@@ -4,6 +4,7 @@ namespace App\Services\AGS;
 
 use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AgsService
@@ -85,6 +86,26 @@ class AgsService
         return $this->client->getGrades([
             'certificate_ids' => $certificateId,
         ]);
+    }
+
+    public function getScannedImagesByCertificateId(string $certificateId): array
+    {
+        $data = $this->getGradesByCertificateId($certificateId);
+
+        if (
+            empty($data) ||
+            $data['count'] === 0 ||
+            (
+                empty($data['results'][0]['laser_front_scan']) &&
+                empty($data['results'][0]['laser_back_scan']) &&
+                empty($data['results'][0]['front_scan']) &&
+                empty($data['results'][0]['back_scan'])
+            )
+        ) {
+            return [];
+        }
+
+        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
     }
 
     /**
@@ -258,7 +279,6 @@ class AgsService
     }
 
     /**
-     * @deprecated Grades on public page are now shown directly from Robograding
      * @param  array  $data
      * @return array
      */
@@ -364,5 +384,23 @@ class AgsService
     public function createCardLabel(array $data): array
     {
         return $this->client->createCardLabel($data);
+    }
+
+    public function deactivateProfile(User $user): mixed
+    {
+        if ($user->ags_access_token) {
+            return $this->client->deactivateProfile($user->ags_access_token);
+        }
+
+        return null;
+    }
+
+    public function deleteProfile(User $user): mixed
+    {
+        if ($user->ags_access_token) {
+            return $this->client->deleteProfile($user->ags_access_token);
+        }
+
+        return null;
     }
 }

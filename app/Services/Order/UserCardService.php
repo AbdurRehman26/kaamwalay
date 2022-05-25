@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
+use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
@@ -126,7 +127,7 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->prepareGeneratedImagesForPublicCardPage($userCard),
+            'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
         ];
     }
 

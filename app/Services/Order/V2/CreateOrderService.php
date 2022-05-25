@@ -95,6 +95,7 @@ class CreateOrderService
         $this->storeServiceFee();
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
+        $this->associateSalesman();
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
@@ -282,6 +283,13 @@ class CreateOrderService
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;
             $this->order->save();
+        }
+    }
+
+    protected function associateSalesman(): void
+    {
+        if ($salesman = $this->order->user->salesman) {
+            $this->order->salesman()->associate($salesman)->save();
         }
     }
 }

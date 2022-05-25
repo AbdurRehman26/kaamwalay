@@ -56,10 +56,16 @@ class OrderPaymentProcessedNotification extends Notification
         $customerFullName = $this->order->user->getFullName();
 
         if (empty($customerFullName)) {
-            $customerFullName = $this->order->shippingAddress->getFullName();
+            $customerFullName = $this->order->shippingAddress?->getFullName();
         }
 
-        return "$customerFullName, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, $totalCards";
+        $message = "$customerFullName, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, $totalCards";
+
+        if (! $this->order->salesman) {
+            return $message;
+        }
+
+        return $message . "\nSalesman: {$this->order->salesman->email}";
     }
 
     protected function getMessageForExtraChargeAndRefund(string $paymentCode): string

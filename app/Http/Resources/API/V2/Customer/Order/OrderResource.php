@@ -27,7 +27,7 @@ class OrderResource extends BaseResource
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
-            'grand_total' => $this->grand_total,
+            'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),

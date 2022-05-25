@@ -4,4 +4,5 @@ export class PromoCodeStatsEntity extends Entity {
     public timesUsed!: number;
     public totalDiscount!: string;
     public totalRevenue!: string;
+    public totalCards!: number;
 }

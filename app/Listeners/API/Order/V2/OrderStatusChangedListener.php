@@ -108,7 +108,10 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->sendEmail(
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
-            ['ORDER_NUMBER' => $event->order->order_number]
+            [
+                'ORDER_NUMBER' => $event->order->order_number,
+                'SHIPPING_METHOD' => $event->order->shippingMethod->code,
+            ]
         );
 
         if (! $event->order->isPaid()) {

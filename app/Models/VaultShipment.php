@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class VaultShipment extends Model
 {
@@ -31,6 +34,27 @@ class VaultShipment extends Model
         'grand_total',
         'shipped_at',
     ];
+
+    public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('user'),
+            AllowedInclude::relationship('vaultShipmentStatus'),
+            AllowedInclude::relationship('billingAddress'),
+            AllowedInclude::relationship('shippingAddress'),
+            AllowedInclude::relationship('vaultShipmentItems'),
+            AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('vaultShipmentPayments', 'firstVaultShipmentPayment'),
+        ];
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::exact('vault_shipment_status_id'),
+            AllowedFilter::exact('shipping_method_id'),
+        ];
+    }
 
     /**
      * @return BelongsTo<User, VaultShipment>
@@ -102,6 +126,14 @@ class VaultShipment extends Model
     public function vaultShipmentPayments(): HasMany
     {
         return $this->hasMany(VaultShipmentPayment::class);
+    }
+
+    /**
+     * @return HasOne<VaultShipmentPayment>
+     */
+    public function firstVaultShipmentPayment(): HasOne
+    {
+        return $this->hasOne(VaultShipmentPayment::class)->oldestOfMany('created_at');
     }
 
     /**

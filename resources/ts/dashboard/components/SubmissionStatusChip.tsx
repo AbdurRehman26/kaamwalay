@@ -29,6 +29,9 @@ export const SubmissionStatusChip = styled(({ color, ...rest }: SubmissionStatus
             textTransform: 'uppercase',
             letterSpacing: '0.093em',
             fontWeight: 500,
+            [theme.breakpoints.down('sm')]: {
+                letterSpacing: '0',
+            },
         };
     },
     {

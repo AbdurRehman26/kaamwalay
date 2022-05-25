@@ -24,7 +24,7 @@
 
             $(function() {
                 $('.feed-view__slider--js').slick({
-                    infinite: true,
+                    infinite: false,
                     arrows: true,
                     dots: false,
                     speed: 300,

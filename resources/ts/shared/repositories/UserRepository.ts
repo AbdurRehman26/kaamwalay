@@ -42,4 +42,16 @@ export class UserRepository extends Repository<UserEntity> {
 
         return this.toEntities(data, null, AddressStateEntity);
     }
+
+    async deactivateProfile(): Promise<{ success: boolean }> {
+        const { data } = await this.endpoint.post('/customer/profile/deactivate');
+
+        return data;
+    }
+
+    async deleteProfile(): Promise<{ success: boolean }> {
+        const { data } = await this.endpoint.post('/customer/profile/delete');
+
+        return data;
+    }
 }

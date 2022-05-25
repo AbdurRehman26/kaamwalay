@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Auth\AuthenticationException;
+use App\Exceptions\API\Customer\UserIsDeactivated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
@@ -12,16 +13,25 @@ use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class LoginController extends Controller
 {
     use AuthenticatableWithAGS;
 
+    /**
+     * @throws Throwable
+     */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (! ($token = auth()->attempt($request->only('email', 'password')))) {
+        $token = auth()->attempt($request->only('email', 'password'));
+
+        if (! $token) {
             $token = $this->loginAGS($request);
         }
+
+        $isActive = auth()->user()->is_active;
+        throw_if(! is_null($isActive) && ! $isActive, UserIsDeactivated::class);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 
@@ -35,8 +45,10 @@ class LoginController extends Controller
         );
     }
 
-    public function authenticateAndUpdateAgsUserToken(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
-    {
+    public function authenticateAndUpdateAgsUserToken(
+        LoginRequest $request,
+        CustomerProfileService $customerProfileService
+    ): JsonResponse {
         try {
             $response = $this->agsService->login(data: $request->validated());
 
@@ -56,11 +68,11 @@ class LoginController extends Controller
         }
 
         return new JsonResponse(
-            [ 'message' => 'User authenticated successfully.' ],
+            ['message' => 'User authenticated successfully.'],
             Response::HTTP_OK,
         );
     }
-    
+
     public function me(): JsonResponse
     {
         return new JsonResponse([

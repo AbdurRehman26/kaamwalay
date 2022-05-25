@@ -16,6 +16,9 @@ export const PaymentStatusChip = styled(({ color, mode, ...rest }: PaymentStatus
             letterSpacing: '0.093em',
             borderRadius: mode === 'admin' ? 4 : 16,
             fontWeight: 500,
+            [theme.breakpoints.down('sm')]: {
+                letterSpacing: '0',
+            },
         };
     },
     {

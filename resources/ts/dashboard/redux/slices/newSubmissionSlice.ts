@@ -51,6 +51,7 @@ export interface Address {
     city: string;
     country: { name: string; code: string; id: number };
     state: { name: string; code: string; id: number };
+    stateName?: string;
     zipCode: string;
     phoneNumber: string;
     id: number;
@@ -196,6 +197,7 @@ const initialState: NewSubmissionSliceState = {
             fullName: '',
             lastName: '',
             address: '',
+            otherAddress: '',
             flat: '',
             city: '',
             state: {
@@ -274,6 +276,7 @@ const initialState: NewSubmissionSliceState = {
             fullName: '',
             lastName: '',
             address: '',
+            otherAddress: '',
             flat: '',
             city: '',
             state: {
@@ -363,8 +366,19 @@ export const getShippingFee = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
         const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
+        const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
 
         const DTO = {
+            ...(shippingAddress.country.code !== '' && {
+                shippingAddress: {
+                    address: shippingAddress.address,
+                    city: shippingAddress.city,
+                    state: shippingAddress.state.code ? shippingAddress.state.code : shippingAddress.state,
+                    zip: shippingAddress.zipCode,
+                    phone: shippingAddress.phoneNumber,
+                    countryCode: shippingAddress.country.code,
+                },
+            }),
             shippingMethodId: shippingMethod.id,
             items: selectedCards.map((item) => ({
                 quantity: item.qty,
@@ -477,11 +491,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             declaredValuePerUnit: selectedCard.value,
         })),
         shippingAddress: {
-            fullName: finalShippingAddress.fullName,
-            lastName: finalShippingAddress.lastName,
+            firstName: finalShippingAddress.fullName,
+            lastName: finalShippingAddress.lastName || 'n',
             address: finalShippingAddress.address,
+            otherAddress: finalShippingAddress.otherAddress,
             city: finalShippingAddress.city,
-            state: finalShippingAddress.state.code,
+            state: finalShippingAddress.state.code || finalShippingAddress.state,
+            country: finalShippingAddress.country.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
@@ -491,11 +507,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : currentSubmission.step03Data.saveForLater,
         },
         billingAddress: {
-            fullName: billingAddress.fullName,
-            lastName: billingAddress.lastName,
+            firstName: billingAddress.fullName,
+            lastName: billingAddress.lastName || 'n',
             address: billingAddress.address,
+            otherAddress: billingAddress.otherAddress,
             city: billingAddress.city,
-            state: billingAddress.state.code,
+            state: billingAddress.state.code || finalShippingAddress.state,
+            country: finalShippingAddress.country.code,
             zip: billingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: billingAddress.flat,

@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getCountriesList,
     getSavedAddresses,
-    getShippingFee,
     getStatesList,
     resetSelectedExistingAddress,
     setDisableAllShippingInputs,
@@ -153,7 +152,6 @@ export function InsuredShippingMethod() {
     const dispatch = useAppDispatch();
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
 
-    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
     const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
 
@@ -163,14 +161,13 @@ export function InsuredShippingMethod() {
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const fullName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.fullName);
-    // const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
     const otherAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.otherAddress);
-    const flat = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
     const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
+    const stateName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.stateName);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
-    // const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.country);
+    const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.country);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
@@ -202,7 +199,7 @@ export function InsuredShippingMethod() {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'state',
-                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
+                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup?.code },
                 }),
             );
         }
@@ -214,7 +211,7 @@ export function InsuredShippingMethod() {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'country',
-                    newValue: { name: country.name, id: country.id, code: country.code },
+                    newValue: { name: country.name, id: country.id, code: country?.code },
                 }),
             );
             dispatch(getStatesList({ countryId }));
@@ -227,11 +224,11 @@ export function InsuredShippingMethod() {
                 addressValidationSchema
                     .isValid({
                         fullName,
-                        // lastName,
                         address,
                         otherAddress,
-                        flat,
+                        country,
                         city,
+                        stateName,
                         state,
                         zipCode,
                         phoneNumber,
@@ -248,16 +245,17 @@ export function InsuredShippingMethod() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
             fullName,
-            // lastName,
             address,
-            flat,
+            otherAddress,
+            country,
             city,
+            stateName,
             state,
             zipCode,
             phoneNumber,
-            // useCustomShippingAddress,
-            // selectedExistingAddressId,
-            // existingAddresses,
+            useCustomShippingAddress,
+            selectedExistingAddressId,
+            existingAddresses,
         ],
     );
 
@@ -303,7 +301,6 @@ export function InsuredShippingMethod() {
                 try {
                     setIsLoadingAddresses(true);
 
-                    await dispatch(getShippingFee(selectedCards));
                     await dispatch(getStatesList());
                     await dispatch(getCountriesList());
                     await dispatch(getSavedAddresses());
@@ -331,12 +328,12 @@ export function InsuredShippingMethod() {
                         {existingAddresses?.map((address: any) => (
                             <ExistingAddress
                                 key={address.id}
-                                firstName={address.fullName}
+                                fullName={address.firstName}
                                 lastName={address.lastName}
                                 address={address.address}
                                 flat={address.flat ?? ''}
                                 city={address.city}
-                                state={address.state.code}
+                                state={address.state?.code}
                                 id={address.id}
                                 zip={address.zipCode}
                             />
@@ -383,7 +380,6 @@ export function InsuredShippingMethod() {
                             label="Save for later"
                         />
                     </div>
-                    {/* <Box marginBottom={'16px'} /> */}
                     <div className={classes.inputsRow01}>
                         <div className={classes.fieldContainer} style={{ width: '100%' }}>
                             <Typography className={classes.methodDescription}>Country</Typography>
@@ -401,7 +397,7 @@ export function InsuredShippingMethod() {
                                 <option value="none">Select a country</option>
                                 {availableCountries.map((item: any) => (
                                     <option key={item.id} value={item.id}>
-                                        {item.code}
+                                        {item?.code}
                                     </option>
                                 ))}
                             </Select>
@@ -473,29 +469,6 @@ export function InsuredShippingMethod() {
                             />
                         </div>
                     </div>
-
-                    {/* <div className={classes.inputsRow02}>
-                        {isMobile ? (
-                            <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
-                                <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
-                                <TextField
-                                    style={{ margin: 8, marginLeft: 0 }}
-                                    placeholder="Apt #"
-                                    fullWidth
-                                    disabled={disableAllInputs}
-                                    value={flat}
-                                    onChange={(e: any) => updateField('flat', e.target.value)}
-                                    size={'small'}
-                                    variant={'outlined'}
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                        ) : null}
-                    </div> */}
-
                     {isMobile ? (
                         <div className={classes.inputsRow03}>
                             <div className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}>
@@ -555,7 +528,7 @@ export function InsuredShippingMethod() {
                                     <option value="none">Select a state</option>
                                     {availableStates.map((item: any) => (
                                         <option key={item.id} value={item.id}>
-                                            {item.code}
+                                            {item?.code}
                                         </option>
                                     ))}
                                 </Select>
@@ -565,8 +538,8 @@ export function InsuredShippingMethod() {
                                     placeholder="Enter State"
                                     fullWidth
                                     disabled={disableAllInputs}
-                                    value={state.name}
-                                    onChange={(e: any) => updateField('state', e.target.value)}
+                                    value={stateName}
+                                    onChange={(e: any) => updateField('stateName', e.target.value)}
                                     size={'small'}
                                     variant={'outlined'}
                                     margin="normal"

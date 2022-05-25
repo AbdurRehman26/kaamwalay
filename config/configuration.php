@@ -83,5 +83,9 @@ return [
             'auth' => true,
             'value' => env('SEARCH_CARD_CATEGORIES_ADMIN'),
         ],
+        'order_wallet_credit_percentage' => [
+            'auth' => true,
+            'value' => env('ORDER_WALLET_CREDIT_PERCENTAGE'),
+        ],
     ],
 ];

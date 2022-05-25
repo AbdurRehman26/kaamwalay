@@ -7,8 +7,10 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
+use App\Services\Wallet\WalletService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -493,5 +495,23 @@ class Order extends Model implements Exportable
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
+    }
+
+    public function isEligibleForCredit(): bool
+    {
+        return now()->diff($this->created_at)->days === 0;
+    }
+
+    public function addCreditToUser(): void
+    {
+        $walletService = resolve(WalletService::class);
+
+        $walletService->processTransaction(
+            $this->user->wallet->id,
+            ($this->grand_total * 5 / 100),
+            WalletTransactionReason::WALLET_CREDIT,
+            $this->user_id,
+            $this->id
+        );
     }
 }

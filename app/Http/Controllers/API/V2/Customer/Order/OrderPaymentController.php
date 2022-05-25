@@ -43,6 +43,10 @@ class OrderPaymentController extends Controller
 
             $response = $this->paymentService->charge($order, $request->all());
 
+            if (config('robograding.order_wallet_credit_percentage') && $order->isEligibleForCredit()) {
+                $order->addCreditToUser();
+            }
+
             DB::commit();
 
             if (! empty($response['data'])) {

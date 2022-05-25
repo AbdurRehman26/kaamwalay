@@ -23,4 +23,6 @@ return [
         'eth_wallet' => env('ETH_WALLET'),
         'test_wallet' => env('TEST_WALLET'),
     ],
+
+    'order_wallet_credit_percentage' => env('ORDER_WALLET_CREDIT_PERCENTAGE'),
 ];

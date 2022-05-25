@@ -42,10 +42,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->where('order_status_id', getModelId($orderStatus))
             ->first();
 
-        // throw_if(
-        //     getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
-        //     OrderCanNotBeMarkedAsGraded::class
-        // );
+        throw_if(
+            getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
+            OrderCanNotBeMarkedAsGraded::class
+        );
 
         throw_if(
             getModelId($orderStatus) === OrderStatus::SHIPPED && ! Order::find($orderId)->isPaid(),
@@ -55,14 +55,14 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 
-            // $response = $this->agsService->createCertificates($data);
-            // throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+            $response = $this->agsService->createCertificates($data);
+            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
-            // CreateOrderFoldersOnDropbox::dispatch($order);
+            CreateOrderFoldersOnDropbox::dispatch($order);
         }
 
         if ($orderStatusId === OrderStatus::GRADED) {
-            // CreateOrderLabel::dispatch($order);
+            CreateOrderLabel::dispatch($order);
             if (! $order->isPaid()) {
                 $order->payment_status = OrderPaymentStatusEnum::DUE;
                 $order->save();

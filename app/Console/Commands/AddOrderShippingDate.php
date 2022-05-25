@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use Illuminate\Console\Command;
 
 class AddOrderShippingDate extends Command
 {

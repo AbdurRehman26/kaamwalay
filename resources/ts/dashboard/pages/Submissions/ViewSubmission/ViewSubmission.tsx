@@ -78,7 +78,7 @@ export function ViewSubmission() {
                     />
                 </Grid>
             ) : null}
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs === 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!orderWalletCreditPercentage || timeInMs === 0) ? (
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus

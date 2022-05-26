@@ -296,7 +296,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </TableCell>
                         </TableRow>
                     ) : null}
-                    {!isPaid && timeInMs === 0 ? (
+                    {!isPaid && (!orderWalletCreditPercentage || timeInMs === 0) ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PaymentStatusNotice
@@ -397,7 +397,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 />
                             </Grid>
                         ) : null}
-                        {!isPaid && timeInMs === 0 ? (
+                        {!isPaid && (!orderWalletCreditPercentage || timeInMs === 0) ? (
                             <Grid mt={3}>
                                 <PaymentStatusNotice
                                     id={id}

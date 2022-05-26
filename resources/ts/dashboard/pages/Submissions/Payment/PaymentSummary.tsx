@@ -509,7 +509,8 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             {timeInMs !== 0 && orderWalletCreditPercentage ? (
                 <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
                     <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
-                        You will earn <b>${(getPreviewTotal() * 5) / 100}</b> in credit by paying now.
+                        You will earn <b>${(getPreviewTotal() * orderWalletCreditPercentage) / 100}</b> in credit by
+                        paying now.
                     </Typography>
                 </Box>
             ) : null}

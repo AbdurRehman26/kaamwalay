@@ -280,7 +280,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     />
                 </Grid>
             ) : null}
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs === 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!orderWalletCreditPercentage || timeInMs === 0) ? (
                 <Grid mt={'20px'}>
                     <PaymentStatusNotice id={orderId} paymentStatus={data?.paymentStatus} hasWidth={true} />
                 </Grid>

@@ -38,7 +38,8 @@ beforeEach(function () {
     ]);
 
     config([
-        'robograding.order_wallet_credit_percentage' => 5,
+        'robograding.feature_order_wallet_credit_enabled' => 1,
+        'robograding.feature_order_wallet_credit_percentage' => 5,
     ]);
 });
 
@@ -84,7 +85,7 @@ test('credit is not added to user`s wallet if he pays after 24 hrs', function ()
 
 test('credit is not added to user`s wallet if config flag is set to 0', function () {
     config([
-        'robograding.order_wallet_credit_percentage' => 0,
+        'robograding.feature_order_wallet_credit_enabled' => 0,
     ]);
 
     $walletAmount = $this->user->wallet->balance;

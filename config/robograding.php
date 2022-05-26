@@ -24,5 +24,6 @@ return [
         'test_wallet' => env('TEST_WALLET'),
     ],
 
-    'order_wallet_credit_percentage' => env('ORDER_WALLET_CREDIT_PERCENTAGE'),
+    'feature_order_wallet_credit_enabled' => env('FEATURE_ORDER_WALLET_CREDIT_ENABLED'),
+    'feature_order_wallet_credit_percentage' => env('FEATURE_ORDER_WALLET_CREDIT_PERCENTAGE'),
 ];

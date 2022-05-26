@@ -43,7 +43,7 @@ class OrderPaymentController extends Controller
 
             $response = $this->paymentService->charge($order, $request->all());
 
-            if (config('robograding.order_wallet_credit_percentage') && $order->isEligibleForCredit()) {
+            if (config('robograding.feature_order_wallet_credit_enabled') && $order->isOlderThanOneDay()) {
                 $order->addCreditToUser();
             }
 

@@ -329,8 +329,8 @@ export function InsuredShippingMethod() {
                             <ExistingAddress
                                 key={address.id}
                                 fullName={address.firstName}
-                                lastName={address.lastName}
                                 address={address.address}
+                                otherAddress={address.otherAddress ?? ''}
                                 flat={address.flat ?? ''}
                                 city={address.city}
                                 state={address.state?.code}
@@ -386,8 +386,8 @@ export function InsuredShippingMethod() {
                             <Select
                                 fullWidth
                                 native
-                                key={availableCountries[0].id}
-                                defaultValue={availableCountries[0].id}
+                                key={country.id ? country.id : availableCountries[0].id}
+                                defaultValue={country.id ? country.id : availableCountries[0].id}
                                 disabled={disableAllInputs}
                                 onChange={(e: any) => updateShippingCountry(e.nativeEvent.target.value)}
                                 placeholder={'Select Country'}
@@ -514,7 +514,7 @@ export function InsuredShippingMethod() {
 
                         <div className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}>
                             <Typography className={classes.methodDescription}>State</Typography>
-                            {availableStates.length > 0 ? (
+                            {country.code === 'US' || country.code === '' ? (
                                 <Select
                                     fullWidth
                                     native

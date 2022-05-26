@@ -367,16 +367,26 @@ export const getShippingFee = createAsyncThunk(
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
         const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
         const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
+        const existingAddresses = (thunk.getState() as any).newSubmission.step03Data.selectedExistingAddress;
 
+        let state;
+        let country;
+        if (shippingAddress.address) {
+            state = shippingAddress.state.code ? shippingAddress.state.code : shippingAddress.stateName;
+            country = shippingAddress.country.code ? shippingAddress.country.code : shippingAddress.country;
+        } else {
+            state = existingAddresses.state.code ? existingAddresses.state.code : existingAddresses.stateName;
+            country = existingAddresses.country.code ? existingAddresses.country.code : existingAddresses.country;
+        }
         const DTO = {
             ...(shippingAddress.country.code !== '' && {
                 shippingAddress: {
-                    address: shippingAddress.address,
-                    city: shippingAddress.city,
-                    state: shippingAddress.state.code ? shippingAddress.state.code : shippingAddress.state,
-                    zip: shippingAddress.zipCode,
-                    phone: shippingAddress.phoneNumber,
-                    countryCode: shippingAddress.country.code,
+                    address: shippingAddress.address ? shippingAddress.address : existingAddresses.address,
+                    city: shippingAddress.city ? shippingAddress.city : existingAddresses.city,
+                    state: state,
+                    zip: shippingAddress.zipCode ? shippingAddress.zipCode : existingAddresses.zipCode,
+                    phone: shippingAddress.phoneNumber ? shippingAddress.phoneNumber : existingAddresses.phoneNumber,
+                    countryCode: country,
                 },
             }),
             shippingMethodId: shippingMethod.id,
@@ -479,6 +489,8 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             : currentSubmission.step03Data.selectedAddress;
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
+    const { firstName, lastName } = parseName(finalShippingAddress.fullName);
+
     const orderDTO = {
         paymentPlan: {
             id: currentSubmission.step01Data.selectedServiceLevel.id,
@@ -491,13 +503,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             declaredValuePerUnit: selectedCard.value,
         })),
         shippingAddress: {
-            firstName: finalShippingAddress.fullName,
-            lastName: finalShippingAddress.lastName || 'n',
+            firstName: firstName,
+            lastName: lastName,
             address: finalShippingAddress.address,
             otherAddress: finalShippingAddress.otherAddress,
             city: finalShippingAddress.city,
-            state: finalShippingAddress.state.code || finalShippingAddress.state,
-            country: finalShippingAddress.country.code,
+            state: finalShippingAddress.state.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
@@ -507,13 +519,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : currentSubmission.step03Data.saveForLater,
         },
         billingAddress: {
-            firstName: billingAddress.fullName,
-            lastName: billingAddress.lastName || 'n',
+            firstName: firstName,
+            lastName: lastName,
             address: billingAddress.address,
             otherAddress: billingAddress.otherAddress,
             city: billingAddress.city,
-            state: billingAddress.state.code || finalShippingAddress.state,
-            country: finalShippingAddress.country.code,
+            state: billingAddress.state.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country.code,
             zip: billingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: billingAddress.flat,
@@ -587,6 +599,19 @@ export const updateOrderItem = createAsyncThunk(
         });
     },
 );
+
+const parseName = (fullName: string) => {
+    const value = fullName.trim();
+    const firstSpace = value.indexOf(' ');
+    if (firstSpace === -1) {
+        return { firstName: value, lastName: null };
+    }
+
+    const firstName = value.slice(0, firstSpace);
+    const lastName = value.slice(firstSpace + 1);
+
+    return { firstName, lastName };
+};
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',

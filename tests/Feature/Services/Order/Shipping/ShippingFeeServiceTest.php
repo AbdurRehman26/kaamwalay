@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Country;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Order\Shipping\ShippingFeeService;
@@ -7,6 +9,11 @@ use App\Services\Order\Shipping\ShippingFeeService;
 test('shipping fee is calculated correctly', function () {
     /** @var Order $order */
     $order = Order::factory()->insuredShipping()->create();
+
+    $country = Country::factory()->create(['code' => 'US']);
+    $customerAddress = CustomerAddress::factory()->for($order->user)->for($country)->create();
+
+    $order->shippingAddress()->associate($customerAddress);
 
     OrderItem::factory()
         ->for($order)

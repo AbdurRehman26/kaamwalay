@@ -11,6 +11,7 @@ import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { cx } from '@shared/lib/utils/cx';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import CompleteSubmissonButton from '../../../components/CompleteSubmissionButton';
 import SubmissionHeader from '../../../components/SubmissionHeader/SubmissionHeader';
@@ -58,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         backgroundColor: '#fff',
         boxShadow: theme.shadows[4],
+    },
+    buttonsContainerMobile: {
+        position: 'static',
     },
     buttonsHolder: {
         maxWidth: 360,
@@ -195,7 +199,13 @@ export function NewSubmission() {
             <SubmissionValidator />
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
-            <div className={classes.buttonsContainer}>
+            <div
+                className={
+                    (currentStep === 1 || currentStep === 2 || currentStep === 3) && isMobile
+                        ? cx(classes.buttonsContainer, classes.buttonsContainerMobile)
+                        : classes.buttonsContainer
+                }
+            >
                 <Grid
                     container
                     alignItems={'center'}

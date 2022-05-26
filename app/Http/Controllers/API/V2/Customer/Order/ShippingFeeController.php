@@ -21,6 +21,7 @@ class ShippingFeeController extends V1ShippingFeeController
         if ($request->shipping_address) {
             $rules = array_merge($rules, [
                 'shipping_address.address' => ['required', 'string'],
+                'shipping_address.address_2' => ['nullable', 'string'],
                 'shipping_address.city' => ['required', 'string'],
                 'shipping_address.state' => ['required', 'string'],
                 'shipping_address.zip' => ['required', 'string'],

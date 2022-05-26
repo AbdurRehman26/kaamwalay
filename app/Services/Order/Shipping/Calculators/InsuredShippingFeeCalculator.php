@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\Shipping\Calculators;
 
+use App\Models\Country;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -13,7 +14,8 @@ class InsuredShippingFeeCalculator
     {
         return self::calculate(
             self::calculateTotalDeclaredValue($order->orderItems),
-            self::calculateTotalNumberOfItems($order->orderItems)
+            self::calculateTotalNumberOfItems($order->orderItems),
+            self::getShippingAddress($order),
         );
     }
 
@@ -109,5 +111,13 @@ class InsuredShippingFeeCalculator
         }
 
         return $additionalShippingFee;
+    }
+
+    protected static function getShippingAddress(Order $order): array
+    {
+        $address = $order->shippingAddress->toArray();
+
+//        dd(array_merge($address, ['country_code' => Country::find($address['country_id'])->code]));
+        return array_merge($address, ['country_code' => Country::find($address['country_id'])->code]);
     }
 }

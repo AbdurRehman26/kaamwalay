@@ -2,8 +2,9 @@
 
 namespace App\Http\APIClients;
 
-use Illuminate\Http\Client\Response;
+use Exception;
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class EasyShipClient
 {
@@ -17,7 +18,7 @@ class EasyShipClient
     }
 
 
-    public function requestRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): Response
+    public function requestRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
         $data = [
             'origin_address' => $originAddress,
@@ -28,11 +29,20 @@ class EasyShipClient
             'shipping_settings' => $shippingSettings,
             'parcels' => $parcels,
         ];
-        \Log::debug($this->baseUrl . '/rates');
-        \Log::debug(json_encode($data));
-        return Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->apiKey,
-        ])->post($this->baseUrl . '/rates', $data);
-    }
 
+        try {
+            Log::debug('EasyShip rates request:', $data);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+//        ])->post($this->baseUrl . '/rates', $data);
+            ])->timeout(5)->retry(3, 500)
+                ->post($this->baseUrl . '/rates', $data);
+
+            return (json_decode($response->body()))->rates;
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
+        }
+    }
 }

@@ -44,6 +44,7 @@ export interface AddCardsToSubmission {
 
 export interface Address {
     fullName: string;
+    firstName?: string;
     lastName?: string;
     address: string;
     otherAddress?: string;
@@ -368,6 +369,8 @@ export const getShippingFee = createAsyncThunk(
         const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
         const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
         const existingAddresses = (thunk.getState() as any).newSubmission.step03Data.selectedExistingAddress;
+        console.log('Shipping Address ', shippingAddress);
+        console.log('Existing Address ', existingAddresses);
 
         let state;
         let country;
@@ -395,6 +398,7 @@ export const getShippingFee = createAsyncThunk(
                 declaredValuePerUnit: item.value,
             })),
         };
+        console.log('DTO ', DTO);
         const shippingFeeResponse = await endpoint.post('', DTO);
         return shippingFeeResponse.data.shippingFee;
     },
@@ -488,8 +492,9 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+    const existingAddressId = currentSubmission.step03Data.selectedExistingAddress.id;
 
-    const { firstName, lastName } = parseName(finalShippingAddress.fullName);
+    const parsedName = parseName(existingAddressId, finalShippingAddress.fullName);
 
     const orderDTO = {
         paymentPlan: {
@@ -503,13 +508,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             declaredValuePerUnit: selectedCard.value,
         })),
         shippingAddress: {
-            firstName: firstName,
-            lastName: lastName,
+            firstName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.lastName,
             address: finalShippingAddress.address,
             otherAddress: finalShippingAddress.otherAddress,
             city: finalShippingAddress.city,
-            state: finalShippingAddress.state.code || finalShippingAddress.stateName,
-            countryCode: finalShippingAddress.country.code,
+            state: finalShippingAddress.state?.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country?.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
@@ -519,8 +524,8 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : currentSubmission.step03Data.saveForLater,
         },
         billingAddress: {
-            firstName: firstName,
-            lastName: lastName,
+            firstName: existingAddressId !== -1 ? billingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? billingAddress.lastName : parsedName?.lastName,
             address: billingAddress.address,
             otherAddress: billingAddress.otherAddress,
             city: billingAddress.city,
@@ -550,6 +555,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
+    console.log('Order DTO ', orderDTO);
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });
@@ -600,17 +606,19 @@ export const updateOrderItem = createAsyncThunk(
     },
 );
 
-const parseName = (fullName: string) => {
-    const value = fullName.trim();
-    const firstSpace = value.indexOf(' ');
-    if (firstSpace === -1) {
-        return { firstName: value, lastName: null };
+const parseName = (id: number, fullName: string) => {
+    if (id === -1) {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
     }
-
-    const firstName = value.slice(0, firstSpace);
-    const lastName = value.slice(firstSpace + 1);
-
-    return { firstName, lastName };
 };
 
 export const newSubmissionSlice = createSlice({

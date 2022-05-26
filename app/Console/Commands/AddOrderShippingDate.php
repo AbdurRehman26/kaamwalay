@@ -30,22 +30,22 @@ class AddOrderShippingDate extends Command
      */
     public function handle(): int
     {
-        $orders = Order::where('order_status_id', OrderStatus::SHIPPED)
+        $this->info('Generating shipping date for orders.');
+
+        Order::where('order_status_id', OrderStatus::SHIPPED)
             ->where('shipped_at', null)
-            ->get();
+            ->get()
+            ->each(function (Order $order) {
+                $this->info("Shipping date for orders # {$order->order_number} Completed.");
 
-        $this->info("Generating shipping date for orders.");
+                $order->shipped_at = OrderStatusHistory::where('order_id', $order->id)
+                    ->where('order_status_id', OrderStatus::SHIPPED)
+                    ->first()->shipped_at;
 
-        foreach ($orders as $order) {
-            $shippingDate = OrderStatusHistory::where('order_id', $order->id)
-                ->where('order_status_id', OrderStatus::SHIPPED)
-                ->first();
+                $order->save();
+            });
 
-            $order->shipped_at = $shippingDate->created_at;
-            $order->save();
-        }
-
-        $this->info("Shipping date for orders Generated. ");
+        $this->info('Shipping date for orders Completed.');
 
         return 0;
     }

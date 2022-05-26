@@ -162,6 +162,7 @@ class CreateOrderService
     protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
     {
         if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
+            $shippingAddress['country_id'] = Country::whereCode($shippingAddress['country_code'] ?? 'US')->first()->id;
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [

@@ -433,14 +433,16 @@ function SubmissionSummary() {
                                     <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
                                 ) : null}
 
-                                <NumberFormat
-                                    value={shippingFee}
-                                    className={classes.rowRightBoldText}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
-                                />
+                                {shippingFee ? (
+                                    <NumberFormat
+                                        value={shippingFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                ) : null}
                             </div>
                         </div>
                         <Divider light />

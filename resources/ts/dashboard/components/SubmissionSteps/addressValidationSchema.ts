@@ -4,7 +4,7 @@ export const addressValidationSchema = yup.object().shape({
     fullName: yup.string().required(),
     // lastName: yup.string().required(),
     address: yup.string().required(),
-    otherAddress: yup.string().optional(),
+    address2: yup.string().optional(),
     flat: yup.string().optional(),
     city: yup.string().required(),
     stateName: yup.string().optional(),

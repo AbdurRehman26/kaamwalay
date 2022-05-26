@@ -47,7 +47,7 @@ export interface Address {
     firstName?: string;
     lastName?: string;
     address: string;
-    otherAddress?: string;
+    address2?: string;
     flat?: string;
     city: string;
     country: { name: string; code: string; id: number };
@@ -198,7 +198,7 @@ const initialState: NewSubmissionSliceState = {
             fullName: '',
             lastName: '',
             address: '',
-            otherAddress: '',
+            address2: '',
             flat: '',
             city: '',
             state: {
@@ -277,7 +277,7 @@ const initialState: NewSubmissionSliceState = {
             fullName: '',
             lastName: '',
             address: '',
-            otherAddress: '',
+            address2: '',
             flat: '',
             city: '',
             state: {
@@ -416,6 +416,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             firstName: address.firstName,
             lastName: address.lastName,
             address: address.address,
+            address2: address.address2,
             zipCode: address.zip,
             phoneNumber: address.phone,
             flat: address.flat ?? '',
@@ -424,7 +425,9 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             isDefaultBilling: address.isDefaultSilling,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
-            state: availableStatesList.find((item: any) => item.code === address.state),
+            state: availableStatesList.find((item: any) => item.code === address.state) ?? {
+                code: address.state,
+            },
             country: {
                 id: address.country.id,
                 code: address.country.code,
@@ -511,7 +514,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             firstName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.firstName,
             lastName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.lastName,
             address: finalShippingAddress.address,
-            otherAddress: finalShippingAddress.otherAddress,
+            address2: finalShippingAddress.address2,
             city: finalShippingAddress.city,
             state: finalShippingAddress.state?.code || finalShippingAddress.stateName,
             countryCode: finalShippingAddress.country?.code,
@@ -527,7 +530,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             firstName: existingAddressId !== -1 ? billingAddress.firstName : parsedName?.firstName,
             lastName: existingAddressId !== -1 ? billingAddress.lastName : parsedName?.lastName,
             address: billingAddress.address,
-            otherAddress: billingAddress.otherAddress,
+            address2: billingAddress.address2,
             city: billingAddress.city,
             state: billingAddress.state.code || finalShippingAddress.stateName,
             countryCode: finalShippingAddress.country.code,

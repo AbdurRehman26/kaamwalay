@@ -9,11 +9,12 @@ import { setSelectedExistingAddress, setUseCustomShippingAddress } from '@dashbo
 type ExistingAddressProps = {
     fullName: string;
     address: string;
-    otherAddress?: string;
+    address2?: string;
     flat?: string;
     zip: string;
     city: string;
     state: string;
+    country: string;
     id: number;
 };
 
@@ -66,7 +67,7 @@ function ExistingAddress(props: ExistingAddressProps) {
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
     const dispatch = useAppDispatch();
-    const { fullName, address, otherAddress, flat, zip, city, state, id } = props;
+    const { fullName, address, address2, flat, zip, city, state, country, id } = props;
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
     function handleRadioPress() {
@@ -85,10 +86,10 @@ function ExistingAddress(props: ExistingAddressProps) {
                 <Radio color={'primary'} onClick={handleRadioPress} checked={selectedExistingAddressID === id} />
             </div>
             <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
-            <Typography className={classes.addressLineText}>{`${address} ${otherAddress} ${
+            <Typography className={classes.addressLineText}>{`${address} ${address2} ${
                 flat ? `Apt: ${flat}` : ''
             }`}</Typography>
-            <Typography className={classes.addressLineText}>{`${city}, ${state} ${zip}, US`}</Typography>
+            <Typography className={classes.addressLineText}>{`${city}, ${state} ${zip}, ${country}`}</Typography>
         </Paper>
     );
 }

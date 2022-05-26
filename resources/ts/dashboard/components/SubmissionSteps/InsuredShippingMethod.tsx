@@ -162,7 +162,7 @@ export function InsuredShippingMethod() {
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const fullName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.fullName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
-    const otherAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.otherAddress);
+    const address2 = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address2);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
     const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
     const stateName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.stateName);
@@ -225,7 +225,7 @@ export function InsuredShippingMethod() {
                     .isValid({
                         fullName,
                         address,
-                        otherAddress,
+                        address2,
                         country,
                         city,
                         stateName,
@@ -246,7 +246,7 @@ export function InsuredShippingMethod() {
         [
             fullName,
             address,
-            otherAddress,
+            address2,
             country,
             city,
             stateName,
@@ -330,12 +330,13 @@ export function InsuredShippingMethod() {
                                 key={address.id}
                                 fullName={address.firstName}
                                 address={address.address}
-                                otherAddress={address.otherAddress ?? ''}
+                                address2={address.address2 ?? ''}
                                 flat={address.flat ?? ''}
                                 city={address.city}
                                 state={address.state?.code}
                                 id={address.id}
                                 zip={address.zipCode}
+                                country={address.country.code}
                             />
                         ))}
                     </div>
@@ -458,8 +459,8 @@ export function InsuredShippingMethod() {
                                 placeholder="Enter apt, suite, building, floor etc."
                                 fullWidth
                                 disabled={disableAllInputs}
-                                value={otherAddress}
-                                onChange={(e: any) => updateField('otherAddress', e.target.value)}
+                                value={address2}
+                                onChange={(e: any) => updateField('address2', e.target.value)}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"

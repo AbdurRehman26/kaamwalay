@@ -501,17 +501,4 @@ class Order extends Model implements Exportable
     {
         return now()->diff($this->created_at)->days === 0;
     }
-
-    public function addCreditToUser(): void
-    {
-        $walletService = resolve(WalletService::class);
-
-        $walletService->processTransaction(
-            $this->user->wallet->id,
-            ($this->grand_total * 5 / 100),
-            WalletTransactionReason::WALLET_CREDIT,
-            $this->user_id,
-            $this->id
-        );
-    }
 }

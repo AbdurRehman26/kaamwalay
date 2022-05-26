@@ -268,7 +268,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     </TableContainer>
                 </Box>
             </Paper>
-            {timeInMs !== 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={orderId}

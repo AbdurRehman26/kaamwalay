@@ -282,7 +282,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {timeInMs !== 0 ? (
+                    {!isPaid && timeInMs !== 0 ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PayNowStatusNotice
@@ -385,7 +385,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
-                        {timeInMs !== 0 ? (
+                        {!isPaid && timeInMs !== 0 ? (
                             <Grid mt={3}>
                                 <PayNowStatusNotice
                                     id={id}

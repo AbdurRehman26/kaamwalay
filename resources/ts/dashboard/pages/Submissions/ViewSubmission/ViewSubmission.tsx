@@ -66,7 +66,7 @@ export function ViewSubmission() {
             />
             <Divider />
             <Box marginTop={'24px'} />
-            {timeInMs !== 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={data?.id}

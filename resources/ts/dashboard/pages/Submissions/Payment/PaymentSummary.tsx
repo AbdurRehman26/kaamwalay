@@ -158,6 +158,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface PaymentSummaryProps {
     timeInMs: number;
+    orderWalletCreditPercentage: number;
 }
 
 export function PaymentSummary(props: PaymentSummaryProps) {
@@ -167,7 +168,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
 
-    const { timeInMs } = props;
+    const { timeInMs, orderWalletCreditPercentage } = props;
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
@@ -505,7 +506,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                     </div>
                 </div>
             </div>
-            {timeInMs !== 0 ? (
+            {timeInMs !== 0 && orderWalletCreditPercentage ? (
                 <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
                     <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
                         You will earn <b>${(getPreviewTotal() * 5) / 100}</b> in credit by paying now.

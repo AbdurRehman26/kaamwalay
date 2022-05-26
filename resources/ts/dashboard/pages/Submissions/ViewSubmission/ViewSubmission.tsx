@@ -10,6 +10,7 @@ import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharge
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
@@ -48,6 +49,7 @@ export function ViewSubmission() {
 
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
+    const { orderWalletCreditPercentage } = useConfiguration();
 
     if (isLoading || isError) {
         return (
@@ -66,7 +68,7 @@ export function ViewSubmission() {
             />
             <Divider />
             <Box marginTop={'24px'} />
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && orderWalletCreditPercentage ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={data?.id}

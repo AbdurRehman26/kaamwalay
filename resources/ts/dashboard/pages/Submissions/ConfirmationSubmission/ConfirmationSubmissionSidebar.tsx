@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Navigate } from 'react-router-dom';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
@@ -38,6 +39,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
     const message = (error as Error)?.message || error;
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
+    const { orderWalletCreditPercentage } = useConfiguration();
 
     if (message === 'This action is unauthorized.') {
         return <Navigate to={'/submissions'} replace />;
@@ -268,7 +270,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     </TableContainer>
                 </Box>
             </Paper>
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && orderWalletCreditPercentage ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={orderId}

@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRemainingTime } from '@shared/components/Counter';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import PayNowHeading from './PayNowHeading';
 
 const CardDiv = styled(Card)({
@@ -55,6 +56,7 @@ interface PayNowProps {
 export default function PayNowStatusNotice(props: PayNowProps) {
     const navigate = useNavigate();
     const { id, countdownTimestampMs, isConfirmationPage, isPayPage } = props;
+    const { orderWalletCreditPercentage } = useConfiguration();
 
     const defaultRemainingTime = {
         seconds: '00',
@@ -78,7 +80,7 @@ export default function PayNowStatusNotice(props: PayNowProps) {
         return (
             <PaperDiv>
                 <Typography sx={{ fontSize: '12px' }}>
-                    <b className={'BoldTitle'}>Earn 5% </b>
+                    <b className={'BoldTitle'}>Earn {orderWalletCreditPercentage}% </b>
                     <b>in the credit by paying in the next</b> {''}
                     <PayNowHeading remainingTime={remainingTime} hasClass={true} />
                 </Typography>
@@ -92,7 +94,7 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                 <Grid className={'CardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
                         Pay in the next <PayNowHeading remainingTime={remainingTime} hasClass={false} /> and get{' '}
-                        <b>5% back</b> in AGS credit.
+                        <b>{orderWalletCreditPercentage}% back</b> in AGS credit.
                     </Typography>
                 </Grid>
             ) : null}
@@ -100,7 +102,8 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                 {isConfirmationPage ? (
                     <>
                         <Typography variant="body2">
-                            If you choose to pay now you <b>EARN 5%</b> in credit to go towards any future order.
+                            If you choose to pay now you <b>EARN {orderWalletCreditPercentage}%</b> in credit to go
+                            towards any future order.
                         </Typography>
                         <Typography variant="body2" mt={3} mb={2}>
                             You can pay whenever you like. Just keep in mind we can't ship your cards back until you
@@ -112,12 +115,12 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                         <Typography sx={{ fontSize: '20px' }}>
                             <b>Payment Pending: </b>Pay in the next{' '}
                             <PayNowHeading remainingTime={remainingTime} hasClass={true} /> and get
-                            <b className={'BoldTitle'}> 5% back</b> in AGS credit.
+                            <b className={'BoldTitle'}> {orderWalletCreditPercentage}% back</b> in AGS credit.
                         </Typography>
                         <Typography variant="body2" mt={2} mb={2}>
-                            If you choose to pay now you <b>EARN 5%</b> in credit to go towards any future order. You
-                            can pay whenever you like. Just keep in mind we can't ship your cards back until you have
-                            completed payment.
+                            If you choose to pay now you <b>EARN {orderWalletCreditPercentage}%</b> in credit to go
+                            towards any future order. You can pay whenever you like. Just keep in mind we can't ship
+                            your cards back until you have completed payment.
                         </Typography>
                     </>
                 )}

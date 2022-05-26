@@ -12,4 +12,5 @@ export class ConfigurationEntity {
     public web3TestWallet!: string;
     public searchCardCategoriesCustomer!: string;
     public searchCardCategoriesAdmin!: string;
+    public orderWalletCreditPercentage!: number;
 }

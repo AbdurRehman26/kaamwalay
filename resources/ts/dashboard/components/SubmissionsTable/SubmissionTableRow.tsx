@@ -17,6 +17,7 @@ import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -155,6 +156,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
+    const { orderWalletCreditPercentage } = useConfiguration();
 
     const endTime = datePlaced ? new Date(new Date(datePlaced).getTime() + 86400000) : 0;
     const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced).getTime() + 86400000 : 0;
@@ -282,7 +284,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {!isPaid && timeInMs !== 0 ? (
+                    {!isPaid && timeInMs !== 0 && orderWalletCreditPercentage ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PayNowStatusNotice
@@ -385,7 +387,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
-                        {!isPaid && timeInMs !== 0 ? (
+                        {!isPaid && timeInMs !== 0 && orderWalletCreditPercentage ? (
                             <Grid mt={3}>
                                 <PayNowStatusNotice
                                     id={id}

@@ -20,6 +20,7 @@ import * as yup from 'yup';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
@@ -346,6 +347,7 @@ export function Payment() {
 
     const endTime = new Date(new Date(order.data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
+    const { orderWalletCreditPercentage } = useConfiguration();
 
     useEffect(() => {
         schema
@@ -509,7 +511,7 @@ export function Payment() {
                             Pay For Submission
                         </Typography>
                     </div>
-                    {timeInMs !== 0 ? (
+                    {timeInMs !== 0 && orderWalletCreditPercentage ? (
                         <Grid mt={'20px'}>
                             <PayNowStatusNotice
                                 id={order.data?.id}
@@ -886,7 +888,7 @@ export function Payment() {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <PaymentSummary timeInMs={timeInMs} />
+                        <PaymentSummary timeInMs={timeInMs} orderWalletCreditPercentage={orderWalletCreditPercentage} />
                     </Grid>
                 </Grid>
 

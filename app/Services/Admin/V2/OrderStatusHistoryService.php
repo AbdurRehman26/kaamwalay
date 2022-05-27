@@ -76,9 +76,11 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 [
                     'order_status_id' => $orderStatusId,
                 ],
-                $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()]: [],
             ));
-        // TODO: replace find with the model.
+
+            $this->storeDatesAccordingToStatus($order, $orderStatusId);
+        
+            // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         if (! $orderStatusHistory) {
@@ -104,4 +106,20 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())
             ->first();
     }
+
+    private function storeDatesAccordingToStatus($order, $orderStatusId)
+    {
+        match ($orderStatusId) {
+            OrderStatus::CONFIRMED => [
+                $order->arrived_at = now(),
+                $order->reviewed_at = now(),
+            ],
+            OrderStatus::GRADED => $order->graded_at = now(),
+            OrderStatus::SHIPPED => $order->shipped_at = now(),
+            default => null,
+        };
+
+        $order->save();
+    }
+
 }

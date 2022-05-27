@@ -77,7 +77,7 @@ class OrderResource extends V1OrderResource
             'reviewed_at' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
             'graded_by' => $this->gradedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
             'graded_at' => $this->gradedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
-            'shipped_at' => $this->shippedAt(fn (?OrderStatusHistory $history) => $this->formatDate($history?->created_at)),
+            'shipped_at' => $this->shipped_at,
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
@@ -108,10 +108,4 @@ class OrderResource extends V1OrderResource
         ];
     }
 
-    protected function shippedAt(Closure $selector): mixed
-    {
-        return $this->when($this->order_status_id >= OrderStatus::SHIPPED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::SHIPPED)->latest()->first());
-        });
-    }
 }

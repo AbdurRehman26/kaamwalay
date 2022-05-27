@@ -19,7 +19,7 @@ class InsuredShippingFeeCalculator
         );
     }
 
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, array $shippingAddress = ['country_code' => 'US']): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?array $shippingAddress = ['country_code' => 'US']): float
     {
         if ($shippingAddress['country_code'] === 'US') {
             self::$shippingFee = self::calculateBasicShippingFee($totalDeclaredValue, $totalNumberOfItems);
@@ -117,7 +117,6 @@ class InsuredShippingFeeCalculator
     {
         $address = $order->shippingAddress->toArray();
 
-//        dd(array_merge($address, ['country_code' => Country::find($address['country_id'])->code]));
         return array_merge($address, ['country_code' => Country::find($address['country_id'])->code]);
     }
 }

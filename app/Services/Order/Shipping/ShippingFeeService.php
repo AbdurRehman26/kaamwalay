@@ -10,7 +10,7 @@ use App\Services\Order\Shipping\Calculators\VaultShippingFeeCalculator;
 
 class ShippingFeeService
 {
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null, array $shippingAddress = ['country_code' => 'US']): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null, ?array $shippingAddress = ['country_code' => 'US']): float
     {
         return match ($shippingMethod?->code) {
             ShippingMethod::VAULT_STORAGE => VaultShippingFeeCalculator::calculate(),

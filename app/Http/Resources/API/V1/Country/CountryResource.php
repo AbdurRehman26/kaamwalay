@@ -18,6 +18,7 @@ class CountryResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
+            'phone_code' => $this->phone_code,
         ];
     }
 }

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 beforeEach(function () {
-
     Event::fake();
 
     $this->user = User::factory()->create([

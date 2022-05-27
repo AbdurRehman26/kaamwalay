@@ -36,16 +36,16 @@ class AddOrderShippingDate extends Command
             ->where('shipped_at', null)
             ->get()
             ->each(function (Order $order) {
-                $this->info("Shipping date for orders # {$order->order_number} Completed.");
+                $this->info("Shipping date for order # {$order->order_number} Completed.");
 
                 $order->shipped_at = OrderStatusHistory::where('order_id', $order->id)
                     ->where('order_status_id', OrderStatus::SHIPPED)
-                    ->first()->shipped_at;
+                    ->first()->created_at;
 
                 $order->save();
             });
 
-        $this->info('Shipping date for orders Completed.');
+        $this->info('Shipping date for orders Generated.');
 
         return 0;
     }

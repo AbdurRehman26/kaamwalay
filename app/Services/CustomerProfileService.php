@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\API\User\UserAccountDeletedEvent;
+use App\Exceptions\API\Customer\UserAccountCannotBeDeactivatedException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeletedException;
 use App\Models\User;
 use App\Services\AGS\AgsService;
@@ -21,9 +22,16 @@ class CustomerProfileService
         return $user;
     }
 
+    /**
+     * @throws UserAccountCannotBeDeactivatedException
+     */
     public function deactivateProfile(User $user): bool
     {
-        $this->agsService->deactivateProfile($user);
+        $response = $this->agsService->deactivateProfile($user);
+
+        if (! isset($response['app_status']) || ! $response['app_status']) {
+            throw new UserAccountCannotBeDeactivatedException();
+        }
 
         $this->update($user, ['is_active' => false]);
 
@@ -37,7 +45,7 @@ class CustomerProfileService
     {
         $response = $this->agsService->deleteProfile($user);
 
-        if (! isset($response['app_status']) || ! ((bool)$response['app_status'])) {
+        if (! isset($response['app_status']) || ! $response['app_status']) {
             throw new UserAccountCannotBeDeletedException();
         }
 

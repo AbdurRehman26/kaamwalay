@@ -331,23 +331,20 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 </IconButton>
 
                                 <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                    {status === OrderStatusEnum.PLACED && (
-                                        <>
-                                            <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                                {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                            </MenuItem>
-                                            <MenuItem onClick={handleOption(Options.ViewInstructions)}>
-                                                View Instructions
-                                            </MenuItem>
-                                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking
-                                                #
-                                            </MenuItem>
-                                            {!isPaid ? (
-                                                <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem>
-                                            ) : null}
-                                        </>
-                                    )}
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                            {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ViewInstructions)}>
+                                            View Instructions
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                            {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                        </MenuItem>
+                                        {!isPaid ? (
+                                            <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem>
+                                        ) : null}
+                                    </>
                                 </Menu>
                             </div>
                         </div>

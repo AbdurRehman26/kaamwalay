@@ -81,7 +81,10 @@ test('a customer`s username can not be duplicate', function () {
 test('a customer can deactivate their account', function () {
     Http::fake([
         // Faking AGS update user API
-        'ags.api/users/me/' => Http::response([]),
+        'ags.api/users/me/' => Http::response([
+            "app_status" => 1,
+            "app_message" => 'OK',
+        ]),
     ]);
 
     $this->actingAs($this->user);
@@ -100,7 +103,7 @@ test('a customer can deactivate their account', function () {
     // This time we should get a 401
     $me = $this->getJson('/api/v2/auth/me');
     $me->assertUnauthorized();
-});
+})->skip('Feature is not available yet.');
 
 
 test('a customer can delete their account', function () {
@@ -135,7 +138,7 @@ test('a customer can delete their account', function () {
     $this->assertNotNull($user);
     $this->assertTrue($user->trashed());
     $this->assertEmpty($user->first_name);
-});
+})->skip('Feature is not available yet.');
 
 test('a customer cannot delete their account if ags fail', function () {
     Http::fake([
@@ -161,4 +164,4 @@ test('a customer cannot delete their account if ags fail', function () {
     // This time we should get a 401
     $me = $this->getJson('/api/v2/auth/me');
     $me->assertOk();
-});
+})->skip('Feature is not available yet.');

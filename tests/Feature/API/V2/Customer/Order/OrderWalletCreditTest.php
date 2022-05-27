@@ -1,17 +1,21 @@
 <?php
 
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Listeners\API\Order\V2\OrderWalletCreditListener;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\Wallet\WalletService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 beforeEach(function () {
+
     Event::fake();
+
     $this->user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);
@@ -47,7 +51,7 @@ beforeEach(function () {
 test('credit added to user`s wallet if he pays within 24 hrs', function () {
     $walletAmount = $this->user->wallet->balance;
 
-    $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+    $order = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
         'payment_method' => [
             'id' => 1,
         ],
@@ -59,7 +63,9 @@ test('credit added to user`s wallet if he pays within 24 hrs', function () {
         ->assertJsonStructure(['data' => ['id', 'charges']])
         ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
 
-    Event::assertDispatched(OrderPaid::class);
+    $listener = new OrderWalletCreditListener(new WalletService());
+    $listener->handle(new OrderPaid(Order::find($this->order->id)));
+
     expect(round(Wallet::find($this->user->wallet->id)->balance, 2))->toBe(round($walletAmount + ($this->order->grand_total * 5 / 100), 2));
     expect(round($this->user->wallet->lastTransaction->amount, 2))->toBe(round(($this->order->grand_total * 5 / 100), 2));
 })->group('order.wallet.credit');
@@ -81,6 +87,9 @@ test('credit is not added to user`s wallet if he pays after 24 hrs', function ()
         ->assertOk()
         ->assertJsonStructure(['data' => ['id', 'charges']])
         ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
+
+    $listener = new OrderWalletCreditListener(new WalletService());
+    $listener->handle(new OrderPaid(Order::find($this->order->id)));
 
     expect(Wallet::find($this->user->wallet->id)->balance)->toBe($walletAmount);
 })->group('order.wallet.credit');
@@ -106,6 +115,9 @@ test('credit is not added to user`s wallet if config flag is set to 0', function
         ->assertOk()
         ->assertJsonStructure(['data' => ['id', 'charges']])
         ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
+
+    $listener = new OrderWalletCreditListener(new WalletService());
+    $listener->handle(new OrderPaid(Order::find($this->order->id)));
 
     expect(Wallet::find($this->user->wallet->id)->balance)->toBe($walletAmount);
 })->group('order.wallet.credit');

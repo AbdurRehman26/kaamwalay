@@ -8,6 +8,8 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam { Int } payment_plan[id] Payment plan associated to order, taken from originalPaymentPlan
+ *
  *  @apiParamExample {json} Request-Example:
  *      {
  *          "payment_plan": {

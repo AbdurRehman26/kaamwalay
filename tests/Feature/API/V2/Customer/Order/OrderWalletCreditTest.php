@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
@@ -58,6 +59,7 @@ test('credit added to user`s wallet if he pays within 24 hrs', function () {
         ->assertJsonStructure(['data' => ['id', 'charges']])
         ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
 
+    Event::assertDispatched(OrderPaid::class);
     expect(round(Wallet::find($this->user->wallet->id)->balance, 2))->toBe(round($walletAmount + ($this->order->grand_total * 5 / 100), 2));
     expect(round($this->user->wallet->lastTransaction->amount, 2))->toBe(round(($this->order->grand_total * 5 / 100), 2));
 })->group('order.wallet.credit');

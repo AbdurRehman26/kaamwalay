@@ -34,7 +34,6 @@ class OrderPaidListener implements ShouldQueue
         if (config('robograding.feature_order_wallet_credit_enabled') && $event->order->isOlderThanOneDay()) {
             $this->processAddWalletCredit($event);
         }
-
     }
 
     /**

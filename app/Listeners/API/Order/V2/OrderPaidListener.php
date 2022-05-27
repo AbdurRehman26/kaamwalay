@@ -30,7 +30,11 @@ class OrderPaidListener implements ShouldQueue
     public function handle(OrderPaid $event): void
     {
         $this->processEmails($event);
-        $this->processAddWalletCredit($event);
+
+        if (config('robograding.feature_order_wallet_credit_enabled') && $event->order->isOlderThanOneDay()) {
+            $this->processAddWalletCredit($event);
+        }
+
     }
 
     /**

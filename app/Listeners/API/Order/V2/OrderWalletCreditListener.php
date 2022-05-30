@@ -26,7 +26,7 @@ class OrderWalletCreditListener
      */
     public function handle(OrderPaid $event): void
     {
-        if (config('robograding.feature_order_wallet_credit_enabled') && $event->order->isNotOlderThanOneDay() && $event->order->hasCoupon()) {
+        if (config('robograding.feature_order_wallet_credit_enabled') && $event->order->isNotOlderThanOneDay() && !$event->order->hasCoupon()) {
             $this->processAddWalletCredit($event);
         }
     }

@@ -156,7 +156,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
-    const { orderWalletCreditPercentage } = useConfiguration();
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
 
     const endTime = datePlaced ? new Date(new Date(datePlaced).getTime() + 86400000) : 0;
     const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced).getTime() + 86400000 : 0;
@@ -284,7 +284,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {!isPaid && timeInMs !== 0 && orderWalletCreditPercentage ? (
+                    {!isPaid && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PayNowStatusNotice
@@ -292,11 +292,12 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     countdownTimestampMs={timeInMs}
                                     isConfirmationPage={false}
                                     isPayPage={false}
+                                    isCoupon={false}
                                 />
                             </TableCell>
                         </TableRow>
                     ) : null}
-                    {!isPaid && (!orderWalletCreditPercentage || timeInMs === 0) ? (
+                    {!isPaid && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PaymentStatusNotice
@@ -387,17 +388,18 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
-                        {!isPaid && timeInMs !== 0 && orderWalletCreditPercentage ? (
+                        {!isPaid && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
                             <Grid mt={3}>
                                 <PayNowStatusNotice
                                     id={id}
                                     countdownTimestampMs={timeInMs}
                                     isConfirmationPage={false}
                                     isPayPage={false}
+                                    isCoupon={false}
                                 />
                             </Grid>
                         ) : null}
-                        {!isPaid && (!orderWalletCreditPercentage || timeInMs === 0) ? (
+                        {!isPaid && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                             <Grid mt={3}>
                                 <PaymentStatusNotice
                                     id={id}

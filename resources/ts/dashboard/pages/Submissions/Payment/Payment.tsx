@@ -312,6 +312,7 @@ export function Payment() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
@@ -347,7 +348,7 @@ export function Payment() {
 
     const endTime = new Date(new Date(order.data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
-    const { orderWalletCreditPercentage } = useConfiguration();
+    const { featureOrderWalletCreditEnabled, featureOrderWalletCreditPercentage } = useConfiguration();
 
     useEffect(() => {
         schema
@@ -511,13 +512,14 @@ export function Payment() {
                             Pay For Submission
                         </Typography>
                     </div>
-                    {timeInMs !== 0 && orderWalletCreditPercentage ? (
+                    {timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
                         <Grid mt={'20px'}>
                             <PayNowStatusNotice
                                 id={order.data?.id}
                                 countdownTimestampMs={timeInMs}
                                 isConfirmationPage={false}
                                 isPayPage={true}
+                                isCoupon={isCouponApplied}
                             />
                         </Grid>
                     ) : (
@@ -888,7 +890,11 @@ export function Payment() {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <PaymentSummary timeInMs={timeInMs} orderWalletCreditPercentage={orderWalletCreditPercentage} />
+                        <PaymentSummary
+                            timeInMs={timeInMs}
+                            featureOrderWalletCreditPercentage={featureOrderWalletCreditPercentage}
+                            featureOrderWalletCreditEnabled={featureOrderWalletCreditEnabled}
+                        />
                     </Grid>
                 </Grid>
 

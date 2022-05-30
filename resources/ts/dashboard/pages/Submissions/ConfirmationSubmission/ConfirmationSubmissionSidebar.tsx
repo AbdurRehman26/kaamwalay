@@ -39,7 +39,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
     const message = (error as Error)?.message || error;
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
-    const { orderWalletCreditPercentage } = useConfiguration();
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
 
     if (message === 'This action is unauthorized.') {
         return <Navigate to={'/submissions'} replace />;
@@ -270,17 +270,18 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     </TableContainer>
                 </Box>
             </Paper>
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && orderWalletCreditPercentage ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={orderId}
                         countdownTimestampMs={timeInMs}
                         isConfirmationPage={true}
                         isPayPage={false}
+                        isCoupon={false}
                     />
                 </Grid>
             ) : null}
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!orderWalletCreditPercentage || timeInMs === 0) ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                 <Grid mt={'20px'}>
                     <PaymentStatusNotice id={orderId} paymentStatus={data?.paymentStatus} hasWidth={true} />
                 </Grid>

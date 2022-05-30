@@ -34,6 +34,12 @@ const CardDiv = styled(Card)({
     '.Title': {
         color: '#FFFFFF',
     },
+    '.CouponNote': {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '12px',
+        paddingTop: '15px',
+        fontWeight: 'bold',
+    },
 });
 
 const PaperDiv = styled(Paper)({
@@ -44,6 +50,25 @@ const PaperDiv = styled(Paper)({
     '.BoldTitle': {
         color: '#DA6612',
     },
+    '.CouponNote': {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '12px',
+        fontWeight: 'bold',
+    },
+});
+
+const CouponDiv = styled(Paper)({
+    background: 'rgba(187, 187, 187, 0.08)',
+    border: '1px solid #D6D6D6',
+    borderRadius: '4px',
+    padding: '15px 15px',
+    width: '345px',
+
+    '.CouponAppliedNote': {
+        fontSize: '12px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontWeight: 'bold',
+    },
 });
 
 interface PayNowProps {
@@ -51,12 +76,13 @@ interface PayNowProps {
     countdownTimestampMs: number;
     isConfirmationPage: boolean;
     isPayPage: boolean;
+    isCoupon: boolean;
 }
 
 export default function PayNowStatusNotice(props: PayNowProps) {
     const navigate = useNavigate();
-    const { id, countdownTimestampMs, isConfirmationPage, isPayPage } = props;
-    const { orderWalletCreditPercentage } = useConfiguration();
+    const { id, countdownTimestampMs, isConfirmationPage, isPayPage, isCoupon } = props;
+    const { featureOrderWalletCreditPercentage } = useConfiguration();
 
     const defaultRemainingTime = {
         seconds: '00',
@@ -76,14 +102,21 @@ export default function PayNowStatusNotice(props: PayNowProps) {
     function updateRemainingTime(countdown: any) {
         setRemainingTime(getRemainingTime(countdown));
     }
-    if (isPayPage === true) {
-        return (
+    if (isPayPage) {
+        return isCoupon ? (
+            <CouponDiv>
+                <Typography className={'CouponAppliedNote'}>
+                    {featureOrderWalletCreditPercentage}% credit does not apply if using a promo code.
+                </Typography>
+            </CouponDiv>
+        ) : (
             <PaperDiv>
                 <Typography sx={{ fontSize: '12px' }}>
-                    <b className={'BoldTitle'}>Earn {orderWalletCreditPercentage}% </b>
+                    <b className={'BoldTitle'}>Earn {featureOrderWalletCreditPercentage}% </b>
                     <b>in the credit by paying in the next</b> {''}
                     <PayNowHeading remainingTime={remainingTime} hasClass={true} />
                 </Typography>
+                <Typography className={'CouponNote'}>Does not apply if using a promo code.</Typography>
             </PaperDiv>
         );
     }
@@ -94,7 +127,7 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                 <Grid className={'CardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
                         Pay in the next <PayNowHeading remainingTime={remainingTime} hasClass={false} /> and get{' '}
-                        <b>{orderWalletCreditPercentage}% back</b> in AGS credit.
+                        <b>{featureOrderWalletCreditPercentage}% back</b> in AGS credit.
                     </Typography>
                 </Grid>
             ) : null}
@@ -102,8 +135,8 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                 {isConfirmationPage ? (
                     <>
                         <Typography variant="body2">
-                            If you choose to pay now you <b>EARN {orderWalletCreditPercentage}%</b> in credit to go
-                            towards any future order.
+                            If you choose to pay now you <b>EARN {featureOrderWalletCreditPercentage}%</b> in credit to
+                            go towards any future order.
                         </Typography>
                         <Typography variant="body2" mt={3} mb={2}>
                             You can pay whenever you like. Just keep in mind we can't ship your cards back until you
@@ -115,11 +148,11 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                         <Typography sx={{ fontSize: '20px' }}>
                             <b>Payment Pending: </b>Pay in the next{' '}
                             <PayNowHeading remainingTime={remainingTime} hasClass={true} /> and get
-                            <b className={'BoldTitle'}> {orderWalletCreditPercentage}% back</b> in AGS credit.
+                            <b className={'BoldTitle'}> {featureOrderWalletCreditPercentage}% back</b> in AGS credit.
                         </Typography>
                         <Typography variant="body2" mt={2} mb={2}>
-                            If you choose to pay now you <b>EARN {orderWalletCreditPercentage}%</b> in credit to go
-                            towards any future order. You can pay whenever you like. Just keep in mind we can't ship
+                            If you choose to pay now you <b>EARN {featureOrderWalletCreditPercentage}%</b> in credit to
+                            go towards any future order. You can pay whenever you like. Just keep in mind we can't ship
                             your cards back until you have completed payment.
                         </Typography>
                     </>
@@ -132,6 +165,9 @@ export default function PayNowStatusNotice(props: PayNowProps) {
                 >
                     PAY NOW
                 </Button>
+                <Typography className={'CouponNote'}>
+                    * The {featureOrderWalletCreditPercentage}% credit does not apply if using a promo code.
+                </Typography>
             </CardContent>
         </CardDiv>
     );

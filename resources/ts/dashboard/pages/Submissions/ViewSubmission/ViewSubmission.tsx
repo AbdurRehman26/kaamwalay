@@ -49,7 +49,7 @@ export function ViewSubmission() {
 
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
-    const { orderWalletCreditPercentage } = useConfiguration();
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
 
     if (isLoading || isError) {
         return (
@@ -68,17 +68,18 @@ export function ViewSubmission() {
             />
             <Divider />
             <Box marginTop={'24px'} />
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && orderWalletCreditPercentage ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
                 <Grid mt={'20px'}>
                     <PayNowStatusNotice
                         id={data?.id}
                         countdownTimestampMs={timeInMs}
                         isConfirmationPage={false}
                         isPayPage={false}
+                        isCoupon={false}
                     />
                 </Grid>
             ) : null}
-            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!orderWalletCreditPercentage || timeInMs === 0) ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus

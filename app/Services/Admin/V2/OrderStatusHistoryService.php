@@ -91,7 +91,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ]);
         }
 
-        if (getModelId($orderStatus) === OrderStatus::SHIPPED) {          
+        if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->notes = $notes;
             $orderStatusHistory->save();

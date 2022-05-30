@@ -40,7 +40,7 @@ class AddOrderGivenStatusDate extends Command
         };
 
         if ($status != null) {
-            $this->info('Generating shipping date for orders.');
+            $this->info('Generating order status date for orders.');
 
             Order::where('order_status_id', $orderStatusId)
                 ->where($status, null)
@@ -60,10 +60,10 @@ class AddOrderGivenStatusDate extends Command
                     };
 
                     $order->save();
-                    $this->info("Shipping date for order # {$order->order_number} Completed.");
+                    $this->info("Order status date for order # {$order->order_number} Completed.");
                 });
 
-            $this->info('Shipping date for orders Generated.');
+            $this->info('Order status date for orders Generated.');
         } else {
             $this->info('Invalid order status provided.');
         }

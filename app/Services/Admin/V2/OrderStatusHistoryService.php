@@ -77,7 +77,8 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 ],
             ));
 
-        $this->storeDatesAccordingToStatus($order, $orderStatusId);
+        $orderQuery = Order::where('id', $orderId)->first();
+        $this->storeDatesAccordingToStatus($orderQuery, $orderStatusId);
         
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));

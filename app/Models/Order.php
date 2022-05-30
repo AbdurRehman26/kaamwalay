@@ -495,7 +495,7 @@ class Order extends Model implements Exportable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
-    public function isOlderThanOneDay(): bool
+    public function isNotOlderThanOneDay(): bool
     {
         return now()->diff($this->created_at)->days === 0;
     }

@@ -14,7 +14,6 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
@@ -78,9 +77,9 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 ],
             ));
 
-            $this->storeDatesAccordingToStatus($order, $orderStatusId);
+        $this->storeDatesAccordingToStatus($order, $orderStatusId);
         
-            // TODO: replace find with the model.
+        // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         if (! $orderStatusHistory) {
@@ -121,5 +120,4 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         $order->save();
     }
-
 }

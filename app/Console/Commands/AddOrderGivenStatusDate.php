@@ -67,6 +67,7 @@ class AddOrderGivenStatusDate extends Command
         } else {
             $this->info('Invalid order status provided.');
         }
+
         return 0;
     }
 }

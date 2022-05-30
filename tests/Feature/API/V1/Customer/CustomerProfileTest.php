@@ -1,7 +1,9 @@
 <?php
 
+use App\Jobs\ProcessImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 
 uses(WithFaker::class);
 
@@ -16,7 +18,12 @@ beforeEach(function () {
 });
 
 test('a customer can update his profile', function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
     $this->actingAs($this->user);
+    Bus::fake(ProcessImage::class);
 
     $response = $this->putJson('/api/v1/customer/profile', [
             'first_name' => 'first',
@@ -41,6 +48,23 @@ test('a customer can update his profile', function () {
             'customer_number',
         ],
     ]);
+    Bus::assertDispatched(ProcessImage::class);
+});
+
+test('profile update does not dispatch Process Image job if no profile image', function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    $this->actingAs($this->user);
+    Bus::fake(ProcessImage::class);
+
+    $response = $this->putJson('/api/v2/customer/profile', [
+        'first_name' => 'first',
+    ]);
+
+    $response->assertSuccessful();
+    Bus::assertNotDispatched(ProcessImage::class);
 });
 
 test('customer profile update required fields error', function () {

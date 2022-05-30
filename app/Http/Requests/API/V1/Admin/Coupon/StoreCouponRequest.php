@@ -45,7 +45,7 @@ class StoreCouponRequest extends FormRequest
             'code' => ['required'],
             'description' => ['required', 'max:250'],
             'type' => ['required', 'in:fixed,percentage,flat'],
-            'discount_value' => ['required', 'numeric'],
+            'discount_value' => ['required', 'numeric', 'min:1'],
             'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],
             'available_from' => [
                 'required',

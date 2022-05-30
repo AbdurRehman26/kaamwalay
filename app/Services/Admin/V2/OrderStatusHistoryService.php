@@ -107,7 +107,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->first();
     }
 
-    private function storeDatesAccordingToStatus($order, $orderStatusId)
+    private function storeDatesAccordingToStatus(Order $order, int $orderStatusId): void
     {
         match ($orderStatusId) {
             OrderStatus::CONFIRMED => [

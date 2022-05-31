@@ -91,7 +91,6 @@ export function NewSubmission() {
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
     const isNextLoading = useAppSelector((state) => state.newSubmission.isNextLoading);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
@@ -123,9 +122,6 @@ export function NewSubmission() {
                 await dispatch(getSavedAddresses());
                 googleTagManager({ event: 'google-ads-cards-selected' });
             } else if (currentStep === 2) {
-                if (shippingAddress) {
-                    await dispatch(getShippingFee(selectedCards));
-                }
                 ReactGA.event({
                     category: EventCategories.ShippingAddresses,
                     action:

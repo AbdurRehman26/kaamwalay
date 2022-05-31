@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getCountriesList,
     getSavedAddresses,
+    getShippingFee,
     getStatesList,
     resetSelectedExistingAddress,
     setDisableAllShippingInputs,
@@ -158,6 +159,7 @@ export function InsuredShippingMethod() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const fullName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.fullName);
@@ -205,6 +207,12 @@ export function InsuredShippingMethod() {
         }
     }
 
+    useEffect(() => {
+        // dispatch(getShippingFee(selectedCards));
+        // setInternationalShipping(!isInternationalShipping)
+        // console.log('Calling from here ! ')
+    }, []);
+
     function updateShippingCountry(countryId: any) {
         const country = availableCountries.find((country: any) => country.id === parseInt(countryId));
         if (country) {
@@ -212,6 +220,18 @@ export function InsuredShippingMethod() {
                 updateShippingAddressField({
                     fieldName: 'country',
                     newValue: { name: country.name, id: country.id, code: country?.code },
+                }),
+            );
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'stateName',
+                    newValue: '',
+                }),
+            );
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'state',
+                    newValue: { name: '', id: '', code: '' },
                 }),
             );
             dispatch(getStatesList({ countryId }));
@@ -235,6 +255,10 @@ export function InsuredShippingMethod() {
                     })
                     .then((valid) => {
                         dispatch(setIsNextDisabled(!valid));
+                        console.log('Valid ', valid);
+                        if (valid) {
+                            // dispatch(getShippingFee(selectedCards));
+                        }
                     });
             }
 
@@ -275,6 +299,12 @@ export function InsuredShippingMethod() {
         [dispatch],
     );
 
+    useEffect(() => {
+        if (country && fullName && (address || address2) && city && zipCode && phoneNumber && (state.id || stateName)) {
+            console.log('Validated! ');
+        }
+    }, [dispatch, fullName, country, address, address2, city, zipCode, phoneNumber, stateName, state]);
+
     useEffect(
         () => {
             // Did the user check the 'Use custom address" checkbox?
@@ -301,6 +331,7 @@ export function InsuredShippingMethod() {
                 try {
                     setIsLoadingAddresses(true);
 
+                    await dispatch(getShippingFee(selectedCards));
                     await dispatch(getStatesList());
                     await dispatch(getCountriesList());
                     await dispatch(getSavedAddresses());
@@ -398,7 +429,7 @@ export function InsuredShippingMethod() {
                                 <option value="none">Select a country</option>
                                 {availableCountries.map((item: any) => (
                                     <option key={item.id} value={item.id}>
-                                        {item?.code}
+                                        {item?.name}
                                     </option>
                                 ))}
                             </Select>

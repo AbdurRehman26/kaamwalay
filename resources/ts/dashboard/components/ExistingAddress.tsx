@@ -4,7 +4,11 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { setSelectedExistingAddress, setUseCustomShippingAddress } from '@dashboard/redux/slices/newSubmissionSlice';
+import {
+    getShippingFee,
+    setSelectedExistingAddress,
+    setUseCustomShippingAddress,
+} from '@dashboard/redux/slices/newSubmissionSlice';
 
 type ExistingAddressProps = {
     fullName: string;
@@ -66,13 +70,15 @@ function ExistingAddress(props: ExistingAddressProps) {
     const selectedExistingAddressID = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+
     const dispatch = useAppDispatch();
     const { fullName, address, address2, flat, zip, city, state, country, id } = props;
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
     function handleRadioPress() {
         dispatch(setSelectedExistingAddress(id));
-
+        dispatch(getShippingFee(selectedCards));
         // We disable the custom shipping checkbox when he presses on an existing address
         // As a side effect of this, all the inputs will get disabled too
         // This will protect us from the scenario of having the user complete both the text fields and also select an address

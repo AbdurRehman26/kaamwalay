@@ -43,7 +43,7 @@ export interface AddCardsToSubmission {
 }
 
 export interface Address {
-    fullName: string;
+    fullName?: string;
     firstName?: string;
     lastName?: string;
     address: string;
@@ -382,11 +382,11 @@ export const getShippingFee = createAsyncThunk(
             country = existingAddresses.country.code ? existingAddresses.country.code : existingAddresses.country;
         }
         const DTO = {
-            ...(shippingAddress.country.code !== '' && {
+            ...((shippingAddress.country.code !== '' || existingAddresses.country.code !== '') && {
                 shippingAddress: {
                     address: shippingAddress.address ? shippingAddress.address : existingAddresses.address,
                     city: shippingAddress.city ? shippingAddress.city : existingAddresses.city,
-                    state: state,
+                    state: state ? state : shippingAddress.state,
                     zip: shippingAddress.zipCode ? shippingAddress.zipCode : existingAddresses.zipCode,
                     phone: shippingAddress.phoneNumber ? shippingAddress.phoneNumber : existingAddresses.phoneNumber,
                     countryCode: country,
@@ -403,6 +403,18 @@ export const getShippingFee = createAsyncThunk(
         return shippingFeeResponse.data.shippingFee;
     },
 );
+
+// export const getAddress = createAsyncThunk(
+//     'newSubmission/getAddress',
+//     async (addressId: number, thunk) => {
+//         const apiService = app(APIService);
+//         const endpoint = apiService.createEndpoint(`customer/addresses/${addressId}`);
+
+//         const address = await endpoint.get('');
+//         console.log('address ', address)
+//         return address.data;
+//     },
+// );
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
@@ -497,7 +509,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
     const existingAddressId = currentSubmission.step03Data.selectedExistingAddress.id;
 
-    const parsedName = parseName(existingAddressId, finalShippingAddress.fullName);
+    const parsedName = parseName(existingAddressId, finalShippingAddress?.fullName);
 
     const orderDTO = {
         paymentPlan: {
@@ -609,7 +621,7 @@ export const updateOrderItem = createAsyncThunk(
     },
 );
 
-const parseName = (id: number, fullName: string) => {
+const parseName = (id: number, fullName: any) => {
     if (id === -1) {
         const value = fullName.trim();
         const firstSpace = value.indexOf(' ');

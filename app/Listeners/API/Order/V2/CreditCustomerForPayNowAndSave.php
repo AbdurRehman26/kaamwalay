@@ -6,7 +6,7 @@ use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\Wallet\WalletService;
 
-class OrderWalletCreditListener
+class CreditCustomerForPayNowAndSave
 {
     /**
      * Create the event listener.
@@ -26,8 +26,8 @@ class OrderWalletCreditListener
      */
     public function handle(OrderPaid $event): void
     {
-        if (config('robograding.feature_order_wallet_credit_enabled') && ! $event->order->isOlderThanOneDay() && ! $event->order->hasCoupon()) {
-            $this->processAddWalletCredit($event);
+        if (! $event->order->isOlderThanOneDay() && ! $event->order->hasCoupon() && config('robograding.feature_order_wallet_credit_enabled')) {
+            $this->addCreditToCustomerWallet($event);
         }
     }
 
@@ -35,11 +35,11 @@ class OrderWalletCreditListener
      * @param  OrderPaid  $event
      * @return void
      */
-    protected function processAddWalletCredit(OrderPaid $event): void
+    protected function addCreditToCustomerWallet(OrderPaid $event): void
     {
         $this->walletService->processTransaction(
             $event->order->user->wallet->id,
-            ($event->order->grand_total * 5 / 100),
+            ($event->order->grand_total * config('robograding.feature_order_wallet_credit_percentage')) / 100,
             WalletTransactionReason::WALLET_CREDIT,
             $event->order->user_id,
             $event->order->id

@@ -207,6 +207,12 @@ export function InsuredShippingMethod() {
                     newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup?.code },
                 }),
             );
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'stateName',
+                    newValue: '',
+                }),
+            );
         }
     }
 
@@ -230,12 +236,12 @@ export function InsuredShippingMethod() {
                     },
                 }),
             );
-            dispatch(
-                updateShippingAddressField({
-                    fieldName: 'stateName',
-                    newValue: '',
-                }),
-            );
+            // dispatch(
+            //     updateShippingAddressField({
+            //         fieldName: 'stateName',
+            //         newValue: '',
+            //     }),
+            // );
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'state',
@@ -613,7 +619,11 @@ export function InsuredShippingMethod() {
                             <Typography className={classes.methodDescription}>Phone Number</Typography>
                             <NumberFormat
                                 customInput={TextField}
-                                format={country.phoneCode + ' (###) ###-####'}
+                                format={
+                                    country.phoneCode
+                                        ? country.phoneCode + ' (###) ###-####'
+                                        : availableCountries[0].phoneCode + ' (###) ###-####'
+                                }
                                 mask=""
                                 style={{ margin: 8, marginLeft: 0 }}
                                 placeholder="Enter Phone Number"

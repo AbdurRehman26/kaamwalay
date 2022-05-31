@@ -15,7 +15,7 @@ class Country extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'name', 'is_enabled'];
+    protected $fillable = ['code', 'name', 'is_enabled', 'phone_code'];
 
     /**
      * The attributes that should be cast to native types.

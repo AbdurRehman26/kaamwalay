@@ -56,6 +56,9 @@ export class OrderEntity extends Entity {
     @Type(() => PaymentMethodEntity)
     public paymentMethod!: PaymentMethodEntity;
 
+    @Type(() => PaymentPlanEntity)
+    public originalPaymentPlan!: PaymentPlanEntity;
+
     @Type(() => OrderExtraChargeEntity)
     public extraCharges!: OrderExtraChargeEntity[];
 

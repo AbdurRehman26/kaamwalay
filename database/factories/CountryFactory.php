@@ -18,6 +18,7 @@ class CountryFactory extends Factory
         return [
             'code' => $this->faker->countryCode(),
             'name' => $this->faker->country(),
+            'phone_code' => '+'.$this->faker->randomNumber(2, true),
         ];
     }
 }

@@ -192,6 +192,9 @@ export function InsuredShippingMethod() {
         // If the user is about to disable the checkbox, we'll select the first existing address on the list
         if (useCustomShippingAddress) {
             dispatch(setSelectedExistingAddress(existingAddresses[0].id));
+        } else {
+            // If the user is enabling the checkbox, we set default country to the first one in list
+            dispatch(updateShippingCountry(country.id ? country.id : availableCountries[0].id));
         }
     }
 
@@ -219,7 +222,12 @@ export function InsuredShippingMethod() {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'country',
-                    newValue: { name: country.name, id: country.id, code: country?.code },
+                    newValue: {
+                        name: country.name,
+                        id: country.id,
+                        code: country?.code,
+                        phoneCode: country?.phoneCode,
+                    },
                 }),
             );
             dispatch(
@@ -605,7 +613,7 @@ export function InsuredShippingMethod() {
                             <Typography className={classes.methodDescription}>Phone Number</Typography>
                             <NumberFormat
                                 customInput={TextField}
-                                format="+1 (###) ###-####"
+                                format={country.phoneCode + ' (###) ###-####'}
                                 mask=""
                                 style={{ margin: 8, marginLeft: 0 }}
                                 placeholder="Enter Phone Number"

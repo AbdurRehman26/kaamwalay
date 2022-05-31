@@ -164,7 +164,6 @@ class AgsService
     }
 
     /**
-     * @deprecated Grades on public page are now shown directly from Robograding
      * @param  array  $data
      * @return array
      */

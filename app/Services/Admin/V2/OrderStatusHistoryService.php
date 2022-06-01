@@ -68,18 +68,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             }
         }
 
-        Order::query()
-            ->where('id', $orderId)
-            ->first()
-            ->update(array_merge(
-                [
-                    'order_status_id' => $orderStatusId,
-                ],
-            ));
+        Order::where('id', $orderId)->update([
+            'order_status_id' => $orderStatusId,
+        ]);
 
-        $orderQuery = Order::where('id', $orderId)->first();
-        $this->storeDatesAccordingToStatus($orderQuery, $orderStatusId);
-        
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
@@ -91,6 +83,8 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 'notes' => $notes,
             ]);
         }
+
+        $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 
         if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
             $orderStatusHistory->user_id = getModelId($user);
@@ -104,15 +98,17 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->first();
     }
 
-    private function storeDatesAccordingToStatus(Order $order, int $orderStatusId): void
+    protected function updateStatusDateOnOrder(Order $order, OrderStatusHistory $orderStatusHistory): void
     {
-        match ($orderStatusId) {
+        $date = $orderStatusHistory->created_at;
+
+        match ($order->order_status_id) {
             OrderStatus::CONFIRMED => [
-                $order->arrived_at = now(),
-                $order->reviewed_at = now(),
+                $order->arrived_at = $date,
+                $order->reviewed_at = $date,
             ],
-            OrderStatus::GRADED => $order->graded_at = now(),
-            OrderStatus::SHIPPED => $order->shipped_at = now(),
+            OrderStatus::GRADED => $order->graded_at = $date,
+            OrderStatus::SHIPPED => $order->shipped_at = $date,
             default => null,
         };
 

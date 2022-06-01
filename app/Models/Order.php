@@ -91,7 +91,7 @@ class Order extends Model implements Exportable
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
-        'shipped_at' => 'datetime',
+        'shipped_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',

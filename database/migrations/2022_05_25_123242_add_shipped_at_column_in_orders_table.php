@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->timestamp('shipped_at')->nullable()->after('paid_at');
+            $table->timestamp('shipped_at')->nullable()->after('graded_at');
         });
     }
 

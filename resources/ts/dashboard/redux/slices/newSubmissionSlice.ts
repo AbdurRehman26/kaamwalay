@@ -248,6 +248,7 @@ const initialState: NewSubmissionSliceState = {
                 name: '',
                 code: '',
                 id: 0,
+                phoneCode: '',
             },
         ],
         availableStatesList: [
@@ -372,8 +373,6 @@ export const getShippingFee = createAsyncThunk(
         const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
         const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
         const existingAddresses = (thunk.getState() as any).newSubmission.step03Data.selectedExistingAddress;
-        console.log('Shipping Address ', shippingAddress);
-        console.log('Existing Address ', existingAddresses);
 
         let state;
         let country;
@@ -401,23 +400,10 @@ export const getShippingFee = createAsyncThunk(
                 declaredValuePerUnit: item.value,
             })),
         };
-        console.log('DTO ', DTO);
         const shippingFeeResponse = await endpoint.post('', DTO);
         return shippingFeeResponse.data.shippingFee;
     },
 );
-
-// export const getAddress = createAsyncThunk(
-//     'newSubmission/getAddress',
-//     async (addressId: number, thunk) => {
-//         const apiService = app(APIService);
-//         const endpoint = apiService.createEndpoint(`customer/addresses/${addressId}`);
-
-//         const address = await endpoint.get('');
-//         console.log('address ', address)
-//         return address.data;
-//     },
-// );
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
@@ -574,7 +560,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
-    console.log('Order DTO ', orderDTO);
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });

@@ -152,6 +152,7 @@ export function InsuredShippingMethod() {
     const { authenticated } = useAuth();
     const dispatch = useAppDispatch();
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
+    const [isShippingFee, setIsShippingFee] = useState(false);
 
     const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
     const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
@@ -216,11 +217,14 @@ export function InsuredShippingMethod() {
         }
     }
 
-    useEffect(() => {
-        // dispatch(getShippingFee(selectedCards));
-        // setInternationalShipping(!isInternationalShipping)
-        // console.log('Calling from here ! ')
-    }, []);
+    const handleShippingFee = async () => {
+        if (isShippingFee) {
+            setIsLoadingAddresses(true);
+            await dispatch(getShippingFee(selectedCards));
+            setIsShippingFee(false);
+            setIsLoadingAddresses(false);
+        }
+    };
 
     function updateShippingCountry(countryId: any) {
         const country = availableCountries.find((country: any) => country.id === parseInt(countryId));
@@ -236,16 +240,10 @@ export function InsuredShippingMethod() {
                     },
                 }),
             );
-            // dispatch(
-            //     updateShippingAddressField({
-            //         fieldName: 'stateName',
-            //         newValue: '',
-            //     }),
-            // );
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'state',
-                    newValue: { name: '', id: '', code: '' },
+                    newValue: {},
                 }),
             );
             dispatch(getStatesList({ countryId }));
@@ -269,9 +267,8 @@ export function InsuredShippingMethod() {
                     })
                     .then((valid) => {
                         dispatch(setIsNextDisabled(!valid));
-                        console.log('Valid ', valid);
                         if (valid) {
-                            // dispatch(getShippingFee(selectedCards));
+                            setIsShippingFee(true);
                         }
                     });
             }
@@ -312,12 +309,6 @@ export function InsuredShippingMethod() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [dispatch],
     );
-
-    useEffect(() => {
-        if (country && fullName && (address || address2) && city && zipCode && phoneNumber && (state.id || stateName)) {
-            console.log('Validated! ');
-        }
-    }, [dispatch, fullName, country, address, address2, city, zipCode, phoneNumber, stateName, state]);
 
     useEffect(
         () => {
@@ -436,6 +427,7 @@ export function InsuredShippingMethod() {
                                 defaultValue={country.id ? country.id : availableCountries[0].id}
                                 disabled={disableAllInputs}
                                 onChange={(e: any) => updateShippingCountry(e.nativeEvent.target.value)}
+                                onBlur={handleShippingFee}
                                 placeholder={'Select Country'}
                                 variant={'outlined'}
                                 style={{ height: '43px', marginTop: 6 }}
@@ -459,6 +451,7 @@ export function InsuredShippingMethod() {
                                 disabled={disableAllInputs}
                                 value={fullName}
                                 onChange={(e: any) => updateField('fullName', e.target.value)}
+                                onBlur={handleShippingFee}
                                 fullWidth
                                 size={'small'}
                                 variant={'outlined'}
@@ -483,6 +476,7 @@ export function InsuredShippingMethod() {
                                 disabled={disableAllInputs}
                                 value={address}
                                 onChange={(e: any) => updateField('address', e.target.value)}
+                                onBlur={handleShippingFee}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"
@@ -506,6 +500,7 @@ export function InsuredShippingMethod() {
                                 disabled={disableAllInputs}
                                 value={address2}
                                 onChange={(e: any) => updateField('address2', e.target.value)}
+                                onBlur={handleShippingFee}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"
@@ -523,6 +518,7 @@ export function InsuredShippingMethod() {
                                     style={{ margin: 8, marginLeft: 0 }}
                                     value={city}
                                     onChange={(e: any) => updateField('city', e.target.value)}
+                                    onBlur={handleShippingFee}
                                     placeholder="Enter City"
                                     fullWidth
                                     disabled={disableAllInputs}
@@ -545,6 +541,7 @@ export function InsuredShippingMethod() {
                                     style={{ margin: 8, marginLeft: 0 }}
                                     value={city}
                                     onChange={(e: any) => updateField('city', e.target.value)}
+                                    onBlur={handleShippingFee}
                                     placeholder="Enter City"
                                     fullWidth
                                     disabled={disableAllInputs}
@@ -567,6 +564,7 @@ export function InsuredShippingMethod() {
                                     disabled={disableAllInputs}
                                     value={state.id || 'none'}
                                     onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
+                                    onBlur={handleShippingFee}
                                     placeholder={'Select State'}
                                     variant={'outlined'}
                                     style={{ height: '43px' }}
@@ -586,6 +584,7 @@ export function InsuredShippingMethod() {
                                     disabled={disableAllInputs}
                                     value={stateName}
                                     onChange={(e: any) => updateField('stateName', e.target.value)}
+                                    onBlur={handleShippingFee}
                                     size={'small'}
                                     variant={'outlined'}
                                     margin="normal"
@@ -604,6 +603,7 @@ export function InsuredShippingMethod() {
                                 disabled={disableAllInputs}
                                 value={zipCode}
                                 onChange={(e: any) => updateField('zipCode', e.target.value)}
+                                onBlur={handleShippingFee}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"
@@ -629,6 +629,7 @@ export function InsuredShippingMethod() {
                                 placeholder="Enter Phone Number"
                                 value={phoneNumber}
                                 onChange={(e: any) => updateField('phoneNumber', e.target.value)}
+                                onBlur={handleShippingFee}
                                 fullWidth
                                 disabled={disableAllInputs}
                                 variant={'outlined'}

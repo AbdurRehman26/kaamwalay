@@ -6,7 +6,6 @@ export const addressValidationSchema = yup.object().shape(
             .string()
             .required()
             .matches(/(\w+\s+[^-])+\S[^-]+/),
-        // lastName: yup.string().required(),
         address: yup.string().required(),
         address2: yup.string().optional(),
         flat: yup.string().optional(),
@@ -30,7 +29,7 @@ export const addressValidationSchema = yup.object().shape(
                 }),
             }),
         stateName: yup.string().when('state', {
-            is: (state: { name: string; code: string; id: number }) => state.id !== 0,
+            is: (state: { name: string; code: string; id: number }) => state.code === '',
             then: yup.string().required(),
             otherwise: yup.string(),
         }),

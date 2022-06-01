@@ -40,7 +40,7 @@ class OrderLabelService
             'certificate_list' => $certList,
         ]);
 
-        if (empty($response) || $response['app_status'] !== 1) {
+        if (empty($response) || (isset($response['app_status']) && $response['app_status'] === 2)) {
             throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
         }
 

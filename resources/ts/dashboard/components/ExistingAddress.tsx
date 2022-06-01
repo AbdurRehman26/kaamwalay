@@ -1,8 +1,10 @@
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
     getShippingFee,
@@ -73,12 +75,15 @@ function ExistingAddress(props: ExistingAddressProps) {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
 
     const dispatch = useAppDispatch();
+    const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
     const { fullName, address, address2, flat, zip, city, state, country, id } = props;
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
-    function handleRadioPress() {
+    async function handleRadioPress() {
         dispatch(setSelectedExistingAddress(id));
-        dispatch(getShippingFee(selectedCards));
+        setIsLoadingAddresses(true);
+        await dispatch(getShippingFee(selectedCards));
+        setIsLoadingAddresses(false);
         // We disable the custom shipping checkbox when he presses on an existing address
         // As a side effect of this, all the inputs will get disabled too
         // This will protect us from the scenario of having the user complete both the text fields and also select an address
@@ -87,16 +92,30 @@ function ExistingAddress(props: ExistingAddressProps) {
     }
 
     return (
-        <Paper variant={'outlined'} className={classes.container} onClick={handleRadioPress}>
-            <div className={classes.radioBtnContainer}>
-                <Radio color={'primary'} onClick={handleRadioPress} checked={selectedExistingAddressID === id} />
-            </div>
-            <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
-            <Typography className={classes.addressLineText}>{`${address} ${address2} ${
-                flat ? `Apt: ${flat}` : ''
-            }`}</Typography>
-            <Typography className={classes.addressLineText}>{`${city}, ${state} ${zip}, ${country}`}</Typography>
-        </Paper>
+        <>
+            {isLoadingAddresses ? (
+                <Grid container alignItems={'center'} justifyContent={'center'} p={3}>
+                    <CircularProgress />
+                </Grid>
+            ) : (
+                <Paper variant={'outlined'} className={classes.container} onClick={handleRadioPress}>
+                    <div className={classes.radioBtnContainer}>
+                        <Radio
+                            color={'primary'}
+                            onClick={handleRadioPress}
+                            checked={selectedExistingAddressID === id}
+                        />
+                    </div>
+                    <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
+                    <Typography className={classes.addressLineText}>{`${address} ${address2} ${
+                        flat ? `Apt: ${flat}` : ''
+                    }`}</Typography>
+                    <Typography
+                        className={classes.addressLineText}
+                    >{`${city}, ${state} ${zip}, ${country}`}</Typography>
+                </Paper>
+            )}
+        </>
     );
 }
 

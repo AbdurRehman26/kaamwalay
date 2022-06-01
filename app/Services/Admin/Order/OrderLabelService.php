@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
@@ -22,6 +23,7 @@ class OrderLabelService
 
     /**
      * @throws AgsServiceIsDisabled
+     * @throws OrderLabelCouldNotBeGeneratedException
      */
     public function generateLabel(Order $order): void
     {
@@ -33,12 +35,14 @@ class OrderLabelService
 
         $certList = $this->orderService->getOrderCertificates($order);
 
-        $response = $this->agsService->createCardLabel(
-            data: array_merge(
-                ['order_id' => $order->order_number],
-                ['certificate_list' => $certList]
-            )
-        );
+        $response = $this->agsService->createCardLabel([
+            'order_id' => $order->order_number,
+            'certificate_list' => $certList,
+        ]);
+
+        if (empty($response) || $response['app_status'] !== 1) {
+            throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
+        }
 
         $fileUrl = $this->generateFileAndUploadToCloud($order, $response);
         $this->saveCardLabel($order, $fileUrl);

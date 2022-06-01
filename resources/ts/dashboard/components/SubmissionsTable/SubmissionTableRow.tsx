@@ -38,7 +38,7 @@ interface SubmissionTableRowProps {
     disabled?: boolean;
     isSm?: boolean;
     orderCustomerShipment: null | ShipmentEntity;
-    datePlaced?: Date | null;
+    datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
     paymentStatus?: PaymentStatusEnum;
 }
@@ -158,8 +158,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const dispatch = useAppDispatch();
     const { featureOrderWalletCreditEnabled } = useConfiguration();
 
-    const endTime = datePlaced ? new Date(new Date(datePlaced).getTime() + 86400000) : 0;
-    const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced).getTime() + 86400000 : 0;
+    const endTime = datePlaced ? new Date(new Date(datePlaced.toString()).getTime() + 86400000) : 0;
+    const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced.toString()).getTime() + 86400000 : 0;
 
     const handleOption = useCallback(
         (option: Options) => async (e: MouseEvent<HTMLElement>) => {

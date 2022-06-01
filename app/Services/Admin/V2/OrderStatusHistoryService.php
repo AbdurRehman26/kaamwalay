@@ -73,9 +73,6 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             'order_status_id' => $orderStatusId,
         ]);
 
-        // TODO: replace find with the model.
-        OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
-
         if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([
                 'order_id' => $orderId,
@@ -84,6 +81,9 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 'notes' => $notes,
             ]);
         }
+
+        // TODO: replace find with the model.
+        OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 

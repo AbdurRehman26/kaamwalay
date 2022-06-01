@@ -82,10 +82,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ]);
         }
 
+        $this->updateStatusDateOnOrder($order, $orderStatusHistory);
+
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
-
-        $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 
         if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
             $orderStatusHistory->user_id = getModelId($user);

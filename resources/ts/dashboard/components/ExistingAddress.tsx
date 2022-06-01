@@ -77,13 +77,13 @@ function ExistingAddress(props: ExistingAddressProps) {
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
     function handleRadioPress() {
-        dispatch(setSelectedExistingAddress(id));
-        dispatch(getShippingFee(selectedCards));
         // We disable the custom shipping checkbox when he presses on an existing address
         // As a side effect of this, all the inputs will get disabled too
         // This will protect us from the scenario of having the user complete both the text fields and also select an address
         // And, since this component is only rendered if the user has multiple saved addresses, it won't affect the first time user
         dispatch(setUseCustomShippingAddress(false));
+        dispatch(setSelectedExistingAddress(id));
+        dispatch(getShippingFee(selectedCards));
     }
 
     return (

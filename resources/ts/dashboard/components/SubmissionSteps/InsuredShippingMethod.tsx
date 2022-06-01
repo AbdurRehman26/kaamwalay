@@ -246,6 +246,18 @@ export function InsuredShippingMethod() {
                     newValue: {},
                 }),
             );
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'stateName',
+                    newValue: '',
+                }),
+            );
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'phoneNumber',
+                    newValue: '',
+                }),
+            );
             dispatch(getStatesList({ countryId }));
         }
     }

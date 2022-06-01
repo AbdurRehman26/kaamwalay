@@ -270,6 +270,7 @@ function addressFromEntity(address: AddressEntity) {
             id: address.country?.id,
             name: address.country?.name,
             code: address.country?.code,
+            phoneCode: address.country?.phoneCode,
         },
         state: {
             id: 0,

@@ -68,7 +68,8 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             }
         }
 
-        Order::where('id', $orderId)->update([
+        $order = Order::where('id', $orderId)->first();
+        $order->update([
             'order_status_id' => $orderStatusId,
         ]);
 

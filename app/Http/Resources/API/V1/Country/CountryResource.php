@@ -4,6 +4,9 @@ namespace App\Http\Resources\API\V1\Country;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property string $phone_code
+ */
 class CountryResource extends JsonResource
 {
     /**

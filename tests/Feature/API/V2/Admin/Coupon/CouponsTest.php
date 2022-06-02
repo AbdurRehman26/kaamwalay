@@ -276,3 +276,16 @@ test('admin can create coupon with flat discount', function () {
     ])
         ->assertCreated();
 });
+
+test('admin cannot create coupon with zero or negative discount', function ($discountValue) {
+    actingAs($this->user);
+    postJson(route('v2.coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => $discountValue,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'usage_allowed_per_user' => null,
+        'is_permanent' => true,
+    ])->assertJsonValidationErrors(['discount_value' => 'The discount value must be at least 1.']);
+})->with([0, -1]);

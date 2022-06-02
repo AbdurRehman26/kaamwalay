@@ -6,16 +6,24 @@ import { useCallback, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { useRepository } from '@shared/hooks/useRepository';
-import { UserRepository } from '@shared/repositories/UserRepository';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { deactivateProfile, deleteProfile } from '@shared/redux/slices/userSlice';
+import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
 import { SettingsSection } from './SettingsSection';
 
 export function ProfileActions() {
-    const userRepository = useRepository(UserRepository);
     const confirm = useConfirmation();
     const { logout } = useAuth();
     const notifications = useNotifications();
     const [loading, setLoading] = useState('');
+    const dispatch = useSharedDispatch();
+    const HTTP_AGS_UNAUTHORIZED = 400;
+    const [showAskForPasswordDialog, setShowAskForPasswordDialog] = useState<boolean>(false);
+    const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
+
+    const toggleAskForPasswordDialog = useCallback(() => {
+        setShowAskForPasswordDialog((prev) => !prev);
+    }, []);
 
     const handleDeleteClick = useCallback(async () => {
         setLoading('delete');
@@ -35,15 +43,21 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                await userRepository.deleteProfile();
-                logout();
+                const data: any = await dispatch(deleteProfile());
+                if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
+                    setShowAskForPasswordDialog(true);
+                    setPasswordConfirmCallback(() => async () => {
+                        await dispatch(deleteProfile());
+                        logout();
+                    });
+                }
             }
         } catch (e) {
             notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, notifications, userRepository]);
+    }, [confirm, logout, notifications, dispatch]);
 
     const handleDeactivateClick = useCallback(async () => {
         setLoading('deactivate');
@@ -62,55 +76,68 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                await userRepository.deactivateProfile();
-                logout();
+                const data: any = await dispatch(deactivateProfile());
+                if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
+                    setShowAskForPasswordDialog(true);
+                    setPasswordConfirmCallback(() => async () => {
+                        await dispatch(deactivateProfile());
+                        logout();
+                    });
+                }
             }
         } catch (e) {
             notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, notifications, userRepository]);
+    }, [confirm, logout, notifications, dispatch]);
 
     return (
-        <SettingsSection headline={'Account'}>
-            <Stack alignItems={'flex-start'} justifyContent={'flex-start'} px={2} pb={3}>
-                <Typography variant={'subtitle1'} fontWeight={500}>
-                    Deactivate Account
-                </Typography>
-                <Typography variant={'caption'} color={'textSecondary'} maxWidth={400} mb={1}>
-                    Your account will be deactivated, you'll be able to activate it again later with a help of our
-                    support.
-                </Typography>
-                <LoadingButton
-                    loading={loading === 'deactivate'}
-                    disabled={!!loading}
-                    variant={'outlined'}
-                    color={'error'}
-                    onClick={handleDeactivateClick}
-                >
-                    Deactivate Account
-                </LoadingButton>
+        <>
+            <ConfirmUserPasswordDialog
+                open={showAskForPasswordDialog}
+                onClose={toggleAskForPasswordDialog}
+                afterSaveCallback={passwordConfirmCallback}
+            />
+            <SettingsSection headline={'Account'}>
+                <Stack alignItems={'flex-start'} justifyContent={'flex-start'} px={2} pb={3}>
+                    <Typography variant={'subtitle1'} fontWeight={500}>
+                        Deactivate Account
+                    </Typography>
+                    <Typography variant={'caption'} color={'textSecondary'} maxWidth={400} mb={1}>
+                        Your account will be deactivated, you'll be able to activate it again later with a help of our
+                        support.
+                    </Typography>
+                    <LoadingButton
+                        loading={loading === 'deactivate'}
+                        disabled={!!loading}
+                        variant={'outlined'}
+                        color={'error'}
+                        onClick={handleDeactivateClick}
+                    >
+                        Deactivate Account
+                    </LoadingButton>
 
-                <Divider flexItem sx={{ my: 3 }} />
+                    <Divider flexItem sx={{ my: 3 }} />
 
-                <Typography variant={'subtitle1'} fontWeight={500}>
-                    Delete Account
-                </Typography>
-                <Typography variant={'caption'} color={'textSecondary'} maxWidth={400} mb={1}>
-                    This is a permanent action, you'll be unable to recover your account. You can deactivate your
-                    account instead.
-                </Typography>
-                <LoadingButton
-                    loading={loading === 'delete'}
-                    disabled={!!loading}
-                    variant={'contained'}
-                    color={'error'}
-                    onClick={handleDeleteClick}
-                >
-                    Delete Account
-                </LoadingButton>
-            </Stack>
-        </SettingsSection>
+                    <Typography variant={'subtitle1'} fontWeight={500}>
+                        Delete Account
+                    </Typography>
+                    <Typography variant={'caption'} color={'textSecondary'} maxWidth={400} mb={1}>
+                        This is a permanent action, you'll be unable to recover your account. You can deactivate your
+                        account instead.
+                    </Typography>
+                    <LoadingButton
+                        loading={loading === 'delete'}
+                        disabled={!!loading}
+                        variant={'contained'}
+                        color={'error'}
+                        onClick={handleDeleteClick}
+                    >
+                        Delete Account
+                    </LoadingButton>
+                </Stack>
+            </SettingsSection>
+        </>
     );
 }

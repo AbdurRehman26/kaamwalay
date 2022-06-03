@@ -87,4 +87,70 @@ class HubspotService
             Log::error($exception);
         }
     }
+
+    public function updateDealStageForOrderPlacedUser(User $user) {
+        try {
+            $hubspotClient = $this->getClient();
+
+            $owner = new Owners($hubspotClient);
+            $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
+
+            $createDeal = [
+                [
+                    'value' => $user->getFullName() ?: '',
+                    'name' => 'dealname',
+                ],
+                [
+                    'value' => config('services.hubspot.pipeline_id'),
+                    'name' => 'pipeline',
+                ],
+                [
+                    'value' => config('services.hubspot.pipline_stage_id_new_customer'),
+                    'name' => 'dealstage',
+                ],
+                [
+                    'value' => $ownerResponse[0]['ownerId'],
+                    'name' => 'hubspot_owner_id',
+                ],
+            ];
+
+            $deal = new Deals($hubspotClient);
+            $response = $deal->create($createDeal);
+
+            $contact = new Contacts($hubspotClient);
+            $createContact = [
+                [
+                    'property' => 'email',
+                    'value' => $user->email ?: '',
+                ],
+                [
+                    'property' => 'firstname',
+                    'value' => $user->first_name ?: '',
+                ],
+                [
+                    'property' => 'lastname',
+                    'value' => $user->last_name ?: '',
+                ],
+                [
+                    'property' => 'phone',
+                    'value' => $user->phone ?: '',
+                ],
+            ];
+
+            $contactResponse = $contact->create($createContact);
+
+            $associateContact = new CrmAssociations($hubspotClient);
+            $associateContact->create([
+                // @phpstan-ignore-next-line
+                'fromObjectId' => $contactResponse->vid,
+                // @phpstan-ignore-next-line
+                'toObjectId' => $response->dealId,
+                'category' => 'HUBSPOT_DEFINED',
+                'definitionId' => 4,
+            ]);
+        } catch (RequestException $exception) {
+            report($exception);
+            Log::error($exception);
+        }
+    }
 }

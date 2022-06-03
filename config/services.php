@@ -60,6 +60,7 @@ return [
         'owner_email' => env('HUBSPOT_OWNER_EMAIL'),
         'pipeline_id' => env('HUBSPOT_PIPELINE_ID'),
         'pipline_stage_id' => env('HUBSPOT_PIPELINE_STAGE_ID'),
+        'pipline_stage_id_new_customer' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_CUSTOMER'),
     ],
 
     'dropbox' => [

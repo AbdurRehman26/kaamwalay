@@ -3,12 +3,14 @@
 namespace App\Services\Payment\V2\Providers;
 
 use App\Exceptions\Services\Payment\FailedPaymentException;
+use App\Exceptions\Services\Payment\FailedPaymentMethodDeleteException;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Str;
+use Stripe\Exception\InvalidRequestException;
 
 class TestingStripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
@@ -303,4 +305,14 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
             'notes' => $refundData['metadata']['Notes'],
         ];
     }
+
+    public function deleteUserPaymentMethod(User $user, $paymentMethodId): void
+    {
+        try{
+            /* Mocking delete stripe payment method */
+        }catch (InvalidRequestException $invalidRequestException){
+            throw new FailedPaymentMethodDeleteException($invalidRequestException->getMessage());
+        }
+    }
+
 }

@@ -60,6 +60,33 @@ const useStyles = makeStyles(
             marginTop: '5%',
             width: '100%',
         },
+        newCardFormContainer: {
+            width: '550px',
+        },
+        cardForm: {
+            iconStyle: 'solid',
+            style: {
+                base: {
+                    iconColor: '#c4f0ff',
+                    color: '#fff',
+                    fontWeight: 500,
+                    fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+                    fontSize: '16px',
+                    fontSmoothing: 'antialiased',
+
+                    ':-webkit-autofill': {
+                        color: '#fce883',
+                    },
+                    '::placeholder': {
+                        color: '#87BBFD',
+                    },
+                },
+                invalid: {
+                    iconColor: '#FFC7EE',
+                    color: '#FFC7EE',
+                },
+            },
+        },
     }),
     {
         name: 'ListVaultShipmentsPage',
@@ -238,8 +265,8 @@ export function ListPaymentCards() {
             <Dialog open={showAddCardModal} onClose={() => setShowAddCardModal(false)}>
                 <DialogTitle id="form-dialog-title">Add a new card</DialogTitle>
                 <DialogContent>
-                    <div>
-                        <CardElement options={CARD_OPTIONS as any} />
+                    <div className={classes.newCardFormContainer}>
+                        <CardElement options={CARD_OPTIONS as any} className={classes.cardForm} />
                     </div>
                 </DialogContent>
                 <DialogActions>

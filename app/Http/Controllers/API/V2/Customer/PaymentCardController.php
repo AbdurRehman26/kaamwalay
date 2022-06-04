@@ -19,10 +19,9 @@ class PaymentCardController extends V1PaymentCardController
             resolve(StripeService::class)->deleteUserPaymentMethod($user, $paymentMethodId);
 
             return new JsonResponse([], Response::HTTP_NO_CONTENT);
-        }catch (Exception $exception){
-
+        } catch (Exception $exception) {
             return new JsonResponse([
-                'error' => $exception->getMessage()
+                'error' => $exception->getMessage(),
             ], Response::HTTP_NOT_FOUND);
         }
     }

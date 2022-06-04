@@ -22,9 +22,6 @@ interface PaymentCardDeleteDialogProps extends Omit<DialogProps, 'onSubmit'> {
 const useStyles = makeStyles(
     (theme: Theme) =>
         createStyles({
-            formControl: {
-                minWidth: '100%',
-            },
             dialogActions: {
                 marginBottom: '12px',
                 marginRight: '18px',
@@ -38,31 +35,8 @@ const useStyles = makeStyles(
             saveBtn: {
                 marginLeft: '12px',
             },
-            fieldContainer: {
-                display: 'flex',
-                alignItems: 'start',
-                flexDirection: 'column',
-                marginBottom: '24px',
-            },
-            selectEmpty: {
-                marginTop: theme.spacing(2),
-            },
-            label: {
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                fontSize: '12px',
-                lineHeight: '16px',
-                letterSpacing: '0.2px',
-                color: 'rgba(0, 0, 0, 0.87)',
-                marginBottom: '8px',
-            },
-            shipmentSelect: {
-                height: '40px',
-                width: '100%',
-            },
         }),
-    { name: 'ShipmentDialog' },
+    { name: 'PaymentCardDeleteDialog' },
 );
 
 function PaymentCardDeleteDialog(props: PaymentCardDeleteDialogProps) {
@@ -91,13 +65,7 @@ function PaymentCardDeleteDialog(props: PaymentCardDeleteDialogProps) {
     return (
         <Dialog onClose={handleClose} {...rest}>
             <DialogTitle>{title}</DialogTitle>
-            <Formik
-                initialValues={{
-                    orderNumber: paymentCardNumber ?? '',
-                    orderId: paymentCardId ?? '',
-                }}
-                onSubmit={handleSubmit}
-            >
+            <Formik initialValues={{}} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                     <Form>
                         <DialogContent className={classes.contentContainer}></DialogContent>

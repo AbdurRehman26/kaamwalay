@@ -38,12 +38,6 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             alignItems: 'center',
         },
-        maxValueContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxHeight: '64px',
-            padding: 0,
-        },
         levelTitle: {
             fontFamily: 'Roboto',
             transform: 'translateZ(0)',
@@ -63,26 +57,6 @@ const useStyles = makeStyles(
             textAlign: 'right',
             letterSpacing: '0.1px',
         },
-        price: {
-            fontFamily: 'Roboto',
-            transform: 'translateZ(0)',
-            fontStyle: 'normal',
-            fontWeight: 400,
-            fontSize: '16px',
-            lineHeight: '24px',
-            letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.87)',
-        },
-        turnaround: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
-            fontWeight: 'normal',
-            fontSize: '12px',
-            lineHeight: '16px',
-            textAlign: 'right',
-            letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.54)',
-        },
         cardMetadataContainer: {
             display: 'flex',
             flexDirection: 'column',
@@ -94,7 +68,7 @@ const useStyles = makeStyles(
             color: 'grey',
         },
     }),
-    { name: 'ServiceLevelItemStyle' },
+    { name: 'PaymentCardItem' },
 );
 
 interface PaymentCardItemProps extends CreditCard {

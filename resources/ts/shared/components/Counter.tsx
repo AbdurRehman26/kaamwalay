@@ -1,27 +1,27 @@
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 export function getRemainingTime(timestampMs: any) {
-    const timestampDayjs = dayjs(timestampMs);
-    const nowDayjs = dayjs();
+    const timestamp = moment(timestampMs);
+    const nowMoment = moment();
 
     let remainingTime = {
-        seconds: getRemainingSeconds(nowDayjs, timestampDayjs),
-        minutes: getRemainingMinutes(nowDayjs, timestampDayjs),
-        hours: getRemainingHours(nowDayjs, timestampDayjs),
+        seconds: getRemainingSeconds(nowMoment, timestamp),
+        minutes: getRemainingMinutes(nowMoment, timestamp),
+        hours: getRemainingHours(nowMoment, timestamp),
     };
 
-    function getRemainingSeconds(nowDayjs: any, timestampDayjs: any) {
-        const seconds = timestampDayjs.diff(nowDayjs, 'seconds') % 60;
+    function getRemainingSeconds(nowMoment: any, timestamp: any) {
+        const seconds = timestamp.diff(nowMoment, 'seconds') % 60;
         return padWithZeros(seconds, 2);
     }
 
-    function getRemainingMinutes(nowDayjs: any, timestampDayjs: any) {
-        const minutes = timestampDayjs.diff(nowDayjs, 'minutes') % 60;
+    function getRemainingMinutes(nowMoment: any, timestamp: any) {
+        const minutes = timestamp.diff(nowMoment, 'minutes') % 60;
         return padWithZeros(minutes, 2);
     }
 
-    function getRemainingHours(nowDayjs: any, timestampDayjs: any) {
-        const hours = timestampDayjs.diff(nowDayjs, 'hours') % 24;
+    function getRemainingHours(nowMoment: any, timestamp: any) {
+        const hours = timestamp.diff(nowMoment, 'hours') % 24;
         return padWithZeros(hours, 2);
     }
 
@@ -33,7 +33,7 @@ export function getRemainingTime(timestampMs: any) {
         return '0'.repeat(minLength - numberString.length) + numberString;
     }
 
-    if (timestampDayjs.isBefore(nowDayjs)) {
+    if (timestamp.isBefore(nowMoment)) {
         remainingTime = {
             seconds: '00',
             minutes: '00',

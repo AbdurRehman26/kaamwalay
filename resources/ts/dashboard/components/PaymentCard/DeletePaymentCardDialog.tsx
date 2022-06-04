@@ -11,7 +11,7 @@ import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { getPaymentTitle } from '@shared/lib/payments';
 
-interface PaymentCardDeleteDialogProps extends Omit<DialogProps, 'onSubmit'> {
+interface DeletePaymentCardDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
     paymentCardNumber?: string;
     paymentCardId?: string;
@@ -36,10 +36,10 @@ const useStyles = makeStyles(
                 marginLeft: '12px',
             },
         }),
-    { name: 'PaymentCardDeleteDialog' },
+    { name: 'DeletePaymentCardDialog' },
 );
 
-function DeletePaymentCardDialog(props: PaymentCardDeleteDialogProps) {
+function DeletePaymentCardDialog(props: DeletePaymentCardDialogProps) {
     const { dialogTitle, paymentCardNumber, paymentCardBrand, paymentCardId, onClose, onSubmit, ...rest } = props;
     const classes = useStyles();
 

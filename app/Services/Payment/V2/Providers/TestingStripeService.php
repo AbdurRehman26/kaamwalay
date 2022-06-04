@@ -308,11 +308,10 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
 
     public function deleteUserPaymentMethod(User $user, $paymentMethodId): void
     {
-        try{
+        try {
             /* Mocking delete stripe payment method */
-        }catch (InvalidRequestException $invalidRequestException){
+        } catch (InvalidRequestException $invalidRequestException) {
             throw new FailedPaymentMethodDeleteException($invalidRequestException->getMessage());
         }
     }
-
 }

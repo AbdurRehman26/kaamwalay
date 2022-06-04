@@ -151,11 +151,8 @@ export function ListPaymentCards() {
     const handleCardDeleteSubmit = async (id: string) => {
         const endpoint = apiService.createEndpoint(`customer/payment-cards/${id}`);
         try {
-            setIsCardsListLoading(true);
             await endpoint.delete('');
-            setIsCardsListLoading(true);
             await loadExistingStripeCards();
-            setIsCardsListLoading(false);
         } catch (error: any) {
             setIsCardsListLoading(false);
             if (error.response?.status !== 401) {

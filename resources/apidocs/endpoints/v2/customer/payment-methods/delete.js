@@ -9,7 +9,7 @@
  * @apiUse Authorization
  *
  * @apiQuery {paymentMethodId} Payment Method ID ( Stripe )
- * @apiSuccess (200) No Content
+ * @apiSuccess (204) No Content
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 No-Content

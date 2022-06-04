@@ -43,7 +43,7 @@ class OrderPlacedNotification extends Notification
         $customerFullName = $this->order->user->getFullName();
 
         if (empty($customerFullName)) {
-            $customerFullName = $this->order->shippingAddress->getFullName();
+            $customerFullName = $this->order->shippingAddress?->getFullName();
         }
 
         return "$customerFullName, {$this->order->grand_total}, UNPAID, {$this->order->order_number}, $totalCards";

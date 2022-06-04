@@ -28,6 +28,7 @@ class UserCard extends Model
         'certificate_number',
         'grade_delta',
         'shipping_status',
+        'is_fake',
     ];
 
     protected $casts = [
@@ -41,6 +42,7 @@ class UserCard extends Model
         'graded_at' => 'datetime',
         'grade_delta' => 'float',
         'shipping_status' => UserCardShippingStatus::class,
+        'is_fake' => 'boolean',
     ];
 
     /**
@@ -55,13 +57,13 @@ class UserCard extends Model
             'card_name' => $this->orderItem->cardProduct->name,
             'card_image' => $this->orderItem->cardProduct->image_path,
             'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
-            'graded_at' => $this->created_at,
             'certificate_number' => $this->certificate_number,
             'owner_name' => $this->user->username,
             'grade_nickname' => $this->overall_grade_nickname,
             'grade_overall' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
+            'shipped_at' => $this->orderItem->order->shipped_at,
         ];
     }
 

@@ -326,6 +326,7 @@ export function Payment() {
             params: {
                 include: [
                     'paymentPlan',
+                    'originalPaymentPlan',
                     'orderStatusHistory',
                     'orderCustomerShipment',
                     'orderStatusHistory.orderStatus',

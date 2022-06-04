@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { useCallback, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { UserRepository } from '@shared/repositories/UserRepository';
 import { SettingsSection } from './SettingsSection';
@@ -13,7 +14,7 @@ export function ProfileActions() {
     const userRepository = useRepository(UserRepository);
     const confirm = useConfirmation();
     const { logout } = useAuth();
-
+    const notifications = useNotifications();
     const [loading, setLoading] = useState('');
 
     const handleDeleteClick = useCallback(async () => {
@@ -37,10 +38,12 @@ export function ProfileActions() {
                 await userRepository.deleteProfile();
                 logout();
             }
+        } catch (e) {
+            notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, userRepository]);
+    }, [confirm, logout, notifications, userRepository]);
 
     const handleDeactivateClick = useCallback(async () => {
         setLoading('deactivate');
@@ -62,10 +65,12 @@ export function ProfileActions() {
                 await userRepository.deactivateProfile();
                 logout();
             }
+        } catch (e) {
+            notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, userRepository]);
+    }, [confirm, logout, notifications, userRepository]);
 
     return (
         <SettingsSection headline={'Account'}>

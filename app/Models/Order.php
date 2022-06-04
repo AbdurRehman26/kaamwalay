@@ -54,12 +54,14 @@ class Order extends Model implements Exportable
         'graded_by_id',
         'reviewed_at',
         'graded_at',
+        'shipped_at',
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
         'order_step',
         'payment_status',
+        'salesman_id',
     ];
 
     /**
@@ -89,6 +91,7 @@ class Order extends Model implements Exportable
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
+        'shipped_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
@@ -145,6 +148,7 @@ class Order extends Model implements Exportable
         return [
             AllowedInclude::relationship('invoice'),
             AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('originalPaymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
             AllowedInclude::relationship('orderPayment', 'firstOrderPayment'),
@@ -178,6 +182,14 @@ class Order extends Model implements Exportable
     public function paymentPlan(): BelongsTo
     {
         return $this->belongsTo(OrderPaymentPlan::class, 'order_payment_plan_id');
+    }
+
+    /**
+     * @return BelongsTo<PaymentPlan, Order>
+     */
+    public function originalPaymentPlan(): BelongsTo
+    {
+        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
     }
 
     public function orderStatus(): BelongsTo
@@ -360,6 +372,14 @@ class Order extends Model implements Exportable
     }
 
     /**
+     * @return BelongsTo<User, Order>
+     */
+    public function salesman(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'salesman_id');
+    }
+
+    /**
      * @param  Builder <Order> $query
      * @return Builder <Order>
      */
@@ -484,5 +504,10 @@ class Order extends Model implements Exportable
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
+    }
+
+    public function isOlderThanOneDay(): bool
+    {
+        return now()->diff($this->created_at)->days > 0;
     }
 }

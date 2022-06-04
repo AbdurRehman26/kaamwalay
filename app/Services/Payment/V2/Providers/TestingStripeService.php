@@ -310,5 +310,4 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
     {
         /* Mocking delete stripe payment method */
     }
-
 }

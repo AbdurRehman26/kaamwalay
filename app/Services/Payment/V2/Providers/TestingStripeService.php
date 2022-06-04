@@ -3,14 +3,12 @@
 namespace App\Services\Payment\V2\Providers;
 
 use App\Exceptions\Services\Payment\FailedPaymentException;
-use App\Exceptions\Services\Payment\FailedPaymentMethodDeleteException;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Str;
-use Stripe\Exception\InvalidRequestException;
 
 class TestingStripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {

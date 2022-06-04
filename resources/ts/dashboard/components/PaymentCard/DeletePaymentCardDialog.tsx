@@ -39,7 +39,7 @@ const useStyles = makeStyles(
     { name: 'PaymentCardDeleteDialog' },
 );
 
-function PaymentCardDeleteDialog(props: PaymentCardDeleteDialogProps) {
+function DeletePaymentCardDialog(props: PaymentCardDeleteDialogProps) {
     const { dialogTitle, paymentCardNumber, paymentCardBrand, paymentCardId, onClose, onSubmit, ...rest } = props;
     const classes = useStyles();
 
@@ -91,4 +91,4 @@ function PaymentCardDeleteDialog(props: PaymentCardDeleteDialogProps) {
     );
 }
 
-export default PaymentCardDeleteDialog;
+export default DeletePaymentCardDialog;

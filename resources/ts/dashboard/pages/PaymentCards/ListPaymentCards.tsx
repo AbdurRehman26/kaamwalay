@@ -1,11 +1,7 @@
-import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+import AddCardOutlined from '@mui/icons-material/AddCardOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -13,42 +9,19 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
-import ReactGA from 'react-ga';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { APIService } from '@shared/services/APIService';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
+import AddPaymentCardDialog from '@dashboard/components/PaymentCard/AddPaymentCardDialog';
 import PaymentCardItem from '@dashboard/components/PaymentCard/PaymentCardItem';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { saveStripeCustomerCards } from '@dashboard/redux/slices/newSubmissionSlice';
 
-const CARD_OPTIONS = {
-    iconStyle: 'solid',
-    style: {
-        base: {
-            color: '#32325D',
-            fontWeight: 500,
-            fontFamily: 'Inter, Open Sans, Segoe UI, sans-serif',
-            fontSize: '16px',
-            fontSmoothing: 'antialiased',
-            '::placeholder': {
-                color: '#CFD7DF',
-            },
-        },
-        invalid: {
-            color: '#E25950',
-        },
-    },
-};
-
 const useStyles = makeStyles(
     (theme) => ({
-        newShipmentBtn: {
+        newAddBtn: {
             borderRadius: 24,
             padding: '12px 24px',
             [theme.breakpoints.down('sm')]: {
@@ -60,36 +33,9 @@ const useStyles = makeStyles(
             marginTop: '5%',
             width: '100%',
         },
-        newCardFormContainer: {
-            width: '550px',
-        },
-        cardForm: {
-            iconStyle: 'solid',
-            style: {
-                base: {
-                    iconColor: '#c4f0ff',
-                    color: '#fff',
-                    fontWeight: 500,
-                    fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-                    fontSize: '16px',
-                    fontSmoothing: 'antialiased',
-
-                    ':-webkit-autofill': {
-                        color: '#fce883',
-                    },
-                    '::placeholder': {
-                        color: '#87BBFD',
-                    },
-                },
-                invalid: {
-                    iconColor: '#FFC7EE',
-                    color: '#FFC7EE',
-                },
-            },
-        },
     }),
     {
-        name: 'ListVaultShipmentsPage',
+        name: 'ListPaymentCards',
     },
 );
 
@@ -98,15 +44,12 @@ export function ListPaymentCards() {
     const apiService = useInjectable(APIService);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const [isCardsListLoading, setIsCardsListLoading] = useState(false);
-    const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
     const [showAddCardModal, setShowAddCardModal] = useState(false);
     const dispatch = useAppDispatch();
     const existingCustomerStripeCards = useAppSelector((state) => state.newSubmission.step04Data.existingCreditCards);
     let cardsListElement;
 
     const notifications = useNotifications();
-    const stripe = useStripe();
-    const elements = useElements();
 
     const loadExistingStripeCards = async () => {
         const endpoint = apiService.createEndpoint('customer/payment-cards');
@@ -161,56 +104,12 @@ export function ListPaymentCards() {
         }
     };
 
-    const handleSaveCard = async () => {
-        const endpoint = apiService.createEndpoint('customer/payment-cards/setup');
-        if (!stripe || !elements) {
-            // Stripe.js has not yet loaded.
-            // Make sure to disable submission until it loaded ;).
-            return;
-        }
-        setSaveBtnLoading(true);
-        try {
-            // Get stripe client secret from back-end in order to use it to save the card
-            const requestClientSecret = await endpoint.post('');
-
-            // We're using the client secret now in order to save the card for the customer on stripe
-            const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.clientSecret, {
-                // eslint-disable-next-line camelcase
-                payment_method: {
-                    card: elements.getElement(CardElement) as any,
-                },
-            });
-            // The card couldn't be saved to stripe
-            if (result.error) {
-                // Let the user know we couldn't save his card
-                setSaveBtnLoading(false);
-                notifications.error(result.error.message!, 'Error');
-            } else {
-                // The card has been successfully saved to stripe, now we ask the back-end to send us all the stripe cards for this customer
-                // we're then listing them on the page
-                await loadExistingStripeCards();
-                notifications.success('Your card was successfully saved', 'Card saved');
-                setSaveBtnLoading(false);
-                ReactGA.event({
-                    category: EventCategories.PaymentMethods,
-                    action: PaymentMethodEvents.addedNewStripeCard,
-                });
-                trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
-            }
-        } catch (e) {
-            console.error(e);
-            // Treat errors.
-        } finally {
-            setSaveBtnLoading(false);
-        }
-    };
-
     const $newCard = (
         <Button
             onClick={() => setShowAddCardModal(true)}
             variant={'contained'}
             color={'primary'}
-            className={classes.newShipmentBtn}
+            className={classes.newAddBtn}
         >
             Add a Card
         </Button>
@@ -229,7 +128,7 @@ export function ListPaymentCards() {
             <Grid item xs={12} sm={12} order={{ xs: 2, sm: 1 }}>
                 <Paper variant={'outlined'} sx={{ width: '100%', backgroundColor: '#F9F9F9', borderRadius: '10px' }}>
                     <Stack p={3} alignItems={'center'} justifyContent={'center'}>
-                        <AccountBalanceWalletTwoToneIcon />
+                        <AddCardOutlined />
                         <Typography mt={1} variant={'subtitle1'} fontWeight={700}>
                             No Saved Cards
                         </Typography>
@@ -259,22 +158,11 @@ export function ListPaymentCards() {
 
             <div className={classes.paymentCards}>{cardsListElement}</div>
 
-            <Dialog open={showAddCardModal} onClose={() => setShowAddCardModal(false)}>
-                <DialogTitle id="form-dialog-title">Add a new card</DialogTitle>
-                <DialogContent>
-                    <div className={classes.newCardFormContainer}>
-                        <CardElement options={CARD_OPTIONS as any} className={classes.cardForm} />
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setShowAddCardModal(false)} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSaveCard} color="primary" disabled={isSaveBtnLoading}>
-                        {isSaveBtnLoading ? 'Loading...' : 'Save'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <AddPaymentCardDialog
+                open={showAddCardModal}
+                onClose={() => setShowAddCardModal(false)}
+                onSubmit={() => loadExistingStripeCards()}
+            />
         </>
     );
 }

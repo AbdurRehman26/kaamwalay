@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
-import PaymentCardDeleteDialog from '@dashboard/components/PaymentCard/PaymentCardDeleteDialog';
+import DeletePaymentCardDialog from '@dashboard/components/PaymentCard/DeletePaymentCardDialog';
 import { CreditCard } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
@@ -83,7 +83,7 @@ function PaymentCardItem(props: PaymentCardItemProps) {
 
     return (
         <>
-            <PaymentCardDeleteDialog
+            <DeletePaymentCardDialog
                 open={showDeleteModal}
                 onClose={() => setShowDeleteModal(false)}
                 paymentCardNumber={last4}

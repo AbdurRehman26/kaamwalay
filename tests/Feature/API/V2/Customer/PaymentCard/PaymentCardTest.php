@@ -42,5 +42,5 @@ test('user can create card setup intent', function () {
 
 test('user can delete a saved card', function () {
     deleteJson('/api/v2/customer/payment-cards/pm_123123123123')
-        ->assertOk();
+        ->assertNoContent();
 })->group('payment');

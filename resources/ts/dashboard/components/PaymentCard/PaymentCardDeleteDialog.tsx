@@ -16,7 +16,7 @@ interface PaymentCardDeleteDialogProps extends Omit<DialogProps, 'onSubmit'> {
     paymentCardNumber?: string;
     paymentCardId?: string;
     paymentCardBrand: string;
-    onSubmit(props: Pick<PaymentCardDeleteDialogProps, 'paymentCardId'>): Promise<void> | void;
+    onSubmit(): Promise<void> | void;
 }
 
 const useStyles = makeStyles(
@@ -84,9 +84,9 @@ function PaymentCardDeleteDialog(props: PaymentCardDeleteDialogProps) {
     );
 
     const handleSubmit = useCallback(async () => {
-        await onSubmit({ paymentCardId });
+        await onSubmit();
         handleClose();
-    }, [handleClose, onSubmit, paymentCardId]);
+    }, [handleClose, onSubmit]);
 
     return (
         <Dialog onClose={handleClose} {...rest}>

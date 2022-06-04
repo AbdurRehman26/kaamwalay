@@ -93,7 +93,7 @@ class StripeService extends V1StripeService
     /**
      * @throws FailedPaymentMethodDeleteException
      */
-    public function deleteUserPaymentMethod(User $user, $paymentMethodId): void
+    public function deleteUserPaymentMethod(User $user, string $paymentMethodId): void
     {
         try {
             $user->deletePaymentMethod($paymentMethodId);

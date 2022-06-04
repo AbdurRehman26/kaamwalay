@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\V2\Customer;
 
+use App\Exceptions\Services\Payment\FailedPaymentMethodDeleteException;
 use App\Http\Controllers\API\V1\Customer\PaymentCardController as V1PaymentCardController;
 use App\Models\User;
 use App\Services\Payment\V2\Providers\StripeService;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +19,7 @@ class PaymentCardController extends V1PaymentCardController
             resolve(StripeService::class)->deleteUserPaymentMethod($user, $paymentMethodId);
 
             return new JsonResponse([], Response::HTTP_NO_CONTENT);
-        } catch (Exception $exception) {
+        } catch (FailedPaymentMethodDeleteException $exception) {
             return new JsonResponse([
                 'error' => $exception->getMessage(),
             ], Response::HTTP_NOT_FOUND);

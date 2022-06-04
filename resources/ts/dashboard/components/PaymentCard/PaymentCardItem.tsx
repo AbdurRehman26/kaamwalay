@@ -1,11 +1,13 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
-import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { CreditCard, setSelectedStripeCard } from '@dashboard/redux/slices/newSubmissionSlice';
+import PaymentCardDeleteDialog from '@dashboard/components/PaymentCard/PaymentCardDeleteDialog';
+import { CreditCard } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -95,26 +97,29 @@ const useStyles = makeStyles(
     { name: 'ServiceLevelItemStyle' },
 );
 
-function PaymentCardItem(props: CreditCard) {
-    const currentSelectedCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
+interface PaymentCardItemProps extends CreditCard {
+    handleCardDeleteSubmit(id: any): Promise<void> | void;
+}
 
-    const styleProps = useMemo(
-        () => ({ isSelected: props.id === currentSelectedCardId }),
-        [props.id, currentSelectedCardId],
-    );
-    const classes = useStyles(styleProps);
-    const dispatch = useAppDispatch();
+function PaymentCardItem(props: PaymentCardItemProps) {
+    const classes = useStyles();
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const { expMonth, expYear, last4, brand, id } = props;
-
-    function handleOnChange() {
-        dispatch(setSelectedStripeCard(id));
-    }
+    const { handleCardDeleteSubmit, expMonth, expYear, last4, brand, id } = props;
 
     return (
-        <ButtonBase className={classes.root} onClick={handleOnChange}>
-            <div className={classes.leftSide}>
-                <div className={classes.rightSide}>
+        <>
+            <PaymentCardDeleteDialog
+                open={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                paymentCardNumber={last4}
+                paymentCardBrand={brand}
+                paymentCardId={id}
+                onSubmit={() => handleCardDeleteSubmit(id)}
+            />
+
+            <ButtonBase className={classes.root}>
+                <div className={classes.leftSide}>
                     <Avatar
                         sx={{ width: 56, height: 36, bgcolor: '#F5F5F5' }}
                         variant="square"
@@ -129,8 +134,14 @@ function PaymentCardItem(props: CreditCard) {
                         </Typography>
                     </div>
                 </div>
-            </div>
-        </ButtonBase>
+
+                <div className={classes.rightSide}>
+                    <IconButton aria-label="delete" onClick={() => setShowDeleteModal(true)} size="large">
+                        <DeleteIcon fontSize="medium" />
+                    </IconButton>
+                </div>
+            </ButtonBase>
+        </>
     );
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\HubspotDeal;
 use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
@@ -82,19 +83,27 @@ class HubspotService
                 'category' => 'HUBSPOT_DEFINED',
                 'definitionId' => 4,
             ]);
+
+            HubspotDeal::create([
+                'deal_name' => $user->getFullName() ?: '',
+                // @phpstan-ignore-next-line
+                'deal_id' => $response->dealId,
+                'user_email' => $user->email,
+                'owner_id' => $ownerResponse[0]['ownerId'],
+            ]);
+
         } catch (RequestException $exception) {
             report($exception);
             Log::error($exception);
         }
     }
 
-    public function updateDealStageForOrderPlacedUser(User $user) {
+    public function updateDealStageForOrderPlacedUser(User $user): void {
+        
+        $hubspotDeal = HubspotDeal::where('user_email', $user->email)->first();
+
         try {
             $hubspotClient = $this->getClient();
-
-            $owner = new Owners($hubspotClient);
-            $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
-
             $createDeal = [
                 [
                     'value' => $user->getFullName() ?: '',
@@ -109,45 +118,15 @@ class HubspotService
                     'name' => 'dealstage',
                 ],
                 [
-                    'value' => $ownerResponse[0]['ownerId'],
+                    'value' => $hubspotDeal->owner_id,
                     'name' => 'hubspot_owner_id',
                 ],
             ];
 
             $deal = new Deals($hubspotClient);
-            $response = $deal->create($createDeal);
+            // @phpstan-ignore-next-line
+            $deal->update($hubspotDeal->deal_id, $createDeal);
 
-            $contact = new Contacts($hubspotClient);
-            $createContact = [
-                [
-                    'property' => 'email',
-                    'value' => $user->email ?: '',
-                ],
-                [
-                    'property' => 'firstname',
-                    'value' => $user->first_name ?: '',
-                ],
-                [
-                    'property' => 'lastname',
-                    'value' => $user->last_name ?: '',
-                ],
-                [
-                    'property' => 'phone',
-                    'value' => $user->phone ?: '',
-                ],
-            ];
-
-            $contactResponse = $contact->create($createContact);
-
-            $associateContact = new CrmAssociations($hubspotClient);
-            $associateContact->create([
-                // @phpstan-ignore-next-line
-                'fromObjectId' => $contactResponse->vid,
-                // @phpstan-ignore-next-line
-                'toObjectId' => $response->dealId,
-                'category' => 'HUBSPOT_DEFINED',
-                'definitionId' => 4,
-            ]);
         } catch (RequestException $exception) {
             report($exception);
             Log::error($exception);

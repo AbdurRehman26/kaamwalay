@@ -20,13 +20,7 @@ class ChangeDealStageForOrderPlacedUserHubspot implements ShouldQueue, ShouldBeE
         //
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  \App\Events\OrderPlaced  $event
-     * @return void
-     */
-    public function handle(OrderPlaced $event)
+    public function handle(OrderPlaced $event): void
     {
         if (app()->environment('local')) {
             return;

@@ -2,7 +2,6 @@
 
 namespace App\Listeners\API\Hubspot;
 
-use App\Events;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Services\HubspotService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,6 +22,10 @@ class ChangeDealStageForOrderPlacedUserHubspot implements ShouldQueue, ShouldBeE
     public function handle(OrderPlaced $event): void
     {
         if (app()->environment('local')) {
+            return;
+        }
+
+        if ($event->order->user->orders()->placed()->count() >= 2) {
             return;
         }
 

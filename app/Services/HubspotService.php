@@ -91,15 +91,14 @@ class HubspotService
                 'user_email' => $user->email,
                 'owner_id' => $ownerResponse[0]['ownerId'],
             ]);
-
         } catch (RequestException $exception) {
             report($exception);
             Log::error($exception);
         }
     }
 
-    public function updateDealStageForOrderPlacedUser(User $user): void {
-        
+    public function updateDealStageForOrderPlacedUser(User $user): void
+    {
         $hubspotDeal = HubspotDeal::where('user_email', $user->email)->first();
 
         try {
@@ -126,7 +125,6 @@ class HubspotService
             $deal = new Deals($hubspotClient);
             // @phpstan-ignore-next-line
             $deal->update($hubspotDeal->deal_id, $createDeal);
-
         } catch (RequestException $exception) {
             report($exception);
             Log::error($exception);

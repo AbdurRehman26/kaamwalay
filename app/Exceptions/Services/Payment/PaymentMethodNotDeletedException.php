@@ -4,7 +4,7 @@ namespace App\Exceptions\Services\Payment;
 
 use Exception;
 
-class FailedPaymentMethodDeleteException extends Exception
+class PaymentMethodNotDeletedException extends Exception
 {
     /**
      * @var string

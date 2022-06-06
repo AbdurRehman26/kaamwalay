@@ -182,7 +182,7 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
-                <ListItem selected={isItemActive('/payments-cards')} onClick={handleItemPress('/payment-cards')} button>
+                <ListItem selected={isItemActive('/payment-cards')} onClick={handleItemPress('/payment-cards')} button>
                     <StyledListItemIcon>
                         <CreditCardIcon />
                     </StyledListItemIcon>

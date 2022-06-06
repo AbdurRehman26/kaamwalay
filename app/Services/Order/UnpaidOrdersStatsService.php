@@ -38,7 +38,7 @@ class UnpaidOrdersStatsService
     */
     public function dailyUnpaidOrders(string $currentDate): Builder
     {
-        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        return Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
             ->forDate($currentDate);
     }
 
@@ -48,7 +48,7 @@ class UnpaidOrdersStatsService
     */
     public function monthlyUnpaidOrders(string $currentDate): Builder
     {
-        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        return Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
             ->forMonth($currentDate);
     }
 

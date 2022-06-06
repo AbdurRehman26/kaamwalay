@@ -3,7 +3,10 @@
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
+use App\Models\OrderCustomerShipment;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,11 +20,13 @@ beforeEach(function () {
     ]);
     $this->unpaidOrdersStatsService = resolve(UnpaidOrdersStatsService::class);
 
+    $orderCustomerShipment = OrderCustomerShipment::factory()->create();
     $this->orders = Order::factory()
         ->count(100)
         ->create(new Sequence(
-            function () {
+            function () use ($orderCustomerShipment) {
                 return [
+                    'order_customer_shipment_id' => $this->faker->randomElement([null, $orderCustomerShipment->id]),
                     'order_status_id' => $this->faker->randomElement([
                         OrderStatus::PLACED,
                         OrderStatus::CONFIRMED,
@@ -30,16 +35,27 @@ beforeEach(function () {
                     ]),
                     'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
                     'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
-                    'payment_status' => $this->faker->randomElement([0,1]),
+                    'payment_status' => $this->faker->randomElement([0, 1]),
                 ];
             }
         ));
+
+    $user = User::factory()->create();
+    $orderStatusHistoryData = $this->orders->map(function ($order) use($user) {
+        return [
+            'order_id' => $order->id,
+            'order_status_id' => 2,
+            'user_id' => $user->id,
+        ];
+    })->toArray();
+
+    OrderStatusHistory::insert($orderStatusHistoryData);
 });
 
 it('calculates daily unpaid orders stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forDate($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
@@ -51,7 +67,7 @@ it('calculates daily unpaid orders stats', function () {
 it('calculates monthly unpaid orders stats for the current month', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forMonth($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 

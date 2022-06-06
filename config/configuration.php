@@ -83,5 +83,13 @@ return [
             'auth' => true,
             'value' => env('SEARCH_CARD_CATEGORIES_ADMIN'),
         ],
+        'feature_order_wallet_credit_enabled' => [
+            'auth' => true,
+            'value' => env('FEATURE_ORDER_WALLET_CREDIT_ENABLED'),
+        ],
+        'feature_order_wallet_credit_percentage' => [
+            'auth' => true,
+            'value' => env('FEATURE_ORDER_WALLET_CREDIT_PERCENTAGE'),
+        ],
     ],
 ];

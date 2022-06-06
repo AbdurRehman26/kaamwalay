@@ -70,6 +70,7 @@ Route::prefix('customer')->group(function () {
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
+        Route::delete('payment-cards/{paymentMethodId}', [PaymentCardController::class, 'destroy']);
 
         Route::prefix('orders')->group(function () {
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);

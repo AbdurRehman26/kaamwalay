@@ -17,10 +17,12 @@ import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 import { useAppDispatch } from '@dashboard/redux/hooks';
@@ -154,6 +156,10 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
+
+    const endTime = datePlaced ? new Date(new Date(datePlaced.toString()).getTime() + 86400000) : 0;
+    const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced.toString()).getTime() + 86400000 : 0;
 
     const handleOption = useCallback(
         (option: Options) => async (e: MouseEvent<HTMLElement>) => {
@@ -278,7 +284,20 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {!isPaid ? (
+                    {!isPaid && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                        <TableRow>
+                            <TableCell colSpan={8}>
+                                <PayNowStatusNotice
+                                    id={id}
+                                    countdownTimestampMs={timeInMs}
+                                    isConfirmationPage={false}
+                                    isPayPage={false}
+                                    isCoupon={false}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ) : null}
+                    {!isPaid && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PaymentStatusNotice
@@ -366,7 +385,18 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
-                        {!isPaid ? (
+                        {!isPaid && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                            <Grid mt={3}>
+                                <PayNowStatusNotice
+                                    id={id}
+                                    countdownTimestampMs={timeInMs}
+                                    isConfirmationPage={false}
+                                    isPayPage={false}
+                                    isCoupon={false}
+                                />
+                            </Grid>
+                        ) : null}
+                        {!isPaid && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                             <Grid mt={3}>
                                 <PaymentStatusNotice
                                     id={id}

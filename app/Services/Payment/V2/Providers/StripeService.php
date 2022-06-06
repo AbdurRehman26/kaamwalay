@@ -3,6 +3,7 @@
 namespace App\Services\Payment\V2\Providers;
 
 use App\Exceptions\Services\Payment\FailedPaymentException;
+use App\Exceptions\Services\Payment\PaymentMethodNotDeletedException;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
@@ -87,5 +88,17 @@ class StripeService extends V1StripeService
         }
 
         throw new FailedPaymentException('Unable to handle your request at the moment.');
+    }
+
+    /**
+     * @throws PaymentMethodNotDeletedException
+     */
+    public function deleteUserPaymentMethod(User $user, string $paymentMethodId): void
+    {
+        try {
+            $user->deletePaymentMethod($paymentMethodId);
+        } catch (InvalidRequestException $invalidRequestException) {
+            throw new PaymentMethodNotDeletedException($invalidRequestException->getMessage());
+        }
     }
 }

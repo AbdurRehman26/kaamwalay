@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderCustomerShipment;
 use App\Models\OrderStatus;
@@ -10,14 +9,10 @@ use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
-    Event::fake([
-        OrderStatusChangedEvent::class,
-    ]);
     $this->unpaidOrdersStatsService = resolve(UnpaidOrdersStatsService::class);
 
     $orderCustomerShipment = OrderCustomerShipment::factory()->create();

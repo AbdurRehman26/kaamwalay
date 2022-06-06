@@ -182,7 +182,7 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
-                <ListItem selected={isItemActive('/profile/payments')} button>
+                <ListItem selected={isItemActive('/payments-cards')} onClick={handleItemPress('/payment-cards')} button>
                     <StyledListItemIcon>
                         <CreditCardIcon />
                     </StyledListItemIcon>
@@ -190,9 +190,6 @@ export function DashboardNavigationDrawer() {
                         primary={'Saved Credit Cards'}
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile/addresses')} button>
                     <StyledListItemIcon>

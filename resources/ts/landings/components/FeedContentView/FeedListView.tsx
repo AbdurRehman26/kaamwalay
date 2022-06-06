@@ -33,7 +33,6 @@ const TableDiv = styled(TableContainer)({
         width: '52px',
         [theme.breakpoints.down('sm')]: {
             width: '52px',
-            height: '82px',
         },
     },
     '.TableInfoText': {

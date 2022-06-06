@@ -39,7 +39,7 @@ beforeEach(function () {
     $orderStatusHistoryData = $this->orders->map(function ($order) use ($user) {
         return [
             'order_id' => $order->id,
-            'order_status_id' => 2,
+            'order_status_id' => OrderStatus::PLACED,
             'user_id' => $user->id,
         ];
     })->toArray();

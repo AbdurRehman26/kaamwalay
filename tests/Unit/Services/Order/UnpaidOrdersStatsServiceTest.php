@@ -41,7 +41,7 @@ beforeEach(function () {
         ));
 
     $user = User::factory()->create();
-    $orderStatusHistoryData = $this->orders->map(function ($order) use($user) {
+    $orderStatusHistoryData = $this->orders->map(function ($order) use ($user) {
         return [
             'order_id' => $order->id,
             'order_status_id' => 2,

@@ -70,6 +70,7 @@ Route::prefix('customer')->group(function () {
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
+        Route::delete('payment-cards/{paymentMethodId}', [PaymentCardController::class, 'destroy']);
 
         Route::prefix('orders')->group(function () {
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
@@ -84,6 +85,8 @@ Route::prefix('customer')->group(function () {
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
+            Route::post('{order}/coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('orders.coupon.discount');
+
             Route::apiResource('', OrderController::class)
                 ->only(['index', 'store'])
                 ->names([

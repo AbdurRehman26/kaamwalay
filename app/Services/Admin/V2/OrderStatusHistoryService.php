@@ -14,7 +14,6 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
@@ -69,17 +68,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             }
         }
 
-        Order::query()
-            ->where('id', $orderId)
-            ->first()
-            ->update(array_merge(
-                [
-                    'order_status_id' => $orderStatusId,
-                ],
-                $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()]: [],
-            ));
-        // TODO: replace find with the model.
-        OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
+        $order = Order::where('id', $orderId)->first();
+        $order->update([
+            'order_status_id' => $orderStatusId,
+        ]);
 
         if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([
@@ -89,6 +81,11 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 'notes' => $notes,
             ]);
         }
+
+        $this->updateStatusDateOnOrder($order, $orderStatusHistory);
+
+        // TODO: replace find with the model.
+        OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
             $orderStatusHistory->user_id = getModelId($user);
@@ -100,5 +97,22 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->where('id', $orderStatusHistory->id)
             ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())
             ->first();
+    }
+
+    protected function updateStatusDateOnOrder(Order $order, OrderStatusHistory $orderStatusHistory): void
+    {
+        $date = $orderStatusHistory->created_at;
+
+        match ($order->order_status_id) {
+            OrderStatus::CONFIRMED => [
+                $order->arrived_at = $date,
+                $order->reviewed_at = $date,
+            ],
+            OrderStatus::GRADED => $order->graded_at = $date,
+            OrderStatus::SHIPPED => $order->shipped_at = $date,
+            default => null,
+        };
+
+        $order->save();
     }
 }

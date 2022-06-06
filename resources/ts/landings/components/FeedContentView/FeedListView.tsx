@@ -33,7 +33,6 @@ const TableDiv = styled(TableContainer)({
         width: '52px',
         [theme.breakpoints.down('sm')]: {
             width: '52px',
-            height: '82px',
         },
     },
     '.TableInfoText': {
@@ -185,10 +184,10 @@ const CustomHits = connectHits(({ hits }) => {
                                         <Typography className={'TableInfoHeading'}>{hit.card_name}</Typography>
                                         <Typography className={'TableInfoSubHeading'}>{hit.searchable_name}</Typography>
                                         <div className={'MobileSection'}>
-                                            <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
+                                            <Typography className={'BottomSectionContent'}>Date Shipped: </Typography>
                                             <Typography className={'BottomSectionText'}>
-                                                {formatDate(hit.graded_at, 'MM/DD/YYYY')} at{' '}
-                                                {formatDate(hit.graded_at, 'h:mm a')}
+                                                {formatDate(hit.shipped_at, 'MM/DD/YYYY')} at{' '}
+                                                {formatDate(hit.shipped_at, 'h:mm a')}
                                             </Typography>
                                         </div>
                                         <div className={'MobileSection'}>

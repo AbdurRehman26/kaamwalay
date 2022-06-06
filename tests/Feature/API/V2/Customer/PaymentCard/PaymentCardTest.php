@@ -2,6 +2,8 @@
 
 use App\Models\User;
 
+use function Pest\Laravel\deleteJson;
+
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->actingAs($this->user);
@@ -36,4 +38,9 @@ test('user can create card setup intent', function () {
             'object',
         ],
     ]);
+})->group('payment');
+
+test('user can delete a saved card', function () {
+    deleteJson('/api/v2/customer/payment-cards/pm_123123123123')
+        ->assertNoContent();
 })->group('payment');

@@ -5,6 +5,8 @@ namespace App\Services\Coupon\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentPlan;
+use App\Services\Order\Shipping\ShippingFeeService;
+use Illuminate\Support\Facades\Cache;
 
 trait CouponApplicables
 {
@@ -37,4 +39,22 @@ trait CouponApplicables
 
         return $order->orderItems->toArray();
     }
+
+    public function getShippingFee(Order|array $order): float
+    {
+        if ($order instanceof Order) {
+            return $order->shipping_fee;
+        }
+
+        $user = request()->user();
+        if (Cache::has('serviceFee-' . $user->id)) {
+            return Cache::get('serviceFee-' . $user->id);
+        }
+
+        return ShippingFeeService::calculate(
+            array_sum(array_column($this->getOrderItems($order), 'declared_value_per_unit')),
+            array_sum(array_column($this->getOrderItems($order), 'quantity'))
+        );
+    }
+
 }

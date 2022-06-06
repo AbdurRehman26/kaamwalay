@@ -20,12 +20,14 @@ import * as yup from 'yup';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
@@ -52,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '100%',
         justifyContent: 'space-between',
         marginBottom: 20,
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+        },
     },
     leftSideContainer: {
         marginTop: '12px',
@@ -308,6 +313,7 @@ export function Payment() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
@@ -341,6 +347,10 @@ export function Payment() {
         () => order.data?.billingAddress || order.data?.shippingAddress || ({} as any),
         [order.data?.shippingAddress, order.data?.billingAddress],
     );
+
+    const endTime = new Date(new Date(order.data?.createdAt).getTime() + 86400000);
+    const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
+    const { featureOrderWalletCreditEnabled, featureOrderWalletCreditPercentage } = useConfiguration();
 
     useEffect(() => {
         schema
@@ -504,12 +514,23 @@ export function Payment() {
                             Pay For Submission
                         </Typography>
                     </div>
-
-                    <PaymentStatusChip
-                        color={paymentStatus}
-                        label={PaymentStatusMap[paymentStatus]}
-                        mode={'customer'}
-                    />
+                    {timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                        <Grid mt={'20px'}>
+                            <PayNowStatusNotice
+                                id={order.data?.id}
+                                countdownTimestampMs={timeInMs}
+                                isConfirmationPage={false}
+                                isPayPage={true}
+                                isCoupon={isCouponApplied}
+                            />
+                        </Grid>
+                    ) : (
+                        <PaymentStatusChip
+                            color={paymentStatus}
+                            label={PaymentStatusMap[paymentStatus]}
+                            mode={'customer'}
+                        />
+                    )}
                 </div>
 
                 <Divider light />
@@ -871,7 +892,11 @@ export function Payment() {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <PaymentSummary />
+                        <PaymentSummary
+                            timeInMs={timeInMs}
+                            featureOrderWalletCreditPercentage={featureOrderWalletCreditPercentage}
+                            featureOrderWalletCreditEnabled={featureOrderWalletCreditEnabled}
+                        />
                     </Grid>
                 </Grid>
 

@@ -303,4 +303,9 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
             'notes' => $refundData['metadata']['Notes'],
         ];
     }
+
+    public function deleteUserPaymentMethod(User $user, string $paymentMethodId): void
+    {
+        /* Mocking delete stripe payment method */
+    }
 }

@@ -1,7 +1,13 @@
 <?php
 
+use App\Jobs\ProcessImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
+
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);
 
@@ -15,20 +21,17 @@ test('a customer can update his profile', function () {
         // Faking AGS update user API
         'ags.api/users/me/' => Http::response([]),
     ]);
+    Bus::fake(ProcessImage::class);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    putJson('/api/v2/customer/profile', [
             'first_name' => 'first',
             'last_name' => 'Last',
             'email_subscription' => true,
             'phone' => '1234567890',
             'username' => 'test24',
             'profile_image' => 'https://via.placeholder.com/150',
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertStatus(200);
-    $response->assertJsonStructure([
+    ])->assertSuccessful()->assertStatus(200)->assertJsonStructure([
         'data' => [
             'id',
             'first_name',
@@ -40,6 +43,21 @@ test('a customer can update his profile', function () {
             'customer_number',
         ],
     ]);
+    Bus::assertDispatched(ProcessImage::class);
+});
+
+test('profile update does not dispatch Process Image job if no profile image', function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    Bus::fake(ProcessImage::class);
+    $this->actingAs($this->user);
+
+    putJson('/api/v2/customer/profile', [
+        'first_name' => 'first',
+    ])->assertSuccessful();
+    Bus::assertNotDispatched(ProcessImage::class);
 });
 
 test('customer profile update required fields error', function () {
@@ -49,15 +67,13 @@ test('customer profile update required fields error', function () {
     ]);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    putJson('/api/v2/customer/profile', [
         'first_name' => '',
         'last_name' => '',
         'phone' => '',
         'username' => '',
         'profile_image' => '',
-    ]);
-
-    $response->assertInvalid([
+    ])->assertInvalid([
         'first_name',
         'last_name',
         'username',
@@ -71,11 +87,9 @@ test('a customer`s username can not be duplicate', function () {
     ]);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    putJson('/api/v2/customer/profile', [
         'username' => $this->anotherUser->username,
-    ]);
-
-    $response->assertUnprocessable();
+    ])->assertUnprocessable();
 });
 
 test('a customer can deactivate their account', function () {
@@ -90,19 +104,19 @@ test('a customer can deactivate their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/deactivate');
-    $response->assertOk();
-    $response->assertJsonFragment([
-        'success' => true,
-    ]);
+    postJson('/api/v2/customer/profile/deactivate')
+        ->assertOk()
+        ->
+        assertJsonFragment([
+            'success' => true,
+        ]);
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
-    $me->assertUnauthorized();
+    getJson('/api/v2/auth/me')->assertUnauthorized();
 })->skip('Feature is not available yet.');
 
 
@@ -120,19 +134,18 @@ test('a customer can delete their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/delete');
-    $response->assertOk();
-    $response->assertJsonFragment([
-        'success' => true,
-    ]);
+    postJson('/api/v2/customer/profile/delete')
+        ->assertOk()
+        ->assertJsonFragment([
+            'success' => true,
+        ]);
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
-    $me->assertUnauthorized();
+    getJson('/api/v2/auth/me')->assertUnauthorized();
 
     $user = User::withTrashed()->find($this->user->id);
     $this->assertNotNull($user);
@@ -154,14 +167,12 @@ test('a customer cannot delete their account if ags fail', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/delete');
-    $response->assertUnprocessable();
+    postJson('/api/v2/customer/profile/delete')->assertUnprocessable();
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
-    $me->assertOk();
+    getJson('/api/v2/auth/me')->assertOk();
 })->skip('Feature is not available yet.');

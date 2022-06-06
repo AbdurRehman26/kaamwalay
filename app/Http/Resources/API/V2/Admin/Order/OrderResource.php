@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
  * @property mixed $gradedBy
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
+ * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice
  * @property mixed $orderLabel
@@ -72,9 +73,10 @@ class OrderResource extends V1OrderResource
             'customer_id' => $this->user_id,
             'created_at' => $this->formatDate($this->created_at),
             'reviewed_by' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
-            'reviewed_at' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
+            'reviewed_at' => $this->reviewed_at,
             'graded_by' => $this->gradedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
-            'graded_at' => $this->gradedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
+            'graded_at' => $this->graded_at,
+            'shipped_at' => $this->shipped_at,
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,

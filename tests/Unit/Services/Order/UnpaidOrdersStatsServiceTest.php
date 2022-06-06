@@ -53,27 +53,25 @@ beforeEach(function () {
 });
 
 it('calculates daily unpaid orders stats', function () {
-    $getRandomOrder = $this->orders->random()->first();
+    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
+    $randomOrder = $orders->inRandomOrder()->first();
 
-    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->forDate($getRandomOrder->created_at->toDateString())
-        ->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forDate($randomOrder->created_at->toDateString())->sum('grand_total');
 
-    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($getRandomOrder->created_at->toDateString());
+    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrder->created_at->toDateString());
 
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
-        ->and($orders)->toBe($unpaidDailyStats['unpaid_total']);
+        ->and($expectedUnpaidTotal)->toBe($unpaidDailyStats['unpaid_total']);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
-    $getRandomOrder = $this->orders->random()->first();
+    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
+    $randomOrder = $orders->inRandomOrder()->first();
 
-    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->forMonth($getRandomOrder->created_at->toDateString())
-        ->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forMonth($randomOrder->created_at->toDateString())->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($getRandomOrder->created_at->toDateString());
+    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrder->created_at->toDateString());
 
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
-        ->and($orders)->toBe($unpaidMonthlyStats['unpaid_total']);
+        ->and($expectedUnpaidTotal)->toBe($unpaidMonthlyStats['unpaid_total']);
 })->group('unpaid-orders-stats');

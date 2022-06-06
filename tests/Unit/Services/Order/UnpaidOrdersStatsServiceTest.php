@@ -8,6 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -50,27 +51,29 @@ beforeEach(function () {
     })->toArray();
 
     OrderStatusHistory::insert($orderStatusHistoryData);
+
+    $this->ordersForTests = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
 });
 
 it('calculates daily unpaid orders stats', function () {
-    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
-    $randomOrder = $orders->inRandomOrder()->first();
+    $orders = $this->ordersForTests;
+    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
 
-    $expectedUnpaidTotal = $orders->forDate($randomOrder->created_at->toDateString())->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forDate($randomOrderDate)->sum('grand_total');
 
-    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrder->created_at->toDateString());
+    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrderDate);
 
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
-    $orders = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
-    $randomOrder = $orders->inRandomOrder()->first();
+    $orders = $this->ordersForTests;
+    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
 
-    $expectedUnpaidTotal = $orders->forMonth($randomOrder->created_at->toDateString())->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forMonth($randomOrderDate)->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrder->created_at->toDateString());
+    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrderDate);
 
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);

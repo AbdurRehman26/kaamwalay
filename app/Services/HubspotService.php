@@ -94,29 +94,34 @@ class HubspotService
             ]);
         } catch (RequestException $exception) {
             report($exception);
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
     }
 
     public function updateDealStageForOrderPlacedUser(User $user): void
     {
         $deal = HubspotDeal::where('user_email', $user->email)->first();
-        if ($deal) {
-            try {
-                $updateProperties = [
+
+        if (! $deal) {
+            Log::error('Hubspot deal not found', [
+                'user_email' => $user->email
+            ]);
+
+            return;
+        }
+
+        try {
+            $propertiesToUpdate = [
                 [
                     'value' => config('services.hubspot.pipline_stage_id_new_customer'),
                     'name' => 'dealstage',
                 ],
             ];
 
-                (new Deals($this->getClient()))->update(intval($deal->deal_id), $updateProperties);
-            } catch (RequestException $exception) {
-                report($exception);
-                Log::error($exception);
-            }
-        } else {
-            throw new Exception('Deal not found!');
+            (new Deals($this->getClient()))->update(intval($deal->deal_id), $propertiesToUpdate);
+        } catch (RequestException $exception) {
+            report($exception);
+            Log::error($exception->getMessage());
         }
     }
 }

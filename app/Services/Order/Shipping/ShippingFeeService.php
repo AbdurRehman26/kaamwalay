@@ -20,6 +20,8 @@ class ShippingFeeService
 
         if (request()->user()) {
             Cache::put('shippingFee-' . request()->user()->id, $shippingFee);
+        } else {
+            Cache::put('shippingFee-' . request()->ip(), $shippingFee);
         }
         return $shippingFee;
     }

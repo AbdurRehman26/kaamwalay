@@ -7,6 +7,7 @@ use App\Http\Requests\API\V2\Customer\Coupon\CalculateCouponDiscountForOrderRequ
 use App\Http\Resources\API\V1\Customer\Coupon\CouponResource;
 use App\Models\Order;
 use App\Services\Coupon\CouponService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CouponController extends V1CouponController

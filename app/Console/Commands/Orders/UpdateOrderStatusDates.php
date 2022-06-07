@@ -31,6 +31,8 @@ class UpdateOrderStatusDates extends Command
     public function handle(): int
     {
         $orderStatusId = (int)$this->argument('orderStatusId');
+        $reviewedAtStatusId = 0;
+        $gradedAtStatusId = 0;
 
         $column = match ($orderStatusId) {
             OrderStatus::CONFIRMED => 'reviewed_at',
@@ -45,15 +47,40 @@ class UpdateOrderStatusDates extends Command
             return 1;
         }
 
-        $this->info("Updating $column for orders...");
+        if ($orderStatusId === OrderStatus::GRADED) {
+            $reviewedAtStatusId = 3;
+        }
 
+        if ($orderStatusId === OrderStatus::SHIPPED) {
+            $reviewedAtStatusId = 3;
+            $gradedAtStatusId = 4;
+        }
+
+        $this->info("Updating status dates for orders...");
         Order::where('order_status_id', $orderStatusId)
-            ->whereNull($column)
             ->get()
-            ->each(function (Order $order) use ($orderStatusId, $column) {
+            ->each(function (Order $order) use ($orderStatusId, $column, $reviewedAtStatusId, $gradedAtStatusId) {
                 $statusDate = OrderStatusHistory::where('order_id', $order->id)
                     ->where('order_status_id', $orderStatusId)
                     ->first()?->created_at;
+
+                if ($reviewedAtStatusId != 0) {
+                    $reviewedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
+                        ->where('order_status_id', $reviewedAtStatusId)
+                        ->first()?->created_at;
+                    
+                    $order->reviewed_at = $reviewedAtStatusDate;
+                    $this->info("reviewed_at for $order->order_number updated.");
+                }
+
+                if ($gradedAtStatusId != 0) {
+                    $gradedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
+                        ->where('order_status_id', $gradedAtStatusId)
+                        ->first()?->created_at;
+                        
+                    $order->graded_at = $gradedAtStatusDate;
+                    $this->info("graded_at for $order->order_number updated.");
+                }
 
                 if ($statusDate) {
                     $order->$column = $statusDate;
@@ -62,7 +89,7 @@ class UpdateOrderStatusDates extends Command
                 }
             });
 
-        $this->info("$column for orders have been updated.");
+        $this->info("Status Dates for orders have been updated.");
 
         return 0;
     }

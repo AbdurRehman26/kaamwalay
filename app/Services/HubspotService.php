@@ -11,6 +11,7 @@ use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
 use SevenShores\Hubspot\Resources\Deals;
 use SevenShores\Hubspot\Resources\Owners;
+use Exception;
 
 class HubspotService
 {
@@ -40,7 +41,7 @@ class HubspotService
                     'name' => 'pipeline',
                 ],
                 [
-                    'value' => config('services.hubspot.pipline_stage_id'),
+                    'value' => config('services.hubspot.pipline_stage_id_new_signup'),
                     'name' => 'dealstage',
                 ],
                 [
@@ -100,36 +101,24 @@ class HubspotService
 
     public function updateDealStageForOrderPlacedUser(User $user): void {
         
-        $hubspotDeal = HubspotDeal::where('user_email', $user->email)->first();
-
-        try {
-            $hubspotClient = $this->getClient();
-            $createDeal = [
-                [
-                    'value' => $user->getFullName() ?: '',
-                    'name' => 'dealname',
-                ],
-                [
-                    'value' => config('services.hubspot.pipeline_id'),
-                    'name' => 'pipeline',
-                ],
+        $deal = HubspotDeal::where('user_email', $user->email)->first();
+        if ($deal) {
+            try {
+                $updateProperties = [
                 [
                     'value' => config('services.hubspot.pipline_stage_id_new_customer'),
                     'name' => 'dealstage',
                 ],
-                [
-                    'value' => $hubspotDeal->owner_id,
-                    'name' => 'hubspot_owner_id',
-                ],
             ];
 
-            $deal = new Deals($hubspotClient);
-            // @phpstan-ignore-next-line
-            $deal->update($hubspotDeal->deal_id, $createDeal);
-
-        } catch (RequestException $exception) {
-            report($exception);
-            Log::error($exception);
+                (new Deals($this->getClient()))->update(intval($deal->deal_id), $updateProperties);
+                
+            } catch (RequestException $exception) {
+                report($exception);
+                Log::error($exception);
+            }
+        } else {
+            throw new Exception('Deal not found!');
         }
     }
 }

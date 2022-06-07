@@ -4,8 +4,8 @@ namespace App\Listeners\API\Hubspot;
 
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Services\HubspotService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ChangeDealStageForOrderPlacedUserHubspot implements ShouldQueue, ShouldBeEncrypted
 {

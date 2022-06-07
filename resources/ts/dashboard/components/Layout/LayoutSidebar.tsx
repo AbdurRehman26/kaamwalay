@@ -102,8 +102,7 @@ export function LayoutSidebar() {
                     exact
                     icon={PaymentOutlinedIcon}
                     title={'Saved Credit Cards'}
-                    href={'/profile/payments'}
-                    disabled
+                    href={'/payment-cards'}
                 />
                 <LayoutSidebarItem
                     exact

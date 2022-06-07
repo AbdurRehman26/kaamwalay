@@ -16,7 +16,7 @@ class RegisterController extends Controller
     {
         $user = User::createCustomer($request->validated());
 
-        CustomerRegistered::dispatch($user, $request->only('password', 'platform'));
+        CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id'));
 
         $token = auth()->guard()->login($user);
 

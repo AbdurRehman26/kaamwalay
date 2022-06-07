@@ -25,6 +25,20 @@ export function ProfileActions() {
         setShowAskForPasswordDialog((prev) => !prev);
     }, []);
 
+    const dispatchProfileAction = useCallback(
+        async (action: any) => {
+            const data: any = await action;
+            if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
+                setShowAskForPasswordDialog(true);
+                setPasswordConfirmCallback(() => async () => {
+                    await action;
+                    logout();
+                });
+            }
+        },
+        [logout],
+    );
+
     const handleDeleteClick = useCallback(async () => {
         setLoading('delete');
         const result = await confirm({
@@ -43,21 +57,14 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                const data: any = await dispatch(deleteProfile());
-                if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
-                    setShowAskForPasswordDialog(true);
-                    setPasswordConfirmCallback(() => async () => {
-                        await dispatch(deleteProfile());
-                        logout();
-                    });
-                }
+                await dispatchProfileAction(dispatch(deleteProfile()));
             }
         } catch (e) {
             notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, notifications, dispatch]);
+    }, [confirm, notifications, dispatch, dispatchProfileAction]);
 
     const handleDeactivateClick = useCallback(async () => {
         setLoading('deactivate');
@@ -76,21 +83,14 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                const data: any = await dispatch(deactivateProfile());
-                if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
-                    setShowAskForPasswordDialog(true);
-                    setPasswordConfirmCallback(() => async () => {
-                        await dispatch(deactivateProfile());
-                        logout();
-                    });
-                }
+                await dispatchProfileAction(dispatch(deactivateProfile()));
             }
         } catch (e) {
             notifications.exception(e as Error);
         } finally {
             setLoading('');
         }
-    }, [confirm, logout, notifications, dispatch]);
+    }, [confirm, notifications, dispatch, dispatchProfileAction]);
 
     return (
         <>

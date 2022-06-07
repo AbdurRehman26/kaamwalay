@@ -49,6 +49,8 @@ trait CouponApplicables
         $user = request()->user();
         if (Cache::has('shippingFee-' . $user->id)) {
             return Cache::get('shippingFee-' . $user->id);
+        } elseif (Cache::has('shippingFee-' . request()->ip())) {
+            return Cache::get('shippingFee-' . request()->ip());
         }
 
         return ShippingFeeService::calculate(

@@ -41,6 +41,7 @@ class RegisterRequest extends FormRequest
                 'sometimes',
                 Rule::in(['web', 'ios', 'android']),
             ],
+            'app_generated_id' => ['sometimes', 'string'],
         ];
     }
 

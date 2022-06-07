@@ -10,7 +10,9 @@ import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharge
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
@@ -45,6 +47,10 @@ export function ViewSubmission() {
         },
     });
 
+    const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
+    const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
+
     if (isLoading || isError) {
         return (
             <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
@@ -62,7 +68,18 @@ export function ViewSubmission() {
             />
             <Divider />
             <Box marginTop={'24px'} />
-            {data?.paymentStatus !== PaymentStatusEnum.PAID ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                <Grid mt={'20px'}>
+                    <PayNowStatusNotice
+                        id={data?.id}
+                        countdownTimestampMs={timeInMs}
+                        isConfirmationPage={false}
+                        isPayPage={false}
+                        isCoupon={false}
+                    />
+                </Grid>
+            ) : null}
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus

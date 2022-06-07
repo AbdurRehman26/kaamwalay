@@ -154,9 +154,9 @@ const CustomHits = connectHits(({ hits }) => {
                         </div>
                         <div className={'GridBottomSection'}>
                             <div className={'GridSection'}>
-                                <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
+                                <Typography className={'BottomSectionContent'}>Date Shipped: </Typography>
                                 <Typography className={'BottomSectionText'}>
-                                    {formatDate(hit.graded_at, 'MM/DD/YYYY')} at {formatDate(hit.graded_at, 'h:mm a')}
+                                    {formatDate(hit.shipped_at, 'MM/DD/YYYY')} at {formatDate(hit.shipped_at, 'h:mm a')}
                                 </Typography>
                             </div>
                             <div className={'GridSection'}>

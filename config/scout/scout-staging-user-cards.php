@@ -163,7 +163,7 @@ return [
     'allowTyposOnNumericTokens' => false,
     'replicas' => ['staging_user_cards_Ascending'],
     'ranking' => [
-        'desc(graded_at)',
+        'desc(shipped_at)',
         'typo',
         'geo',
         'words',

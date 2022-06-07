@@ -533,6 +533,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\HubspotDeal
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal query()
+ */
+	class HubspotDeal extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Invoice
  *
  * @property int $id
@@ -638,6 +649,7 @@ namespace App\Models{
  * @property-read \App\Models\OrderStatus|null $orderStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
  * @property-read int|null $order_status_history_count
+ * @property-read \App\Models\PaymentPlan $originalPaymentPlan
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\OrderPaymentPlan|null $paymentPlan
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
@@ -748,6 +760,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Order|null $order
+ * @method static \Database\Factories\OrderCustomerShipmentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment query()
@@ -1562,6 +1575,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User salesman()
  * @method static \Illuminate\Database\Eloquent\Builder|User signedUpBetween(string $startDate, string $endDate)
  * @method static \Illuminate\Database\Eloquent\Builder|User submissions(string $minSubmissionCount, string $maxSubmissionCount)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAgsAccessToken($value)

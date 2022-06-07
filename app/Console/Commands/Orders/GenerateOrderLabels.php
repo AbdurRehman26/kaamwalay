@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Orders;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderLabelService;
@@ -48,7 +49,7 @@ class GenerateOrderLabels extends Command
         $orders = $ordersQuery->get();
         $this->info("Total {$orders->count()} orders found");
 
-        $orders->each(/*** @throws AgsServiceIsDisabled */ function (Order $order) use ($orderLabelService) {
+        $orders->each(/*** @throws AgsServiceIsDisabled|OrderLabelCouldNotBeGeneratedException */ function (Order $order) use ($orderLabelService) {
             $this->info("Generating label for order # {$order->order_number} ...");
             $orderLabelService->generateLabel($order);
             $this->info('Label has been generated.');

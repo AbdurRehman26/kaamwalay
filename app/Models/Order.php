@@ -54,6 +54,7 @@ class Order extends Model implements Exportable
         'graded_by_id',
         'reviewed_at',
         'graded_at',
+        'shipped_at',
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
@@ -90,6 +91,7 @@ class Order extends Model implements Exportable
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
+        'shipped_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
@@ -502,5 +504,10 @@ class Order extends Model implements Exportable
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
+    }
+
+    public function isOlderThanOneDay(): bool
+    {
+        return now()->diff($this->created_at)->days > 0;
     }
 }

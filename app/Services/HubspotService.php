@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\HubspotDeal;
 use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
@@ -39,7 +40,7 @@ class HubspotService
                     'name' => 'pipeline',
                 ],
                 [
-                    'value' => config('services.hubspot.pipline_stage_id'),
+                    'value' => config('services.hubspot.pipline_stage_id_new_signup'),
                     'name' => 'dealstage',
                 ],
                 [
@@ -82,9 +83,44 @@ class HubspotService
                 'category' => 'HUBSPOT_DEFINED',
                 'definitionId' => 4,
             ]);
+
+            HubspotDeal::create([
+                'deal_name' => $user->getFullName() ?: '',
+                // @phpstan-ignore-next-line
+                'deal_id' => $response->dealId,
+                'user_email' => $user->email,
+                'owner_id' => $ownerResponse[0]['ownerId'],
+            ]);
         } catch (RequestException $exception) {
             report($exception);
-            Log::error($exception);
+            Log::error($exception->getMessage());
+        }
+    }
+
+    public function updateDealStageForOrderPlacedUser(User $user): void
+    {
+        $deal = HubspotDeal::where('user_email', $user->email)->first();
+
+        if (! $deal) {
+            Log::error('Hubspot deal not found', [
+                'user_email' => $user->email,
+            ]);
+
+            return;
+        }
+
+        try {
+            $propertiesToUpdate = [
+                [
+                    'value' => config('services.hubspot.pipline_stage_id_new_customer'),
+                    'name' => 'dealstage',
+                ],
+            ];
+
+            (new Deals($this->getClient()))->update(intval($deal->deal_id), $propertiesToUpdate);
+        } catch (RequestException $exception) {
+            report($exception);
+            Log::error($exception->getMessage());
         }
     }
 }

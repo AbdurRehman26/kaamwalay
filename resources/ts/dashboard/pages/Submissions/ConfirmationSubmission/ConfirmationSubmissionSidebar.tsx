@@ -13,10 +13,12 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Navigate } from 'react-router-dom';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { font } from '@shared/styles/utils';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { useConfirmationSubmissionSidebarStyles } from './style';
 
@@ -35,6 +37,9 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
     const classes = useConfirmationSubmissionSidebarStyles();
     const { isLoading, isError, data, error } = useOrderQuery({ resourceId: orderId });
     const message = (error as Error)?.message || error;
+    const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
+    const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
+    const { featureOrderWalletCreditEnabled } = useConfiguration();
 
     if (message === 'This action is unauthorized.') {
         return <Navigate to={'/submissions'} replace />;
@@ -265,7 +270,18 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     </TableContainer>
                 </Box>
             </Paper>
-            {data?.paymentStatus !== PaymentStatusEnum.PAID ? (
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                <Grid mt={'20px'}>
+                    <PayNowStatusNotice
+                        id={orderId}
+                        countdownTimestampMs={timeInMs}
+                        isConfirmationPage={true}
+                        isPayPage={false}
+                        isCoupon={false}
+                    />
+                </Grid>
+            ) : null}
+            {data?.paymentStatus !== PaymentStatusEnum.PAID && (!featureOrderWalletCreditEnabled || timeInMs === 0) ? (
                 <Grid mt={'20px'}>
                     <PaymentStatusNotice id={orderId} paymentStatus={data?.paymentStatus} hasWidth={true} />
                 </Grid>

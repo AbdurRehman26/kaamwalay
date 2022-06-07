@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\API\User\UserAccountDeletedEvent;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeactivatedException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeletedException;
+use App\Jobs\ProcessImage;
 use App\Models\User;
 use App\Services\AGS\AgsService;
 
@@ -18,6 +19,8 @@ class CustomerProfileService
     public function update(User $user, array $data): User
     {
         $user->update($data);
+
+        ProcessImage::dispatchIf(! empty($data['profile_image']), model: $user, columnName: 'profile_image', directory: "users/$user->id/files");
 
         return $user;
     }

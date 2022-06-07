@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\HubspotDeal;
 use App\Models\User;
-use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use SevenShores\Hubspot\Http\Client;
@@ -104,7 +103,7 @@ class HubspotService
 
         if (! $deal) {
             Log::error('Hubspot deal not found', [
-                'user_email' => $user->email
+                'user_email' => $user->email,
             ]);
 
             return;

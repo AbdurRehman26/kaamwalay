@@ -88,6 +88,7 @@ test('customer can register with valid platform', function () {
         'password_confirmation' => 'password',
         'phone' => '',
         'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
+        'app_generated_id' => '12345',
     ]);
 
     $response->assertStatus(Response::HTTP_CREATED);

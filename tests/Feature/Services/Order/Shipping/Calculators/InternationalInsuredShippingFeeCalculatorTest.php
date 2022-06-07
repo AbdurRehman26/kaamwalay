@@ -14,7 +14,6 @@ beforeEach(function () {
 });
 
 test('international insured shipping fee is calculated correctly', function () {
-
     Http::fake([
         '*/api.easyship.com/*' => Http::response($this->sampleRequestRatesResponse, 200, []),
     ]);

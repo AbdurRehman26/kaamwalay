@@ -58,5 +58,4 @@ trait CouponApplicables
             array_sum(array_column($this->getOrderItems($order), 'quantity'))
         );
     }
-
 }

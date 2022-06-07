@@ -82,6 +82,7 @@ class EasyShipService
     public function requestRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
         Log::debug('Request International Rates, User ID: ' . auth()->user()?->id);
+
         return $this->easyShipClient->requestRates($originAddress, $destinationAddress, $incoterms, $insurance, $courierSelection, $shippingSettings, $parcels);
     }
 

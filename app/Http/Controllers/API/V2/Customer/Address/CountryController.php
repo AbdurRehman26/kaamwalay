@@ -15,5 +15,4 @@ class CountryController extends Controller
 
         return new CountryCollection($countries);
     }
-
 }

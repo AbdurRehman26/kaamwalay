@@ -50,5 +50,4 @@ class CouponController extends V1CouponController
             ],
         ]);
     }
-
 }

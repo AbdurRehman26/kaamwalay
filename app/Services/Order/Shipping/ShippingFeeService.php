@@ -23,6 +23,7 @@ class ShippingFeeService
         } else {
             Cache::put('shippingFee-' . request()->ip(), $shippingFee);
         }
+
         return $shippingFee;
     }
 

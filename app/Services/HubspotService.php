@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\HubspotDeal;
 use App\Models\User;
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use SevenShores\Hubspot\Http\Client;
@@ -11,7 +12,6 @@ use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
 use SevenShores\Hubspot\Resources\Deals;
 use SevenShores\Hubspot\Resources\Owners;
-use Exception;
 
 class HubspotService
 {
@@ -92,15 +92,14 @@ class HubspotService
                 'user_email' => $user->email,
                 'owner_id' => $ownerResponse[0]['ownerId'],
             ]);
-
         } catch (RequestException $exception) {
             report($exception);
             Log::error($exception);
         }
     }
 
-    public function updateDealStageForOrderPlacedUser(User $user): void {
-        
+    public function updateDealStageForOrderPlacedUser(User $user): void
+    {
         $deal = HubspotDeal::where('user_email', $user->email)->first();
         if ($deal) {
             try {
@@ -112,7 +111,6 @@ class HubspotService
             ];
 
                 (new Deals($this->getClient()))->update(intval($deal->deal_id), $updateProperties);
-                
             } catch (RequestException $exception) {
                 report($exception);
                 Log::error($exception);

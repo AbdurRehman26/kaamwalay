@@ -3,6 +3,7 @@
 namespace App\Jobs\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
 use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Bus\Queueable;
@@ -29,7 +30,7 @@ class CreateOrderLabel implements ShouldQueue
      *
      * @param  OrderLabelService  $orderLabelService
      * @return void
-     * @throws AgsServiceIsDisabled
+     * @throws AgsServiceIsDisabled|OrderLabelCouldNotBeGeneratedException
      */
     public function handle(OrderLabelService $orderLabelService): void
     {

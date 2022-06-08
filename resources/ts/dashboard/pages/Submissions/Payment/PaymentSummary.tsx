@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
+import { round } from 'lodash';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -510,8 +511,9 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             {timeInMs !== 0 && featureOrderWalletCreditEnabled && !isCouponApplied ? (
                 <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
                     <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
-                        You will earn <b>${(getPreviewTotal() * featureOrderWalletCreditPercentage) / 100}</b> in credit
-                        by paying now.
+                        You will earn{' '}
+                        <b>${round((getPreviewTotal() * featureOrderWalletCreditPercentage) / 100, 2).toFixed(2)}</b> in
+                        credit by paying now.
                     </Typography>
                 </Box>
             ) : null}

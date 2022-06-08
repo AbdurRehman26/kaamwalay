@@ -171,7 +171,7 @@ test('deactivating profile returns password error if ags token is null', functio
     $this->user->ags_access_token = null;
     $this->actingAs($this->user);
     postJson(route('v2.customer.profile.deactivate'))->assertStatus(400)->assertJson([
-        'error' => 'Please enter your AGS password.'
+        'error' => 'Please enter your AGS password.',
     ]);
 });
 
@@ -179,6 +179,6 @@ test('deleting profile returns password error if ags token is null', function ()
     $this->user->ags_access_token = null;
     $this->actingAs($this->user);
     postJson(route('v2.customer.profile.delete'))->assertStatus(400)->assertJson([
-        'error' => 'Please enter your AGS password.'
+        'error' => 'Please enter your AGS password.',
     ]);
 });

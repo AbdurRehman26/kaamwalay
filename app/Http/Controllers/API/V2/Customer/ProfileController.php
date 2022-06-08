@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V2\Customer;
 
 use App\Exceptions\API\Auth\AgsAuthenticationException;
-use App\Exceptions\API\FeatureNotAvailable;
 use App\Http\Controllers\API\V1\Customer\ProfileController as V1ProfileController;
 use App\Services\CustomerProfileService;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +11,7 @@ use Illuminate\Http\Request;
 class ProfileController extends V1ProfileController
 {
     /**
-     * @throws FeatureNotAvailable
+     * @throws AgsAuthenticationException
      */
     public function deactivateProfile(Request $request, CustomerProfileService $customerProfileService): JsonResponse
     {
@@ -26,7 +25,7 @@ class ProfileController extends V1ProfileController
     }
 
     /**
-     * @throws FeatureNotAvailable
+     * @throws AgsAuthenticationException
      */
     public function deleteProfile(Request $request, CustomerProfileService $customerProfileService): JsonResponse
     {

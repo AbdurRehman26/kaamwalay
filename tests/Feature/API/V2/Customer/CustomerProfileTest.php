@@ -5,8 +5,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
 
-use function Pest\Laravel\getJson;
-use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);

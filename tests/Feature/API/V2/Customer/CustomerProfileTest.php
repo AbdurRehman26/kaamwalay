@@ -185,7 +185,7 @@ test('deactive profile returns password error if ags token is null', function ()
     $response->assertStatus(400)->assertJson(['error' => 'Please enter your AGS password.']);
 });
 
-test('delete profile returns password error if ags token is null', function () {  
+test('delete profile returns password error if ags token is null', function () {
     $this->user->ags_access_token = null;
     $this->actingAs($this->user);
     $response = $this->postJson(route('v2.customer.profile.delete'));

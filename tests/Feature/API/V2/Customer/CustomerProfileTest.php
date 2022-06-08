@@ -5,8 +5,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
 
-use function Pest\Laravel\getJson;
-use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);
@@ -181,10 +179,8 @@ test('a customer cannot delete their account if ags fail', function () {
 });
 
 test('it throws exception ags token is null', function () {
-    
     $this->user->ags_access_token = null;
     $this->actingAs($this->user);
     $response = $this->postJson(route('v2.customer.profile.delete'));
     $response->assertStatus(400)->assertJson(['error' => 'Please enter your AGS password.']);
-
 });

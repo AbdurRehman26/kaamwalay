@@ -17,7 +17,7 @@ test('a customer can update his profile', function () {
     ]);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    $response = $this->putJson(route('v2.customer.profile'), [
             'first_name' => 'first',
             'last_name' => 'Last',
             'email_subscription' => true,
@@ -49,7 +49,7 @@ test('customer profile update required fields error', function () {
     ]);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    $response = $this->putJson(route('v2.customer.profile'), [
         'first_name' => '',
         'last_name' => '',
         'phone' => '',
@@ -71,7 +71,7 @@ test('a customer`s username can not be duplicate', function () {
     ]);
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/profile', [
+    $response = $this->putJson(route('v2.customer.profile'), [
         'username' => $this->anotherUser->username,
     ]);
 
@@ -90,7 +90,7 @@ test('a customer can deactivate their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/deactivate');
+    $response = $this->postJson(route('v2.customer.profile.deactivate'));
     $response->assertOk();
     $response->assertJsonFragment([
         'success' => true,
@@ -101,9 +101,9 @@ test('a customer can deactivate their account', function () {
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
+    $me = $this->getJson(route('v2.auth.me'));
     $me->assertUnauthorized();
-})->skip('Feature is not available yet.');
+});
 
 
 test('a customer can delete their account', function () {
@@ -120,7 +120,7 @@ test('a customer can delete their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/delete');
+    $response = $this->postJson(route('v2.customer.profile.delete'));
     $response->assertOk();
     $response->assertJsonFragment([
         'success' => true,
@@ -131,14 +131,14 @@ test('a customer can delete their account', function () {
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
+    $me = $this->getJson(route('v2.auth.me'));
     $me->assertUnauthorized();
 
     $user = User::withTrashed()->find($this->user->id);
     $this->assertNotNull($user);
     $this->assertTrue($user->trashed());
     $this->assertEmpty($user->first_name);
-})->skip('Feature is not available yet.');
+});
 
 test('a customer cannot delete their account if ags fail', function () {
     Http::fake([
@@ -154,7 +154,7 @@ test('a customer cannot delete their account if ags fail', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    $response = $this->postJson('/api/v2/customer/profile/delete');
+    $response = $this->postJson(route('v2.customer.profile.delete'));
     $response->assertUnprocessable();
 
     // Re-login and retrieve a new session
@@ -162,6 +162,15 @@ test('a customer cannot delete their account if ags fail', function () {
     auth()->login($this->user);
 
     // This time we should get a 401
-    $me = $this->getJson('/api/v2/auth/me');
+    $me = $this->getJson(route('v2.auth.me'));
     $me->assertOk();
-})->skip('Feature is not available yet.');
+});
+
+test('it throws exception ags token is null', function () {
+    
+    $this->user->ags_access_token = null;
+    $this->actingAs($this->user);
+    $response = $this->postJson(route('v2.customer.profile.delete'));
+    $response->assertStatus(400)->assertJson(['error' => 'Please enter your AGS password.']);
+
+});

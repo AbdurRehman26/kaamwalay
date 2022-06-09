@@ -18,7 +18,7 @@ class EasyShipClient
     }
 
 
-    public function requestRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
+    public function getRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
         $data = [
             'origin_address' => $originAddress,
@@ -31,15 +31,14 @@ class EasyShipClient
         ];
 
         try {
-            Log::debug('EasyShip rates request:', $data);
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
-//        ])->post($this->baseUrl . '/rates', $data);
             ])->timeout(5)->retry(3, 500)
                 ->post($this->baseUrl . '/rates', $data);
 
             return (json_decode($response->body()))->rates;
         } catch (Exception $e) {
+            Log::info('EasyShip rates request:', $data);
             report($e);
 
             return [];

@@ -19,7 +19,7 @@ class InternationalInsuredShippingFeeCalculator
 
         $parcels = $easyShipService->calculateParcels($totalNumberOfItems);
 
-        $rates = $easyShipService->requestRates(
+        $rates = $easyShipService->getRates(
             $originAddress,
             $destinationAddress,
             $incoterms,

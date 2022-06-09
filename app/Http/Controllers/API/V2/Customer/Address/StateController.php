@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Cache;
 
 class StateController extends Controller
 {
+    public const DEFAULT_COUNTRY_ID = 1;
+
     public function index(ListStatesRequest $request): StateCollection
     {
-        $countryId = $request->country_id ?? 1;
+        $countryId = $request->country_id ?? self::DEFAULT_COUNTRY_ID;
 
         $states = Cache::remember('states-' . $countryId, now()->addWeek(), fn () => State::where('country_id', $countryId)->get());
 

@@ -17,20 +17,17 @@
  *              {
  *                  "id": 1,
  *                  "code": "US",
- *                  "name": "United States",
- *                  "is_enabled": 1
+ *                  "name": "United States"
  *              },
  *              {
  *                  "id": 2,
  *                  "code": "AU",
- *                  "name": "Australia",
- *                  "is_enabled": 1
+ *                  "name": "Australia"
  *              },
  *              {
  *                  "id": 3,
  *                  "code": "CA",
- *                  "name": "Canada",
- *                  "is_enabled": 1
+ *                  "name": "Canada"
  *              }
  *          ]
  *      }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources\API\V1\Country;
 
+use App\Models\Country;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property string $phone_code
+ * @mixin Country
  */
 class CountryResource extends JsonResource
 {

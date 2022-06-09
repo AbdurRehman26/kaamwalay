@@ -3,10 +3,11 @@
 namespace App\Http\Resources\API\V1\Customer\Order;
 
 use App\Http\Resources\API\V1\Country\CountryResource;
+use App\Models\OrderAddress;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property string $address_2
+ * @mixin OrderAddress
  */
 class OrderAddressResource extends JsonResource
 {

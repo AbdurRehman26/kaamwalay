@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Country extends Model
 {
@@ -15,7 +17,7 @@ class Country extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'name', 'is_enabled', 'phone_code'];
+    protected $fillable = ['code', 'name', 'phone_code', 'is_enabled'];
 
     /**
      * The attributes that should be cast to native types.
@@ -30,5 +32,13 @@ class Country extends Model
     public function scopeEnabled(Builder $query): Builder
     {
         return $query->where('is_enabled', true);
+    }
+
+    /**
+     * @return HasOne<ShippingMatrix>
+     */
+    public function shippingMatrices(): HasOne
+    {
+        return $this->hasOne(ShippingMatrix::class);
     }
 }

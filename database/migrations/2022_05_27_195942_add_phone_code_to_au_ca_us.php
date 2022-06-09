@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::table('countries')->whereIn('code', ['US', 'CA'])->update(['phone_code' => '+1']);
-        DB::table('countries')->where('code', 'AU')->update(['phone_code' => '+61']);
+        DB::table('countries')->whereIn('code', ['US', 'CA'])->update(['phone_code' => '1']);
+        DB::table('countries')->where('code', 'AU')->update(['phone_code' => '61']);
     }
 
     /**

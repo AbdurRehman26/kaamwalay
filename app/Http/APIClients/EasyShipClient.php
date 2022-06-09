@@ -36,8 +36,9 @@ class EasyShipClient
             ])->timeout(5)->retry(3, 500)
                 ->post($this->baseUrl . '/rates', $data);
 
-            return (json_decode($response->body()))->rates;
+            return $response->json()['rates'];
         } catch (Exception $e) {
+            Log::info('Request International Rates, User ID: ' . auth()->user()?->id);
             Log::info('EasyShip rates request:', $data);
             report($e);
 

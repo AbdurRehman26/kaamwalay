@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('states', function (Blueprint $table) {
-            $table->foreignId('country_id')->after('name')->default(1)->constrained();
+            $table->foreignId('country_id')->after('name')->nullable()->constrained();
         });
     }
 

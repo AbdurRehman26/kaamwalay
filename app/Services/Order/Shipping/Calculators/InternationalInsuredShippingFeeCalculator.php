@@ -31,10 +31,10 @@ class InternationalInsuredShippingFeeCalculator
 
         if (count($rates) > 0) {
             usort($rates, function ($rate1, $rate2) {
-                return $rate2->total_charge <=> $rate1->total_charge;
+                return $rate2['total_charge'] <=> $rate1['total_charge'];
             });
 
-            return $rates[0]->total_charge;
+            return $rates[0]['total_charge'];
         } else {
             return $easyShipService->calculateDefaultPrice($parcels, $shippingAddress['country_code']);
         }

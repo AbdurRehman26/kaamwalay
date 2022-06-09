@@ -5,7 +5,6 @@ namespace App\Services\Order\Shipping;
 use App\Http\APIClients\EasyShipClient;
 use App\Models\ShippingMatrix;
 use Illuminate\Support\Facades\Cache;
-use Log;
 
 class EasyShipService
 {
@@ -81,8 +80,6 @@ class EasyShipService
     }
     public function getRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
-        Log::debug('Request International Rates, User ID: ' . auth()->user()?->id);
-
         return $this->easyShipClient->getRates($originAddress, $destinationAddress, $incoterms, $insurance, $courierSelection, $shippingSettings, $parcels);
     }
 

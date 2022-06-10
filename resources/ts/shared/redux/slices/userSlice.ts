@@ -53,6 +53,28 @@ export const updateUserPassword = createAsyncThunk(
     },
 );
 
+export const deactivateProfile = createAsyncThunk('user/deactivateProfile', async () => {
+    const userRepository = app(UserRepository);
+    try {
+        await userRepository.deactivateProfile();
+        NotificationsService.success('Profile deactivated successfully!');
+    } catch (error: any) {
+        NotificationsService.exception(error);
+        return error;
+    }
+});
+
+export const deleteProfile = createAsyncThunk('user/deleteProfile', async () => {
+    const userRepository = app(UserRepository);
+    try {
+        await userRepository.deleteProfile();
+        NotificationsService.success('Profile deleted successfully!');
+    } catch (error: any) {
+        NotificationsService.exception(error);
+        return error;
+    }
+});
+
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState: {},

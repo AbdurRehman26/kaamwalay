@@ -131,13 +131,13 @@ export function SubmissionsGradeCard({
                         orderItemGradeData.currentViewMode === 'missing_pending_notes' ? null : (
                             <>
                                 <TextField
-                                    label="Notes to Customer"
+                                    label="Internal Notes"
                                     multiline
                                     rows={4}
-                                    value={orderItemGradeData.cardNotes}
+                                    value={orderItemGradeData?.cardInternalNotes}
                                     sx={{ marginTop: '16px' }}
                                     fullWidth
-                                    onChange={orderItemGradeData.handleNotesChange}
+                                    onChange={orderItemGradeData.handleInternalNotesChange}
                                 />
                                 <SubmissionsGradeCardGrades
                                     icon={<FaceIcon className={classes.headingIcon} />}
@@ -153,13 +153,13 @@ export function SubmissionsGradeCard({
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
                                 <TextField
-                                    label="Internal Notes"
+                                    label="Notes to Customer"
                                     multiline
                                     rows={4}
-                                    value={orderItemGradeData?.cardInternalNotes}
+                                    value={orderItemGradeData.cardNotes}
                                     sx={{ marginTop: '16px' }}
                                     fullWidth
-                                    onChange={orderItemGradeData.handleInternalNotesChange}
+                                    onChange={orderItemGradeData.handleNotesChange}
                                 />
                                 <Grid container justifyContent={'flex-end'}>
                                     {orderItemGradeData.currentViewMode === 'graded_revise_mode' ? (

@@ -85,18 +85,18 @@ class EasyShipService
 
     public function calculateDefaultPrice(array $parcels, string $countryCode): float
     {
-        $ShippingMatrixs = Cache::remember(
-            'shipping-metrics-' . $countryCode,
+        $shippingMatrix = Cache::remember(
+            'shipping-matrix-' . $countryCode,
             now()->addMonth(),
-            fn () => ShippingMatrix::join('countries', 'countries.id', '=', 'shipping_metrics.country_id')->where('countries.code', $countryCode)->first()
+            fn () => ShippingMatrix::join('countries', 'countries.id', '=', 'shipping_matrices.country_id')->where('countries.code', $countryCode)->first()
         );
         $price = 0;
 
         foreach ($parcels as $parcel) {
             if ($parcel['box'] === self::BOX_DIMENSIONS) {
-                $price += $ShippingMatrixs->box_default_value;
+                $price += $shippingMatrix->box_default_value;
             } else {
-                $price += $ShippingMatrixs->slip_default_value;
+                $price += $shippingMatrix->slip_default_value;
             }
         }
 

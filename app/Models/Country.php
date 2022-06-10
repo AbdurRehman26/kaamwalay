@@ -36,7 +36,7 @@ class Country extends Model
     /**
      * @return HasOne<ShippingMatrix>
      */
-    public function shippingMatrices(): HasOne
+    public function shippingMatrix(): HasOne
     {
         return $this->hasOne(ShippingMatrix::class);
     }

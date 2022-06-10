@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
@@ -13,6 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
@@ -169,9 +171,21 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
-                            You haven't submitted any cards for grading yet.
-                            <br />
-                            Click the button below to get started.
+                            Your cards will only show here once we grade and ship them back to you. Either you haven't
+                            created a{!isSm ? <br /> : null}
+                            submission, or we haven't shipped any cards back to you, yet. Go to the{' '}
+                            <MuiLink
+                                component={Link}
+                                to={'/submissions'}
+                                align={'center'}
+                                color={'primary'}
+                                underline={'always'}
+                            >
+                                Submissions
+                            </MuiLink>{' '}
+                            page to see status
+                            {!isSm ? <br /> : null}
+                            of submissions or create a new one.
                         </Typography>
                     </Grid>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>

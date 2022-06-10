@@ -170,10 +170,9 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                        <Typography variant={'body1'} textAlign={'center'} fontSize={12} margin={'0 35px 0 35px'}>
                             Your cards will only show here once we grade and ship them back to you. Either you haven't
-                            created a{!isSm ? <br /> : null}
-                            submission, or we haven't shipped any cards back to you, yet. Go to the{' '}
+                            created a submission, or we haven't shipped any cards back to you, yet. Go to the{' '}
                             <MuiLink
                                 component={Link}
                                 to={'/submissions'}
@@ -183,9 +182,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                             >
                                 Submissions
                             </MuiLink>{' '}
-                            page to see status
-                            {!isSm ? <br /> : null}
-                            of submissions or create a new one.
+                            page to see status of submissions or create a new one.
                         </Typography>
                     </Grid>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>

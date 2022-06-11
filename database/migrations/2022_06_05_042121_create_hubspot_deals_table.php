@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->foreignId('country_id')->after('name')->nullable()->constrained();
+        Schema::create('hubspot_deals', function (Blueprint $table) {
+            $table->id();
+            $table->string('deal_name');
+            $table->string('deal_id');
+            $table->string('user_email');
+            $table->string('owner_id');
+            $table->timestamps();
         });
     }
 
@@ -25,9 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->dropForeign(['country_id']);
-            $table->dropColumn(['country_id']);
-        });
+        Schema::dropIfExists('hubspot_deals');
     }
 };

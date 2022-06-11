@@ -13,7 +13,6 @@ use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
-use App\Services\Order\Shipping\ShippingFeeService;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);

@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('countries', function (Blueprint $table) {
-            $table->boolean('is_enabled')->default(false);
+            $table->boolean('is_enabled')->after('name')->default(false);
         });
     }
 

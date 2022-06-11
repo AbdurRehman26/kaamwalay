@@ -3,9 +3,8 @@
 namespace App\Services\Order\Shipping;
 
 use App\Http\APIClients\EasyShipClient;
-use App\Models\ShippingMetric;
+use App\Models\ShippingMatrix;
 use Illuminate\Support\Facades\Cache;
-use Log;
 
 class EasyShipService
 {
@@ -79,26 +78,25 @@ class EasyShipService
 
         return $parcels;
     }
-    public function requestRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
+    public function getRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
-        Log::debug('Request International Rates, User ID: ' . auth()->user()?->id);
-        return $this->easyShipClient->requestRates($originAddress, $destinationAddress, $incoterms, $insurance, $courierSelection, $shippingSettings, $parcels);
+        return $this->easyShipClient->getRates($originAddress, $destinationAddress, $incoterms, $insurance, $courierSelection, $shippingSettings, $parcels);
     }
 
     public function calculateDefaultPrice(array $parcels, string $countryCode): float
     {
-        $shippingMetrics = Cache::remember(
-            'shipping-metrics-' . $countryCode,
+        $shippingMatrix = Cache::remember(
+            'shipping-matrix-' . $countryCode,
             now()->addMonth(),
-            fn () => ShippingMetric::join('countries', 'countries.id', '=', 'shipping_metrics.country_id')->where('countries.code', $countryCode)->first()
+            fn () => ShippingMatrix::join('countries', 'countries.id', '=', 'shipping_matrices.country_id')->where('countries.code', $countryCode)->first()
         );
         $price = 0;
 
         foreach ($parcels as $parcel) {
             if ($parcel['box'] === self::BOX_DIMENSIONS) {
-                $price += $shippingMetrics->box_default_value;
+                $price += $shippingMatrix->box_default_value;
             } else {
-                $price += $shippingMetrics->slip_default_value;
+                $price += $shippingMatrix->slip_default_value;
             }
         }
 

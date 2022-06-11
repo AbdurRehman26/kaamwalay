@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('states', function (Blueprint $table) {
-            $table->foreignId('country_id')->after('name')->nullable()->constrained();
+            $table->unsignedBigInteger('country_id')->nullable(false)->change();
         });
     }
 
@@ -26,8 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('states', function (Blueprint $table) {
-            $table->dropForeign(['country_id']);
-            $table->dropColumn(['country_id']);
+            $table->unsignedBigInteger('country_id')->nullable()->change();
         });
     }
 };

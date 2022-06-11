@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
 return new class extends Migration
@@ -37,6 +38,9 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         DB::table('countries')->whereIn('code', ['AU', 'CA'])->delete();
+        Schema::enableForeignKeyConstraints();
+
     }
 };

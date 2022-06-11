@@ -30,7 +30,7 @@ test('a user can see specific state', function () {
         ->create(['id' => 1000]);
     $response = $this->getJson('/api/v2/customer/addresses/states/1000');
 
-        $response->assertJsonCount(4, 'data');
+    $response->assertJsonCount(4, 'data');
     $response->assertJsonStructure([
         'data' => ['id', 'code', 'name', 'country'],
     ]);

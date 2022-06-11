@@ -46,5 +46,6 @@
         <env name="AWS_DEFAULT_REGION" value="us-west-2"/>
         <env name="PUSHER_BEAMS_INSTANCE_ID" value="adhj123"/>
         <env name="PUSHER_BEAMS_SECRET_KEY" value="BCA3C2F"/>
+        <env name="EASYSHIP_API_KEY" value="12345"/>
     </php>
 </phpunit>

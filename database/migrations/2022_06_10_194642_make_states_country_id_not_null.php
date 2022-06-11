@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -14,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('countries', function (Blueprint $table) {
-            $table->boolean('is_enabled')->after('name')->default(false);
+        Schema::table('states', function (Blueprint $table) {
+            $table->unsignedBigInteger('country_id')->nullable(false)->change();
         });
     }
 
@@ -26,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('countries', function (Blueprint $table) {
-            $table->dropColumn('is_enabled');
+        Schema::table('states', function (Blueprint $table) {
+            $table->unsignedBigInteger('country_id')->nullable()->change();
         });
     }
 };

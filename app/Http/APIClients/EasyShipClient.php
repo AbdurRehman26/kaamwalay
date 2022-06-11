@@ -38,8 +38,8 @@ class EasyShipClient
 
             return $response->json()['rates'];
         } catch (Exception $e) {
-            Log::info('Request International Rates, User ID: ' . auth()->user()?->id);
-            Log::info('EasyShip rates request:', $data);
+            Log::error('Request International Rates, User ID: ' . auth()->user()?->id);
+            Log::error('EasyShip rates request:', $data);
             report($e);
 
             return [];

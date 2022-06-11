@@ -640,8 +640,8 @@ export function InsuredShippingMethod() {
                                     customInput={TextField}
                                     format={
                                         country.phoneCode
-                                            ? country.phoneCode + ' (###) ###-####'
-                                            : availableCountries[0].phoneCode + ' (###) ###-####'
+                                            ? '+' + country.phoneCode + ' (###) ###-####'
+                                            : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
                                     }
                                     mask=""
                                     style={{ margin: 8, marginLeft: 0 }}

@@ -139,6 +139,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }

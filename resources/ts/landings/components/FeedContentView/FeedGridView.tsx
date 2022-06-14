@@ -3,8 +3,10 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectHits } from 'react-instantsearch-dom';
+import { useDispatch } from 'react-redux';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import theme from '@shared/styles/theme';
+import { setCardsDataLength } from '../../redux/slices/feedSlice';
 
 const GridDiv = styled(Grid)({
     '.GridView': {
@@ -134,6 +136,8 @@ const BoxDiv = styled(Box)({
     },
 });
 const CustomHits = connectHits(({ hits }) => {
+    const dispatch = useDispatch();
+    dispatch(setCardsDataLength(hits.length));
     return (
         <GridDiv container>
             {hits.map((hit: any) => (

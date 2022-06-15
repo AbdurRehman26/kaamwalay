@@ -13,8 +13,12 @@
 
 .Home-availableCardsColumn {
     min-width: 14%;
+    overflow: -moz-scrollbars-none;
+    ::-webkit-scrollbar {
+        width: 0 !important;
+    }
     @media screen and (max-width: 768px) {
-        width: 40%;
+        min-width: 40%;
     }
 }
 

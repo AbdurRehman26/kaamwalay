@@ -18,7 +18,7 @@ import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } f
 import { TablePagination } from '@shared/components/TablePagination';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { PaymentNoticeHeadingMap } from '@shared/constants/PaymentStatusEnum';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -68,7 +68,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
 
-    const FilterButton = ({ label, active, value, onClear, children }: PropsWithChildren<Props>) => {
+    const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (
             <StyledButton
                 variant={'outlined'}
@@ -187,8 +187,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 </Grid>
             </Grid>
             <Grid alignItems={'left'}>
-                {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                    console.log(paymentStatus, key);
+                {Object.entries(PaymentNoticeHeadingMap).map(([key, status]) => {
                     return <FilterButton label={status} active={paymentStatus === key} value={key} />;
                 })}
             </Grid>

@@ -399,7 +399,7 @@ class Order extends Model implements Exportable
 
     public function exportHeadings(): array
     {
-        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Payment Status', 'Status', 'Declared Value', 'Order Total'];
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Payment Status', 'Declared Value', 'Order Total'];
     }
 
     public function exportFilters(): array

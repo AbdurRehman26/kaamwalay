@@ -376,29 +376,21 @@ test('order can be shipped if its not paid', function () {
     Event::assertDispatched(OrderStatusChangedEvent::class);
 });
 
-it('returns only orders with payment status pending', function () {
-    // 5 Orders were created in the pending state in beforeEach method at the top
-    $this->getJson('/api/v2/admin/orders?filter[payment_status]=0')
-        ->assertOk()
-        ->assertJsonCount(5, ['data']);
-});
-
-it('returns only orders with payment status paid', function () {
-    $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['payment_status' => OrderPaymentStatusEnum::PAID],
+it('returns only orders with filtered payment status', function ($data) {
+    $this->orders = Order::factory()->count(3)->state(new Sequence(
+        ['id' => 100, 'payment_status' => OrderPaymentStatusEnum::PENDING],
+        ['id' => 101, 'payment_status' => OrderPaymentStatusEnum::PAID],
+        ['id' => 102, 'payment_status' => OrderPaymentStatusEnum::DUE],
     ))->create();
 
-    $this->getJson('/api/v2/admin/orders?filter[payment_status]=2')
+    $this->getJson('/api/v2/admin/orders?filter[payment_status]=' . $data['payment_status'])
         ->assertOk()
-        ->assertJsonCount(5, ['data']);
-});
-
-it('returns only orders with payment status payment due', function () {
-    $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['payment_status' => OrderPaymentStatusEnum::DUE],
-    ))->create();
-
-    $this->getJson('/api/v2/admin/orders?filter[payment_status]=1')
-        ->assertOk()
-        ->assertJsonCount(5, ['data']);
-});
+        ->assertJsonCount($data['count'], ['data'])
+        ->assertJsonFragment([
+            'id' => $data['id'], 'payment_status' => $data['payment_status'],
+        ]);
+})->with([
+    fn () => ['id' => 100, 'count' => 6, 'payment_status' => OrderPaymentStatusEnum::PENDING->value],
+    fn () => ['id' => 101, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::PAID->value],
+    fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
+]);

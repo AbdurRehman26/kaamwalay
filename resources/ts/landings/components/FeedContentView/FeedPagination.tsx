@@ -24,7 +24,7 @@ const FeedPaginationBox = styled(Box)({
 const CustomPagination = connectPagination(({ currentRefinement, nbPages, refine, createURL }) => {
     const totalCardsLength = useSelector((state: RootState) => state.feed.filterResults.results);
     const itemsPerPage = useSelector((state: RootState) => state.feed.totalItemsPerPage.itemsPerPage);
-    const firstIndex = currentRefinement === 1 ? 1 : (currentRefinement - 1) * itemsPerPage + 1;
+    const firstIndex = currentRefinement === 1 ? 1 : (currentRefinement - 1) * (itemsPerPage + 1);
     const lastRecordDifference = currentRefinement * itemsPerPage - totalCardsLength;
     const lastIndex =
         currentRefinement === nbPages

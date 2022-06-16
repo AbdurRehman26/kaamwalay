@@ -139,6 +139,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
@@ -398,7 +399,7 @@ class Order extends Model implements Exportable
 
     public function exportHeadings(): array
     {
-        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Declared Value', 'Amount Paid'];
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Payment Status', 'Status', 'Declared Value', 'Order Total'];
     }
 
     public function exportFilters(): array
@@ -424,6 +425,7 @@ class Order extends Model implements Exportable
             $row->user->customer_number,
             $row->orderItems->sum('quantity'),
             $row->orderStatus->name,
+            $row->payment_status->toString(),
             $row->orderItems->sum('declared_value_total'),
             $row->grand_total,
         ];

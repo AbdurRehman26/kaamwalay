@@ -376,6 +376,13 @@ test('order can be shipped if its not paid', function () {
     Event::assertDispatched(OrderStatusChangedEvent::class);
 });
 
+it('returns only orders with payment status pending', function () {
+    // 5 Orders were created in the pending state in beforeEach method at the top
+    $this->getJson('/api/v2/admin/orders?filter[payment_status]=0')
+        ->assertOk()
+        ->assertJsonCount(5, ['data']);
+});
+
 it('returns only orders with payment status paid', function () {
     $this->orders = Order::factory()->count(5)->state(new Sequence(
         ['payment_status' => OrderPaymentStatusEnum::PAID],
@@ -383,21 +390,7 @@ it('returns only orders with payment status paid', function () {
 
     $this->getJson('/api/v2/admin/orders?filter[payment_status]=2')
         ->assertOk()
-        ->assertJsonFragment([
-            'payment_status' => OrderPaymentStatusEnum::PAID,
-        ]);
-});
-
-it('returns only orders with payment status pending', function () {
-    $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['payment_status' => OrderPaymentStatusEnum::PENDING],
-    ))->create();
-
-    $this->getJson('/api/v2/admin/orders?filter[payment_status]=0')
-        ->assertOk()
-        ->assertJsonFragment([
-            'payment_status' => OrderPaymentStatusEnum::PENDING,
-        ]);
+        ->assertJsonCount(5, ['data']);
 });
 
 it('returns only orders with payment status payment due', function () {
@@ -407,7 +400,5 @@ it('returns only orders with payment status payment due', function () {
 
     $this->getJson('/api/v2/admin/orders?filter[payment_status]=1')
         ->assertOk()
-        ->assertJsonFragment([
-            'payment_status' => OrderPaymentStatusEnum::DUE,
-        ]);
+        ->assertJsonCount(5, ['data']);
 });

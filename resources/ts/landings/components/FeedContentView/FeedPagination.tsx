@@ -3,7 +3,6 @@ import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
 import { connectPagination } from 'react-instantsearch-dom';
 import { useSelector } from 'react-redux';
 import theme from '@shared/styles/theme';
@@ -25,15 +24,12 @@ const FeedPaginationBox = styled(Box)({
 const CustomPagination = connectPagination(({ currentRefinement, nbPages, refine, createURL }) => {
     const totalCardsLength = useSelector((state: RootState) => state.feed.filterResults.results);
     const itemsPerPage = useSelector((state: RootState) => state.feed.totalItemsPerPage.itemsPerPage);
-    const cardsLength = useSelector((state: RootState) => state.feed.totalCardsLength.cardsLength);
-    const [previousItemsLength, setPreviousItemsLength] = useState(0);
-    const firstIndex = currentRefinement === 1 ? 1 : previousItemsLength + 1;
+    const firstIndex = currentRefinement === 1 ? 1 : (currentRefinement - 1) * itemsPerPage + 1;
+    const lastRecordDifference = currentRefinement * itemsPerPage - totalCardsLength;
     const lastIndex =
-        currentRefinement === 1 && itemsPerPage < totalCardsLength
-            ? itemsPerPage
-            : currentRefinement === 1
-            ? totalCardsLength
-            : previousItemsLength + cardsLength;
+        currentRefinement === nbPages
+            ? currentRefinement * itemsPerPage - lastRecordDifference
+            : currentRefinement * itemsPerPage;
 
     return (
         <FeedPaginationBox>
@@ -48,7 +44,6 @@ const CustomPagination = connectPagination(({ currentRefinement, nbPages, refine
                             onClick={(event) => {
                                 event.preventDefault();
                                 refine(currentRefinement - 1);
-                                setPreviousItemsLength(previousItemsLength - itemsPerPage);
                             }}
                         >
                             <ChevronLeftOutlinedIcon />
@@ -66,7 +61,6 @@ const CustomPagination = connectPagination(({ currentRefinement, nbPages, refine
                             onClick={(event) => {
                                 event.preventDefault();
                                 refine(currentRefinement + 1);
-                                setPreviousItemsLength(itemsPerPage + previousItemsLength);
                             }}
                         >
                             <ChevronRightOutlinedIcon />

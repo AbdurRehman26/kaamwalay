@@ -23,7 +23,7 @@ const CustomHitsPerPage = connectHitsPerPage(({ items, refine, currentRefinement
 
     return (
         <GridDiv>
-            <Typography>Items per page:</Typography>
+            <Typography sx={{ marginTop: '2px' }}>Items per page:</Typography>
             <Select
                 className={'selectdiv'}
                 value={currentRefinement || ''}

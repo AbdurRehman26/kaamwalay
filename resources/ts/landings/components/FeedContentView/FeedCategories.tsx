@@ -88,6 +88,9 @@ const FeeCategoryBox = styled(Box)(
             borderRadius: '17px',
             color: 'rgba(0, 0, 0, 0.38)',
         },
+        '.ViewOptionContainer': {
+            display: 'inline-flex',
+        },
     },
     { name: 'FeeCategoryBox' },
 );
@@ -153,7 +156,7 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                     <FeedGrade />
                 </Grid>
                 <Grid className={'FilterBar'}>
-                    <Grid>
+                    <Grid className={'ViewOptionContainer'}>
                         <DensitySmallOutlinedIcon
                             className={toggleView ? 'ListViewButton' : 'ListViewButtonActive'}
                             onClick={() => {

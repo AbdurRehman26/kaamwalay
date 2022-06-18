@@ -7,15 +7,24 @@ use App\Models\Order;
 use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\Calculators\InsuredShippingFeeCalculator;
 use App\Services\Order\Shipping\Calculators\VaultShippingFeeCalculator;
+use Illuminate\Support\Facades\Cache;
 
 class ShippingFeeService
 {
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null, ?array $shippingAddress = []): float
     {
-        return match ($shippingMethod?->code) {
+        $shippingFee = match ($shippingMethod?->code) {
             ShippingMethod::VAULT_STORAGE => VaultShippingFeeCalculator::calculate(),
-            default => InsuredShippingFeeCalculator::calculate($totalDeclaredValue, $totalNumberOfItems),
+            default => InsuredShippingFeeCalculator::calculate($totalDeclaredValue, $totalNumberOfItems, $shippingAddress),
         };
+
+        if (request()->user()) {
+            Cache::put('shippingFee-' . request()->user()->id, $shippingFee);
+        } else {
+            Cache::put('shippingFee-' . request()->ip(), $shippingFee);
+        }
+
+        return $shippingFee;
     }
 
     /**

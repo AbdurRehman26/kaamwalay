@@ -15,6 +15,7 @@ class OrderAddress extends Address
         'first_name',
         'last_name',
         'address',
+        'address_2',
         'city',
         'state',
         'zip',

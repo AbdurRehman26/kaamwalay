@@ -7,15 +7,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-// import { APIService } from '@shared/services/APIService';
-// import { useInjectable } from '@shared/hooks/useInjectable';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { getStatesList } from '../../redux/slices/newSubmissionSlice';
+import { getCountriesList, getStatesList } from '../../redux/slices/newSubmissionSlice';
 
 interface AddPaymentCardDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function AddAddressDialog(props: AddPaymentCardDialogProps) {
     const { onClose, onSubmit, ...rest } = props;
-    // const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
+    const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
     const [country, setCountry] = useState<CountryProps>();
     const [fullName, setFullName] = useState('');
     const [address, setAddress] = useState('');
@@ -115,18 +115,18 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
     const [zip, setZip] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    // const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
+    const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const dispatch = useAppDispatch();
 
-    // const apiService = useInjectable(APIService);
+    const apiService = useInjectable(APIService);
     const classes = useStyles({});
 
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const handleSubmit = useCallback(async () => {
-        // const endpoint = apiService.createEndpoint('customer/addresses');
-
+        const endpoint = apiService.createEndpoint('customer/addresses');
+        setSaveBtnLoading(true);
         const DTO = {
             country: country,
             fullName: fullName,
@@ -138,6 +138,8 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
             phoneNumber: phoneNumber,
         };
         console.log('dto ', DTO);
+        const addressResponse = await endpoint.post('', DTO);
+        console.log('address ', addressResponse);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -153,7 +155,7 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
     useEffect(
         () => {
             (async () => {
-                // await dispatch(getCountriesList());
+                await dispatch(getCountriesList());
                 await dispatch(getStatesList());
             })();
         },
@@ -161,14 +163,14 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
         [],
     );
 
-    const handleCountryChange = useCallback((e) => setCountry(e.target.value), []);
-    const handleFullNameChange = useCallback((e) => setFullName(e.target.value), []);
-    const handleAddressChange = useCallback((e) => setAddress(e.target.value), []);
-    const handleAddress2Change = useCallback((e) => setAddress2(e.target.value), []);
-    const handleCityChange = useCallback((e) => setCity(e.target.value), []);
-    const handleStateChange = useCallback((e) => setState(e.target.value), []);
-    const handleZipChange = useCallback((e) => setZip(e.target.value), []);
-    const handlePhoneChange = useCallback((e) => setPhoneNumber(e.target.value), []);
+    const handleCountryChange = () => setCountry(country);
+    const handleFullNameChange = () => setFullName(fullName);
+    const handleAddressChange = () => setAddress(address);
+    const handleAddress2Change = () => setAddress2(address2);
+    const handleCityChange = () => setCity(city);
+    const handleStateChange = () => setState(state);
+    const handleZipChange = () => setZip(zip);
+    const handlePhoneChange = () => setPhoneNumber(phoneNumber);
 
     return (
         <Dialog onClose={handleClose} {...rest}>
@@ -180,19 +182,19 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                         <Select
                             fullWidth
                             native
-                            // key={country?.id ? country?.id : availableCountries[0].id}
-                            // defaultValue={country?.id ? country?.id : availableCountries[0].id}
+                            key={country?.id ? country?.id : availableCountries[0].id}
+                            defaultValue={country?.id ? country?.id : availableCountries[0].id}
                             onChange={handleCountryChange}
                             placeholder={'Select Country'}
                             variant={'outlined'}
                             style={{ height: '43px', marginTop: 6 }}
                         >
                             <option value="none">Select a country</option>
-                            {/* {availableCountries.map((item: any) => (
-                                        <option key={item.id} value={item.id}>
-                                            {item?.name}
-                                        </option>
-                                    ))} */}
+                            {availableCountries.map((item: any) => (
+                                <option key={item.id} value={item.id}>
+                                    {item?.name}
+                                </option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -358,11 +360,11 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                         <Typography className={classes.methodDescription}>Phone Number</Typography>
                         <NumberFormat
                             customInput={TextField}
-                            // format={
-                            //     country?.phoneCode
-                            //         ? '+' + country?.phoneCode + ' (###) ###-####'
-                            //         : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
-                            // }
+                            format={
+                                country?.phoneCode
+                                    ? '+' + country?.phoneCode + ' (###) ###-####'
+                                    : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
+                            }
                             mask=""
                             style={{ margin: 8, marginLeft: 0 }}
                             placeholder="Enter Phone Number"
@@ -380,7 +382,9 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button color="primary" onClick={handleSubmit}></Button>
+                <Button color="primary" onClick={handleSubmit} disabled={isSaveBtnLoading}>
+                    {isSaveBtnLoading ? 'Loading...' : 'Save'}
+                </Button>
             </DialogActions>
         </Dialog>
     );

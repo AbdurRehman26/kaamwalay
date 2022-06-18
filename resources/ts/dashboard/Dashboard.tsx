@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
 import { Wallet } from '@dashboard/pages/Wallet';
+import { ListAddresses } from './pages/Addresses';
 import { Cards } from './pages/Cards/Cards';
 import { PaymentCards } from './pages/PaymentCards';
 import { Profile } from './pages/Profile';
@@ -25,6 +26,7 @@ export function Dashboard() {
             <Route path={'/profile/*'} element={ProtectedRoute(Profile)} />
             <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />
             <Route path={'/payment-cards/*'} element={ProtectedRoute(PaymentCards)} />
+            <Route path={'/profile/address/*'} element={ProtectedRoute(ListAddresses)} />
         </Routes>
     );
 }

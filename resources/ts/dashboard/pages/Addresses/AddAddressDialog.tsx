@@ -7,31 +7,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+// import { Theme } from '@mui/material/styles';
+// import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import NumberFormat from 'react-number-format';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { getCountriesList, getStatesList } from '../../redux/slices/newSubmissionSlice';
+import {
+    addNewShippingAddress,
+    getCountriesList,
+    getStatesList,
+    updateShippingAddressField,
+} from '../../redux/slices/newAddressSlice';
+
+// import { addressValidationSchema } from '@dashboard/components/SubmissionSteps/addressValidationSchema'
 
 interface AddPaymentCardDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
     onSubmit(): Promise<void> | void;
-}
-
-interface CountryProps {
-    id: string;
-    name: string;
-    code: string;
-    phoneCode: string;
-}
-interface StateProps {
-    id: string;
-    name: string;
-    code: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -105,43 +98,24 @@ const useStyles = makeStyles((theme) => ({
 
 export function AddAddressDialog(props: AddPaymentCardDialogProps) {
     const { onClose, onSubmit, ...rest } = props;
-    const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
-    const [country, setCountry] = useState<CountryProps>();
-    const [fullName, setFullName] = useState('');
-    const [address, setAddress] = useState('');
-    const [address2, setAddress2] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState<StateProps | string>();
-    const [zip, setZip] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    // const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
 
-    const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
-    const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
+    const fullName = useAppSelector((state) => state.newAddressSlice.shippingAddress.firstName);
+    const address = useAppSelector((state) => state.newAddressSlice?.shippingAddress.address);
+    const address2 = useAppSelector((state) => state.newAddressSlice?.shippingAddress.address2);
+    const city = useAppSelector((state) => state.newAddressSlice?.shippingAddress.city);
+    const state = useAppSelector((state) => state.newAddressSlice?.shippingAddress.state);
+    const stateName = useAppSelector((state) => state.newAddressSlice?.shippingAddress.stateName);
+    const zipCode = useAppSelector((state) => state.newAddressSlice?.shippingAddress.zipCode);
+    const country = useAppSelector((state) => state.newAddressSlice?.shippingAddress.country);
+    const phoneNumber = useAppSelector((state) => state.newAddressSlice?.shippingAddress.phoneNumber);
+    const availableCountries = useAppSelector((state) => state.newAddressSlice.availableCountriesList);
+    const availableStates = useAppSelector((state) => state.newAddressSlice?.availableStatesList);
     const dispatch = useAppDispatch();
 
-    const apiService = useInjectable(APIService);
     const classes = useStyles({});
 
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
-    const handleSubmit = useCallback(async () => {
-        const endpoint = apiService.createEndpoint('customer/addresses');
-        setSaveBtnLoading(true);
-        const DTO = {
-            country: country,
-            fullName: fullName,
-            address: address,
-            address2: address2,
-            state: state,
-            city: city,
-            zip: zip,
-            phoneNumber: phoneNumber,
-        };
-        console.log('dto ', DTO);
-        const addressResponse = await endpoint.post('', DTO);
-        console.log('address ', addressResponse);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const handleClose = useCallback(
         (...args) => {
@@ -152,29 +126,61 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
         [onClose],
     );
 
+    const handleAddressSubmit = useCallback(() => {
+        console.log('submit ');
+        dispatch(addNewShippingAddress());
+    }, [dispatch]);
+
     useEffect(
         () => {
-            (async () => {
-                await dispatch(getCountriesList());
-                await dispatch(getStatesList());
-            })();
+            dispatch(getCountriesList());
+            dispatch(getStatesList());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
 
-    const handleCountryChange = () => setCountry(country);
-    const handleFullNameChange = () => setFullName(fullName);
-    const handleAddressChange = () => setAddress(address);
-    const handleAddress2Change = () => setAddress2(address2);
-    const handleCityChange = () => setCity(city);
-    const handleStateChange = () => setState(state);
-    const handleZipChange = () => setZip(zip);
-    const handlePhoneChange = () => setPhoneNumber(phoneNumber);
+    // useEffect(
+    //     () => {
+    //             addressValidationSchema
+    //                 .isValid({
+    //                     fullName,
+    //                     address,
+    //                     address2,
+    //                     country,
+    //                     city,
+    //                     state,
+    //                     stateName,
+    //                     zipCode,
+    //                     phoneNumber,
+    //                 })
+    //                 .then((valid) => {
+    //                     if (valid) {
+    //                         setSaveBtnLoading(true)
+    //                     }
+    //                 });
+    //     },
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    //     [
+    //         fullName,
+    //         address,
+    //         address2,
+    //         country,
+    //         city,
+    //         state,
+    //         stateName,
+    //         zipCode,
+    //         phoneNumber,
+    //     ],
+    // );
+
+    function updateField(fieldName: any, newValue: any) {
+        dispatch(updateShippingAddressField({ fieldName, newValue }));
+    }
 
     return (
         <Dialog onClose={handleClose} {...rest}>
-            <DialogTitle>Add new Address</DialogTitle>
+            <DialogTitle>Add Shipping Address</DialogTitle>
             <DialogContent>
                 <div className={classes.inputsRow01}>
                     <div className={classes.fieldContainer} style={{ width: '100%' }}>
@@ -182,9 +188,9 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                         <Select
                             fullWidth
                             native
-                            key={country?.id ? country?.id : availableCountries[0].id}
-                            defaultValue={country?.id ? country?.id : availableCountries[0].id}
-                            onChange={handleCountryChange}
+                            key={country?.id ? country?.id : availableCountries[0]?.id}
+                            defaultValue={country?.id ? country?.id : availableCountries[0]?.id}
+                            onChange={(e: any) => updateField('country', e.target.value)}
                             placeholder={'Select Country'}
                             variant={'outlined'}
                             style={{ height: '43px', marginTop: 6 }}
@@ -206,7 +212,7 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             style={{ margin: 8, marginLeft: 0 }}
                             placeholder="Enter Full Name"
                             value={fullName}
-                            onChange={handleFullNameChange}
+                            onChange={(e: any) => updateField('fullName', e.target.value)}
                             fullWidth
                             size={'small'}
                             variant={'outlined'}
@@ -229,7 +235,7 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             placeholder="Enter Street Address"
                             fullWidth
                             value={address}
-                            onChange={handleAddressChange}
+                            onChange={(e: any) => updateField('address', e.target.value)}
                             size={'small'}
                             variant={'outlined'}
                             margin="normal"
@@ -251,7 +257,7 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             placeholder="Enter apt, suite, building, floor etc."
                             fullWidth
                             value={address2}
-                            onChange={handleAddress2Change}
+                            onChange={(e: any) => updateField('address2', e.target.value)}
                             size={'small'}
                             variant={'outlined'}
                             margin="normal"
@@ -261,46 +267,24 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                         />
                     </div>
                 </div>
-                {isMobile ? (
-                    <div className={classes.inputsRow03}>
-                        <div className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}>
-                            <Typography className={classes.methodDescription}>City</Typography>
-                            <TextField
-                                style={{ margin: 8, marginLeft: 0 }}
-                                value={city}
-                                onChange={handleCityChange}
-                                placeholder="Enter City"
-                                fullWidth
-                                size={'small'}
-                                variant={'outlined'}
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </div>
-                    </div>
-                ) : null}
 
                 <div className={classes.inputsRow03}>
-                    {!isMobile ? (
-                        <div className={` ${classes.cityFieldContainer} ${classes.fieldContainer}`}>
-                            <Typography className={classes.methodDescription}>City</Typography>
-                            <TextField
-                                style={{ margin: 8, marginLeft: 0 }}
-                                value={city}
-                                onChange={handleCityChange}
-                                placeholder="Enter City"
-                                fullWidth
-                                size={'small'}
-                                variant={'outlined'}
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </div>
-                    ) : null}
+                    <div className={` ${classes.cityFieldContainer} ${classes.fieldContainer}`}>
+                        <Typography className={classes.methodDescription}>City</Typography>
+                        <TextField
+                            style={{ margin: 8, marginLeft: 0 }}
+                            value={city}
+                            onChange={(e: any) => updateField('city', e.target.value)}
+                            placeholder="Enter City"
+                            fullWidth
+                            size={'small'}
+                            variant={'outlined'}
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
 
                     <div className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}>
                         <Typography className={classes.methodDescription}>State</Typography>
@@ -308,8 +292,8 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             <Select
                                 fullWidth
                                 native
-                                value={state || 'none'}
-                                onChange={handleStateChange}
+                                value={state?.id || 'none'}
+                                onChange={(e: any) => updateField('state', e.target.value)}
                                 placeholder={'Select State'}
                                 variant={'outlined'}
                                 style={{ height: '43px' }}
@@ -326,8 +310,8 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                                 style={{ marginTop: 2 }}
                                 placeholder="Enter State"
                                 fullWidth
-                                value={state}
-                                onChange={handleStateChange}
+                                value={stateName}
+                                onChange={(e: any) => updateField('stateName', e.target.value)}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"
@@ -343,8 +327,8 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             style={{ margin: 8, marginLeft: 0 }}
                             placeholder="Enter Zip Code"
                             fullWidth
-                            value={zip}
-                            onChange={handleZipChange}
+                            value={zipCode}
+                            onChange={(e: any) => updateField('zipCode', e.target.value)}
                             size={'small'}
                             variant={'outlined'}
                             margin="normal"
@@ -369,7 +353,7 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                             style={{ margin: 8, marginLeft: 0 }}
                             placeholder="Enter Phone Number"
                             value={phoneNumber}
-                            onChange={handlePhoneChange}
+                            onChange={(e: any) => updateField('phoneNumber', e.target.value)}
                             fullWidth
                             InputLabelProps={{
                                 shrink: true,
@@ -382,8 +366,8 @@ export function AddAddressDialog(props: AddPaymentCardDialogProps) {
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button color="primary" onClick={handleSubmit} disabled={isSaveBtnLoading}>
-                    {isSaveBtnLoading ? 'Loading...' : 'Save'}
+                <Button color="primary" onClick={handleAddressSubmit}>
+                    {'Save'}
                 </Button>
             </DialogActions>
         </Dialog>

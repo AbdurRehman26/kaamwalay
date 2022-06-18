@@ -10,6 +10,7 @@ import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { ListHeader } from '../../components/ListHeader/ListHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getCountriesList, getStatesList } from '../../redux/slices/newAddressSlice';
 import {
     getSavedAddresses,
     setDisableAllShippingInputs,
@@ -18,69 +19,20 @@ import {
 import { AddAddressDialog } from './AddAddressDialog';
 import { Address } from './Address';
 
-const useStyles = makeStyles(
-    (theme) => ({
-        root: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            border: '1px solid red',
-            marginBottom: '12px',
-            borderRadius: '4px',
-            padding: '10px 8px 10px 6px',
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
-        },
-        leftSide: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            maxWidth: '100%',
-        },
-        rightSide: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-        },
-        levelTitle: {
-            fontFamily: 'Roboto',
-            transform: 'translateZ(0)',
-            fontStyle: 'normal',
-            fontWeight: '500',
-            fontSize: '14px',
-            lineHeight: '20px',
-            letterSpacing: '0.1px',
-            color: 'rgba(0, 0, 0, 0.87)',
-        },
-        protectionText: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
-            fontWeight: 'normal',
-            fontSize: '14px',
-            lineHeight: '20px',
-            textAlign: 'right',
-            letterSpacing: '0.1px',
-        },
-        expDate: {
-            fontWeight: 'normal',
-            color: 'black',
-        },
-        row: {
-            display: 'flex',
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        test: {
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-        },
-    }),
-    { name: 'PaymentCardItem' },
-);
+const useStyles = makeStyles((theme) => ({
+    row: {
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    container: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+}));
 
 const StyledBox = styled(Box)(
     {
@@ -102,12 +54,13 @@ export function ListAddresses() {
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
 
     const handleAddressDeleteSubmit = async (id: string) => {
-        console.log(id);
         const endpoint = apiService.createEndpoint(`customer/addresses/${id}`);
         await endpoint.delete('');
     };
 
-    const loadAddresses = () => {};
+    const loadAddresses = () => {
+        console.log('onSubmit! ');
+    };
 
     useEffect(
         () => {
@@ -119,6 +72,13 @@ export function ListAddresses() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
+
+    useEffect(() => {
+        (async () => {
+            await dispatch(getCountriesList());
+            await dispatch(getStatesList());
+        })();
+    });
 
     function handleUseCustomShippingAddress() {
         dispatch(setUseCustomShippingAddress(true));
@@ -142,7 +102,7 @@ export function ListAddresses() {
                         OTHER ADDRESSES
                     </Typography>
                     <Box marginBottom={'16px'} />
-                    <div className={classes.test}>
+                    <div className={classes.container}>
                         {existingAddresses?.map((address: any) => (
                             <Address
                                 key={address.id}

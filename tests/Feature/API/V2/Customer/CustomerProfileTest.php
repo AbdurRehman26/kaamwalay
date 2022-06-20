@@ -2,14 +2,11 @@
 
 use App\Jobs\ProcessImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
 
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
-
-uses(WithFaker::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -24,7 +21,7 @@ test('a customer can update his profile', function () {
     Bus::fake(ProcessImage::class);
     $this->actingAs($this->user);
 
-    putJson('/api/v2/customer/profile', [
+    putJson(route('v2.customer.profile'), [
             'first_name' => 'first',
             'last_name' => 'Last',
             'email_subscription' => true,
@@ -67,7 +64,7 @@ test('customer profile update required fields error', function () {
     ]);
     $this->actingAs($this->user);
 
-    putJson('/api/v2/customer/profile', [
+    putJson(route('v2.customer.profile'), [
         'first_name' => '',
         'last_name' => '',
         'phone' => '',
@@ -87,7 +84,7 @@ test('a customer`s username can not be duplicate', function () {
     ]);
     $this->actingAs($this->user);
 
-    putJson('/api/v2/customer/profile', [
+    putJson(route('v2.customer.profile'), [
         'username' => $this->anotherUser->username,
     ])->assertUnprocessable();
 });
@@ -104,20 +101,17 @@ test('a customer can deactivate their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    postJson('/api/v2/customer/profile/deactivate')
-        ->assertOk()
-        ->
-        assertJsonFragment([
-            'success' => true,
-        ]);
+    postJson(route('v2.customer.profile.deactivate'))->assertOk()->assertJsonFragment([
+        'success' => true,
+    ]);
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    getJson('/api/v2/auth/me')->assertUnauthorized();
-})->skip('Feature is not available yet.');
+    getJson(route('v2.auth.me'))->assertUnauthorized();
+});
 
 
 test('a customer can delete their account', function () {
@@ -134,24 +128,20 @@ test('a customer can delete their account', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    postJson('/api/v2/customer/profile/delete')
-        ->assertOk()
-        ->assertJsonFragment([
-            'success' => true,
-        ]);
+    postJson(route('v2.customer.profile.delete'))->assertOk()->assertJsonFragment([
+        'success' => true,
+    ]);
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    getJson('/api/v2/auth/me')->assertUnauthorized();
+    getJson(route('v2.auth.me'))->assertUnauthorized();
 
     $user = User::withTrashed()->find($this->user->id);
-    $this->assertNotNull($user);
-    $this->assertTrue($user->trashed());
-    $this->assertEmpty($user->first_name);
-})->skip('Feature is not available yet.');
+    expect($user)->not()->toBeNull()->and($user->trashed())->toBeTrue()->and($user->first_name)->toBeEmpty();
+});
 
 test('a customer cannot delete their account if ags fail', function () {
     Http::fake([
@@ -167,12 +157,28 @@ test('a customer cannot delete their account if ags fail', function () {
     $this->actingAs($this->user);
     auth()->login($this->user);
 
-    postJson('/api/v2/customer/profile/delete')->assertUnprocessable();
+    postJson(route('v2.customer.profile.delete'))->assertUnprocessable();
 
     // Re-login and retrieve a new session
     $this->actingAs($this->user);
     auth()->login($this->user);
 
     // This time we should get a 401
-    getJson('/api/v2/auth/me')->assertOk();
-})->skip('Feature is not available yet.');
+    getJson(route('v2.auth.me'))->assertOk();
+});
+
+test('deactivating profile returns password error if ags token is null', function () {
+    $this->user->ags_access_token = null;
+    $this->actingAs($this->user);
+    postJson(route('v2.customer.profile.deactivate'))->assertStatus(400)->assertJson([
+        'error' => 'Please enter your AGS password.',
+    ]);
+});
+
+test('deleting profile returns password error if ags token is null', function () {
+    $this->user->ags_access_token = null;
+    $this->actingAs($this->user);
+    postJson(route('v2.customer.profile.delete'))->assertStatus(400)->assertJson([
+        'error' => 'Please enter your AGS password.',
+    ]);
+});

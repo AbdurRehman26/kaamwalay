@@ -15,6 +15,7 @@
  * @apiParam {Array} [filter[customer_id]] For filtering records by customer ID. E.g. filter[customer_id]=1
  * @apiParam {Array} [filter[customer_name]] For filtering records by customer name. E.g. filter[customer_name]=Jhon
  * @apiParam {Array} [filter[status]] For filtering records by order's status code. E.g. filter[status]=arrived, filter[status]=1
+ * @apiParam {Array} [filter[payment_status]] For filtering records by order's payment status code. E.g. filter[payment_status]=0, filter[payment_status]=1
  * @apiParam {string} sort For sorting records, supporting params are [grand_total, -grand_total]. E.g. sort=grand_total
  * @apiParam {Array} [include] For including relationships [invoice, paymentPlan, orderItems, orderStatus, orderPayment, billingAddress,
  *  shippingAddress, orderStatusHistory, orderStatus, user, orderShipment, orderCustomerShipment]
@@ -45,6 +46,7 @@
  *                    },
  *                    "number_of_cards": 11,
  *                    "status": "Pending Payment",
+ *                    "payment_status": 0,
  *                    "customer_shipment": {
  *                        "id": 1,
  *                        "shipping_provider": "usps",
@@ -83,6 +85,7 @@
  *                    },
  *                    "number_of_cards": 11,
  *                    "status": "Pending Payment",
+ *                    "payment_status": 0,
  *                    "customer_shipment": {
  *                        "id": 2,
  *                        "shipping_provider": "fedex",

@@ -47,7 +47,7 @@ Route::prefix('auth')->group(function () {
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::post('password/change', [ChangePasswordController::class, 'change']);
-    Route::middleware('auth')->get('me', [LoginController::class, 'me']);
+    Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');
 });
 
 Route::prefix('customer')->group(function () {
@@ -105,7 +105,7 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
-        Route::put('profile', [ProfileController::class, 'update']);
+        Route::put('profile', [ProfileController::class, 'update'])->name('customer.profile');
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {
@@ -122,8 +122,8 @@ Route::prefix('customer')->group(function () {
         });
 
         Route::prefix('profile')->group(function () {
-            Route::post('deactivate', [ProfileController::class, 'deactivateProfile']);
-            Route::post('delete', [ProfileController::class, 'deleteProfile']);
+            Route::post('deactivate', [ProfileController::class, 'deactivateProfile'])->name('customer.profile.deactivate');
+            Route::post('delete', [ProfileController::class, 'deleteProfile'])->name('customer.profile.delete');
         });
     });
 });

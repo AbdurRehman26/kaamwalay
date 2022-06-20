@@ -245,8 +245,10 @@ namespace App\Models{
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property string|null $phone_code
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $is_enabled
  * @method static \Database\Factories\CountryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
@@ -254,7 +256,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereIsEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country wherePhoneCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereUpdatedAt($value)
  */
 	class Country extends \Eloquent {}
@@ -499,6 +503,7 @@ namespace App\Models{
  * @property string $first_name
  * @property string $last_name
  * @property string $address
+ * @property string|null $address_2
  * @property string $city
  * @property string $state
  * @property string $zip
@@ -515,6 +520,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress query()
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress whereAddress2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress whereCountryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress whereCreatedAt($value)
@@ -535,9 +541,23 @@ namespace App\Models{
 /**
  * App\Models\HubspotDeal
  *
+ * @property int $id
+ * @property string $deal_name
+ * @property string $deal_id
+ * @property string $user_email
+ * @property string $owner_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereDealId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereDealName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HubspotDeal whereUserEmail($value)
  */
 	class HubspotDeal extends \Eloquent {}
 }
@@ -603,7 +623,7 @@ namespace App\Models{
  * @property float $refund_total This will hold the cumulative value of all the refunds per order
  * @property int $user_id
  * @property int $payment_plan_id
- * @property int|null $order_payment_plan_id
+ * @property int $order_payment_plan_id
  * @property int|null $order_status_id
  * @property \App\Enums\Order\OrderPaymentStatusEnum $payment_status 0 => pending payment, 1 => paid
  * @property int|null $shipping_order_address_id
@@ -624,6 +644,7 @@ namespace App\Models{
  * @property int|null $graded_by_id
  * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $graded_at
+ * @property \Illuminate\Support\Carbon|null $shipped_at
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
@@ -651,7 +672,7 @@ namespace App\Models{
  * @property-read int|null $order_status_history_count
  * @property-read \App\Models\PaymentPlan $originalPaymentPlan
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
- * @property-read \App\Models\OrderPaymentPlan|null $paymentPlan
+ * @property-read \App\Models\OrderPaymentPlan $paymentPlan
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
@@ -702,6 +723,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingOrderAddressId($value)
@@ -719,6 +741,7 @@ namespace App\Models{
  * @property string $first_name
  * @property string $last_name
  * @property string $address
+ * @property string|null $address_2
  * @property string $city
  * @property string $state
  * @property string $zip
@@ -733,6 +756,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress query()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereAddress2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereCountryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereCreatedAt($value)
@@ -1508,6 +1532,7 @@ namespace App\Models{
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property int $country_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\StateFactory factory(...$parameters)
@@ -1515,6 +1540,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|State newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|State query()
  * @method static \Illuminate\Database\Eloquent\Builder|State whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|State whereCountryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|State whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|State whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|State whereName($value)

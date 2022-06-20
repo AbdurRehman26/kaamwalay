@@ -7,6 +7,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -46,7 +47,9 @@ beforeEach(function () {
 
     OrderStatusHistory::insert($orderStatusHistoryData);
 
-    $this->ordersForTests = Order::placed()->whereHas('orderCustomerShipment')->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value);
+    $this->ordersForTests = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    });
 });
 
 it('calculates daily unpaid orders stats', function () {

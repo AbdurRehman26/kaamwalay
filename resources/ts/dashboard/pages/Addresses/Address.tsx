@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import { getSavedAddresses, getSingleAddress } from '../../redux/slices/newAddressSlice';
+import { getSavedAddresses, getSingleAddress, getStatesList } from '../../redux/slices/newAddressSlice';
 import { AddAddressDialog } from './AddAddressDialog';
 import DeleteAddressDialog from './DeleteAddressDialog';
 
@@ -80,6 +80,7 @@ export function Address(props: ExistingAddressProps) {
     const handleEditAddressModal = () => {
         setShowEditAddressModal(true);
         dispatch(getSingleAddress(props.id));
+        dispatch(getStatesList());
     };
 
     return (

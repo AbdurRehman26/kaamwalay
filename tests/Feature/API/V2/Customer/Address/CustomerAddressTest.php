@@ -46,7 +46,17 @@ test('a customer can add shipping address', function () {
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
-            'shipping_address',
+            'user_id',
+            'first_name', 
+            'last_name', 
+            'address',
+            'address_2',
+            'city', 
+            'state', 
+            'zip', 
+            'phone', 
+            'flat',
+            'country', 
         ],
     ]);
 });
@@ -54,7 +64,7 @@ test('a customer can add shipping address', function () {
 test('a customer can update shipping address', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/customer/addresses', [
+    $response = $this->putJson('/api/v2/customer/addresses/'. $this->addresses[0]->id, [
         'shipping_address' => [
             'country_id' => '1',
             'first_name' => 'First',
@@ -67,10 +77,26 @@ test('a customer can update shipping address', function () {
             'phone' => '1234567890',
         ]
     ]);
+
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
-            'shipping_address',
+            'user_id',
+            'first_name', 
+            'last_name', 
+            'address',
+            'address_2',
+            'city', 
+            'state', 
+            'zip', 
+            'phone', 
+            'flat',
+            'country', 
         ],
     ]);
 });
+
+test('user can delete a saved address', function () {
+    $this->deleteJson('/api/v2/customer/addresses/'. $this->addresses[0]->id)
+        ->assertNoContent();
+})->group('payment');

@@ -169,7 +169,6 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                     country,
                     city,
                     state,
-                    stateName,
                     zipCode,
                     phoneNumber,
                 })
@@ -183,7 +182,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 });
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [fullName, address, address2, country, city, state, stateName, zipCode, phoneNumber],
+        [fullName, address, address2, country, city, state, zipCode, phoneNumber],
     );
 
     function updateField(fieldName: any, newValue: any) {

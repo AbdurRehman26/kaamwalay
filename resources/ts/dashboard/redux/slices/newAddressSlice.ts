@@ -226,7 +226,7 @@ export const newAddressSlice = createSlice({
         [getSingleAddress.fulfilled as any]: (state, action) => {
             state.shippingAddress = {
                 ...state.shippingAddress,
-                fullName: action.payload.firstName + action.payload.lastName,
+                fullName: action.payload.firstName + ' ' + action.payload.lastName,
                 country: action.payload.country,
                 address: action.payload.address,
                 address2: action.payload.address2,

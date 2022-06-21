@@ -24,7 +24,6 @@ class UpdateShippingAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'address_id' => ['required', 'integer', 'exists:customer_addresses,id'],
             'shipping_address' => ['required', 'array'],
             'shipping_address.country_id' =>  ['required', 'integer', 'exists:countries,id'],
             'shipping_address.first_name' => ['required', 'string'],

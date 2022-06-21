@@ -9,7 +9,6 @@ import HomeIcon from '@mui/icons-material/HomeOutlined';
 import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import StyleIcon from '@mui/icons-material/StyleOutlined';
 import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
@@ -18,7 +17,6 @@ import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -191,7 +189,7 @@ export function DashboardNavigationDrawer() {
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
-                <ListItem selected={isItemActive('/profile/addresses')} button>
+                <ListItem selected={isItemActive('/saved-address')} onClick={handleItemPress('/saved-address')} button>
                     <StyledListItemIcon>
                         <HomeIcon />
                     </StyledListItemIcon>
@@ -199,9 +197,6 @@ export function DashboardNavigationDrawer() {
                         primary={'Address Book'}
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
 
                 <Divider className={classes.divider} />

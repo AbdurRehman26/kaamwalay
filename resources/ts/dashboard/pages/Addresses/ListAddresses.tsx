@@ -7,30 +7,20 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useEffect, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 import { ListHeader } from '../../components/ListHeader/ListHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getCountriesList, getStatesList } from '../../redux/slices/newAddressSlice';
-import {
-    getSavedAddresses,
-    setDisableAllShippingInputs,
-    setUseCustomShippingAddress,
-} from '../../redux/slices/newSubmissionSlice';
+import { getCountriesList, getSavedAddresses, getStatesList } from '../../redux/slices/newAddressSlice';
 import { AddAddressDialog } from './AddAddressDialog';
 import { Address } from './Address';
 
 const useStyles = makeStyles((theme) => ({
-    row: {
-        display: 'flex',
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
     container: {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        width: '100%',
     },
 }));
 
@@ -49,41 +39,35 @@ export function ListAddresses() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
+    const notifications = useNotifications();
 
     const [showAddAddressModal, setShowAddAddressModal] = useState(false);
-    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const existingAddresses = useAppSelector((state) => state.newAddressSlice.existingAddresses);
 
     const handleAddressDeleteSubmit = async (id: string) => {
-        const endpoint = apiService.createEndpoint(`customer/addresses/${id}`);
-        await endpoint.delete('');
+        try {
+            const endpoint = apiService.createEndpoint(`customer/addresses/${id}`);
+            await endpoint.delete('');
+            notifications.success('Deleted Successfully!');
+            dispatch(getSavedAddresses());
+        } catch (e: any) {
+            notifications.exception(e);
+        }
     };
 
     const loadAddresses = () => {
-        console.log('onSubmit! ');
+        dispatch(getSavedAddresses());
     };
 
     useEffect(
         () => {
-            (async () => {
-                handleUseCustomShippingAddress();
-                await dispatch(getSavedAddresses());
-            })();
+            dispatch(getSavedAddresses());
+            dispatch(getCountriesList());
+            dispatch(getStatesList());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
-
-    useEffect(() => {
-        (async () => {
-            await dispatch(getCountriesList());
-            await dispatch(getStatesList());
-        })();
-    });
-
-    function handleUseCustomShippingAddress() {
-        dispatch(setUseCustomShippingAddress(true));
-        dispatch(setDisableAllShippingInputs(false));
-    }
 
     const $newAddress = (
         <Button variant={'contained'} color={'primary'} onClick={() => setShowAddAddressModal(true)}>
@@ -111,11 +95,12 @@ export function ListAddresses() {
                                 address={address.address}
                                 flat={address.flat ?? ''}
                                 city={address.city}
-                                country={address.country.name}
-                                state={address.state?.code}
+                                country={address.country}
+                                state={address.state}
+                                stateName={address?.stateName}
                                 id={address.id}
-                                zip={address.zipCode}
-                                phoneNumber={address.phoneNumber}
+                                zip={address.zip}
+                                phone={address.phone}
                                 handleAddressDeleteSubmit={handleAddressDeleteSubmit}
                             />
                         ))}
@@ -143,6 +128,8 @@ export function ListAddresses() {
                 </StyledBox>
             )}
             <AddAddressDialog
+                dialogTitle={'Add Shipping Address'}
+                isUpdate={false}
                 open={showAddAddressModal}
                 onClose={() => setShowAddAddressModal(false)}
                 onSubmit={() => loadAddresses()}

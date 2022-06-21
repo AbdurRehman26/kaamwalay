@@ -29,7 +29,7 @@ export const addressValidationSchema = yup.object().shape(
                 }),
             }),
         stateName: yup.string().when('state', {
-            is: (state: { name: string; code: string; id: number }) => state.code === '',
+            is: (state: { name: string; code: string; id: number }) => state?.code === '',
             then: yup.string().required(),
             otherwise: yup.string(),
         }),

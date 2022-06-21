@@ -7,6 +7,9 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
+import { useAppDispatch } from '@dashboard/redux/hooks';
+import { getSavedAddresses, getSingleAddress } from '../../redux/slices/newAddressSlice';
+import { AddAddressDialog } from './AddAddressDialog';
 import DeleteAddressDialog from './DeleteAddressDialog';
 
 type ExistingAddressProps = {
@@ -16,26 +19,16 @@ type ExistingAddressProps = {
     flat: string;
     zip: string;
     city: string;
-    country: { name: string; code: string; id: number };
-    state: string;
+    country: { name: string; code: string; id: number; phoneCode: string };
+    state: { name: string; code: string; id: number };
+    stateName: string;
     id: number;
-    phoneNumber: number;
+    phone: number;
     handleAddressDeleteSubmit(id: any): Promise<void> | void;
 };
 
 const useStyles = makeStyles(
     (theme) => ({
-        // root: {
-        //     flexDirection: 'row',
-        //     alignItems: 'center',
-        //     border: '1px solid red',
-        //     marginBottom: '12px',
-        //     borderRadius: '4px',
-        //     padding: '10px 8px 10px 6px',
-        //     [theme.breakpoints.down('sm')]: {
-        //         width: '100%',
-        //     },
-        // },
         levelTitle: {
             fontFamily: 'Roboto',
             transform: 'translateZ(0)',
@@ -77,6 +70,17 @@ const Root = styled(Box)(({ theme }) => ({
 export function Address(props: ExistingAddressProps) {
     const classes = useStyles();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditAddressModal, setShowEditAddressModal] = useState(false);
+    const dispatch = useAppDispatch();
+
+    const loadAddresses = () => {
+        dispatch(getSavedAddresses());
+    };
+
+    const handleEditAddressModal = () => {
+        setShowEditAddressModal(true);
+        dispatch(getSingleAddress(props.id));
+    };
 
     return (
         <>
@@ -85,7 +89,7 @@ export function Address(props: ExistingAddressProps) {
                 onClose={() => setShowDeleteModal(false)}
                 onSubmit={() => props.handleAddressDeleteSubmit(props.id)}
             />
-            <Grid xs={12} sm={12} md={6} className={classes.container}>
+            <Grid container item xs={12} sm={12} md={6} className={classes.container}>
                 <Root>
                     <div className={classes.row}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
@@ -106,16 +110,24 @@ export function Address(props: ExistingAddressProps) {
                             {props.country.name}
                         </Typography>
                         <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.87)'}>
-                            +{props.phoneNumber}
+                            +{props.phone}
                         </Typography>
                         <Grid>
-                            <Button variant={'text'} size={'medium'}>
+                            <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
                                 Edit
                             </Button>
                         </Grid>
                     </div>
                 </Root>
             </Grid>
+            <AddAddressDialog
+                addressId={props.id}
+                isUpdate={true}
+                dialogTitle={'Update Shipping Address'}
+                open={showEditAddressModal}
+                onClose={() => setShowEditAddressModal(false)}
+                onSubmit={() => loadAddresses()}
+            />
         </>
     );
 }

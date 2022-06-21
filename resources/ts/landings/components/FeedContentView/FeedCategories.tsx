@@ -33,6 +33,8 @@ const FeeCategoryBox = styled(Box)(
 
         '.GradeList': {
             display: 'inline-flex',
+            flexWrap: 'wrap',
+            gap: '0.5em',
         },
         '.CategoryChipSelected': {
             width: '100%',
@@ -56,20 +58,16 @@ const FeeCategoryBox = styled(Box)(
             cursor: 'pointer',
             color: 'rgba(0, 0, 0, 0.54)',
         },
-        '.GradeListItem': {
-            marginLeft: '10px',
-        },
         '.FilterBar': {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'stretch',
         },
         '.GridViewButton': {
-            margin: '15px 15px',
+            margin: '8px',
             cursor: 'pointer',
         },
         '.GridViewButtonActive': {
-            margin: '15px 15px',
             cursor: 'pointer',
             background: '#DCDCDC',
             fontSize: '40px',
@@ -78,17 +76,20 @@ const FeeCategoryBox = styled(Box)(
             color: 'rgba(0, 0, 0, 0.38)',
         },
         '.ListViewButton': {
-            margin: '15px 10px',
+            margin: '8px 8px',
             cursor: 'pointer',
         },
         '.ListViewButtonActive': {
             background: '#DCDCDC',
-            margin: '15px 10px',
+            margin: '0px 8px',
             cursor: 'pointer',
             fontSize: '40px',
-            padding: '8px',
+            padding: '10px',
             borderRadius: '17px',
             color: 'rgba(0, 0, 0, 0.38)',
+        },
+        '.ViewOptionContainer': {
+            display: 'inline-flex',
         },
     },
     { name: 'FeeCategoryBox' },
@@ -155,7 +156,7 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                     <FeedGrade />
                 </Grid>
                 <Grid className={'FilterBar'}>
-                    <Grid>
+                    <Grid className={'ViewOptionContainer'}>
                         <DensitySmallOutlinedIcon
                             className={toggleView ? 'ListViewButton' : 'ListViewButtonActive'}
                             onClick={() => {

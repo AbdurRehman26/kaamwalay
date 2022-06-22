@@ -7,22 +7,25 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerAddressService {
-
-    public function create(array $data) : CustomerAddress {
+class CustomerAddressService
+{
+    public function create(array $data) : CustomerAddress
+    {
         return CustomerAddress::create(array_merge(
             $data['shipping_address'],
             [
                 'user_id' => auth()->user()->id,
-            ]));
+            ]
+        ));
     }
 
-    public function update(CustomerAddress $customerAddress, array $data) : CustomerAddress | JsonResponse {
+    public function update(CustomerAddress $customerAddress, array $data) : CustomerAddress | JsonResponse
+    {
         try {
             $customerAddress->update($data['shipping_address']);
+
             return $customerAddress;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

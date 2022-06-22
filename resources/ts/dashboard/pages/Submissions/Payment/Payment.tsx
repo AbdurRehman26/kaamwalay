@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '20px',
         [theme.breakpoints.down('sm')]: {
             display: 'block',
+            marginTop: '0px',
         },
     },
     leftSideContainer: {

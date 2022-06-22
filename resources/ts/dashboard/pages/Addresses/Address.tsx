@@ -8,7 +8,12 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import { getSavedAddresses, getSingleAddress, getStatesList } from '../../redux/slices/newAddressSlice';
+import {
+    getSavedAddresses,
+    getSingleAddress,
+    getStatesList,
+    updateShippingAddressField,
+} from '../../redux/slices/newAddressSlice';
 import { AddAddressDialog } from './AddAddressDialog';
 import DeleteAddressDialog from './DeleteAddressDialog';
 
@@ -16,7 +21,7 @@ type ExistingAddressProps = {
     firstName: string;
     lastName: string;
     address: string;
-    flat: string;
+    address2: string;
     zip: string;
     city: string;
     country: { name: string; code: string; id: number; phoneCode: string };
@@ -29,7 +34,7 @@ type ExistingAddressProps = {
 
 const useStyles = makeStyles(
     (theme) => ({
-        levelTitle: {
+        nameClass: {
             fontFamily: 'Roboto',
             transform: 'translateZ(0)',
             fontStyle: 'normal',
@@ -40,6 +45,7 @@ const useStyles = makeStyles(
             color: 'rgba(0, 0, 0, 0.87)',
         },
         row: {
+            marginLeft: '10px',
             display: 'flex',
             width: '100%',
             flexDirection: 'row',
@@ -49,6 +55,15 @@ const useStyles = makeStyles(
         container: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        item: {
+            marginLeft: '10px',
+            marginTop: '5px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        btnClass: {
+            marginTop: '15px',
+            marginLeft: '-5px',
         },
     }),
     { name: 'PaymentCardItem' },
@@ -81,6 +96,16 @@ export function Address(props: ExistingAddressProps) {
         setShowEditAddressModal(true);
         dispatch(getSingleAddress(props.id));
         dispatch(getStatesList());
+        dispatch(
+            updateShippingAddressField({
+                fieldName: 'state',
+                newValue: {
+                    id: 0,
+                    code: '',
+                    name: '',
+                },
+            }),
+        );
     };
 
     return (
@@ -93,7 +118,7 @@ export function Address(props: ExistingAddressProps) {
             <Grid container item xs={12} sm={12} md={6} className={classes.container}>
                 <Root>
                     <div className={classes.row}>
-                        <Typography variant={'subtitle2'} className={classes.levelTitle}>
+                        <Typography variant={'subtitle2'} className={classes.nameClass}>
                             {props.firstName} {props.lastName}
                         </Typography>
                         <IconButton aria-label="delete" size="small" onClick={() => setShowDeleteModal(true)}>
@@ -101,23 +126,27 @@ export function Address(props: ExistingAddressProps) {
                         </IconButton>
                     </div>
                     <div>
-                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.87)'}>
-                            {props.address}
-                        </Typography>
-                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.87)'}>
-                            {props.address}
-                        </Typography>
-                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.87)'}>
-                            {props.country.name}
-                        </Typography>
-                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.87)'}>
-                            +{props.phone}
-                        </Typography>
-                        <Grid>
+                        <div className={classes.item}>
+                            <Typography variant={'body2'}>
+                                {props.address} {props.address2}
+                            </Typography>
+                        </div>
+                        <div className={classes.item}>
+                            <Typography variant={'body2'}>
+                                {props.state.code} {','} {props.zip}
+                            </Typography>
+                        </div>
+                        <div className={classes.item}>
+                            <Typography variant={'body2'}>{props.country.name}</Typography>
+                        </div>
+                        <div className={classes.item}>
+                            <Typography variant={'body2'}>{props.phone}</Typography>
+                        </div>
+                        <div className={classes.btnClass}>
                             <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
                                 Edit
                             </Button>
-                        </Grid>
+                        </div>
                     </div>
                 </Root>
             </Grid>

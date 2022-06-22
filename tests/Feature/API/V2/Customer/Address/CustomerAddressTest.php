@@ -9,28 +9,28 @@ beforeEach(function () {
 });
 
 test('user can receive addresses', function () {
-    $response = $this->getJson('/api/v2/customer/addresses');
+    $response = $this->getJson(route('v2.customer.addresses.index'));
     $response->assertJsonStructure([
         'data' => [['id', 'first_name', 'last_name', 'state']],
     ]);
 });
 
 test('user can receive single address', function () {
-    $response = $this->getJson('/api/v2/customer/addresses/' . $this->addresses[0]->id);
+    $response = $this->getJson(route('v2.customer.addresses.show', $this->addresses[0]->id));
     $response->assertJsonStructure([
         'data' => ['id', 'first_name', 'last_name', 'state'],
     ]);
 });
 
 test('user can not receive other user address', function () {
-    $response = $this->getJson('/api/v2/customer/addresses/' . $this->addresses[1]->id);
+    $response = $this->getJson(route('v2.customer.addresses.show', $this->addresses[1]->id));
     $response->assertStatus(403);
 });
 
 test('a customer can add shipping address', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/customer/addresses', [
+    $response = $this->postJson(route('v2.customer.addresses.store'), [
         'shipping_address' => [
             'country_id' => '1',
             'first_name' => 'First',
@@ -64,7 +64,7 @@ test('a customer can add shipping address', function () {
 test('a customer can update shipping address', function () {
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/v2/customer/addresses/'. $this->addresses[0]->id, [
+    $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[0]->id), [
         'shipping_address' => [
             'country_id' => '1',
             'first_name' => 'First',
@@ -96,7 +96,8 @@ test('a customer can update shipping address', function () {
     ]);
 });
 
-test('user can delete a saved address', function () {
-    $this->deleteJson('/api/v2/customer/addresses/'. $this->addresses[0]->id)
+test('customer can delete a saved address', function () {
+    $this->actingAs($this->user);
+    $this->deleteJson(route('v2.customer.addresses.delete', ['address' => $this->addresses[0]->id]))
         ->assertNoContent();
-})->group('payment');
+});

@@ -212,6 +212,10 @@ export const newAddressSlice = createSlice({
             // @ts-ignore
             state.shippingAddress[action.payload.fieldName] = action.payload.newValue;
         },
+        emptyShippingAddress: (state, action: PayloadAction<{}>) => {
+            // @ts-ignore
+            state.shippingAddress = action.payload;
+        },
     },
     extraReducers: {
         [getCountriesList.fulfilled as any]: (state, action) => {
@@ -229,9 +233,13 @@ export const newAddressSlice = createSlice({
                 fullName: action.payload.firstName + ' ' + action.payload.lastName,
                 country: action.payload.country,
                 address: action.payload.address,
-                address2: action.payload.address2,
-                state: action.payload.state,
-                stateName: action.payload.state,
+                address2: action.payload.address2 || '',
+                state: state.availableStatesList.find((item: any) => item.code === action.payload.state) || {
+                    id: 0,
+                    code: '',
+                    name: '',
+                },
+                stateName: action.payload.stateName || action.payload.state,
                 zip: action.payload.zip,
                 phone: action.payload.phone,
                 city: action.payload.city,
@@ -240,4 +248,4 @@ export const newAddressSlice = createSlice({
     },
 });
 
-export const { updateShippingAddressField } = newAddressSlice.actions;
+export const { updateShippingAddressField, emptyShippingAddress } = newAddressSlice.actions;

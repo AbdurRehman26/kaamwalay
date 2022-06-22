@@ -1,9 +1,11 @@
+import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -13,14 +15,15 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { addressValidationSchema } from '@dashboard/components/SubmissionSteps/addressValidationSchema';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
     addNewShippingAddress,
+    emptyShippingAddress,
     getStatesList,
     updateShippingAddress,
     updateShippingAddressField,
 } from '../../redux/slices/newAddressSlice';
+import { addressValidationSchema } from './newAddressSchema';
 
 interface AddAddressDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle: string;
@@ -120,23 +123,36 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const classes = useStyles({});
 
-    // useEffect(
-    //     () => {
-    //         if (isUpdate) {
-    //             dispatch(getSingleAddress(updateItem?.id));
-    //         }
-    //     },
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     [],
-    // );
-
     const handleClose = useCallback(
         (...args) => {
             if (onClose) {
                 (onClose as any)(...args);
+                dispatch(
+                    emptyShippingAddress({
+                        fullName: '',
+                        lastName: '',
+                        address: '',
+                        address2: '',
+                        city: '',
+                        state: {
+                            id: 0,
+                            code: '',
+                            name: '',
+                        },
+                        zip: '',
+                        phone: '',
+                        country: {
+                            id: 0,
+                            code: '',
+                            name: '',
+                            phoneCode: '',
+                        },
+                    }),
+                );
+                dispatch(getStatesList());
             }
         },
-        [onClose],
+        [onClose, dispatch],
     );
 
     const handleAddressSubmit = useCallback(async () => {
@@ -152,6 +168,28 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 if (onClose) {
                     (onClose as any)();
                     onSubmit();
+                    dispatch(
+                        emptyShippingAddress({
+                            fullName: '',
+                            lastName: '',
+                            address: '',
+                            address2: '',
+                            city: '',
+                            state: {
+                                id: 0,
+                                code: '',
+                                name: '',
+                            },
+                            zip: '',
+                            phone: '',
+                            country: {
+                                id: 0,
+                                code: '',
+                                name: '',
+                                phoneCode: '',
+                            },
+                        }),
+                    );
                 }
             }
         } catch (e: any) {
@@ -169,12 +207,12 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                     country,
                     city,
                     state,
+                    stateName,
                     zipCode,
                     phoneNumber,
                 })
                 .then((valid) => {
                     if (valid) {
-                        console.log('valid !');
                         setIsSaveBtnEnable(true);
                     } else {
                         setIsSaveBtnEnable(false);
@@ -182,7 +220,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 });
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [fullName, address, address2, country, city, state, zipCode, phoneNumber],
+        [fullName, address, address2, country, city, state, stateName, zipCode, phoneNumber],
     );
 
     function updateField(fieldName: any, newValue: any) {
@@ -206,7 +244,11 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'state',
-                    newValue: isUpdate ? null : {},
+                    newValue: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
                 }),
             );
             dispatch(
@@ -245,7 +287,20 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
 
     return (
         <Dialog onClose={handleClose} {...rest}>
-            <DialogTitle>{dialogTitle}</DialogTitle>
+            <DialogTitle>
+                {dialogTitle}
+                <IconButton
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                    onClick={handleClose}
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
             <DialogContent>
                 <div className={classes.inputsRow01}>
                     <div className={classes.fieldContainer} style={{ width: '100%' }}>
@@ -378,7 +433,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                             <Select
                                 fullWidth
                                 native
-                                value={isUpdate ? state?.id : !isUpdate ? state?.id || 'none' : state}
+                                value={state?.id || 'none'}
                                 onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
                                 placeholder={'Select State'}
                                 variant={'outlined'}
@@ -396,7 +451,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                                 style={{ marginTop: 2 }}
                                 placeholder="Enter State"
                                 fullWidth
-                                value={isUpdate ? state : stateName}
+                                value={stateName}
                                 onChange={(e: any) => updateField('stateName', e.target.value)}
                                 size={'small'}
                                 variant={'outlined'}
@@ -432,8 +487,8 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                             customInput={TextField}
                             format={
                                 country?.phoneCode
-                                    ? '+' + country?.phoneCode + ' (###) ###-####'
-                                    : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
+                                    ? country?.phoneCode + ' (###) ###-####'
+                                    : availableCountries[0].phoneCode + ' (###) ###-####'
                             }
                             mask=""
                             style={{ margin: 8, marginLeft: 0 }}
@@ -453,7 +508,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                     Cancel
                 </Button>
                 <Button color="primary" disabled={!isSaveBtnEnable} onClick={handleAddressSubmit}>
-                    {'Save'}
+                    {isUpdate ? 'Update Address' : 'Add Address'}
                 </Button>
             </DialogActions>
         </Dialog>

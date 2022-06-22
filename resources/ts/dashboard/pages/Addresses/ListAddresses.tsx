@@ -74,7 +74,6 @@ export function ListAddresses() {
             Add Address
         </Button>
     );
-
     return (
         <>
             <ListHeader headline={'Address Book'} noSearch>
@@ -93,14 +92,14 @@ export function ListAddresses() {
                                 firstName={address.firstName}
                                 lastName={address.lastName}
                                 address={address.address}
-                                flat={address.flat ?? ''}
+                                address2={address.address2}
                                 city={address.city}
                                 country={address.country}
                                 state={address.state}
                                 stateName={address?.stateName}
                                 id={address.id}
-                                zip={address.zip}
-                                phone={address.phone}
+                                zip={address.zipCode}
+                                phone={address.phoneNumber}
                                 handleAddressDeleteSubmit={handleAddressDeleteSubmit}
                             />
                         ))}

@@ -16,7 +16,7 @@ class CustomerAddressController extends Controller
 {
     public function __construct(protected CustomerAddressService $customerAddressService)
     {
-        // ($this->authorizeResource(CustomerAddress::class, 'address'));
+        $this->authorizeResource(CustomerAddress::class, 'address');
     }
 
     public function index(): CustomerAddressCollection

@@ -32,15 +32,18 @@ class CustomerAddressController extends Controller
         return new CustomerAddressResource($address);
     }
 
-    public function store(CreateCustomerAddressRequest $request) : CustomerAddressResource{
+    public function store(CreateCustomerAddressRequest $request) : CustomerAddressResource
+    {
         return new CustomerAddressResource($this->customerAddressService->create($request->validated()));
     }
     
-    public function update(CustomerAddress $address, UpdateShippingAddressRequest $request) : CustomerAddressResource {    
+    public function update(CustomerAddress $address, UpdateShippingAddressRequest $request) : CustomerAddressResource
+    {
         return new CustomerAddressResource($this->customerAddressService->update($address, $request->validated()));
     }
 
-    public function destroy(CustomerAddress $address) : JsonResponse {
+    public function destroy(CustomerAddress $address) : JsonResponse
+    {
         $address->delete();
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);

@@ -25,7 +25,7 @@ class UpdateShippingAddressRequest extends FormRequest
     {
         return [
             'shipping_address' => ['required', 'array'],
-            'shipping_address.country_id' =>  ['required', 'integer', 'exists:countries,id'],
+            'shipping_address.country_id' => ['required', 'integer', 'exists:countries,id'],
             'shipping_address.first_name' => ['required', 'string'],
             'shipping_address.last_name' => ['required', 'string'],
             'shipping_address.address' => ['required', 'string'],

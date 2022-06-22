@@ -41,22 +41,22 @@ test('a customer can add shipping address', function () {
             'state' => 'AB',
             'zip' => '12345',
             'phone' => '1234567890',
-        ]
+        ],
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
             'user_id',
-            'first_name', 
-            'last_name', 
+            'first_name',
+            'last_name',
             'address',
             'address_2',
-            'city', 
-            'state', 
-            'zip', 
-            'phone', 
+            'city',
+            'state',
+            'zip',
+            'phone',
             'flat',
-            'country', 
+            'country',
         ],
     ]);
 });
@@ -75,23 +75,23 @@ test('a customer can update shipping address', function () {
             'state' => 'AB',
             'zip' => '12345',
             'phone' => '1234567890',
-        ]
+        ],
     ]);
 
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
             'user_id',
-            'first_name', 
-            'last_name', 
+            'first_name',
+            'last_name',
             'address',
             'address_2',
-            'city', 
-            'state', 
-            'zip', 
-            'phone', 
+            'city',
+            'state',
+            'zip',
+            'phone',
             'flat',
-            'country', 
+            'country',
         ],
     ]);
 });

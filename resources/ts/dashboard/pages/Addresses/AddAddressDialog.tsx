@@ -294,7 +294,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        color: 'black',
                     }}
                     onClick={handleClose}
                 >
@@ -503,11 +503,11 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                     </div>
                 </div>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="primary">
+            <DialogActions sx={{ margin: '16px' }}>
+                <Button onClick={handleClose} color="inherit">
                     Cancel
                 </Button>
-                <Button color="primary" disabled={!isSaveBtnEnable} onClick={handleAddressSubmit}>
+                <Button color="primary" variant={'contained'} disabled={!isSaveBtnEnable} onClick={handleAddressSubmit}>
                     {isUpdate ? 'Update Address' : 'Add Address'}
                 </Button>
             </DialogActions>

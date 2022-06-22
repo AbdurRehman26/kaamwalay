@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useEffect, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -21,6 +23,14 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         flexWrap: 'wrap',
         width: '100%',
+    },
+    newAddressBtn: {
+        borderRadius: 24,
+        padding: '12px 24px',
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: 'auto',
+            padding: '9px 16px',
+        },
     },
 }));
 
@@ -40,6 +50,7 @@ export function ListAddresses() {
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
     const notifications = useNotifications();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const [showAddAddressModal, setShowAddAddressModal] = useState(false);
     const existingAddresses = useAppSelector((state) => state.newAddressSlice.existingAddresses);
@@ -70,14 +81,19 @@ export function ListAddresses() {
     );
 
     const $newAddress = (
-        <Button variant={'contained'} color={'primary'} onClick={() => setShowAddAddressModal(true)}>
+        <Button
+            className={classes.newAddressBtn}
+            variant={'contained'}
+            color={'primary'}
+            onClick={() => setShowAddAddressModal(true)}
+        >
             Add Address
         </Button>
     );
     return (
         <>
-            <ListHeader headline={'Address Book'} noSearch>
-                {$newAddress}
+            <ListHeader headline={'Address Book'} noSearch actions={isMobile ? $newAddress : null}>
+                {!isMobile ? $newAddress : null}
             </ListHeader>
             {existingAddresses.length > 0 ? (
                 <>

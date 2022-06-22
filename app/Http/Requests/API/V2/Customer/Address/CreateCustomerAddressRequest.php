@@ -34,7 +34,6 @@ class CreateCustomerAddressRequest extends FormRequest
             'shipping_address.zip' => ['required', 'string'],
             'shipping_address.phone' => ['required', 'string'],
             'shipping_address.flat' => ['nullable', 'string'],
-            // 'shipping_address.save_for_later' => ['required', 'boolean'],
         ];
     }
 }

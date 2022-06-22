@@ -1,6 +1,7 @@
 import HomeTwoTone from '@mui/icons-material/HomeTwoTone';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -52,6 +53,7 @@ export function ListAddresses() {
     const notifications = useNotifications();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
+    const [isLoading, setIsLoading] = useState(false);
     const [showAddAddressModal, setShowAddAddressModal] = useState(false);
     const existingAddresses = useAppSelector((state) => state.newAddressSlice.existingAddresses);
 
@@ -72,9 +74,16 @@ export function ListAddresses() {
 
     useEffect(
         () => {
-            dispatch(getSavedAddresses());
-            dispatch(getCountriesList());
-            dispatch(getStatesList());
+            (async () => {
+                try {
+                    setIsLoading(true);
+                    await dispatch(getSavedAddresses());
+                    await dispatch(getCountriesList());
+                    await dispatch(getStatesList());
+                } finally {
+                    setIsLoading(false);
+                }
+            })();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
@@ -90,12 +99,21 @@ export function ListAddresses() {
             Add Address
         </Button>
     );
+
+    if (isLoading) {
+        return (
+            <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
     return (
         <>
             <ListHeader headline={'Address Book'} noSearch actions={isMobile ? $newAddress : null}>
                 {!isMobile ? $newAddress : null}
             </ListHeader>
-            {existingAddresses.length > 0 ? (
+            {existingAddresses.length > 0 && !isLoading ? (
                 <>
                     <Typography variant={'caption'} color={'rgba(0, 0, 0, 0.54)'}>
                         OTHER ADDRESSES

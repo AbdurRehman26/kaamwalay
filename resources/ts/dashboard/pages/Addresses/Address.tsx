@@ -8,12 +8,7 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import {
-    getSavedAddresses,
-    getSingleAddress,
-    getStatesList,
-    updateShippingAddressField,
-} from '../../redux/slices/newAddressSlice';
+import { getSavedAddresses, getSingleAddress, getStatesList } from '../../redux/slices/newAddressSlice';
 import { AddAddressDialog } from './AddAddressDialog';
 import DeleteAddressDialog from './DeleteAddressDialog';
 
@@ -96,16 +91,6 @@ export function Address(props: ExistingAddressProps) {
         setShowEditAddressModal(true);
         dispatch(getSingleAddress(props.id));
         dispatch(getStatesList());
-        dispatch(
-            updateShippingAddressField({
-                fieldName: 'state',
-                newValue: {
-                    id: 0,
-                    code: '',
-                    name: '',
-                },
-            }),
-        );
     };
 
     return (
@@ -128,12 +113,12 @@ export function Address(props: ExistingAddressProps) {
                     <div>
                         <div className={classes.item}>
                             <Typography variant={'body2'}>
-                                {props.address} {props.address2}
+                                {props.address} {props.address2}.
                             </Typography>
                         </div>
                         <div className={classes.item}>
                             <Typography variant={'body2'}>
-                                {props.state.code} {','} {props.zip}
+                                {props.state.code}, {props.zip}
                             </Typography>
                         </div>
                         <div className={classes.item}>

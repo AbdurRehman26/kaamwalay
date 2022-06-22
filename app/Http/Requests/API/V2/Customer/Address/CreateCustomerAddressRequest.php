@@ -29,11 +29,11 @@ class CreateCustomerAddressRequest extends FormRequest
             'shipping_address.first_name' => ['required', 'string'],
             'shipping_address.last_name' => ['required', 'string'],
             'shipping_address.address' => ['required', 'string'],
+            'shipping_address.address_2' => ['nullable', 'string'],
             'shipping_address.city' => ['required', 'string'],
             'shipping_address.state' => ['required', 'string',],
             'shipping_address.zip' => ['required', 'string'],
             'shipping_address.phone' => ['required', 'string'],
-            'shipping_address.flat' => ['nullable', 'string'],
         ];
     }
 }

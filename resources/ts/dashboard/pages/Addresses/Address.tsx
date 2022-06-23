@@ -46,18 +46,15 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-        },
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
+            marginBottom: '-2px',
         },
         item: {
             marginLeft: '10px',
-            marginTop: '5px',
+            marginTop: '4px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
         btnClass: {
-            marginTop: '15px',
+            marginTop: '10px',
             marginLeft: '-5px',
         },
     }),
@@ -66,7 +63,6 @@ const useStyles = makeStyles(
 
 const Root = styled(Box)(({ theme }) => ({
     minWidth: '97%',
-    backgroundColor: '#F9F9F9',
     border: '1px solid #E0E0E0',
     marginBottom: '12px',
     marginRight: '12px',
@@ -100,38 +96,37 @@ export function Address(props: ExistingAddressProps) {
                 onClose={() => setShowDeleteModal(false)}
                 onSubmit={() => props.handleAddressDeleteSubmit(props.id)}
             />
-            <Grid container item xs={12} sm={12} md={6} className={classes.container}>
+            <Grid container item xs={12} sm={12} md={6}>
                 <Root>
-                    <div className={classes.row}>
+                    <Box className={classes.row}>
                         <Typography variant={'subtitle2'} className={classes.nameClass}>
                             {props.firstName} {props.lastName}
                         </Typography>
-                        <IconButton aria-label="delete" size="small" onClick={() => setShowDeleteModal(true)}>
+                        <IconButton
+                            sx={{ marginRight: '8px' }}
+                            aria-label="delete"
+                            size="small"
+                            onClick={() => setShowDeleteModal(true)}
+                        >
                             <DeleteOutline fontSize="small" />
                         </IconButton>
-                    </div>
-                    <div>
-                        <div className={classes.item}>
-                            <Typography variant={'body2'}>
-                                {props.address} {props.address2}.
-                            </Typography>
-                        </div>
-                        <div className={classes.item}>
-                            <Typography variant={'body2'}>
-                                {props.state.code}, {props.zip}
-                            </Typography>
-                        </div>
-                        <div className={classes.item}>
-                            <Typography variant={'body2'}>{props.country.name}</Typography>
-                        </div>
-                        <div className={classes.item}>
-                            <Typography variant={'body2'}>{props.phone}</Typography>
-                        </div>
-                        <div className={classes.btnClass}>
-                            <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
-                                Edit
-                            </Button>
-                        </div>
+                    </Box>
+                    <Typography variant={'body2'} className={classes.item}>
+                        {props.address} {props.address2}.
+                    </Typography>
+                    <Typography variant={'body2'} className={classes.item}>
+                        {props.state.code}, {props.zip}
+                    </Typography>
+                    <Typography variant={'body2'} className={classes.item}>
+                        {props.country.name}
+                    </Typography>
+                    <Typography variant={'body2'} className={classes.item}>
+                        {props.phone}
+                    </Typography>
+                    <div className={classes.btnClass}>
+                        <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
+                            Edit
+                        </Button>
                     </div>
                 </Root>
             </Grid>

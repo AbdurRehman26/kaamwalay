@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '@shared/assets/logo.svg';
+import Logo from '@shared/assets/robogradingLogo.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useLayoutHeaderStyles } from '@admin/components/Layout/styles';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';

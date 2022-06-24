@@ -35,6 +35,7 @@ use Illuminate\Http\Request;
  * @property mixed $created_at
  * @property mixed $grand_total
  * @property mixed $shipping_fee
+ * @property mixed $cleaning_fee
  * @property mixed $service_fee
  * @property mixed $order_number
  * @property mixed $id
@@ -47,6 +48,7 @@ use Illuminate\Http\Request;
  * @property mixed $payment_method_id
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
+ * @property mixed $requires_cleaning
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
  * @method orderStatusHistory()
@@ -69,6 +71,7 @@ class OrderResource extends V1OrderResource
             'total_declared_value' => (float)$this->orderItems()->sum('declared_value_total'),
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
+            'shipping_fee' => $this->cleaning_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'customer_id' => $this->user_id,
             'created_at' => $this->formatDate($this->created_at),
@@ -104,6 +107,7 @@ class OrderResource extends V1OrderResource
             'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
+            'requires_cleaning' => $this->requires_cleaning,
         ];
     }
 }

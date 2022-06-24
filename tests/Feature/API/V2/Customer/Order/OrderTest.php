@@ -785,3 +785,74 @@ test('an order has salesman if customer has a salesman assigned', function () {
     $response->assertSuccessful();
     assertDatabaseHas('orders', ['id' => $response->json('data.id'), 'salesman_id' => $salesman->id]);
 });
+
+test('a customer can request cleaning service while placing order', function () {
+    $this->actingAs($this->user);
+    Event::fake();
+
+    $response = $this->postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'grand_total',
+        ],
+    ]);
+});

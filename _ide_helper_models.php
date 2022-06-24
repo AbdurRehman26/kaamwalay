@@ -646,6 +646,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property \Illuminate\Support\Carbon|null $shipped_at
  * @property \Illuminate\Support\Carbon|null $paid_at
+ * @property bool $requires_cleaning
+ * @property float $cleaning_fee
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments

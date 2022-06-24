@@ -16,6 +16,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\CleaningFee\CleaningFeeService;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;
@@ -93,6 +94,9 @@ class CreateOrderService
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
+        if (! empty($this->data['cleaning_fee'])) {
+            $this->storeCleaningFee();
+        }
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->associateSalesman();
@@ -209,8 +213,8 @@ class CreateOrderService
 
     protected function storeGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
+        $this->order->grand_total = $this->order->grand_total_before_discount - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -291,5 +295,11 @@ class CreateOrderService
         if ($salesman = $this->order->user->salesman) {
             $this->order->salesman()->associate($salesman)->save();
         }
+    }
+
+    protected function storeCleaningFee(): void
+    {
+        $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
+        $this->order->save();
     }
 }

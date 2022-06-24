@@ -71,7 +71,7 @@ class OrderResource extends V1OrderResource
             'total_declared_value' => (float)$this->orderItems()->sum('declared_value_total'),
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
-            'shipping_fee' => $this->cleaning_fee,
+            'cleaning_fee' => $this->cleaning_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'customer_id' => $this->user_id,
             'created_at' => $this->formatDate($this->created_at),

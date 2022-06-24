@@ -43,48 +43,48 @@ class InternationalInsuredShippingFeeCalculator
     protected static function getOriginAddress(): array
     {
         return [
-            "line_1" => "727 Page Ave",
-            "state" => "NY",
-            "city" => "Staten Island",
-            "postal_code" => "10307",
-            "country_alpha2" => "US",
-            "contact_name" => "AGS Submissions",
-            "contact_phone" => "(347) 850 2720",
+            'line_1' => '727 Page Ave',
+            'state' => 'NY',
+            'city' => 'Staten Island',
+            'postal_code' => '10307',
+            'country_alpha2' => 'US',
+            'contact_name' => 'AGS Submissions',
+            'contact_phone' => '(347) 850 2720',
         ];
     }
 
     protected static function buildDestinationAddress(array $shippingAddress): array
     {
         return [
-            "line_1" => $shippingAddress['address'],
-            "line_2" => array_key_exists('address_2', $shippingAddress) ? $shippingAddress['address_2'] : null,
-            "state" => $shippingAddress['state'],
-            "city" => $shippingAddress['city'],
-            "postal_code" => $shippingAddress['zip'],
-            "country_alpha2" => $shippingAddress['country_code'],
-            "contact_phone" => $shippingAddress['phone'],
+            'line_1' => $shippingAddress['address'],
+            'line_2' => array_key_exists('address_2', $shippingAddress) ? $shippingAddress['address_2'] : null,
+            'state' => $shippingAddress['state'],
+            'city' => $shippingAddress['city'],
+            'postal_code' => $shippingAddress['zip'],
+            'country_alpha2' => $shippingAddress['country_code'],
+            'contact_phone' => $shippingAddress['phone'],
         ];
     }
 
     protected static function getInsurance(): array
     {
         return [
-            "is_insured" => false,
+            'is_insured' => false,
         ];
     }
 
     protected static function getCourierSelection(): array
     {
         return [
-            "apply_shipping_rules" => true,
+            'apply_shipping_rules' => true,
         ];
     }
     protected static function getShippingSettings(): array
     {
         return [
-            "units" => [
-                "weight" => "lb",
-                "dimensions" => "in",
+            'units' => [
+                'weight' => 'lb',
+                'dimensions' => 'in',
             ],
         ];
     }

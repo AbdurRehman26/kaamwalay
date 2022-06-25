@@ -929,4 +929,4 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
     ->with([
         [1, 5, true],
         [2, 10, false],
-    ])->group('12');
+    ]);

@@ -94,9 +94,7 @@ class CreateOrderService
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
-        if (! empty($this->data['cleaning_fee'])) {
-            $this->storeCleaningFee();
-        }
+        $this->storeCleaningFee();
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->associateSalesman();
@@ -299,7 +297,12 @@ class CreateOrderService
 
     protected function storeCleaningFee(): void
     {
-        $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
+        $cleaningFee = 0;
+        if (! empty($this->data['requires_cleaning'])) {
+            $cleaningFee = (new CleaningFeeService($this->order))->calculate();
+        }
+
+        $this->order->cleaning_fee = $cleaningFee;
         $this->order->save();
     }
 }

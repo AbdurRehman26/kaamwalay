@@ -843,7 +843,6 @@ test('a customer can request cleaning service with correct cleaning fee', functi
         ],
         'requires_cleaning' => 1,
     ])
-        ->dump()
         ->assertSuccessful()
         ->assertJsonFragment([
             'cleaning_fee' => $cleaningFee,

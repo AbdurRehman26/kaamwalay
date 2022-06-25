@@ -303,6 +303,7 @@ class CreateOrderService
         }
 
         $this->order->cleaning_fee = $cleaningFee;
+        $this->order->requires_cleaning = $cleaningFee > 0;
         $this->order->save();
     }
 }

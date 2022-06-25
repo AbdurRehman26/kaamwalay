@@ -847,6 +847,7 @@ test('a customer can request cleaning service with correct cleaning fee', functi
         ->assertSuccessful()
         ->assertJsonFragment([
             'cleaning_fee' => $cleaningFee,
+            'requires_cleaning' => true,
         ]);
 })
     ->with([
@@ -922,9 +923,10 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
         ->assertSuccessful()
         ->assertJsonFragment([
             'cleaning_fee' => $isCleaningRequired ? $cleaningFee : 0,
+            'requires_cleaning' => $isCleaningRequired,
         ]);
 })
     ->with([
         [1, 5, true],
         [2, 10, false],
-    ]);
+    ])->group('12');

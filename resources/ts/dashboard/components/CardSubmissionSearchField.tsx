@@ -26,6 +26,11 @@ const useStyles = makeStyles({
     searchContainer: {
         display: 'flex',
         flexDirection: 'column',
+        position: 'sticky',
+        top: 0,
+        background: 'white',
+        zIndex: 10,
+        paddingBottom: '0.5em',
     },
     searchLabelContainer: {
         display: 'flex',

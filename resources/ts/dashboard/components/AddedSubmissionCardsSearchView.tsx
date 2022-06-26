@@ -16,7 +16,7 @@ function AddedSubmissionCardsMobileSearchView() {
 
     return (
         <>
-            <Grid container alignItems={'center'} mt={4.5}>
+            <Grid container alignItems={'center'} mt={2.5}>
                 <Typography variant={'subtitle1'} fontWeight={500}>
                     Added Cards
                 </Typography>

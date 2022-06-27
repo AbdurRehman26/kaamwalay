@@ -35,9 +35,9 @@ class InternationalInsuredShippingFeeCalculator
             });
 
             return $rates[0]['total_charge'];
-        } else {
-            return $easyShipService->calculateDefaultPrice($parcels, $shippingAddress['country_code']);
         }
+
+        return $easyShipService->calculateDefaultPrice($parcels, $shippingAddress['country_code']);
     }
 
     protected static function getOriginAddress(): array

@@ -20,14 +20,14 @@ interface Address {
 
 interface NewAddressState {
     existingAddresses: Address[] | [];
-    shippingAddress: Address;
+    customerAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
     availableCountriesList: { name: string; code: string; id: number; phoneCode: string }[];
 }
 
 const initialState: NewAddressState = {
     existingAddresses: [],
-    shippingAddress: {
+    customerAddress: {
         fullName: '',
         lastName: '',
         address: '',
@@ -106,26 +106,26 @@ export const getSavedAddresses = createAsyncThunk('newAddress/getSavedAddresses'
     return formattedAddresses;
 });
 
-export const addNewShippingAddress = createAsyncThunk(
-    'newAddress/addNewShippingAddress',
+export const addNewCustomerAddress = createAsyncThunk(
+    'newAddress/addNewCustomerAddress',
     async (_, { getState }: any) => {
         const newAddress: NewAddressState = getState().newAddressSlice;
-        const parsedName = parseName(newAddress.shippingAddress.fullName);
+        const parsedName = parseName(newAddress.customerAddress.fullName);
 
         const addressDTO = {
-            shippingAddress: {
-                countryId: newAddress.shippingAddress.country.id ? newAddress.shippingAddress.country.id : 1,
+            customerAddress: {
+                countryId: newAddress.customerAddress.country.id ? newAddress.customerAddress.country.id : 1,
                 firstName: parsedName?.firstName,
                 lastName: parsedName?.lastName,
-                address: newAddress.shippingAddress.address,
-                address2: newAddress.shippingAddress.address2,
-                city: newAddress.shippingAddress.city,
-                state: newAddress.shippingAddress.state?.code
-                    ? newAddress.shippingAddress.state?.code
-                    : newAddress.shippingAddress.stateName,
-                countryCode: newAddress.shippingAddress.country?.phoneCode,
-                zip: newAddress.shippingAddress.zip,
-                phone: newAddress.shippingAddress.phone,
+                address: newAddress.customerAddress.address,
+                address2: newAddress.customerAddress.address2,
+                city: newAddress.customerAddress.city,
+                state: newAddress.customerAddress.state?.code
+                    ? newAddress.customerAddress.state?.code
+                    : newAddress.customerAddress.stateName,
+                countryCode: newAddress.customerAddress.country?.phoneCode,
+                zip: newAddress.customerAddress.zip,
+                phone: newAddress.customerAddress.phone,
             },
         };
 
@@ -141,26 +141,26 @@ export const addNewShippingAddress = createAsyncThunk(
     },
 );
 
-export const updateShippingAddress = createAsyncThunk(
-    'newAddress/updateShippingAddress',
+export const updateCustomerAddress = createAsyncThunk(
+    'newAddress/updateCustomerAddress',
     async (addressId: any, { getState }: any) => {
         const newAddress: NewAddressState = getState().newAddressSlice;
-        const parsedName = parseName(newAddress.shippingAddress.fullName);
+        const parsedName = parseName(newAddress.customerAddress.fullName);
 
         const updateAddressDTO = {
-            shippingAddress: {
-                countryId: newAddress.shippingAddress.country.id || 1,
+            customerAddress: {
+                countryId: newAddress.customerAddress.country.id || 1,
                 firstName: parsedName?.firstName,
                 lastName: parsedName?.lastName,
-                address: newAddress.shippingAddress.address,
-                address2: newAddress.shippingAddress.address2,
-                city: newAddress.shippingAddress.city,
-                state: newAddress.shippingAddress.state?.code
-                    ? newAddress.shippingAddress.state?.code
-                    : newAddress.shippingAddress.stateName,
-                countryCode: newAddress.shippingAddress.country?.phoneCode,
-                zip: newAddress.shippingAddress.zip,
-                phone: newAddress.shippingAddress.phone,
+                address: newAddress.customerAddress.address,
+                address2: newAddress.customerAddress.address2,
+                city: newAddress.customerAddress.city,
+                state: newAddress.customerAddress.state?.code
+                    ? newAddress.customerAddress.state?.code
+                    : newAddress.customerAddress.stateName,
+                countryCode: newAddress.customerAddress.country?.phoneCode,
+                zip: newAddress.customerAddress.zip,
+                phone: newAddress.customerAddress.phone,
             },
         };
         try {
@@ -208,13 +208,13 @@ export const newAddressSlice = createSlice({
     name: 'newAddressSlice',
     initialState,
     reducers: {
-        updateShippingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+        updateCustomerAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
             // @ts-ignore
-            state.shippingAddress[action.payload.fieldName] = action.payload.newValue;
+            state.customerAddress[action.payload.fieldName] = action.payload.newValue;
         },
-        emptyShippingAddress: (state, action: PayloadAction<{}>) => {
+        emptyCustomerAddress: (state, action: PayloadAction<{}>) => {
             // @ts-ignore
-            state.shippingAddress = action.payload;
+            state.customerAddress = action.payload;
         },
     },
     extraReducers: {
@@ -228,8 +228,8 @@ export const newAddressSlice = createSlice({
             state.existingAddresses = action.payload;
         },
         [getSingleAddress.fulfilled as any]: (state, action) => {
-            state.shippingAddress = {
-                ...state.shippingAddress,
+            state.customerAddress = {
+                ...state.customerAddress,
                 fullName: action.payload.firstName + ' ' + action.payload.lastName,
                 country: action.payload.country,
                 address: action.payload.address,
@@ -248,4 +248,4 @@ export const newAddressSlice = createSlice({
     },
 });
 
-export const { updateShippingAddressField, emptyShippingAddress } = newAddressSlice.actions;
+export const { updateCustomerAddressField, emptyCustomerAddress } = newAddressSlice.actions;

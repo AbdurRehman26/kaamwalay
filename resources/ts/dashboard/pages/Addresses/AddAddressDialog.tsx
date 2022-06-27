@@ -17,11 +17,11 @@ import NumberFormat from 'react-number-format';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
-    addNewShippingAddress,
-    emptyShippingAddress,
+    addNewCustomerAddress,
+    emptyCustomerAddress,
     getStatesList,
-    updateShippingAddress,
-    updateShippingAddressField,
+    updateCustomerAddress,
+    updateCustomerAddressField,
 } from '../../redux/slices/newAddressSlice';
 import { addressValidationSchema } from './newAddressSchema';
 
@@ -107,15 +107,15 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
 
     const notifications = useNotifications();
 
-    const fullName = useAppSelector((state) => state.newAddressSlice.shippingAddress.fullName);
-    const address = useAppSelector((state) => state.newAddressSlice?.shippingAddress.address);
-    const address2 = useAppSelector((state) => state.newAddressSlice?.shippingAddress.address2);
-    const city = useAppSelector((state) => state.newAddressSlice?.shippingAddress.city);
-    const state = useAppSelector((state) => state.newAddressSlice?.shippingAddress.state);
-    const stateName = useAppSelector((state) => state.newAddressSlice?.shippingAddress.stateName);
-    const zipCode = useAppSelector((state) => state.newAddressSlice?.shippingAddress.zip);
-    const country = useAppSelector((state) => state.newAddressSlice?.shippingAddress.country);
-    const phoneNumber = useAppSelector((state) => state.newAddressSlice?.shippingAddress.phone);
+    const fullName = useAppSelector((state) => state.newAddressSlice.customerAddress.fullName);
+    const address = useAppSelector((state) => state.newAddressSlice?.customerAddress.address);
+    const address2 = useAppSelector((state) => state.newAddressSlice?.customerAddress.address2);
+    const city = useAppSelector((state) => state.newAddressSlice?.customerAddress.city);
+    const state = useAppSelector((state) => state.newAddressSlice?.customerAddress.state);
+    const stateName = useAppSelector((state) => state.newAddressSlice?.customerAddress.stateName);
+    const zipCode = useAppSelector((state) => state.newAddressSlice?.customerAddress.zip);
+    const country = useAppSelector((state) => state.newAddressSlice?.customerAddress.country);
+    const phoneNumber = useAppSelector((state) => state.newAddressSlice?.customerAddress.phone);
     const availableCountries = useAppSelector((state) => state.newAddressSlice.availableCountriesList);
     const availableStates = useAppSelector((state) => state.newAddressSlice?.availableStatesList);
     const dispatch = useAppDispatch();
@@ -128,7 +128,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
             if (onClose) {
                 (onClose as any)(...args);
                 dispatch(
-                    emptyShippingAddress({
+                    emptyCustomerAddress({
                         fullName: '',
                         lastName: '',
                         address: '',
@@ -158,18 +158,18 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
     const handleAddressSubmit = useCallback(async () => {
         try {
             if (isUpdate) {
-                dispatch(updateShippingAddress(addressId));
+                dispatch(updateCustomerAddress(addressId));
                 if (onClose) {
                     (onClose as any)();
                     onSubmit();
                 }
             } else {
-                dispatch(addNewShippingAddress());
+                dispatch(addNewCustomerAddress());
                 if (onClose) {
                     (onClose as any)();
                     onSubmit();
                     dispatch(
-                        emptyShippingAddress({
+                        emptyCustomerAddress({
                             fullName: '',
                             lastName: '',
                             address: '',
@@ -224,14 +224,14 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
     );
 
     function updateField(fieldName: any, newValue: any) {
-        dispatch(updateShippingAddressField({ fieldName, newValue }));
+        dispatch(updateCustomerAddressField({ fieldName, newValue }));
     }
 
     function updateShippingCountry(countryId: any) {
         const country = availableCountries.find((country: any) => country.id === parseInt(countryId));
         if (country) {
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'country',
                     newValue: {
                         name: country.name,
@@ -242,7 +242,7 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 }),
             );
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'state',
                     newValue: {
                         id: 0,
@@ -252,13 +252,13 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 }),
             );
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'stateName',
                     newValue: '',
                 }),
             );
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'phone',
                     newValue: '',
                 }),
@@ -271,13 +271,13 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
         const stateLookup = availableStates.find((state: any) => state.id === parseInt(stateId));
         if (stateLookup) {
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'state',
                     newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup?.code },
                 }),
             );
             dispatch(
-                updateShippingAddressField({
+                updateCustomerAddressField({
                     fieldName: 'stateName',
                     newValue: '',
                 }),
@@ -486,9 +486,9 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                         <NumberFormat
                             customInput={TextField}
                             format={
-                                country?.phoneCode
-                                    ? country?.phoneCode + ' (###) ###-####'
-                                    : availableCountries[0].phoneCode + ' (###) ###-####'
+                                country.phoneCode
+                                    ? '+' + country.phoneCode + ' (###) ###-####'
+                                    : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
                             }
                             mask=""
                             style={{ margin: 8, marginLeft: 0 }}

@@ -26,7 +26,7 @@ export function Dashboard() {
             <Route path={'/profile/*'} element={ProtectedRoute(Profile)} />
             <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />
             <Route path={'/payment-cards/*'} element={ProtectedRoute(PaymentCards)} />
-            <Route path={'/saved-address/*'} element={ProtectedRoute(ListAddresses)} />
+            <Route path={'/address-book/*'} element={ProtectedRoute(ListAddresses)} />
         </Routes>
     );
 }

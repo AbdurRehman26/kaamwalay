@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\V2\Customer\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCustomerAddressRequest extends FormRequest
+class UpdateCustomerAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

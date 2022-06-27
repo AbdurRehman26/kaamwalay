@@ -189,7 +189,7 @@ export function DashboardNavigationDrawer() {
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
-                <ListItem selected={isItemActive('/saved-address')} onClick={handleItemPress('/saved-address')} button>
+                <ListItem selected={isItemActive('/address-book')} onClick={handleItemPress('/address-book')} button>
                     <StyledListItemIcon>
                         <HomeIcon />
                     </StyledListItemIcon>

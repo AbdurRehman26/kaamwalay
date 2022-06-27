@@ -104,7 +104,7 @@ export function LayoutSidebar() {
                     title={'Saved Credit Cards'}
                     href={'/payment-cards'}
                 />
-                <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/saved-address'} />
+                <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/address-book'} />
             </List>
         </Paper>
     );

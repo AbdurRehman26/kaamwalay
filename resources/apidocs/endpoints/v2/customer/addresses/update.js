@@ -10,7 +10,7 @@
  *
  * @apiParamExample {json} Request-Example:
  *      {
- *          "shipping_address": {
+ *          "customer_address": {
  *              "first_name": "Test Update",
  *              "last_name": "Test 123",
  *              "address": "Test address 123",

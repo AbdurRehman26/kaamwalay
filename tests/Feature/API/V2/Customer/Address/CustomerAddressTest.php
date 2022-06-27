@@ -27,11 +27,11 @@ test('user can not receive other user address', function () {
     $response->assertStatus(403);
 });
 
-test('a customer can add shipping address', function () {
+test('a customer can add customer address', function () {
     $this->actingAs($this->user);
 
     $response = $this->postJson(route('v2.customer.addresses.store'), [
-        'shipping_address' => [
+        'customer_address' => [
             'country_id' => '1',
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -61,11 +61,11 @@ test('a customer can add shipping address', function () {
     ]);
 });
 
-test('a customer can update shipping address', function () {
+test('a customer can update customer address', function () {
     $this->actingAs($this->user);
 
     $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[0]->id), [
-        'shipping_address' => [
+        'customer_address' => [
             'country_id' => '1',
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -96,8 +96,32 @@ test('a customer can update shipping address', function () {
     ]);
 });
 
-test('customer can delete a saved address', function () {
+test('a customer can delete a saved address', function () {
     $this->actingAs($this->user);
     $this->deleteJson(route('v2.customer.addresses.delete', ['address' => $this->addresses[0]->id]))
         ->assertNoContent();
+});
+
+test('a customer cannot update address of another customer', function () {
+
+    $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[1]->id), [
+        'customer_address' => [
+            'country_id' => '1',
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'address2' => 'Test address 2',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+        ],
+    ]);
+
+    $response->assertStatus(403);
+});
+
+test('a customer cannot delete address of another customer', function () {
+    $response = $this->deleteJson(route('v2.customer.addresses.delete', ['address' => $this->addresses[1]->id]));
+    $response->assertStatus(403);
 });

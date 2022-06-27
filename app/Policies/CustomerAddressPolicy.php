@@ -39,7 +39,7 @@ class CustomerAddressPolicy
      * @param  User  $user
      * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }
@@ -47,11 +47,12 @@ class CustomerAddressPolicy
      * Determine whether the user can update models.
      *
      * @param  User  $user
+     * @param  CustomerAddress  $customerAddress
      * @return bool
      */
-    public function update(User $user, CustomerAddress $customerAddress)
+    public function update(User $user, CustomerAddress $customerAddress): bool
     {
-        return true;
+        return $customerAddress->user->is($user);;
     }
 
     /**
@@ -61,8 +62,8 @@ class CustomerAddressPolicy
      * @param  CustomerAddress $customerAddress
      * @return bool
      */
-    public function delete(User $user, CustomerAddress $customerAddress)
+    public function delete(User $user, CustomerAddress $customerAddress): bool
     {
-        return true;
+        return $customerAddress->user->is($user);;
     }
 }

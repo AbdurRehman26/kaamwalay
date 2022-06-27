@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Customer\Address;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Address\CreateCustomerAddressRequest;
-use App\Http\Requests\API\V2\Customer\Address\UpdateShippingAddressRequest;
+use App\Http\Requests\API\V2\Customer\Address\UpdateCustomerAddressRequest;
 use App\Http\Resources\API\V1\Customer\Address\CustomerAddressCollection;
 use App\Http\Resources\API\V1\Customer\Address\CustomerAddressResource;
 use App\Models\CustomerAddress;
@@ -37,7 +37,7 @@ class CustomerAddressController extends Controller
         return new CustomerAddressResource($this->customerAddressService->create($request->validated()));
     }
     
-    public function update(CustomerAddress $address, UpdateShippingAddressRequest $request) : CustomerAddressResource
+    public function update(CustomerAddress $address, UpdateCustomerAddressRequest $request) : CustomerAddressResource
     {
         return new CustomerAddressResource($this->customerAddressService->update($address, $request->validated()));
     }

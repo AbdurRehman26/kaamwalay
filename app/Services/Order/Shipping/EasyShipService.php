@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Cache;
 class EasyShipService
 {
     protected EasyShipClient $easyShipClient;
+
     public function __construct()
     {
         $this->easyShipClient = new EasyShipClient();
     }
+
     // Dimensions are in inches
     // Weights are in pounds
 
@@ -33,7 +35,6 @@ class EasyShipService
     public const CARD_BASE_WEIGHT = 0.0625;
     public const MAX_CARDS_PER_SLIP = 4;
     public const MAX_CARDS_PER_BOX = 42;
-
 
     public function calculatePackageWeight(int $cardsNumber, int $packageType): float
     {
@@ -106,12 +107,12 @@ class EasyShipService
     protected function getParcelItems(int $itemsNumber): array
     {
         return [[
-            "quantity" => $itemsNumber,
-            "category" => "books_collectibles", //TODO: check if maybe pass category as parameter?
-            "description" => "Collectible Card",
-            "actual_weight" => self::CARD_BASE_WEIGHT,
-            "declared_currency" => "USD",
-            "declared_customs_value" => 1, //TODO: Check if we can use total declared value / total declared items instead of hard coded 1
+            'quantity' => $itemsNumber,
+            'category' => 'books_collectibles', //TODO: check if maybe pass category as parameter?
+            'description' => 'Collectible Card',
+            'actual_weight' => self::CARD_BASE_WEIGHT,
+            'declared_currency' => 'USD',
+            'declared_customs_value' => 1, //TODO: Check if we can use total declared value / total declared items instead of hard coded 1
         ]];
     }
 }

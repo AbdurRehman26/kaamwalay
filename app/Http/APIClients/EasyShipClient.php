@@ -17,7 +17,6 @@ class EasyShipClient
         $this->apiKey = config('services.easyship.key');
     }
 
-
     public function getRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
         $data = [

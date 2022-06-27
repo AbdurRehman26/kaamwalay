@@ -19,9 +19,9 @@ class ShippingFeeService
         };
 
         if (request()->user()) {
-            Cache::put('shippingFee-' . request()->user()->id, $shippingFee);
+            Cache::put('shippingFee-' . request()->user()->id, $shippingFee, now()->addWeek());
         } else {
-            Cache::put('shippingFee-' . request()->ip(), $shippingFee);
+            Cache::put('shippingFee-' . request()->ip(), $shippingFee, now()->addWeek());
         }
 
         return $shippingFee;

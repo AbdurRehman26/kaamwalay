@@ -103,7 +103,6 @@ test('a customer can delete a saved address', function () {
 });
 
 test('a customer cannot update address of another customer', function () {
-
     $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[1]->id), [
         'customer_address' => [
             'country_id' => '1',

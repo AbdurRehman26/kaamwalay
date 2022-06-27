@@ -52,7 +52,8 @@ class CustomerAddressPolicy
      */
     public function update(User $user, CustomerAddress $customerAddress): bool
     {
-        return $customerAddress->user->is($user);;
+        return $customerAddress->user->is($user);
+        ;
     }
 
     /**
@@ -64,6 +65,7 @@ class CustomerAddressPolicy
      */
     public function delete(User $user, CustomerAddress $customerAddress): bool
     {
-        return $customerAddress->user->is($user);;
+        return $customerAddress->user->is($user);
+        ;
     }
 }

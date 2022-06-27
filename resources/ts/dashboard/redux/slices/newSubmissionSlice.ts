@@ -39,6 +39,8 @@ export interface AddCardsToSubmission {
     searchResults: SearchResultItemCardProps[];
     selectedCards: SearchResultItemCardProps[];
     shippingFee: number;
+    cleaningFee: number;
+    isCleaningFee: boolean;
     isMobileSearchModalOpen: boolean;
 }
 
@@ -186,6 +188,8 @@ const initialState: NewSubmissionSliceState = {
         searchResults: [],
         selectedCards: [],
         shippingFee: 0,
+        cleaningFee: 0,
+        isCleaningFee: false,
         isMobileSearchModalOpen: false,
     },
     step03Data: {
@@ -575,6 +579,12 @@ export const newSubmissionSlice = createSlice({
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
+        setIsCleaningFee: (state, action: PayloadAction<boolean>) => {
+            state.step02Data.isCleaningFee = action.payload;
+        },
+        setCleaningFee: (state, action: PayloadAction<number>) => {
+            state.step02Data.cleaningFee = action.payload;
+        },
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
             // TODO: This will be replaced with search integration
@@ -751,6 +761,8 @@ export const newSubmissionSlice = createSlice({
                 ...action.payload.originalPaymentPlan,
             };
             state.step02Data = {
+                cleaningFee: action.payload.cleaningFee,
+                isCleaningFee: action.payload.isCleaningFee,
                 shippingFee: action.payload.shippingFee,
                 isMobileSearchModalOpen: false,
                 searchResults: [],
@@ -914,6 +926,8 @@ export const {
     setIsNextDisabled,
     setCardsSearchValue,
     setSaveShippingAddress,
+    setIsCleaningFee,
+    setCleaningFee,
     updateShippingAddressField,
     markCardAsSelected,
     markCardAsUnselected,

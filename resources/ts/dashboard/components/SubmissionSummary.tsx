@@ -8,7 +8,7 @@ import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import { setCleaningFee, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
 import SubmissionSummaryDescription from './SubmissionSummaryDescription';
 
@@ -152,6 +152,8 @@ function SubmissionSummary() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const isCleaningFee = useAppSelector((state) => state.newSubmission.step02Data.isCleaningFee);
+    const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
@@ -179,9 +181,16 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
+    function getCleaningFee() {
+        const previewCleaningFee = numberOfSelectedCards >= 20 ? 20 * 5 : numberOfSelectedCards * 5;
+        dispatch(setCleaningFee(cleaningFee));
+        return previewCleaningFee;
+    }
+
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
+            cleaningFee +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -283,6 +292,20 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {isCleaningFee ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
+                                    <NumberFormat
+                                        value={getCleaningFee()}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
                         </div>
                         <Divider light />
                     </>
@@ -442,6 +465,21 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {isCleaningFee ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
+
+                                    <NumberFormat
+                                        value={cleaningFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
                         </div>
                         <Divider light />
                     </>

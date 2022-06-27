@@ -118,7 +118,6 @@ export function NewSubmission() {
             if (currentStep === 0) {
                 googleTagManager({ event: 'google-ads-service-selected' });
             } else if (currentStep === 1) {
-                await dispatch(getShippingFee(selectedCards));
                 await dispatch(getStatesList());
                 await dispatch(getSavedAddresses());
                 googleTagManager({ event: 'google-ads-cards-selected' });

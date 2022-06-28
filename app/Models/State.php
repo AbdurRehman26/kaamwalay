@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class State extends Model
 {
@@ -14,7 +15,7 @@ class State extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'name'];
+    protected $fillable = ['code', 'name', 'country_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -24,4 +25,12 @@ class State extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    /**
+     * @return BelongsTo<Country,State>
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

@@ -1,5 +1,5 @@
 /**
- * @api {get} /v2/customer/addresses/states List Sates
+ * @api {get} /v2/customer/addresses/states List States
  * @apiName List States
  * @apiGroup Customer-Addresses
  *
@@ -7,6 +7,8 @@
  *
  * @apiUse header_main
  * @apiUse Authorization
+ *
+ * @apiParam {String} country_id optional, to display only states for specific country
  *
  * @apiSuccess {Array} data States data
  *
@@ -17,17 +19,35 @@
  *              {
  *                  "id": 1,
  *                  "code": "AL",
- *                  "name": "Alabama"
+ *                  "name": "Alabama",
+ *                  "country": {
+ *                      "id": 1,
+ *                      "code": "US",
+ *                      "name": "United States",
+ *                      "phone_code": "1"
+ *                  }
  *              },
  *              {
  *                  "id": 2,
  *                  "code": "AK",
- *                  "name": "Alaska"
+ *                  "name": "Alaska",
+ *                  "country": {
+ *                      "id": 1,
+ *                      "code": "US",
+ *                      "name": "United States",
+ *                      "phone_code": "1"
+ *                  }
  *              },
  *              {
  *                  "id": 3,
  *                  "code": "AS",
- *                  "name": "American Samoa"
+ *                  "name": "American Samoa",
+ *                  "country": {
+ *                      "id": 1,
+ *                      "code": "US",
+ *                      "name": "United States",
+ *                      "phone_code": "1"
+ *                  }
  *              }
  *          ]
  *      }

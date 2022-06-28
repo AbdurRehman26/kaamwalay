@@ -39,7 +39,7 @@ test('a customer can add customer address', function () {
         'city' => 'Test',
         'state' => 'AB',
         'zip' => '12345',
-        'phone' => '1234567890'
+        'phone' => '1234567890',
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
@@ -71,7 +71,7 @@ test('a customer can update customer address', function () {
         'city' => 'Test',
         'state' => 'AB',
         'zip' => '12345',
-        'phone' => '1234567890'
+        'phone' => '1234567890',
     ]);
 
     $response->assertSuccessful();

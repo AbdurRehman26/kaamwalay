@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Customer\Address;
 
-use App\Models\CustomerAddress;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Country\CountryResource;
+use App\Models\CustomerAddress;
 
 /**
  * @mixin CustomerAddress

@@ -35,7 +35,7 @@ test('a customer can add customer address', function () {
         'first_name' => 'First',
         'last_name' => 'Last',
         'address' => 'Test address',
-        'address2' => 'Test address 2',
+        'address_2' => 'Test address 2',
         'city' => 'Test',
         'state' => 'AB',
         'zip' => '12345',
@@ -67,7 +67,7 @@ test('a customer can update customer address', function () {
         'first_name' => 'First',
         'last_name' => 'Last',
         'address' => 'Test address',
-        'address2' => 'Test address 2',
+        'address_2' => 'Test address 2',
         'city' => 'Test',
         'state' => 'AB',
         'zip' => '12345',
@@ -99,7 +99,6 @@ test('a customer can delete a saved address', function () {
 });
 
 test('a customer cannot update address of another customer', function () {
-
     $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[1]->id), [
         'customer_address' => [
             'country_id' => '1',

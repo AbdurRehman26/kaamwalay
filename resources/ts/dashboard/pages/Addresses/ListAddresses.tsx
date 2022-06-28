@@ -68,8 +68,8 @@ export function ListAddresses() {
         }
     };
 
-    const loadAddresses = () => {
-        dispatch(getSavedAddresses());
+    const loadAddresses = async () => {
+        await dispatch(getSavedAddresses());
     };
 
     useEffect(
@@ -115,9 +115,6 @@ export function ListAddresses() {
             </ListHeader>
             {existingAddresses.length > 0 && !isLoading ? (
                 <>
-                    <Typography variant={'caption'} color={'rgba(0, 0, 0, 0.54)'}>
-                        OTHER ADDRESSES
-                    </Typography>
                     <Box marginBottom={'16px'} />
                     <div className={classes.container}>
                         {existingAddresses?.map((address: any) => (

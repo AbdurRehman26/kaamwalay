@@ -1,6 +1,7 @@
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -76,6 +77,7 @@ const Root = styled(Box)(({ theme }) => ({
 export function Address(props: ExistingAddressProps) {
     const classes = useStyles();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [showEditAddressModal, setShowEditAddressModal] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -83,61 +85,76 @@ export function Address(props: ExistingAddressProps) {
         dispatch(getSavedAddresses());
     };
 
-    const handleEditAddressModal = () => {
-        setShowEditAddressModal(true);
-        dispatch(getSingleAddress(props.id));
-        dispatch(getStatesList());
+    const handleEditAddressModal = async () => {
+        try {
+            setIsLoading(true);
+            await dispatch(getSingleAddress(props.id));
+            await dispatch(getStatesList());
+            await setShowEditAddressModal(true);
+            setIsLoading(false);
+        } finally {
+            setIsLoading(false);
+            setShowEditAddressModal(true);
+        }
     };
 
     return (
         <>
-            <DeleteAddressDialog
-                open={showDeleteModal}
-                onClose={() => setShowDeleteModal(false)}
-                onSubmit={() => props.handleAddressDeleteSubmit(props.id)}
-            />
-            <Grid container item xs={12} sm={12} md={6}>
-                <Root>
-                    <Box className={classes.row}>
-                        <Typography variant={'subtitle2'} className={classes.nameClass}>
-                            {props.firstName} {props.lastName}
-                        </Typography>
-                        <IconButton
-                            sx={{ marginRight: '8px' }}
-                            aria-label="delete"
-                            size="small"
-                            onClick={() => setShowDeleteModal(true)}
-                        >
-                            <DeleteOutline fontSize="small" />
-                        </IconButton>
-                    </Box>
-                    <Typography variant={'body2'} className={classes.item}>
-                        {props.address} {props.address2}.
-                    </Typography>
-                    <Typography variant={'body2'} className={classes.item}>
-                        {props.state.code}, {props.zip}
-                    </Typography>
-                    <Typography variant={'body2'} className={classes.item}>
-                        {props.country.name}
-                    </Typography>
-                    <Typography variant={'body2'} className={classes.item}>
-                        {props.phone}
-                    </Typography>
-                    <div className={classes.btnClass}>
-                        <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
-                            Edit
-                        </Button>
-                    </div>
-                </Root>
-            </Grid>
-            <AddAddressDialog
-                addressId={props.id}
-                isUpdate={true}
-                dialogTitle={'Update Shipping Address'}
-                open={showEditAddressModal}
-                onClose={() => setShowEditAddressModal(false)}
-                onSubmit={() => loadAddresses()}
-            />
+            {!isLoading ? (
+                <>
+                    <DeleteAddressDialog
+                        open={showDeleteModal}
+                        onClose={() => setShowDeleteModal(false)}
+                        onSubmit={() => props.handleAddressDeleteSubmit(props.id)}
+                    />
+                    <Grid container item xs={12} sm={12} md={6}>
+                        <Root>
+                            <Box className={classes.row}>
+                                <Typography variant={'subtitle2'} className={classes.nameClass}>
+                                    {props.firstName} {props.lastName}
+                                </Typography>
+                                <IconButton
+                                    sx={{ marginRight: '8px' }}
+                                    aria-label="delete"
+                                    size="small"
+                                    onClick={() => setShowDeleteModal(true)}
+                                >
+                                    <DeleteOutline fontSize="small" />
+                                </IconButton>
+                            </Box>
+                            <Typography variant={'body2'} className={classes.item}>
+                                {props.address} {props.address2}.
+                            </Typography>
+                            <Typography variant={'body2'} className={classes.item}>
+                                {props.state.code}, {props.zip}
+                            </Typography>
+                            <Typography variant={'body2'} className={classes.item}>
+                                {props.country.name}
+                            </Typography>
+                            <Typography variant={'body2'} className={classes.item}>
+                                {props.phone}
+                            </Typography>
+                            <div className={classes.btnClass}>
+                                <Button variant={'text'} size={'medium'} onClick={handleEditAddressModal}>
+                                    Edit
+                                </Button>
+                            </div>
+                        </Root>
+                    </Grid>
+                    <AddAddressDialog
+                        addressId={props.id}
+                        isUpdate={true}
+                        dialogTitle={'Update Shipping Address'}
+                        open={showEditAddressModal}
+                        onClose={() => setShowEditAddressModal(false)}
+                        onSubmit={() => loadAddresses()}
+                    />
+                </>
+            ) : (
+                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            )}
         </>
     );
 }

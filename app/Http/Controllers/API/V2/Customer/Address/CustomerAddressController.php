@@ -13,17 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerAddressController extends V1CustomerAddressController
 {
-    public function store(CreateCustomerAddressRequest $request) : CustomerAddressResource
+    public function store(CreateCustomerAddressRequest $request): CustomerAddressResource
     {
         return new CustomerAddressResource($this->customerAddressService->create($request->validated()));
     }
     
-    public function update(CustomerAddress $address, UpdateCustomerAddressRequest $request) : CustomerAddressResource
+    public function update(CustomerAddress $address, UpdateCustomerAddressRequest $request): CustomerAddressResource
     {
         return new CustomerAddressResource($this->customerAddressService->update($address, $request->validated()));
     }
 
-    public function destroy(CustomerAddress $address) : JsonResponse
+    public function destroy(CustomerAddress $address): JsonResponse
     {
         $address->delete();
 

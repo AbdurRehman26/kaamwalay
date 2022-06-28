@@ -31,17 +31,15 @@ test('a customer can add customer address', function () {
     $this->actingAs($this->user);
 
     $response = $this->postJson(route('v2.customer.addresses.store'), [
-        'customer_address' => [
-            'country_id' => '1',
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'address2' => 'Test address 2',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-        ],
+        'country_id' => '1',
+        'first_name' => 'First',
+        'last_name' => 'Last',
+        'address' => 'Test address',
+        'address2' => 'Test address 2',
+        'city' => 'Test',
+        'state' => 'AB',
+        'zip' => '12345',
+        'phone' => '1234567890'
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
@@ -65,17 +63,15 @@ test('a customer can update customer address', function () {
     $this->actingAs($this->user);
 
     $response = $this->putJson(route('v2.customer.addresses.update', $this->addresses[0]->id), [
-        'customer_address' => [
-            'country_id' => '1',
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'address2' => 'Test address 2',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-        ],
+        'country_id' => '1',
+        'first_name' => 'First',
+        'last_name' => 'Last',
+        'address' => 'Test address',
+        'address2' => 'Test address 2',
+        'city' => 'Test',
+        'state' => 'AB',
+        'zip' => '12345',
+        'phone' => '1234567890'
     ]);
 
     $response->assertSuccessful();

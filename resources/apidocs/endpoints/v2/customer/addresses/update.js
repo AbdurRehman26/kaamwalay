@@ -10,17 +10,15 @@
  *
  * @apiParamExample {json} Request-Example:
  *      {
- *          "customer_address": {
- *              "first_name": "Test Update",
- *              "last_name": "Test 123",
- *              "address": "Test address 123",
- *              "address2": "Test address 123",
- *              "city": "Test 123",
- *              "state": "AB",
- *              "zip": "123A",
- *              "phone": "1312310913",
- *              "country_id": "2"
- *          },
+ *           "first_name": "Test Update",
+ *           "last_name": "Test 123",
+ *           "address": "Test address 123",
+ *           "address2": "Test address 123",
+ *           "city": "Test 123",
+ *           "state": "AB",
+ *           "zip": "123A",
+ *           "phone": "1312310913",
+ *           "country_id": "2"
  *       }
  *  @apiSuccess {Object} data Order object
  *

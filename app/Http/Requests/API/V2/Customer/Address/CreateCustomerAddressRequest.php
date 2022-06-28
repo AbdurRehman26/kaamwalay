@@ -24,16 +24,15 @@ class CreateCustomerAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'customer_address' => ['required', 'array'],
-            'customer_address.country_id' => ['required', 'integer', 'exists:countries,id'],
-            'customer_address.first_name' => ['required', 'string'],
-            'customer_address.last_name' => ['required', 'string'],
-            'customer_address.address' => ['required', 'string'],
-            'customer_address.address_2' => ['nullable', 'string'],
-            'customer_address.city' => ['required', 'string'],
-            'customer_address.state' => ['required', 'string',],
-            'customer_address.zip' => ['required', 'string'],
-            'customer_address.phone' => ['required', 'string'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'address_2' => ['nullable', 'string'],
+            'city' => ['required', 'string'],
+            'state' => ['required', 'string'],
+            'zip' => ['required', 'string'],
+            'phone' => ['required', 'string'],
         ];
     }
 }

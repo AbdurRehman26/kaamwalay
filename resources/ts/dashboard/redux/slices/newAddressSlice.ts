@@ -113,20 +113,18 @@ export const addNewCustomerAddress = createAsyncThunk(
         const parsedName = parseName(newAddress.customerAddress.fullName);
 
         const addressDTO = {
-            customerAddress: {
-                countryId: newAddress.customerAddress.country.id ? newAddress.customerAddress.country.id : 1,
-                firstName: parsedName?.firstName,
-                lastName: parsedName?.lastName,
-                address: newAddress.customerAddress.address,
-                address2: newAddress.customerAddress.address2,
-                city: newAddress.customerAddress.city,
-                state: newAddress.customerAddress.state?.code
-                    ? newAddress.customerAddress.state?.code
-                    : newAddress.customerAddress.stateName,
-                countryCode: newAddress.customerAddress.country?.phoneCode,
-                zip: newAddress.customerAddress.zip,
-                phone: newAddress.customerAddress.phone,
-            },
+            countryId: newAddress.customerAddress.country.id ? newAddress.customerAddress.country.id : 1,
+            firstName: parsedName?.firstName,
+            lastName: parsedName?.lastName,
+            address: newAddress.customerAddress.address,
+            address2: newAddress.customerAddress.address2,
+            city: newAddress.customerAddress.city,
+            state: newAddress.customerAddress.state?.code
+                ? newAddress.customerAddress.state?.code
+                : newAddress.customerAddress.stateName,
+            countryCode: newAddress.customerAddress.country?.phoneCode,
+            zip: newAddress.customerAddress.zip,
+            phone: newAddress.customerAddress.phone,
         };
 
         try {
@@ -148,20 +146,18 @@ export const updateCustomerAddress = createAsyncThunk(
         const parsedName = parseName(newAddress.customerAddress.fullName);
 
         const updateAddressDTO = {
-            customerAddress: {
-                countryId: newAddress.customerAddress.country.id || 1,
-                firstName: parsedName?.firstName,
-                lastName: parsedName?.lastName,
-                address: newAddress.customerAddress.address,
-                address2: newAddress.customerAddress.address2,
-                city: newAddress.customerAddress.city,
-                state: newAddress.customerAddress.state?.code
-                    ? newAddress.customerAddress.state?.code
-                    : newAddress.customerAddress.stateName,
-                countryCode: newAddress.customerAddress.country?.phoneCode,
-                zip: newAddress.customerAddress.zip,
-                phone: newAddress.customerAddress.phone,
-            },
+            countryId: newAddress.customerAddress.country.id || 1,
+            firstName: parsedName?.firstName,
+            lastName: parsedName?.lastName,
+            address: newAddress.customerAddress.address,
+            address2: newAddress.customerAddress.address2,
+            city: newAddress.customerAddress.city,
+            state: newAddress.customerAddress.state?.code
+                ? newAddress.customerAddress.state?.code
+                : newAddress.customerAddress.stateName,
+            countryCode: newAddress.customerAddress.country?.phoneCode,
+            zip: newAddress.customerAddress.zip,
+            phone: newAddress.customerAddress.phone,
         };
         try {
             const apiService = app(APIService);

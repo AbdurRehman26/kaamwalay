@@ -12,7 +12,7 @@ class CustomerAddressService
     public function create(array $data) : CustomerAddress
     {
         return CustomerAddress::create(array_merge(
-            $data['customer_address'],
+            $data,
             [
                 'user_id' => auth()->user()->id,
             ]
@@ -22,7 +22,7 @@ class CustomerAddressService
     public function update(CustomerAddress $customerAddress, array $data) : CustomerAddress | JsonResponse
     {
         try {
-            $customerAddress->update($data['customer_address']);
+            $customerAddress->update($data);
 
             return $customerAddress;
         } catch (Exception $e) {

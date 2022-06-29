@@ -162,63 +162,36 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
             if (isUpdate) {
                 setIsSubmitting(true);
                 await dispatch(updateCustomerAddress(addressId));
-                await onSubmit();
-                setIsSubmitting(false);
-                dispatch(
-                    emptyCustomerAddress({
-                        fullName: '',
-                        lastName: '',
-                        address: '',
-                        address2: '',
-                        city: '',
-                        state: {
-                            id: 0,
-                            code: '',
-                            name: '',
-                        },
-                        zip: '',
-                        phone: '',
-                        country: {
-                            id: 0,
-                            code: '',
-                            name: '',
-                            phoneCode: '',
-                        },
-                    }),
-                );
-                if (onClose) {
-                    (onClose as any)();
-                }
             } else {
                 setIsSubmitting(true);
                 await dispatch(addNewCustomerAddress());
-                await onSubmit();
-                setIsSubmitting(false);
-                dispatch(
-                    emptyCustomerAddress({
-                        fullName: '',
-                        lastName: '',
-                        address: '',
-                        address2: '',
-                        city: '',
-                        state: {
-                            id: 0,
-                            code: '',
-                            name: '',
-                        },
-                        zip: '',
-                        phone: '',
-                        country: {
-                            id: 0,
-                            code: '',
-                            name: '',
-                            phoneCode: '',
-                        },
-                    }),
-                );
-                if (onClose) {
-                    (onClose as any)();
-                }
+            }
+            await onSubmit();
+            setIsSubmitting(false);
+            dispatch(
+                emptyCustomerAddress({
+                    fullName: '',
+                    lastName: '',
+                    address: '',
+                    address2: '',
+                    city: '',
+                    state: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
+                    zip: '',
+                    phone: '',
+                    country: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                        phoneCode: '',
+                    },
+                }),
+            );
+            if (onClose) {
+                (onClose as any)();
             }
         } catch (e: any) {
             notifications.exception(e);

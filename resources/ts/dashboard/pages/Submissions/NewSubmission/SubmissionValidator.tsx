@@ -17,8 +17,8 @@ export function SubmissionValidator() {
 
     const addressFirstName = useAppSelector(
         (state) =>
-            state.newSubmission.step03Data.selectedExistingAddress.firstName ||
-            state.newSubmission.step03Data.selectedAddress.firstName,
+            state.newSubmission.step03Data.selectedExistingAddress.fullName ||
+            state.newSubmission.step03Data.selectedAddress.fullName,
     );
     const addressLastName = useAppSelector(
         (state) =>
@@ -44,6 +44,11 @@ export function SubmissionValidator() {
         (state) =>
             state.newSubmission.step03Data.selectedExistingAddress.state ||
             state.newSubmission.step03Data.selectedAddress.state,
+    );
+    const addressStateName = useAppSelector(
+        (state) =>
+            state.newSubmission.step03Data.selectedExistingAddress.stateName ||
+            state.newSubmission.step03Data.selectedAddress.stateName,
     );
     const addressZipCode = useAppSelector(
         (state) =>
@@ -75,6 +80,7 @@ export function SubmissionValidator() {
                 flat: addressFlat,
                 city: addressCity,
                 state: addressState,
+                stateName: addressStateName,
                 zipCode: addressZipCode,
                 phoneNumber: addressPhoneNumber,
             });
@@ -90,6 +96,7 @@ export function SubmissionValidator() {
         addressFlat,
         addressCity,
         addressState,
+        addressStateName,
         addressZipCode,
         addressPhoneNumber,
         shippingMethod?.code,

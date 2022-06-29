@@ -5,6 +5,9 @@ namespace App\Http\Resources\API\V1\Customer\Address;
 use App\Http\Resources\API\V1\Country\CountryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property string $address_2
+ */
 class CustomerAddressResource extends JsonResource
 {
     /**
@@ -21,6 +24,7 @@ class CustomerAddressResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'address' => $this->address,
+            'address_2' => $this->address_2,
             'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,

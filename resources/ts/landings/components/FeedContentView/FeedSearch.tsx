@@ -86,7 +86,7 @@ const styles = {
 
 const PaginationBox = styled(Container)({
     display: 'flex',
-    padding: '20px 20px',
+    padding: '15px 15px',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('sm')]: {
         float: 'none',

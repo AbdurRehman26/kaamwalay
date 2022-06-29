@@ -6,8 +6,8 @@ export enum PaymentStatusEnum {
 
 export const PaymentStatusMap = {
     [PaymentStatusEnum.PENDING]: 'pending',
-    [PaymentStatusEnum.DUE]: 'payment due',
     [PaymentStatusEnum.PAID]: 'paid',
+    [PaymentStatusEnum.DUE]: 'payment due',
 };
 
 type StatusColorProps = {

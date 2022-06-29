@@ -15,4 +15,13 @@ enum OrderPaymentStatusEnum: int
             default => false,
         };
     }
+
+    public function toString(): string
+    {
+        return match ($this) {
+            self::DUE => 'Payment Due',
+            self::PAID => 'Paid',
+            default => 'Pending',
+        };
+    }
 }

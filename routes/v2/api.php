@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;
 use App\Http\Controllers\API\V2\Auth\ResetPasswordController;
 use App\Http\Controllers\API\V2\ConfigurationsController;
+use App\Http\Controllers\API\V2\Customer\Address\CountryController;
 use App\Http\Controllers\API\V2\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Customer\Address\StateController;
 use App\Http\Controllers\API\V2\Customer\Cards\CardCategoryController;
@@ -22,10 +23,10 @@ use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodControll
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
+use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
 use App\Http\Controllers\API\V2\Landings\PopReportController;
-use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,10 +47,11 @@ Route::prefix('auth')->group(function () {
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::post('password/change', [ChangePasswordController::class, 'change']);
-    Route::middleware('auth')->get('me', [LoginController::class, 'me']);
+    Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');
 });
 
 Route::prefix('customer')->group(function () {
+    Route::apiResource('addresses/countries', CountryController::class)->only(['index']);
     Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
     Route::prefix('orders')->group(function () {
         Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
@@ -64,7 +66,13 @@ Route::prefix('customer')->group(function () {
     });
     Route::middleware('auth')->group(function () {
         Route::apiResource('addresses', CustomerAddressController::class)
-            ->only(['index', 'show']);
+        ->names([
+            'index' => 'customer.addresses.index',
+            'show' => 'customer.addresses.show',
+            'store' => 'customer.addresses.store',
+            'update' => 'customer.addresses.update',
+            'destroy' => 'customer.addresses.delete',
+        ]);
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
@@ -83,6 +91,8 @@ Route::prefix('customer')->group(function () {
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
+            Route::post('{order}/coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('orders.coupon.discount');
+
             Route::apiResource('', OrderController::class)
                 ->only(['index', 'store'])
                 ->names([
@@ -101,7 +111,7 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
-        Route::put('profile', [ProfileController::class, 'update']);
+        Route::put('profile', [ProfileController::class, 'update'])->name('customer.profile');
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {
@@ -118,8 +128,8 @@ Route::prefix('customer')->group(function () {
         });
 
         Route::prefix('profile')->group(function () {
-            Route::post('deactivate', [ProfileController::class, 'deactivateProfile']);
-            Route::post('delete', [ProfileController::class, 'deleteProfile']);
+            Route::post('deactivate', [ProfileController::class, 'deactivateProfile'])->name('customer.profile.deactivate');
+            Route::post('delete', [ProfileController::class, 'deleteProfile'])->name('customer.profile.delete');
         });
     });
 });

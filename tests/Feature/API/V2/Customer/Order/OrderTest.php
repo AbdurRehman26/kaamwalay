@@ -15,7 +15,10 @@ use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
+use Illuminate\Support\Collection;
+
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\postJson;
 
 uses(WithFaker::class);
 
@@ -785,3 +788,144 @@ test('an order has salesman if customer has a salesman assigned', function () {
     $response->assertSuccessful();
     assertDatabaseHas('orders', ['id' => $response->json('data.id'), 'salesman_id' => $salesman->id]);
 });
+
+test('a customer can request cleaning service with correct cleaning fee', function (int $numberOfCards, $cleaningFee) {
+    $this->actingAs($this->user);
+    Event::fake();
+
+    $cards = Collection::times($numberOfCards, function ($value) {
+        $cards = [];
+        foreach (range(1, $value) as $_) {
+            $cards = [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ];
+        }
+
+        return $cards;
+    });
+
+    postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => $cards->toArray(),
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'requires_cleaning' => 1,
+    ])
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'cleaning_fee' => $cleaningFee,
+            'requires_cleaning' => true,
+        ]);
+})
+    ->with([
+        [1, 5],
+        [2, 10],
+        [4, 20],
+        [6, 30],
+        [8, 40],
+        [10, 50],
+        [15, 75],
+        [20, 100],
+        [21, 100],
+        [30, 100],
+        [100, 100],
+        [500, 100],
+    ]);
+
+
+test('cleaning fee should be calculated when needed', function (int $numberOfCards, int $cleaningFee, bool $isCleaningRequired) {
+    $this->actingAs($this->user);
+    Event::fake();
+
+    $cards = Collection::times($numberOfCards, function ($value) {
+        $cards = [];
+        foreach (range(1, $value) as $_) {
+            $cards = [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ];
+        }
+
+        return $cards;
+    });
+
+    postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => $cards->toArray(),
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'requires_cleaning' => $isCleaningRequired,
+    ])
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'cleaning_fee' => $isCleaningRequired ? $cleaningFee : 0,
+            'requires_cleaning' => $isCleaningRequired,
+        ]);
+})
+    ->with([
+        [1, 5, true],
+        [2, 10, false],
+    ]);

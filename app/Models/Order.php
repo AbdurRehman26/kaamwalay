@@ -62,6 +62,8 @@ class Order extends Model implements Exportable
         'order_step',
         'payment_status',
         'salesman_id',
+        'requires_cleaning',
+        'cleaning_fee',
     ];
 
     /**
@@ -99,6 +101,8 @@ class Order extends Model implements Exportable
         'paid_at' => 'datetime',
         'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
+        'requires_cleaning' => 'bool',
+        'cleaning_fee' => 'float',
     ];
 
     protected $appends = [
@@ -511,5 +515,10 @@ class Order extends Model implements Exportable
     public function isOlderThanOneDay(): bool
     {
         return now()->diff($this->created_at)->days > 0;
+    }
+
+    public function requiresCardCleaning(): bool
+    {
+        return $this->requires_cleaning;
     }
 }

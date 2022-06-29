@@ -12,11 +12,25 @@ class ShippingFeeController extends V1ShippingFeeController
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $data = $this->validate($request, [
+        $rules = [
             'items' => 'required|array',
             'shipping_method_id' => ['nullable', 'exists:shipping_methods,id'],
-        ]);
+            'shipping_address' => ['sometimes', 'nullable', 'array'],
+        ];
 
+        if ($request->shipping_address) {
+            $rules = array_merge($rules, [
+                'shipping_address.address' => ['required', 'string'],
+                'shipping_address.address_2' => ['nullable', 'string'],
+                'shipping_address.city' => ['required', 'string'],
+                'shipping_address.state' => ['required', 'string'],
+                'shipping_address.zip' => ['required', 'string'],
+                'shipping_address.phone' => ['required', 'string'],
+                'shipping_address.country_code' => ['required', 'string', 'exists:countries,code'],
+            ]);
+        }
+
+        $data = $this->validate($request, $rules);
         $preparedData = $this->prepareData($data['items']);
 
         return new JsonResponse([
@@ -25,6 +39,7 @@ class ShippingFeeController extends V1ShippingFeeController
                     $preparedData['totalDeclaredValue'],
                     $preparedData['totalNumberOfItems'],
                     ShippingMethod::find($request->input('shipping_method_id')),
+                    array_key_exists('shipping_address', $data) ? $data['shipping_address'] : ['country_code' => 'US']
                 ),
             ],
         ]);

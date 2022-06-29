@@ -90,9 +90,9 @@ class CreateOrderService
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
-        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storePaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);

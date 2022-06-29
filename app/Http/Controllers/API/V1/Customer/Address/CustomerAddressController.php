@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Customer\Address\CustomerAddressCollection;
 use App\Http\Resources\API\V1\Customer\Address\CustomerAddressResource;
 use App\Models\CustomerAddress;
+use App\Services\CustomerAddressService;
 
 class CustomerAddressController extends Controller
 {
-    public function __construct()
+    public function __construct(protected CustomerAddressService $customerAddressService)
     {
         $this->authorizeResource(CustomerAddress::class, 'address');
     }

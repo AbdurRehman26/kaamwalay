@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources\API\V2\Country;
 
+use App\Models\Country;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property int $id
- * @property string $code
- * @property string $name
+ * @mixin Country
  */
 class CountryResource extends JsonResource
 {
@@ -23,6 +22,7 @@ class CountryResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
+            'phone_code' => $this->phone_code,
         ];
     }
 }

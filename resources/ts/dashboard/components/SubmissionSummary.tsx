@@ -190,7 +190,7 @@ function SubmissionSummary() {
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
-            cleaningFee +
+            getCleaningFee() +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -471,7 +471,7 @@ function SubmissionSummary() {
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
 
                                     <NumberFormat
-                                        value={cleaningFee}
+                                        value={getCleaningFee()}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

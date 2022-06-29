@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -104,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
 export function AddAddressDialog(props: AddAddressDialogProps) {
     const { onClose, onSubmit, isUpdate, dialogTitle, addressId, ...rest } = props;
     const [isSaveBtnEnable, setIsSaveBtnEnable] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const notifications = useNotifications();
 
@@ -158,39 +160,38 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
     const handleAddressSubmit = useCallback(async () => {
         try {
             if (isUpdate) {
-                dispatch(updateCustomerAddress(addressId));
-                if (onClose) {
-                    (onClose as any)();
-                    onSubmit();
-                }
+                setIsSubmitting(true);
+                await dispatch(updateCustomerAddress(addressId));
             } else {
-                dispatch(addNewCustomerAddress());
-                if (onClose) {
-                    (onClose as any)();
-                    onSubmit();
-                    dispatch(
-                        emptyCustomerAddress({
-                            fullName: '',
-                            lastName: '',
-                            address: '',
-                            address2: '',
-                            city: '',
-                            state: {
-                                id: 0,
-                                code: '',
-                                name: '',
-                            },
-                            zip: '',
-                            phone: '',
-                            country: {
-                                id: 0,
-                                code: '',
-                                name: '',
-                                phoneCode: '',
-                            },
-                        }),
-                    );
-                }
+                setIsSubmitting(true);
+                await dispatch(addNewCustomerAddress());
+            }
+            await onSubmit();
+            setIsSubmitting(false);
+            dispatch(
+                emptyCustomerAddress({
+                    fullName: '',
+                    lastName: '',
+                    address: '',
+                    address2: '',
+                    city: '',
+                    state: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
+                    zip: '',
+                    phone: '',
+                    country: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                        phoneCode: '',
+                    },
+                }),
+            );
+            if (onClose) {
+                (onClose as any)();
             }
         } catch (e: any) {
             notifications.exception(e);
@@ -507,7 +508,13 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 <Button onClick={handleClose} color="inherit">
                     Cancel
                 </Button>
-                <Button color="primary" variant={'contained'} disabled={!isSaveBtnEnable} onClick={handleAddressSubmit}>
+                <Button
+                    color="primary"
+                    variant={'contained'}
+                    disabled={!isSaveBtnEnable}
+                    onClick={handleAddressSubmit}
+                    startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
+                >
                     {isUpdate ? 'Update Address' : 'Add Address'}
                 </Button>
             </DialogActions>

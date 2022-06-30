@@ -919,7 +919,7 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-        'requires_cleaning' => $isCleaningRequired,
+        'requires_cleaning' => $isCleaningRequired ? 1 : 0,
     ])
         ->assertSuccessful()
         ->assertJsonFragment([

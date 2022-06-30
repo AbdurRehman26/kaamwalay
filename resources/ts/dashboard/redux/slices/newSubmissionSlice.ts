@@ -43,13 +43,16 @@ export interface AddCardsToSubmission {
 }
 
 export interface Address {
-    firstName: string;
-    lastName: string;
+    fullName?: string;
+    firstName?: string;
+    lastName?: string;
     address: string;
+    address2?: string;
     flat?: string;
     city: string;
-    country: { name: string; code: string; id: number };
+    country: { name: string; code: string; id: number; phoneCode: string };
     state: { name: string; code: string; id: number };
+    stateName?: string;
     zipCode: string;
     phoneNumber: string;
     id: number;
@@ -70,6 +73,7 @@ export interface ShippingSubmissionState {
     existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
+    availableCountriesList: { name: string; code: string; id: number; phoneCode: string }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
     disableAllShippingInputs: boolean;
@@ -191,9 +195,10 @@ const initialState: NewSubmissionSliceState = {
     step03Data: {
         existingAddresses: [],
         selectedAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
+            address2: '',
             flat: '',
             city: '',
             state: {
@@ -207,6 +212,7 @@ const initialState: NewSubmissionSliceState = {
                 id: 0,
                 code: '',
                 name: '',
+                phoneCode: '',
             },
             id: -1,
             userId: 0,
@@ -214,7 +220,7 @@ const initialState: NewSubmissionSliceState = {
             isDefaultBilling: false,
         },
         selectedExistingAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
             flat: '',
@@ -230,12 +236,21 @@ const initialState: NewSubmissionSliceState = {
                 id: 0,
                 code: '',
                 name: '',
+                phoneCode: '',
             },
             id: -1,
             userId: 0,
             isDefaultShipping: false,
             isDefaultBilling: false,
         },
+        availableCountriesList: [
+            {
+                name: '',
+                code: '',
+                id: 0,
+                phoneCode: '',
+            },
+        ],
         availableStatesList: [
             {
                 name: '',
@@ -262,9 +277,10 @@ const initialState: NewSubmissionSliceState = {
         saveForLater: true,
         useShippingAddressAsBillingAddress: true,
         selectedBillingAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
+            address2: '',
             flat: '',
             city: '',
             state: {
@@ -278,6 +294,7 @@ const initialState: NewSubmissionSliceState = {
                 id: 0,
                 code: '',
                 name: '',
+                phoneCode: '',
             },
             id: 0,
             userId: 0,
@@ -332,11 +349,20 @@ export const getTotalInAGS = createAsyncThunk(
     },
 );
 
-export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
+export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async (input?: { countryId: number }) => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/addresses/states');
+    const endpoint = apiService.createEndpoint(
+        `customer/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
+    );
     const americanStates = await endpoint.get('');
     return americanStates.data;
+});
+
+export const getCountriesList = createAsyncThunk('newSubmission/getCountriesList', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses/countries');
+    const countries = await endpoint.get('');
+    return countries.data;
 });
 
 export const getShippingFee = createAsyncThunk(
@@ -345,8 +371,29 @@ export const getShippingFee = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
         const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
+        const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
+        const existingAddresses = (thunk.getState() as any).newSubmission.step03Data.selectedExistingAddress;
 
+        let state;
+        let country;
+        if (shippingAddress.address) {
+            state = shippingAddress.state.code ? shippingAddress.state.code : shippingAddress.stateName;
+            country = shippingAddress.country.code ? shippingAddress.country.code : shippingAddress.country;
+        } else {
+            state = existingAddresses.state.code ? existingAddresses.state.code : existingAddresses.stateName;
+            country = existingAddresses.country.code ? existingAddresses.country.code : existingAddresses.country;
+        }
         const DTO = {
+            ...((shippingAddress.country.code !== '' || existingAddresses.country.code !== '') && {
+                shippingAddress: {
+                    address: shippingAddress.address ? shippingAddress.address : existingAddresses.address,
+                    city: shippingAddress.city ? shippingAddress.city : existingAddresses.city,
+                    state: state ? state : shippingAddress.state,
+                    zip: shippingAddress.zipCode ? shippingAddress.zipCode : existingAddresses.zipCode,
+                    phone: shippingAddress.phoneNumber ? shippingAddress.phoneNumber : existingAddresses.phoneNumber,
+                    countryCode: country,
+                },
+            }),
             shippingMethodId: shippingMethod.id,
             items: selectedCards.map((item) => ({
                 quantity: item.qty,
@@ -370,6 +417,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             firstName: address.firstName,
             lastName: address.lastName,
             address: address.address,
+            address2: address.address2,
             zipCode: address.zip,
             phoneNumber: address.phone,
             flat: address.flat ?? '',
@@ -378,11 +426,14 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             isDefaultBilling: address.isDefaultSilling,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
-            state: availableStatesList.find((item: any) => item.code === address.state),
+            state: availableStatesList.find((item: any) => item.code === address.state) ?? {
+                code: address.state,
+            },
             country: {
                 id: address.country.id,
                 code: address.country.code,
                 name: address.country.name,
+                phoneCode: address.country.phoneCode,
             },
         };
     });
@@ -446,6 +497,9 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+    const existingAddressId = currentSubmission.step03Data.selectedExistingAddress.id;
+
+    const parsedName = parseName(existingAddressId, finalShippingAddress?.fullName);
 
     const orderDTO = {
         paymentPlan: {
@@ -459,11 +513,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             declaredValuePerUnit: selectedCard.value,
         })),
         shippingAddress: {
-            firstName: finalShippingAddress.firstName,
-            lastName: finalShippingAddress.lastName,
+            firstName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.lastName,
             address: finalShippingAddress.address,
+            address2: finalShippingAddress.address2,
             city: finalShippingAddress.city,
-            state: finalShippingAddress.state.code,
+            state: finalShippingAddress.state?.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country?.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
@@ -473,11 +529,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : currentSubmission.step03Data.saveForLater,
         },
         billingAddress: {
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
+            firstName: existingAddressId !== -1 ? billingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? billingAddress.lastName : parsedName?.lastName,
             address: billingAddress.address,
+            address2: billingAddress.address2,
             city: billingAddress.city,
-            state: billingAddress.state.code,
+            state: billingAddress.state.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country.code,
             zip: billingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: billingAddress.flat,
@@ -551,6 +609,21 @@ export const updateOrderItem = createAsyncThunk(
         });
     },
 );
+
+const parseName = (id: number, fullName: any) => {
+    if (id === -1) {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
+    }
+};
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
@@ -781,7 +854,7 @@ export const newSubmissionSlice = createSlice({
                     !action.payload.billingAddress,
                 selectedBillingAddress: {
                     id: billingAddress?.id,
-                    firstName: billingAddress?.firstName,
+                    fullName: billingAddress?.firstName,
                     lastName: billingAddress?.lastName,
                     address: billingAddress?.address,
                     city: billingAddress?.city,
@@ -848,6 +921,9 @@ export const newSubmissionSlice = createSlice({
         },
         [getStatesList.rejected as any]: (state) => {
             state.step03Data.fetchingStatus = 'failed';
+        },
+        [getCountriesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableCountriesList = action.payload;
         },
         [getShippingFee.fulfilled as any]: (state, action) => {
             state.step02Data.shippingFee = action.payload;

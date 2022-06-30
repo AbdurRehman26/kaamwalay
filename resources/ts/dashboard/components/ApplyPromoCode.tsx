@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
@@ -43,6 +44,7 @@ const useStyles = makeStyles(
 );
 
 export function ApplyPromoCode() {
+    const { id } = useParams<'id'>();
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const isCouponValid = useAppSelector((state) => state.newSubmission.couponState.isCouponValid);
@@ -140,7 +142,10 @@ export function ApplyPromoCode() {
             },
         };
         try {
-            const applyCouponEndpoint = apiService.createEndpoint(`customer/coupons/calculate-discount`);
+            const endpointUrl = id
+                ? `customer/orders/${id}/coupons/calculate-discount`
+                : `customer/coupons/calculate-discount`;
+            const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
             const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));
             dispatch(

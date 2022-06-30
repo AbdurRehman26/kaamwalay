@@ -81,13 +81,13 @@ function OrderReviewSection() {
                     <OrderDetailItem title={'Shipping Address'} editStep={2}>
                         <Typography
                             className={classes.darkBodyText}
-                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                        >{`${finalShippingAddress.fullName} ${finalShippingAddress.lastName}`}</Typography>
                         <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
                             finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                         }`}</Typography>
                         <Typography
                             className={classes.darkBodyText}
-                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state?.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                     </OrderDetailItem>
                 </div>
             ) : null}

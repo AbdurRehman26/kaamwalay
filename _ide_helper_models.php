@@ -248,7 +248,9 @@ namespace App\Models{
  * @property string|null $phone_code
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $is_enabled
+ * @property bool $is_enabled
+ * @property-read \App\Models\ShippingMatrix|null $shippingMatrix
+ * @method static \Illuminate\Database\Eloquent\Builder|Country enabled()
  * @method static \Database\Factories\CountryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
@@ -1507,6 +1509,31 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\ShippingMatrix
+ *
+ * @property int $id
+ * @property int $country_id
+ * @property float|null $box_default_value
+ * @property float|null $slip_default_value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Country $country
+ * @method static \Database\Factories\ShippingMatrixFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereBoxDefaultValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereSlipDefaultValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix whereUpdatedAt($value)
+ */
+	class ShippingMatrix extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\ShippingMethod
  *
  * @property int $id
@@ -1537,6 +1564,7 @@ namespace App\Models{
  * @property int $country_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Country $country
  * @method static \Database\Factories\StateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|State newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|State newQuery()

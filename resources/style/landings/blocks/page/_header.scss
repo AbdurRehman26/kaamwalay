@@ -55,7 +55,7 @@
         display: block;
         padding: 9px 24px 9px 0;
         @include breakpoints.down(md) {
-            padding: 12px 24px 12px 40px;
+            padding: 12px 0px 12px 40px;
             display: flex;
         }
         &-holder {

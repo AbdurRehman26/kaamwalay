@@ -6,9 +6,6 @@ use App\Models\Order;
 
 class CleaningFeeService
 {
-    protected const FEE_FOR_ONE_CARD = 5.00;
-    protected const MAX_CLEANING_FEE_CAP = 100.00;
-
     public function __construct(protected Order $order)
     {
     }
@@ -17,13 +14,13 @@ class CleaningFeeService
     {
         $cleaningFee = $this->getCleaningFee();
 
-        return $cleaningFee > 100
-            ? self::MAX_CLEANING_FEE_CAP
+        return $cleaningFee > config('configuration.keys.cleaning_fee_max_cap.value')
+            ? config('configuration.keys.cleaning_fee_max_cap.value')
             : $cleaningFee;
     }
 
     protected function getCleaningFee(): float
     {
-        return $this->order->orderItems()->count() * self::FEE_FOR_ONE_CARD;
+        return $this->order->orderItems()->count() * config('configuration.keys.cleaning_fee_per_card.value');
     }
 }

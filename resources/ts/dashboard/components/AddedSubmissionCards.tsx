@@ -305,7 +305,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                     </div>
                                 </div>
                             </div>
-                            {selectedCards[selectedCards.length - 1] !== row ? <Divider light /> : null}
+                            {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
                         </>
                     ))}
                 </>

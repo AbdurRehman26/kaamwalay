@@ -266,7 +266,8 @@ class Order extends Model implements Exportable
 
     public function scopePlaced(Builder $query): Builder
     {
-        return $query->whereHas('orderStatusHistory', function ($query) {
+        return $query->where('payment_status', OrderPaymentStatusEnum::PAID)
+            ->whereHas('orderStatusHistory', function ($query) {
             return $query->where('order_status_id', OrderStatus::PLACED);
         });
     }

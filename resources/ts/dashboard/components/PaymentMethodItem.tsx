@@ -1,10 +1,7 @@
 import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
-import Radio, { RadioProps } from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
-import React from 'react';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -23,9 +20,10 @@ const useStyles = makeStyles(
             border: '2px solid #DDDDDD',
             marginBottom: '12px',
             borderRadius: '2px',
-            padding: '10px 8px 10px 6px',
+            padding: '15px 15px',
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
             borderWidth: ({ isSelected }: any) => (isSelected ? '2px' : '1px'),
+            background: ({ isSelected }: any) => (isSelected ? '#F2FBFA' : '#FFFFFF'),
             '&:hover': {
                 cursor: 'pointer',
             },
@@ -46,10 +44,6 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-        },
-        radioBtnContainer: {
-            display: 'flex',
-            flexDirection: 'row',
         },
         maxValueContainer: {
             display: 'flex',
@@ -101,15 +95,6 @@ const useStyles = makeStyles(
     { name: 'ServiceLevelItemStyle' },
 );
 
-const GreenRadio = withStyles({
-    root: {
-        '&$checked': {
-            color: '#20BFB8',
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
 type PaymentMethodItemProps = {
     isSelected: boolean;
     methodName: string;
@@ -119,7 +104,7 @@ type PaymentMethodItemProps = {
 function PaymentMethodItem(props: PaymentMethodItemProps) {
     const classes = useStyles(props);
     const dispatch = useAppDispatch();
-    const { isSelected, methodName, methodId } = props;
+    const { methodName, methodId } = props;
     const { collectorCoinDiscountPercentage } = useConfiguration();
     function handleOnChange() {
         dispatch(updatePaymentMethodId(methodId));
@@ -128,9 +113,6 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
     return (
         <ButtonBase className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
-                <div className={classes.radioBtnContainer}>
-                    <GreenRadio checked={isSelected} />
-                </div>
                 {methodId === 1 ? <ColoredCC /> : <div />}
                 {methodId === 2 ? <PaypalLogo /> : <div />}
                 {methodId === 3 ? (

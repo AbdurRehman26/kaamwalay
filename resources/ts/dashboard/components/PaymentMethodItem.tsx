@@ -20,7 +20,7 @@ const useStyles = makeStyles(
             border: '2px solid #DDDDDD',
             marginBottom: '12px',
             borderRadius: '2px',
-            padding: '10px 8px 10px 6px',
+            padding: '15px 15px',
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
             borderWidth: ({ isSelected }: any) => (isSelected ? '2px' : '1px'),
             background: ({ isSelected }: any) => (isSelected ? '#F2FBFA' : '#FFFFFF'),

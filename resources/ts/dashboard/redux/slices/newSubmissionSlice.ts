@@ -561,6 +561,9 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
               }
             : null,
         paymentByWallet: currentSubmission.appliedCredit ?? 0,
+        requiresCleaning: currentSubmission.step02Data.isCleaningFee
+            ? currentSubmission.step02Data.isCleaningFee
+            : false,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');

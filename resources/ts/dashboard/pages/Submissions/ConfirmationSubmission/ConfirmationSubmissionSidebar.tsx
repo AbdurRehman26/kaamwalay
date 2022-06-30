@@ -247,7 +247,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     </TableCell>
                                 </TableRow>
 
-                                {data.isCleaningFee ? (
+                                {data.cleaningFee > 0 ? (
                                     <TableRow>
                                         <TableCell>
                                             <Typography variant={'body2'}>

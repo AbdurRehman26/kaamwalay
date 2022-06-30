@@ -14,6 +14,7 @@ use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 
 use Illuminate\Support\Collection;
 
@@ -790,8 +791,8 @@ test('an order has salesman if customer has a salesman assigned', function () {
 });
 
 test('a customer can request cleaning service with correct cleaning fee', function (int $numberOfCards, $cleaningFee) {
-    \Illuminate\Support\Facades\Config::set('configuration.keys.cleaning_fee_per_card.value', 5);
-    \Illuminate\Support\Facades\Config::set('configuration.keys.cleaning_fee_max_cap.value', 100);
+    Config::set('robograding.feature_order_cleaning_fee_per_card', 5);
+    Config::set('robograding.feature_order_cleaning_fee_max_cap', 100);
     $this->actingAs($this->user);
     Event::fake();
 
@@ -868,8 +869,8 @@ test('a customer can request cleaning service with correct cleaning fee', functi
 
 
 test('cleaning fee should be calculated when needed', function (int $numberOfCards, int $cleaningFee, bool $isCleaningRequired) {
-    \Illuminate\Support\Facades\Config::set('configuration.keys.cleaning_fee_per_card.value', 5);
-    \Illuminate\Support\Facades\Config::set('configuration.keys.cleaning_fee_max_cap.value', 100);
+    Config::set('robograding.feature_order_cleaning_fee_per_card', 5);
+    Config::set('robograding.feature_order_cleaning_fee_max_cap', 100);
     $this->actingAs($this->user);
     Event::fake();
 

@@ -14,13 +14,13 @@ class CleaningFeeService
     {
         $cleaningFee = $this->getCleaningFee();
 
-        return $cleaningFee > config('configuration.keys.cleaning_fee_max_cap.value')
-            ? config('configuration.keys.cleaning_fee_max_cap.value')
+        return $cleaningFee > config('robograding.feature_order_cleaning_fee_max_cap')
+            ? config('robograding.feature_order_cleaning_fee_max_cap')
             : $cleaningFee;
     }
 
     protected function getCleaningFee(): float
     {
-        return $this->order->orderItems()->count() * config('configuration.keys.cleaning_fee_per_card.value');
+        return $this->order->orderItems()->count() * config('robograding.feature_order_cleaning_fee_per_card');
     }
 }

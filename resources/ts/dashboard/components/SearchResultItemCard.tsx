@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         padding: '8px 12px',
         marginTop: '8px',
         [theme.breakpoints.down('sm')]: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     leftSide: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },
     rightSide: {
@@ -192,6 +192,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                             onClick={handleMobileDeselect}
                             aria-label="close"
                             size="large"
+                            sx={{ padding: '0px 20px' }}
                         >
                             <DeleteOutlineOutlinedIcon fontSize="medium" />
                         </IconButton>

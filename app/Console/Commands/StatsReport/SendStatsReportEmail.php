@@ -2,6 +2,10 @@
 
 namespace App\Console\Commands\StatsReport;
 
+use App\Services\StatsReport\StatsReportIntervals\MonthlyStatsReportService;
+use App\Services\StatsReport\StatsReportIntervals\WeeklyStatsReportService;
+use App\Services\StatsReport\StatsReportIntervals\YearlyStatsReportService;
+use App\Services\StatsReport\StatsReportService;
 use Illuminate\Console\Command;
 
 class SendStatsReportEmail extends Command
@@ -20,19 +24,17 @@ class SendStatsReportEmail extends Command
      */
     protected $description = 'Command description';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
-    {
-        $selectedOption = $this->choice(
-            'Select interva :',
-            ['All', 'Series', 'Sets', 'Cards'],
-            '0'
-        );
+    protected $statsReportIntervals = [
+        'weekly' => WeeklyStatsReportService::class,
+        'monthly' => MonthlyStatsReportService::class,
+        'yearly' => YearlyStatsReportService::class
+    ];
 
+    public function handle(StatsReportService $statsReportService): int
+    {
+        $statsReportService->generateReportFor($this->statsReportIntervals[
+            $this->option('interval')
+        ]);
         return 0;
     }
 }

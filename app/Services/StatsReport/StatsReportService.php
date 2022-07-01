@@ -2,27 +2,14 @@
 
 namespace App\Services\StatsReport;
 
+use App\Services\StatsReport\StatsReportIntervals\StatsReportIntervalsInterface;
+
 class StatsReportService
 {
-    private string $fromDate;
-    private string $toDate;
-
-    public function __construct(StatsReortInterval $interval = 'weekly')
+    public static function generateReportFor(StatsReportIntervalsInterface $statsReportInterval)
     {
-        $this->setIntervalDates($interval);
+        $statsReportInterval->setIntervalDates();
+        $statsReportInterval->getReportData();
     }
 
-    public function setIntervalDates(string $interval): void
-    {
-        $this->setFromDate($interval);
-        $this->setToDate($interval);
-    }
-
-    private function setToDate(string $interval): void
-    {
-    }
-
-    private function setFromDate(string $interval): void
-    {
-    }
 }

@@ -24,7 +24,7 @@ class SendStatsReportEmail extends Command
      */
     protected $description = 'Command description';
 
-    protected $statsReportIntervals = [
+    protected array $statsReportIntervals = [
         'weekly' => WeeklyStatsReportService::class,
         'monthly' => MonthlyStatsReportService::class,
         'yearly' => YearlyStatsReportService::class
@@ -32,9 +32,11 @@ class SendStatsReportEmail extends Command
 
     public function handle(StatsReportService $statsReportService): int
     {
-        $statsReportService->generateReportFor($this->statsReportIntervals[
-            $this->option('interval')
-        ]);
+        $statsReportService->generateReportFor(
+            resolve(
+                $this->statsReportIntervals[$this->option('interval')]
+            ));
+
         return 0;
     }
 }

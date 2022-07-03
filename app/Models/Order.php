@@ -268,18 +268,18 @@ class Order extends Model implements Exportable
     {
         $orderId = $query->where('payment_status', OrderPaymentStatusEnum::PAID)
                 ->whereHas('orderStatusHistory', function ($query) {
-                return $query->where('order_status_id', OrderStatus::PLACED);
-            })->pluck('id');
+                    return $query->where('order_status_id', OrderStatus::PLACED);
+                })->pluck('id');
 
-        return OrderItem::whereIn('order_id',$orderId)->sum('quantity');
+        return OrderItem::whereIn('order_id', $orderId)->sum('quantity');
     }
 
     public function scopePlaced(Builder $query): Builder
     {
         return $query->where('payment_status', OrderPaymentStatusEnum::PAID)
             ->whereHas('orderStatusHistory', function ($query) {
-            return $query->where('order_status_id', OrderStatus::PLACED);
-        });
+                return $query->where('order_status_id', OrderStatus::PLACED);
+            });
     }
 
     public function getGrandTotalCentsAttribute(): int

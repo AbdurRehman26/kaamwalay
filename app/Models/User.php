@@ -297,7 +297,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public function exportHeadings(): array
     {
-        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Wallet Balance'];
+        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Total Cards', 'Wallet Balance'];
     }
 
     public function exportFilters(): array
@@ -323,6 +323,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->phone,
             $row->created_at,
             $row->orders()->placed()->count(),
+            $row->orders()->totalCardsCount(),
             $this->wallet?->balance,
         ];
     }

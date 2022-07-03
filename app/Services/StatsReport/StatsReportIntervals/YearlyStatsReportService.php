@@ -2,22 +2,21 @@
 
 namespace App\Services\StatsReport\StatsReportIntervals;
 
+use App\Services\StatsReport\StatsReportIntervals\Contracts\StatsReportIntervalsInterface;
+use App\Services\StatsReport\StatsReportIntervals\Traits\StatsReportGeneralMethods;
+use App\Services\StatsReport\StatsReportIntervals\Traits\StatsReportIntervalDates;
+
 class YearlyStatsReportService implements StatsReportIntervalsInterface
 {
-    use StatsReportIntervalDates;
+    use StatsReportIntervalDates, StatsReportGeneralMethods;
 
-    public function setFromDate()
+    public function setFromDate(): void
     {
-        // TODO: Implement setFromDate() method.
+        $this->fromDate = now()->subYear()->startOfYear()->toDateString();
     }
 
-    public function setToDate()
+    public function setToDate(): void
     {
-        // TODO: Implement setToDate() method.
-    }
-
-    public function getReportData()
-    {
-        // TODO: Implement getReportData() method.
+        $this->toDate = now()->subYear()->endOfYear()->toDateString();
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands\StatsReport;
 
+use App\Mail\Admin\StatsReport\StatsReport;
 use App\Services\StatsReport\StatsReportIntervals\MonthlyStatsReportService;
 use App\Services\StatsReport\StatsReportIntervals\WeeklyStatsReportService;
 use App\Services\StatsReport\StatsReportIntervals\YearlyStatsReportService;
 use App\Services\StatsReport\StatsReportService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class SendStatsReportEmail extends Command
 {
@@ -22,7 +24,7 @@ class SendStatsReportEmail extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send email to admins of stats report for specified interval';
 
     protected array $statsReportIntervals = [
         'weekly' => WeeklyStatsReportService::class,
@@ -30,13 +32,16 @@ class SendStatsReportEmail extends Command
         'yearly' => YearlyStatsReportService::class
     ];
 
-    public function handle(StatsReportService $statsReportService): int
+    public function handle(): int
     {
-        $statsReportService->generateReportFor(
+        $d = StatsReportService::generateReport(
             resolve(
-                $this->statsReportIntervals[$this->option('interval')]
+                $this->statsReportIntervals[$this->argument('interval')]
             ));
 
+        Mail::to(\App\Models\User::find(8585))->send(new StatsReport($d, $this->argument('interval')));
+
+        dd($d);
         return 0;
     }
 }

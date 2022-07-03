@@ -508,8 +508,26 @@ class Order extends Model implements Exportable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeBetweenDates(Builder $query, string $fromDate, string $toDate): Builder
+    {
+        return $query->whereBetween('created_at', [$fromDate, $toDate]);
+    }
+
     public function isOlderThanOneDay(): bool
     {
         return now()->diff($this->created_at)->days > 0;
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeArePaid(Builder $query): Builder
+    {
+        return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
     }
 }

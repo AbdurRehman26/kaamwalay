@@ -100,4 +100,24 @@ class OrderItem extends Model
     {
         return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
     }
+
+    /**
+     * @param  Builder <OrderItem> $query
+     * @return Builder <OrderItem>
+     */
+    public function scopeBetweenDates(Builder $query, string $fromDate, string $toDate): Builder
+    {
+        return $query->whereBetween('created_at', [$fromDate, $toDate]);
+    }
+
+    /**
+     * @param  Builder <OrderItem> $query
+     * @return Builder <OrderItem>
+     */
+    public function scopeGraded(Builder $query): Builder
+    {
+        return $query->where('order_item_status_id', OrderItemStatus::GRADED);
+    }
+
+
 }

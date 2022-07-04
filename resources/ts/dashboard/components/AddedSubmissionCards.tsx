@@ -75,6 +75,11 @@ const useStyles = makeStyles((theme) => ({
     table: {
         minWidth: '100%',
     },
+    row: {
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    },
     editBtn: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
@@ -303,7 +308,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <Divider light />
+                                {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
                             </>
                         ))}
                 </>
@@ -323,7 +328,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                             .reverse()
                             .map((row: SearchResultItemCardProps) => (
                                 <>
-                                    <TableRow key={row.id}>
+                                    <TableRow key={row.id} className={classes.row}>
                                         <TableCell component="th" scope="row" align={'left'}>
                                             {!reviewMode ? (
                                                 <TextField

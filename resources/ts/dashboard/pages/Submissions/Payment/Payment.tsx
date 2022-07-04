@@ -53,9 +53,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         minWidth: '100%',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: '15px',
+        marginTop: '20px',
         [theme.breakpoints.down('sm')]: {
             display: 'block',
+            marginTop: '0px',
         },
     },
     leftSideContainer: {
@@ -204,13 +206,20 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Roboto',
         fontSize: '24px',
         fontStyle: 'normal',
-        fontWeight: 400,
+        fontWeight: 500,
         lineHeight: '36px',
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
         [theme.breakpoints.down('sm')]: {
             fontSize: '20px',
+        },
+    },
+    titleDiv: {
+        display: 'flex',
+        alignItems: 'center',
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: '15px',
         },
     },
     description: {
@@ -228,6 +237,7 @@ const useStyles = makeStyles((theme) => ({
         width: 20,
         height: 24,
         marginRight: 22,
+        verticalAlign: 'middle',
         cursor: 'pointer',
     },
     billingAddressButtonContainer: {
@@ -275,6 +285,7 @@ function addressFromEntity(address: AddressEntity) {
             id: address.country?.id,
             name: address.country?.name,
             code: address.country?.code,
+            phoneCode: address.country?.phoneCode,
         },
         state: {
             id: 0,
@@ -507,22 +518,20 @@ export function Payment() {
         <StripeContainer>
             <Container className={classes.paymentPageContainer}>
                 <div className={classes.stepDescriptionContainer}>
-                    <div>
+                    <div className={classes.titleDiv}>
                         <Typography variant={'h2'} className={classes.title}>
                             <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
                             Pay For Submission
                         </Typography>
                     </div>
                     {timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
-                        <Grid mt={'20px'}>
-                            <PayNowStatusNotice
-                                id={order.data?.id}
-                                countdownTimestampMs={timeInMs}
-                                isConfirmationPage={false}
-                                isPayPage={true}
-                                isCoupon={isCouponApplied}
-                            />
-                        </Grid>
+                        <PayNowStatusNotice
+                            id={order.data?.id}
+                            countdownTimestampMs={timeInMs}
+                            isConfirmationPage={false}
+                            isPayPage={true}
+                            isCoupon={isCouponApplied}
+                        />
                     ) : (
                         <PaymentStatusChip
                             color={paymentStatus}
@@ -536,7 +545,6 @@ export function Payment() {
 
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={7}>
-                        <Divider light />
                         <div className={classes.leftSideContainer}>
                             {availableCredit > 0 ? (
                                 <div className={classes.shippingMethodContainer}>

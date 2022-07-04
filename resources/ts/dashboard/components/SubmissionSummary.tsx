@@ -7,8 +7,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-// import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { setCleaningFee, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
 import SubmissionSummaryDescription from './SubmissionSummaryDescription';
@@ -164,7 +164,7 @@ function SubmissionSummary() {
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
 
-    // const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
+    const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -185,15 +185,18 @@ function SubmissionSummary() {
     });
 
     function getCleaningFee() {
-        const previewCleaningFee = numberOfSelectedCards >= 20 ? 20 * 5 : numberOfSelectedCards * 5;
-        dispatch(setCleaningFee(cleaningFee));
+        const previewCleaningFee =
+            numberOfSelectedCards * featureOrderCleaningFeePerCard >= featureOrderCleaningFeeMaxCap
+                ? featureOrderCleaningFeeMaxCap
+                : numberOfSelectedCards * featureOrderCleaningFeePerCard;
+        dispatch(setCleaningFee(previewCleaningFee));
         return previewCleaningFee;
     }
 
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
-            getCleaningFee() +
+            cleaningFee +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -472,7 +475,6 @@ function SubmissionSummary() {
                             {isCleaningFee ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
-
                                     <NumberFormat
                                         value={getCleaningFee()}
                                         className={classes.rowRightBoldText}

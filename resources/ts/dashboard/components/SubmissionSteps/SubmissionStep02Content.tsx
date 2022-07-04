@@ -53,12 +53,7 @@ const useStyles = makeStyles({
     },
 });
 
-const TOOLTIP_TEXT = `We offer a professional cleaning service in which we carefully remove any dirt or dust from your card. Dirt and dust may cause your card to get a lower grade then you would get otherwise.  
-
-Card cleaning costs $5.00 per card and can help improve your grade by 0.5/10 points. 
-
-What does up to $100 mean? 
-We won’t charge you any more than $100 for a cleaning, which means any time you submit more than 20 cards, and opt in for cleaning, we will only charge a cleaning fee for the first 20 cards and the rest will be cleaned for FREE!`;
+const TOOLTIP_TEXT = `We offer a professional cleaning service in which we carefully remove any dirt or dust from your card. Dirt and dust may cause your card to get a lower grade then you would get otherwise. Card cleaning costs $5.00 per card and can help improve your grade by 0.5/10 points. What does up to $100 mean? We won’t charge you any more than $100 for a cleaning, which means any time you submit more than 20 cards, and opt in for cleaning, we will only charge a cleaning fee for the first 20 cards and the rest will be cleaned for FREE!`;
 
 function SubmissionStep02Content() {
     const classes = useStyles();

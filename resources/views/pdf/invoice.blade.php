@@ -429,7 +429,7 @@
                             @if($order->cleaning_fee > 0)
                             <tr class="info-line">
                                 <td class="info-title">
-                                    Insured Shipping:
+                                    Cleaning Fee:
                                 </td>
                                 <td class="info-content">
                                     ${{number_format($order->cleaning_fee, 2)}}

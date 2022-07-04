@@ -14,8 +14,9 @@ use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use Illuminate\Support\Collection;
+
+use Illuminate\Support\Facades\Config;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
@@ -790,6 +791,8 @@ test('an order has salesman if customer has a salesman assigned', function () {
 });
 
 test('a customer can request cleaning service with correct cleaning fee', function (int $numberOfCards, $cleaningFee) {
+    Config::set('robograding.feature_order_cleaning_fee_per_card', 5);
+    Config::set('robograding.feature_order_cleaning_fee_max_cap', 100);
     $this->actingAs($this->user);
     Event::fake();
 
@@ -866,6 +869,8 @@ test('a customer can request cleaning service with correct cleaning fee', functi
 
 
 test('cleaning fee should be calculated when needed', function (int $numberOfCards, int $cleaningFee, bool $isCleaningRequired) {
+    Config::set('robograding.feature_order_cleaning_fee_per_card', 5);
+    Config::set('robograding.feature_order_cleaning_fee_max_cap', 100);
     $this->actingAs($this->user);
     Event::fake();
 
@@ -917,7 +922,7 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-        'requires_cleaning' => $isCleaningRequired,
+        'requires_cleaning' => $isCleaningRequired ? 1 : 0,
     ])
         ->assertSuccessful()
         ->assertJsonFragment([

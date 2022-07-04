@@ -301,13 +301,10 @@ class CreateOrderService
 
     protected function storeCleaningFee(): void
     {
-        $cleaningFee = 0;
         if (! empty($this->data['requires_cleaning'])) {
-            $cleaningFee = (new CleaningFeeService($this->order))->calculate();
+            $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
+            $this->order->requires_cleaning = (bool) $this->data['requires_cleaning'];
+            $this->order->save();
         }
-
-        $this->order->cleaning_fee = $cleaningFee;
-        $this->order->requires_cleaning = $cleaningFee > 0;
-        $this->order->save();
     }
 }

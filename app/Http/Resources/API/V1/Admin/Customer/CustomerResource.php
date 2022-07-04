@@ -5,12 +5,16 @@ namespace App\Http\Resources\API\V1\Admin\Customer;
 use App\Http\Resources\API\BaseResource;
 use Illuminate\Http\Request;
 
+/**
+ * @method orders()
+ */
 class CustomerResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
+     * @return array
      */
     public function toArray($request): array
     {

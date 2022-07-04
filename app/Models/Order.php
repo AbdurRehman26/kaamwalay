@@ -278,10 +278,17 @@ class Order extends Model implements Exportable
         return OrderItem::whereIn('order_id', $orderIds)->sum('quantity');
     }
 
-    public function scopePlaced(Builder $query): Builder
+    public function scopePlacedAndPaid(Builder $query): Builder
     {
         return $query->where('payment_status', OrderPaymentStatusEnum::PAID)
-            ->whereHas('orderStatusHistory', function ($query) {
+                    ->whereHas('orderStatusHistory', function ($query) {
+                return $query->where('order_status_id', OrderStatus::PLACED);
+            });
+    }
+
+    public function scopePlaced(Builder $query): Builder
+    {
+        return $query->whereHas('orderStatusHistory', function ($query) {
                 return $query->where('order_status_id', OrderStatus::PLACED);
             });
     }

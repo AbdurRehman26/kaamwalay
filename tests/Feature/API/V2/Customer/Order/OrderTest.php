@@ -796,26 +796,22 @@ test('a customer can request cleaning service with correct cleaning fee', functi
     $this->actingAs($this->user);
     Event::fake();
 
-    $cards = Collection::times($numberOfCards, function ($value) {
-        $cards = [];
-        foreach (range(1, $value) as $_) {
-            $cards = [
-                'card_product' => [
-                    'id' => $this->cardProduct->id,
-                ],
-                'quantity' => 1,
-                'declared_value_per_unit' => 500,
-            ];
-        }
-
-        return $cards;
-    });
+    $items = [];
+    for ($i = 0; $i < $numberOfCards; $i++) {
+        $items[] = [
+            'card_product' => [
+                'id' => $this->cardProduct->id,
+            ],
+            'quantity' => 1,
+            'declared_value_per_unit' => 500,
+        ];
+    }
 
     postJson('/api/v2/customer/orders', [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
-        'items' => $cards->toArray(),
+        'items' => $items,
         'shipping_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -874,26 +870,22 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
     $this->actingAs($this->user);
     Event::fake();
 
-    $cards = Collection::times($numberOfCards, function ($value) {
-        $cards = [];
-        foreach (range(1, $value) as $_) {
-            $cards = [
-                'card_product' => [
-                    'id' => $this->cardProduct->id,
-                ],
-                'quantity' => 1,
-                'declared_value_per_unit' => 500,
-            ];
-        }
-
-        return $cards;
-    });
+    $items = [];
+    for ($i = 0; $i < $numberOfCards; $i++) {
+        $items[] = [
+            'card_product' => [
+                'id' => $this->cardProduct->id,
+            ],
+            'quantity' => 1,
+            'declared_value_per_unit' => 500,
+        ];
+    }
 
     postJson('/api/v2/customer/orders', [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
-        'items' => $cards->toArray(),
+        'items' => $items,
         'shipping_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',

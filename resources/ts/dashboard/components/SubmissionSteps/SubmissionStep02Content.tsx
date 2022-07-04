@@ -161,13 +161,9 @@ function SubmissionStep02Content() {
                     control={<Checkbox color={'primary'} onChange={setShippingFee} checked={isCleaningFee} />}
                     label={
                         <Box display={'flex'} alignItems={'center'}>
-                            <Typography>Yes, clean my cards for an additional $5.00 per card.</Typography>
-                            <Typography
-                                sx={{ marginLeft: '4px' }}
-                                className={classes.cleaningText}
-                                variant={'subtitle1'}
-                            >
-                                (Up to $100)
+                            <Typography>
+                                Yes, clean my cards for an additional $5.00 per card.
+                                <span className={classes.cleaningText}>{'  '} (Up to $100)</span>
                             </Typography>
                         </Box>
                     }

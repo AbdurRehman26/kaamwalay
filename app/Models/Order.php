@@ -270,10 +270,7 @@ class Order extends Model implements Exportable
     */
     public function scopeTotalCardsCount(Builder $query): int
     {
-        $orderIds = $query->where('payment_status', OrderPaymentStatusEnum::PAID)
-                ->whereHas('orderStatusHistory', function ($query) {
-                    return $query->where('order_status_id', OrderStatus::PLACED);
-                })->pluck('id');
+        $orderIds = $query->where('payment_status', OrderPaymentStatusEnum::PAID)->pluck('id');
 
         return OrderItem::whereIn('order_id', $orderIds)->sum('quantity');
     }
@@ -282,12 +279,9 @@ class Order extends Model implements Exportable
      * @param  Builder <Order> $query
      * @return Builder <Order>
     */
-    public function scopePlacedAndPaid(Builder $query): Builder
+    public function scopePaid(Builder $query): Builder
     {
-        return $query->where('payment_status', OrderPaymentStatusEnum::PAID)
-                    ->whereHas('orderStatusHistory', function ($query) {
-                        return $query->where('order_status_id', OrderStatus::PLACED);
-                    });
+        return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
     }
 
     public function scopePlaced(Builder $query): Builder

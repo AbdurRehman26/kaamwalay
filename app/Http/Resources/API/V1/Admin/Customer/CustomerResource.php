@@ -25,7 +25,7 @@ class CustomerResource extends BaseResource
             'customer_number' => $this->customer_number,
             'email' => $this->email,
             'phone' => $this->phone,
-            'submissions' => $this->orders()->placedAndPaid()->count(),
+            'submissions' => $this->orders()->paid()->count(),
             'total_cards_count' => $this->orders()->totalCardsCount(),
             'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),

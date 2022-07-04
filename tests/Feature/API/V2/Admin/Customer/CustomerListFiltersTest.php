@@ -60,7 +60,7 @@ it('filters customers by submissions', function () {
 });
 
 it('returns customers that do not have submissions', function () {
-   getJson(route('v2.customers.index', [
+    getJson(route('v2.customers.index', [
         'filter[submissions]' => '0, 0',
     ]))
         ->assertOk()

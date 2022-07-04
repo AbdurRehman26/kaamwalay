@@ -8,6 +8,7 @@ import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+// import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { setCleaningFee, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
 import SubmissionSummaryDescription from './SubmissionSummaryDescription';
@@ -162,6 +163,8 @@ function SubmissionSummary() {
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+
+    // const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const numberOfSelectedCards =
         selectedCards.length !== 0

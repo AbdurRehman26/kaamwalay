@@ -20,10 +20,11 @@ class StatsReport extends Mailable
 
     public function build(): StatsReport
     {
-        return $this->from('sydabdrehman@gmail.com', 'Test')
+        return $this->from(config('mail.from.address'), config('mail.from.name'))
             ->view('emails.admin.stats-report')
             ->with([
-                'orderName' => json_encode($this->statsReport),
+                'report' => $this->statsReport,
+                'title' => $this->reportType
             ]);
     }
 }

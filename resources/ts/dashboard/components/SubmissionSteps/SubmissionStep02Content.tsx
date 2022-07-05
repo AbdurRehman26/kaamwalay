@@ -67,8 +67,14 @@ function SubmissionStep02Content() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer, featureOrderCleaningFeePerCard } =
-        useConfiguration();
+    const {
+        appEnv,
+        algoliaAppId,
+        algoliaPublicKey,
+        searchCardCategoriesCustomer,
+        featureOrderCleaningFeePerCard,
+        featureOrderCleaningFeeMaxCap,
+    } = useConfiguration();
 
     const searchClient = useMemo(
         () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
@@ -166,7 +172,9 @@ function SubmissionStep02Content() {
                             <Typography>
                                 Yes, clean my cards for an additional {formatCurrency(featureOrderCleaningFeePerCard)}{' '}
                                 per card.
-                                <span className={classes.cleaningText}>{'  '} (Up to $100)</span>
+                                <span className={classes.cleaningText}>
+                                    {'  '} (Up to {formatCurrency(featureOrderCleaningFeeMaxCap)})
+                                </span>
                             </Typography>
                         </Box>
                     }

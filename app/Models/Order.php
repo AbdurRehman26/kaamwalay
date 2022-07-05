@@ -110,6 +110,11 @@ class Order extends Model implements Exportable
         'grand_total_to_be_paid',
     ];
 
+    protected $attributes = [
+        'requires_cleaning' => false,
+        'cleaning_fee' => 0,
+    ];
+
     public static function getAllowedAdminIncludes(): array
     {
         return [

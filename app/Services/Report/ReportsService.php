@@ -28,7 +28,7 @@ class ReportsService
         foreach ($this->mailableReports as $mailableReport) {
             $report = resolve($mailableReport);
 
-            if (! $report instanceof Reportable) {
+            if (! ($report instanceof Reportable)) {
                 throw new ServiceNotReportableException();
             }
 

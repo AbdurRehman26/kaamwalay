@@ -30,5 +30,4 @@ return $config->setRules([
         'on_multiline' => 'ensure_fully_multiline',
         'keep_multiple_spaces_after_comma' => true,
     ]
-])
-    ->setFinder($finder);
+])->setFinder($finder);

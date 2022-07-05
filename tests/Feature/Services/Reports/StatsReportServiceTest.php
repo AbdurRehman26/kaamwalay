@@ -50,10 +50,10 @@ beforeEach(function () {
             'grand_total' => 100,
             'graded_at' => Carbon::now()->addDays($this->daysDifference[3]),
         ],
-    ))->create([
+    ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
         'created_at' => $date,
         'order_status_id' => OrderStatus::GRADED,
-    ])->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED);
+    ]);
 
     $cardsToBeGraded = [
         26,

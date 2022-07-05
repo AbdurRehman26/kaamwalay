@@ -13,13 +13,12 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
-
     Event::fake();
     Mail::fake();
 
 
     $this->daysDifference = [
-        1, 2, 3, 4
+        1, 2, 3, 4,
     ];
 
     $this->orderItemService = resolve(OrderItemService::class);
@@ -56,21 +55,20 @@ beforeEach(function () {
         ],
     ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
         'created_at' => $date,
-        'order_status_id' => OrderStatus::GRADED
+        'order_status_id' => OrderStatus::GRADED,
     ]);
 
     $cardsToBeGraded = [
         26,
         55,
         106,
-        26
+        26,
     ];
 
-    foreach ($this->gradedOrders as $key =>  $order){
-
+    foreach ($this->gradedOrders as $key => $order) {
         $order->markAsPaid();
 
-        OrderItem::factory()->count($cardsToBeGraded[$key])->state( new Sequence(
+        OrderItem::factory()->count($cardsToBeGraded[$key])->state(new Sequence(
             [
                 'order_id' => $order->id,
                 'order_item_status_id' => OrderItemStatus::GRADED,
@@ -107,13 +105,11 @@ beforeEach(function () {
         ],
     ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
         'created_at' => $date,
-        'order_status_id' => OrderStatus::SHIPPED
+        'order_status_id' => OrderStatus::SHIPPED,
     ]);
-
 });
 
 it('validates reports data for weekly', function () {
-
     $resultArray = [
         'Average order amount' => Order::all()->avg('grand_total'),
         'Average number of cards graded by all customers' => (OrderItem::graded()->count() / 3),

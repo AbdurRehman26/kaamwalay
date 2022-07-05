@@ -44,5 +44,4 @@ it('sends monthly and quarterly emails', function () {
 
     $this->artisan('reports:send-email')
         ->assertExitCode(0);
-
 });

@@ -196,7 +196,7 @@ function SubmissionSummary() {
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
-            cleaningFee +
+            Number(cleaningFee) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;

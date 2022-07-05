@@ -253,7 +253,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             refundTotal +
-            cleaningFee +
+            Number(cleaningFee) +
             extraChargesTotal -
             appliedCredit;
         dispatch(setPreviewTotal(previewTotal));

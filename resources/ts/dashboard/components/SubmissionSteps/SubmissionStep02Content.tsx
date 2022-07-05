@@ -14,6 +14,7 @@ import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { backStep, setIsCleaningFee, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from '../AddedSubmissionCards';
@@ -66,7 +67,8 @@ function SubmissionStep02Content() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer } = useConfiguration();
+    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer, featureOrderCleaningFeePerCard } =
+        useConfiguration();
 
     const searchClient = useMemo(
         () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
@@ -162,7 +164,8 @@ function SubmissionStep02Content() {
                     label={
                         <Box display={'flex'} alignItems={'center'}>
                             <Typography>
-                                Yes, clean my cards for an additional $5.00 per card.
+                                Yes, clean my cards for an additional {formatCurrency(featureOrderCleaningFeePerCard)}{' '}
+                                per card.
                                 <span className={classes.cleaningText}>{'  '} (Up to $100)</span>
                             </Typography>
                         </Box>

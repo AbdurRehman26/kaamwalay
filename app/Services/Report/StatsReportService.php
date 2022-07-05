@@ -38,7 +38,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     }
 
     public function isEligibleToBeSentYearly(): bool
-    {return true;
+    {
         return now()->firstOfYear()->isCurrentDay();
     }
 

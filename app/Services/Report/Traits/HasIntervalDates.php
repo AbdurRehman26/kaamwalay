@@ -23,7 +23,7 @@ trait HasIntervalDates
             match($interval) {
                 'monthly' => now()->subMonth()->endOfMonth()->toDateString(),
                 'yearly' => now()->subYear()->endOfYear()->toDateString(),
-                'default' => now()->subDay()->toDateString()
+                default => now()->subDay()->toDateString()
             }
         );
     }

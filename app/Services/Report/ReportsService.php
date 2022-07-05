@@ -10,7 +10,6 @@ use App\Services\Report\Contracts\ReportableMonthly;
 use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Contracts\ReportableYearly;
 use App\Services\Report\Traits\HasIntervalDates;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class ReportsService
@@ -48,7 +47,7 @@ class ReportsService
         }
     }
 
-    protected function sendMail(Reportable $report, $interval = 'weekly'): void
+    protected function sendMail(Reportable $report, string $interval = 'weekly'): void
     {
         Mail::to(User::whereIn('email', config('mail.admin_addresses'))->get())->send(
             new Report(

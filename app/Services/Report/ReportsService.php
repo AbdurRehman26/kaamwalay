@@ -7,8 +7,8 @@ use App\Mail\Admin\Report;
 use App\Models\User;
 use App\Services\Report\Contracts\Reportable;
 use App\Services\Report\Contracts\ReportableMonthly;
-use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Contracts\ReportableQuarterly;
+use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Traits\HasIntervalDates;
 use Illuminate\Support\Facades\Mail;
 

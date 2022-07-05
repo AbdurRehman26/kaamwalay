@@ -1,11 +1,9 @@
 <?php
 
 use App\Jobs\Email\SendScheduledEmail;
-use App\Mail\Admin\Report;
 use App\Models\Order;
 use App\Models\ScheduledEmail;
 use App\Services\EmailService;
-use App\Services\Report\ReportsService;
 use Illuminate\Support\Facades\Bus;
 
 use function Pest\Laravel\assertDatabaseCount;

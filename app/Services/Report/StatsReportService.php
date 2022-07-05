@@ -1,16 +1,48 @@
 <?php
 
-namespace App\Services\StatsReport\StatsReportIntervals\Traits;
+namespace App\Services\Report;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Services\Report\Contracts\Reportable;
+use App\Services\Report\Contracts\ReportableWeekly;
+use App\Services\Report\Contracts\ReportableMonthly;
+use App\Services\Report\Contracts\ReportableYearly;
+use DateTime;
+use Illuminate\Support\Facades\DB;
 
-trait StatsReportGeneralMethods
+class StatsReportService implements ReportableWeekly, ReportableMonthly, ReportableYearly
 {
-    public function getReportData(string $fromDate, string $toDate): array
+    protected string $template = 'stats-report';
+
+    public function getReportTitle(string $interval = 'weekly'): string
+    {
+        return ucwords($interval) . ' Stats Report.';
+    }
+
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    public function isEligibleToBeSentWeekly(): bool
+    {
+        return now()->isDayOfWeek('Monday');
+    }
+
+    public function isEligibleToBeSentMonthly(): bool
+    {
+        return now()->firstOfMonth()->isCurrentDay();
+    }
+
+    public function isEligibleToBeSentYearly(): bool
+    {return true;
+        return now()->firstOfYear()->isCurrentDay();
+    }
+
+    public function getReportData(DateTime $fromDate, DateTime $toDate): array
     {
         return [
             'Average order amount' =>  $this->getAvgOrderAmount($fromDate, $toDate),
@@ -26,12 +58,12 @@ trait StatsReportGeneralMethods
         ];
     }
 
-    protected function getAvgOrderAmount(string $fromDate, string $toDate): int
+    protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total') ?? 0;
     }
 
-    protected function getAvgCardsGraded(string $fromDate, string $toDate): float|int
+    protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): float|int
     {
         $totalCustomers = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->whereBetween('order_items.created_at', [$fromDate, $toDate])
@@ -46,7 +78,7 @@ trait StatsReportGeneralMethods
         return ( OrderItem::betweenDates($fromDate, $toDate)->graded()->count() / $totalCustomers );
     }
 
-    protected function getTotalRepeatCustomers(string $fromDate, string $toDate): int
+    protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::groupBy('user_id')
             ->betweenDates($fromDate, $toDate)
@@ -54,7 +86,7 @@ trait StatsReportGeneralMethods
             ->count();
     }
 
-    protected function getCustomersWithCardsBetween(string $fromDate, string $toDate, int $totalCardsGreaterThan, int $totalCardsLessThan = null): int
+    protected function getCustomersWithCardsBetween(DateTime $fromDate, DateTime $toDate, int $totalCardsGreaterThan, int $totalCardsLessThan = null): int
     {
         $query = Order::join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereBetween('orders.created_at', [$fromDate, $toDate])
@@ -68,7 +100,7 @@ trait StatsReportGeneralMethods
         return count($query->get());
     }
 
-    protected function getAvgDaysFromConfirmationTo(string $fromDate, string $toDate, string $statusOfOrder): int
+    protected function getAvgDaysFromConfirmationTo(DateTime $fromDate, DateTime $toDate, string $statusOfOrder): int
     {
         $orderColumns = [
             'shipped_at' => OrderStatus::SHIPPED,
@@ -84,7 +116,7 @@ trait StatsReportGeneralMethods
                 ->avg ?? 0;
     }
 
-    protected function getAvgDaysFromGradingToShipping(string $fromDate, string $toDate): int
+    protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(graded_at, shipped_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)
@@ -92,7 +124,7 @@ trait StatsReportGeneralMethods
                 ->avg ?? 0;
     }
 
-    protected function getAvgDaysFromSubmissionToPayment(string $fromDate, string $toDate): int
+    protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(created_at, paid_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)

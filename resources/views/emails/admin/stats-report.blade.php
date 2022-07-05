@@ -1,9 +1,13 @@
-<h4>
-    {{ucfirst($title)}} Stats Report
-</h4>
+@component('mail::message')
+{{--    # {{ $templateInfo['heading'] }}--}}
+    @component('mail::table')
+        | Title       | Value         |
+        | :--------- | :------------- |
+        @foreach ($report as $key => $value)
+            | {{$key}} | {{$value}} |
+        @endforeach
+    @endcomponent
+@endcomponent
 
-@foreach($report as $key => $value)
-    <div>
-        {{$key}} = {{$value}}
-    </div>
-@endforeach
+
+

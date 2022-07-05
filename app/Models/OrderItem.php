@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +106,7 @@ class OrderItem extends Model
      * @param  Builder <OrderItem> $query
      * @return Builder <OrderItem>
      */
-    public function scopeBetweenDates(Builder $query, string $fromDate, string $toDate): Builder
+    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
     {
         return $query->whereBetween('created_at', [$fromDate, $toDate]);
     }

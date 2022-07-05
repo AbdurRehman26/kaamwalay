@@ -114,4 +114,10 @@ return [
         ],
     ],
 
+    'admin_addresses' => env('ADMIN_MAILING_ADDRESSES', [
+//        'nabeel@wooter.com',
+        'kazmi@wooter.com',
+//        'hassan@wooter.com'
+    ])
+
 ];

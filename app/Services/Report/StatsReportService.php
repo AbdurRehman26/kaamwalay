@@ -8,12 +8,15 @@ use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Services\Report\Contracts\ReportableMonthly;
 use App\Services\Report\Contracts\ReportableWeekly;
-use App\Services\Report\Contracts\ReportableYearly;
+use App\Services\Report\Contracts\ReportableQuarterly;
+use App\Services\Report\Traits\ReportsEligibleToBeSent;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 
-class StatsReportService implements ReportableWeekly, ReportableMonthly, ReportableYearly
+class StatsReportService implements ReportableWeekly, ReportableMonthly, ReportableQuarterly
 {
+    use ReportsEligibleToBeSent;
+
     protected string $template = 'stats-report';
 
     public function getReportTitle(string $interval = 'weekly'): string
@@ -24,21 +27,6 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     public function getTemplate(): string
     {
         return $this->template;
-    }
-
-    public function isEligibleToBeSentWeekly(): bool
-    {
-        return now()->isDayOfWeek(1);
-    }
-
-    public function isEligibleToBeSentMonthly(): bool
-    {
-        return now()->firstOfMonth()->isCurrentDay();
-    }
-
-    public function isEligibleToBeSentYearly(): bool
-    {
-        return now()->firstOfYear()->isCurrentDay();
     }
 
     public function getReportData(DateTime $fromDate, DateTime $toDate): array
@@ -117,7 +105,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(graded_at, shipped_at)) as avg"))
+        return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)
                 ->first()
                 ->avg ?? 0;
@@ -125,7 +113,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(created_at, paid_at)) as avg"))
+        return Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)
                 ->first()
                 ->avg ?? 0;

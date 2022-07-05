@@ -54,8 +54,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     {
         /* Count on query is not working */
 
-        $totalCustomers = count(Order::
-            selectRaw('MAX(orders.user_id)')
+        $totalCustomers = count(Order::selectRaw('MAX(orders.user_id)')
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->whereBetween('order_items.created_at', [$fromDate, $toDate])
             ->where('order_item_status_id', OrderItemStatus::GRADED)

@@ -5,8 +5,12 @@
  *
  * @apiVersion 2.0.0
  *
+ * @apiUse header_main
+ * @apiUse Authorization
  *
- *  @apiParamExample {json} Request-Example:
+ * @apiParam {Boolean} requires_cleaning If customer opts in for cleaning, value can be 1, 0, true, false
+ *
+ * @apiParamExample {json} Request-Example:
  *      {
  *          "payment_plan": {
  *              "id": 1
@@ -60,7 +64,7 @@
  *              "id": 2
  *          },
  *          "payment_by_wallet": 10.00,
- *          "requires_cleaning: 1, // can be 1, 0, true, false
+ *          "requires_cleaning: 1,
  *      }
  *
  * @apiSuccess {Object} data Order object

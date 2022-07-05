@@ -1,6 +1,7 @@
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
+import * as queryString from 'qs';
 import { useCallback, useMemo, useState } from 'react';
 import { ApplicationEventsEnum } from '../../constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '../../entities/AuthenticatedUserEntity';
@@ -48,6 +49,9 @@ export function AuthDialog({
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
     const dispatch = useSharedDispatch();
+    const { from: intendedRoute } = useMemo(() => {
+        return queryString.parse(window.location.search.slice(1));
+    }, []);
 
     const [view, setView] = useState(() => initialView ?? AuthDialogView.SignIn);
     const ContentComponent = useMemo(() => {
@@ -75,8 +79,8 @@ export function AuthDialog({
             googleTagManager({ event: 'google-ads-authenticated' });
             dispatch(authenticateCheckAction());
             NotificationsService.success('Login successfully!');
-            if (redirectPath) {
-                window.location.href = redirectPath;
+            if (intendedRoute) {
+                window.location.href = intendedRoute.toString();
             }
             if (onAuthSuccess) {
                 await onAuthSuccess(authenticatedUser);
@@ -84,7 +88,7 @@ export function AuthDialog({
 
             onClose && onClose({}, 'escapeKeyDown');
         },
-        [authenticationService, dispatch, eventService, onAuthSuccess, onClose, redirectPath],
+        [authenticationService, dispatch, eventService, onAuthSuccess, onClose, intendedRoute],
     );
 
     return (

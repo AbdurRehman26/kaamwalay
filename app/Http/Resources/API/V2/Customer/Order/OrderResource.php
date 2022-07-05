@@ -27,6 +27,7 @@ class OrderResource extends BaseResource
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
+            'cleaning_fee' => $this->cleaning_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
@@ -53,6 +54,7 @@ class OrderResource extends BaseResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'order_step' => $this->order_step,
+            'requires_cleaning' => $this->requires_cleaning,
         ];
     }
 }

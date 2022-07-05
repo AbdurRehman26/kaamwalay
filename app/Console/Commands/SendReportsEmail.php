@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\StatsReport;
+namespace App\Console\Commands;
 
 use App\Services\Report\ReportsService;
 use Illuminate\Console\Command;

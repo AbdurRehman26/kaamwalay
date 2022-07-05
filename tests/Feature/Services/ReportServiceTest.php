@@ -11,12 +11,9 @@ use Illuminate\Support\Facades\Bus;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
-it('sends reports email', function () {
-    Bus::fake();
-
-    resolve(ReportsService::class) ->send();
-
-    Bus::assertDispatched(Report::class);
+it('runs send reports command', function () {
+    $this->artisan('reports:send-email')
+        ->assertExitCode(0);
 });
 
 it('schedules email', function () {

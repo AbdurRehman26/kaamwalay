@@ -8,23 +8,19 @@ trait HasIntervalDates
 {
     protected function getFromDate(string $interval = 'weekly'): DateTime
     {
-        return new DateTime(
-            match ($interval) {
-                'monthly' => now()->subMonth()->startOfMonth()->toDateString(),
-                'yearly' => now()->subYear()->startOfYear()->toDateString(),
-                default => now()->subDay()->subWeek()->toDateString()
-            }
-        );
+        return match ($interval) {
+            'monthly' => now()->subMonth()->startOfMonth(),
+            'yearly' => now()->subYear()->startOfYear(),
+            default => now()->subDay()->subWeek()
+        };
     }
 
     protected function getToDate(string $interval = 'weekly'): DateTime
     {
-        return new DateTime(
-            match ($interval) {
-                'monthly' => now()->subMonth()->endOfMonth()->toDateString(),
-                'yearly' => now()->subYear()->endOfYear()->toDateString(),
-                default => now()->subDay()->toDateString()
-            }
-        );
+        return match ($interval) {
+            'monthly' => now()->subMonth()->endOfMonth(),
+            'yearly' => now()->subYear()->endOfYear(),
+            default => now()->subDay()
+        };
     }
 }

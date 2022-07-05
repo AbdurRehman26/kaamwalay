@@ -30,7 +30,7 @@ class Report extends Mailable
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->with([
                 'report' => $this->reportData,
-                'templateInfo' => $this->templateInfo
+                'templateInfo' => $this->templateInfo,
             ]);
     }
 

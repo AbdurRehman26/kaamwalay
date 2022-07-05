@@ -119,6 +119,4 @@ class OrderItem extends Model
     {
         return $query->where('order_item_status_id', OrderItemStatus::GRADED);
     }
-
-
 }

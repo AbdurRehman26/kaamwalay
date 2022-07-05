@@ -24,6 +24,7 @@ class SendReportsEmail extends Command
     public function handle(): int
     {
         resolve(ReportsService::class)->send();
+
         return 0;
     }
 }

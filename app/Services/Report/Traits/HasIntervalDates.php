@@ -20,7 +20,7 @@ trait HasIntervalDates
     protected function getToDate(string $interval = 'weekly'): DateTime
     {
         return new DateTime(
-            match($interval) {
+            match ($interval) {
                 'monthly' => now()->subMonth()->endOfMonth()->toDateString(),
                 'yearly' => now()->subYear()->endOfYear()->toDateString(),
                 default => now()->subDay()->toDateString()

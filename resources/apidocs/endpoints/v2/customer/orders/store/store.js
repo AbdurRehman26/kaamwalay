@@ -1,6 +1,6 @@
 /**
- * @api {post} /v1/customer/orders Store order
- * @apiName Store Order
+ * @api {post} /v2/customer/orders Create order
+ * @apiName Create Order
  * @apiGroup Customer-Orders
  *
  * @apiVersion 2.0.0
@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Boolean} requires_cleaning If customer opts in for cleaning, value can be 1, 0, true, false
+ * @apiParam {Boolean} [requires_cleaning] If customer opts in for cleaning, value can be 1, 0, true, false
  *
  * @apiParamExample {json} Request-Example:
  *      {
@@ -64,7 +64,7 @@
  *              "id": 2
  *          },
  *          "payment_by_wallet": 10.00,
- *          "requires_cleaning: 1,
+ *          "requires_cleaning": 1,
  *      }
  *
  * @apiSuccess {Object} data Order object

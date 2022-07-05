@@ -28,7 +28,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     public function isEligibleToBeSentWeekly(): bool
     {
-        return now()->isDayOfWeek('Monday');
+        return now()->isDayOfWeek(1);
     }
 
     public function isEligibleToBeSentMonthly(): bool

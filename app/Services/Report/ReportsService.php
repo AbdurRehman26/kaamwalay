@@ -48,9 +48,6 @@ class ReportsService
         }
     }
 
-    /**
-     * @throws Exception
-     */
     protected function sendMail(Reportable $report, $interval = 'weekly'): void
     {
         Mail::to(User::whereIn('email', config('mail.admin_addresses'))->get())->send(

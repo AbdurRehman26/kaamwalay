@@ -3,35 +3,28 @@
 namespace App\Services\Report\Traits;
 
 use DateTime;
-use Exception;
 
 trait HasIntervalDates
 {
-    /**
-     * @throws Exception
-     */
-    protected function getFromDate(string $interval): DateTime
+    protected function getFromDate(string $interval = 'weekly'): DateTime
     {
-        $fromDates = [
-            'weekly' => now()->subDay()->subWeek()->toDateString(),
-            'monthly' => now()->subMonth()->startOfMonth()->toDateString(),
-            'yearly' => now()->subYear()->startOfYear()->toDateString()
-        ];
-
-        return new DateTime($fromDates[$interval]);
+        return new DateTime(
+            match ($interval) {
+                'monthly' => now()->subMonth()->startOfMonth()->toDateString(),
+                'yearly' => now()->subYear()->startOfYear()->toDateString(),
+                default => now()->subDay()->subWeek()->toDateString()
+            }
+        );
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function getToDate(string $interval): DateTime
+    protected function getToDate(string $interval = 'weekly'): DateTime
     {
-        $toDates = [
-            'weekly' => now()->subDay()->toDateString(),
-            'monthly' => now()->subMonth()->endOfMonth()->toDateString(),
-            'yearly' => now()->subYear()->endOfYear()->toDateString()
-        ];
-
-        return new DateTime($toDates[$interval]);
+        return new DateTime(
+            match($interval) {
+                'monthly' => now()->subMonth()->endOfMonth()->toDateString(),
+                'yearly' => now()->subYear()->endOfYear()->toDateString(),
+                'default' => now()->subDay()->toDateString()
+            }
+        );
     }
 }

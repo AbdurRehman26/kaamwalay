@@ -5,7 +5,6 @@ use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\Order\OrderItemService;
 use App\Services\Report\Contracts\Reportable;
 use App\Services\Report\StatsReportService;
 use Carbon\Carbon;
@@ -20,8 +19,6 @@ beforeEach(function () {
     $this->daysDifference = [
         1, 2, 3, 4,
     ];
-
-    $this->orderItemService = resolve(OrderItemService::class);
 
     $this->firstDay = Carbon::create(2022);
     $this->lastDayOfWeek = Carbon::create(2022, 1, 7);
@@ -53,10 +50,10 @@ beforeEach(function () {
             'grand_total' => 100,
             'graded_at' => Carbon::now()->addDays($this->daysDifference[3]),
         ],
-    ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
+    ))->create([
         'created_at' => $date,
         'order_status_id' => OrderStatus::GRADED,
-    ]);
+    ])->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED);
 
     $cardsToBeGraded = [
         26,
@@ -141,6 +138,7 @@ it('checks if class implements reportable contract', function () {
 });
 
 it('isEligibleToBeSentWeekly returns true if its Monday', function () {
+
     Carbon::setTestNow(Carbon::create(now()->firstWeekDay));
 
     self::assertTrue(
@@ -156,8 +154,8 @@ it('isEligibleToBeSentMonthly returns true if its first day of the month', funct
     );
 });
 
-it('isEligibleToBeSentYearly returns true if its first day of the quarter', function () {
-    Carbon::setTestNow(Carbon::create(now()->firstOfYear()));
+it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', function () {
+    Carbon::setTestNow(Carbon::create(now()->firstOfQuarter()));
 
     self::assertTrue(
         $this->report->isEligibleToBeSentQuarterly()

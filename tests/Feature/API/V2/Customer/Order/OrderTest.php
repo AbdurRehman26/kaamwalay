@@ -14,7 +14,6 @@ use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Collection;
 
 use Illuminate\Support\Facades\Config;
 

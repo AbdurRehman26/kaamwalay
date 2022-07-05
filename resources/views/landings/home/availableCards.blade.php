@@ -3,7 +3,7 @@
         <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center" data-aos="fade">
             <h4 class="Home-sectionContentCaption text-center">Currently accepting:</h4>
             <h3 class="Home-sectionContentHeadline text-center">
-                @foreach($categories as $category)
+                @foreach($categories->take(4) as $category)
                     @if ($loop->last)
                         {{ $category->name }}
                     @else

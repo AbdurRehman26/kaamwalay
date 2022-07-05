@@ -9,12 +9,11 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Mail;
 
 beforeEach(function () {
-
     Mail::fake();
     Event::fake();
 
     $user = User::factory()->create([
-            'email' => 'test@gmail.com'
+            'email' => 'test@gmail.com',
     ]);
 
     $orders = Order::factory()->count(1)->withPayment()->state(new Sequence(
@@ -24,7 +23,7 @@ beforeEach(function () {
         ],
     ))->create();
 
-    $orders->each(function (Order $order){
+    $orders->each(function (Order $order) {
         $order->markAsPaid();
     });
 
@@ -35,16 +34,14 @@ beforeEach(function () {
     });
 
     Config::set('mail.admin_addresses', [
-        'test@gmail.com'
+        'test@gmail.com',
     ]);
 });
 
 it('sends monthly and yearly emails', function () {
-
     $knownDate = Carbon::create(2023);
     Carbon::setTestNow($knownDate);
 
     $this->artisan('reports:send-email')
         ->assertExitCode(0);
-
 });

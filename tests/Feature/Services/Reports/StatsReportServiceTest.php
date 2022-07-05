@@ -138,7 +138,6 @@ it('checks if class implements reportable contract', function () {
 });
 
 it('isEligibleToBeSentWeekly returns true if its Monday', function () {
-
     Carbon::setTestNow(Carbon::create(now()->firstWeekDay));
 
     self::assertTrue(

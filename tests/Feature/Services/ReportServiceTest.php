@@ -1,6 +1,5 @@
 <?php
 
-use App\Jobs\Email\SendEmail;
 use App\Jobs\Email\SendScheduledEmail;
 use App\Mail\Admin\Report;
 use App\Models\Order;

@@ -26,9 +26,9 @@ class ReportsService
     public function send(): void
     {
         foreach ($this->mailableReports as $mailableReport) {
-            $report = resolve($mailableReport);
+            $report = new $mailableReport;
 
-            if (! ($report instanceof Reportable)) {
+            if (! $report instanceof Reportable) {
                 throw new ServiceNotReportableException();
             }
 

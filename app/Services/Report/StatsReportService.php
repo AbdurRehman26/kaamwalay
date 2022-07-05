@@ -6,9 +6,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
-use App\Services\Report\Contracts\Reportable;
-use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Contracts\ReportableMonthly;
+use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Contracts\ReportableYearly;
 use DateTime;
 use Illuminate\Support\Facades\DB;
@@ -38,14 +37,16 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     }
 
     public function isEligibleToBeSentYearly(): bool
-    {return true;
+    {
+        return true;
+
         return now()->firstOfYear()->isCurrentDay();
     }
 
     public function getReportData(DateTime $fromDate, DateTime $toDate): array
     {
         return [
-            'Average order amount' =>  $this->getAvgOrderAmount($fromDate, $toDate),
+            'Average order amount' => $this->getAvgOrderAmount($fromDate, $toDate),
             'Average number of cards graded by all customers' => $this->getAvgCardsGraded($fromDate, $toDate),
             'Number of repeat customers' => $this->getTotalRepeatCustomers($fromDate, $toDate),
             'Number of customers who order 25-50 cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 25, 50),
@@ -71,18 +72,18 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
             ->groupBy('orders.user_id')
             ->count();
 
-        if(!$totalCustomers){
+        if (! $totalCustomers) {
             return $totalCustomers;
         }
 
-        return ( OrderItem::betweenDates($fromDate, $toDate)->graded()->count() / $totalCustomers );
+        return (OrderItem::betweenDates($fromDate, $toDate)->graded()->count() / $totalCustomers);
     }
 
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::groupBy('user_id')
             ->betweenDates($fromDate, $toDate)
-            ->having(DB::raw('COUNT(user_id)'),'>' ,1)
+            ->having(DB::raw('COUNT(user_id)'), '>', 1)
             ->count();
     }
 
@@ -93,7 +94,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
             ->groupBy('orders.user_id')
             ->having(DB::raw('COUNT(order_items.id)'), '>=', $totalCardsGreaterThan);
 
-        if($totalCardsLessThan){
+        if ($totalCardsLessThan) {
             $query = $query->having(DB::raw('COUNT(order_items.id)'), '<=', $totalCardsLessThan);
         }
 
@@ -104,7 +105,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     {
         $orderColumns = [
             'shipped_at' => OrderStatus::SHIPPED,
-            'graded_at' => OrderStatus::GRADED
+            'graded_at' => OrderStatus::GRADED,
         ];
 
         return Order::join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')

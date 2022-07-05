@@ -10,7 +10,6 @@ use App\Services\Report\Contracts\ReportableMonthly;
 use App\Services\Report\Contracts\ReportableWeekly;
 use App\Services\Report\Contracts\ReportableYearly;
 use App\Services\Report\Traits\HasIntervalDates;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class ReportsService
@@ -18,7 +17,7 @@ class ReportsService
     use HasIntervalDates;
 
     protected array $mailableReports = [
-        StatsReportService::class
+        StatsReportService::class,
     ];
 
     /**
@@ -26,23 +25,22 @@ class ReportsService
      */
     public function send(): void
     {
-        foreach($this->mailableReports as $mailableReport){
-
+        foreach ($this->mailableReports as $mailableReport) {
             $report = resolve($mailableReport);
 
             if (! $report instanceof Reportable) {
                 throw new ServiceNotReportableException();
             }
 
-            if($report instanceof  ReportableWeekly && $report->isEligibleToBeSentWeekly()){
+            if ($report instanceof  ReportableWeekly && $report->isEligibleToBeSentWeekly()) {
                 $this->sendMail($report, 'weekly');
             }
 
-            if($report instanceof  ReportableMonthly && $report->isEligibleToBeSentMonthly()){
+            if ($report instanceof  ReportableMonthly && $report->isEligibleToBeSentMonthly()) {
                 $this->sendMail($report, 'monthly');
             }
 
-            if($report instanceof  ReportableYearly && $report->isEligibleToBeSentYearly()){
+            if ($report instanceof  ReportableYearly && $report->isEligibleToBeSentYearly()) {
                 $this->sendMail($report, 'yearly');
             }
         }
@@ -58,7 +56,7 @@ class ReportsService
                 ),
                 templateInfo: [
                     'name' => $report->getTemplate(),
-                    'heading' => $report->getReportTitle($interval)
+                    'heading' => $report->getReportTitle($interval),
                 ]
             )
         );

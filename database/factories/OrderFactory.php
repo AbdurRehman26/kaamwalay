@@ -10,6 +10,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderPayment;
 use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -76,6 +77,18 @@ class OrderFactory extends Factory
             return [
                 'shipping_method_id' => ShippingMethod::factory()->insured(),
             ];
+        });
+    }
+
+    public function withConfirmationOrderStatusHistory($statusId): OrderFactory
+    {
+        return $this->afterCreating(function (Order $order) use ($statusId) {
+            OrderStatusHistory::create([
+                'user_id' => $order->id,
+                'order_status_id' => $statusId,
+                'order_id' => $order->id,
+                'created_at' => $order->created_at
+            ]);
         });
     }
 }

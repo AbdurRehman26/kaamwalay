@@ -38,10 +38,11 @@ beforeEach(function () {
     ]);
 });
 
-it('sends monthly and yearly emails', function () {
+it('sends monthly and quarterly emails', function () {
     $knownDate = Carbon::create(2023);
     Carbon::setTestNow($knownDate);
 
     $this->artisan('reports:send-email')
         ->assertExitCode(0);
+
 });

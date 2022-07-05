@@ -45,17 +45,20 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
         ];
     }
 
-    protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): int
+    protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
     {
         return Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total') ?? 0;
     }
 
     protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): float|int
     {
-        $totalCustomers = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+        $totalCustomers = Order::
+            selectRaw('MAX(orders.user_id)')
+            ->join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->whereBetween('order_items.created_at', [$fromDate, $toDate])
             ->where('order_item_status_id', OrderItemStatus::GRADED)
             ->groupBy('orders.user_id')
+            ->get()
             ->count();
 
         if (! $totalCustomers) {
@@ -67,7 +70,8 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::groupBy('user_id')
+        return Order::select(DB::raw('MAX(user_id)'))
+            ->groupBy('user_id')
             ->betweenDates($fromDate, $toDate)
             ->having(DB::raw('COUNT(user_id)'), '>', 1)
             ->count();
@@ -75,7 +79,8 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getCustomersWithCardsBetween(DateTime $fromDate, DateTime $toDate, int $totalCardsGreaterThan, int $totalCardsLessThan = null): int
     {
-        $query = Order::join('order_items', 'orders.id', '=', 'order_items.order_id')
+        $query = Order::selectRaw('MAX(orders.user_id)')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereBetween('orders.created_at', [$fromDate, $toDate])
             ->groupBy('orders.user_id')
             ->having(DB::raw('COUNT(order_items.id)'), '>=', $totalCardsGreaterThan);
@@ -87,7 +92,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
         return count($query->get());
     }
 
-    protected function getAvgDaysFromConfirmationTo(DateTime $fromDate, DateTime $toDate, string $statusOfOrder): int
+    protected function getAvgDaysFromConfirmationTo(DateTime $fromDate, DateTime $toDate, string $statusOfOrder): float
     {
         $orderColumns = [
             'shipped_at' => OrderStatus::SHIPPED,
@@ -103,7 +108,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
                 ->avg ?? 0;
     }
 
-    protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
+    protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): float
     {
         return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)

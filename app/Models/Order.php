@@ -62,6 +62,8 @@ class Order extends Model implements Exportable
         'order_step',
         'payment_status',
         'salesman_id',
+        'requires_cleaning',
+        'cleaning_fee',
     ];
 
     /**
@@ -99,11 +101,18 @@ class Order extends Model implements Exportable
         'paid_at' => 'datetime',
         'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
+        'requires_cleaning' => 'bool',
+        'cleaning_fee' => 'float',
     ];
 
     protected $appends = [
         'grand_total_cents',
         'grand_total_to_be_paid',
+    ];
+
+    protected $attributes = [
+        'requires_cleaning' => false,
+        'cleaning_fee' => 0,
     ];
 
     public static function getAllowedAdminIncludes(): array

@@ -22,6 +22,7 @@ interface ViewSubmissionInformationProps {
     extraChargesTotal: string | number;
     serviceFee: number;
     shippingFee: number;
+    cleaningFee: number;
     total: number;
     discountedAmount: string;
     paymentMethodDiscountedAmount: string;
@@ -45,6 +46,7 @@ export function ViewSubmissionInformation({
     customerNumber,
     serviceFee,
     shippingFee,
+    cleaningFee,
     extraChargesTotal,
     refundsTotal,
     total,
@@ -174,6 +176,14 @@ export function ViewSubmissionInformation({
                         </TableCell>
                         <TableCell>{formatCurrency(shippingFee)}</TableCell>
                     </TableRow>
+                    {cleaningFee > 0 ? (
+                        <TableRow>
+                            <TableCell variant={'head'} component={'th'}>
+                                Cleaning Fee
+                            </TableCell>
+                            <TableCell>{formatCurrency(cleaningFee)}</TableCell>
+                        </TableRow>
+                    ) : null}
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
                             Total

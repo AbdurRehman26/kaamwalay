@@ -210,6 +210,16 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasOne(Wallet::class);
     }
 
+    /**
+     * @return int
+    */
+    public function cardsCount(): int
+    {
+        $orderIds = Order::paid()->where('user_id', $this->id)->pluck('id');
+
+        return OrderItem::whereIn('order_id', $orderIds)->sum('quantity');
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -297,7 +307,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public function exportHeadings(): array
     {
-        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Total Cards', 'Wallet Balance'];
+        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Cards', 'Wallet Balance'];
     }
 
     public function exportFilters(): array
@@ -323,7 +333,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->phone,
             $row->created_at,
             $row->orders()->paid()->count(),
-            $row->orders()->totalCardsCount(),
+            $row->cardsCount(),
             $this->wallet?->balance,
         ];
     }

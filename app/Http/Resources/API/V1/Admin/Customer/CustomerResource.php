@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 /**
  * @method orders()
+ * @method cardsCount()
  */
 class CustomerResource extends BaseResource
 {
@@ -26,7 +27,7 @@ class CustomerResource extends BaseResource
             'email' => $this->email,
             'phone' => $this->phone,
             'submissions' => $this->orders()->paid()->count(),
-            'total_cards_count' => $this->orders()->totalCardsCount(),
+            'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
             'update_at' => $this->formatDate($this->update_at),

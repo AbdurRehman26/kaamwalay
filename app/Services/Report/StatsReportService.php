@@ -54,7 +54,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     {
         $totalCustomers = Order::betweenDates($fromDate, $toDate)
                 ->selectRaw('COUNT(DISTINCT(user_id)) as totalUsers')
-                ->where('order_status_id', '=' , OrderItemStatus::GRADED)
+                ->where('order_status_id', '=', OrderItemStatus::GRADED)
                 ->first()->totalUsers;
 
         if (! $totalCustomers) {

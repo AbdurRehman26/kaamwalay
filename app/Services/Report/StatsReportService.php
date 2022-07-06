@@ -52,13 +52,12 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): int
     {
-        $totalCustomers = Order::selectRaw('MAX(orders.user_id)')
+        $totalCustomers = count(Order::selectRaw('MAX(orders.user_id)')
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->whereBetween('order_items.created_at', [$fromDate, $toDate])
             ->where('order_item_status_id', OrderItemStatus::GRADED)
             ->groupBy('orders.user_id')
-            ->get()
-            ->count();
+            ->get());
 
         if (! $totalCustomers) {
             return $totalCustomers;

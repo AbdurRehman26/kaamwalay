@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 /**
  * @method orders()
+ * @method cardsCount()
  */
 class CustomerResource extends BaseResource
 {

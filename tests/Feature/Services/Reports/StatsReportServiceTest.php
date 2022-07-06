@@ -21,17 +21,15 @@ beforeEach(function () {
     $this->report = resolve(StatsReportService::class);
 
     $this->users = User::factory()->count(4)->create();
-
 });
 
 it('validates reports data for weekly', function ($intervalDates) {
-
     $differenceInDays = $intervalDates['fromDate']->diff($intervalDates['toDate'])->days;
 
     $fromDate = $intervalDates['fromDate'];
     $toDate = $intervalDates['toDate'];
 
-    foreach ($this->users as $user){
+    foreach ($this->users as $user) {
 
         /* Four graded orders */
         /* Four shipped orders */
@@ -50,7 +48,6 @@ it('validates reports data for weekly', function ($intervalDates) {
             'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
             'graded_at' => Carbon::create($this->date)->addDays(rand(($differenceInDays / 2), $differenceInDays)),
         ]);
-
     }
 
     foreach (Order::all() as $order) {
@@ -60,7 +57,7 @@ it('validates reports data for weekly', function ($intervalDates) {
             'user_id' => $order->user->id,
             'order_status_id' => OrderStatus::CONFIRMED,
             'order_id' => $order->id,
-            'created_at' => $order->created_at
+            'created_at' => $order->created_at,
         ]);
 
         OrderItem::factory()->count(rand(1, 50))->create([
@@ -69,7 +66,7 @@ it('validates reports data for weekly', function ($intervalDates) {
             'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
         ]);
 
-        if($order['order_status_id'] === OrderStatus::SHIPPED){
+        if ($order['order_status_id'] === OrderStatus::SHIPPED) {
             $gradedDate = Carbon::create($order->graded_at);
 
             $order->shipped_at = $gradedDate->addDays(
@@ -103,7 +100,6 @@ it('validates reports data for weekly', function ($intervalDates) {
     $reportData = $this->report->getReportData($fromDate, $toDate);
 
     $this->assertEquals($resultArray, $reportData);
-
 })->with('intervalDates');
 
 it('checks if template exists', function () {
@@ -143,24 +139,23 @@ it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', f
 });
 
 
-dataset('intervalDates', function (){
-
-    yield function (){
+dataset('intervalDates', function () {
+    yield function () {
         return [
             'fromDate' => $this->date,
-            'toDate' => Carbon::create($this->date)->addWeek()->startOfDay()
+            'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
         ];
     };
-    yield function (){
+    yield function () {
         return [
             'fromDate' => $this->date,
-            'toDate' => Carbon::create($this->date)->endOfQuarter()
+            'toDate' => Carbon::create($this->date)->endOfQuarter(),
         ];
     };
-    yield function (){
+    yield function () {
         return [
             'fromDate' => $this->date,
-            'toDate' => Carbon::create($this->date)->endOfYear()
+            'toDate' => Carbon::create($this->date)->endOfYear(),
         ];
     };
 });

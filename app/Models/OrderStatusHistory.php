@@ -17,7 +17,7 @@ class OrderStatusHistory extends Model
         'order_status_id',
         'user_id',
         'notes',
-        'created_at'
+        'created_at',
     ];
 
     protected $casts = [

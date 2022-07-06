@@ -23,7 +23,7 @@ beforeEach(function () {
     $this->users = User::factory()->count(4)->create();
 });
 
-it('validates reports data for weekly', function ($intervalDates) {
+it('validates reports data for weekly, monthly and quarterly', function ($intervalDates) {
     $differenceInDays = $intervalDates['fromDate']->diff($intervalDates['toDate'])->days;
 
     $fromDate = $intervalDates['fromDate'];
@@ -140,22 +140,29 @@ it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', f
 
 
 dataset('intervalDates', function () {
-    yield function () {
-        return [
-            'fromDate' => $this->date,
-            'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
-        ];
-    };
+
+    /* Quarterly */
     yield function () {
         return [
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfQuarter(),
         ];
     };
+
+    /* Monthly */
     yield function () {
         return [
             'fromDate' => $this->date,
-            'toDate' => Carbon::create($this->date)->endOfYear(),
+            'toDate' => Carbon::create($this->date)->endOfMonth(),
         ];
     };
+
+    /* Weekly */
+    yield function () {
+        return [
+            'fromDate' => $this->date,
+            'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
+        ];
+    };
+
 });

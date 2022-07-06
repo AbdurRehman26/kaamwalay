@@ -79,16 +79,20 @@ export function AuthDialog({
             googleTagManager({ event: 'google-ads-authenticated' });
             dispatch(authenticateCheckAction());
             NotificationsService.success('Login successfully!');
-            if (intendedRoute) {
-                window.location.href = intendedRoute.toString();
-            }
             if (onAuthSuccess) {
                 await onAuthSuccess(authenticatedUser);
             }
 
+            if (redirectPath) {
+                window.location.href = redirectPath;
+            }
+            if (intendedRoute) {
+                window.location.href = intendedRoute.toString();
+            }
+
             onClose && onClose({}, 'escapeKeyDown');
         },
-        [authenticationService, dispatch, eventService, onAuthSuccess, onClose, intendedRoute],
+        [authenticationService, dispatch, eventService, onAuthSuccess, onClose, redirectPath, intendedRoute],
     );
 
     return (

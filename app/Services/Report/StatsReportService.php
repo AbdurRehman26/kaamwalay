@@ -86,13 +86,13 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
             ->having(DB::raw('COUNT(order_items.id)'), '>=', $totalCardsGreaterThan);
 
         if ($totalCardsLessThan) {
-            $query = $query->having(DB::raw('COUNT(order_items.id)'), '<=', $totalCardsLessThan);
+            $query = $query->having(DB::raw('COUNT(order_items.id)'), '<', $totalCardsLessThan);
         }
 
-        return count($query->get());
+        return $query->count();
     }
 
-    protected function getAvgDaysFromConfirmationTo(DateTime $fromDate, DateTime $toDate, string $statusOfOrder): float
+    protected function getAvgDaysFromConfirmationTo(DateTime $fromDate, DateTime $toDate, string $statusOfOrder): int
     {
         $orderColumns = [
             'shipped_at' => OrderStatus::SHIPPED,
@@ -108,7 +108,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
                 ->avg ?? 0;
     }
 
-    protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): float
+    protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
                 ->betweenDates($fromDate, $toDate)

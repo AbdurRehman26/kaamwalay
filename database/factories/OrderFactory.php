@@ -79,16 +79,4 @@ class OrderFactory extends Factory
             ];
         });
     }
-
-    public function withConfirmationOrderStatusHistory($statusId): OrderFactory
-    {
-        return $this->afterCreating(function (Order $order) use ($statusId) {
-            OrderStatusHistory::create([
-                'user_id' => $order->user->id,
-                'order_status_id' => $statusId,
-                'order_id' => $order->id,
-                'created_at' => $order->created_at
-            ]);
-        });
-    }
 }

@@ -4,6 +4,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Report\Contracts\Reportable;
 use App\Services\Report\StatsReportService;
@@ -15,115 +16,95 @@ beforeEach(function () {
     Event::fake();
     Mail::fake();
 
-
-    $this->daysDifference = [
-        1, 2, 3, 4,
-    ];
-
-    $this->firstDay = Carbon::create(2022);
-    $this->lastDayOfWeek = Carbon::create(2022, 1, 7);
-
-    $date = Carbon::create(2022, 1, 2);
+    $this->date = Carbon::create(2022);
 
     $this->report = resolve(StatsReportService::class);
 
-    $users = User::factory()->count(3)->create();
+    $this->users = User::factory()->count(4)->create();
 
-    $this->gradedOrders = Order::factory()->count(4)->state(new Sequence(
-        [
-            'user_id' => $users->first()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[0]),
-        ],
-        [
-            'user_id' => $users->first()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[1]),
-        ],
-        [
-            'user_id' => $users[1]->id,
-            'grand_total' => 200,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[2]),
-        ],
-        [
-            'user_id' => $users->last()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[3]),
-        ],
-    ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
-        'created_at' => $date,
-        'order_status_id' => OrderStatus::GRADED,
-    ]);
+});
 
-    $cardsToBeGraded = [
-        26,
-        55,
-        106,
-        26,
-    ];
+it('validates reports data for weekly', function ($intervalDates) {
 
-    foreach ($this->gradedOrders as $key => $order) {
-        $order->markAsPaid();
+    $differenceInDays = $intervalDates['fromDate']->diff($intervalDates['toDate'])->days;
 
-        OrderItem::factory()->count($cardsToBeGraded[$key])->state(new Sequence(
+    $fromDate = $intervalDates['fromDate'];
+    $toDate = $intervalDates['toDate'];
+
+    foreach ($this->users as $user){
+
+        /* Four graded orders */
+        /* Four shipped orders */
+
+        Order::factory()->count(8)->state(new Sequence(
             [
-                'order_id' => $order->id,
-                'order_item_status_id' => OrderItemStatus::GRADED,
-                'created_at' => $date,
-            ]
-        ))->create();
+                'order_status_id' => OrderStatus::GRADED,
+                'user_id' => $user->id,
+            ],
+            [
+                'order_status_id' => OrderStatus::SHIPPED,
+                'user_id' => $user->id,
+            ],
+        ))->create([
+            'grand_total' => rand(100, 4000),
+            'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
+            'graded_at' => Carbon::create($this->date)->addDays(rand(($differenceInDays / 2), $differenceInDays)),
+        ]);
+
     }
 
+    foreach (Order::all() as $order) {
+        $order->markAsPaid();
 
-    $this->shippedOrders = Order::factory()->count(4)->state(new Sequence(
-        [
-            'user_id' => $users->first()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[0]),
-            'shipped_at' => Carbon::now()->addDays($this->daysDifference[0] * 2),
-        ],
-        [
-            'user_id' => $users->first()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[1]),
-            'shipped_at' => Carbon::now()->addDays($this->daysDifference[1] * 2),
-        ],
-        [
-            'user_id' => $users[1]->id,
-            'grand_total' => 200,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[2]),
-            'shipped_at' => Carbon::now()->addDays($this->daysDifference[2] * 2),
-        ],
-        [
-            'user_id' => $users->last()->id,
-            'grand_total' => 100,
-            'graded_at' => Carbon::now()->addDays($this->daysDifference[3]),
-            'shipped_at' => Carbon::now()->addDays($this->daysDifference[3] * 2),
-        ],
-    ))->withConfirmationOrderStatusHistory(OrderStatus::CONFIRMED)->create([
-        'created_at' => $date,
-        'order_status_id' => OrderStatus::SHIPPED,
-    ]);
-});
+        OrderStatusHistory::create([
+            'user_id' => $order->user->id,
+            'order_status_id' => OrderStatus::CONFIRMED,
+            'order_id' => $order->id,
+            'created_at' => $order->created_at
+        ]);
 
-it('validates reports data for weekly', function () {
+        OrderItem::factory()->count(rand(1, 50))->create([
+            'order_id' => $order->id,
+            'order_item_status_id' => OrderItemStatus::GRADED,
+            'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
+        ]);
+
+        if($order['order_status_id'] === OrderStatus::SHIPPED){
+            $gradedDate = Carbon::create($order->graded_at);
+
+            $order->shipped_at = $gradedDate->addDays(
+                rand(1, $gradedDate->diff($intervalDates['toDate'])->days)
+            );
+            $order->save();
+        }
+    }
+
+    $queryCardsCalculation25To50 = Order::selectRaw('MAX(orders.user_id)')
+        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        ->whereBetween('orders.created_at', [$fromDate, $toDate])
+        ->groupBy('orders.user_id');
+
+    $queryCardsCalculation50To100 = clone $queryCardsCalculation25To50;
+    $queryCardsCalculation100 = clone $queryCardsCalculation25To50;
+
     $resultArray = [
-        'Average order amount' => Order::all()->avg('grand_total'),
-        'Average number of cards graded by all customers' => (OrderItem::graded()->count() / 3),
+        'Average order amount' => (float) Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total') ?? 0,
+        'Average number of cards graded by all customers' => (OrderItem::graded()->count() / 4),
         'Number of repeat customers' => count(DB::select('select max(id) from orders group by user_id having count(*) > 1')),
-        'Number of customers who order 25-50 cards' => 1,
-        'Number of customers who order 50 - 100 cards' => 1,
-        'Number of customers that order 100+ cards' => 1,
-        'Average number of days taken from confirmation to grading' => array_sum($this->daysDifference) / Order::where('order_status_id', OrderStatus::GRADED)->count(),
-        'Average number of days taken from confirmation to shipping' => (float) (array_sum($this->daysDifference) * 2) / Order::where('order_status_id', OrderStatus::SHIPPED)->count(),
-        'Average number of days taken from grading to shipping' => (float) DB::table('orders')->selectRaw('AVG(DATEDIFF(shipped_at, graded_at)) as avg')->first()->avg,
-        'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->first()->avg,
+        'Number of customers who order 25-50 cards' => $queryCardsCalculation25To50->having(DB::raw('COUNT(order_items.id)'), '>=', 25)->having(DB::raw('COUNT(order_items.id)'), '<', 50)->count(),
+        'Number of customers who order 50 - 100 cards' => $queryCardsCalculation50To100->having(DB::raw('COUNT(order_items.id)'), '>=', 50)->having(DB::raw('COUNT(order_items.id)'), '<', 100)->count(),
+        'Number of customers that order 100+ cards' => $queryCardsCalculation100->having(DB::raw('COUNT(order_items.id)'), '>=', 100)->count(),
+        'Average number of days taken from confirmation to grading' => (int) Order::where('order_status_id', '=', OrderStatus::GRADED)->select(DB::raw("AVG(DATEDIFF(graded_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg,
+        'Average number of days taken from confirmation to shipping' => (int) Order::where('order_status_id', '=', OrderStatus::SHIPPED)->select(DB::raw("AVG(DATEDIFF(shipped_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg,
+        'Average number of days taken from grading to shipping' => (int) Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg,
+        'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg,
     ];
 
-    $reportData = $this->report->getReportData($this->firstDay, $this->lastDayOfWeek);
+    $reportData = $this->report->getReportData($fromDate, $toDate);
 
     $this->assertEquals($resultArray, $reportData);
-});
+
+})->with('intervalDates');
 
 it('checks if template exists', function () {
     $templatePath = head(Config::get('view.paths')) . '/emails/admin/'.$this->report->getTemplate() . '.blade.php';
@@ -159,4 +140,27 @@ it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', f
     self::assertTrue(
         $this->report->isEligibleToBeSentQuarterly()
     );
+});
+
+
+dataset('intervalDates', function (){
+
+    yield function (){
+        return [
+            'fromDate' => $this->date,
+            'toDate' => Carbon::create($this->date)->addWeek()->startOfDay()
+        ];
+    };
+    yield function (){
+        return [
+            'fromDate' => $this->date,
+            'toDate' => Carbon::create($this->date)->endOfQuarter()
+        ];
+    };
+    yield function (){
+        return [
+            'fromDate' => $this->date,
+            'toDate' => Carbon::create($this->date)->endOfYear()
+        ];
+    };
 });

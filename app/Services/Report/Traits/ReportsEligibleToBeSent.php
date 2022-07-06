@@ -15,7 +15,9 @@ trait ReportsEligibleToBeSent
     }
 
     public function isEligibleToBeSentQuarterly(): bool
-    {return true;
+    {
+        return true;
+
         return now()->firstOfQuarter()->isCurrentDay();
     }
 }

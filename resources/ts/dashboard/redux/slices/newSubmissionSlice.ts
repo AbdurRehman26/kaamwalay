@@ -40,7 +40,7 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
     shippingFee: number;
     cleaningFee: number;
-    isCleaningFee: boolean;
+    requiresCleaning: boolean;
     isMobileSearchModalOpen: boolean;
 }
 
@@ -193,7 +193,7 @@ const initialState: NewSubmissionSliceState = {
         selectedCards: [],
         shippingFee: 0,
         cleaningFee: 0,
-        isCleaningFee: false,
+        requiresCleaning: false,
         isMobileSearchModalOpen: false,
     },
     step03Data: {
@@ -561,8 +561,8 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
               }
             : null,
         paymentByWallet: currentSubmission.appliedCredit ?? 0,
-        requiresCleaning: currentSubmission.step02Data.isCleaningFee
-            ? currentSubmission.step02Data.isCleaningFee
+        requiresCleaning: currentSubmission.step02Data.requiresCleaning
+            ? currentSubmission.step02Data.requiresCleaning
             : false,
     };
     const apiService = app(APIService);
@@ -655,8 +655,8 @@ export const newSubmissionSlice = createSlice({
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
-        setIsCleaningFee: (state, action: PayloadAction<boolean>) => {
-            state.step02Data.isCleaningFee = action.payload;
+        setRequiresCleaning: (state, action: PayloadAction<boolean>) => {
+            state.step02Data.requiresCleaning = action.payload;
         },
         setCleaningFee: (state, action: PayloadAction<number>) => {
             state.step02Data.cleaningFee = action.payload;
@@ -838,7 +838,7 @@ export const newSubmissionSlice = createSlice({
             };
             state.step02Data = {
                 cleaningFee: action.payload.cleaningFee,
-                isCleaningFee: action.payload.isCleaningFee,
+                requiresCleaning: action.payload.requiresCleaning,
                 shippingFee: action.payload.shippingFee,
                 isMobileSearchModalOpen: false,
                 searchResults: [],
@@ -1005,7 +1005,7 @@ export const {
     setIsNextDisabled,
     setCardsSearchValue,
     setSaveShippingAddress,
-    setIsCleaningFee,
+    setRequiresCleaning,
     setCleaningFee,
     updateShippingAddressField,
     markCardAsSelected,

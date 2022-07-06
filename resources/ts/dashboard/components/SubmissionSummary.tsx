@@ -153,7 +153,7 @@ function SubmissionSummary() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
-    const isCleaningFee = useAppSelector((state) => state.newSubmission.step02Data.isCleaningFee);
+    const requiresCleaning = useAppSelector((state) => state.newSubmission.step02Data.requiresCleaning);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
@@ -185,10 +185,11 @@ function SubmissionSummary() {
     });
 
     function getCleaningFee() {
+        const calculatedCleaningFee = numberOfSelectedCards * featureOrderCleaningFeePerCard;
         const previewCleaningFee =
-            numberOfSelectedCards * featureOrderCleaningFeePerCard >= featureOrderCleaningFeeMaxCap
+            calculatedCleaningFee >= featureOrderCleaningFeeMaxCap
                 ? featureOrderCleaningFeeMaxCap
-                : numberOfSelectedCards * featureOrderCleaningFeePerCard;
+                : calculatedCleaningFee;
         dispatch(setCleaningFee(previewCleaningFee));
         return previewCleaningFee;
     }
@@ -299,7 +300,7 @@ function SubmissionSummary() {
                                 />
                             </div>
 
-                            {isCleaningFee ? (
+                            {requiresCleaning ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat
@@ -472,7 +473,7 @@ function SubmissionSummary() {
                                 />
                             </div>
 
-                            {isCleaningFee ? (
+                            {requiresCleaning ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat

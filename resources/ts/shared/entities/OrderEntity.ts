@@ -30,7 +30,7 @@ export class OrderEntity extends Entity {
     public refundTotal!: number;
     public shippingFee!: number;
     public cleaningFee!: number;
-    public isCleaningFee!: boolean;
+    public requiresCleaning!: boolean;
     public serviceFee!: number;
     public customerId!: number;
     public orderStep!: string;

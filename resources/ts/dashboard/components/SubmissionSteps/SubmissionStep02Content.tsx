@@ -16,7 +16,7 @@ import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { backStep, setIsCleaningFee, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
+import { backStep, setIsNextDisabled, setRequiresCleaning } from '../../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from '../AddedSubmissionCards';
 import CardSubmissionSearchField from '../CardSubmissionSearchField';
 import CardsSearchMobileModal from '../CardsSearchMobileModal';
@@ -54,13 +54,13 @@ const useStyles = makeStyles({
     },
 });
 
-const TOOLTIP_TEXT = `We offer a professional cleaning service in which we carefully remove any dirt or dust from your card. Dirt and dust may cause your card to get a lower grade then you would get otherwise. Card cleaning costs $5.00 per card and can help improve your grade by 0.5/10 points. What does up to $100 mean? We won’t charge you any more than $100 for a cleaning, which means any time you submit more than 20 cards, and opt in for cleaning, we will only charge a cleaning fee for the first 20 cards and the rest will be cleaned for FREE!`;
+const CLEANING_FEE_TOOLTIP_TEXT = `We offer a professional cleaning service in which we carefully remove any dirt or dust from your card. Dirt and dust may cause your card to get a lower grade then you would get otherwise. Card cleaning costs $5.00 per card and can help improve your grade by 0.5/10 points. What does up to $100 mean? We won’t charge you any more than $100 for a cleaning, which means any time you submit more than 20 cards, and opt in for cleaning, we will only charge a cleaning fee for the first 20 cards and the rest will be cleaned for FREE!`;
 
 function SubmissionStep02Content() {
     const classes = useStyles();
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const isCleaningFee = useAppSelector((state) => state.newSubmission.step02Data.isCleaningFee);
+    const requiresCleaning = useAppSelector((state) => state.newSubmission.step02Data.requiresCleaning);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
@@ -82,7 +82,7 @@ function SubmissionStep02Content() {
     );
 
     function setShippingFee() {
-        dispatch(setIsCleaningFee(!isCleaningFee));
+        dispatch(setRequiresCleaning(!requiresCleaning));
     }
 
     function areSelectedCardsValuesValid() {
@@ -153,7 +153,7 @@ function SubmissionStep02Content() {
             <div className={classes.cleaningFeeContainer}>
                 <Box display={'flex'} alignItems={'center'}>
                     <Typography>Card Cleaning Fee</Typography>
-                    <Tooltip title={TOOLTIP_TEXT}>
+                    <Tooltip title={CLEANING_FEE_TOOLTIP_TEXT}>
                         <IconButton aria-label="info">
                             <InfoOutlinedIcon />
                         </IconButton>
@@ -166,7 +166,7 @@ function SubmissionStep02Content() {
                 </Box>
                 <FormControlLabel
                     sx={{ marginTop: '10px' }}
-                    control={<Checkbox color={'primary'} onChange={setShippingFee} checked={isCleaningFee} />}
+                    control={<Checkbox color={'primary'} onChange={setShippingFee} checked={requiresCleaning} />}
                     label={
                         <Box display={'flex'} alignItems={'center'}>
                             <Typography>

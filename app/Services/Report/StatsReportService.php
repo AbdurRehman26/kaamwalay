@@ -67,6 +67,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw('MAX(user_id)'))
+            ->arePaid()
             ->groupBy('user_id')
             ->betweenDates($fromDate, $toDate)
             ->having(DB::raw('COUNT(user_id)'), '>', 1)
@@ -78,6 +79,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
         $query = Order::selectRaw('MAX(orders.user_id)')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereBetween('orders.created_at', [$fromDate, $toDate])
+            ->whereNotNull('orders.paid_at')
             ->groupBy('orders.user_id')
             ->having(DB::raw('COUNT(order_items.id)'), '>=', $totalCardsGreaterThan);
 
@@ -115,6 +117,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))
+                ->arePaid()
                 ->betweenDates($fromDate, $toDate)
                 ->first()
                 ->avg ?? 0;

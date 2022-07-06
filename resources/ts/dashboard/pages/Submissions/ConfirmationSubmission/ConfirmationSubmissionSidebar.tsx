@@ -246,6 +246,27 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
+
+                                {data.cleaningFee > 0 ? (
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant={'body2'}>
+                                                <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
+                                                    Cleaning Fee:
+                                                </Box>
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align={'right'}>
+                                            <Typography
+                                                variant={'body2'}
+                                                align={'right'}
+                                                className={font.fontWeightMedium}
+                                            >
+                                                {formatCurrency(data.cleaningFee)}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : null}
                             </TableBody>
                         </Table>
                     </TableContainer>

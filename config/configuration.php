@@ -91,5 +91,11 @@ return [
             'auth' => true,
             'value' => env('FEATURE_ORDER_WALLET_CREDIT_PERCENTAGE'),
         ],
+        'feature_order_cleaning_fee_per_card' => [
+            'value' => env('FEATURE_ORDER_CLEANING_FEE_PER_CARD'),
+        ],
+        'feature_order_cleaning_fee_max_cap' => [
+            'value' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
+        ],
     ],
 ];

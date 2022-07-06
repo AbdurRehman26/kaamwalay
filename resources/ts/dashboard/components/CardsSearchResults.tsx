@@ -114,7 +114,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         setTimeout(() => {
             dispatch(setCardsSearchValue(''));
             (window as any).globalThis.clearSearch();
-        }, 2000);
+        }, 500);
     }, [selectedCards, item, selectCard, deselectCard, dispatch]);
 
     const handleRemove = useCallback(

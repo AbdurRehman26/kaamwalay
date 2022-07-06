@@ -88,8 +88,8 @@ it('validates reports data for weekly', function ($intervalDates) {
     $queryCardsCalculation100 = clone $queryCardsCalculation25To50;
 
     $resultArray = [
-        'Average order amount' => (float) Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total') ?? 0,
-        'Average number of cards graded by all customers' => (OrderItem::graded()->count() / 4),
+        'Average order amount' => (float) number_format(Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total'), 2) ?? 0,
+        'Average number of cards graded by all customers' => (int)(OrderItem::graded()->count() / 4),
         'Number of repeat customers' => count(DB::select('select max(id) from orders group by user_id having count(*) > 1')),
         'Number of customers who order 25-50 cards' => $queryCardsCalculation25To50->having(DB::raw('COUNT(order_items.id)'), '>=', 25)->having(DB::raw('COUNT(order_items.id)'), '<', 50)->count(),
         'Number of customers who order 50 - 100 cards' => $queryCardsCalculation50To100->having(DB::raw('COUNT(order_items.id)'), '>=', 50)->having(DB::raw('COUNT(order_items.id)'), '<', 100)->count(),

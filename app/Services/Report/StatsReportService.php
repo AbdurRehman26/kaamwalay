@@ -47,19 +47,18 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
     {
-        return Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total') ?? 0;
+        return (float) number_format(Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total'), 2);
     }
 
-    protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): float|int
+    protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): int
     {
-        /* Count on query is not working */
-
-        $totalCustomers = count(Order::selectRaw('MAX(orders.user_id)')
+        $totalCustomers = Order::selectRaw('MAX(orders.user_id)')
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->whereBetween('order_items.created_at', [$fromDate, $toDate])
             ->where('order_item_status_id', OrderItemStatus::GRADED)
             ->groupBy('orders.user_id')
-            ->get());
+            ->get()
+            ->count();
 
         if (! $totalCustomers) {
             return $totalCustomers;

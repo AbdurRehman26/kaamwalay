@@ -307,7 +307,7 @@ export function CustomersListPage() {
                                 Submissions
                             </TableCell>
                             <TableCell variant={'head'} align={'right'}>
-                                Total Cards
+                                Cards
                             </TableCell>
                             <TableCell variant={'head'} align={'right'}>
                                 Wallet Balance
@@ -337,7 +337,7 @@ export function CustomersListPage() {
                                     {customer.submissions ?? 0}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
-                                    {customer.totalCardsCount}
+                                    {customer.cardsCount}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
                                     {formatCurrency(customer.wallet?.balance ?? 0)}

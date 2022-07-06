@@ -32,6 +32,7 @@ it('returns customers list for admin', function () {
                     'phone',
                     'created_at',
                     'submissions',
+                    'cards_count'
                 ],
             ],
         ]);

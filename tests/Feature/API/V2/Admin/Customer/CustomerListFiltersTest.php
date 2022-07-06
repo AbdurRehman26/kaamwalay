@@ -75,7 +75,7 @@ it('returns customers that do not have submissions', function () {
                     'phone',
                     'created_at',
                     'submissions',
-                    'total_cards_count',
+                    'cards_count',
                 ],
             ],
         ]);
@@ -108,7 +108,7 @@ it('returns customers that do not lie between signed up date', function () {
                     'phone',
                     'created_at',
                     'submissions',
-                    'total_cards_count',
+                    'cards_count',
                 ],
             ],
         ]);

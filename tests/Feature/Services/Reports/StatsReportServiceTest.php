@@ -164,5 +164,4 @@ dataset('intervalDates', function () {
             'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
         ];
     };
-
 });

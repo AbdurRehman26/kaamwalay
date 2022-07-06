@@ -9,8 +9,8 @@ class Report extends Mailable
 {
     use SerializesModels;
 
-    protected array $reportData;
-    protected array $templateInfo;
+    public array $reportData;
+    public array $templateInfo;
     protected string $prefix = 'emails.admin.';
 
     public function __construct(array $reportData, array $templateInfo)

@@ -25,7 +25,6 @@ it('sends monthly and quarterly emails sent to correct template', function () {
     });
 
     Mail::assertSent(Report::class, 2);
-
 });
 
 
@@ -38,4 +37,3 @@ it('sends email for weekly', function () {
 
     Mail::assertSent(Report::class, 1);
 });
-

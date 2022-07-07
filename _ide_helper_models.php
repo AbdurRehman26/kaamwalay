@@ -648,8 +648,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property \Illuminate\Support\Carbon|null $shipped_at
  * @property \Illuminate\Support\Carbon|null $paid_at
- * @property bool $requires_cleaning
- * @property float $cleaning_fee
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments
@@ -693,6 +691,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order paid()
  * @method static \Illuminate\Database\Eloquent\Builder|Order placed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order status(string|int $status)

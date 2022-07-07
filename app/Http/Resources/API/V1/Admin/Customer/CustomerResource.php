@@ -5,12 +5,17 @@ namespace App\Http\Resources\API\V1\Admin\Customer;
 use App\Http\Resources\API\BaseResource;
 use Illuminate\Http\Request;
 
+/**
+ * @method orders()
+ * @method cardsCount()
+ */
 class CustomerResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
+     * @return array
      */
     public function toArray($request): array
     {
@@ -21,7 +26,8 @@ class CustomerResource extends BaseResource
             'customer_number' => $this->customer_number,
             'email' => $this->email,
             'phone' => $this->phone,
-            'submissions' => $this->orders()->placed()->count(),
+            'submissions' => $this->orders()->paid()->count(),
+            'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
             'update_at' => $this->formatDate($this->update_at),

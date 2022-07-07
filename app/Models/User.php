@@ -215,9 +215,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     */
     public function cardsCount(): int
     {
-        $orderIds = Order::paid()->where('user_id', $this->id)->pluck('id');
-
-        return OrderItem::whereIn('order_id', $orderIds)->sum('quantity');
+        return Order::paid()
+            ->join('order_items', 'order_id', '=', 'orders.id')
+            ->where('user_id', '=', $this->id)
+            ->sum('order_items.quantity');
     }
 
     public function assignCustomerNumber(): self

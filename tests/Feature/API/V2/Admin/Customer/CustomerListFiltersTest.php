@@ -26,7 +26,6 @@ beforeEach(function () {
     $this->orders = Order::factory()->for($this->customer)->state(new Sequence(
         [
             'order_status_id' => 5,
-            'payment_status' => 2,
         ]
     ))->count(10)->create();
 

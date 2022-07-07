@@ -3,8 +3,6 @@
 namespace App\Exceptions\Services\Admin;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServiceNotReportableException extends Exception

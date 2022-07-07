@@ -1,5 +1,5 @@
 @component('mail::message')
-{{--    # {{ $templateInfo['heading'] }}--}}
+    {{ $templateInfo['heading'] }}
     @component('mail::table')
         | Title       | Value         |
         | :--------- | :------------- |

@@ -7,8 +7,8 @@ use App\Mail\Admin\Report;
 use App\Models\User;
 use App\Services\Report\Contracts\Reportable;
 use App\Services\Report\Contracts\ReportableMonthly;
+use App\Services\Report\Contracts\ReportableQuarterly;
 use App\Services\Report\Contracts\ReportableWeekly;
-use App\Services\Report\Contracts\ReportableYearly;
 use App\Services\Report\Traits\HasIntervalDates;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,7 +26,7 @@ class ReportsService
     public function send(): void
     {
         foreach ($this->mailableReports as $mailableReport) {
-            $report = resolve($mailableReport);
+            $report = new $mailableReport;
 
             if (! $report instanceof Reportable) {
                 throw new ServiceNotReportableException();
@@ -40,8 +40,8 @@ class ReportsService
                 $this->sendMail($report, 'monthly');
             }
 
-            if ($report instanceof  ReportableYearly && $report->isEligibleToBeSentYearly()) {
-                $this->sendMail($report, 'yearly');
+            if ($report instanceof  ReportableQuarterly && $report->isEligibleToBeSentQuarterly()) {
+                $this->sendMail($report, 'quarterly');
             }
         }
     }

@@ -32,16 +32,16 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     public function getReportData(DateTime $fromDate, DateTime $toDate): array
     {
         return [
-            'Average order amount' => $this->getAvgOrderAmount($fromDate, $toDate),
+            'Average order amount' => '$'.$this->getAvgOrderAmount($fromDate, $toDate),
             'Average number of cards graded by all customers' => $this->getAvgCardsGraded($fromDate, $toDate),
             'Number of repeat customers' => $this->getTotalRepeatCustomers($fromDate, $toDate),
             'Number of customers who order 25-50 cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 25, 50),
             'Number of customers who order 50 - 100 cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 50, 100),
             'Number of customers that order 100+ cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 100),
-            'Average number of days taken from confirmation to grading' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'graded_at'),
-            'Average number of days taken from confirmation to shipping' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'shipped_at'),
-            'Average number of days taken from grading to shipping' => $this->getAvgDaysFromGradingToShipping($fromDate, $toDate),
-            'Average time from submission to payment' => $this->getAvgDaysFromSubmissionToPayment($fromDate, $toDate),
+            'Average number of days taken from confirmation to grading' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'graded_at') . ' Day(s)',
+            'Average number of days taken from confirmation to shipping' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'shipped_at') . ' Day(s)',
+            'Average number of days taken from grading to shipping' => $this->getAvgDaysFromGradingToShipping($fromDate, $toDate)  . ' Day(s)',
+            'Average time from submission to payment' => $this->getAvgDaysFromSubmissionToPayment($fromDate, $toDate)  . ' Day(s)',
         ];
     }
 

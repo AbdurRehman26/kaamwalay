@@ -51,6 +51,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
                 'numeric',
             ],
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
+            'requires_cleaning' => ['sometimes', 'boolean'],
         ];
 
         if ($this->addressIsNotRequired()) {

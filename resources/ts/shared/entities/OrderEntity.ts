@@ -29,6 +29,8 @@ export class OrderEntity extends Entity {
     public extraChargeTotal!: number;
     public refundTotal!: number;
     public shippingFee!: number;
+    public cleaningFee!: number;
+    public requiresCleaning!: boolean;
     public serviceFee!: number;
     public customerId!: number;
     public orderStep!: string;

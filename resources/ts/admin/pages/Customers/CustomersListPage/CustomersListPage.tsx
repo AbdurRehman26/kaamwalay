@@ -307,9 +307,11 @@ export function CustomersListPage() {
                                 Submissions
                             </TableCell>
                             <TableCell variant={'head'} align={'right'}>
+                                Cards
+                            </TableCell>
+                            <TableCell variant={'head'} align={'right'}>
                                 Wallet Balance
                             </TableCell>
-                            <TableCell />
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -333,6 +335,9 @@ export function CustomersListPage() {
                                 <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
                                 <TableCell variant={'body'} align={'right'}>
                                     {customer.submissions ?? 0}
+                                </TableCell>
+                                <TableCell variant={'body'} align={'right'}>
+                                    {customer.cardsCount}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
                                     {formatCurrency(customer.wallet?.balance ?? 0)}

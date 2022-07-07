@@ -446,11 +446,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
 
 		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:orders\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$customer_number\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
@@ -1719,11 +1714,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"

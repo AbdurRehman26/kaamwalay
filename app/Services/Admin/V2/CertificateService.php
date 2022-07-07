@@ -9,8 +9,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CertificateService {
-
+class CertificateService
+{
     protected const DEFAULT_PAGE_SIZE = 10;
 
     public function getCertificates(): LengthAwarePaginator
@@ -32,8 +32,8 @@ class CertificateService {
     public function getCertificate(string $certificateId): Model | QueryBuilder
     {
         $query = UserCard::where('certificate_number', $certificateId);
+
         return QueryBuilder::for($query)
             ->firstOrFail();
-
     }
 }

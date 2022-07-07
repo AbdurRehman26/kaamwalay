@@ -44,7 +44,6 @@ test('admins can get certificates list', function () {
 
     $response->assertSuccessful();
     $response->assertJsonCount(3, ['data']);
-
 });
 
 test('admins can get single certificate', function () {

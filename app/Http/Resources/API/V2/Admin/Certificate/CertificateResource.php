@@ -44,5 +44,4 @@ class CertificateResource extends BaseResource
             'edition' => $cardProduct->edition,
         ];
     }
-
 }

@@ -274,6 +274,15 @@ class Order extends Model implements Exportable
             && ! $this->payment_status->isPaid();
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
+    public function scopePaid(Builder $query): Builder
+    {
+        return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
+    }
+
     public function scopePlaced(Builder $query): Builder
     {
         return $query->whereHas('orderStatusHistory', function ($query) {

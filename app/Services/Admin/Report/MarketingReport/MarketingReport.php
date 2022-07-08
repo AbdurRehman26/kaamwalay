@@ -46,7 +46,7 @@ abstract class MarketingReport implements Reportable
         $totalCustomers = Order::betweenDates($fromDate, $toDate)
                 ->distinct('user_id')
                 ->paid()
-                ->where('order_status_id', '=', OrderItemStatus::GRADED)
+                ->where('order_status_id', '>=', OrderItemStatus::GRADED)
                 ->count();
 
         if (! $totalCustomers) {

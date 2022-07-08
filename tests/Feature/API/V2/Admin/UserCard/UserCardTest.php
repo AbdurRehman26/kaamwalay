@@ -88,7 +88,7 @@ test('a customer can not get certificates list', function () {
 test('a customer can not get single certificate', function () {
     $this->actingAs($this->customer);
 
-    $response = $this->getJson('/api/v2/admin/certificates' . $this->userCards[0]->certificate_number);
+    $response = $this->getJson('/api/v2/admin/certificates/' . $this->userCards[0]->certificate_number);
 
     $response->assertForbidden();
 });

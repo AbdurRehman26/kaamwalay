@@ -5,18 +5,14 @@ namespace App\Mail\Admin;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Report extends Mailable
+class ReportMail extends Mailable
 {
     use SerializesModels;
 
-    public array $reportData;
-    public array $templateInfo;
-    protected string $prefix = 'emails.admin.';
+    protected string $prefix = 'emails.admin.reports.';
 
-    public function __construct(array $reportData, array $templateInfo)
+    public function __construct(public array $reportData, public array $templateInfo)
     {
-        $this->templateInfo = $templateInfo;
-        $this->reportData = $reportData;
     }
 
     /**

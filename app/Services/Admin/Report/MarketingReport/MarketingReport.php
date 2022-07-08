@@ -1,35 +1,26 @@
 <?php
 
-namespace App\Services\Report;
+namespace App\Services\Admin\Report\MarketingReport;
 
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
-use App\Services\Report\Contracts\ReportableMonthly;
-use App\Services\Report\Contracts\ReportableQuarterly;
-use App\Services\Report\Contracts\ReportableWeekly;
-use App\Services\Report\Traits\ReportsEligibleToBeSent;
+use App\Services\Admin\Report\Contracts\Reportable;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 
-class StatsReportService implements ReportableWeekly, ReportableMonthly, ReportableQuarterly
+/**
+ * On request of Alex Kegan (Marketing)
+ */
+abstract class MarketingReport implements Reportable
 {
-    use ReportsEligibleToBeSent;
-
-    protected string $template = 'stats-report';
-
-    public function getReportTitle(string $interval = 'weekly'): string
-    {
-        return ucwords($interval) . ' Stats Report.';
-    }
-
     public function getTemplate(): string
     {
-        return $this->template;
+        return 'marketing-report';
     }
 
-    public function getReportData(DateTime $fromDate, DateTime $toDate): array
+    public function getDataForReport(DateTime $fromDate, DateTime $toDate): array
     {
         return [
             'Average order amount' => '$'.$this->getAvgOrderAmount($fromDate, $toDate),
@@ -47,14 +38,14 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
 
     protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
     {
-        return (float) number_format(Order::betweenDates($fromDate, $toDate)->arePaid()->avg('grand_total'), 2);
+        return (float) number_format(Order::betweenDates($fromDate, $toDate)->paid()->avg('grand_total'), 2);
     }
 
     protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): int
     {
         $totalCustomers = Order::betweenDates($fromDate, $toDate)
                 ->distinct('user_id')
-                ->arePaid()
+                ->paid()
                 ->where('order_status_id', '=', OrderItemStatus::GRADED)
                 ->count();
 
@@ -68,7 +59,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw('MAX(user_id)'))
-            ->arePaid()
+            ->paid()
             ->groupBy('user_id')
             ->betweenDates($fromDate, $toDate)
             ->having(DB::raw('COUNT(user_id)'), '>', 1)
@@ -118,7 +109,7 @@ class StatsReportService implements ReportableWeekly, ReportableMonthly, Reporta
     protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))
-                ->arePaid()
+                ->paid()
                 ->betweenDates($fromDate, $toDate)
                 ->first()
                 ->avg ?? 0;

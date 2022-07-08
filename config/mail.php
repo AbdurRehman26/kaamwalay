@@ -113,11 +113,4 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
-
-    'admin_addresses' => env('ADMIN_MAILING_ADDRESSES', [
-        'kazmi@wooter.com',
-        'hassan@wooter.com',
-        'nabeel@wooter.com',
-    ])
-
 ];

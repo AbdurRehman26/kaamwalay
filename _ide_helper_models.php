@@ -682,7 +682,7 @@ namespace App\Models{
  * @property-read \App\Models\OrderAddress|null $shippingAddress
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
- * @property-read float|null $cleaning_fee
+ * @method static \Illuminate\Database\Eloquent\Builder|Order betweenDates(\DateTime $fromDate, \DateTime $toDate)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
  * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()
@@ -832,8 +832,10 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItemStatusHistory[] $orderItemStatusHistory
  * @property-read int|null $order_item_status_history_count
  * @property-read \App\Models\UserCard|null $userCard
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem betweenDates(\DateTime $fromDate, \DateTime $toDate)
  * @method static \Database\Factories\OrderItemFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem forOrder(\App\Models\Order $order)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem graded()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()

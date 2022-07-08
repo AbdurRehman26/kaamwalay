@@ -540,13 +540,4 @@ class Order extends Model implements Exportable
     {
         return now()->diff($this->created_at)->days > 0;
     }
-
-    /**
-     * @param  Builder <Order> $query
-     * @return Builder <Order>
-     */
-    public function scopeArePaid(Builder $query): Builder
-    {
-        return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
-    }
 }

@@ -1,30 +1,33 @@
 <?php
 
-use App\Mail\Admin\Report;
+use App\Console\Commands\SendAdminReports;
+use App\Mail\Admin\ReportMail;
+use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Facades\Mail;
+
+use function Pest\Laravel\seed;
 
 beforeEach(function () {
     Mail::fake();
     Event::fake();
-
-    Config::set('mail.admin_addresses', [
-        'test@gmail.com',
-    ]);
+    seed(RolesSeeder::class);
+    User::factory()->withRole(config('permission.roles.admin'))->create();
 });
 
 it('sends monthly and quarterly emails sent to correct template', function () {
     $knownDate = Carbon::create(2023);
     Carbon::setTestNow($knownDate);
 
-    $this->artisan('reports:send-email')
+    $this->artisan(SendAdminReports::class)
         ->assertExitCode(0);
 
-    Mail::assertSent(function (Report $mail) {
+    Mail::assertSent(function (ReportMail $mail) {
         return  array_key_exists('name', $mail->templateInfo) && $mail->templateInfo['name'] === 'stats-report';
     });
 
-    Mail::assertSent(Report::class, 2);
+    Mail::assertSent(ReportMail::class, 2);
 });
 
 
@@ -32,8 +35,8 @@ it('sends email for weekly', function () {
     $knownDate = Carbon::create(2022)->next('Monday');
     Carbon::setTestNow($knownDate);
 
-    $this->artisan('reports:send-email')
+    $this->artisan(SendAdminReports::class)
         ->assertExitCode(0);
 
-    Mail::assertSent(Report::class, 1);
+    Mail::assertSent(ReportMail::class, 1);
 });

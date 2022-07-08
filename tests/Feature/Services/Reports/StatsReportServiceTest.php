@@ -6,8 +6,8 @@ use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Services\Report\Contracts\Reportable;
-use App\Services\Report\StatsReportService;
+use App\Services\Admin\Report\Contracts\Reportable;
+use App\Services\Admin\Report\MarketingReport\MarketingReport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ beforeEach(function () {
 
     $this->date = Carbon::create(2022);
 
-    $this->report = resolve(StatsReportService::class);
+    $this->report = resolve(MarketingReport::class);
 
     $this->users = User::factory()->count(4)->create();
 });

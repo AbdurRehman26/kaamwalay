@@ -11,7 +11,7 @@ trait HasIntervalDates
         return match ($interval) {
             'monthly' => now()->subMonth()->startOfMonth(),
             'quarterly' => now()->subMonth()->startOfQuarter(),
-            default => now()->subWeek()->endOfDay()
+            default => now()->subWeek()->startOfDay()
         };
     }
 

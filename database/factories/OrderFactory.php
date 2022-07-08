@@ -10,7 +10,6 @@ use App\Models\OrderAddress;
 use App\Models\OrderPayment;
 use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
-use App\Models\OrderStatusHistory;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;

@@ -1,12 +1,12 @@
 <?php
 
+use App\Contracts\Services\Admin\Reportable;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Services\Admin\Report\Contracts\Reportable;
 use App\Services\Admin\Report\MarketingReport\MarketingReport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;

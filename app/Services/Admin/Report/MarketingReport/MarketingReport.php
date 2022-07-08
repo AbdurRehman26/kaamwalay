@@ -2,11 +2,11 @@
 
 namespace App\Services\Admin\Report\MarketingReport;
 
+use App\Contracts\Services\Admin\Reportable;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
-use App\Services\Admin\Report\Contracts\Reportable;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 

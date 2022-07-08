@@ -2,10 +2,10 @@
 
 namespace App\Services\Admin\Report;
 
+use App\Contracts\Services\Admin\Reportable;
 use App\Exceptions\Services\Admin\ReportIsNotReportableException;
 use App\Mail\Admin\ReportMail;
 use App\Models\User;
-use App\Services\Admin\Report\Contracts\Reportable;
 use App\Services\Admin\Report\MarketingReport\MarketingMonthlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingQuarterlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;

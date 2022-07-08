@@ -16,19 +16,19 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    Order::factory()->create([
+    $order = Order::factory()->create([
         'order_status_id' => OrderStatus::SHIPPED,
     ]);
 
-    OrderItem::factory()->count(3)->create([
+    $orderItems = OrderItem::factory()->count(3)->create([
         'order_item_status_id' => OrderItemStatus::GRADED,
-        'order_id' => 1,
+        'order_id' => $order->id,
     ]);
 
     $this->userCards = UserCard::factory()->count(3)->sequence(
-        [ 'order_item_id' => 1],
-        [ 'order_item_id' => 2],
-        [ 'order_item_id' => 3],
+        [ 'order_item_id' => $orderItems[0]->id],
+        [ 'order_item_id' => $orderItems[1]->id],
+        [ 'order_item_id' => $orderItems[2]->id],
     )->create();
 
     $this->user = User::factory()

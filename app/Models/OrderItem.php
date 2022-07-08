@@ -117,6 +117,6 @@ class OrderItem extends Model
      */
     public function scopeGraded(Builder $query): Builder
     {
-        return $query->where('order_item_status_id', '>=',OrderItemStatus::GRADED);
+        return $query->where('order_item_status_id', '>=', OrderItemStatus::GRADED);
     }
 }

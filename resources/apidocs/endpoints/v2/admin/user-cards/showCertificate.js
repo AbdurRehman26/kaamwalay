@@ -1,6 +1,6 @@
 /**
  * @api {get} /v2/admin/certificates/{certificateNumber} Show certificate
- * @apiName Show Certificates
+ * @apiName Show Certificate
  * @apiGroup Admin Certificates
  *
  * @apiVersion 2.0.0

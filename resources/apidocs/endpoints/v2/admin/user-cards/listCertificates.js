@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {string} sort For sorting records, supporting params are [created_at, -created_at]. Default at -created_at. E.g. sort=created_at
+ * @apiParam {string} sort For sorting records, supporting params are [created_at, -created_at]. Default is created_at descending. E.g. sort=created_at
  *
  * @apiSuccess {Object} data Certificates data
  *

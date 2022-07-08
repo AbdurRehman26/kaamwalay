@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Certificate;
+namespace App\Http\Resources\API\V2\Admin\UserCard;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\CardProduct;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 /**
  * @mixin UserCard
  */
-class CertificateResource extends BaseResource
+class UserCardResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

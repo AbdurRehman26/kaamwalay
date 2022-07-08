@@ -4,7 +4,6 @@ use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
-use App\Http\Controllers\API\V2\Admin\Certificates\CertificateController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponController;
@@ -69,8 +68,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [CardProductController::class, 'store']);
     });
 
-    Route::apiResource('certificates', CertificateController::class)->only(['index', 'show']);
-
+    Route::prefix('certificates')->group(function () {
+        Route::get('/', [UserCardController::class, 'listCertificates']);
+        Route::get('/{certificateNumber}', [UserCardController::class, 'getCertificate']);
+    });
     // Coupons
     Route::apiResource('coupons', CouponController::class)->except('update');
     Route::put('coupons/{coupon}/change-status', CouponStatusController::class)

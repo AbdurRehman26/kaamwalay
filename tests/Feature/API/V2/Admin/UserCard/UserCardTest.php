@@ -36,6 +36,10 @@ beforeEach(function () {
         ->withRole(config('permission.roles.admin'))
         ->create();
 
+    $this->customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
     $this->actingAs($this->user);
 });
 
@@ -71,4 +75,20 @@ test('admins can get single certificate', function () {
                 'edition',
             ]],
         ]);
+});
+
+test('a customer can not get certificates list', function () {
+    $this->actingAs($this->customer);
+
+    $response = $this->getJson('/api/v2/admin/certificates');
+
+    $response->assertForbidden();
+});
+
+test('a customer can not get single certificate', function () {
+    $this->actingAs($this->customer);
+
+    $response = $this->getJson('/api/v2/admin/certificates' . $this->userCards[0]->certificate_number);
+
+    $response->assertForbidden();
 });

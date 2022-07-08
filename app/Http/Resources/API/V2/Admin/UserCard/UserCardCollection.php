@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Certificate;
+namespace App\Http\Resources\API\V2\Admin\UserCard;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CertificateCollection extends ResourceCollection
+class UserCardCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

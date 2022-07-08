@@ -682,6 +682,7 @@ namespace App\Models{
  * @property-read \App\Models\OrderAddress|null $shippingAddress
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
+ * @property-read float|null $cleaning_fee
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
  * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()

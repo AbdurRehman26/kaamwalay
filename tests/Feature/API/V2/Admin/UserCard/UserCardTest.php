@@ -26,9 +26,9 @@ beforeEach(function () {
     ]);
 
     $this->userCards = UserCard::factory()->count(3)->sequence(
-        [ 'order_item_id' => $orderItems[0]->id],
-        [ 'order_item_id' => $orderItems[1]->id],
-        [ 'order_item_id' => $orderItems[2]->id],
+        [ 'order_item_id' => $orderItems[0]->id, 'certificate_number' => '00000001'],
+        [ 'order_item_id' => $orderItems[1]->id, 'certificate_number' => '00000002'],
+        [ 'order_item_id' => $orderItems[2]->id, 'certificate_number' => '00000003S'],
     )->create();
 
     $this->user = User::factory()
@@ -55,7 +55,7 @@ test('admins can get single certificate', function () {
 
     $response->assertSuccessful()
         ->assertJsonStructure([
-            'data' => [[
+            'data' => [
                 'certificate_number',
                 'grade',
                 'nickname',
@@ -73,7 +73,7 @@ test('admins can get single certificate', function () {
                 'variant',
                 'surface',
                 'edition',
-            ]],
+            ],
         ]);
 });
 

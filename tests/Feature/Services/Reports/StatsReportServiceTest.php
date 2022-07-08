@@ -12,6 +12,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\assertFileExists;
+use function PHPUnit\Framework\assertTrue;
+
 beforeEach(function () {
     Event::fake();
     Mail::fake();
@@ -105,11 +108,11 @@ it('validates reports data for weekly, monthly and quarterly', function ($interv
 it('checks if template exists', function () {
     $templatePath = head(Config::get('view.paths')) . '/emails/admin/'.$this->report->getTemplate() . '.blade.php';
 
-    self::assertFileExists($templatePath);
+    assertFileExists($templatePath);
 });
 
 it('checks if class implements reportable contract', function () {
-    self::assertTrue(
+    assertTrue(
         $this->report instanceof Reportable
     );
 });
@@ -117,7 +120,7 @@ it('checks if class implements reportable contract', function () {
 it('isEligibleToBeSentWeekly returns true if its Monday', function () {
     Carbon::setTestNow(Carbon::create(now()->firstWeekDay));
 
-    self::assertTrue(
+    assertTrue(
         $this->report->isEligibleToBeSentWeekly()
     );
 });
@@ -125,7 +128,7 @@ it('isEligibleToBeSentWeekly returns true if its Monday', function () {
 it('isEligibleToBeSentMonthly returns true if its first day of the month', function () {
     Carbon::setTestNow(Carbon::create(now()->firstOfMonth()));
 
-    self::assertTrue(
+    assertTrue(
         $this->report->isEligibleToBeSentMonthly()
     );
 });
@@ -133,11 +136,10 @@ it('isEligibleToBeSentMonthly returns true if its first day of the month', funct
 it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', function () {
     Carbon::setTestNow(Carbon::create(now()->firstOfQuarter()));
 
-    self::assertTrue(
+    assertTrue(
         $this->report->isEligibleToBeSentQuarterly()
     );
 });
-
 
 dataset('intervalDates', function () {
 

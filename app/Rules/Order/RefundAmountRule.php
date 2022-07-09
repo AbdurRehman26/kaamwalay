@@ -58,11 +58,7 @@ class RefundAmountRule implements Rule, DataAwareRule
 
         $firstOrderPayment = $order->firstOrderPayment;
 
-        if (empty($firstOrderPayment)) {
-            return $order->grand_total_to_be_paid;
-        }
-
-        if ($order->isPayable('v2')) {
+        if (empty($firstOrderPayment) || $order->isPayable('v2')) {
             return $order->grand_total_to_be_paid;
         }
 

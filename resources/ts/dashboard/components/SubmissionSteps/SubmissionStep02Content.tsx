@@ -175,10 +175,11 @@ function SubmissionStep02Content() {
                                     What does up to {formatCurrency(featureOrderCleaningFeeMaxCap)} mean?
                                 </Typography>
                                 <Typography display={'block'} variant={'caption'}>
-                                    We won’t charge you any more than {formatCurrency(featureOrderCleaningFeeMaxCap)}{' '}
-                                    for a cleaning, which means any time you submit more than 20 cards, and opt in for
-                                    cleaning, we will only charge a cleaning fee for the first 20 cards and the rest
-                                    will be cleaned for FREE!
+                                    We won't charge you any more than {formatCurrency(featureOrderCleaningFeeMaxCap)}{' '}
+                                    for a cleaning, which means any time you submit certain number of cards, and opt in
+                                    for cleaning, we will only charge a cleaning fee upto{' '}
+                                    {formatCurrency(featureOrderCleaningFeeMaxCap)} and the rest will be cleaned for
+                                    FREE!
                                 </Typography>
                             </Box>
                         }

@@ -24,7 +24,7 @@ it('sends monthly and quarterly emails sent to correct template', function () {
         ->assertExitCode(0);
 
     Mail::assertSent(function (ReportMail $mail) {
-        return  array_key_exists('name', $mail->templateInfo) && $mail->templateInfo['name'] === 'stats-report';
+        return  array_key_exists('name', $mail->templateInfo) && $mail->templateInfo['name'] === 'marketing-report';
     });
 
     Mail::assertSent(ReportMail::class, 2);

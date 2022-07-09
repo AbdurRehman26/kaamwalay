@@ -116,9 +116,16 @@ it('checks if template exists', function () {
 });
 
 it('checks if class implements reportable contract', function () {
-    assertTrue(
-        $this->report instanceof Reportable
-    );
+    foreach ([
+                 resolve(MarketingWeeklyReport::class),
+                 resolve(MarketingMonthlyReport::class),
+                 resolve(MarketingQuarterlyReport::class)
+             ] as $report) {
+        assertTrue(
+            $report instanceof Reportable
+        );
+    }
+
 });
 
 dataset('reportable', function () {

@@ -7,7 +7,9 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Admin\Report\Contracts\Reportable;
-use App\Services\Admin\Report\MarketingReport\MarketingReport;
+use App\Services\Admin\Report\MarketingReport\MarketingMonthlyReport;
+use App\Services\Admin\Report\MarketingReport\MarketingQuarterlyReport;
+use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
@@ -21,16 +23,17 @@ beforeEach(function () {
 
     $this->date = Carbon::create(2022);
 
-    $this->report = resolve(MarketingReport::class);
-
     $this->users = User::factory()->count(4)->create();
 });
 
-it('validates reports data for weekly, monthly and quarterly', function ($intervalDates) {
-    $differenceInDays = $intervalDates['fromDate']->diff($intervalDates['toDate'])->days;
+it('validates reports data for weekly, monthly and quarterly', function ($reportable) {
 
-    $fromDate = $intervalDates['fromDate'];
-    $toDate = $intervalDates['toDate'];
+    $report = $reportable['report'];
+
+    $fromDate = $reportable['fromDate'];
+    $toDate = $reportable['toDate'];
+
+    $differenceInDays = $fromDate->diff($toDate)->days;
 
     foreach ($this->users as $user) {
 
@@ -73,7 +76,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($interv
             $gradedDate = Carbon::create($order->graded_at);
 
             $order->shipped_at = $gradedDate->addDays(
-                rand(1, $gradedDate->diff($intervalDates['toDate'])->days)
+                rand(1, $gradedDate->diff($toDate)->days)
             );
             $order->save();
         }
@@ -100,10 +103,11 @@ it('validates reports data for weekly, monthly and quarterly', function ($interv
         'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
     ];
 
-    $reportData = $this->report->getReportData($fromDate, $toDate);
+    $reportData = $report->getReportData($fromDate, $toDate);
 
     $this->assertEquals($resultArray, $reportData);
-})->with('intervalDates');
+
+})->with('reportable');
 
 it('checks if template exists', function () {
     $templatePath = head(Config::get('view.paths')) . '/emails/admin/'.$this->report->getTemplate() . '.blade.php';
@@ -117,53 +121,33 @@ it('checks if class implements reportable contract', function () {
     );
 });
 
-it('isEligibleToBeSentWeekly returns true if its Monday', function () {
-    Carbon::setTestNow(Carbon::create(now()->firstWeekDay));
+dataset('reportable', function () {
 
-    assertTrue(
-        $this->report->isEligibleToBeSentWeekly()
-    );
-});
-
-it('isEligibleToBeSentMonthly returns true if its first day of the month', function () {
-    Carbon::setTestNow(Carbon::create(now()->firstOfMonth()));
-
-    assertTrue(
-        $this->report->isEligibleToBeSentMonthly()
-    );
-});
-
-it('isEligibleToBeSentQuarterly returns true if its first day of the quarter', function () {
-    Carbon::setTestNow(Carbon::create(now()->firstOfQuarter()));
-
-    assertTrue(
-        $this->report->isEligibleToBeSentQuarterly()
-    );
-});
-
-dataset('intervalDates', function () {
-
-    /* Quarterly */
+    /* Weekly */
     yield function () {
         return [
+            'report' => resolve(MarketingWeeklyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfQuarter(),
         ];
     };
 
     /* Monthly */
-    yield function () {
+    yield function() {
         return [
+            'report' => resolve(MarketingMonthlyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfMonth(),
         ];
     };
 
-    /* Weekly */
+    /* Quarterly */
     yield function () {
         return [
+            'report' => resolve(MarketingQuarterlyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
         ];
     };
+
 });

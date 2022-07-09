@@ -156,7 +156,7 @@ function SubmissionStep02Content() {
                             <Box>
                                 <Typography display={'block'} variant={'caption'}>
                                     We offer a professional cleaning service in which we carefully remove any dirt or
-                                    dust from your card. Dirt and dust may cause your card to get a lower grade then you
+                                    dust from your card. Dirt and dust may cause your card to get a lower grade than you
                                     would get otherwise.{' '}
                                 </Typography>
                                 <Typography

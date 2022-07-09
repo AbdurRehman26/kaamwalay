@@ -3,7 +3,6 @@
 namespace App\Rules\Order;
 
 use App\Models\Order;
-use App\Models\OrderPayment;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 

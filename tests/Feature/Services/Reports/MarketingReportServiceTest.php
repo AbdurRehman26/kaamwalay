@@ -117,13 +117,12 @@ it('checks if class implements reportable contract', function () {
     foreach ([
                  resolve(MarketingWeeklyReport::class),
                  resolve(MarketingMonthlyReport::class),
-                 resolve(MarketingQuarterlyReport::class)
+                 resolve(MarketingQuarterlyReport::class),
              ] as $report) {
         assertTrue(
             $report instanceof Reportable
         );
     }
-
 });
 
 dataset('reportable', function () {

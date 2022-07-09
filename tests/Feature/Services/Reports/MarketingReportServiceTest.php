@@ -27,7 +27,6 @@ beforeEach(function () {
 });
 
 it('validates reports data for weekly, monthly and quarterly', function ($reportable) {
-
     $report = $reportable['report'];
 
     $fromDate = $reportable['fromDate'];
@@ -106,7 +105,6 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $reportData = $report->getReportData($fromDate, $toDate);
 
     $this->assertEquals($resultArray, $reportData);
-
 })->with('reportable');
 
 it('checks if template exists', function () {
@@ -140,7 +138,7 @@ dataset('reportable', function () {
     };
 
     /* Monthly */
-    yield function() {
+    yield function () {
         return [
             'report' => resolve(MarketingMonthlyReport::class),
             'fromDate' => $this->date,
@@ -156,5 +154,4 @@ dataset('reportable', function () {
             'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
         ];
     };
-
 });

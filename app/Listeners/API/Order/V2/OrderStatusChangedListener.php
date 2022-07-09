@@ -12,6 +12,7 @@ use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
 use App\Services\PopReport\PopReportService;
+use App\Services\ShipStationService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,7 +32,8 @@ class OrderStatusChangedListener implements ShouldQueue
         protected EmailService $emailService,
         protected OrderService $orderService,
         protected AdminOrderService $adminOrderService,
-        protected PopReportService $popReportService
+        protected PopReportService $popReportService,
+        protected ShipStationService $shipStationService
     ) {
     }
 
@@ -91,6 +93,8 @@ class OrderStatusChangedListener implements ShouldQueue
                 'FIRST_NAME' => $event->order->user->first_name,
             ]
         );
+
+        $this->shipStationService->createOrder($event->order);
     }
 
     protected function handleConfirmed(OrderStatusChangedEvent $event): void

@@ -83,4 +83,10 @@ return [
         'key' => env('EASYSHIP_API_KEY'),
     ],
 
+    'shipstation' => [
+        'base_url' => env('SHIPSTATION_BASE_URL'),
+        'api_key' => env('SHIPSTATION_API_KEY'),
+        'api_secret' => env('SHIPSTATION_API_SECRET'),
+    ],
+
 ];

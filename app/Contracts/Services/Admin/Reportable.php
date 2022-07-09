@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin\Report\Contracts;
+namespace App\Contracts\Services\Admin;
 
 interface Reportable
 {

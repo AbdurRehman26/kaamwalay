@@ -78,3 +78,20 @@ test('credit is not added to user`s wallet if config flag is disabled via config
 
     expect(Wallet::find($this->user->wallet->id)->balance)->toBe($walletAmount);
 })->group('order.wallet.credit');
+
+it('calculates and credits the amount from what user paid through the payment method other than wallet', function () {
+    $walletAmount = $this->user->wallet->balance;
+    $this->order->amount_paid_from_wallet = 10;
+    $this->order->save();
+
+    $listener = new CreditCustomerForPayNowAndSave(new WalletService());
+    $listener->handle(new OrderPaid(Order::find($this->order->id)));
+
+    $walletCreditAmount = (
+        ($this->order->grand_total - $this->order->amount_paid_from_wallet)
+        * config('robograding.feature_order_wallet_credit_percentage')
+    ) / 100;
+
+    expect(round(Wallet::find($this->user->wallet->id)->balance, 2))->toBe(round($walletAmount + $walletCreditAmount, 2));
+    expect(round($this->user->wallet->lastTransaction->amount, 2))->toBe(round($walletCreditAmount, 2));
+})->group('order.wallet.credit');

@@ -38,22 +38,25 @@ abstract class MarketingReport implements Reportable
 
     protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
     {
-        return (float) number_format(Order::betweenDates($fromDate, $toDate)->paid()->avg('grand_total'), 2);
+        return (float) number_format(Order::paid()->betweenDates($fromDate, $toDate)->avg('grand_total'), 2);
     }
 
     protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): int
     {
-        $totalCustomers = Order::betweenDates($fromDate, $toDate)
+        $totalCustomers = Order::whereBetween('graded_at', [$fromDate, $toDate])
                 ->distinct('user_id')
                 ->paid()
-                ->where('order_status_id', '>=', OrderItemStatus::GRADED)
+                ->where('order_status_id', '>=', OrderStatus::GRADED)
                 ->count();
 
         if (! $totalCustomers) {
             return $totalCustomers;
         }
 
-        return (OrderItem::betweenDates($fromDate, $toDate)->graded()->count() / $totalCustomers);
+        return OrderItem::join('orders', 'orders.id', 'order_items.order_id')
+                ->whereBetween('orders.graded_at', [$fromDate, $toDate])
+                ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+                ->count() / $totalCustomers;
     }
 
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
@@ -91,9 +94,9 @@ abstract class MarketingReport implements Reportable
 
         return Order::join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
                 ->select(DB::raw("AVG(DATEDIFF(orders.$statusOfOrder, order_status_histories.created_at)) as avg"))
-                ->where('orders.order_status_id', '=', $orderColumns[$statusOfOrder])
+                ->where('orders.order_status_id', '>=', $orderColumns[$statusOfOrder])
                 ->where('order_status_histories.order_status_id', '=', OrderStatus::CONFIRMED)
-                ->whereBetween('orders.created_at', [$fromDate, $toDate])
+                ->whereBetween("orders.$statusOfOrder", [$fromDate, $toDate])
                 ->first()
                 ->avg ?? 0;
     }
@@ -101,7 +104,7 @@ abstract class MarketingReport implements Reportable
     protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
         return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
-                ->betweenDates($fromDate, $toDate)
+                ->whereBetween('orders.shipped_at', [$fromDate, $toDate])
                 ->first()
                 ->avg ?? 0;
     }

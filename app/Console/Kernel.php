@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
         $schedule->command(ProcessPaymentHandshake::class, ['--email=platform@robograding.com'])->everyFiveMinutes();
-        $schedule->command(SendAdminReports::class)->daily();
+        $schedule->command(SendAdminReports::class)->dailyAt('00:20');
     }
 
     /**

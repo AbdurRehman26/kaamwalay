@@ -1,6 +1,5 @@
 <?php
 
-use App\Contracts\Services\Admin\Reportable;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
@@ -13,9 +12,6 @@ use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
-
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertTrue;
 
 beforeEach(function () {
     Event::fake();
@@ -89,41 +85,42 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $queryCardsCalculation50To100 = clone $queryCardsCalculation25To50;
     $queryCardsCalculation100 = clone $queryCardsCalculation25To50;
 
+    $queryCardsConfirmationToNextStatus = Order::join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
+        ->where('order_status_histories.order_status_id', '=', OrderStatus::CONFIRMED);
+
+    $queryCardsConfirmationToGrading = clone $queryCardsConfirmationToNextStatus;
+
     $resultArray = [
         'Average order amount' => '$'.(float) number_format(Order::betweenDates($fromDate, $toDate)->avg('grand_total'), 2) ?? 0,
-        'Average number of cards graded by all customers' => (int)(OrderItem::graded()->count() / 4),
-        'Number of repeat customers' => count(DB::select('select max(id) from orders group by user_id having count(*) > 1')),
+        'Average number of cards graded by all customers' => (int)(OrderItem::count() / 4),
+        'Number of repeat customers' => Order::selectRaw('MAX(id)')->groupBy('user_id')->having(DB::raw('COUNT(user_id)'), '>', 1)->count(),
         'Number of customers who order 25-50 cards' => $queryCardsCalculation25To50->having(DB::raw('COUNT(order_items.id)'), '>=', 25)->having(DB::raw('COUNT(order_items.id)'), '<', 50)->count(),
         'Number of customers who order 50 - 100 cards' => $queryCardsCalculation50To100->having(DB::raw('COUNT(order_items.id)'), '>=', 50)->having(DB::raw('COUNT(order_items.id)'), '<', 100)->count(),
         'Number of customers that order 100+ cards' => $queryCardsCalculation100->having(DB::raw('COUNT(order_items.id)'), '>=', 100)->count(),
-        'Average number of days taken from confirmation to grading' => (int) Order::where('order_status_id', '=', OrderStatus::GRADED)->select(DB::raw("AVG(DATEDIFF(graded_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg  . ' Day(s)',
-        'Average number of days taken from confirmation to shipping' => (int) Order::where('order_status_id', '=', OrderStatus::SHIPPED)->select(DB::raw("AVG(DATEDIFF(shipped_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg  . ' Day(s)',
+        'Average number of days taken from confirmation to grading' => (int) $queryCardsConfirmationToGrading->select(DB::raw("AVG(DATEDIFF(orders.graded_at, order_status_histories.created_at)) as avg"))
+        ->where('orders.order_status_id', '>=', OrderStatus::GRADED)
+        ->whereBetween("orders.graded_at", [$fromDate, $toDate])
+        ->first()->avg . ' Day(s)',
+
+        'Average number of days taken from confirmation to shipping' => (int) $queryCardsConfirmationToGrading->select(DB::raw("AVG(DATEDIFF(orders.shipped_at, order_status_histories.created_at)) as avg"))
+            ->where('orders.order_status_id', '>=', OrderStatus::SHIPPED)
+            ->whereBetween("orders.shipped_at", [$fromDate, $toDate])
+            ->first()->avg . ' Day(s)',
+
         'Average number of days taken from grading to shipping' => (int) Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
         'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
     ];
 
-    $reportData = $report->getReportData($fromDate, $toDate);
+    $reportData = $report->getDataForReport($fromDate, $toDate);
 
-    $this->assertEquals($resultArray, $reportData);
+    expect($reportData)->toBe($resultArray);
+
 })->with('reportable');
 
 it('checks if template exists', function () {
-    $templatePath = head(Config::get('view.paths')) . '/emails/admin/'.$this->report->getTemplate() . '.blade.php';
+    $report = resolve(MarketingQuarterlyReport::class);
 
-    assertFileExists($templatePath);
-});
-
-it('checks if class implements reportable contract', function () {
-    foreach ([
-                 resolve(MarketingWeeklyReport::class),
-                 resolve(MarketingMonthlyReport::class),
-                 resolve(MarketingQuarterlyReport::class)
-             ] as $report) {
-        assertTrue(
-            $report instanceof Reportable
-        );
-    }
-
+    expect(View::exists('emails.admin.reports.' . $report->getTemplate()))->toBeTrue();
 });
 
 dataset('reportable', function () {

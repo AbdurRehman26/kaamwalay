@@ -19,6 +19,6 @@ class MarketingWeeklyReport extends MarketingReport
 
     public function getReportData(): array
     {
-        return $this->getDataForReport(now()->subWeek()->endOfDay(), now()->startOfDay());
+        return $this->getDataForReport(now()->subWeek()->startOfDay(), now()->subDay()->endOfDay());
     }
 }

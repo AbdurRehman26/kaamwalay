@@ -93,7 +93,7 @@ abstract class MarketingReport implements Reportable
         ];
 
         return Order::join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-                ->select(DB::raw("AVG(DATEDIFF(orders.$statusOfOrder, order_status_histories.created_at)) as avg"))
+                ->select(DB::raw("AVG(orders.$statusOfOrder) - AVG(order_status_histories.created_at) as avg"))
                 ->where('orders.order_status_id', '>=', $orderColumns[$statusOfOrder])
                 ->where('order_status_histories.order_status_id', '=', OrderStatus::CONFIRMED)
                 ->whereBetween("orders.$statusOfOrder", [$fromDate, $toDate])
@@ -103,7 +103,7 @@ abstract class MarketingReport implements Reportable
 
     protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
+        return Order::select(DB::raw("AVG(shipped_at) - AVG(graded_at) as avg"))
                 ->whereBetween('orders.shipped_at', [$fromDate, $toDate])
                 ->first()
                 ->avg ?? 0;
@@ -111,7 +111,7 @@ abstract class MarketingReport implements Reportable
 
     protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))
+        return Order::select(DB::raw("AVG(paid_at) - AVG(created_at) as avg"))
                 ->paid()
                 ->betweenDates($fromDate, $toDate)
                 ->first()

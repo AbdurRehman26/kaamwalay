@@ -835,7 +835,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem betweenDates(\DateTime $fromDate, \DateTime $toDate)
  * @method static \Database\Factories\OrderItemFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem forOrder(\App\Models\Order $order)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderItem graded()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()

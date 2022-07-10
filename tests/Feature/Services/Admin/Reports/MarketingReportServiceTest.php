@@ -114,7 +114,6 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $reportData = $report->getDataForReport($fromDate, $toDate);
 
     expect($reportData)->toBe($resultArray);
-
 })->with('reportable');
 
 it('checks if template exists', function () {

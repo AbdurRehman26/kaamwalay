@@ -138,7 +138,7 @@ abstract class MarketingReport implements Reportable
             return $totalUsers;
         }
 
-        return number_format(( User::whereHas('orders')
+        return (float) number_format(( User::whereHas('orders')
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->count() /  $totalUsers) * 100, 2);
     }
@@ -151,6 +151,6 @@ abstract class MarketingReport implements Reportable
             return $totalOrders;
         }
 
-        return number_format( ( Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() /  $totalOrders) * 100 , 2);
+        return (float) number_format( ( Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() /  $totalOrders) * 100 , 2);
     }
 }

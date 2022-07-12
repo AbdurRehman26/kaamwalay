@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Models\User;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,9 @@ abstract class MarketingReport implements Reportable
             'Average number of days taken from confirmation to shipping' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'shipped_at') . ' Day(s)',
             'Average number of days taken from grading to shipping' => $this->getAvgDaysFromGradingToShipping($fromDate, $toDate)  . ' Day(s)',
             'Average time from submission to payment' => $this->getAvgDaysFromSubmissionToPayment($fromDate, $toDate)  . ' Day(s)',
+            'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate)  . ' Day(s)',
+            '% of signups that make submission' => $this->getPercentageOfSignupThatMadeSubmission($fromDate, $toDate),
+            '% of submissions that don`t make payment' => $this->getPercentageOfSubmissionThatDontMakePayment($fromDate, $toDate),
         ];
     }
 
@@ -116,5 +120,37 @@ abstract class MarketingReport implements Reportable
                 ->betweenDates($fromDate, $toDate)
                 ->first()
                 ->avg ?? 0;
+    }
+
+    protected function getAvgDaysFromSignupToSubmission(DateTime $fromDate, DateTime $toDate): int
+    {
+        return User::select(DB::raw("AVG(DATEDIFF(orders.created_at, users.created_at)) as avg"))
+                ->join('orders', 'orders.user_id', '=','users.id')
+                ->whereBetween('users.created_at', [$fromDate, $toDate])
+                ->first()->avg ?? 0;
+    }
+
+    protected function getPercentageOfSignupThatMadeSubmission(DateTime $fromDate, DateTime $toDate): float
+    {
+        $totalUsers = User::whereBetween('created_at', [$fromDate, $toDate])->count();
+
+        if( !$totalUsers ){
+            return $totalUsers;
+        }
+
+        return number_format(( User::whereHas('orders')
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->count() /  $totalUsers) * 100, 2);
+    }
+
+    protected function getPercentageOfSubmissionThatDontMakePayment(DateTime $fromDate, DateTime $toDate): float
+    {
+        $totalOrders = Order::whereBetween('created_at', [$fromDate, $toDate])->count();
+
+        if( !$totalOrders ){
+            return $totalOrders;
+        }
+
+        return number_format( ( Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() /  $totalOrders) * 100 , 2);
     }
 }

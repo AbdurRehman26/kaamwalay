@@ -125,7 +125,7 @@ abstract class MarketingReport implements Reportable
     protected function getAvgDaysFromSignupToSubmission(DateTime $fromDate, DateTime $toDate): int
     {
         return User::select(DB::raw("AVG(DATEDIFF(orders.created_at, users.created_at)) as avg"))
-                ->join('orders', 'orders.user_id', '=','users.id')
+                ->join('orders', 'orders.user_id', '=', 'users.id')
                 ->whereBetween('users.created_at', [$fromDate, $toDate])
                 ->first()->avg ?? 0;
     }
@@ -134,20 +134,20 @@ abstract class MarketingReport implements Reportable
     {
         $totalUsers = User::whereBetween('created_at', [$fromDate, $toDate])->count();
 
-        if( !$totalUsers ){
+        if (! $totalUsers) {
             return $totalUsers;
         }
 
         return (float) number_format(( User::whereHas('orders')
                     ->whereBetween('created_at', [$fromDate, $toDate])
-                    ->count() /  $totalUsers) * 100, 2);
+                    ->count() / $totalUsers) * 100, 2);
     }
 
     protected function getPercentageOfSubmissionThatDontMakePayment(DateTime $fromDate, DateTime $toDate): float
     {
         $totalOrders = Order::whereBetween('created_at', [$fromDate, $toDate])->count();
 
-        if( !$totalOrders ){
+        if (! $totalOrders) {
             return $totalOrders;
         }
 

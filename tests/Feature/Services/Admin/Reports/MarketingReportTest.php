@@ -18,7 +18,6 @@ beforeEach(function () {
     Mail::fake();
 
     $this->date = Carbon::create(2022);
-
 });
 
 it('validates reports data for weekly, monthly and quarterly', function ($reportable) {
@@ -30,7 +29,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $differenceInDays = $fromDate->diff($toDate)->days;
 
     $this->users = User::factory()->count(4)->create([
-        'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2)))
+        'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
     ]);
 
     foreach ($this->users as $user) {
@@ -113,15 +112,15 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
         'Average number of days taken from grading to shipping' => (int) Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
         'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
         'Average time from signup to submission' => (int) User::select(DB::raw("AVG(DATEDIFF(orders.created_at, users.created_at)) as avg"))
-            ->join('orders', 'orders.user_id', '=','users.id')
+            ->join('orders', 'orders.user_id', '=', 'users.id')
             ->whereBetween('users.created_at', [$fromDate, $toDate])
             ->first()->avg . ' Day(s)',
 
-        '% of signups that make submission' => (float) number_format(( User::whereHas('orders')
+        '% of signups that make submission' => (float) number_format((User::whereHas('orders')
                     ->whereBetween('created_at', [$fromDate, $toDate])
-                    ->count() /  User::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
+                    ->count() / User::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
 
-        '% of submissions that don`t make payment' => (float) number_format( ( Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() /  Order::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100 , 2),
+        '% of submissions that don`t make payment' => (float) number_format((Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() / Order::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
 
     ];
 

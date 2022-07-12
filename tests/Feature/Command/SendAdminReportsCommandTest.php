@@ -21,4 +21,4 @@ it('runs command to send reports to admins', function () {
 
     $this->artisan(SendAdminReports::class)
         ->assertExitCode(0);
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');

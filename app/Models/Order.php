@@ -10,6 +10,7 @@ use App\Enums\Order\OrderStepEnum;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -524,6 +525,15 @@ class Order extends Model implements Exportable
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
+    {
+        return $query->whereBetween('created_at', [$fromDate, $toDate]);
     }
 
     public function isOlderThanOneDay(): bool

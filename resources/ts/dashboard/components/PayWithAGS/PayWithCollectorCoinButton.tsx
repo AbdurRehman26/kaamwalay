@@ -24,6 +24,8 @@ export function PayWithCollectorCoinButton() {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+
     const wallets = {
         // Prod eth mainnet wallet
         ethWallet: configs?.web3EthWallet,
@@ -120,7 +122,7 @@ export function PayWithCollectorCoinButton() {
                         orderID,
                         chainID: currentChainId,
                         paymentByWallet: appliedCredit,
-                        discountedAmount: discountedValue,
+                        discountedAmount: isCouponApplied ? discountedValue : 0,
                     }),
                 );
                 return;
@@ -131,13 +133,13 @@ export function PayWithCollectorCoinButton() {
                     orderID,
                     chainID: 1,
                     paymentByWallet: appliedCredit,
-                    discountedAmount: discountedValue,
+                    discountedAmount: isCouponApplied ? discountedValue : 0,
                 }),
             );
         }
 
         fetchTotalInAGS();
-    }, [dispatch, orderID, appliedCredit, discountedValue]);
+    }, [dispatch, orderID, appliedCredit, discountedValue, isCouponApplied]);
 
     return (
         <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>

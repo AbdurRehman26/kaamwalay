@@ -164,8 +164,7 @@ function SubmissionStep02Content() {
                                     sx={{ fontWeight: 700, marginTop: '12px' }}
                                     variant={'caption'}
                                 >
-                                    Card cleaning costs {formatCurrency(featureOrderCleaningFeePerCard)} per card and
-                                    can help improve your grade by 0.5/10 points.
+                                    Card cleaning costs {formatCurrency(featureOrderCleaningFeePerCard)} per card.
                                 </Typography>
                                 <Typography
                                     display={'block'}

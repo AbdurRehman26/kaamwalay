@@ -682,6 +682,7 @@ namespace App\Models{
  * @property-read \App\Models\OrderAddress|null $shippingAddress
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Order betweenDates(\DateTime $fromDate, \DateTime $toDate)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
  * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()
@@ -691,6 +692,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order paid()
  * @method static \Illuminate\Database\Eloquent\Builder|Order placed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order status(string|int $status)

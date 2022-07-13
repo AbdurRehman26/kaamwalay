@@ -426,6 +426,16 @@
                                     ${{number_format($order->shipping_fee, 2)}}
                                 </td>
                             </tr>
+                            @if($order->cleaning_fee > 0)
+                            <tr class="info-line">
+                                <td class="info-title">
+                                    Cleaning Fee:
+                                </td>
+                                <td class="info-content">
+                                    ${{number_format($order->cleaning_fee, 2)}}
+                                </td>
+                            </tr>
+                            @endif
                             <tr class="info-line total-line">
                                 <td class="info-title">
                                     Total:

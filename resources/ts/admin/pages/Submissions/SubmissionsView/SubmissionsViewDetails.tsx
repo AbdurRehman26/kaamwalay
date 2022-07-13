@@ -22,6 +22,7 @@ interface SubmissionsViewDetailsProps {
     declaredValue: number;
     serviceFee: number;
     shippingFee: number;
+    cleaningFee: number;
     grandTotal: number;
     customerId: number;
     customerNumber: string;
@@ -64,6 +65,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         customerNumber,
         serviceFee,
         shippingFee,
+        cleaningFee,
         grandTotal,
         billingAddress,
         shippingAddress,
@@ -122,6 +124,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Insured Shipping:': formatCurrency(shippingFee),
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
+            ...(Number(cleaningFee) > 0 && { 'Cleaning Fee:': formatCurrency(cleaningFee) }),
             'Total:': formatCurrency(grandTotal),
         }),
         [
@@ -129,6 +132,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             serviceFee,
             discountedAmount,
             shippingFee,
+            cleaningFee,
             extraChargesTotal,
             paymentMethodDiscountedAmount,
             refundsTotal,

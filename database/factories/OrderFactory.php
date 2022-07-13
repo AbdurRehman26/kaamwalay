@@ -26,7 +26,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'order_number' => $this->faker->uuid(),
+            'order_number' => strtoupper($this->faker->uuid()),
             'shipping_fee' => $this->faker->randomFloat(2, 50, 500),
             'service_fee' => $this->faker->randomFloat(2, 50, 500),
             'grand_total' => $this->faker->randomFloat(2, 20, 10000),

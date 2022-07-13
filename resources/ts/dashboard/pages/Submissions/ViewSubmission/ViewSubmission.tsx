@@ -107,6 +107,7 @@ export function ViewSubmission() {
                 customerNumber={data?.customer?.customerNumber}
                 serviceFee={data?.serviceFee}
                 shippingFee={data?.shippingFee}
+                cleaningFee={data?.cleaningFee}
                 refundsTotal={data?.refundTotal}
                 extraChargesTotal={data?.extraChargeTotal}
                 total={data?.grandTotal}

@@ -7,8 +7,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import { setCleaningFee, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
 import SubmissionSummaryDescription from './SubmissionSummaryDescription';
 
@@ -152,6 +153,8 @@ function SubmissionSummary() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const requiresCleaning = useAppSelector((state) => state.newSubmission.step02Data.requiresCleaning);
+    const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
@@ -160,6 +163,8 @@ function SubmissionSummary() {
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+
+    const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -179,9 +184,20 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
+    function getCleaningFee() {
+        const calculatedCleaningFee = numberOfSelectedCards * featureOrderCleaningFeePerCard;
+        const previewCleaningFee =
+            calculatedCleaningFee >= featureOrderCleaningFeeMaxCap
+                ? featureOrderCleaningFeeMaxCap
+                : calculatedCleaningFee;
+        dispatch(setCleaningFee(previewCleaningFee));
+        return previewCleaningFee;
+    }
+
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
+            Number(cleaningFee) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -283,6 +299,20 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {requiresCleaning ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
+                                    <NumberFormat
+                                        value={getCleaningFee()}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
                         </div>
                         <Divider light />
                     </>
@@ -442,6 +472,20 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {requiresCleaning ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
+                                    <NumberFormat
+                                        value={getCleaningFee()}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
                         </div>
                         <Divider light />
                     </>

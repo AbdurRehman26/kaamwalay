@@ -61,11 +61,23 @@ class OrderPaymentProcessedNotification extends Notification
 
         $message = "$customerFullName, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, $totalCards";
 
-        if (! $this->order->salesman) {
-            return $message;
+        if ($countryName = $this->order->shippingAddress?->country->name) {
+            $message = "$message, $countryName";
         }
 
-        return $message . "\nSalesman: {$this->order->salesman->email}";
+        if ($this->order->hasCreditApplied()) {
+            $message = "$message, Credit Applied";
+        }
+
+        if ($this->order->hasCoupon()) {
+            $message = "$message, Coupon Applied";
+        }
+
+        if ($this->order->salesman) {
+            $message = $message . "\nSalesman: {$this->order->salesman->email}";
+        }
+
+        return $message;
     }
 
     protected function getMessageForExtraChargeAndRefund(string $paymentCode): string

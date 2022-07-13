@@ -8,5 +8,6 @@ export class CustomerEntity extends Entity {
     public email!: string;
     public phone!: string;
     public submissions!: number;
+    public cardsCount!: number;
     public wallet!: WalletEntity;
 }

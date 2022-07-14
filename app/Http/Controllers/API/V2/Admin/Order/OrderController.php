@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeCanceled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -63,5 +66,30 @@ class OrderController extends V1OrderController
         $order = $this->ordersService->getOrder($orderId);
 
         return new OrderResource($order);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function destroy(Order $order): JsonResponse
+    {
+        throw_if(($order->payment_status !== OrderPaymentStatusEnum::PENDING || $order->order_status_id === OrderStatus::CANCELLED), OrderCanNotBeCanceled::class);
+
+        /** @var OrderService $orderService */
+        $orderService = resolve(OrderService::class);
+
+        try {
+            DB::beginTransaction();
+
+            $orderService->cancelOrder($order, auth()->user());
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return new JsonResponse(['message' => 'Failed to delete order!'], $e->getCode());
+        }
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }

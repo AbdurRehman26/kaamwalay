@@ -252,6 +252,18 @@ export const updateOrderWalletById = createAsyncThunk('updateOrderWalletById', a
     }
 });
 
+export const cancelOrder = createAsyncThunk('cancelOrder', async (orderId: number, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        await ordersRepository.cancelOrder({ orderId });
+        NotificationsService.success('Order canceled successfully!');
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {

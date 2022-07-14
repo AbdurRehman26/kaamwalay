@@ -9,8 +9,11 @@ import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { cancelOrder } from '@shared/redux/slices/adminOrdersSlice';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
 const useStyles = makeStyles(
@@ -48,6 +51,8 @@ export default function SubmissionHeaderMoreButton({
     const [creditDialog, setCreditDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const notifications = useNotifications();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -65,10 +70,9 @@ export default function SubmissionHeaderMoreButton({
 
     const setCancelDialog = useCallback(async () => {
         const result = await confirm({
-            title: 'Delete account',
-            message:
-                "Are you sure you want to delete your account? This is a permanent action, you'll be unable to recover your account. You can deactivate your account instead.",
-            confirmText: 'I understand, delete my account',
+            title: 'Cancel Order',
+            message: 'Are you sure you want to cancel the order?',
+            confirmText: 'Yes',
             cancelButtonProps: {
                 color: 'inherit',
             },
@@ -80,14 +84,16 @@ export default function SubmissionHeaderMoreButton({
 
         try {
             if (result) {
-                // await dispatchProfileAction(dispatch(deleteProfile()));
+                await dispatch(cancelOrder(orderId))
+                    .unwrap()
+                    .then(() => {
+                        navigate(`/submissions/all/list`);
+                    });
             }
         } catch (e) {
-            // notifications.exception(e as Error);
-        } finally {
-            // setLoading('');
+            notifications.exception(e as Error);
         }
-    }, [confirm]);
+    }, [navigate, orderId, notifications, dispatch, confirm]);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -123,7 +129,7 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.AddExtraCharge)}>Add Extra Charge</MenuItem>
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
-                <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Order</MenuItem>
+                <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
                 {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                 ) : null}

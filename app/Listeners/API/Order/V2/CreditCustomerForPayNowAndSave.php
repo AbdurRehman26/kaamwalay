@@ -37,12 +37,19 @@ class CreditCustomerForPayNowAndSave
      */
     protected function addCreditToCustomerWallet(OrderPaid $event): void
     {
-        $this->walletService->processTransaction(
-            $event->order->user->wallet->id,
-            ($event->order->grand_total * config('robograding.feature_order_wallet_credit_percentage')) / 100,
-            WalletTransactionReason::WALLET_CREDIT,
-            $event->order->user_id,
-            $event->order->id
-        );
+        $creditAmount = (
+            ($event->order->grand_total - $event->order->amount_paid_from_wallet)
+            * config('robograding.feature_order_wallet_credit_percentage')
+        ) / 100;
+
+        if ($creditAmount > 0) {
+            $this->walletService->processTransaction(
+                $event->order->user->wallet->id,
+                $creditAmount,
+                WalletTransactionReason::WALLET_CREDIT,
+                $event->order->user_id,
+                $event->order->id
+            );
+        }
     }
 }

@@ -68,6 +68,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [CardProductController::class, 'store']);
     });
 
+    Route::prefix('certificates')->group(function () {
+        Route::get('/', [UserCardController::class, 'listCertificates']);
+        Route::get('/{certificateNumber}', [UserCardController::class, 'getCertificate']);
+    });
+
     // Coupons
     Route::apiResource('coupons', CouponController::class)->except('update');
     Route::put('coupons/{coupon}/change-status', CouponStatusController::class)

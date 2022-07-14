@@ -165,13 +165,15 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                     >
                                                         ID: {item.id}
                                                     </Typography>
-                                                    <Typography
-                                                        variant={'caption'}
-                                                        color={'textSecondary'}
-                                                        className={classes.gutterRight}
-                                                    >
-                                                        Certificate #: {item.certificateNumber ?? null}
-                                                    </Typography>
+                                                    {item.certificateNumber ? (
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.gutterRight}
+                                                        >
+                                                            Certificate #: {item.certificateNumber}
+                                                        </Typography>
+                                                    ) : null}
                                                 </Box>
                                             ) : null}
 

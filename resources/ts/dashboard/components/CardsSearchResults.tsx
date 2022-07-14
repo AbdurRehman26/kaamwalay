@@ -10,8 +10,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Hit } from 'react-instantsearch-core';
 import { Hits, Stats } from 'react-instantsearch-dom';
+import { AuthDialog } from '@shared/components/AuthDialog';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { useAuth } from '@shared/hooks/useAuth';
 import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObject';
 import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
@@ -155,10 +157,15 @@ function CardsSearchResults() {
     const [showAddCardDialog, setShowAddCardDialog] = useState<boolean | null>(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const ResultsWrapper = isSm ? 'div' : Paper;
+    const { authenticated, authDialogProps, openAuthDialog } = useAuth();
 
     const toggleAddCardDialog = useCallback(() => {
+        if (!showAddCardDialog && !authenticated) {
+            openAuthDialog();
+            return;
+        }
         setShowAddCardDialog(!showAddCardDialog);
-    }, [showAddCardDialog]);
+    }, [showAddCardDialog, authenticated, openAuthDialog]);
 
     return (
         <div className={classes.container}>
@@ -189,6 +196,10 @@ function CardsSearchResults() {
                 <Hits hitComponent={ResultWrapper} />
                 <CustomPagination />
             </ResultsWrapper>
+            <AuthDialog
+                {...authDialogProps}
+                subtitle={'In order to add cards manually, you need to login with a Robograding account.'}
+            />
         </div>
     );
 }

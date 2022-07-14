@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeCanceled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
@@ -10,7 +9,6 @@ use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
-use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

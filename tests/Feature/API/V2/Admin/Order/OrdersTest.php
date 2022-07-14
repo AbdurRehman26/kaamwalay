@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\deleteJson;
+
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
@@ -374,6 +376,19 @@ test('order can be shipped if its not paid', function () {
     ])->assertOk();
 
     Event::assertDispatched(OrderStatusChangedEvent::class);
+});
+
+test('order can be canceled if its not paid', function () {
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertNoContent();
+});
+
+test('order can not be canceled if its paid', function () {
+    /** @var Order $order */
+    Event::fake();
+    $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertForbidden();
 });
 
 it('returns only orders with filtered payment status', function ($data) {

@@ -79,9 +79,9 @@ function OrderReviewSection() {
             {shippingMethod?.code !== ShippingMethodType.VaultStorage ? (
                 <div className={classes.orderItemsColumn}>
                     <OrderDetailItem title={'Shipping Address'} editStep={2}>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${finalShippingAddress.fullName} ${finalShippingAddress.lastName}`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${
+                            finalShippingAddress.fullName || finalShippingAddress.firstName
+                        } ${finalShippingAddress.lastName}`}</Typography>
                         <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
                             finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                         }`}</Typography>

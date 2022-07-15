@@ -3,54 +3,54 @@
 namespace App\Http\APIClients;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Exception;
 use Http;
+use Log;
+use Illuminate\Http\Client\Response;
 
 class ShipStationClient {
 
-    public function createOrder(Order $order) {
+    public function createOrder(Order $order): array {
         $data = [
-            'orderNumber' => 'RG00001',
-            'customerUsername' => 'Ali Raza',
-            'customerEmail' => 'ali@wooter.com',
-            'phone' => '8112114',
-            'numberofCards' => 'RG00001',
-            'orderDate' => '2015-06-29T08:46:27.0000000',
+            'orderNumber' => $order->order_number,
+            'customerUsername' => $order->user->getFullName(),
+            'customerEmail' => $order->user->email,
+            'numberofCards' => $order->orderItems->count(),
+            'orderDate' =>  Carbon::parse($order->created_at)->format('Y-m-d\TH:i:s.uP'),
             'orderStatus' => 'awaiting_payment',
+            'advancedOptions' => [
+                "storeId" => config('services.shipstation.store_id'),
+            ],
             'billTo' => [
-                'name' => 'Home',
-                'company' => null,
-                'street1' => null,
-                'street2' => null,
-                'street3' => null,
-                'city' => null,
-                'state' => null,
-                'postalCode' => null,
-                'country' => null,
-                'phone' => null,
-                'residential' => null
+                'name' => $order->shippingAddress->getFullName(),
+                'street1' => $order->shippingAddress->address,
+                'street2' => $order->shippingAddress->address_2,
+                'city' => $order->shippingAddress->city,
+                'state' => $order->shippingAddress->state,
+                'postalCode' => $order->shippingAddress->zip,
+                'country' => $order->shippingAddress->country->code,
+                'phone' => $order->shippingAddress->phone,
             ],
             'shipTo' => [
-                'name' => 'The Home',
-                'company' => 'Wooter',
-                'street1' => 'Muslimabad ',
-                'street2' => 'G 10 3',
-                'street3' => null,
-                'city' => 'Abbottabad',
-                'state' => '34',
-                'postalCode' => '22010',
-                'country' => 'US',
-                'phone' => '8112113',
-                'residential' => 'true'
+                'name' => $order->shippingAddress->getFullName(),
+                'street1' => $order->shippingAddress->address,
+                'street2' => $order->shippingAddress->address_2,
+                'city' => $order->shippingAddress->city,
+                'state' => $order->shippingAddress->state,
+                'postalCode' => $order->shippingAddress->zip,
+                'country' => $order->shippingAddress->country->code,
+                'phone' => $order->shippingAddress->phone,
             ]
         ];
 
         try {
             $response = Http::withBasicAuth(config('services.shipstation.api_key'), config('services.shipstation.api_secret'))->post(config('services.shipstation.base_url') . '/orders/createorder', $data);
-            dd($response->json());
             return $response->json();
         } catch (Exception $e) {
             report($e);
+            Log::error('Error occur for Order Number: ' . $order->order_number);
+            return [];
         }
     }
 

@@ -93,8 +93,6 @@ class OrderStatusChangedListener implements ShouldQueue
                 'FIRST_NAME' => $event->order->user->first_name,
             ]
         );
-
-        $this->shipStationService->createOrder($event->order);
     }
 
     protected function handleConfirmed(OrderStatusChangedEvent $event): void
@@ -103,6 +101,8 @@ class OrderStatusChangedListener implements ShouldQueue
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
         ]);
+        
+        $this->shipStationService->createOrder($event->order);
     }
 
     protected function handleGraded(OrderStatusChangedEvent $event): void

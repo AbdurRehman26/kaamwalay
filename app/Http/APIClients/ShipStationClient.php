@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Exception;
 use Http;
 use Log;
-use Illuminate\Http\Client\Response;
 
 class ShipStationClient {
 
@@ -53,5 +52,4 @@ class ShipStationClient {
             return [];
         }
     }
-
 }

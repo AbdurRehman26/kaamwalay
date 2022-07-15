@@ -16,7 +16,7 @@ class ShipStationService {
         if (app()->environment('local')) {
             return;
         }
-        
+
         $this->shipStationClient->createOrder($order);
     }
 }

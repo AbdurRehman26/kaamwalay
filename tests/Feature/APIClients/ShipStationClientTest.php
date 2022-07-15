@@ -4,7 +4,6 @@ use App\Http\APIClients\ShipStationClient;
 use App\Models\Order;
 
 it('create order on shipstation', function () {
-
     $order = Order::factory()->create();
 
     $data = [

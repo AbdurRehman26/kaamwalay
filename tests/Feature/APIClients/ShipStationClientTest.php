@@ -2,10 +2,8 @@
 
 use App\Http\APIClients\ShipStationClient;
 use App\Models\Order;
-use Carbon\Carbon;
 
 it('create order on shipstation', function () {
-
     $order = Order::factory()->create();
 
     $data = [

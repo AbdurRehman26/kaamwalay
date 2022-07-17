@@ -257,7 +257,7 @@ export const cancelOrder = createAsyncThunk('cancelOrder', async (orderId: numbe
 
     try {
         await ordersRepository.cancelOrder({ orderId });
-        NotificationsService.success('Order canceled successfully!');
+        NotificationsService.success('Order cancelled successfully!');
     } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);

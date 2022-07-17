@@ -89,7 +89,6 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER,
             [
                 'FIRST_NAME' => $event->order->user->first_name,
-                'DASHBOARD_URL' => 'dashboard/submissions',
             ]
         );
     }
@@ -99,7 +98,6 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_CONFIRMED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
-            'DASHBOARD_URL' => 'dashboard/submissions',
         ]);
     }
 

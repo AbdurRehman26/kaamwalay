@@ -93,6 +93,7 @@ class OrderController extends V1OrderController
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return new JsonResponse(['message' => 'Failed to cancel order.'], $e->getCode());
         }
 

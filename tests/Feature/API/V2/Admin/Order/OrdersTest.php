@@ -392,7 +392,7 @@ test('order can not be cancelled if it is paid', function () {
     $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
     deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
     $order->refresh();
-    expect(!$order->isCancelled())->toBeTrue();
+    expect(! $order->isCancelled())->toBeTrue();
 });
 
 it('returns only orders with filtered payment status', function ($data) {

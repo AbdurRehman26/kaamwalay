@@ -155,12 +155,7 @@ class OrderService extends V1OrderService
         $order->order_status_id = OrderStatus::CANCELLED;
         $order->save();
 
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'order_status_id' => OrderStatus::CANCELLED,
-            'user_id' => $user->id,
-        ]);
-
-        OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
+        $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+        $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
     }
 }

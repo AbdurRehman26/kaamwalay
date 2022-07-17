@@ -155,8 +155,6 @@ class OrderService extends V1OrderService
 
     public function cancelOrder(Order $order, User $user): void
     {
-        $this->cancelOrderItems($order, $user);
-
         $order->order_status_id = OrderStatus::CANCELLED;
         $order->save();
 
@@ -167,20 +165,5 @@ class OrderService extends V1OrderService
         ]);
 
         OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
-    }
-
-    protected function cancelOrderItems(Order $order, User $user): void
-    {
-        $order->orderItems->each(function (OrderItem $orderItem) use ($order, $user) {
-            OrderItemStatusHistory::updateOrCreate([
-                'order_item_id' => $orderItem->id,
-                'order_item_status_id' => OrderItemStatus::CANCELLED,
-                'user_id' => $user->id,
-                'notes' => 'Admin cancelled the order.',
-            ]);
-
-            $orderItem->order_item_status_id = OrderItemStatus::CANCELLED;
-            $orderItem->save();
-        });
     }
 }

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Exceptions\API\Admin\Order\OrderCanNotBeCanceled;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeCancelled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
+use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
-use App\Models\OrderStatus;
+use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -73,21 +74,26 @@ class OrderController extends V1OrderController
      */
     public function destroy(Order $order): JsonResponse
     {
-        throw_if($order->isPaid() || $order->isCancelled(), OrderCanNotBeCanceled::class);
+        throw_if($order->isPaid() || $order->isCancelled(), OrderCanNotBeCancelled::class);
+        throw_if($order->isCancelled(), OrderIsAlreadyCancelled::class);
 
         /** @var OrderService $orderService */
         $orderService = resolve(OrderService::class);
 
+        /** @var OrderItemService $orderItemService */
+        $orderItemService = resolve(OrderItemService::class);
+
         try {
             DB::beginTransaction();
 
+            $orderItemService->markItemsAsCancelled($order, auth()->user());
             $orderService->cancelOrder($order, auth()->user());
 
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-
-            return new JsonResponse(['message' => 'Failed to delete order!'], $e->getCode());
+            Log::error($e->getMessage());
+            return new JsonResponse(['message' => 'Failed to cancel order.'], $e->getCode());
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);

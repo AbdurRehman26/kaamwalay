@@ -378,17 +378,21 @@ test('order can be shipped if its not paid', function () {
     Event::assertDispatched(OrderStatusChangedEvent::class);
 });
 
-test('order can be canceled if its not paid', function () {
+test('order can be cancelled if it is not paid', function () {
+    Event::fake();
     /** @var Order $order */
     $order = Order::factory()->create();
     deleteJson('/api/v2/admin/orders/' . $order->id)->assertNoContent();
+    $order->refresh();
+    expect($order->isCancelled())->toBeTrue();
 });
 
-test('order can not be canceled if its paid', function () {
+test('order can not be cancelled if it is paid', function () {
     /** @var Order $order */
-    Event::fake();
     $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
-    deleteJson('/api/v2/admin/orders/' . $order->id)->assertForbidden();
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
+    $order->refresh();
+    expect(!$order->isCancelled())->toBeTrue();
 });
 
 it('returns only orders with filtered payment status', function ($data) {

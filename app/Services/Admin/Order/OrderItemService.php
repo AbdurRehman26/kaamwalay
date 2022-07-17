@@ -81,10 +81,23 @@ class OrderItemService
      */
     public function markItemsAsPending(Order $order, array $items, User $user): Collection
     {
+        return $this->marketItemsAs($order, $items, $user, 'pending');
+    }
+
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
+    public function markItemsAsCancelled(Order $order, User $user): Collection
+    {
+        return $this->marketItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
+    }
+
+    protected function marketItemsAs(Order $order, array $items, User $user, string $status): Collection
+    {
         $processedItems = [];
         foreach ($items as $item) {
             $orderItem = OrderItem::find($item);
-            $processedItems[] = $this->changeStatus($order, $orderItem, ["status" => "pending"], $user);
+            $processedItems[] = $this->changeStatus($order, $orderItem, ["status" => $status], $user);
         }
 
         return collect($processedItems);

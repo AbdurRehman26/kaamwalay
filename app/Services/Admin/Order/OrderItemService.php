@@ -86,13 +86,14 @@ class OrderItemService
 
     /**
      * @throws OrderItemDoesNotBelongToOrder
+     * @return Collection<int,OrderItem>
      */
     public function markItemsAsCancelled(Order $order, User $user): Collection
     {
         return $this->marketItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
     }
 
-    protected function marketItemsAs(Order $order, array $items, User $user, string $status): Collection
+    protected function marketItemsAs(Order $order, array $items, User $user, string|int $status): Collection
     {
         $processedItems = [];
         foreach ($items as $item) {

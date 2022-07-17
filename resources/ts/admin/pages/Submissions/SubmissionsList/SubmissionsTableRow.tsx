@@ -144,7 +144,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         <MuiLink
                             component={Link}
                             color={'primary'}
-                            to={`/customers/${order.customer?.id}/view`}
+                            to={`/customers/list?search=${order.customer?.customerNumber}`}
                             className={font.fontWeightMedium}
                         >
                             {order.customer?.customerNumber}

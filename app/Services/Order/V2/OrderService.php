@@ -53,6 +53,7 @@ class OrderService extends V1OrderService
         $data["SHIPPING_ADDRESS"] = ! empty($order->shippingAddress) ? $this->getAddressData($order->shippingAddress) : [];
         $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['SUBMISSION_URL'] = 'dashboard/submissions/' . $order->id . '/view';
 
         return $data;
     }
@@ -67,6 +68,7 @@ class OrderService extends V1OrderService
         $data["TOTAL"] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
         $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['SUBMISSION_URL'] = 'dashboard/submissions/' . $order->id . '/view';
 
         return $data;
     }
@@ -88,6 +90,7 @@ class OrderService extends V1OrderService
         $data['SERVICE_LEVEL'] = $paymentPlan->price;
         $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
         $data['DATE'] = $order->created_at->format('m/d/Y');
+        $data['SUBMISSION_PAYMENT_URL'] = 'dashboard/submissions/' . $order->id . '/pay';
 
         return $data;
     }
@@ -221,6 +224,7 @@ class OrderService extends V1OrderService
                     'FIRST_NAME' => $order->user->first_name,
                     'TRACKING_NUMBER' => $order->orderShipment->tracking_number,
                     'TRACKING_URL' => $order->orderShipment->tracking_url,
+                    'SUBMISSION_URL' => 'dashboard/submissions/' . $order->id . '/view',
                 ],
                 'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED,
             ];

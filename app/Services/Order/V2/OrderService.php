@@ -53,7 +53,6 @@ class OrderService extends V1OrderService
         $data["SHIPPING_ADDRESS"] = ! empty($order->shippingAddress) ? $this->getAddressData($order->shippingAddress) : [];
         $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
-        $data['SUBMISSION_URL'] = 'dashboard/submissions/' . $order->id . '/view';
 
         return $data;
     }

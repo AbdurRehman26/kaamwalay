@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderCanNotBeCancelled extends Exception
 {
     /** @var string */
-    protected $message = 'Order can not be canceled because it is already paid.';
+    protected $message = 'Order can not be cancelled because it is already paid.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

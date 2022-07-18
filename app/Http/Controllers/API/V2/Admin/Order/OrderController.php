@@ -87,8 +87,9 @@ class OrderController extends V1OrderController
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error("Failed to cancel Order #: $order->order_number");
-            Log::error($e->getMessage());
+            Log::error("Failed to cancel order $order->id", [
+                'message' => $e->getMessage(),
+            ]);
 
             return new JsonResponse(['message' => 'Failed to cancel order.'], $e->getCode());
         }

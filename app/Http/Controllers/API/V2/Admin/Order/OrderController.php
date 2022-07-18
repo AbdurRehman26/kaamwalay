@@ -10,7 +10,6 @@ use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
-use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

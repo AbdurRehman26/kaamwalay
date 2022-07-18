@@ -160,7 +160,7 @@ class OrderService extends V1OrderService
         $orderItemService = resolve(OrderItemService::class);
         $orderItemService->markItemsAsCancelled($order, auth()->user());
 
-        /** @var OrderStatusHistoryService $orderItemService */
+        /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
     }

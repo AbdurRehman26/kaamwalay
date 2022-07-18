@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 
+use function Pest\Laravel\deleteJson;
+
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
@@ -374,6 +376,29 @@ test('order can be shipped if its not paid', function () {
     ])->assertOk();
 
     Event::assertDispatched(OrderStatusChangedEvent::class);
+});
+
+test('order can be cancelled if it is not paid', function () {
+    Event::fake();
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertNoContent();
+    $order->refresh();
+    expect($order->isCancelled())->toBeTrue();
+});
+
+test('order can not be cancelled if it is paid', function () {
+    /** @var Order $order */
+    $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
+    $order->refresh();
+    expect($order->isCancelled())->toBeFalse();
+});
+
+test('order can not be cancelled if it is already cancelled', function () {
+    /** @var Order $order */
+    $order = Order::factory()->create(['order_status_id' => OrderStatus::CANCELLED]);
+    deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
 });
 
 it('returns only orders with filtered payment status', function ($data) {

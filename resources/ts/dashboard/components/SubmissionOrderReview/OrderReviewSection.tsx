@@ -85,9 +85,9 @@ function OrderReviewSection() {
                         <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
                             finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                         }`}</Typography>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state?.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${finalShippingAddress.city}, ${
+                            finalShippingAddress.state?.code || finalShippingAddress?.stateName
+                        } ${finalShippingAddress.zipCode}, ${finalShippingAddress.country.code}`}</Typography>
                     </OrderDetailItem>
                 </div>
             ) : null}

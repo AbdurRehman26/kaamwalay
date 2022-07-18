@@ -16,11 +16,10 @@ class ShipStationClient
             'orderNumber' => $order->order_number,
             'customerUsername' => $order->user->getFullName(),
             'customerEmail' => $order->user->email,
-            'numberofCards' => $order->orderItems->count(),
             'orderDate' => Carbon::parse($order->created_at)->format('Y-m-d\TH:i:s.uP'),
             'orderStatus' => 'awaiting_payment',
             'advancedOptions' => [
-                "storeId" => config('services.shipstation.store_id'),
+                'storeId' => config('services.shipstation.store_id'),
             ],
             'billTo' => [
                 'name' => $order->shippingAddress->getFullName(),
@@ -44,13 +43,18 @@ class ShipStationClient
             ],
         ];
 
+        return $this->sendRequest(config('services.shipstation.base_url') . '/orders/createorder', $data);
+    }
+
+    protected function sendRequest(string $url, array $data): array 
+    {
         try {
-            $response = Http::withBasicAuth(config('services.shipstation.api_key'), config('services.shipstation.api_secret'))->post(config('services.shipstation.base_url') . '/orders/createorder', $data);
+            $response = Http::withBasicAuth(config('services.shipstation.api_key'), config('services.shipstation.api_secret'))->post($url , $data);
 
             return $response->json();
         } catch (Exception $e) {
             report($e);
-            Log::error('Error occur for Order Number: ' . $order->order_number);
+            Log::error('Order could not be created on ShipStation: ' . $data['orderNumber']);
 
             return [];
         }

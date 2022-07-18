@@ -48,6 +48,7 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->processEmails($event);
         $this->processPushNotification($event);
         $this->indexCardsForFeed($event);
+        $this->createOrderOnShipStation($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -101,8 +102,6 @@ class OrderStatusChangedListener implements ShouldQueue
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
         ]);
-        
-        $this->shipStationService->createOrder($event->order);
     }
 
     protected function handleGraded(OrderStatusChangedEvent $event): void
@@ -201,6 +200,13 @@ class OrderStatusChangedListener implements ShouldQueue
             $orderItemIds = OrderItem::where('order_id', $event->order->id)->pluck('id');
             // @phpstan-ignore-next-line
             UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
+        }
+    }
+
+    protected function createOrderOnShipStation(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id === OrderStatus::CONFIRMED && !app()->environment('local')) {
+            $this->shipStationService->createOrder($event->order);
         }
     }
 }

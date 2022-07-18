@@ -13,10 +13,6 @@ class ShipStationService
 
     public function createOrder(Order $order): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
-
         $this->shipStationClient->createOrder($order);
     }
 }

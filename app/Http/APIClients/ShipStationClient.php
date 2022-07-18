@@ -50,10 +50,12 @@ class ShipStationClient
     {
         try {
             $response = Http::withBasicAuth(config('services.shipstation.api_key'), config('services.shipstation.api_secret'))->post($url, $data);
+
             return $response->json();
         } catch (Exception $e) {
             report($e);
             Log::error('Order could not be created on ShipStation: ' . $data['orderNumber']);
+
             return [];
         }
     }

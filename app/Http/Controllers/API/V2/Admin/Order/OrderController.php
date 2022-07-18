@@ -74,7 +74,7 @@ class OrderController extends V1OrderController
      */
     public function destroy(Order $order): JsonResponse
     {
-        throw_if($order->isPaid() || $order->isCancelled(), OrderCanNotBeCancelled::class);
+        throw_if($order->isPaid(), OrderCanNotBeCancelled::class);
         throw_if($order->isCancelled(), OrderIsAlreadyCancelled::class);
 
         /** @var OrderService $orderService */

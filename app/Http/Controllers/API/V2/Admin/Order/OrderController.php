@@ -80,18 +80,15 @@ class OrderController extends V1OrderController
         /** @var OrderService $orderService */
         $orderService = resolve(OrderService::class);
 
-        /** @var OrderItemService $orderItemService */
-        $orderItemService = resolve(OrderItemService::class);
-
         try {
             DB::beginTransaction();
 
-            $orderItemService->markItemsAsCancelled($order, auth()->user());
             $orderService->cancelOrder($order, auth()->user());
 
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error("Failed to cancel Order #: $order->order_number");
             Log::error($e->getMessage());
 
             return new JsonResponse(['message' => 'Failed to cancel order.'], $e->getCode());

@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CustomerAddressResource\Pages;
-use App\Models\CustomerAddress;
 use App\Models\State;
 use Filament\Forms;
 use Filament\Resources\Form;

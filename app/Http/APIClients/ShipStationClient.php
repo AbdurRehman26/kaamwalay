@@ -12,7 +12,8 @@ class ShipStationClient
 {
     public function createOrder(Order $order): array
     {
-        $data = [
+        if ($order->hasInsuredShipping()) {
+            $data = [
             'orderNumber' => $order->order_number,
             'customerUsername' => $order->user->getFullName(),
             'customerEmail' => $order->user->email,
@@ -41,9 +42,11 @@ class ShipStationClient
                 'country' => $order->shippingAddress->country->code,
                 'phone' => $order->shippingAddress->phone,
             ],
-        ];
+                ];
 
-        return $this->sendRequest(config('services.shipstation.base_url') . '/orders/createorder', $data);
+                return $this->sendRequest(config('services.shipstation.base_url') . '/orders/createorder', $data);
+            }
+        return [];
     }
 
     protected function sendRequest(string $url, array $data): array
@@ -54,7 +57,9 @@ class ShipStationClient
             return $response->json();
         } catch (Exception $e) {
             report($e);
-            Log::error('Order could not be created on ShipStation: ' . $data['orderNumber']);
+            Log::error('Order could not be created on ShipStation: ' . $data['orderNumber'], [
+                'message' => $e->getMessage(),
+             ]);
 
             return [];
         }

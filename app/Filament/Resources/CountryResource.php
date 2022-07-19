@@ -67,5 +67,5 @@ class CountryResource extends Resource
         return [
             'index' => Pages\ManageCountries::route('/'),
         ];
-    }    
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules\Order;
+namespace App\Rules\V1\Order;
 
 use App\Models\Order;
 use Illuminate\Contracts\Validation\DataAwareRule;
@@ -57,7 +57,7 @@ class RefundAmountRule implements Rule, DataAwareRule
 
         $firstOrderPayment = $order->firstOrderPayment;
 
-        if (empty($firstOrderPayment) || $order->isPayable('v2')) {
+        if (empty($firstOrderPayment)) {
             return $order->grand_total_to_be_paid;
         }
 

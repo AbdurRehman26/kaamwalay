@@ -6,11 +6,12 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
-use Filament\Forms\Components\BelongsToSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -60,9 +61,10 @@ class OrderResource extends Resource
                 TextInput::make('invoice_id'),
                 Forms\Components\Textarea::make('notes')
                     ->maxLength(65535),
-                BelongsToSelect::make('salesman')
+                Forms\Components\Select::make('salesman')
                     // @phpstan-ignore-next-line
                     ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
+                    ->searchable()
                     ->nullable(),
             ]);
     }
@@ -82,13 +84,25 @@ class OrderResource extends Resource
             ->filters([
                 //
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->actions([
+                EditAction::make(),
+                Action::make('regenerate-invoice')
+                    ->action(fn (Order $order) => dd($order))
+                    ->label('Regenerate Invoice'),
+                Action::make('mark-paid')
+                    ->action(fn (Order $order) => dd($order))
+                    ->label('Mark Paid'),
+            ]);
     }
 
     public static function getRelations(): array
     {
         return [
             RelationManagers\OrderItemsRelationManager::class,
+            RelationManagers\ShippingAddressRelationManager::class,
+            RelationManagers\BillingAddressRelationManager::class,
+            RelationManagers\OrderPaymentsRelationManager::class,
         ];
     }
 

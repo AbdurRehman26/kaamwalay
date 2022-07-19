@@ -13,8 +13,6 @@ class CustomerAddressResource extends AddressResource
     {
         return [
             'index' => Pages\ListCustomerAddresses::route('/'),
-            'create' => Pages\CreateCustomerAddress::route('/create'),
-            'edit' => Pages\EditCustomerAddress::route('/{record}/edit'),
         ];
     }
 }

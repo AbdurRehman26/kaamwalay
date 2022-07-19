@@ -49,5 +49,5 @@ class OrderItemsRelationManager extends RelationManager
             ])
             ->bulkActions([
             ]);
-    }    
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderAddressResource\Pages;
-use App\Models\OrderAddress;
+use App\Filament\Resources\CustomerAddressResource\Pages;
+use App\Models\CustomerAddress;
 use App\Models\State;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -11,15 +11,13 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 
-class OrderAddressResource extends Resource
+abstract class AddressResource extends Resource
 {
-    protected static ?string $model = OrderAddress::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-location-marker';
 
-    protected static ?string $recordTitleAttribute = 'id';
+    protected static ?string $navigationGroup = 'User Management';
 
-    protected static ?string $navigationGroup = 'Order Management';
+    protected static ?string $recordTitleAttribute = 'id';
 
     public static function form(Form $form): Form
     {
@@ -48,12 +46,11 @@ class OrderAddressResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
-                    ->tel()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('flat')
                     ->maxLength(255),
-                Forms\Components\BelongsToSelect::make('country_id')
+                Forms\Components\Select::make('country_id')
                     ->relationship('country', 'name')
                     ->required(),
             ]);
@@ -90,15 +87,6 @@ class OrderAddressResource extends Resource
     {
         return [
             //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListOrderAddresses::route('/'),
-            'create' => Pages\CreateOrderAddress::route('/create'),
-            'edit' => Pages\EditOrderAddress::route('/{record}/edit'),
         ];
     }
 }

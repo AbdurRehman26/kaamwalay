@@ -44,8 +44,9 @@ class ShipStationClient
             ],
                 ];
 
-                return $this->sendRequest(config('services.shipstation.base_url') . '/orders/createorder', $data);
-            }
+            return $this->sendRequest(config('services.shipstation.base_url') . '/orders/createorder', $data);
+        }
+
         return [];
     }
 

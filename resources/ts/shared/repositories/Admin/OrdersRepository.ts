@@ -90,4 +90,10 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
         return plainToInstance(ShipmentEntity, data);
     }
+
+    async cancelOrder(input: { orderId: number }) {
+        const { orderId } = input;
+        const { data } = await this.endpoint.delete(`/${orderId}`);
+        return plainToInstance(OrderEntity, data);
+    }
 }

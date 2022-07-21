@@ -540,4 +540,9 @@ class Order extends Model implements Exportable
     {
         return now()->diff($this->created_at)->days > 0;
     }
+
+    public function requiresCardCleaning(): bool
+    {
+        return $this->requires_cleaning;
+    }
 }

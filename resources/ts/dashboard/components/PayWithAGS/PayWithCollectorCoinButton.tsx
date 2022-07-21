@@ -142,7 +142,7 @@ export function PayWithCollectorCoinButton() {
     }, [dispatch, orderID, appliedCredit, discountedValue, isCouponApplied, fetchTotalInAGS]);
 
     return (
-        <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>
+        <Button variant={'contained'} disabled={isLoading} onClick={handleClick} sx={{ height: 48 }}>
             {isLoading ? 'Processing Payment...' : 'Pay With Collector Coin'}
         </Button>
     );

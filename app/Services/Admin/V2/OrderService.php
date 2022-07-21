@@ -8,6 +8,8 @@ use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
 use App\Events\API\Admin\Order\UnpaidOrderRefund;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Models\OrderShipment;
@@ -16,6 +18,7 @@ use App\Models\PaymentMethod;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
+use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
 use Illuminate\Support\Facades\DB;
@@ -146,5 +149,19 @@ class OrderService extends V1OrderService
         );
 
         return true;
+    }
+
+    /**
+     * @throws OrderItemDoesNotBelongToOrder | OrderItemIsNotGraded
+     */
+    public function cancelOrder(Order $order, User $user): void
+    {
+        /** @var OrderItemService $orderItemService */
+        $orderItemService = resolve(OrderItemService::class);
+        $orderItemService->markItemsAsCancelled($order, auth()->user());
+
+        /** @var OrderStatusHistoryService $orderStatusHistoryService */
+        $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+        $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
     }
 }

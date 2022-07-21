@@ -64,6 +64,10 @@ function AlogliaSearchWrapper(props: any) {
         props.refine('');
     }
 
+    (window as any).globalThis.clearSearch = () => {
+        handleClearSearch();
+    };
+
     function handleSearch(e: any) {
         dispatch(setCardsSearchValue(e.currentTarget.value));
         props.refine(e.currentTarget.value);

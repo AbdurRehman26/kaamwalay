@@ -33,7 +33,7 @@ it('sends weekly, monthly and quarterly emails.', function () {
 
     $this->reportService->send();
     Mail::assertSent(ReportMail::class, 3);
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 it('checks if ReportService class has array of reports that have reportable implemented', function () {
     foreach ($this->reports as $report) {
@@ -67,4 +67,4 @@ it('checks if report is sent to correct admins.', function () {
     Mail::assertSent(ReportMail::class, function ($mail) {
         return $mail->hasTo(User::admin()->pluck('email')->toArray());
     });
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');

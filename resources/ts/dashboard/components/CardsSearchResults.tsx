@@ -18,7 +18,11 @@ import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObje
 import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { markCardAsSelected, markCardAsUnselected } from '@dashboard/redux/slices/newSubmissionSlice';
+import {
+    markCardAsSelected,
+    markCardAsUnselected,
+    setCardsSearchValue,
+} from '@dashboard/redux/slices/newSubmissionSlice';
 import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
@@ -109,7 +113,11 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         } else {
             deselectCard(item);
         }
-    }, [selectedCards, item, selectCard, deselectCard]);
+        setTimeout(() => {
+            dispatch(setCardsSearchValue(''));
+            (window as any).globalThis.clearSearch();
+        }, 500);
+    }, [selectedCards, item, selectCard, deselectCard, dispatch]);
 
     const handleRemove = useCallback(
         (cardProductEntity: CardProductEntity) => {

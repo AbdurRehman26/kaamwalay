@@ -6,8 +6,10 @@ import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useFormikContext } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { useAppDispatch } from '@dashboard/redux/hooks';
+import { getCountriesList, getStatesList } from '../../../dashboard/redux/slices/newAddressSlice';
 import { AddressEntity } from '../../entities/AddressEntity';
 import { useRepository } from '../../hooks/useRepository';
 import { UserRepository } from '../../repositories/UserRepository';
@@ -19,7 +21,18 @@ export function SelectAddressDialogContent() {
 
     const formik = useFormikContext<Record<string, any>>();
     const newAddress = formik.values.newAddress;
+    const dispatch = useAppDispatch();
 
+    useEffect(
+        () => {
+            (async () => {
+                await dispatch(getCountriesList());
+                await dispatch(getStatesList());
+            })();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
     const addresses = useQuery('customer/addresses', () => userRepository.getAddresses(), {
         onSuccess(data) {
             if (data.length === 0) {

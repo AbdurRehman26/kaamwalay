@@ -46,6 +46,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
                 zip: input.address.zip,
                 phone: input.address.phone,
                 flat: input.address.flat,
+                countryId: input.address.country.id,
                 saveForLater: !!input.saveForLater,
             };
         }

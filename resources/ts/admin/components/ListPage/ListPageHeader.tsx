@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -59,6 +60,7 @@ const useStyles = makeStyles(
 export function ListPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
+    const [addCustomerDialog, setAddCustomerDialog] = useState(false);
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -83,6 +85,7 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
 
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
+            <CustomerAddDialog open={addCustomerDialog} onClose={() => setAddCustomerDialog(!addCustomerDialog)} />
             <Grid container justifyContent={'space-between'}>
                 <Grid display={'flex'} alignItems={'center'} item>
                     <Typography variant={'h4'} fontWeight={500} mr={3}>
@@ -114,7 +117,12 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
                     )}
                 </Grid>
                 <Grid item>
-                    <Button variant={'contained'} color={'primary'} className={classes.newCustomerBtn}>
+                    <Button
+                        onClick={() => setAddCustomerDialog(true)}
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.newCustomerBtn}
+                    >
                         Add Customer
                     </Button>
                 </Grid>

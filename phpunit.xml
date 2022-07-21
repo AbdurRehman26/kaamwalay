@@ -47,5 +47,8 @@
         <env name="PUSHER_BEAMS_INSTANCE_ID" value="adhj123"/>
         <env name="PUSHER_BEAMS_SECRET_KEY" value="BCA3C2F"/>
         <env name="EASYSHIP_API_KEY" value="12345"/>
+        <env name="SHIPSTATION_BASE_URL" value="https://ssapi.shipstation.com"/>
+        <env name="SHIPSTATION_API_KEY" value="12345"/>
+        <env name="SHIPSTATION_API_SECRET" value="12345"/>
     </php>
 </phpunit>

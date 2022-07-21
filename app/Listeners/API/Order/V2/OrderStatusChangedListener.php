@@ -12,6 +12,7 @@ use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
 use App\Services\PopReport\PopReportService;
+use App\Services\ShipStationService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,7 +32,8 @@ class OrderStatusChangedListener implements ShouldQueue
         protected EmailService $emailService,
         protected OrderService $orderService,
         protected AdminOrderService $adminOrderService,
-        protected PopReportService $popReportService
+        protected PopReportService $popReportService,
+        protected ShipStationService $shipStationService
     ) {
     }
 
@@ -46,6 +48,7 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->processEmails($event);
         $this->processPushNotification($event);
         $this->indexCardsForFeed($event);
+        $this->createOrderOnShipStation($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -197,6 +200,13 @@ class OrderStatusChangedListener implements ShouldQueue
             $orderItemIds = OrderItem::where('order_id', $event->order->id)->pluck('id');
             // @phpstan-ignore-next-line
             UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
+        }
+    }
+
+    protected function createOrderOnShipStation(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id === OrderStatus::CONFIRMED && $event->order->hasInsuredShipping() && ! app()->environment('local')) {
+            $this->shipStationService->createOrder($event->order);
         }
     }
 }

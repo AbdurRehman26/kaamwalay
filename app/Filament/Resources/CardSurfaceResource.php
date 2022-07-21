@@ -60,5 +60,5 @@ class CardSurfaceResource extends Resource
         return [
             'index' => Pages\ManageCardSurfaces::route('/'),
         ];
-    }    
+    }
 }

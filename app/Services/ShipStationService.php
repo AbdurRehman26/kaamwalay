@@ -20,6 +20,7 @@ class ShipStationService
             'customerEmail' => $order->user->email,
             'orderDate' => Carbon::parse($order->created_at)->format('Y-m-d\TH:i:s.uP'),
             'orderStatus' => 'awaiting_payment',
+            'orderTotal' => $order->grand_total,
             'advancedOptions' => [
                 'storeId' => config('services.shipstation.store_id'),
             ],

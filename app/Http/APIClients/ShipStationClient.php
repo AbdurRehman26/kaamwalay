@@ -2,8 +2,6 @@
 
 namespace App\Http\APIClients;
 
-use App\Models\Order;
-use Carbon\Carbon;
 use Exception;
 use Http;
 use Log;

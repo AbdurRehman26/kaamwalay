@@ -89,7 +89,7 @@ class OrderService extends V1OrderService
         $data['SERVICE_LEVEL'] = $paymentPlan->price;
         $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
         $data['DATE'] = $order->created_at->format('m/d/Y');
-        $data['SUBMISSION_PAYMENT_URL'] = 'dashboard/submissions/' . $order->id . '/pay';
+        $data['SUBMISSION_PAYMENT_URL'] = config('app.url') . '/dashboard/submissions/' . $order->id . '/pay';
 
         return $data;
     }

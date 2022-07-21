@@ -98,6 +98,7 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_CONFIRMED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
+            'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $event->order->id . '/view',
         ]);
     }
 
@@ -111,7 +112,7 @@ class OrderStatusChangedListener implements ShouldQueue
             [
                 'ORDER_NUMBER' => $event->order->order_number,
                 'SHIPPING_METHOD' => $event->order->shippingMethod->code,
-                'SUBMISSION_URL' => 'dashboard/submissions/' . $event->order->id . '/view',
+                'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $event->order->id . '/view',
             ]
         );
 

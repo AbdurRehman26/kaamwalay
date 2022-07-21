@@ -150,7 +150,7 @@ function SubmissionStep02Content() {
             </div>
             <div className={classes.cleaningFeeContainer}>
                 <Box display={'flex'} alignItems={'center'}>
-                    <Typography>Card Cleaning Fee</Typography>
+                    <Typography>Card Cleaning</Typography>
                     <Tooltip
                         title={
                             <Box>

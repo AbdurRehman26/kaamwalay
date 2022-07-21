@@ -205,7 +205,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function createOrderOnShipStation(OrderStatusChangedEvent $event): void
     {
-        if ($event->orderStatus->id === OrderStatus::CONFIRMED && ! app()->environment('local')) {
+        if ($event->orderStatus->id === OrderStatus::CONFIRMED && $event->order->hasInsuredShipping() && ! app()->environment('local')) {
             $this->shipStationService->createOrder($event->order);
         }
     }

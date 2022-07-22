@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules\Order;
+namespace App\Rules\V1\Order;
 
 use App\Models\Order;
 use Illuminate\Contracts\Validation\DataAwareRule;

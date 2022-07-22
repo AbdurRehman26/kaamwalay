@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     servicesContainer: {
         marginBottom: theme.spacing(8),
     },
+    contentContainer: {
+        padding: 0,
+    },
 }));
 
 type InitialValues = {
@@ -38,7 +41,7 @@ export function SubmissionStep01Content() {
     }, [serviceLevels, dispatch, plan]);
 
     return (
-        <Container maxWidth={'md'}>
+        <Container className={classes.contentContainer} maxWidth={'md'}>
             <StepDescription
                 title="Select your service level"
                 description="Select your desired service level from the list below"

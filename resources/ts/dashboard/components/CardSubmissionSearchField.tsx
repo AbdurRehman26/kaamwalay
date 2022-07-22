@@ -7,13 +7,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
+import { cx } from '@shared/lib/utils/cx';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCardsSearchValue, setIsMobileSearchModalOpen } from '../redux/slices/newSubmissionSlice';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'row',
@@ -23,9 +25,24 @@ const useStyles = makeStyles({
         width: '100%',
         marginTop: '12px',
     },
+    searchInputMobile: {
+        marginRight: '0.75em',
+    },
     searchContainer: {
         display: 'flex',
         flexDirection: 'column',
+        position: 'sticky',
+        top: 0,
+        background: 'white',
+        zIndex: 10,
+        paddingBottom: '0.5em',
+    },
+    searchContainerMobile: {
+        width: `calc(100% + 32px)`,
+        marginLeft: -16,
+    },
+    searchContainerShadow: {
+        boxShadow: theme.shadows[1],
     },
     searchLabelContainer: {
         display: 'flex',
@@ -49,8 +66,9 @@ const useStyles = makeStyles({
         alignItems: 'center',
         marginTop: 20,
         marginRight: 16,
+        marginLeft: 4,
     },
-});
+}));
 
 function AlogliaSearchWrapper(props: any) {
     const classes = useStyles();
@@ -92,7 +110,7 @@ function AlogliaSearchWrapper(props: any) {
             {isMobileSearchModalOpen && <ArrowBack className={classes.mobileBackIcon} onClick={handleClose} />}
             <TextField
                 size="small"
-                className={classes.searchInput}
+                className={cx(classes.searchInput, { [classes.searchInputMobile]: isMobileSearchModalOpen })}
                 value={props.currentRefinement}
                 placeholder={'Search for cards to add...'}
                 onChange={(e) => handleSearch(e)}
@@ -124,9 +142,18 @@ const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
 function CardSubmissionSearchField() {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobileSearchModalOpen = useAppSelector((state) => state.newSubmission.step02Data.isMobileSearchModalOpen);
+    const isScrolling = useScrollTrigger({
+        disableHysteresis: true,
+    });
 
     return (
-        <div className={classes.searchContainer}>
+        <div
+            className={cx(classes.searchContainer, {
+                [classes.searchContainerMobile]: isMobileSearchModalOpen,
+                [classes.searchContainerShadow]: isScrolling,
+            })}
+        >
             {!isMobile ? (
                 <div className={classes.searchLabelContainer}>
                     <Typography variant={'subtitle2'} className={classes.label}>

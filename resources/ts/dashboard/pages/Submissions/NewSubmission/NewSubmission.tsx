@@ -160,7 +160,7 @@ export function NewSubmission() {
 
     const children = mountChildren ? (
         <Container>
-            <Grid container spacing={4}>
+            <Grid container paddingLeft={0.5} paddingRight={0.5}>
                 <Grid item xs={12} md={currentStep !== 0 ? 8 : 12}>
                     {getStepContent()}
                 </Grid>

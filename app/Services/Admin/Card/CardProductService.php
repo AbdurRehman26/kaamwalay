@@ -115,7 +115,7 @@ class CardProductService
         }
     }
 
-    protected function getSeriesFromAgs(string $seriesName, $categoryName): int | null
+    protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
         return $this->agsService->getCardSeries(['name' => $seriesName, 'category_name' => $categoryName])['results'][0]['id'];
     }

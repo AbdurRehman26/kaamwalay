@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,17 +8,16 @@ import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FormInput } from '@shared/components/AuthDialog/FormInput';
-import { useStyles } from '@shared/components/AuthDialog/styles';
 import { SignUpValidationRules } from '@shared/components/AuthDialog/validation';
-import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
+import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { WalletEntity } from '@shared/entities/WalletEntity';
-import { useAuth } from '@shared/hooks/useAuth';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { updateOrderWalletById } from '@shared/redux/slices/adminOrdersSlice';
@@ -31,10 +31,10 @@ interface Props extends DialogProps {
 
 const Root = styled(Dialog)(({ theme }) => ({
     '.MuiDialog-paper': {
-        minWidth: 524,
+        minWidth: 580,
     },
     '.MuiDialogContent-root': {
-        padding: '28px 24px',
+        padding: '0px 24px 20px 24px !important',
     },
     '.MuiDialogActions-root': {
         padding: '18px 24px',
@@ -44,52 +44,33 @@ const Root = styled(Dialog)(({ theme }) => ({
             marginLeft: theme.spacing(3),
         },
     },
-    '.CustomerCreditDialog-history': {
-        backgroundColor: '#f9f9f9',
-        borderRadius: 8,
-        overflow: 'hidden',
-    },
-    '.CustomerCreditDialog-customerDescription': {
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-    '.CustomerCreditDialog-customerTableHead': {
-        backgroundColor: '#f9f9f9',
-        position: 'sticky',
-        top: 0,
-        boxShadow: '0 1px 0 #eee',
-        '.MuiTableCell-head': {
-            paddingTop: 10,
-            paddingBottom: 14,
-            fontWeight: 500,
-            fontSize: 10,
-            lineHeight: '16px',
-            letterSpacing: '0.75px',
-            textTransform: 'uppercase',
-            color: theme.palette.text.secondary,
-        },
-    },
-    '.CustomerCreditDialog-customerTableBody': {
-        '.MuiTableCell-root': {
-            backgroundColor: '#fff',
-        },
-        '.MuiTableRow-root': {
-            '&:last-child .MuiTableCell-body': {
-                borderBottom: 'none',
-            },
-        },
-    },
-    '.CustomerCreditDialog-customerTableContainer': {
-        maxHeight: 300,
-        overflowY: 'auto',
-    },
 }));
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: CustomerCreditDialog
- * @date: 23.12.2021
- * @time: 18:31
- */
+const useStyles = makeStyles(
+    () => {
+        return {
+            root: {
+                backgroundColor: '#fff',
+            },
+            inputWithLabelContainer: {
+                marginTop: '27px',
+                flexDirection: 'column',
+            },
+            textField: {
+                height: 48,
+                radius: 4,
+            },
+            label: {
+                fontFamily: 'Roboto',
+                fontWeight: 400,
+                fontSize: 12,
+                lineHeight: '16px',
+            },
+        };
+    },
+    { name: 'AddCustomerDialog' },
+);
+
 export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props) {
     const classes = useStyles();
     const walletRepository = useRepository(WalletRepository);
@@ -97,15 +78,13 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
     const [amount, setAmount] = useState<string | number>(0);
-    const { register } = useAuth();
 
-    const initialState = useMemo<SignUpRequestDto>(
+    const initialState = useMemo<AddCustomerRequestDto>(
         () => ({
-            fullName: '',
+            firstName: '',
+            lastName: '',
             email: '',
             phone: '',
-            password: '',
-            passwordConfirmation: '',
         }),
         [],
     );
@@ -137,13 +116,9 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
         handleClose({});
     }, [amount, dispatch, handleClose, notifications, wallet?.id, walletRepository]);
 
-    const handleSubmit = useCallback(
-        async (values: SignUpRequestDto) => {
-            values = { ...values, passwordConfirmation: values.password };
-            await register(values);
-        },
-        [register],
-    );
+    const handleSubmit = useCallback(async (values: AddCustomerRequestDto) => {
+        values = { ...values };
+    }, []);
 
     return (
         <Root onClose={handleClose} {...rest}>
@@ -162,7 +137,7 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
             </Grid>
             <Divider />
             <DialogContent>
-                <Grid container>
+                <Grid container flexDirection={'column'}>
                     <Formik
                         initialValues={initialState}
                         onSubmit={handleSubmit}
@@ -170,14 +145,66 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
                         validateOnChange
                     >
                         <Form className={classes.root}>
-                            <FormInput type={'text'} label={'Full name'} name={'fullName'} />
-                            <FormInput type={'text'} label={'Email'} name={'email'} />
-                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
+                            <Grid display={'flex'} justifyContent={'space-between'} item>
+                                <Box className={classes.inputWithLabelContainer} width={'49%'}>
+                                    <Typography variant={'subtitle1'} className={classes.label}>
+                                        First Name
+                                    </Typography>
+                                    <TextField
+                                        className={classes.textField}
+                                        fullWidth
+                                        placeholder={'Enter First Name'}
+                                        size={'small'}
+                                        variant="outlined"
+                                        onChange={() => console.log(1)}
+                                    />
+                                </Box>
+                                <Box className={classes.inputWithLabelContainer} width={'49%'}>
+                                    <Typography variant={'subtitle1'} className={classes.label}>
+                                        Last Name
+                                    </Typography>
+                                    <TextField
+                                        className={classes.textField}
+                                        fullWidth
+                                        placeholder={'Enter Last Name'}
+                                        size={'small'}
+                                        variant="outlined"
+                                        onChange={() => console.log(1)}
+                                    />
+                                </Box>
+                            </Grid>
+
+                            <Box className={classes.inputWithLabelContainer} width={'100%'}>
+                                <Typography variant={'subtitle1'} className={classes.label}>
+                                    Email
+                                </Typography>
+                                <TextField
+                                    className={classes.textField}
+                                    fullWidth
+                                    placeholder={'Enter Email'}
+                                    size={'small'}
+                                    variant="outlined"
+                                    onChange={() => console.log(1)}
+                                />
+                            </Box>
+
+                            <Box className={classes.inputWithLabelContainer} width={'100%'}>
+                                <Typography variant={'subtitle1'} className={classes.label}>
+                                    Phone Number
+                                </Typography>
+                                <TextField
+                                    className={classes.textField}
+                                    fullWidth
+                                    placeholder={'Enter Phone Number'}
+                                    size={'small'}
+                                    variant="outlined"
+                                    onChange={() => console.log(1)}
+                                />
+                            </Box>
                         </Form>
                     </Formik>
                 </Grid>
             </DialogContent>
-            <Divider />
             <DialogActions>
                 <Button onClick={handleClose} color={'inherit'}>
                     Cancel

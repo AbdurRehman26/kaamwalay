@@ -30,7 +30,7 @@ class UpdateOrderStatusDates extends Command
      */
     public function handle(): int
     {
-        $orderStatusId = (int)$this->argument('orderStatusId');
+        $orderStatusId = (int) $this->argument('orderStatusId');
         $reviewedAtStatusId = 0;
         $gradedAtStatusId = 0;
 
@@ -56,40 +56,51 @@ class UpdateOrderStatusDates extends Command
             $gradedAtStatusId = 4;
         }
 
-        $this->info("Updating status dates for orders...");
+        $this->info('Updating status dates for orders...');
+        $this->newLine();
+
         Order::where('order_status_id', $orderStatusId)
             ->get()
             ->each(function (Order $order) use ($orderStatusId, $column, $reviewedAtStatusId, $gradedAtStatusId) {
-                $statusDate = OrderStatusHistory::where('order_id', $order->id)
-                    ->where('order_status_id', $orderStatusId)
-                    ->first()?->created_at;
+                $this->info("Processing $order->order_number ...");
 
                 if ($reviewedAtStatusId != 0) {
-                    $reviewedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
-                        ->where('order_status_id', $reviewedAtStatusId)
-                        ->first()?->created_at;
-                    
-                    $order->reviewed_at = $reviewedAtStatusDate;
-                    $this->info("reviewed_at for $order->order_number updated.");
+                    if (! $order->reviewed_at) {
+                        $reviewedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
+                            ->where('order_status_id', $reviewedAtStatusId)
+                            ->first()?->updated_at;
+
+                        $order->reviewed_at = $reviewedAtStatusDate;
+                        $this->info("reviewed_at for $order->order_number updated.");
+                    }
                 }
 
                 if ($gradedAtStatusId != 0) {
-                    $gradedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
-                        ->where('order_status_id', $gradedAtStatusId)
-                        ->first()?->created_at;
-                        
-                    $order->graded_at = $gradedAtStatusDate;
-                    $this->info("graded_at for $order->order_number updated.");
+                    if (! $order->graded_at) {
+                        $gradedAtStatusDate = OrderStatusHistory::where('order_id', $order->id)
+                            ->where('order_status_id', $gradedAtStatusId)
+                            ->first()?->updated_at;
+
+                        $order->graded_at = $gradedAtStatusDate;
+                        $this->info("graded_at for $order->order_number updated.");
+                    }
                 }
 
-                if ($statusDate) {
-                    $order->$column = $statusDate;
-                    $order->save();
-                    $this->info("$column for $order->order_number updated.");
+                if (! $order->$column) {
+                    $statusDate = OrderStatusHistory::where('order_id', $order->id)
+                        ->where('order_status_id', $orderStatusId)
+                        ->first()?->updated_at;
+
+                    if ($statusDate) {
+                        $order->$column = $statusDate;
+                        $order->save();
+                        $this->info("$column for $order->order_number updated.");
+                    }
                 }
             });
 
-        $this->info("Status Dates for orders have been updated.");
+        $this->newLine();
+        $this->info('Status Dates for orders have been updated.');
 
         return 0;
     }

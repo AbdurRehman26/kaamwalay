@@ -151,7 +151,7 @@ function CardSubmissionSearchField() {
         <div
             className={cx(classes.searchContainer, {
                 [classes.searchContainerMobile]: isMobileSearchModalOpen,
-                [classes.searchContainerShadow]: isScrolling,
+                [classes.searchContainerShadow]: isScrolling && isMobileSearchModalOpen,
             })}
         >
             {!isMobile ? (

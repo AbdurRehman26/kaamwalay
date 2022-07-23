@@ -1,27 +1,28 @@
 <?php
 
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
+use App\Models\OrderCustomerShipment;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
-    Event::fake([
-        OrderStatusChangedEvent::class,
-    ]);
     $this->unpaidOrdersStatsService = resolve(UnpaidOrdersStatsService::class);
 
+    $orderCustomerShipment = OrderCustomerShipment::factory()->create();
     $this->orders = Order::factory()
         ->count(100)
         ->create(new Sequence(
-            function () {
+            function () use ($orderCustomerShipment) {
                 return [
+                    'order_customer_shipment_id' => $this->faker->randomElement([null, $orderCustomerShipment->id]),
                     'order_status_id' => $this->faker->randomElement([
                         OrderStatus::PLACED,
                         OrderStatus::CONFIRMED,
@@ -30,32 +31,47 @@ beforeEach(function () {
                     ]),
                     'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
                     'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
-                    'payment_status' => $this->faker->randomElement([0,1]),
+                    'payment_status' => $this->faker->randomElement([0, 1]),
                 ];
             }
         ));
+
+    $user = User::factory()->create();
+    $orderStatusHistoryData = $this->orders->map(function ($order) use ($user) {
+        return [
+            'order_id' => $order->id,
+            'order_status_id' => OrderStatus::PLACED,
+            'user_id' => $user->id,
+        ];
+    })->toArray();
+
+    OrderStatusHistory::insert($orderStatusHistoryData);
+
+    $this->ordersForTests = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    });
 });
 
 it('calculates daily unpaid orders stats', function () {
-    $getRandomOrder = $this->orders->random()->first();
+    $orders = $this->ordersForTests;
+    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
 
-    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->forDate($getRandomOrder->created_at->toDateString())
-        ->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forDate($randomOrderDate)->sum('grand_total');
 
-    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($getRandomOrder->created_at->toDateString());
+    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrderDate);
 
-    expect($orders)->toBe($unpaidDailyStats['unpaid_total']);
+    expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
+        ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
-    $getRandomOrder = $this->orders->random()->first();
+    $orders = $this->ordersForTests;
+    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
 
-    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->forMonth($getRandomOrder->created_at->toDateString())
-        ->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forMonth($randomOrderDate)->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($getRandomOrder->created_at->toDateString());
+    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrderDate);
 
-    expect($orders)->toBe($unpaidMonthlyStats['unpaid_total']);
+    expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
+        ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');

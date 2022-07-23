@@ -10,9 +10,11 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -142,7 +144,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         <MuiLink
                             component={Link}
                             color={'primary'}
-                            to={`/customers/${order.customer?.id}/view`}
+                            to={`/customers/list?search=${order.customer?.customerNumber}`}
                             className={font.fontWeightMedium}
                         >
                             {order.customer?.customerNumber}
@@ -154,6 +156,13 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />
+                </TableCell>
+                <TableCell>
+                    <PaymentStatusChip
+                        color={order?.paymentStatus}
+                        label={PaymentStatusMap[order?.paymentStatus]}
+                        mode={'admin'}
+                    />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
                 <TableCell>

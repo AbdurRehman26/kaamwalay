@@ -118,7 +118,6 @@ export function NewSubmission() {
             if (currentStep === 0) {
                 googleTagManager({ event: 'google-ads-service-selected' });
             } else if (currentStep === 1) {
-                await dispatch(getShippingFee(selectedCards));
                 await dispatch(getStatesList());
                 await dispatch(getSavedAddresses());
                 googleTagManager({ event: 'google-ads-cards-selected' });
@@ -161,7 +160,7 @@ export function NewSubmission() {
 
     const children = mountChildren ? (
         <Container>
-            <Grid container spacing={4}>
+            <Grid container paddingLeft={0.5} paddingRight={0.5}>
                 <Grid item xs={12} md={currentStep !== 0 ? 8 : 12}>
                     {getStepContent()}
                 </Grid>

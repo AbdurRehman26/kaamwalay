@@ -102,16 +102,9 @@ export function LayoutSidebar() {
                     exact
                     icon={PaymentOutlinedIcon}
                     title={'Saved Credit Cards'}
-                    href={'/profile/payments'}
-                    disabled
+                    href={'/payment-cards'}
                 />
-                <LayoutSidebarItem
-                    exact
-                    icon={HomeOutlinedIcon}
-                    disabled
-                    title={'Address Book'}
-                    href={'/profile/address'}
-                />
+                <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/address-book'} />
             </List>
         </Paper>
     );

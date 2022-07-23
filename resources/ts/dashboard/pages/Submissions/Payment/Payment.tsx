@@ -20,12 +20,14 @@ import * as yup from 'yup';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
@@ -51,7 +53,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         minWidth: '100%',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: '15px',
+        marginTop: '20px',
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+            marginTop: '0px',
+        },
     },
     leftSideContainer: {
         marginTop: '12px',
@@ -199,13 +206,20 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Roboto',
         fontSize: '24px',
         fontStyle: 'normal',
-        fontWeight: 400,
+        fontWeight: 500,
         lineHeight: '36px',
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
         [theme.breakpoints.down('sm')]: {
             fontSize: '20px',
+        },
+    },
+    titleDiv: {
+        display: 'flex',
+        alignItems: 'center',
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: '15px',
         },
     },
     description: {
@@ -223,6 +237,7 @@ const useStyles = makeStyles((theme) => ({
         width: 20,
         height: 24,
         marginRight: 22,
+        verticalAlign: 'middle',
         cursor: 'pointer',
     },
     billingAddressButtonContainer: {
@@ -270,6 +285,7 @@ function addressFromEntity(address: AddressEntity) {
             id: address.country?.id,
             name: address.country?.name,
             code: address.country?.code,
+            phoneCode: address.country?.phoneCode,
         },
         state: {
             id: 0,
@@ -307,6 +323,7 @@ export function Payment() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
@@ -340,6 +357,10 @@ export function Payment() {
         () => order.data?.billingAddress || order.data?.shippingAddress || ({} as any),
         [order.data?.shippingAddress, order.data?.billingAddress],
     );
+
+    const endTime = new Date(new Date(order.data?.createdAt).getTime() + 86400000);
+    const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
+    const { featureOrderWalletCreditEnabled, featureOrderWalletCreditPercentage } = useConfiguration();
 
     useEffect(() => {
         schema
@@ -497,25 +518,33 @@ export function Payment() {
         <StripeContainer>
             <Container className={classes.paymentPageContainer}>
                 <div className={classes.stepDescriptionContainer}>
-                    <div>
+                    <div className={classes.titleDiv}>
                         <Typography variant={'h2'} className={classes.title}>
                             <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
                             Pay For Submission
                         </Typography>
                     </div>
-
-                    <PaymentStatusChip
-                        color={paymentStatus}
-                        label={PaymentStatusMap[paymentStatus]}
-                        mode={'customer'}
-                    />
+                    {timeInMs !== 0 && featureOrderWalletCreditEnabled ? (
+                        <PayNowStatusNotice
+                            id={order.data?.id}
+                            countdownTimestampMs={timeInMs}
+                            isConfirmationPage={false}
+                            isPayPage={true}
+                            isCoupon={isCouponApplied}
+                        />
+                    ) : (
+                        <PaymentStatusChip
+                            color={paymentStatus}
+                            label={PaymentStatusMap[paymentStatus]}
+                            mode={'customer'}
+                        />
+                    )}
                 </div>
 
                 <Divider light />
 
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={7}>
-                        <Divider light />
                         <div className={classes.leftSideContainer}>
                             {availableCredit > 0 ? (
                                 <div className={classes.shippingMethodContainer}>
@@ -870,7 +899,11 @@ export function Payment() {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <PaymentSummary />
+                        <PaymentSummary
+                            timeInMs={timeInMs}
+                            featureOrderWalletCreditPercentage={featureOrderWalletCreditPercentage}
+                            featureOrderWalletCreditEnabled={featureOrderWalletCreditEnabled}
+                        />
                     </Grid>
                 </Grid>
 

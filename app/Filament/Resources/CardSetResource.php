@@ -26,13 +26,13 @@ class CardSetResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('card_series_id')
                     ->required(),
-                Forms\Components\TextInput::make('card_category_id')
+                Forms\Components\Select::make('card_category_id')
+                    ->relationship('cardCategory', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(200),
                 Forms\Components\TextInput::make('description')
-                    ->required()
                     ->maxLength(1000),
                 Forms\Components\TextInput::make('cards_number'),
                 Forms\Components\TextInput::make('secret_cards'),
@@ -55,9 +55,9 @@ class CardSetResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('card_series_id'),
-                Tables\Columns\TextColumn::make('card_category_id'),
+                Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('cardSeries.name'),
+                Tables\Columns\TextColumn::make('cardCategory.name'),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('description'),
                 Tables\Columns\TextColumn::make('cards_number'),

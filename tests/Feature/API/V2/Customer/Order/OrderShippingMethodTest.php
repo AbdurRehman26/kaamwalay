@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CardProduct;
+use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -40,6 +41,7 @@ beforeEach(function () {
         'service_fee' => 20,
         'shipping_fee' => 0,
     ]);
+    $this->country = Country::factory()->create(['code' => 'US']);
     OrderItem::factory()->for($this->insuredShippingOrder)->create();
 });
 
@@ -55,7 +57,7 @@ test('order\'s shipping method can be changed from vault to insured shipping', f
     OrderItem::factory()->for($this->vaultShippingOrder)->create();
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
         'shipping_method_id' => $this->insuredShippingMethod->id,
-        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->create()->id],
+        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
     ])->assertOk();
     expect($this->vaultShippingOrder->refresh()->shippingMethod->code)->toBe(ShippingMethod::INSURED_SHIPPING);
 });
@@ -76,7 +78,7 @@ test('when order shipping method is changed from vault to insured, shipping fee 
 
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
         'shipping_method_id' => $this->insuredShippingMethod->id,
-        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->create()->id],
+        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
     ])->assertOk();
 
     expect($this->vaultShippingOrder->refresh()->shipping_fee)->toBe(14.0);
@@ -119,7 +121,7 @@ test('grand total is recalculated when the shipping method is changed from vault
     ]);
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
         'shipping_method_id' => $this->insuredShippingMethod->id,
-        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->create()->id],
+        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
     ])->assertOk();
 
     expect($this->insuredShippingOrder->refresh()->grand_total)->toBe(34.0);

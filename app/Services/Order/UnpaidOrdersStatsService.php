@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Database\Eloquent\Builder;
 
 class UnpaidOrdersStatsService
@@ -36,31 +37,37 @@ class UnpaidOrdersStatsService
      * @param  string  $currentDate
      * @return Builder<Order>
     */
-    public function dailyUnpaidOrders(string $currentDate): Builder
+    protected function dailyUnpaidOrders(string $currentDate): Builder
     {
-        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-            ->forDate($currentDate);
+        return $this->orders()->forDate($currentDate);
     }
 
     /**
      * @param  string  $currentDate
      * @return Builder<Order>
     */
-    public function monthlyUnpaidOrders(string $currentDate): Builder
+    protected function monthlyUnpaidOrders(string $currentDate): Builder
     {
-        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-            ->forMonth($currentDate);
+        return $this->orders()->forMonth($currentDate);
     }
 
-    protected function monthlyOrdersCount(string $currentDate): int
+    /**
+     * @return Builder<Order>
+     */
+    protected function orders(): Builder
     {
-        return $this->monthlyUnpaidOrders($currentDate)
-            ->count();
+        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
+            $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+        });
     }
 
     protected function dailyOrdersCount(string $currentDate): int
     {
-        return $this->dailyUnpaidOrders($currentDate)
-            ->count();
+        return $this->dailyUnpaidOrders($currentDate)->count();
+    }
+
+    protected function monthlyOrdersCount(string $currentDate): int
+    {
+        return $this->monthlyUnpaidOrders($currentDate)->count();
     }
 }

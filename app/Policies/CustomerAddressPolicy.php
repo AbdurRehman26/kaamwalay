@@ -32,4 +32,38 @@ class CustomerAddressPolicy
     {
         return $customerAddress->user->is($user);
     }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  User  $user
+     * @return bool
+     */
+    public function create(User $user): bool
+    {
+        return true;
+    }
+    /**
+     * Determine whether the user can update models.
+     *
+     * @param  User  $user
+     * @param  CustomerAddress  $customerAddress
+     * @return bool
+     */
+    public function update(User $user, CustomerAddress $customerAddress): bool
+    {
+        return $customerAddress->user->is($user);
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  User  $user
+     * @param  CustomerAddress $customerAddress
+     * @return bool
+     */
+    public function delete(User $user, CustomerAddress $customerAddress): bool
+    {
+        return $customerAddress->user->is($user);
+    }
 }

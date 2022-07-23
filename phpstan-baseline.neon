@@ -446,11 +446,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
 
 		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:orders\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$customer_number\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
@@ -1011,21 +1006,6 @@ parameters:
 			path: app/Http/Resources/API/V1/CardSet/CardSetResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$code\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Country/CountryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Country/CountryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Country/CountryResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$address\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
@@ -1139,56 +1119,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$updated_at\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$address\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$city\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$country\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$first_name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$flat\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$last_name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$phone\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$state\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$zip\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$amount_paid_from_wallet\\.$#"
@@ -1784,11 +1714,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"

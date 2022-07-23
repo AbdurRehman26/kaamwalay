@@ -33,7 +33,6 @@ const TableDiv = styled(TableContainer)({
         width: '52px',
         [theme.breakpoints.down('sm')]: {
             width: '52px',
-            height: '82px',
         },
     },
     '.TableInfoText': {
@@ -165,7 +164,7 @@ const CustomHits = connectHits(({ hits }) => {
                 <TableHead className={'TableHead'}>
                     <TableRow>
                         <TableCell>Card</TableCell>
-                        <TableCell>Date Graded</TableCell>
+                        <TableCell>Date Shipped</TableCell>
                         <TableCell>Certificate #</TableCell>
                         <TableCell>Owner</TableCell>
                         <TableCell>Grade</TableCell>
@@ -180,7 +179,9 @@ const CustomHits = connectHits(({ hits }) => {
                                     key={hit.objectID}
                                     className={'TableInfo'}
                                 >
-                                    <img className={'TableInfoImage'} src={hit.card_image} alt={hit.card_name} />
+                                    <div>
+                                        <img className={'TableInfoImage'} src={hit.card_image} alt={hit.card_name} />
+                                    </div>
                                     <div className={'TableInfoText'}>
                                         <Typography className={'TableInfoHeading'}>{hit.card_name}</Typography>
                                         <Typography className={'TableInfoSubHeading'}>{hit.searchable_name}</Typography>
@@ -210,8 +211,8 @@ const CustomHits = connectHits(({ hits }) => {
                             </TableCell>
                             <TableCell className={'DateCell'}>
                                 <a href={`feed/${hit.certificate_number}/view`}>
-                                    <Typography>{formatDate(hit.graded_at, 'MM/DD/YYYY')}</Typography>
-                                    <Typography>{formatDate(hit.graded_at, 'h:mm a')}</Typography>
+                                    <Typography>{formatDate(hit.shipped_at, 'MM/DD/YYYY')}</Typography>
+                                    <Typography>{formatDate(hit.shipped_at, 'h:mm a')}</Typography>
                                 </a>
                             </TableCell>
                             <TableCell className={'CertificateNoCell'}>

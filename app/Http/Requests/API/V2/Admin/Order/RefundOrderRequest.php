@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\API\V2\Admin\Order;
 
-use App\Rules\Order\RefundAmountRule;
+use App\Rules\V2\Order\RefundAmountRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RefundOrderRequest extends FormRequest

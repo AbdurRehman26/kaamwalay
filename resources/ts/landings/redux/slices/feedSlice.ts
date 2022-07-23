@@ -28,6 +28,10 @@ export interface FilterResults {
     results: number;
 }
 
+export interface TotalItemsPerPage {
+    itemsPerPage: number;
+}
+
 export interface FeedSliceState {
     sortState: SortState;
     categoryValue: CategoryValue;
@@ -36,6 +40,7 @@ export interface FeedSliceState {
     categoryTeal: CategoryTeal;
     gradeTeal: GradeTeal;
     filterResults: FilterResults;
+    totalItemsPerPage: TotalItemsPerPage;
 }
 
 const initialState: FeedSliceState = {
@@ -59,6 +64,9 @@ const initialState: FeedSliceState = {
     },
     filterResults: {
         results: 0,
+    },
+    totalItemsPerPage: {
+        itemsPerPage: 0,
     },
 };
 
@@ -90,6 +98,9 @@ export const feedSlice = createSlice({
         setFilterResults: (state, action: PayloadAction<number>) => {
             state.filterResults.results = action.payload;
         },
+        setItemsPerPage: (state, action: PayloadAction<number>) => {
+            state.totalItemsPerPage.itemsPerPage = action.payload;
+        },
     },
 });
 
@@ -102,4 +113,5 @@ export const {
     setGradeTeal,
     setCategoryTeal,
     setFilterResults,
+    setItemsPerPage,
 } = feedSlice.actions;

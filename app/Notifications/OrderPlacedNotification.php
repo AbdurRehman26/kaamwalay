@@ -46,7 +46,17 @@ class OrderPlacedNotification extends Notification
             $customerFullName = $this->order->shippingAddress?->getFullName();
         }
 
-        return "$customerFullName, {$this->order->grand_total}, UNPAID, {$this->order->order_number}, $totalCards";
+        $message = "$customerFullName, {$this->order->grand_total}, UNPAID, {$this->order->order_number}, $totalCards";
+
+        if ($countryName = $this->order->shippingAddress?->country->name) {
+            $message = "$message, $countryName";
+        }
+
+        if ($this->order->requiresCardCleaning()) {
+            $message = "$message, Cleaning Required";
+        }
+
+        return $message;
     }
 
     protected function getCardsBreakdown(): string

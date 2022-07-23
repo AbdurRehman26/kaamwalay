@@ -59,7 +59,8 @@ return [
         'api_key' => env('HUBSPOT_API_KEY'),
         'owner_email' => env('HUBSPOT_OWNER_EMAIL'),
         'pipeline_id' => env('HUBSPOT_PIPELINE_ID'),
-        'pipline_stage_id' => env('HUBSPOT_PIPELINE_STAGE_ID'),
+        'pipline_stage_id_new_signup' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_SIGNUP'),
+        'pipline_stage_id_new_customer' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_CUSTOMER'),
     ],
 
     'dropbox' => [
@@ -76,6 +77,17 @@ return [
     'pusher' => [
         'beams_instance_id' => env('PUSHER_BEAMS_INSTANCE_ID'),
         'beams_secret_key' => env('PUSHER_BEAMS_SECRET_KEY'),
+    ],
+
+    'easyship' => [
+        'key' => env('EASYSHIP_API_KEY'),
+    ],
+
+    'shipstation' => [
+        'base_url' => env('SHIPSTATION_BASE_URL'),
+        'api_key' => env('SHIPSTATION_API_KEY'),
+        'api_secret' => env('SHIPSTATION_API_SECRET'),
+        'store_id' => env('SHIPSTATION_STORE_ID'),
     ],
 
 ];

@@ -8,8 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { cancelOrder } from '@shared/redux/slices/adminOrdersSlice';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
 const useStyles = makeStyles(
@@ -26,6 +30,7 @@ enum Options {
     IssueRefund,
     CustomerCredit,
     ViewGrades,
+    CancelOrder,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -39,12 +44,15 @@ export default function SubmissionHeaderMoreButton({
     orderStatus,
     customer,
 }: SubmissionHeaderMoreButtonProps) {
+    const confirm = useConfirmation();
     const classes = useStyles();
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const notifications = useNotifications();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -59,6 +67,33 @@ export default function SubmissionHeaderMoreButton({
     const handleClose = useCallback(() => {
         setAnchorEl(null);
     }, [setAnchorEl]);
+
+    const setCancelDialog = useCallback(async () => {
+        const result = await confirm({
+            title: 'Cancel Order',
+            message: 'Are you sure you want to cancel the order?',
+            confirmText: 'Yes',
+            cancelButtonProps: {
+                color: 'inherit',
+            },
+            confirmButtonProps: {
+                variant: 'contained',
+                color: 'error',
+            },
+        });
+
+        try {
+            if (result) {
+                await dispatch(cancelOrder(orderId))
+                    .unwrap()
+                    .then(() => {
+                        navigate(`/submissions/all/list`);
+                    });
+            }
+        } catch (e) {
+            notifications.exception(e as Error);
+        }
+    }, [navigate, orderId, notifications, dispatch, confirm]);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -77,9 +112,12 @@ export default function SubmissionHeaderMoreButton({
                 case Options.ViewGrades:
                     handleViewGrades();
                     break;
+                case Options.CancelOrder:
+                    await setCancelDialog();
+                    break;
             }
         },
-        [handleClose, handleViewGrades],
+        [setCancelDialog, handleClose, handleViewGrades],
     );
 
     return (
@@ -91,6 +129,7 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.AddExtraCharge)}>Add Extra Charge</MenuItem>
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
+                <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
                 {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                 ) : null}

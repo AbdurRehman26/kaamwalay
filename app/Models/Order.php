@@ -10,6 +10,7 @@ use App\Enums\Order\OrderStepEnum;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,6 +63,8 @@ class Order extends Model implements Exportable
         'order_step',
         'payment_status',
         'salesman_id',
+        'requires_cleaning',
+        'cleaning_fee',
     ];
 
     /**
@@ -99,11 +102,18 @@ class Order extends Model implements Exportable
         'paid_at' => 'datetime',
         'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
+        'requires_cleaning' => 'bool',
+        'cleaning_fee' => 'float',
     ];
 
     protected $appends = [
         'grand_total_cents',
         'grand_total_to_be_paid',
+    ];
+
+    protected $attributes = [
+        'requires_cleaning' => false,
+        'cleaning_fee' => 0,
     ];
 
     public static function getAllowedAdminIncludes(): array
@@ -139,6 +149,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
@@ -261,6 +272,15 @@ class Order extends Model implements Exportable
         return $this->order_status_id > OrderStatus::PAYMENT_PENDING
             && ! $this->isCancelled()
             && ! $this->payment_status->isPaid();
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
+    public function scopePaid(Builder $query): Builder
+    {
+        return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -398,7 +418,7 @@ class Order extends Model implements Exportable
 
     public function exportHeadings(): array
     {
-        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Declared Value', 'Amount Paid'];
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Payment Status', 'Declared Value', 'Order Total'];
     }
 
     public function exportFilters(): array
@@ -424,6 +444,7 @@ class Order extends Model implements Exportable
             $row->user->customer_number,
             $row->orderItems->sum('quantity'),
             $row->orderStatus->name,
+            $row->payment_status->toString(),
             $row->orderItems->sum('declared_value_total'),
             $row->grand_total,
         ];
@@ -506,8 +527,22 @@ class Order extends Model implements Exportable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
+    {
+        return $query->whereBetween('created_at', [$fromDate, $toDate]);
+    }
+
     public function isOlderThanOneDay(): bool
     {
         return now()->diff($this->created_at)->days > 0;
+    }
+
+    public function requiresCardCleaning(): bool
+    {
+        return $this->requires_cleaning;
     }
 }

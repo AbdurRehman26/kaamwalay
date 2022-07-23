@@ -5,6 +5,7 @@ namespace App\Services\Order\V2;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -16,6 +17,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\CleaningFee\CleaningFeeService;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;
@@ -90,9 +92,10 @@ class CreateOrderService
         }
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
-        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
+        $this->storeCleaningFee();
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->associateSalesman();
@@ -143,6 +146,7 @@ class CreateOrderService
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
         } else {
+            $shippingAddress['country_id'] = Country::whereCode($shippingAddress['country_code'] ?? 'US')->first()->id;
             $shippingAddress = OrderAddress::create($shippingAddress);
         }
 
@@ -151,6 +155,7 @@ class CreateOrderService
         if ($billingAddress['same_as_shipping']) {
             $this->order->billingAddress()->associate($shippingAddress);
         } else {
+            $billingAddress['country_id'] = Country::whereCode($billingAddress['country_code'] ?? 'US')->first()->id;
             $billingAddress = OrderAddress::create($billingAddress);
             $this->order->billingAddress()->associate($billingAddress);
         }
@@ -159,6 +164,7 @@ class CreateOrderService
     protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
     {
         if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
+            $shippingAddress['country_id'] = Country::whereCode($shippingAddress['country_code'] ?? 'US')->first()->id;
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [
@@ -209,8 +215,8 @@ class CreateOrderService
 
     protected function storeGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
+        $this->order->grand_total = $this->order->grand_total_before_discount - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -290,6 +296,15 @@ class CreateOrderService
     {
         if ($salesman = $this->order->user->salesman) {
             $this->order->salesman()->associate($salesman)->save();
+        }
+    }
+
+    protected function storeCleaningFee(): void
+    {
+        if (! empty($this->data['requires_cleaning'])) {
+            $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
+            $this->order->requires_cleaning = (bool) $this->data['requires_cleaning'];
+            $this->order->save();
         }
     }
 }

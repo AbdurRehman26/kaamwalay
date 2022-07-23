@@ -80,10 +80,9 @@ test(
 
         Event::assertDispatched(UnpaidOrderRefund::class);
 
-        expect($this->order->refresh()->grand_total)->toEqual($oldGrandTotal - 10);
-
-        expect($this->order->refunds()->count())->toEqual(1);
-        expect($this->order->orderPayments()->count())->toEqual(2);
+        expect($this->order->refresh()->grand_total)->toEqual($oldGrandTotal - 10)
+            ->and($this->order->refunds()->count())->toEqual(1)
+            ->and($this->order->orderPayments()->count())->toEqual(2);
     }
 );
 
@@ -112,8 +111,8 @@ test(
 
         Event::assertDispatched(UnpaidOrderRefund::class);
 
-        expect($this->order->refunds()->count())->toEqual(1);
-        expect($this->order->orderPayments()->count())->toEqual(3);
+        expect($this->order->refunds()->count())->toEqual(1)
+            ->and($this->order->orderPayments()->count())->toEqual(3);
     }
 );
 
@@ -141,8 +140,8 @@ test(
         ])->assertCreated();
 
         Event::assertDispatched(UnpaidOrderRefund::class);
-        expect($this->order->refunds()->count())->toEqual(2);
-        expect($this->order->orderPayments()->count())->toEqual(3);
+        expect($this->order->refunds()->count())->toEqual(2)
+            ->and($this->order->orderPayments()->count())->toEqual(3);
     }
 );
 
@@ -179,8 +178,8 @@ test(
         ])->assertCreated();
 
         Event::assertDispatched(UnpaidOrderRefund::class);
-        expect($this->order->refunds()->count())->toEqual(2);
-        expect($this->order->orderPayments()->count())->toEqual(4);
+        expect($this->order->refunds()->count())->toEqual(2)
+            ->and($this->order->orderPayments()->count())->toEqual(4);
     }
 );
 

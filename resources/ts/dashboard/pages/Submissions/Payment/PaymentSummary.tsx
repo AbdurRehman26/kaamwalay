@@ -1,9 +1,11 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
+import { round } from 'lodash';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -33,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 12,
         [theme.breakpoints.down('sm')]: {
             width: '100%',
+            marginLeft: 0,
         },
     },
     titleContainer: {
@@ -155,13 +158,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function PaymentSummary() {
+interface PaymentSummaryProps {
+    timeInMs: number;
+    featureOrderWalletCreditPercentage: number;
+    featureOrderWalletCreditEnabled: boolean;
+}
+
+export function PaymentSummary(props: PaymentSummaryProps) {
     const classes = useStyles();
     const notifications = useNotifications();
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
 
+    const { timeInMs, featureOrderWalletCreditPercentage, featureOrderWalletCreditEnabled } = props;
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
@@ -173,6 +183,7 @@ export function PaymentSummary() {
     );
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
+    const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const extraChargesTotal = useAppSelector((state) => state.newSubmission.extraChargesTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
@@ -243,6 +254,7 @@ export function PaymentSummary() {
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             refundTotal +
+            Number(cleaningFee) +
             extraChargesTotal -
             appliedCredit;
         dispatch(setPreviewTotal(previewTotal));
@@ -349,6 +361,7 @@ export function PaymentSummary() {
                                 color="primary"
                                 disabled={isStripePaymentLoading}
                                 onClick={handleConfirmStripePayment}
+                                sx={{ height: 48 }}
                             >
                                 {isStripePaymentLoading ? 'Loading...' : 'Submit Payment'}
                             </Button>
@@ -465,6 +478,20 @@ export function PaymentSummary() {
                         </div>
                     ) : null}
 
+                    {cleaningFee > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
+                            <NumberFormat
+                                value={cleaningFee}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </div>
+                    ) : null}
+
                     {refundTotal > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Refunds: </Typography>
@@ -498,8 +525,16 @@ export function PaymentSummary() {
                         </Typography>
                     </div>
                 </div>
-                <Divider light />
             </div>
+            {timeInMs !== 0 && featureOrderWalletCreditEnabled && !isCouponApplied ? (
+                <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
+                    <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
+                        You will earn{' '}
+                        <b>${round((getPreviewTotal() * featureOrderWalletCreditPercentage) / 100, 2).toFixed(2)}</b> in
+                        credit by paying now.
+                    </Typography>
+                </Box>
+            ) : null}
         </Paper>
     );
 }

@@ -32,8 +32,8 @@ class CardProductResource extends Resource
                     ->maxLength(255),
                 TextInput::make('card_reference_id')
                     ->maxLength(255),
-                Forms\Components\BelongsToSelect::make('card_category')->relationship('cardCategory', 'name'),
-                Forms\Components\BelongsToSelect::make('card_set')->relationship('cardSet', 'name'),
+                Forms\Components\Select::make('card_category')->relationship('cardCategory', 'name'),
+                Forms\Components\Select::make('card_set')->relationship('cardSet', 'name'),
                 TextInput::make('added_by'),
                 TextInput::make('rarity')
                     ->maxLength(255),
@@ -48,7 +48,6 @@ class CardProductResource extends Resource
                 TextInput::make('card_number_order')
                     ->maxLength(255),
                 TextInput::make('edition')
-                    ->required()
                     ->maxLength(255),
                 TextInput::make('surface')
                     ->required()
@@ -60,13 +59,10 @@ class CardProductResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('variant_category')
-                    ->required()
                     ->maxLength(255),
                 TextInput::make('variant_name')
-                    ->required()
                     ->maxLength(255),
                 TextInput::make('holo_type')
-                    ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->maxLength(65535),
@@ -79,7 +75,7 @@ class CardProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
+                TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('card_reference_id')->searchable(),
                 TextColumn::make('cardCategory.name')->label('Category')->sortable(),

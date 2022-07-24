@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import contractAbi from '@shared/assets/bscContract.json';
@@ -14,8 +14,6 @@ import { clearSubmissionState, getTotalInAGS, verifyOrderStatus } from '@dashboa
 const web3: any = new Web3(window?.ethereum);
 
 export function PayWithCollectorCoinButton() {
-    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
-    const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +22,8 @@ export function PayWithCollectorCoinButton() {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+
     const wallets = {
         // Prod eth mainnet wallet
         ethWallet: configs?.web3EthWallet,
@@ -52,7 +52,7 @@ export function PayWithCollectorCoinButton() {
         }
     }
 
-    async function handleClick() {
+    async function initiateTransaction(totalInAGS: number) {
         setIsLoading(true);
         // @ts-ignore
         const currentChainId = await web3.eth.net.getId();
@@ -61,7 +61,7 @@ export function PayWithCollectorCoinButton() {
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
-        if (balance <= grandTotal) {
+        if (balance <= totalInAGS) {
             notifications.error("You don't have enough AGS to finish the payment");
             setIsLoading(false);
 
@@ -110,37 +110,39 @@ export function PayWithCollectorCoinButton() {
             setIsLoading(false);
         }
     }
-
-    useEffect(() => {
-        async function fetchTotalInAGS() {
-            const currentChainId = await web3.eth.net.getId();
-            if (currentChainId) {
-                dispatch(
-                    getTotalInAGS({
-                        orderID,
-                        chainID: currentChainId,
-                        paymentByWallet: appliedCredit,
-                        discountedAmount: discountedValue,
-                    }),
-                );
-                return;
-            }
-
-            dispatch(
+    const fetchTotalInAGS = useCallback(async () => {
+        const currentChainId = await web3.eth.net.getId();
+        if (currentChainId) {
+            return dispatch(
                 getTotalInAGS({
                     orderID,
-                    chainID: 1,
+                    chainID: currentChainId,
                     paymentByWallet: appliedCredit,
-                    discountedAmount: discountedValue,
+                    discountedAmount: isCouponApplied ? discountedValue : 0,
                 }),
             );
         }
 
+        return dispatch(
+            getTotalInAGS({
+                orderID,
+                chainID: 1,
+                paymentByWallet: appliedCredit,
+                discountedAmount: isCouponApplied ? discountedValue : 0,
+            }),
+        );
+    }, [appliedCredit, discountedValue, dispatch, isCouponApplied, orderID]);
+
+    const handleClick = () => {
+        fetchTotalInAGS().then((result: any) => initiateTransaction(result.payload));
+    };
+
+    useEffect(() => {
         fetchTotalInAGS();
-    }, [dispatch, orderID, appliedCredit, discountedValue]);
+    }, [dispatch, orderID, appliedCredit, discountedValue, isCouponApplied, fetchTotalInAGS]);
 
     return (
-        <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>
+        <Button variant={'contained'} disabled={isLoading} onClick={handleClick} sx={{ height: 48 }}>
             {isLoading ? 'Processing Payment...' : 'Pay With Collector Coin'}
         </Button>
     );

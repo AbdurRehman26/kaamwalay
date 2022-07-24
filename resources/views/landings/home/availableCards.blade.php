@@ -3,6 +3,7 @@
         <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center" data-aos="fade">
             <h4 class="Home-sectionContentCaption text-center">Currently accepting:</h4>
             <h3 class="Home-sectionContentHeadline text-center">
+                Modern Sports Cards,
                 @foreach($categories->take(4) as $category)
                     @if ($loop->last)
                         {{ $category->name }}
@@ -10,10 +11,9 @@
                         {{ $category->name }},
                     @endif
                 @endforeach
-                & More!
+                & Much More!
             </h3>
-            <p class="Home-sectionContentText text-center">You can include any card from the categories listed below in your submission.
-                We support a wide array of TCG and Sports Cards, and we’re always adding more!</p>
+            <p class="Home-sectionContentText text-center">We grade a large selection of TCG and Sports Cards, and we’re always adding more!</p>
         </div>
     </div>
 

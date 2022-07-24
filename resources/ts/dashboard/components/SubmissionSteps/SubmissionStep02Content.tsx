@@ -150,7 +150,7 @@ function SubmissionStep02Content() {
             </div>
             <div className={classes.cleaningFeeContainer}>
                 <Box display={'flex'} alignItems={'center'}>
-                    <Typography>Card Cleaning Fee</Typography>
+                    <Typography>Card Cleaning Service</Typography>
                     <Tooltip
                         title={
                             <Box>
@@ -164,8 +164,7 @@ function SubmissionStep02Content() {
                                     sx={{ fontWeight: 700, marginTop: '12px' }}
                                     variant={'caption'}
                                 >
-                                    Card cleaning costs {formatCurrency(featureOrderCleaningFeePerCard)} per card and
-                                    can help improve your grade by 0.5/10 points.
+                                    Card cleaning costs {formatCurrency(featureOrderCleaningFeePerCard)} per card.
                                 </Typography>
                                 <Typography
                                     display={'block'}

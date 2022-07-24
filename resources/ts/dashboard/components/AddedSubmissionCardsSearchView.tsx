@@ -16,28 +16,31 @@ function AddedSubmissionCardsMobileSearchView() {
 
     return (
         <>
-            <Grid container alignItems={'center'} mt={4.5}>
+            <Grid container alignItems={'center'} mt={2.5}>
                 <Typography variant={'subtitle1'} fontWeight={500}>
                     Added Cards
                 </Typography>
             </Grid>
-            {selectedCards.map((row: SearchResultItemCardProps) => (
-                <Fragment key={row.id}>
-                    <Stack mt={1.5} title={row.shortName || row.name}>
-                        <SearchResultItemCard
-                            key={row.id}
-                            id={row.id}
-                            image={row.image}
-                            longName={row.longName}
-                            shortName={row.shortName}
-                            name={row.name}
-                            addedMode
-                            reviewMode
-                        />
-                    </Stack>
-                    <Divider light />
-                </Fragment>
-            ))}
+            {selectedCards
+                .slice()
+                .reverse()
+                .map((row: SearchResultItemCardProps) => (
+                    <Fragment key={row.id}>
+                        <Stack mt={1.5} title={row.shortName || row.name}>
+                            <SearchResultItemCard
+                                key={row.id}
+                                id={row.id}
+                                image={row.image}
+                                longName={row.longName}
+                                shortName={row.shortName}
+                                name={row.name}
+                                addedMode
+                                reviewMode
+                            />
+                        </Stack>
+                        <Divider light />
+                    </Fragment>
+                ))}
         </>
     );
 }

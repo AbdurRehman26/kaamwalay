@@ -52,6 +52,10 @@ class OrderPlacedNotification extends Notification
             $message = "$message, $countryName";
         }
 
+        if ($this->order->requiresCardCleaning()) {
+            $message = "$message, Cleaning Required";
+        }
+
         return $message;
     }
 

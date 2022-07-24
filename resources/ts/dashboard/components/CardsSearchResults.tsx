@@ -10,13 +10,19 @@ import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Hit } from 'react-instantsearch-core';
 import { Hits, Stats } from 'react-instantsearch-dom';
+import { AuthDialog } from '@shared/components/AuthDialog';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { useAuth } from '@shared/hooks/useAuth';
 import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObject';
 import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { markCardAsSelected, markCardAsUnselected } from '@dashboard/redux/slices/newSubmissionSlice';
+import {
+    markCardAsSelected,
+    markCardAsUnselected,
+    setCardsSearchValue,
+} from '@dashboard/redux/slices/newSubmissionSlice';
 import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
@@ -107,7 +113,11 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         } else {
             deselectCard(item);
         }
-    }, [selectedCards, item, selectCard, deselectCard]);
+        setTimeout(() => {
+            dispatch(setCardsSearchValue(''));
+            (window as any).globalThis.clearSearch();
+        }, 500);
+    }, [selectedCards, item, selectCard, deselectCard, dispatch]);
 
     const handleRemove = useCallback(
         (cardProductEntity: CardProductEntity) => {
@@ -155,10 +165,15 @@ function CardsSearchResults() {
     const [showAddCardDialog, setShowAddCardDialog] = useState<boolean | null>(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const ResultsWrapper = isSm ? 'div' : Paper;
+    const { authenticated, authDialogProps, openAuthDialog } = useAuth();
 
     const toggleAddCardDialog = useCallback(() => {
+        if (!showAddCardDialog && !authenticated) {
+            openAuthDialog();
+            return;
+        }
         setShowAddCardDialog(!showAddCardDialog);
-    }, [showAddCardDialog]);
+    }, [showAddCardDialog, authenticated, openAuthDialog]);
 
     return (
         <div className={classes.container}>
@@ -189,6 +204,10 @@ function CardsSearchResults() {
                 <Hits hitComponent={ResultWrapper} />
                 <CustomPagination />
             </ResultsWrapper>
+            <AuthDialog
+                {...authDialogProps}
+                subtitle={'In order to add cards manually, you need to login with a Robograding account.'}
+            />
         </div>
     );
 }

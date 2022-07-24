@@ -24,7 +24,8 @@ class CardSeriesResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('card_category_id')
+                Forms\Components\Select::make('card_category_id')
+                    ->relationship('cardCategory', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -42,8 +43,8 @@ class CardSeriesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('card_category_id'),
+                Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('cardCategory.name'),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('image_path'),
                 Tables\Columns\TextColumn::make('image_bucket_path'),

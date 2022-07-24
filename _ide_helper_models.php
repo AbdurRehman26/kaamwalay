@@ -616,6 +616,7 @@ namespace App\Models{
  * @property \App\Enums\Order\OrderStepEnum $order_step
  * @property float|null $service_fee
  * @property float|null $shipping_fee
+ * @property float $cleaning_fee
  * @property float|null $grand_total
  * @property float|null $amount_paid_from_wallet
  * @property string|null $grand_total_before_discount
@@ -637,6 +638,7 @@ namespace App\Models{
  * @property int|null $order_shipment_id
  * @property int|null $order_customer_shipment_id
  * @property int|null $salesman_id
+ * @property bool $requires_cleaning Refers to card cleaning service
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -700,6 +702,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereArrivedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAutoSavedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereBillingOrderAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCleaningFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscountedAmount($value)
@@ -723,6 +726,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresCleaning($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanId($value)

@@ -73,6 +73,10 @@ class OrderPaymentProcessedNotification extends Notification
             $message = "$message, Coupon Applied";
         }
 
+        if ($this->order->requiresCardCleaning()) {
+            $message = "$message, Cleaning Required";
+        }
+
         if ($this->order->salesman) {
             $message = $message . "\nSalesman: {$this->order->salesman->email}";
         }

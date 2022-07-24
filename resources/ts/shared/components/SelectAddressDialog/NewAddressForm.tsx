@@ -9,7 +9,7 @@ import { Theme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useFormikContext } from 'formik';
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import theme from '@shared/styles/theme';
 import { useAppSelector } from '@dashboard/redux/hooks';
@@ -92,7 +92,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
     const country = useAppSelector((state) => state.newAddressSlice?.customerAddress.country);
     const availableCountries = useAppSelector((state) => state.newAddressSlice.availableCountriesList);
     const availableStates = useAppSelector((state) => state.newAddressSlice?.availableStatesList);
-
+    const [countryId, setCountryId] = useState<number>(0);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const handleBack = useCallback(() => {
         if (canGoBack) {
@@ -119,7 +119,10 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                     fullWidth
                     native
                     key={country?.id ? country?.id : availableCountries[0]?.id}
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                        formik.handleChange(e);
+                        setCountryId(Number(e.target.value));
+                    }}
                     placeholder={'Select Country'}
                     name={'address.countryId'}
                     variant={'outlined'}
@@ -229,7 +232,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
 
                 <div className={`${'fieldContainer'} ${'stateFieldContainer'}`}>
                     <Typography className={'methodDescription'}>State</Typography>
-                    {country?.code === 'US' || country?.code === '' ? (
+                    {countryId === 1 || !countryId ? (
                         <Select
                             fullWidth
                             native

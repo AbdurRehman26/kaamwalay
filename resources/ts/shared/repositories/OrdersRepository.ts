@@ -38,15 +38,15 @@ export class OrdersRepository extends Repository<OrderEntity> {
             };
 
             body.shippingAddress = {
-                firstName: input.address.getFirstName(),
-                lastName: input.address.getLastName(),
+                firstName: input.address.getFirstName() ?? input.address.firstName,
+                lastName: input.address.getLastName() ?? input.address.lastName,
                 address: input.address.address,
                 city: input.address.city,
                 state: input.address.state,
                 zip: input.address.zip,
                 phone: input.address.phone,
                 flat: input.address.flat,
-                countryId: input.address.countryId,
+                countryId: input.address.countryId ?? input.address.country.id,
                 saveForLater: !!input.saveForLater,
             };
         }

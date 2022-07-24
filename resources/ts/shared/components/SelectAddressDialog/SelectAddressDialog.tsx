@@ -32,7 +32,6 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
     const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const handleSubmit = useCallback(
         async (values) => {
-            console.log(values);
             await onSubmit(values);
 
             if (rest.onClose) {

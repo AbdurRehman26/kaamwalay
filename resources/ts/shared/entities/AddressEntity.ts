@@ -21,16 +21,16 @@ export class AddressEntity extends Entity {
 
     public getFirstName() {
         const arr = this.fullName?.split(' ');
-        return this.fullName
+        return `${this.fullName
             ?.split(' ')
             .slice(0, arr.length - 1)
             .toString()
-            .replace(/,/g, ' ');
+            .replace(/,/g, ' ')}`;
     }
 
     public getLastName() {
         const arr = this.fullName?.split(' ');
-        return this.fullName?.split(' ')[arr.length - 1];
+        return `${this.fullName?.split(' ')[arr.length - 1]}`;
     }
 
     public getFullName() {

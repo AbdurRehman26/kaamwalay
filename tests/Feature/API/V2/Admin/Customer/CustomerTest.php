@@ -49,3 +49,22 @@ test('a customer can not get customers list', function () {
     getJson(route('v2.customers.index'))
         ->assertStatus(403);
 });
+
+it('returns single customer details for admin', function () {
+    actingAs($this->user);
+    getJson(route('v2.customers.show', ['customer' => $this->customer]))
+        ->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'profile_image',
+                'full_name',
+                'customer_number',
+                'submissions',
+                'email',
+                'phone',
+                'created_at',
+                'submissions',
+                'cards_count',
+            ],
+        ]);
+});

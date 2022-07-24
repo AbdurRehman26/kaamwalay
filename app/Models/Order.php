@@ -10,6 +10,7 @@ use App\Enums\Order\OrderStepEnum;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -91,9 +92,9 @@ class Order extends Model implements Exportable
         'reviewed_by_id' => 'integer',
         'graded_by_id' => 'integer',
         'grand_total_cents' => 'integer',
-        'reviewed_at' => 'date',
-        'graded_at' => 'date',
-        'shipped_at' => 'date',
+        'reviewed_at' => 'datetime',
+        'graded_at' => 'datetime',
+        'shipped_at' => 'datetime',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
@@ -526,8 +527,22 @@ class Order extends Model implements Exportable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
+    {
+        return $query->whereBetween('created_at', [$fromDate, $toDate]);
+    }
+
     public function isOlderThanOneDay(): bool
     {
         return now()->diff($this->created_at)->days > 0;
+    }
+
+    public function requiresCardCleaning(): bool
+    {
+        return $this->requires_cleaning;
     }
 }

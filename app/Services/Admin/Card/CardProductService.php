@@ -50,7 +50,7 @@ class CardProductService
         $set = CardSet::find($data['set_id']);
 
         //store in AGS
-        $agsResponse = $this->createCardProductOnAgs($category->id, $seriesName, $set->name, $data);
+        $agsResponse = $this->createCardProductOnAgs($category, $seriesName, $set->name, $data);
 
         if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;
@@ -89,15 +89,15 @@ class CardProductService
         ];
     }
 
-    protected function createCardProductOnAgs(int $categoryId, string $seriesName, string $setName, array $data): array
+    protected function createCardProductOnAgs(CardCategory $category, string $seriesName, string $setName, array $data): array
     {
         try {
-            $createData['series_id'] = $this->getSeriesFromAgs($seriesName);
+            $createData['series_id'] = $this->getSeriesFromAgs($seriesName, $category->name);
             $createData['set_id'] = $this->getSetFromAgs($createData['series_id'], $setName);
 
             $createData = array_merge($createData, [
                 'name' => $data['name'],
-                'category_id' => $categoryId,
+                'category_id' => $category->id,
                 'rarity' => $data['rarity'],
                 'card_number_order' => $data['card_number'],
                 'image_path' => $data['image_path'],
@@ -115,9 +115,9 @@ class CardProductService
         }
     }
 
-    protected function getSeriesFromAgs(string $seriesName): int | null
+    protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
-        return $this->agsService->getCardSeries(['name' => $seriesName])['results'][0]['id'];
+        return $this->agsService->getCardSeries(['name' => $seriesName, 'category_name' => $categoryName])['results'][0]['id'];
     }
 
     protected function getSetFromAgs(int $seriesId, string $setName): int | null

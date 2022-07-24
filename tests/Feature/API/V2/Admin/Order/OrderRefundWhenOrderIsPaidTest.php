@@ -228,3 +228,56 @@ test('admin can refund full charged amount to payment method when order has wall
     expect($this->order->refunds()->count())->toEqual(1);
     expect($this->order->orderPayments()->count())->toEqual(3);
 });
+
+/**
+ * Use Case:
+ * Admin refunds partially to customer's wallet. Now the admin wants to refund to the user's payment method.
+ * This test will validate that the total refunded amount should not be greater than the order total.
+ */
+test('admin can not refund more than the order total when order has partial refund to wallet', function () {
+    Event::fake();
+
+    OrderPayment::factory()->create([
+        'order_id' => $this->order->id,
+        'payment_method_id' => PaymentMethod::factory()->wallet(),
+        'response' => json_encode(['id' => Str::random(25)]),
+        'payment_provider_reference_id' => Str::random(25),
+        'amount' => 10.00,
+        'type' => OrderPayment::TYPE_REFUND,
+        'created_at' => now()->addMinute(),
+    ]);
+
+    postJson(route('v2.payments.refund', ['order' => $this->order]), [
+        'notes' => $this->faker->sentence(),
+        'amount' => $this->order->grand_total,
+        'add_to_wallet' => false,
+    ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});
+
+/**
+ * Use Case:
+ * Admin refunds partially to customer's wallet. Now the admin wants to refund to the user's payment method.
+ * This test will validate that the total refunded amount is equal to the order's grand total.
+ */
+test('admin can refund the order total when order has partial refund to wallet', function () {
+    Event::fake();
+
+    OrderPayment::factory()->create([
+        'order_id' => $this->order->id,
+        'payment_method_id' => PaymentMethod::factory()->wallet(),
+        'response' => json_encode(['id' => Str::random(25)]),
+        'payment_provider_reference_id' => Str::random(25),
+        'amount' => 10.00,
+        'type' => OrderPayment::TYPE_REFUND,
+        'created_at' => now()->addMinute(),
+    ]);
+
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
+        'notes' => $this->faker->sentence(),
+        'amount' => $this->order->grand_total - 10,
+        'add_to_wallet' => false,
+    ])->assertStatus(Response::HTTP_CREATED);
+
+    Event::assertDispatched(RefundSuccessful::class);
+    expect($this->order->refunds()->sum('amount'))->toEqual($this->order->grand_total);
+});

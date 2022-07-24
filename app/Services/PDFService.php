@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFService
 {
     public static function generate(string $viewName, array $data): \Barryvdh\DomPDF\PDF
     {
-        /** @var \Barryvdh\DomPDF\PDF $pdf */
-        $pdf = PDF::loadView($viewName, $data);
+        $pdf = Pdf::loadView($viewName, $data);
         $pdf->setPaper('A4');
 
         return $pdf;

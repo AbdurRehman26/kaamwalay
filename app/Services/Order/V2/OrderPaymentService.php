@@ -88,7 +88,7 @@ class OrderPaymentService
         $orderPaymentData = [
             'order_id' => $this->order->id,
             'payment_method_id' => $this->order->paymentMethod->id,
-            'amount' => $this->order->grand_total,
+            'amount' => $this->order->grand_total_to_be_paid,
         ];
         if ($this->order->paymentMethod->code === 'stripe') {
             $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
@@ -171,7 +171,7 @@ class OrderPaymentService
 
     protected function updateGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
         $this->order->grand_total = (
             $this->order->service_fee
             + $this->order->shipping_fee
@@ -179,6 +179,7 @@ class OrderPaymentService
             - $this->order->payment_method_discounted_amount
             - $this->order->refund_total
             + $this->order->extra_charge_total
+            + $this->order->cleaning_fee
         );
 
         GrandTotalValidator::validate($this->order);

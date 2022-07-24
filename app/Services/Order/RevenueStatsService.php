@@ -129,7 +129,7 @@ class RevenueStatsService
 
     protected function getOrderTotalProviderFee(Order $order): float
     {
-        return $order->firstOrderPayment->provider_fee
+        return $order->firstOrderPayment?->provider_fee
             + $order->extraCharges->sum('provider_fee');
     }
 }

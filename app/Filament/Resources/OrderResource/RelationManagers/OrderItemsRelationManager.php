@@ -4,11 +4,12 @@ namespace App\Filament\Resources\OrderResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
+use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 
-class OrderItemsRelationManager extends HasManyRelationManager
+class OrderItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'orderItems';
 
@@ -39,6 +40,14 @@ class OrderItemsRelationManager extends HasManyRelationManager
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
             ]);
     }
 }

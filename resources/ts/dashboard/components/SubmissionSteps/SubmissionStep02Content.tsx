@@ -54,8 +54,6 @@ const useStyles = makeStyles({
     },
 });
 
-const CLEANING_FEE_TOOLTIP_TEXT = `We offer a professional cleaning service in which we carefully remove any dirt or dust from your card. Dirt and dust may cause your card to get a lower grade then you would get otherwise. Card cleaning costs $5.00 per card and can help improve your grade by 0.5/10 points. What does up to $100 mean? We won’t charge you any more than $100 for a cleaning, which means any time you submit more than 20 cards, and opt in for cleaning, we will only charge a cleaning fee for the first 20 cards and the rest will be cleaned for FREE!`;
-
 function SubmissionStep02Content() {
     const classes = useStyles();
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
@@ -152,8 +150,39 @@ function SubmissionStep02Content() {
             </div>
             <div className={classes.cleaningFeeContainer}>
                 <Box display={'flex'} alignItems={'center'}>
-                    <Typography>Card Cleaning Fee</Typography>
-                    <Tooltip title={CLEANING_FEE_TOOLTIP_TEXT}>
+                    <Typography>Card Cleaning Service</Typography>
+                    <Tooltip
+                        title={
+                            <Box>
+                                <Typography display={'block'} variant={'caption'}>
+                                    We offer a professional cleaning service in which we carefully remove any dirt or
+                                    dust from your card. Dirt and dust may cause your card to get a lower grade than you
+                                    would get otherwise.{' '}
+                                </Typography>
+                                <Typography
+                                    display={'block'}
+                                    sx={{ fontWeight: 700, marginTop: '12px' }}
+                                    variant={'caption'}
+                                >
+                                    Card cleaning costs {formatCurrency(featureOrderCleaningFeePerCard)} per card.
+                                </Typography>
+                                <Typography
+                                    display={'block'}
+                                    sx={{ fontWeight: 700, marginTop: '12px' }}
+                                    variant={'caption'}
+                                >
+                                    What does up to {formatCurrency(featureOrderCleaningFeeMaxCap)} mean?
+                                </Typography>
+                                <Typography display={'block'} variant={'caption'}>
+                                    We won't charge you any more than {formatCurrency(featureOrderCleaningFeeMaxCap)}{' '}
+                                    for a cleaning, which means any time you submit certain number of cards, and opt in
+                                    for cleaning, we will only charge a cleaning fee upto{' '}
+                                    {formatCurrency(featureOrderCleaningFeeMaxCap)} and the rest will be cleaned for
+                                    FREE!
+                                </Typography>
+                            </Box>
+                        }
+                    >
                         <IconButton aria-label="info">
                             <InfoOutlinedIcon />
                         </IconButton>

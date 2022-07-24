@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', LoginController::class)->middleware('guest');
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'destroy']);
     Route::prefix('orders/{order}')->group(function () {
         Route::post('items/bulk/change-status', [OrderItemController::class, 'changeStatusBulk']);
         Route::post('items/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
@@ -66,6 +66,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store']);
+    });
+
+    Route::prefix('certificates')->group(function () {
+        Route::get('/', [UserCardController::class, 'listCertificates']);
+        Route::get('/{certificateNumber}', [UserCardController::class, 'getCertificate']);
     });
 
     // Coupons

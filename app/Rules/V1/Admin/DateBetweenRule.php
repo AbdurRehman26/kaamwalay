@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules\Admin;
+namespace App\Rules\V1\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;

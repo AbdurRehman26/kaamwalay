@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 20,
         [theme.breakpoints.down('sm')]: {
             width: '100%',
+            marginLeft: 0,
         },
     },
     titleContainer: {
@@ -359,6 +360,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                                 color="primary"
                                 disabled={isStripePaymentLoading}
                                 onClick={handleConfirmStripePayment}
+                                sx={{ height: 48 }}
                             >
                                 {isStripePaymentLoading ? 'Loading...' : 'Submit Payment'}
                             </Button>

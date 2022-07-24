@@ -3,11 +3,11 @@
 namespace App\Http\Resources\API\V2\Admin\Customer;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /**
- * @method orders()
- * @method cardsCount()
+ * @mixin User
  */
 class CustomerResource extends BaseResource
 {

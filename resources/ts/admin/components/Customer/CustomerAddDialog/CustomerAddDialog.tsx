@@ -49,12 +49,16 @@ const Root = styled(Dialog)(({ theme }) => ({
 
 const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
     '&': {
-        padding: '4px 14px !important',
+        padding: '0px 14px !important',
         width: '100%',
         border: '1px solid lightgray',
         fontWeight: 400,
         fontSize: '1rem',
         borderRadius: 4,
+    },
+    '.MuiInput-input': {
+        borderLeft: '1px solid lightgray',
+        padding: '7px 5px !important',
     },
     '.MuiInput-root:before': {
         border: '0 !important',

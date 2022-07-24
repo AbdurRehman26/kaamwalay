@@ -17,18 +17,11 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SignUpValidationRules } from '@shared/components/AuthDialog/validation';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
-import { UserEntity } from '@shared/entities/UserEntity';
-import { WalletEntity } from '@shared/entities/WalletEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
-import { updateOrderWalletById } from '@shared/redux/slices/adminOrdersSlice';
-import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
-import { useAppDispatch } from '../../../redux/hooks';
+import { CustomersRepository } from '@shared/repositories/Admin/CustomersRepository';
 
-interface Props extends DialogProps {
-    customer?: UserEntity | null;
-    wallet?: WalletEntity | null;
-}
+interface Props extends DialogProps {}
 
 const Root = styled(Dialog)(({ theme }) => ({
     '.MuiDialog-paper': {
@@ -98,15 +91,13 @@ const useStyles = makeStyles(
     { name: 'AddCustomerDialog' },
 );
 
-export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props) {
+export function CustomerAddDialog({ onClose, ...rest }: Props) {
     const classes = useStyles();
-    const walletRepository = useRepository(WalletRepository);
-    const dispatch = useAppDispatch();
+    const customersRepository = useRepository(CustomersRepository);
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
-    const [amount, setAmount] = useState<string | number>(0);
 
-    const initialState = useMemo<AddCustomerRequestDto>(
+    const customerInput = useMemo<AddCustomerRequestDto>(
         () => ({
             firstName: '',
             lastName: '',
@@ -126,22 +117,18 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
     );
 
     const handleApply = useCallback(async () => {
-        if (amount && wallet?.id) {
-            try {
-                setLoading(true);
-                await walletRepository.addCredit(wallet.id, amount);
-                await dispatch(updateOrderWalletById(wallet.id));
-            } catch (e: any) {
-                notifications.exception(e);
-                return;
-            } finally {
-                setLoading(false);
-                setAmount(0);
-            }
+        try {
+            setLoading(true);
+            await customersRepository.storeCustomer(customerInput);
+        } catch (e: any) {
+            notifications.exception(e);
+            return;
+        } finally {
+            setLoading(false);
         }
 
         handleClose({});
-    }, [amount, dispatch, handleClose, notifications, wallet?.id, walletRepository]);
+    }, [customerInput, customersRepository, handleClose, notifications]);
 
     const handleSubmit = useCallback(async (values: AddCustomerRequestDto) => {
         values = { ...values };
@@ -166,7 +153,7 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
             <DialogContent>
                 <Grid container flexDirection={'column'}>
                     <Formik
-                        initialValues={initialState}
+                        initialValues={customerInput}
                         onSubmit={handleSubmit}
                         validationSchema={SignUpValidationRules}
                         validateOnChange

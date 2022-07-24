@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
+import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SignUpValidationRules } from '@shared/components/AuthDialog/validation';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
@@ -46,6 +47,23 @@ const Root = styled(Dialog)(({ theme }) => ({
     },
 }));
 
+const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
+    '&': {
+        padding: '4px 14px !important',
+        width: '100%',
+        border: '1px solid lightgray',
+        fontWeight: 400,
+        fontSize: '1rem',
+        borderRadius: 4,
+    },
+    '.MuiInput-root:before': {
+        border: '0 !important',
+    },
+    '.MuiInput-root:after': {
+        border: '0 !important',
+    },
+}));
+
 const useStyles = makeStyles(
     () => {
         return {
@@ -65,6 +83,11 @@ const useStyles = makeStyles(
                 fontWeight: 400,
                 fontSize: 12,
                 lineHeight: '16px',
+            },
+            phoneNumberText: {
+                '.MuiInput-root': {
+                    padding: '8.5px 14px !important',
+                },
             },
         };
     },
@@ -192,13 +215,12 @@ export function CustomerAddDialog({ customer, wallet, onClose, ...rest }: Props)
                                 <Typography variant={'subtitle1'} className={classes.label}>
                                     Phone Number
                                 </Typography>
-                                <TextField
-                                    className={classes.textField}
-                                    fullWidth
-                                    placeholder={'Enter Phone Number'}
-                                    size={'small'}
-                                    variant="outlined"
-                                    onChange={() => console.log(1)}
+                                <StyledPhoneNumber
+                                    defaultCountry="it"
+                                    preferredCountries={['it', 'se']}
+                                    onChange={() => {
+                                        console.log(1);
+                                    }}
                                 />
                             </Box>
                         </Form>

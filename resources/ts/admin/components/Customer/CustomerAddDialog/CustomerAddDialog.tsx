@@ -15,11 +15,11 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
-import { SignUpValidationRules } from '@shared/components/AuthDialog/validation';
+import * as yup from 'yup';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { useRepository } from '@shared/hooks/useRepository';
-import { CustomersRepository } from '@shared/repositories/Admin/CustomersRepository';
+import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface Props extends DialogProps {}
 
@@ -93,7 +93,7 @@ const useStyles = makeStyles(
 
 export function CustomerAddDialog({ onClose, ...rest }: Props) {
     const classes = useStyles();
-    const customersRepository = useRepository(CustomersRepository);
+    const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
 
@@ -119,7 +119,7 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
     const handleApply = useCallback(async () => {
         try {
             setLoading(true);
-            await customersRepository.storeCustomer(customerInput);
+            dispatch(storeCustomer(customerInput));
         } catch (e: any) {
             notifications.exception(e);
             return;
@@ -128,7 +128,7 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
         }
 
         handleClose({});
-    }, [customerInput, customersRepository, handleClose, notifications]);
+    }, [dispatch, customerInput, handleClose, notifications]);
 
     const handleSubmit = useCallback(async (values: AddCustomerRequestDto) => {
         values = { ...values };
@@ -150,82 +150,99 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                 </Grid>
             </Grid>
             <Divider />
-            <DialogContent>
-                <Grid container flexDirection={'column'}>
-                    <Formik
-                        initialValues={customerInput}
-                        onSubmit={handleSubmit}
-                        validationSchema={SignUpValidationRules}
-                        validateOnChange
-                    >
-                        <Form className={classes.root}>
-                            <Grid display={'flex'} justifyContent={'space-between'} item>
-                                <Box className={classes.inputWithLabelContainer} width={'49%'}>
+            <Formik
+                initialValues={customerInput}
+                onSubmit={handleSubmit}
+                validationSchema={CustomerAddValidationRules}
+                validateOnChange
+            >
+                {({ values, errors, touched, isValid, dirty, isSubmitting, handleChange, handleBlur }) => (
+                    <Form className={classes.root}>
+                        <DialogContent>
+                            <Grid container flexDirection={'column'}>
+                                <Grid display={'flex'} justifyContent={'space-between'} item>
+                                    <Box className={classes.inputWithLabelContainer} width={'49%'}>
+                                        <Typography variant={'subtitle1'} className={classes.label}>
+                                            First Name
+                                        </Typography>
+                                        <TextField
+                                            name={'firstName'}
+                                            className={classes.textField}
+                                            fullWidth
+                                            placeholder={'Enter First Name'}
+                                            size={'small'}
+                                            variant="outlined"
+                                            value={values.firstName}
+                                        />
+                                    </Box>
+                                    <Box className={classes.inputWithLabelContainer} width={'49%'}>
+                                        <Typography variant={'subtitle1'} className={classes.label}>
+                                            Last Name
+                                        </Typography>
+                                        <TextField
+                                            className={classes.textField}
+                                            fullWidth
+                                            placeholder={'Enter Last Name'}
+                                            size={'small'}
+                                            variant="outlined"
+                                            value={values.lastName}
+                                        />
+                                    </Box>
+                                </Grid>
+
+                                <Box className={classes.inputWithLabelContainer} width={'100%'}>
                                     <Typography variant={'subtitle1'} className={classes.label}>
-                                        First Name
+                                        Email
                                     </Typography>
                                     <TextField
                                         className={classes.textField}
                                         fullWidth
-                                        placeholder={'Enter First Name'}
+                                        placeholder={'Enter Email'}
                                         size={'small'}
                                         variant="outlined"
-                                        onChange={() => console.log(1)}
+                                        value={values.email}
                                     />
                                 </Box>
-                                <Box className={classes.inputWithLabelContainer} width={'49%'}>
+
+                                <Box className={classes.inputWithLabelContainer} width={'100%'}>
                                     <Typography variant={'subtitle1'} className={classes.label}>
-                                        Last Name
+                                        Phone Number
                                     </Typography>
-                                    <TextField
-                                        className={classes.textField}
-                                        fullWidth
-                                        placeholder={'Enter Last Name'}
-                                        size={'small'}
-                                        variant="outlined"
-                                        onChange={() => console.log(1)}
+                                    <StyledPhoneNumber
+                                        defaultCountry="it"
+                                        preferredCountries={['it', 'se']}
+                                        onChange={() => {
+                                            console.log(1);
+                                        }}
                                     />
                                 </Box>
                             </Grid>
-
-                            <Box className={classes.inputWithLabelContainer} width={'100%'}>
-                                <Typography variant={'subtitle1'} className={classes.label}>
-                                    Email
-                                </Typography>
-                                <TextField
-                                    className={classes.textField}
-                                    fullWidth
-                                    placeholder={'Enter Email'}
-                                    size={'small'}
-                                    variant="outlined"
-                                    onChange={() => console.log(1)}
-                                />
-                            </Box>
-
-                            <Box className={classes.inputWithLabelContainer} width={'100%'}>
-                                <Typography variant={'subtitle1'} className={classes.label}>
-                                    Phone Number
-                                </Typography>
-                                <StyledPhoneNumber
-                                    defaultCountry="it"
-                                    preferredCountries={['it', 'se']}
-                                    onChange={() => {
-                                        console.log(1);
-                                    }}
-                                />
-                            </Box>
-                        </Form>
-                    </Formik>
-                </Grid>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color={'inherit'}>
-                    Cancel
-                </Button>
-                <LoadingButton loading={loading} variant={'contained'} onClick={handleApply}>
-                    Add Customer
-                </LoadingButton>
-            </DialogActions>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color={'inherit'}>
+                                Cancel
+                            </Button>
+                            <LoadingButton
+                                disabled={!dirty || !isValid || isSubmitting}
+                                loading={loading}
+                                variant={'contained'}
+                                onClick={handleApply}
+                            >
+                                Add Customer
+                            </LoadingButton>
+                        </DialogActions>
+                    </Form>
+                )}
+            </Formik>
         </Root>
     );
 }
+
+const RequiredMessage = 'Required field!';
+
+export const CustomerAddValidationRules = yup.object().shape({
+    email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
+    firstName: yup.string().trim().required(RequiredMessage),
+    lastName: yup.string().trim().required(RequiredMessage),
+    phoneNumber: yup.string().trim().required(RequiredMessage),
+});

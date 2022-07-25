@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { app } from '@shared/lib/app';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { CustomerEntity } from '../../entities/CustomerEntity';
@@ -10,7 +11,7 @@ interface StateType extends APIState<CustomerEntity> {}
 
 const adminCustomersThunk = createRepositoryThunk('adminCustomers', CustomersRepository);
 
-export const storeCustomer = createAsyncThunk('storeCustomer', async (input: CustomerEntity, thunkAPI) => {
+export const storeCustomer = createAsyncThunk('storeCustomer', async (input: AddCustomerRequestDto, thunkAPI) => {
     const customersRepository = app(CustomersRepository);
 
     try {

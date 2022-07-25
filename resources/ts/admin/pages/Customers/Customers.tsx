@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { CustomerViewPage } from './CustomerViewPage';
 import { CustomersListPage } from './CustomersListPage';
 
 /**
@@ -13,6 +14,7 @@ export function Customers() {
         <Routes>
             <Route path={''} element={<Navigate to={'/customers/list'} replace />} />
             <Route path={'list'} element={<CustomersListPage />} />
+            <Route path={'/:id/view'} element={<CustomerViewPage />} />
         </Routes>
     );
 }

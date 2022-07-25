@@ -1,4 +1,3 @@
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -12,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
@@ -26,12 +24,11 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { nameInitials } from '@shared/lib/strings/initials';
-import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
+import { CustomerTableRow } from './CustomerTableRow';
 
 type InitialValues = {
     minSubmissions: string;
@@ -58,10 +55,6 @@ const getFilters = (values: InitialValues) => ({
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
-
-enum RowOption {
-    CreditCustomer,
-}
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -160,20 +153,6 @@ export function CustomersListPage() {
         [customers, setQuery],
     );
 
-    const handleOption = useCallback((action: RowOption, value?: any) => {
-        switch (action) {
-            case RowOption.CreditCustomer:
-                const [firstName, lastName] = value.fullName.split(' ');
-                const user = new UserEntity();
-                user.id = value.id;
-                user.firstName = firstName;
-                user.lastName = lastName;
-                user.wallet = value.wallet;
-                setCustomer(user);
-                break;
-        }
-    }, []);
-
     const handleExportData = useCallback(async () => {
         try {
             const exportData = await dataExportRepository.export({
@@ -191,7 +170,13 @@ export function CustomersListPage() {
 
     return (
         <Grid container>
-            <ListPageHeader searchField title={'Customers'} value={initialValues.search} onSearch={handleSearch} />
+            <ListPageHeader
+                searchField
+                title={'Customers'}
+                value={initialValues.search}
+                onSearch={handleSearch}
+                isCustomerPage={true}
+            />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'subtitle1'}>{customers.pagination.meta.total} Result(s)</Typography>
@@ -316,40 +301,7 @@ export function CustomersListPage() {
                     </TableHead>
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <TableRow key={customer.id}>
-                                <TableCell variant={'body'}>
-                                    <Grid container>
-                                        <Avatar src={customer.profileImage ?? ''}>
-                                            {nameInitials(customer.fullName)}
-                                        </Avatar>
-                                        <Grid item xs container direction={'column'} pl={2}>
-                                            <Typography variant={'body2'}>{customer.fullName}</Typography>
-                                            <Typography variant={'caption'} color={'textSecondary'}>
-                                                {customer.customerNumber}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </TableCell>
-                                <TableCell variant={'body'}>{customer.email ?? '-'}</TableCell>
-                                <TableCell variant={'body'}>{customer.phone ?? '-'}</TableCell>
-                                <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {customer.submissions ?? 0}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {customer.cardsCount}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {formatCurrency(customer.wallet?.balance ?? 0)}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.CreditCustomer} value={customer}>
-                                            Credit Customer
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
-                                </TableCell>
-                            </TableRow>
+                            <CustomerTableRow customerData={customer} />
                         ))}
                     </TableBody>
                     <TableFooter>

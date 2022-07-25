@@ -1,5 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
 import Grid, { GridProps } from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,6 +14,7 @@ interface Props extends GridProps {
     searchField?: boolean;
     value?: string;
     onSearch?: (search: string) => void;
+    isCustomerPage?: boolean;
 }
 
 const Root = styled(Grid)(() => ({
@@ -38,7 +40,7 @@ const Root = styled(Grid)(() => ({
  * @date: 23.12.2021
  * @time: 21:44
  */
-export function ListPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
+export function ListPageHeader({ title, searchField, value, isCustomerPage, onSearch, children, ...rest }: Props) {
     const [search, setSearch] = useState(value ?? '');
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
@@ -92,6 +94,18 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
                         }}
                     />
                 )}
+                {isCustomerPage ? (
+                    <Grid container item xs justifyContent={'flex-end'}>
+                        <Button
+                            variant={'contained'}
+                            color={'primary'}
+                            sx={{ borderRadius: '24px', padding: '10px 20px' }}
+                            disabled
+                        >
+                            ADD CUSTOMER
+                        </Button>
+                    </Grid>
+                ) : null}
             </Grid>
             {children}
         </Root>

@@ -116,23 +116,22 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
         [onClose],
     );
 
-    const handleApply = useCallback(async () => {
-        try {
-            setLoading(true);
-            dispatch(storeCustomer(customerInput));
-        } catch (e: any) {
-            notifications.exception(e);
-            return;
-        } finally {
-            setLoading(false);
-        }
+    const handleSubmit = useCallback(
+        async (customerInput: AddCustomerRequestDto) => {
+            try {
+                setLoading(true);
+                dispatch(storeCustomer(customerInput));
+            } catch (e: any) {
+                notifications.exception(e);
+                return;
+            } finally {
+                setLoading(false);
+            }
 
-        handleClose({});
-    }, [dispatch, customerInput, handleClose, notifications]);
-
-    const handleSubmit = useCallback(async (values: AddCustomerRequestDto) => {
-        values = { ...values };
-    }, []);
+            handleClose({});
+        },
+        [dispatch, handleClose, notifications],
+    );
 
     return (
         <Root onClose={handleClose} {...rest}>
@@ -156,7 +155,17 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                 validationSchema={CustomerAddValidationRules}
                 validateOnChange
             >
-                {({ values, errors, touched, isValid, dirty, isSubmitting, handleChange, handleBlur }) => (
+                {({
+                    values,
+                    errors,
+                    touched,
+                    isValid,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    setFieldValue,
+                }) => (
                     <Form className={classes.root}>
                         <DialogContent>
                             <Grid container flexDirection={'column'}>
@@ -166,6 +175,8 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                             First Name
                                         </Typography>
                                         <TextField
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
                                             name={'firstName'}
                                             className={classes.textField}
                                             fullWidth
@@ -173,6 +184,7 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                             size={'small'}
                                             variant="outlined"
                                             value={values.firstName}
+                                            error={touched.firstName && !!errors.firstName}
                                         />
                                     </Box>
                                     <Box className={classes.inputWithLabelContainer} width={'49%'}>
@@ -180,12 +192,16 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                             Last Name
                                         </Typography>
                                         <TextField
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            name={'lastName'}
                                             className={classes.textField}
                                             fullWidth
                                             placeholder={'Enter Last Name'}
                                             size={'small'}
                                             variant="outlined"
                                             value={values.lastName}
+                                            error={touched.lastName && !!errors.lastName}
                                         />
                                     </Box>
                                 </Grid>
@@ -195,12 +211,16 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                         Email
                                     </Typography>
                                     <TextField
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        name={'email'}
                                         className={classes.textField}
                                         fullWidth
                                         placeholder={'Enter Email'}
                                         size={'small'}
                                         variant="outlined"
                                         value={values.email}
+                                        error={touched.email && !!errors.email}
                                     />
                                 </Box>
 
@@ -209,24 +229,23 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                         Phone Number
                                     </Typography>
                                     <StyledPhoneNumber
-                                        defaultCountry="it"
-                                        preferredCountries={['it', 'se']}
-                                        onChange={() => {
-                                            console.log(1);
-                                        }}
+                                        defaultCountry="us"
+                                        disableAreaCodes
+                                        onlyCountries={['us']}
+                                        onChange={(e) => setFieldValue('phone', e)}
                                     />
                                 </Box>
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleClose} color={'inherit'}>
+                            <Button disabled={isSubmitting} onClick={handleClose} color={'inherit'}>
                                 Cancel
                             </Button>
                             <LoadingButton
+                                type={'submit'}
                                 disabled={!dirty || !isValid || isSubmitting}
                                 loading={loading}
                                 variant={'contained'}
-                                onClick={handleApply}
                             >
                                 Add Customer
                             </LoadingButton>
@@ -244,5 +263,4 @@ export const CustomerAddValidationRules = yup.object().shape({
     email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
     firstName: yup.string().trim().required(RequiredMessage),
     lastName: yup.string().trim().required(RequiredMessage),
-    phoneNumber: yup.string().trim().required(RequiredMessage),
 });

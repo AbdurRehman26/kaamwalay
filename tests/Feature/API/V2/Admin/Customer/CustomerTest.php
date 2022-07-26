@@ -6,6 +6,7 @@ use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
+use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     $this->seed([
@@ -67,4 +68,16 @@ it('returns single customer details for admin', function () {
                 'cards_count',
             ],
         ]);
+});
+
+test('a guest can not get single customer details', function () {
+    getJson(route('v2.customers.show', ['customer' => $this->customer]))
+        ->assertStatus(Response::HTTP_UNAUTHORIZED);
+});
+
+test('a customer can not get single customer detail', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+    getJson(route('v2.customers.show', ['customer' => $this->customer]))
+        ->assertStatus(403);
 });

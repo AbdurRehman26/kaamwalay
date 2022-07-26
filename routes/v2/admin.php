@@ -82,7 +82,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   
     
     // Customers
-    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::apiResource('customers', CustomerController::class)->only('index', 'show');
   
     // wallet
     Route::prefix('wallets')->group(function () {

@@ -22,7 +22,7 @@ class CardSurfaceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('cardCategory.name')
+                Forms\Components\Select::make('card_category_id')
                     ->relationship('cardCategory', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')

@@ -230,6 +230,7 @@ export function CustomerAddDialog({ onClose, ...rest }: DialogProps) {
                                             Phone Number
                                         </Typography>
                                         <StyledPhoneNumber
+                                            countryCodeEditable={false}
                                             defaultCountry="us"
                                             disableAreaCodes
                                             onlyCountries={data.map((country) => country.code.toLowerCase())}

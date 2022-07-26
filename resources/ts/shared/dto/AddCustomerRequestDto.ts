@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber, ValidateIf } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 import { ErrorMessages } from '../lib/errors/ErrorMessage';
 import { createErrorMessageOption } from '../lib/errors/createErrorMessage';
 
@@ -13,7 +13,5 @@ export class AddCustomerRequestDto {
     @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Last Name'))
     public lastName!: string;
 
-    @ValidateIf((dto) => typeof dto.phone !== 'undefined' && dto.phone !== '')
-    @IsPhoneNumber('US', createErrorMessageOption(ErrorMessages.ShouldBeValidPhoneNumber, 'Phone'))
     public phone?: string;
 }

@@ -3,20 +3,11 @@
 namespace App\Http\Resources\API\V2\Admin\Customer;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /**
- * @property int $id
- * @property string $email
- * @property string|null $phone
- * @property string|null $profile_image
- * @property string|null $customer_number
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Wallet|null $wallet
- * @method orders()
- * @method cardsCount()
- * @method getFullName()
+ * @mixin User
  */
 class CustomerResource extends BaseResource
 {
@@ -39,7 +30,7 @@ class CustomerResource extends BaseResource
             'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
-            'update_at' => $this->formatDate($this->updated_at),
+            'updated_at' => $this->formatDate($this->updated_at),
         ];
     }
 }

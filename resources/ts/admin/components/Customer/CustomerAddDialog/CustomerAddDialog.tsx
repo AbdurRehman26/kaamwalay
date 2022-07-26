@@ -231,7 +231,7 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                     <StyledPhoneNumber
                                         defaultCountry="us"
                                         disableAreaCodes
-                                        onlyCountries={['us']}
+                                        onlyCountries={['us', 'au', 'ca']}
                                         onChange={(e) => setFieldValue('phone', e)}
                                     />
                                 </Box>

@@ -18,10 +18,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
 import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
-
-interface Props extends DialogProps {}
 
 const Root = styled(Dialog)(({ theme }) => ({
     '.MuiDialog-paper': {
@@ -91,11 +90,12 @@ const useStyles = makeStyles(
     { name: 'AddCustomerDialog' },
 );
 
-export function CustomerAddDialog({ onClose, ...rest }: Props) {
+export function CustomerAddDialog({ onClose, ...rest }: DialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
+    const { data } = useCountriesListsQuery();
 
     const customerInput = useMemo<AddCustomerRequestDto>(
         () => ({
@@ -224,17 +224,19 @@ export function CustomerAddDialog({ onClose, ...rest }: Props) {
                                     />
                                 </Box>
 
-                                <Box className={classes.inputWithLabelContainer} width={'100%'}>
-                                    <Typography variant={'subtitle1'} className={classes.label}>
-                                        Phone Number
-                                    </Typography>
-                                    <StyledPhoneNumber
-                                        defaultCountry="us"
-                                        disableAreaCodes
-                                        onlyCountries={['us', 'au', 'ca']}
-                                        onChange={(e) => setFieldValue('phone', e)}
-                                    />
-                                </Box>
+                                {data.length && (
+                                    <Box className={classes.inputWithLabelContainer} width={'100%'}>
+                                        <Typography variant={'subtitle1'} className={classes.label}>
+                                            Phone Number
+                                        </Typography>
+                                        <StyledPhoneNumber
+                                            defaultCountry="us"
+                                            disableAreaCodes
+                                            onlyCountries={data.map((country) => country.code.toLowerCase())}
+                                            onChange={(e) => setFieldValue('phone', e)}
+                                        />
+                                    </Box>
+                                )}
                             </Grid>
                         </DialogContent>
                         <DialogActions>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { CustomerViewPage } from './CustomerViewPage';
-import { CustomersListPage } from './CustomersListPage';
+import { CustomerView } from './CustomerView';
+import { CustomersList } from './CustomersList';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -13,8 +13,8 @@ export function Customers() {
     return (
         <Routes>
             <Route path={''} element={<Navigate to={'/customers/list'} replace />} />
-            <Route path={'list'} element={<CustomersListPage />} />
-            <Route path={'/:id/view'} element={<CustomerViewPage />} />
+            <Route path={'list'} element={<CustomersList />} />
+            <Route path={'/:id/view'} element={<CustomerView />} />
         </Routes>
     );
 }

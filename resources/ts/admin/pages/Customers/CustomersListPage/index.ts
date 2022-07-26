@@ -1,1 +1,0 @@
-export { CustomersListPage } from './CustomersListPage';

@@ -62,7 +62,7 @@ const getFilters = (values: InitialValues) => ({
  * @date: 23.12.2021
  * @time: 21:39
  */
-export function CustomersListPage() {
+export function CustomersList() {
     const [customer, setCustomer] = useState<UserEntity | null>(null);
 
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
@@ -322,4 +322,4 @@ export function CustomersListPage() {
     );
 }
 
-export default CustomersListPage;
+export default CustomersList;

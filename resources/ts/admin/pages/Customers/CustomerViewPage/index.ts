@@ -1,1 +1,0 @@
-export { CustomerViewPage } from './CustomerViewPage';

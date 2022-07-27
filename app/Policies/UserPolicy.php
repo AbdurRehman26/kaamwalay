@@ -20,7 +20,7 @@ class UserPolicy
         //
     }
 
-    public function sendAcessEmail(User $user, User $customer)
+    public function sendAcessEmail(User $user, User $customer): bool
     {
         return $user->isAdmin() && ! $customer->last_login_at;
     }

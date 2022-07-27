@@ -3,6 +3,8 @@
  * @apiName List Customers
  * @apiGroup Admin Customers
  *
+ * @apiVersion 2.0.0
+ *
  * @apiUse header_main
  * @apiUse Authorization
  *

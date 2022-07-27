@@ -96,7 +96,12 @@ export function CustomerView() {
                     </Grid>
                 </Grid>
                 <Grid container item xs className={'Actions'}>
-                    <Button variant={'contained'} color={'primary'} sx={{ borderRadius: '24px' }} disabled>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        sx={{ borderRadius: '24px', padding: '10px 20px' }}
+                        disabled
+                    >
                         CREATE SUBMISSION
                     </Button>
                     <OptionsMenu onClick={handleOption}>

@@ -47,7 +47,7 @@ class UpdateOrderShippingMethodRequest extends FormRequest
             'shipping_address.first_name' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],
             'shipping_address.last_name' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],
             'shipping_address.address' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],
-            'shipping_address.country_id' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'int'],
+            'shipping_address.country_id' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'integer' , 'exists:countries,id'],
             'shipping_address.city' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],
             'shipping_address.state' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],
             'shipping_address.zip' => [Rule::requiredIf($isAddressRequired && $hasNoCustomerAddress), 'string'],

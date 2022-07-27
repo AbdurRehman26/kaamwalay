@@ -31,6 +31,7 @@ class CustomerResource extends BaseResource
             'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
+            'last_login_at' => $this->formatDate($this->last_login_at),
         ];
     }
 }

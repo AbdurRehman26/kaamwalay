@@ -75,6 +75,7 @@ test('an admin can create a customer', function () {
                 'submissions',
                 'cards_count',
                 'wallet',
+                'last_login_at',
             ],
         ]);
 

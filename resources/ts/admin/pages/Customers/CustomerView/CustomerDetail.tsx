@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 const Root = styled(Grid)({
     '.CustomerDetailBox': {
@@ -93,6 +94,7 @@ export function CustomerDetail() {
                     </Grid>
                 </Grid>
             </Root>
+            <CustomerSubmissionListView />
         </>
     );
 }

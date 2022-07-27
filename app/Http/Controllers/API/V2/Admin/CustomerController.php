@@ -18,6 +18,11 @@ class CustomerController extends V1CustomerController
         parent::__construct($this->customerService);
     }
 
+    public function show(User $customer): CustomerResource
+    {
+        return new CustomerResource($customer);
+    }
+
     public function store(StoreCustomerRequest $request): CustomerResource
     {
         return new CustomerResource($this->customerService->createCustomer($request->validated()));

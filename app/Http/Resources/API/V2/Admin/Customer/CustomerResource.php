@@ -2,10 +2,14 @@
 
 namespace App\Http\Resources\API\V2\Admin\Customer;
 
-use App\Http\Resources\API\V1\Admin\Customer\CustomerResource as V1CustomerResource;
+use App\Http\Resources\API\BaseResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class CustomerResource extends V1CustomerResource
+/**
+ * @mixin User
+ */
+class CustomerResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -15,6 +19,18 @@ class CustomerResource extends V1CustomerResource
      */
     public function toArray($request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'profile_image' => $this->profile_image,
+            'full_name' => $this->getFullName(),
+            'customer_number' => $this->customer_number,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'submissions' => $this->orders()->paid()->count(),
+            'cards_count' => $this->cardsCount(),
+            'wallet' => $this->wallet,
+            'created_at' => $this->formatDate($this->created_at),
+            'updated_at' => $this->formatDate($this->updated_at),
+        ];
     }
 }

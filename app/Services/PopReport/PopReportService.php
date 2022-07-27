@@ -17,6 +17,7 @@ use App\Services\Admin\CardGradingService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -275,10 +276,13 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id')
-        ->where('card_series.card_category_id', $cardCategory->id);
+        ->where('card_series.card_category_id', $cardCategory->id)
+        ->select('*')
+        ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 
         return QueryBuilder::for($query)
-            ->allowedSorts(['card_series_id'])
+            ->allowedSorts(['card_series_id', 'total_graded'])
+            ->defaultSort('-total_graded')
             ->paginate($itemsPerPage);
     }
 
@@ -287,10 +291,13 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsSet::join('card_sets', 'pop_reports_sets.card_set_id', 'card_sets.id')
-            ->where('pop_reports_sets.card_series_id', $cardSeries->id);
+            ->where('pop_reports_sets.card_series_id', $cardSeries->id)
+            ->select('*')
+            ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 
         return QueryBuilder::for($query)
-            ->allowedSorts(['card_sets_id'])
+            ->allowedSorts(['card_series_id', 'total_graded'])
+            ->defaultSort('-total_graded')
             ->paginate($itemsPerPage);
     }
 
@@ -299,10 +306,13 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
-            ->where('pop_reports_cards.card_set_id', $cardSet->id);
+            ->where('pop_reports_cards.card_set_id', $cardSet->id)
+            ->select('*')
+            ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 
         return QueryBuilder::for($query)
-            ->allowedSorts(['card_sets_id'])
+            ->allowedSorts(['card_series_id', 'total_graded'])
+            ->defaultSort('-total_graded')
             ->paginate($itemsPerPage);
     }
 

@@ -82,10 +82,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   
     
     // Customers
-    Route::apiResource('customers', CustomerController::class)->only(['index', 'store'])
+    Route::apiResource('customers', CustomerController::class)->only(['index', 'store', 'show'])
         ->names([
             'index' => 'customers.index',
             'store' => 'customers.store',
+            'show' => 'customers.show',
         ]);
     Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
 

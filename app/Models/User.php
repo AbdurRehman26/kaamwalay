@@ -196,6 +196,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
     }
 
+    /**
+     * @return HasMany<Order>
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

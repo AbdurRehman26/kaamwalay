@@ -1,17 +1,20 @@
 <?php
 
+use App\Events\API\Admin\Customer\CustomerCreated;
 use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
 
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
         UsersSeeder::class,
     ]);
+    Event::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
@@ -48,4 +51,95 @@ test('a customer can not get customers list', function () {
     actingAs($user);
     getJson(route('v2.customers.index'))
         ->assertStatus(403);
+});
+
+test('an admin can create a customer', function () {
+    actingAs($this->user);
+
+    postJson(route('v2.customers.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email' => 'luis@wooter.com',
+        'phone' => '+1234567890',
+    ])
+        ->assertSuccessful()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'profile_image',
+                'full_name',
+                'customer_number',
+                'email',
+                'phone',
+                'submissions',
+                'cards_count',
+                'wallet',
+                'created_at',
+                'update_at',
+            ],
+        ]);
+
+    Event::assertDispatched(CustomerCreated::class);
+});
+
+test('a customer can not create customers', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    postJson(route('v2.customers.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email' => 'luis@wooter.com',
+        'phone' => '+1234567890',
+    ])
+    ->assertStatus(403);
+});
+
+test('a guest can not create customers', function () {
+    postJson(route('v2.customers.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email' => 'luis@wooter.com',
+        'phone' => '+1234567890',
+    ])
+        ->assertStatus(401);
+});
+
+it('can resend user access email', function () {
+    actingAs($this->user);
+
+    $user = User::factory()->create(['last_login_at' => null]);
+
+    postJson(route('v2.customers.send-access-email', $user))
+        ->assertSuccessful()
+        ->assertJsonStructure([
+            'success',
+            'message',
+        ]);
+});
+
+it('can not resend user access email to user who already has logged in', function () {
+    actingAs($this->user);
+
+    $user = User::factory()->create();
+
+    postJson(route('v2.customers.send-access-email', $user))
+        ->assertStatus(403);
+});
+
+test('a customer can not resend user access email', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    $newUser = User::factory()->create(['last_login_at' => null]);
+
+    postJson(route('v2.customers.send-access-email', $newUser))
+        ->assertStatus(403);
+});
+
+test('a guest can not resend user access email', function () {
+    $newUser = User::factory()->create(['last_login_at' => null]);
+
+    postJson(route('v2.customers.send-access-email', $newUser))
+        ->assertStatus(401);
 });

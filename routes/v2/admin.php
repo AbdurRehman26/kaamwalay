@@ -82,8 +82,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   
     
     // Customers
-    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
-  
+    Route::apiResource('customers', CustomerController::class)->only(['index', 'store'])
+        ->names([
+            'index' => 'customers.index',
+            'store' => 'customers.store',
+        ]);
+    Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
+
     // wallet
     Route::prefix('wallets')->group(function () {
         Route::get('{wallet}', [CustomerWalletController::class, 'show'])

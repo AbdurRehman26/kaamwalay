@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
+use App\Events\API\Auth\UserLogin;
 use App\Exceptions\API\Auth\AuthenticationException;
 use App\Exceptions\API\Customer\UserIsDeactivated;
 use App\Http\Controllers\Controller;
@@ -34,6 +35,7 @@ class LoginController extends Controller
         throw_if(! is_null($isActive) && ! $isActive, UserIsDeactivated::class);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
+        UserLogin::dispatch(auth()->user());
 
         return new JsonResponse(
             [

@@ -16,7 +16,7 @@ export function SubmissionEstimatedDelivery({
 }: SubmissionEstimatedDeliveryProps) {
     return (
         <>
-            <Grid py={2} alignItems={'flex-start'}>
+            <Grid py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500}>
                     Estimated Delivery
                 </Typography>

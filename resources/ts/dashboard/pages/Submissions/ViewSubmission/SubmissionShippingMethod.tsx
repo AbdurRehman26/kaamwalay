@@ -155,7 +155,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
 
     return (
         <>
-            <Stack py={2} alignItems={'flex-start'}>
+            <Stack py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500}>
                     Shipping/Storage Selection
                 </Typography>

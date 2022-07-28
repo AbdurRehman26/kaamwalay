@@ -545,4 +545,16 @@ class Order extends Model implements Exportable
     {
         return $this->requires_cleaning;
     }
+
+    public function isEligibleToMarkAsAssembly(): bool
+    {
+        return $this->orderStatus()->value('id') === OrderStatus::GRADED;
+    }
+
+    public function isEligibleToMarkAsShipped(): bool
+    {
+        return (
+            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLY && $this->isPaid()
+        );
+    }
 }

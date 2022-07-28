@@ -140,6 +140,7 @@ test('shipping address is saved when provided separately while changing shipping
         'city' => $this->faker->city(),
         'state' => $this->faker->stateAbbr(),
         'zip' => $this->faker->postcode(),
+        'country_id' => 1,
         'phone' => $this->faker->phoneNumber(),
         'flat' => $this->faker->buildingNumber(),
         'save_for_later' => false,
@@ -157,6 +158,7 @@ test('shipping address is saved when provided separately while changing shipping
     expect($shippingAddress->address)->toBe($address['address']);
     expect($shippingAddress->state)->toBe($address['state']);
     expect($shippingAddress->zip)->toBe($address['zip']);
+    expect($shippingAddress->country_id)->toBe($address['country_id']);
     expect($shippingAddress->phone)->toBe($address['phone']);
     expect($shippingAddress->flat)->toBe($address['flat']);
 });
@@ -174,6 +176,7 @@ test('shipping address is saved for customer when provided separately while chan
         'city' => $this->faker->city(),
         'state' => $this->faker->stateAbbr(),
         'zip' => $this->faker->postcode(),
+        'country_id' => 1,
         'phone' => $this->faker->phoneNumber(),
         'flat' => $this->faker->buildingNumber(),
         'save_for_later' => true,
@@ -191,6 +194,7 @@ test('shipping address is saved for customer when provided separately while chan
     expect($customerAddress->address)->toBe($address['address']);
     expect($customerAddress->state)->toBe($address['state']);
     expect($customerAddress->zip)->toBe($address['zip']);
+    expect($customerAddress->country_id)->toBe($address['country_id']);
     expect($customerAddress->phone)->toBe($address['phone']);
     expect($customerAddress->flat)->toBe($address['flat']);
 });

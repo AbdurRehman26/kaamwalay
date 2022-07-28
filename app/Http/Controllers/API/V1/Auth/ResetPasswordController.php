@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
+use App\Events\API\Auth\CustomerRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\ResetPasswordRequest;
 use App\Models\User;
@@ -25,6 +26,11 @@ class ResetPasswordController extends Controller
             ),
             fn ($user, $password) => $this->resetPassword($user, $password)
         );
+
+        $user = User::whereEmail($request->email)->first();
+        if ($response === Password::PASSWORD_RESET && ! $user->last_login_at) {
+            CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id'));
+        }
 
         return $response === Password::PASSWORD_RESET
             ? $this->sendResetResponse($response)

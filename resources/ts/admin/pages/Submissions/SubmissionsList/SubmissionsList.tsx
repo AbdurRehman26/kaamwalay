@@ -5,8 +5,8 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '@shared/components/Customers/Header';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { SubmissionsListHeader } from './SubmissionsListHeader';
 import { SubmissionsTable } from './SubmissionsTable';
 
 const TabContent = styled(TabPanel)(
@@ -22,7 +22,7 @@ export function SubmissionsList() {
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <SubmissionsListHeader onSearch={setSearch} />
+                <Header onSearch={setSearch} />
 
                 <Divider />
                 <TabContent value={'all'}>

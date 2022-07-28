@@ -16,8 +16,8 @@ return new class extends Migration {
         Schema::table('order_statuses', function (Blueprint $table) {
             DB::table('order_statuses')->insert([
                 [
-                    'code' => 'assembly',
-                    'name' => 'Assembly',
+                    'code' => 'assembled',
+                    'name' => 'Assembled',
                     'description' => 'Order is graded and in assembly now.',
                     'order_state_id' => 2,
                     'created_at' => now(),
@@ -35,7 +35,7 @@ return new class extends Migration {
     public function down()
     {
         Schema::table('order_statuses', function (Blueprint $table) {
-            DB::table('order_statuses')->where('code', 'assembly')->delete();
+            DB::table('order_statuses')->where('code', 'assembled')->delete();
         });
     }
 };

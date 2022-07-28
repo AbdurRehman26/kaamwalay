@@ -50,7 +50,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         throw_if(
             (
-                getModelId($orderStatus) === OrderStatus::ASSEMBLY && ! $order->isEligibleToMarkAsAssembly()
+                getModelId($orderStatus) === OrderStatus::ASSEMBLED && ! $order->isEligibleToMarkAsAssembly()
             ),
             OrderCanNotBeMarkedAsAssembly::class
         );

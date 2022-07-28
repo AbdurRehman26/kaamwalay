@@ -554,7 +554,7 @@ class Order extends Model implements Exportable
     public function isEligibleToMarkAsShipped(): bool
     {
         return (
-            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLY && $this->isPaid()
+            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid()
         );
     }
 }

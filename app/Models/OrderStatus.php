@@ -17,7 +17,7 @@ class OrderStatus extends Model
     public const SHIPPED = 5;
     public const CANCELLED = 6;
     public const REVIEWED = 7;
-    public const ASSEMBLY = 8;
+    public const ASSEMBLED = 8;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
 

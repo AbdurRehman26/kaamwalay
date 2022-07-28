@@ -49,6 +49,8 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
  * @property mixed $requires_cleaning
+ * @property mixed $estimated_delivery_start_date
+ * @property mixed $estimated_delivery_end_date
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
  * @method orderStatusHistory()

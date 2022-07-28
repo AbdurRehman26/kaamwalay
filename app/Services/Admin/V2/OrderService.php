@@ -175,8 +175,8 @@ class OrderService extends V1OrderService
             $cleanedData = preg_replace('/[^0-9\-]/', '', $turnaroundTime);
             $days = explode("-", $cleanedData);
         
-            $order->estimated_delivery_start_date = Carbon::now()->addWeekdays($days[0])->format('M-d');
-            $order->estimated_delivery_end_date = Carbon::now()->addWeekdays($days[1])->format('M-d,Y');
+            $order->estimated_delivery_start_date = Carbon::now()->addWeekdays(intval($days[0]))->format('M-d');
+            $order->estimated_delivery_end_date = Carbon::now()->addWeekdays(intval($days[1]))->format('M-d,Y');
 
         } else {
             $order->estimated_delivery_start_date = Carbon::now()->format('M-d,Y');

@@ -51,14 +51,14 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             OrderCanNotBeMarkedAsShipped::class
         );
 
-        if ($orderStatusId === OrderStatus::CONFIRMED) {
-            $data = $this->orderService->getOrderCertificatesData($order);
+        // if ($orderStatusId === OrderStatus::CONFIRMED) {
+        //     $data = $this->orderService->getOrderCertificatesData($order);
 
-            $response = $this->agsService->createCertificates($data);
-            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+        //     $response = $this->agsService->createCertificates($data);
+        //     throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
-            CreateOrderFoldersOnDropbox::dispatch($order);
-        }
+        //     CreateOrderFoldersOnDropbox::dispatch($order);
+        // }
 
         if ($orderStatusId === OrderStatus::GRADED) {
             CreateOrderLabel::dispatch($order);

@@ -21,7 +21,9 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OrderService extends V1OrderService
@@ -163,5 +165,24 @@ class OrderService extends V1OrderService
         /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
+    }
+
+    public function addEstimatedDeliveryDateToOrder(Order $order): void 
+    {
+        $turnaroundTime = $order->paymentPlan->turnaround;
+
+        if(str_contains($turnaroundTime, '-')) {
+            $cleanedData = preg_replace('/[^0-9\-]/', '', $turnaroundTime);
+            $days = explode("-", $cleanedData);
+        
+            $order->estimated_delivery_start_date = Carbon::now()->addWeekdays($days[0])->format('M-d');
+            $order->estimated_delivery_end_date = Carbon::now()->addWeekdays($days[1])->format('M-d,Y');
+
+        } else {
+            $order->estimated_delivery_start_date = Carbon::now()->format('M-d,Y');
+            $order->estimated_delivery_end_date = Carbon::now()->format('M-d,Y');
+        }
+
+        $order->save();
     }
 }

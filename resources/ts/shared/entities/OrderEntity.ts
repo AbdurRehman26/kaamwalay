@@ -42,6 +42,8 @@ export class OrderEntity extends Entity {
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
     public paymentStatus!: PaymentStatusEnum;
+    public estimatedDeliveryStartDate!: string;
+    public estimatedDeliveryEndDate!: string;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

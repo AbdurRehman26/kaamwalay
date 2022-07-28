@@ -65,6 +65,8 @@ class Order extends Model implements Exportable
         'salesman_id',
         'requires_cleaning',
         'cleaning_fee',
+        'estimated_delivery_start_date',
+        'estimated_delivery_end_date',
     ];
 
     /**

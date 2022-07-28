@@ -108,6 +108,8 @@ class OrderResource extends V1OrderResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
+            'estimated_delivery_start_date' => $this->estimated_delivery_start_date,
+            'estimated_delivery_end_date' => $this->estimated_delivery_end_date,
         ];
     }
 }

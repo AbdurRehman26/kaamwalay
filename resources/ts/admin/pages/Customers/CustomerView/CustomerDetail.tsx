@@ -83,7 +83,9 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                         </div>
                         <div>
                             <Typography className={'CustomerDataValue'}>{customerData.signedUpAt ?? '-'}</Typography>
-                            <Typography className={'CustomerDataValue'}>{customerData.createdBy ?? '-'}</Typography>
+                            <Typography className={'CustomerDataValue'}>{`Admin(${
+                                customerData.createdBy ?? '-'
+                            })`}</Typography>
                             <Typography className={'CustomerDataValue'}>
                                 {customerData.lastLoginAt ? 'Yes' : 'No'}
                             </Typography>

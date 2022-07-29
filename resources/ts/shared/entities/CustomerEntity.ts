@@ -10,4 +10,7 @@ export class CustomerEntity extends Entity {
     public submissions!: number;
     public cardsCount!: number;
     public wallet!: WalletEntity;
+    public signedUpAt!: string;
+    public createdBy!: string;
+    public lastLoginAt!: string;
 }

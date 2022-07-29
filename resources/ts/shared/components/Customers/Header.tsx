@@ -17,6 +17,7 @@ import theme from '@shared/styles/theme';
 interface HeaderProps {
     onSearch?: (query: string) => void;
     isCustomerDetailPage?: boolean;
+    dataLength?: number;
 }
 const styles = {
     header: {
@@ -63,7 +64,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage }: HeaderProps) {
+export function Header({ onSearch, isCustomerDetailPage, dataLength }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -86,24 +87,26 @@ export function Header({ onSearch, isCustomerDetailPage }: HeaderProps) {
                     <Typography variant={'h4'} sx={isCustomerDetailPage ? styles.CustomerTitle : styles.Title}>
                         Submissions
                     </Typography>
-                    <TextField
-                        variant={'outlined'}
-                        onChange={handleSearch}
-                        value={search}
-                        placeholder={'Search...'}
-                        sx={styles.searchField}
-                        InputProps={{
-                            classes: {
-                                input: classes.searchFieldInput,
-                                notchedOutline: classes.searchFieldNotch,
-                            },
-                            startAdornment: (
-                                <InputAdornment position={'start'}>
-                                    <SearchIcon color={'inherit'} />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                    {dataLength !== 0 ? (
+                        <TextField
+                            variant={'outlined'}
+                            onChange={handleSearch}
+                            value={search}
+                            placeholder={'Search...'}
+                            sx={styles.searchField}
+                            InputProps={{
+                                classes: {
+                                    input: classes.searchFieldInput,
+                                    notchedOutline: classes.searchFieldNotch,
+                                },
+                                startAdornment: (
+                                    <InputAdornment position={'start'}>
+                                        <SearchIcon color={'inherit'} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    ) : null}
                 </Grid>
                 {!isCustomerDetailPage ? (
                     <Grid container item xs justifyContent={'flex-end'}>

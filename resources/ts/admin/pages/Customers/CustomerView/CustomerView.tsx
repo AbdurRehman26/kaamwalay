@@ -139,7 +139,7 @@ export function CustomerView() {
                     onClose={handleCreditDialogClose}
                 />
             </Root>
-            <CustomerDetail submission={data.submissions} wallet={data.wallet} customerName={data?.fullName} />
+            <CustomerDetail customerData={data} />
         </>
     );
 }

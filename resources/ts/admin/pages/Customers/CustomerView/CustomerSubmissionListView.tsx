@@ -136,19 +136,22 @@ export function CustomerSubmissionListView({ search }: CustomerSubmissionListVie
             </Box>
         );
     }
+
     return (
         <Root container>
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
                 <Grid sx={{ padding: '20px' }}>
-                    <Header isCustomerDetailPage={true} />
+                    <Header isCustomerDetailPage={true} dataLength={orders$.data.length} />
                 </Grid>
-                <Grid container sx={{ padding: '10px' }}>
-                    <Grid alignItems={'left'}>
-                        {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                            return <FilterButton label={status} active={paymentStatus === key} value={key} />;
-                        })}
+                {orders$.data.length !== 0 ? (
+                    <Grid container sx={{ padding: '10px' }}>
+                        <Grid alignItems={'left'}>
+                            {Object.entries(PaymentStatusMap).map(([key, status]) => {
+                                return <FilterButton label={status} active={paymentStatus === key} value={key} />;
+                            })}
+                        </Grid>
                     </Grid>
-                </Grid>
+                ) : null}
                 <TableContainer>
                     <CustomerSubmissionsList
                         orderData={orders$.data}

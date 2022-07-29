@@ -1,4 +1,6 @@
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,6 +26,32 @@ export function CustomerSubmissionsList({
     paginationProp,
     isCustomerDetailPage,
 }: CustomerSubmissionsListProps) {
+    if (isCustomerDetailPage && orderData?.length === 0) {
+        return (
+            <Grid
+                container
+                alignItems={'center'}
+                justifyContent={'center'}
+                rowSpacing={1}
+                sx={{ padding: '40px 20px' }}
+            >
+                <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                    <Inventory2TwoToneIcon />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>
+                        No Submissions
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                        This customer has no submissions, yet.
+                    </Typography>
+                </Grid>
+            </Grid>
+        );
+    }
+
     return (
         <Table>
             <TableHead>

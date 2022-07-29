@@ -4,25 +4,39 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import ReactGA from 'react-ga';
+import { Navigate } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { useStyles } from '@shared/components/AuthDialog/styles';
 import { ResetPasswordValidationRules } from '@shared/components/AuthDialog/validation';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
+import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { ResetPasswordRequestDto } from '@shared/dto/ResetPasswordRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import { authenticateCheckAction } from '@shared/redux/slices/authenticationSlice';
+import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { EventService } from '@shared/services/EventService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 import { font } from '@shared/styles/utils';
 import { LayoutHeader } from '@auth/components/LayoutHeader';
 
 export function CreatePassword() {
-    const [{ token, email }] = useLocationQuery<{ token: string; email: string }>();
+    const [{ token, email, name }] = useLocationQuery<{ token: string; email: string; name: string }>();
     const notifications = useNotifications();
-    const navigate = useNavigate();
+    const authenticationRepository = useInjectable(AuthenticationRepository);
+    const authenticationService = useInjectable(AuthenticationService);
     const classes = useStyles();
+    const dispatch = useSharedDispatch();
     const { resetPassword } = useAuth();
+    const eventService = useInjectable(EventService);
     const initialState = useMemo<ResetPasswordRequestDto>(
         () => ({
             token,
@@ -43,12 +57,26 @@ export function CreatePassword() {
 
             if (payload?.message) {
                 notifications.success(payload?.message);
-            }
+                const authenticatedUser = await authenticationRepository.postLogin({
+                    email: values.email,
+                    password: values.password,
+                });
+                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
+                eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
+                await authenticationService.setAccessToken(authenticatedUser.accessToken);
+                googleTagManager({ event: 'google-ads-authenticated' });
+                NotificationsService.success('Login successfully!');
+                dispatch(authenticateCheckAction());
 
-            navigate('/sign-in');
+                window.location.href = '/dashboard/';
+            }
         },
-        [navigate, notifications, resetPassword],
+        [authenticationRepository, authenticationService, dispatch, eventService, notifications, resetPassword],
     );
+
+    if (!email || !token || !name) {
+        return <Navigate to={'/'} replace />;
+    }
 
     return (
         <>
@@ -63,7 +91,7 @@ export function CreatePassword() {
                 <Form className={classes.root}>
                     <Grid container direction={'column'} className={classes.content}>
                         <Box
-                            marginTop={15}
+                            marginTop={0}
                             marginBottom={4}
                             display={'flex'}
                             flexDirection={'column'}
@@ -71,7 +99,7 @@ export function CreatePassword() {
                         >
                             <Avatar sx={{ marginBottom: 2, width: '64px', height: '64px' }} src={UserAvatar} />
                             <Typography marginBottom={2} fontWeight={300} variant={'h4'} align={'center'}>
-                                Welcome, <span className={font.fontWeightBold}>Jim</span>
+                                Welcome, <span className={font.fontWeightBold}>{name}</span>
                             </Typography>
                             <Typography variant={'body1'} align={'center'}>
                                 An AGS rep has created your Robograding account.

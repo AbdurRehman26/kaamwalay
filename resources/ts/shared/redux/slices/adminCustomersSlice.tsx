@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { instanceToPlain } from 'class-transformer';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { app } from '@shared/lib/app';
 import { NotificationsService } from '@shared/services/NotificationsService';
@@ -15,8 +16,9 @@ export const storeCustomer = createAsyncThunk('storeCustomer', async (input: Add
     const customersRepository = app(CustomersRepository);
 
     try {
-        await customersRepository.storeCustomer(input);
-        NotificationsService.success('Order cancelled successfully!');
+        const customer: CustomerEntity = await customersRepository.storeCustomer(input);
+        NotificationsService.success('Customer added successfully!');
+        return instanceToPlain(customer);
     } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);

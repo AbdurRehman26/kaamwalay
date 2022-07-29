@@ -17,10 +17,15 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
 import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
+
+interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
+    customerAdded(customer: CustomerEntity): void;
+}
 
 const Root = styled(Dialog)(({ theme }) => ({
     '.MuiDialog-paper': {
@@ -90,7 +95,7 @@ const useStyles = makeStyles(
     { name: 'AddCustomerDialog' },
 );
 
-export function CustomerAddDialog({ onClose, ...rest }: DialogProps) {
+export function CustomerAddDialog({ onClose, customerAdded, ...rest }: CustomerAddDialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -120,17 +125,20 @@ export function CustomerAddDialog({ onClose, ...rest }: DialogProps) {
         async (customerInput: AddCustomerRequestDto) => {
             try {
                 setLoading(true);
-                dispatch(storeCustomer(customerInput));
+                await dispatch(storeCustomer(customerInput))
+                    .unwrap()
+                    .then((customer: CustomerEntity) => {
+                        handleClose({});
+                        customerAdded(customer);
+                    });
             } catch (e: any) {
                 notifications.exception(e);
                 return;
             } finally {
                 setLoading(false);
             }
-
-            handleClose({});
         },
-        [dispatch, handleClose, notifications],
+        [customerAdded, dispatch, handleClose, notifications],
     );
 
     return (

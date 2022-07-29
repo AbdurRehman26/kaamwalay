@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 
 interface Props extends GridProps {
@@ -61,6 +63,7 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
     const [addCustomerDialog, setAddCustomerDialog] = useState(false);
+    const navigate = useNavigate();
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -79,13 +82,24 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
         [handleSearch],
     );
 
+    const redirectToCustomerProfile = useCallback(
+        (customer: CustomerEntity) => {
+            navigate(`/customers/${customer.id}/view`);
+        },
+        [navigate],
+    );
+
     useEffect(() => {
         setSearch(value ?? '');
     }, [value]);
 
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
-            <CustomerAddDialog open={addCustomerDialog} onClose={() => setAddCustomerDialog(!addCustomerDialog)} />
+            <CustomerAddDialog
+                customerAdded={redirectToCustomerProfile}
+                open={addCustomerDialog}
+                onClose={() => setAddCustomerDialog(!addCustomerDialog)}
+            />
             <Grid container justifyContent={'space-between'}>
                 <Grid display={'flex'} alignItems={'center'} item>
                     <Typography variant={'h4'} fontWeight={500} mr={3}>

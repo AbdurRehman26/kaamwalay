@@ -21,6 +21,7 @@
  *               "phone": null,
  *               "submissions": 3,
  *               "created_by": "John Doe",
+ *               "signed_up_at": "2021-12-13",
  *               "created_at": "2021-12-13",
  *               "updated_at": "2021-12-13",
  *               "last_login_at": "2022-07-29T14:54:48.000000Z",

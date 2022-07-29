@@ -28,8 +28,8 @@ interface ViewSubmissionStatusProps {
     isPaid?: boolean;
     serviceLevel: string;
     turnAround: string;
-    estimatedDeliveryStartDate: string;
-    estimatedDeliveryEndDate: string;
+    estimatedDeliveryStartAt: string;
+    estimatedDeliveryEndAt: string;
 }
 
 const STATUS_DESCRIPTION_MAP = {
@@ -59,8 +59,8 @@ export function ViewSubmissionStatus({
     isPaid,
     serviceLevel,
     turnAround,
-    estimatedDeliveryStartDate,
-    estimatedDeliveryEndDate,
+    estimatedDeliveryStartAt,
+    estimatedDeliveryEndAt,
 }: ViewSubmissionStatusProps) {
     const isVaultStorage = shippingMethod?.code === ShippingMethodType.VaultStorage;
 
@@ -138,11 +138,12 @@ export function ViewSubmissionStatus({
                 mt={3}
                 width={'100%'}
             >
-                <Grid md={6} sm={12} xs={12} p={2} sx={{ border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+                <Grid item md={6} sm={12} xs={12} p={2} sx={{ border: '1px solid #E0E0E0', borderRadius: '4px' }}>
                     <SubmissionShippingMethod orderId={orderId} shippingMethod={shippingMethod} paid={isPaid} />
                 </Grid>
-                {estimatedDeliveryStartDate && estimatedDeliveryEndDate ? (
+                {estimatedDeliveryStartAt && estimatedDeliveryEndAt && !isVaultStorage ? (
                     <Grid
+                        item
                         md={6}
                         sm={12}
                         xs={12}
@@ -154,8 +155,8 @@ export function ViewSubmissionStatus({
                         <SubmissionEstimatedDelivery
                             serviceLevel={serviceLevel}
                             turnAround={turnAround}
-                            estimatedDeliveryStartDate={estimatedDeliveryStartDate}
-                            estimatedDeliveryEndDate={estimatedDeliveryEndDate}
+                            estimatedDeliveryStartAt={estimatedDeliveryStartAt}
+                            estimatedDeliveryEndAt={estimatedDeliveryEndAt}
                         ></SubmissionEstimatedDelivery>
                     </Grid>
                 ) : null}

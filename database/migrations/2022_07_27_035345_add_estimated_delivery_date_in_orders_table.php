@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('estimated_delivery_start_date')->nullable()->after('updated_at');
-            $table->string('estimated_delivery_end_date')->nullable()->after('estimated_delivery_start_date');
+            $table->timestamp('estimated_delivery_start_at')->nullable()->after('arrived_at');
+            $table->timestamp('estimated_delivery_end_at')->nullable()->after('estimated_delivery_start_at');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('estimated_delivery_start_date');
-            $table->dropColumn('estimated_delivery_end_date');
+            $table->dropColumn('estimated_delivery_start_at');
+            $table->dropColumn('estimated_delivery_end_at');
         });
     }
 };

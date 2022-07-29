@@ -12,6 +12,7 @@ use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,11 @@ use Throwable;
 
 class OrderStatusHistoryService extends V1OrderStatusHistoryService
 {
+    public function __construct(
+        protected AdminOrderService $adminOrderService
+    ) {
+    }
+
     /**
      * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
@@ -91,6 +97,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->notes = $notes;
             $orderStatusHistory->save();
+        }
+
+        if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
+            $this->adminOrderService->addEstimatedDeliveryDateToOrder($order);
         }
 
         return QueryBuilder::for(OrderStatusHistory::class)

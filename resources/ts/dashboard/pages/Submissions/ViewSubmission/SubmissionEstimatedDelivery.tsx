@@ -1,18 +1,19 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 
 interface SubmissionEstimatedDeliveryProps {
     serviceLevel: string;
     turnAround: string;
-    estimatedDeliveryStartDate: string;
-    estimatedDeliveryEndDate: string;
+    estimatedDeliveryStartAt: string;
+    estimatedDeliveryEndAt: string;
 }
 
 export function SubmissionEstimatedDelivery({
     serviceLevel,
     turnAround,
-    estimatedDeliveryStartDate,
-    estimatedDeliveryEndDate,
+    estimatedDeliveryStartAt,
+    estimatedDeliveryEndAt,
 }: SubmissionEstimatedDeliveryProps) {
     return (
         <>
@@ -22,9 +23,12 @@ export function SubmissionEstimatedDelivery({
                 </Typography>
                 <Grid container alignItems={'center'}>
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
-                        {estimatedDeliveryStartDate !== estimatedDeliveryEndDate
-                            ? `${estimatedDeliveryStartDate} - ${estimatedDeliveryEndDate}`
-                            : estimatedDeliveryStartDate}
+                        {estimatedDeliveryStartAt !== estimatedDeliveryEndAt
+                            ? `${formatDate(estimatedDeliveryStartAt, 'MMM DD ')} - ${formatDate(
+                                  estimatedDeliveryEndAt,
+                                  'MMM DD, YYYY',
+                              )}`
+                            : formatDate(estimatedDeliveryStartAt, 'MMM DD, YYYY')}
                     </Typography>
                 </Grid>
                 <Grid display={'flex'}>

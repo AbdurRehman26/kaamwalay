@@ -49,7 +49,6 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->processPushNotification($event);
         $this->indexCardsForFeed($event);
         $this->createOrderOnShipStation($event);
-        $this->addEstimatedDeliveryDateToOrder($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -213,10 +212,4 @@ class OrderStatusChangedListener implements ShouldQueue
         }
     }
 
-    protected function addEstimatedDeliveryDateToOrder(OrderStatusChangedEvent $event): void
-    {
-        if ($event->orderStatus->id === OrderStatus::CONFIRMED && $event->order->hasInsuredShipping()) {
-            $this->adminOrderService->addEstimatedDeliveryDateToOrder($event->order);
-        }
-    }
 }

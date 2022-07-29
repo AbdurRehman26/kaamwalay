@@ -65,8 +65,8 @@ class Order extends Model implements Exportable
         'salesman_id',
         'requires_cleaning',
         'cleaning_fee',
-        'estimated_delivery_start_date',
-        'estimated_delivery_end_date',
+        'estimated_delivery_start_at',
+        'estimated_delivery_end_at',
     ];
 
     /**
@@ -106,6 +106,8 @@ class Order extends Model implements Exportable
         'payment_status' => OrderPaymentStatusEnum::class,
         'requires_cleaning' => 'bool',
         'cleaning_fee' => 'float',
+        'estimated_delivery_start_at' => 'datetime',
+        'estimated_delivery_end_at' => 'datetime',
     ];
 
     protected $appends = [

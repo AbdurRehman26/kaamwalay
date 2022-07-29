@@ -172,13 +172,13 @@ class OrderService extends V1OrderService
 
         if (str_contains($turnaroundTime, '-')) {
             $cleanedData = preg_replace('/[^0-9\-]/', '', $turnaroundTime);
-            $days = explode("-", $cleanedData);
+            $days = explode('-', $cleanedData);
         
-            $order->estimated_delivery_start_date = Carbon::now()->addWeekdays(intval($days[0]))->format('M d');
-            $order->estimated_delivery_end_date = Carbon::now()->addWeekdays(intval($days[1]))->format('M d, Y');
+            $order->estimated_delivery_start_at = Carbon::now()->addWeekdays(intval($days[0]));
+            $order->estimated_delivery_end_at = Carbon::now()->addWeekdays(intval($days[1]));
         } else {
-            $order->estimated_delivery_start_date = Carbon::now()->format('M d, Y');
-            $order->estimated_delivery_end_date = Carbon::now()->format('M d, Y');
+            $order->estimated_delivery_start_at = Carbon::now();
+            $order->estimated_delivery_end_at = Carbon::now();
         }
 
         $order->save();

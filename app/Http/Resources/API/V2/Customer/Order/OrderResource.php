@@ -55,8 +55,8 @@ class OrderResource extends BaseResource
             'payment_status' => $this->payment_status,
             'order_step' => $this->order_step,
             'requires_cleaning' => $this->requires_cleaning,
-            'estimated_delivery_start_date' => $this->estimated_delivery_start_date,
-            'estimated_delivery_end_date' => $this->estimated_delivery_end_date,
+            'estimated_delivery_start_at' => $this->estimated_delivery_start_at,
+            'estimated_delivery_end_at' => $this->estimated_delivery_end_at,
         ];
     }
 }

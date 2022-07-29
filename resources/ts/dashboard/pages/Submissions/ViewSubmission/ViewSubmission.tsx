@@ -90,8 +90,8 @@ export function ViewSubmission() {
                 orderShipment={data?.orderShipment}
                 shippingMethod={data?.shippingMethod}
                 isPaid={data?.paymentStatus === PaymentStatusEnum.PAID}
-                estimatedDeliveryStartDate={data?.estimatedDeliveryStartDate}
-                estimatedDeliveryEndDate={data?.estimatedDeliveryEndDate}
+                estimatedDeliveryStartAt={data?.estimatedDeliveryStartAt}
+                estimatedDeliveryEndAt={data?.estimatedDeliveryEndAt}
                 serviceLevel={`$${data?.paymentPlan?.price} / Card`}
                 turnAround={data?.paymentPlan.turnaround}
             />

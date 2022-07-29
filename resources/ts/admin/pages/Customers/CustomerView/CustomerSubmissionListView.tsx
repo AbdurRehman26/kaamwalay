@@ -15,10 +15,6 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 
-interface CustomerSubmissionListViewProps {
-    search?: string;
-}
-
 interface Props {
     label: string;
     active?: boolean;
@@ -53,9 +49,10 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerSubmissionListView({ search }: CustomerSubmissionListViewProps) {
+export function CustomerSubmissionListView() {
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [search, setSearch] = useState('');
     const { id } = useParams<'id'>();
 
     const orders$ = useListAdminOrdersQuery({
@@ -129,36 +126,38 @@ export function CustomerSubmissionListView({ search }: CustomerSubmissionListVie
         setIsSearchEnabled(true);
     }, []);
 
-    if (orders$.isLoading) {
-        return (
-            <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
     return (
         <Root container>
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
                 <Grid sx={{ padding: '20px' }}>
-                    <Header isCustomerDetailPage={true} dataLength={orders$.data.length} />
+                    <Header isCustomerDetailPage={true} dataLength={orders$.data.length} onSearch={setSearch} />
                 </Grid>
-                {orders$.data.length !== 0 ? (
-                    <Grid container sx={{ padding: '10px' }}>
-                        <Grid alignItems={'left'}>
-                            {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                                return <FilterButton label={status} active={paymentStatus === key} value={key} />;
-                            })}
-                        </Grid>
-                    </Grid>
-                ) : null}
-                <TableContainer>
-                    <CustomerSubmissionsList
-                        orderData={orders$.data}
-                        paginationProp={orders$.paginationProps}
-                        isCustomerDetailPage={true}
-                    />
-                </TableContainer>
+                {orders$.isLoading ? (
+                    <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <>
+                        {orders$.data.length !== 0 ? (
+                            <Grid container sx={{ padding: '10px' }}>
+                                <Grid alignItems={'left'}>
+                                    {Object.entries(PaymentStatusMap).map(([key, status]) => {
+                                        return (
+                                            <FilterButton label={status} active={paymentStatus === key} value={key} />
+                                        );
+                                    })}
+                                </Grid>
+                            </Grid>
+                        ) : null}
+                        <TableContainer>
+                            <CustomerSubmissionsList
+                                orderData={orders$.data}
+                                paginationProp={orders$.paginationProps}
+                                isCustomerDetailPage={true}
+                            />
+                        </TableContainer>
+                    </>
+                )}
             </Grid>
         </Root>
     );

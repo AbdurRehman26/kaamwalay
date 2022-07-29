@@ -29,6 +29,7 @@ class CustomerResource extends BaseResource
             'submissions' => $this->orders()->paid()->count(),
             'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
+            'created_by' => $this->createdBy?->getFullName(),
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
             'last_login_at' => $this->formatDate($this->last_login_at),

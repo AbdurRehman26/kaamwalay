@@ -25,6 +25,7 @@ class CustomerService
     public function createCustomer(array $data): User
     {
         $data['password'] = Hash::make(Str::random(8));
+        $data['created_by_id'] = auth()->user()->id;
 
         $user = User::createCustomer($data);
 

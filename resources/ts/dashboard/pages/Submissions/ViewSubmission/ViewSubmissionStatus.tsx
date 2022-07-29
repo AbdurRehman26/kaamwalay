@@ -1,3 +1,4 @@
+import ErrorIcon from '@mui/icons-material/Error';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
@@ -28,6 +29,8 @@ const STATUS_DESCRIPTION_MAP = {
     graded: 'Your cards have been graded! We are now preparing your cards for shipment. You can see all grades in "Your Cards" tab, once they are shipped.',
     gradedVaultStorage:
         'Your cards have been graded! We are now preparing your cards for vault storage. You can see all grades in "Your Cards" tab, once they are stored in the vault.',
+    assembled:
+        'Your graded cards have been slabbed and packed for shipment! We will notify you via email as soon as your cards are graded so you can preview your grades.',
     shipped: 'Your cards have been shipped! You can now see all your grades in "Your Cards" tab.',
     shippedVaultStorage:
         'Your cards have been stored in the AGS vault! You can now see all your grades in "Your Cards" tab.',
@@ -83,6 +86,22 @@ export function ViewSubmissionStatus({
             <Typography variant={'caption'} color={'primary'} className={cx(classes.textGutter, classes.darkText)}>
                 {statusDescription}
             </Typography>
+            <Grid marginBottom={1} item alignItems={'end'} display={'flex'}>
+                <ErrorIcon
+                    sx={{
+                        marginRight: '4px',
+                        color: 'rgba(0, 0, 0, 0.54)',
+                    }}
+                />
+                <Typography
+                    mt={1}
+                    variant={'body2'}
+                    color={'primary'}
+                    className={cx(classes.fontMedium, classes.darkText)}
+                >
+                    PLEASE NOTE: You won't be able to see your grades until your cards are shipped.
+                </Typography>
+            </Grid>
 
             <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus} isVaultStorage={isVaultStorage} />
 

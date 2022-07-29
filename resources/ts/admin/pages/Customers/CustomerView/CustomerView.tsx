@@ -5,11 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerDataQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -68,6 +69,9 @@ const Root = styled(Grid)({
 
 export function CustomerView() {
     const { id } = useParams<'id'>();
+    const [creditDialog, setCreditDialog] = useState(false);
+
+    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
     const { data, isLoading } = useAdminCustomerDataQuery({
         resourceId: Number(id),
@@ -76,6 +80,7 @@ export function CustomerView() {
     const handleOption = useCallback((action: RowOption, value?: any) => {
         switch (action) {
             case RowOption.CreditCustomer:
+                setCreditDialog(true);
                 break;
 
             case RowOption.ResendAccessEmail:
@@ -127,8 +132,14 @@ export function CustomerView() {
                         <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
+                <CustomerCreditDialog
+                    customerName={data?.fullName}
+                    wallet={data?.wallet}
+                    open={creditDialog}
+                    onClose={handleCreditDialogClose}
+                />
             </Root>
-            <CustomerDetail submission={data.submissions} wallet={data.wallet} />
+            <CustomerDetail submission={data.submissions} wallet={data.wallet} customerName={data?.fullName} />
         </>
     );
 }

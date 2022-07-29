@@ -3,10 +3,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
+import { useCallback, useState } from 'react';
 import { WalletEntity } from '@shared/entities/WalletEntity';
+import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
+    customerName?: string;
     submission: number;
     wallet: WalletEntity;
 }
@@ -65,7 +68,11 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ submission, wallet }: CustomerDetailProps) {
+export function CustomerDetail({ submission, wallet, customerName }: CustomerDetailProps) {
+    const [creditDialog, setCreditDialog] = useState(false);
+    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const handleClick = useCallback(() => setCreditDialog(true), []);
+
     return (
         <>
             <Root container>
@@ -98,10 +105,16 @@ export function CustomerDetail({ submission, wallet }: CustomerDetailProps) {
                             </Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
-                            <AddIcon />
+                            <AddIcon onClick={handleClick} sx={{ cursor: 'pointer' }} />
                         </Grid>
                     </Grid>
                 </Grid>
+                <CustomerCreditDialog
+                    customerName={customerName}
+                    wallet={wallet}
+                    open={creditDialog}
+                    onClose={handleCreditDialogClose}
+                />
             </Root>
             <CustomerSubmissionListView />
         </>

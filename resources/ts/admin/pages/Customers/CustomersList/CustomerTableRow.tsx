@@ -1,16 +1,19 @@
+import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { MouseEventHandler, useCallback, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { UserEntity } from '@shared/entities/UserEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 
 interface CustomerTableRowProps {
     customerData: CustomerEntity;
@@ -31,23 +34,34 @@ const styles = {
 
 export function CustomerTableRow(props: CustomerTableRowProps) {
     const { customerData } = props;
-    const [customer, setCustomer] = useState<UserEntity | null>(null);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+    const [creditDialog, setCreditDialog] = useState(false);
     const customerViewUrl = `/customers/${customerData.id}/view`;
     const navigate = useNavigate();
 
-    const handleOption = useCallback((action: RowOption, value?: any) => {
-        switch (action) {
-            case RowOption.CreditCustomer:
-                const [firstName, lastName] = value.fullName.split(' ');
-                const user = new UserEntity();
-                user.id = value.id;
-                user.firstName = firstName;
-                user.lastName = lastName;
-                user.wallet = value.wallet;
-                setCustomer(user);
-                break;
-        }
-    }, []);
+    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+
+    const handleClickOptions = useCallback<MouseEventHandler>(
+        (e) => {
+            e.stopPropagation();
+            setAnchorEl(e.target as Element);
+        },
+        [setAnchorEl],
+    );
+
+    const handleOption = useCallback(
+        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
+            handleCloseOptions();
+            switch (option) {
+                case RowOption.CreditCustomer:
+                    setCreditDialog(true);
+                    break;
+            }
+        },
+        [handleCloseOptions],
+    );
 
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
@@ -59,37 +73,46 @@ export function CustomerTableRow(props: CustomerTableRowProps) {
     );
 
     return (
-        <TableRow key={customerData.id} onClick={handleRowClick} sx={styles.TableRow}>
-            <TableCell variant={'body'}>
-                <Grid container>
-                    <Avatar src={customerData.profileImage ?? ''}>{nameInitials(customerData.fullName)}</Avatar>
-                    <Grid item xs container direction={'column'} pl={2}>
-                        <Typography variant={'body2'}>{customerData.customerNumber}</Typography>
-                        <Typography variant={'caption'} color={'textSecondary'}>
-                            {customerData.customerNumber}
-                        </Typography>
+        <>
+            <TableRow key={customerData.id} onClick={handleRowClick} sx={styles.TableRow}>
+                <TableCell variant={'body'}>
+                    <Grid container>
+                        <Avatar src={customerData.profileImage ?? ''}>{nameInitials(customerData.fullName)}</Avatar>
+                        <Grid item xs container direction={'column'} pl={2}>
+                            <Typography variant={'body2'}>{customerData.customerNumber}</Typography>
+                            <Typography variant={'caption'} color={'textSecondary'}>
+                                {customerData.customerNumber}
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </TableCell>
-            <TableCell variant={'body'}>{customerData.email ?? '-'}</TableCell>
-            <TableCell variant={'body'}>{customerData.phone ?? '-'}</TableCell>
-            <TableCell variant={'body'}>{formatDate(customerData.createdAt, 'MM/DD/YYYY')}</TableCell>
-            <TableCell variant={'body'} align={'right'}>
-                {customerData.submissions ?? 0}
-            </TableCell>
-            <TableCell variant={'body'} align={'right'}>
-                {customerData.cardsCount}
-            </TableCell>
-            <TableCell variant={'body'} align={'right'}>
-                {formatCurrency(customerData.wallet?.balance ?? 0)}
-            </TableCell>
-            <TableCell variant={'body'} align={'right'}>
-                <OptionsMenu onClick={handleOption}>
-                    <OptionsMenuItem action={RowOption.CreditCustomer} value={customer}>
-                        Credit Customer
-                    </OptionsMenuItem>
-                </OptionsMenu>
-            </TableCell>
-        </TableRow>
+                </TableCell>
+                <TableCell variant={'body'}>{customerData.email ?? '-'}</TableCell>
+                <TableCell variant={'body'}>{customerData.phone ?? '-'}</TableCell>
+                <TableCell variant={'body'}>{formatDate(customerData.createdAt, 'MM/DD/YYYY')}</TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    {customerData.submissions ?? 0}
+                </TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    {customerData.cardsCount}
+                </TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    {formatCurrency(customerData.wallet?.balance ?? 0)}
+                </TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    <IconButton onClick={handleClickOptions} size="large">
+                        <MoreIcon />
+                    </IconButton>
+                    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                        <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                    </Menu>
+                </TableCell>
+            </TableRow>
+            <CustomerCreditDialog
+                customerName={customerData.fullName}
+                wallet={customerData.wallet}
+                open={creditDialog}
+                onClose={handleCreditDialogClose}
+            />
+        </>
     );
 }

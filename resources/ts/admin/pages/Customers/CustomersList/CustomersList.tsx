@@ -10,13 +10,12 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
-import { UserEntity } from '@shared/entities/UserEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -26,7 +25,6 @@ import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerTableRow } from './CustomerTableRow';
 
@@ -63,8 +61,6 @@ const getFilters = (values: InitialValues) => ({
  * @time: 21:39
  */
 export function CustomersList() {
-    const [customer, setCustomer] = useState<UserEntity | null>(null);
-
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
 
@@ -81,8 +77,6 @@ export function CustomersList() {
         }),
         [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
     );
-
-    const handleCreditDialogClose = useCallback(() => setCustomer(null), []);
 
     const customers = useAdminCustomersQuery({
         params: {
@@ -311,13 +305,6 @@ export function CustomersList() {
                     </TableFooter>
                 </Table>
             </TableContainer>
-
-            <CustomerCreditDialog
-                customer={customer}
-                wallet={customer?.wallet}
-                open={!!customer}
-                onClose={handleCreditDialogClose}
-            />
         </Grid>
     );
 }

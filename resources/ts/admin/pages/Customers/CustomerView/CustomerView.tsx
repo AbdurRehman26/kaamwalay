@@ -1,11 +1,15 @@
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
+import { useAdminCustomerDataQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -63,6 +67,12 @@ const Root = styled(Grid)({
 });
 
 export function CustomerView() {
+    const { id } = useParams<'id'>();
+
+    const { data, isLoading } = useAdminCustomerDataQuery({
+        resourceId: Number(id),
+    });
+
     const handleOption = useCallback((action: RowOption, value?: any) => {
         switch (action) {
             case RowOption.CreditCustomer:
@@ -73,25 +83,33 @@ export function CustomerView() {
         }
     }, []);
 
+    if (isLoading || !data) {
+        return (
+            <Box p={4} display={'flex'} alignItems={'center'} justifyContent={'center'} width={'100%'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
     return (
         <>
             <Root container>
                 <Grid container item xs className={'ImageDiv'} alignItems={'center'}>
-                    <Avatar src={''} variant="square" className={'Avatar'}>
-                        {nameInitials('Jim Jones')}
+                    <Avatar src={data.profileImage ?? ''} variant="square" className={'Avatar'}>
+                        {nameInitials(data.fullName)}
                     </Avatar>
                 </Grid>
                 <Grid container item xs alignItems={'center'} pl={2}>
                     <Grid className={'CustomerData'}>
-                        <Typography className={'CustomerName'}>Jim Jones</Typography>
+                        <Typography className={'CustomerName'}>{data.fullName}</Typography>
                         <Typography className={'CustomerDataHeading'}>
-                            Customer ID: <span className={'CustomerDataValue'}>C92029211</span>
+                            Customer ID: <span className={'CustomerDataValue'}>{data.customerNumber}</span>
                         </Typography>
                         <Typography className={'CustomerDataHeading'}>
-                            Email: <span className={'CustomerDataValue'}>jimjones@email.com</span>
+                            Email: <span className={'CustomerDataValue'}>{data.email}</span>
                         </Typography>
                         <Typography className={'CustomerDataHeading'}>
-                            Phone: <span className={'CustomerDataValue'}>+1 (718) 929-8298</span>
+                            Phone: <span className={'CustomerDataValue'}>{data.phone ?? '-'}</span>
                         </Typography>
                     </Grid>
                 </Grid>
@@ -105,16 +123,12 @@ export function CustomerView() {
                         CREATE SUBMISSION
                     </Button>
                     <OptionsMenu onClick={handleOption}>
-                        <OptionsMenuItem action={RowOption.CreditCustomer} value={''}>
-                            Credit Customer
-                        </OptionsMenuItem>
-                        <OptionsMenuItem action={RowOption.ResendAccessEmail} value={''}>
-                            Resend Access Email
-                        </OptionsMenuItem>
+                        <OptionsMenuItem action={RowOption.CreditCustomer}>Credit Customer</OptionsMenuItem>
+                        <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
             </Root>
-            <CustomerDetail />
+            <CustomerDetail submission={data.submissions} wallet={data.wallet} />
         </>
     );
 }

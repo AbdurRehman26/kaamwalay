@@ -2,7 +2,14 @@ import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { round } from 'lodash';
+import { WalletEntity } from '@shared/entities/WalletEntity';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
+
+interface CustomerDetailProps {
+    submission: number;
+    wallet: WalletEntity;
+}
 
 const Root = styled(Grid)({
     '.CustomerDetailBox': {
@@ -58,7 +65,7 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail() {
+export function CustomerDetail({ submission, wallet }: CustomerDetailProps) {
     return (
         <>
             <Root container>
@@ -79,15 +86,17 @@ export function CustomerDetail() {
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <div>
                         <Typography className={'Submissions'}>Submissions</Typography>
-                        <Typography className={'TotalSubmissions'}>3</Typography>
+                        <Typography className={'TotalSubmissions'}>{submission}</Typography>
                     </div>
                 </Grid>
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <Grid container>
-                        <Grid container item xs>
+                        <div>
                             <Typography className={'Wallet'}>Wallet </Typography>
-                            <Typography className={'WalletTotalAmount'}>$50.00</Typography>
-                        </Grid>
+                            <Typography className={'WalletTotalAmount'}>
+                                ${round(wallet?.balance, 2).toFixed(2)}
+                            </Typography>
+                        </div>
                         <Grid container item xs justifyContent={'flex-end'}>
                             <AddIcon />
                         </Grid>

@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
 import Header from '@shared/components/Customers/Header';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
@@ -49,13 +50,13 @@ const Root = styled(Grid)({
         border: '1px solid #E0E0E0',
         borderRadius: '4px',
         margin: '20px',
-        padding: '20px',
     },
 });
 
 export function CustomerSubmissionListView({ search }: CustomerSubmissionListViewProps) {
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const { id } = useParams<'id'>();
 
     const orders$ = useListAdminOrdersQuery({
         params: {
@@ -71,6 +72,7 @@ export function CustomerSubmissionListView({ search }: CustomerSubmissionListVie
             filter: {
                 search,
                 paymentStatus,
+                customerId: id,
             },
         },
         ...bracketParams(),
@@ -137,8 +139,10 @@ export function CustomerSubmissionListView({ search }: CustomerSubmissionListVie
     return (
         <Root container>
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
-                <Header isCustomerDetailPage={true} />
-                <Grid container direction={'column'}>
+                <Grid sx={{ padding: '20px' }}>
+                    <Header isCustomerDetailPage={true} />
+                </Grid>
+                <Grid container sx={{ padding: '10px' }}>
                     <Grid alignItems={'left'}>
                         {Object.entries(PaymentStatusMap).map(([key, status]) => {
                             return <FilterButton label={status} active={paymentStatus === key} value={key} />;

@@ -12,11 +12,11 @@ use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use App\Services\AGS\AgsService;
 use App\Models\User;
 use App\Services\Admin\V1\OrderService;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
+use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
@@ -24,7 +24,9 @@ use Throwable;
 class OrderStatusHistoryService extends V1OrderStatusHistoryService
 {
     public function __construct(
-        protected AgsService $agsService, protected OrderService $orderService, protected AdminOrderService $adminOrderService
+        protected AgsService $agsService,
+        protected OrderService $orderService,
+        protected AdminOrderService $adminOrderService
     ) {
         parent::__construct($this->agsService, $this->orderService);
     }

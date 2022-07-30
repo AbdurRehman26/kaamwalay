@@ -95,23 +95,27 @@ export function SubmissionsViewHeader({
 
     const history = useMemo(
         () =>
-            [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
-                (status) => {
-                    const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                    let { label, value } = AdminOrderStatusMap[status];
+            [
+                OrderStatusEnum.PLACED,
+                OrderStatusEnum.CONFIRMED,
+                OrderStatusEnum.GRADED,
+                OrderStatusEnum.ASSEMBLED,
+                OrderStatusEnum.SHIPPED,
+            ].map((status) => {
+                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                let { label, value } = AdminOrderStatusMap[status];
 
-                    if (status === OrderStatusEnum.SHIPPED && isVault) {
-                        label = 'Stored In Vault';
-                    }
+                if (status === OrderStatusEnum.SHIPPED && isVault) {
+                    label = 'Stored In Vault';
+                }
 
-                    return {
-                        label,
-                        value,
-                        isCompleted: !!item?.createdAt,
-                        completedAt: item?.createdAt,
-                    };
-                },
-            ),
+                return {
+                    label,
+                    value,
+                    isCompleted: !!item?.createdAt,
+                    completedAt: item?.createdAt,
+                };
+            }),
         [isVault, orderStatusHistory],
     );
 

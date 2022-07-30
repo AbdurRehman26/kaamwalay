@@ -15,14 +15,17 @@ use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Log;
 use Throwable;
 
 class OrderService extends V1OrderService
@@ -168,19 +171,18 @@ class OrderService extends V1OrderService
 
     public function addEstimatedDeliveryDateToOrder(Order $order): void
     {
-        $turnaroundTime = $order->paymentPlan->turnaround;
+        try {
+            $days = PaymentPlan::where('price', $order->paymentPlan->price)->value('estimated_delivery_days');
+            $days = explode('-', $days);
 
-        if (str_contains($turnaroundTime, '-')) {
-            $cleanedData = preg_replace('/[^0-9\-]/', '', $turnaroundTime);
-            $days = explode('-', $cleanedData);
-        
             $order->estimated_delivery_start_at = Carbon::now()->addWeekdays(intval($days[0]));
             $order->estimated_delivery_end_at = Carbon::now()->addWeekdays(intval($days[1]));
-        } else {
-            $order->estimated_delivery_start_at = Carbon::now();
-            $order->estimated_delivery_end_at = Carbon::now();
+            $order->save();
+        } catch (Exception $e) {
+            Log::error('Could Not Calculate Order Estimated Date :' . $order->order_number, [
+                'message' => $e->getMessage(),
+            ]);
+            report($e);
         }
-
-        $order->save();
     }
 }

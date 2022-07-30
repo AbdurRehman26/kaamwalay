@@ -16,7 +16,7 @@ class PaymentPlan extends Model
      *
      * @var array
      */
-    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position'];
+    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position', 'estimated_delivery_days'];
 
     /**
      * The attributes that should be cast to native types.

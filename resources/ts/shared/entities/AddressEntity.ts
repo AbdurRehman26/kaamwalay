@@ -9,6 +9,8 @@ export class AddressEntity extends Entity {
     public zip!: string;
     public phone!: string;
     public flat!: string;
+    public countryId!: number;
+    public fullName!: string;
 
     public firstName!: string;
 
@@ -16,6 +18,20 @@ export class AddressEntity extends Entity {
 
     @Type(() => CountryEntity)
     public country!: CountryEntity;
+
+    public getFirstName() {
+        const arr = this.fullName?.split(' ');
+        return this.fullName
+            ?.split(' ')
+            .slice(0, arr.length - 1)
+            .toString()
+            .replace(/,/g, ' ');
+    }
+
+    public getLastName() {
+        const arr = this.fullName?.split(' ');
+        return this.fullName?.split(' ')[arr.length - 1];
+    }
 
     public getFullName() {
         return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();

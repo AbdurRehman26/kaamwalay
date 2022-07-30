@@ -47,10 +47,9 @@ export function FeedItemsPerPage() {
             defaultRefinement={50}
             items={[
                 { value: 50, label: '50' },
-                { value: 72, label: '72' },
-                { value: 96, label: '96' },
                 { value: 100, label: '100' },
-                { value: 120, label: '120' },
+                { value: 150, label: '150' },
+                { value: 200, label: '200' },
             ]}
         />
     );

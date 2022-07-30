@@ -2586,11 +2586,6 @@ parameters:
 			path: app/Models/User.php
 
 		-
-			message: "#^Method App\\\\Models\\\\User\\:\\:orders\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
-			count: 1
-			path: app/Models/User.php
-
-		-
 			message: "#^Method App\\\\Models\\\\User\\:\\:scopeAdmin\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Models/User.php

@@ -1,7 +1,9 @@
 /**
- * @api {get} /admin/customers List customers
+ * @api {get} /v2/admin/customers List customers
  * @apiName List Customers
  * @apiGroup Admin Customers
+ *
+ * @apiVersion 2.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization

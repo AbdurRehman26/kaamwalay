@@ -211,5 +211,4 @@ class OrderStatusChangedListener implements ShouldQueue
             $this->shipStationService->createOrder($event->order);
         }
     }
-
 }

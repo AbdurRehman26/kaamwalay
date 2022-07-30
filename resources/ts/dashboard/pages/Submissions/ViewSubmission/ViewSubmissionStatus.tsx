@@ -109,11 +109,11 @@ export function ViewSubmissionStatus({
             </Typography>
             {orderStatus.toLowerCase() !== 'shipped' ? (
                 <Box display={'flex'} alignItems={'center'}>
-                    <IconButton sx={{ paddingLeft: '0px', paddingRight: '6px' }}>
+                    <IconButton sx={{ paddingLeft: '0px', paddingRight: '6px', paddingTop: '6px' }}>
                         <InfoTwoTone />
                     </IconButton>
 
-                    <Typography sx={{ fontWeight: '500', fontSize: '14px' }} mt={isMobile ? 1.5 : 0}>
+                    <Typography sx={{ fontWeight: '500', fontSize: '14px' }} mt={isMobile ? 2 : 0}>
                         {getpreShipmentNoteContent()}
                     </Typography>
                 </Box>

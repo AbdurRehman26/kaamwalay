@@ -3,6 +3,7 @@
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 
@@ -21,6 +22,7 @@ test('an admin can update order shipment', function () {
 
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
+        'order_status_id' => OrderStatus::ASSEMBLED,
     ]);
 
     $this->postJson('/api/v1/admin/orders/' . $this->order->id . '/shipment', [

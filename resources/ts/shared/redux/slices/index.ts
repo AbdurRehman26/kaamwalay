@@ -13,4 +13,4 @@ export { walletSlice as transactions } from './walletSlice';
 export { pendingOrdersSlice as pendingOrders } from './pendingOrdersSlice';
 export { vaultShipmentsSlice as vaultShipments } from './vaultShipmentsSlice';
 export { modalsSlice as modals } from './modalsSlice';
-export { adminCustomerDataSlice as adminCustomerData } from './adminCustomerDataSlice';
+export { adminCustomerSlice as adminCustomer } from './adminCustomerSlice';

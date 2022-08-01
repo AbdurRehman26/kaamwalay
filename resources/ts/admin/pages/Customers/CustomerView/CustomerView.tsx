@@ -133,7 +133,7 @@ export function CustomerView() {
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog
-                    customerName={data?.fullName}
+                    customer={data}
                     wallet={data?.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}

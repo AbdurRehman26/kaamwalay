@@ -24,7 +24,6 @@ import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
 interface Props extends DialogProps {
-    customerName?: string;
     customer?: UserEntity | null;
     wallet?: WalletEntity | null;
 }
@@ -90,7 +89,7 @@ const Root = styled(Dialog)(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 18:31
  */
-export function CustomerCreditDialog({ customer, wallet, customerName, onClose, ...rest }: Props) {
+export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -174,7 +173,7 @@ export function CustomerCreditDialog({ customer, wallet, customerName, onClose, 
 
                 <Stack mt={3.5} mb={2}>
                     <Typography variant={'subtitle1'} fontWeight={500}>
-                        {customer?.getFullName() ?? customerName}
+                        {customer?.fullName ?? customer?.getFullName()}
                     </Typography>
                     <Grid container alignItems={'center'}>
                         <Typography variant={'body2'} fontWeight={500} color={'textSecondary'}>

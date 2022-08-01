@@ -9,14 +9,14 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 
 interface CustomerTableRowProps {
-    customerData: CustomerEntity;
+    customerData: UserEntity;
 }
 
 enum RowOption {
@@ -108,7 +108,7 @@ export function CustomerTableRow(props: CustomerTableRowProps) {
                 </TableCell>
             </TableRow>
             <CustomerCreditDialog
-                customerName={customerData.fullName}
+                customer={customerData}
                 wallet={customerData.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}

@@ -147,7 +147,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                 <MuiLink
                                     component={Link}
                                     color={'primary'}
-                                    to={`/customers/list?search=${order.customer?.customerNumber}`}
+                                    to={`/customers/${order.customer?.id}/view`}
                                     className={font.fontWeightMedium}
                                 >
                                     {order.customer?.customerNumber}

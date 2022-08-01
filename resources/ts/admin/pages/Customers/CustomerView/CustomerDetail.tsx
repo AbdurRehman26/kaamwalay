@@ -83,9 +83,9 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                         </div>
                         <div>
                             <Typography className={'CustomerDataValue'}>{customerData.signedUpAt ?? '-'}</Typography>
-                            <Typography className={'CustomerDataValue'}>{`Admin(${
-                                customerData.createdBy ?? '-'
-                            })`}</Typography>
+                            <Typography className={'CustomerDataValue'}>
+                                {customerData.createdBy ? `Admin(${customerData.createdBy})` : '-'}
+                            </Typography>
                             <Typography className={'CustomerDataValue'}>
                                 {customerData.lastLoginAt ? 'Yes' : 'No'}
                             </Typography>
@@ -94,7 +94,7 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                 </Grid>
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <div>
-                        <Typography className={'Submissions'}>Submissions</Typography>
+                        <Typography className={'Submissions'}>Paid Submissions</Typography>
                         <Typography className={'TotalSubmissions'}>{customerData?.submissions}</Typography>
                     </div>
                 </Grid>

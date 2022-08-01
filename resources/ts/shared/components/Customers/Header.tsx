@@ -18,6 +18,7 @@ interface HeaderProps {
     onSearch?: (query: string) => void;
     isCustomerDetailPage?: boolean;
     dataLength?: number;
+    ordersCount?: number;
 }
 const styles = {
     header: {
@@ -64,7 +65,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage, dataLength }: HeaderProps) {
+export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -87,7 +88,7 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength }: HeaderPro
                     <Typography variant={'h4'} sx={isCustomerDetailPage ? styles.CustomerTitle : styles.Title}>
                         Submissions
                     </Typography>
-                    {dataLength !== 0 ? (
+                    {dataLength !== 0 || ordersCount !== 0 ? (
                         <TextField
                             variant={'outlined'}
                             onChange={handleSearch}

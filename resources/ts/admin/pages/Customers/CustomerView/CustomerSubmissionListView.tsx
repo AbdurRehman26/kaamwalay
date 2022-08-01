@@ -1,9 +1,11 @@
 import Check from '@mui/icons-material/Check';
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import TableContainer from '@mui/material/TableContainer';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
@@ -53,6 +55,7 @@ export function CustomerSubmissionListView() {
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [search, setSearch] = useState('');
+    const [ordersCount, setOrdersCount] = useState(0);
     const { id } = useParams<'id'>();
 
     const orders$ = useListAdminOrdersQuery({
@@ -90,6 +93,7 @@ export function CustomerSubmissionListView() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search, isSearchEnabled],
     );
+
     const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (
             <StyledButton
@@ -126,11 +130,22 @@ export function CustomerSubmissionListView() {
         setIsSearchEnabled(true);
     }, []);
 
+    useEffect(() => {
+        if (orders$.data.length !== 0) {
+            setOrdersCount(orders$.data.length);
+        }
+    }, [orders$.isLoading, orders$.data.length]);
+
     return (
         <Root container>
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
                 <Grid sx={{ padding: '20px' }}>
-                    <Header isCustomerDetailPage={true} dataLength={orders$.data.length} onSearch={setSearch} />
+                    <Header
+                        isCustomerDetailPage={true}
+                        dataLength={orders$.data.length}
+                        ordersCount={ordersCount}
+                        onSearch={setSearch}
+                    />
                 </Grid>
                 {orders$.isLoading ? (
                     <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -138,24 +153,57 @@ export function CustomerSubmissionListView() {
                     </Box>
                 ) : (
                     <>
-                        {orders$.data.length !== 0 ? (
-                            <Grid container sx={{ padding: '10px' }}>
-                                <Grid alignItems={'left'}>
-                                    {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                                        return (
-                                            <FilterButton label={status} active={paymentStatus === key} value={key} />
-                                        );
-                                    })}
+                        {orders$.data.length !== 0 || ordersCount !== 0 ? (
+                            <>
+                                <Grid container sx={{ padding: '10px' }}>
+                                    <Grid alignItems={'left'}>
+                                        {Object.entries(PaymentStatusMap).map(([key, status]) => {
+                                            return (
+                                                <FilterButton
+                                                    label={status}
+                                                    active={paymentStatus === key}
+                                                    value={key}
+                                                />
+                                            );
+                                        })}
+                                    </Grid>
+                                </Grid>
+                                <TableContainer>
+                                    <CustomerSubmissionsList
+                                        orderData={orders$.data}
+                                        paginationProp={orders$.paginationProps}
+                                        isCustomerDetailPage={true}
+                                    />
+                                </TableContainer>
+                            </>
+                        ) : (
+                            <Grid
+                                container
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                rowSpacing={1}
+                                sx={{ padding: '40px 20px' }}
+                            >
+                                <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                                    <Inventory2TwoToneIcon />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography
+                                        variant={'subtitle1'}
+                                        fontWeight={500}
+                                        textAlign={'center'}
+                                        fontSize={16}
+                                    >
+                                        No Submissions
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                                        This customer has no submissions, yet.
+                                    </Typography>
                                 </Grid>
                             </Grid>
-                        ) : null}
-                        <TableContainer>
-                            <CustomerSubmissionsList
-                                orderData={orders$.data}
-                                paginationProp={orders$.paginationProps}
-                                isCustomerDetailPage={true}
-                            />
-                        </TableContainer>
+                        )}
                     </>
                 )}
             </Grid>

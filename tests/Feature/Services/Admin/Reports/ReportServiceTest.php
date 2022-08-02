@@ -42,7 +42,7 @@ it('checks if ReportService class has array of reports that have reportable impl
 });
 
 it('checks if quarterly report is eligible to be sent now.', function () {
-    Carbon::setTestNow(Carbon::create('First day of 2022'));
+    Carbon::setTestNow(Carbon::create(2022, 01, 01));
     $report = resolve(MarketingQuarterlyReport::class);
     expect($report->shouldSendNow())->toBeTrue();
 });

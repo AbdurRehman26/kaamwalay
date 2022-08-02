@@ -44,8 +44,10 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
     (theme) => ({
         parentDiv: {
             overflow: 'hidden',
-            overflowX: 'scroll',
             width: '100%',
+            [theme.breakpoints.down(500)]: {
+                overflowX: 'scroll',
+            },
         },
         root: {
             [theme.breakpoints.down(500)]: {

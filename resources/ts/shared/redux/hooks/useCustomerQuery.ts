@@ -1,5 +1,4 @@
 import { CustomerEntity } from '../../entities/CustomerEntity';
-import { UserEntity } from '../../entities/UserEntity';
 import { useShowQuery } from '../../hooks/useShowQuery';
 import { ThunkShowActionArg } from '../../types/ThunkShowActionArg';
 import { showAdminCustomerAction as showAdminCustomerActions } from '../slices/adminCustomerSlice';
@@ -10,5 +9,5 @@ export function useAdminCustomerQuery(options: ThunkShowActionArg) {
 }
 
 export function useAdminCustomerDataQuery(options: ThunkShowActionArg) {
-    return useShowQuery(showAdminCustomerActions, UserEntity, (state) => state.adminCustomer, options);
+    return useShowQuery(showAdminCustomerActions, CustomerEntity, (state) => state.adminCustomer, options);
 }

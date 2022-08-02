@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserEntity } from '../../entities/UserEntity';
+import { CustomerEntity } from '../../entities/CustomerEntity';
 import { CustomersRepository } from '../../repositories/Admin/CustomersRepository';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
-interface StateType extends APIState<UserEntity> {}
+interface StateType extends APIState<CustomerEntity> {}
 
 const adminCustomersThunk = createRepositoryThunk('adminCustomers', CustomersRepository);
 

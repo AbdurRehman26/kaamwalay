@@ -4,12 +4,12 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import { useCallback, useState } from 'react';
-import { UserEntity } from '@shared/entities/UserEntity';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
-    customerData: UserEntity;
+    customerData: CustomerEntity;
 }
 
 const Root = styled(Grid)({
@@ -112,7 +112,7 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                     </Grid>
                 </Grid>
                 <CustomerCreditDialog
-                    customer={customerData}
+                    customerName={customerData.fullName}
                     wallet={customerData.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}

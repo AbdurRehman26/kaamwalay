@@ -1,9 +1,9 @@
 import { Injectable } from '../../decorators/Injectable';
-import { UserEntity } from '../../entities/UserEntity';
+import { CustomerEntity } from '../../entities/CustomerEntity';
 import { Repository } from '../Repository';
 
 @Injectable('CustomerRepository')
-export class CustomerRepository extends Repository<UserEntity> {
+export class CustomerRepository extends Repository<CustomerEntity> {
     readonly endpointPath: string = 'admin/customers/:id';
-    readonly model = UserEntity;
+    readonly model = CustomerEntity;
 }

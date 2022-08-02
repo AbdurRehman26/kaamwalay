@@ -7,10 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderCanNotBeMarkedAsAssembly extends Exception
+class OrderCanNotBeMarkedAsAssembled extends Exception
 {
     /** @var string */
-    protected $message = 'Order can not be marked as Assembly because it is not graded yet.';
+    protected $message = 'Order can not be marked as Assembled because it is not graded yet.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

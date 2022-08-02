@@ -4,7 +4,7 @@ namespace App\Services\Admin\V2;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
-use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsAssembly;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsAssembled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
@@ -50,9 +50,9 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         throw_if(
             (
-                getModelId($orderStatus) === OrderStatus::ASSEMBLED && ! $order->isEligibleToMarkAsAssembly()
+                getModelId($orderStatus) === OrderStatus::ASSEMBLED && ! $order->isEligibleToMarkAsAssembled()
             ),
-            OrderCanNotBeMarkedAsAssembly::class
+            OrderCanNotBeMarkedAsAssembled::class
         );
 
         throw_if(

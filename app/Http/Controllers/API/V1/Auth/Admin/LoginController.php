@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Auth\Admin;
 
-use App\Events\API\Auth\UserLogin;
+use App\Events\API\Auth\UserLoggedIn;
 use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
@@ -26,7 +26,7 @@ class LoginController extends Controller
 
         throw_if(empty($token), AuthenticationException::class);
 
-        UserLogin::dispatch(auth()->user());
+        UserLoggedIn::dispatch(auth()->user());
 
         return new JsonResponse(
             [

@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('created_by_id')->references('id')->on('users')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable()->after('salesman_id');
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 
@@ -26,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['created_by_id']);
-            $table->dropColumn('created_by_id');
+            $table->dropForeign(['created_by']);
+            $table->dropColumn('created_by');
         });
     }
 };

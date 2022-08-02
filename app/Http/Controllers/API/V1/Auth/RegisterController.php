@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Events\API\Auth\UserLogin;
+use App\Events\API\Auth\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
@@ -21,7 +21,7 @@ class RegisterController extends Controller
 
         $token = auth()->guard()->login($user);
 
-        UserLogin::dispatch($user);
+        UserLoggedIn::dispatch($user);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\API\Admin\Customer\CustomerCreated;
 use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -15,7 +14,7 @@ beforeEach(function () {
         RolesSeeder::class,
         UsersSeeder::class,
     ]);
-    Event::fake();
+    Queue::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
@@ -54,7 +53,7 @@ test('a customer can not get customers list', function () {
         ->assertStatus(403);
 });
 
-test('an admin can create a customer', function () {
+it('can create a customer', function () {
     actingAs($this->user);
 
     postJson(route('v2.customers.store'), [
@@ -78,11 +77,9 @@ test('an admin can create a customer', function () {
                 'last_login_at',
             ],
         ]);
-
-    Event::assertDispatched(CustomerCreated::class);
 });
 
-test('a customer can not create customers', function () {
+test('a customer cannot create customers', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
     actingAs($user);
 
@@ -95,7 +92,7 @@ test('a customer can not create customers', function () {
     ->assertStatus(403);
 });
 
-test('a guest can not create customers', function () {
+test('a guest cannot create customers', function () {
     postJson(route('v2.customers.store'), [
         'first_name' => 'John',
         'last_name' => 'Doe',
@@ -118,13 +115,13 @@ it('can resend user access email', function () {
         ]);
 });
 
-it('can not resend user access email to user who already has logged in', function () {
+it('cannot resend user access email to user who already has logged in', function () {
     actingAs($this->user);
 
     $user = User::factory()->create();
 
     postJson(route('v2.customers.send-access-email', $user))
-        ->assertStatus(403);
+        ->assertStatus(422);
 });
 
 test('a customer can not resend user access email', function () {

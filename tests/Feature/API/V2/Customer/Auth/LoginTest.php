@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\API\Auth\UserLogin;
+use App\Events\API\Auth\UserLoggedIn;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -24,7 +24,7 @@ test('user can login with valid credentials without platform', function () {
         'type',
         'expiry',
     ]);
-    Event::assertDispatched(UserLogin::class);
+    Event::assertDispatched(UserLoggedIn::class);
 })->group('auth');
 
 test('user can not login with invalid email', function () {

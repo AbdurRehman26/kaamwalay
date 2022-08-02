@@ -2,16 +2,21 @@
 
 namespace App\Services\Admin;
 
-use App\Events\API\Admin\Customer\CustomerCreated;
 use App\Models\User;
+use App\Services\EmailService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerService
 {
     protected const PER_PAGE = 20;
+
+    public function __construct(protected EmailService $emailService)
+    {
+        //
+    }
 
     public function getCustomers(): LengthAwarePaginator
     {
@@ -24,13 +29,25 @@ class CustomerService
 
     public function createCustomer(array $data): User
     {
-        $data['password'] = Hash::make(Str::random(8));
-        $data['created_by_id'] = auth()->user()->id;
+        $data['password'] = Str::random(8);
+        $data['created_by'] = auth()->user()->id;
 
         $user = User::createCustomer($data);
 
-        CustomerCreated::dispatch($user);
+        $this->sendAccessEmailToCreatedCustomer($user);
 
         return $user;
+    }
+
+    public function sendAccessEmailToCreatedCustomer(User $user): void
+    {
+        $token = Password::broker()->createToken($user);
+
+        $this->emailService->sendEmail(
+            [[$user->email => $user->first_name ?? '']],
+            EmailService::SUBJECT[EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT],
+            EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
+            ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.$user->email],
+        );
     }
 }

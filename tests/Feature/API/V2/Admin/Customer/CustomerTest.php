@@ -14,7 +14,7 @@ beforeEach(function () {
         RolesSeeder::class,
         UsersSeeder::class,
     ]);
-    Queue::fake();
+    Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();

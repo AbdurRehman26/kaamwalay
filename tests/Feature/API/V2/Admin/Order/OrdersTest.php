@@ -422,3 +422,29 @@ it('returns only orders with filtered payment status', function ($data) {
     fn () => ['id' => 101, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::PAID->value],
     fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
 ]);
+
+it('admin can mark graded order as assembled', function () {
+    Event::fake();
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create([
+        'order_status_id' => OrderStatus::GRADED,
+    ]);
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ASSEMBLED,
+    ])->assertOk();
+});
+
+it('admin can not mark ungraded order as assembled', function () {
+    Event::fake();
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create([
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ASSEMBLED,
+    ])->assertUnprocessable();
+});

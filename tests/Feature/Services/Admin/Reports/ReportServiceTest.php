@@ -48,7 +48,7 @@ it('checks if quarterly report is eligible to be sent now.', function () {
 });
 
 it('checks if monthly report is eligible to be sent now.', function () {
-    Carbon::setTestNow(Carbon::create('First day of this month'));
+    Carbon::setTestNow(Carbon::create(2022));
     $report = resolve(MarketingMonthlyReport::class);
     expect($report->shouldSendNow())->toBeTrue();
 });

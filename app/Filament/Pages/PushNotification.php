@@ -3,8 +3,8 @@
 namespace App\Filament\Pages;
 
 use Filament\Forms;
-use Filament\Pages\Page;
 use Filament\Pages\Actions\Action;
+use Filament\Pages\Page;
 use Pusher\PushNotifications\PushNotifications;
 
 class PushNotification extends Page
@@ -53,7 +53,7 @@ class PushNotification extends Page
                     Forms\Components\Select::make('interest')
                         ->options([
                             'general' => 'general',
-                            'debug-general' => 'debug-general'
+                            'debug-general' => 'debug-general',
                         ])
                         ->required(),
                     Forms\Components\TextInput::make('title')

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderStatus extends Model
 {
@@ -16,8 +17,7 @@ class OrderStatus extends Model
     public const GRADED = 4;
     public const SHIPPED = 5;
     public const CANCELLED = 6;
-    public const REVIEWED = 7;
-    public const ASSEMBLED = 8;
+    public const ASSEMBLED = 7;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
 
@@ -41,5 +41,10 @@ class OrderStatus extends Model
     public function orderState(): BelongsTo
     {
         return $this->belongsTo(OrderState::class);
+    }
+
+    public function orderStatusHistories(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class);
     }
 }

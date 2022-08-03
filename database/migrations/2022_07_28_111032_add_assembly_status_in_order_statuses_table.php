@@ -14,15 +14,9 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('order_statuses', function (Blueprint $table) {
-            DB::table('order_statuses')->insert([
-                [
-                    'code' => 'assembled',
-                    'name' => 'Assembled',
-                    'description' => 'Order is graded and in assembly now.',
-                    'order_state_id' => 2,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
+            DB::table('order_statuses')->where('code', 'reviewed')->update([
+                'code' => 'assembled',
+                'name' => 'Assembled',
             ]);
         });
     }
@@ -35,7 +29,10 @@ return new class extends Migration {
     public function down()
     {
         Schema::table('order_statuses', function (Blueprint $table) {
-            DB::table('order_statuses')->where('code', 'assembled')->delete();
+            DB::table('order_statuses')->where('code', 'assembled')->update([
+                'code' => 'reviewed',
+                'name' => 'Reviewed',
+            ]);
         });
     }
 };

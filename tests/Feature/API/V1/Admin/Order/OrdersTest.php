@@ -34,7 +34,6 @@ beforeEach(function () {
         ['id' => 2, 'order_status_id' => OrderStatus::CONFIRMED],
         ['id' => 3, 'order_status_id' => OrderStatus::GRADED],
         ['id' => 4, 'order_status_id' => OrderStatus::SHIPPED],
-        ['id' => 5, 'order_status_id' => OrderStatus::REVIEWED]
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -256,22 +255,6 @@ it(
     fn () => '000000100', // cert number of the first order's first item
 ]);
 
-test('an admin can complete review of an order', function () {
-    Http::fake([
-        'ags.api/*/certificates/*' => Http::response(['data']),
-    ]);
-    $response = $this->postJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/status-history', [
-        'order_status_id' => OrderStatus::REVIEWED,
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'data' => [
-            'order_id' => $this->orders[0]->id,
-            'order_status_id' => OrderStatus::REVIEWED,
-        ],
-    ]);
-});
 
 test('an admin can not complete review of an order if error occurred with AGS client', function () {
     Http::fake([

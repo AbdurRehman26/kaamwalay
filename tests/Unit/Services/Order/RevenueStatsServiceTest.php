@@ -31,7 +31,6 @@ beforeEach(function () {
                     OrderStatus::CONFIRMED,
                     OrderStatus::GRADED,
                     OrderStatus::SHIPPED,
-                    OrderStatus::REVIEWED,
                 ]),
                 'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
                 'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),

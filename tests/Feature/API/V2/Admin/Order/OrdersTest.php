@@ -37,7 +37,6 @@ beforeEach(function () {
         ['order_status_id' => OrderStatus::CONFIRMED],
         ['order_status_id' => OrderStatus::GRADED],
         ['order_status_id' => OrderStatus::SHIPPED],
-        ['order_status_id' => OrderStatus::REVIEWED]
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -133,15 +132,6 @@ it('returns only placed orders', function () {
         ->assertOk()
         ->assertJsonFragment([
             'order_status_id' => OrderStatus::PLACED,
-        ]);
-});
-
-it('returns only reviewed orders', function () {
-    $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[status]=reviewed')
-        ->assertOk()
-        ->assertJsonCount(1, ['data'])
-        ->assertJsonFragment([
-            'order_status_id' => OrderStatus::REVIEWED,
         ]);
 });
 
@@ -256,23 +246,6 @@ it(
     fn () => $this->orders[0]->user->first_name,
     fn () => '000000100', // cert number of the first order's first item
 ]);
-
-test('an admin can complete review of an order', function () {
-    Http::fake([
-        'ags.api/*/certificates/*' => Http::response(['data']),
-    ]);
-    $response = $this->postJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/status-history', [
-        'order_status_id' => OrderStatus::REVIEWED,
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'data' => [
-            'order_id' => $this->orders[0]->id,
-            'order_status_id' => OrderStatus::REVIEWED,
-        ],
-    ]);
-});
 
 test('an admin can not complete review of an order if error occurred with AGS client', function () {
     Http::fake([

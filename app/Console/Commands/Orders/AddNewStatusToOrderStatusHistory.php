@@ -38,12 +38,13 @@ class AddNewStatusToOrderStatusHistory extends Command
                     $this->info('Found ' . $collection->count() . ' Orders with shipped status');
                 })
                 ->each(function (Order $order) {
+                    /** @var OrderStatusHistory $shippedOrderHistory */
                     $shippedOrderHistory = $order->orderStatusHistory()->latest()->first();
                     $order->orderStatusHistory()->create([
                         'order_status_id' => OrderStatus::ASSEMBLED,
                         'user_id' => $shippedOrderHistory->user_id,
                         'created_at' => $shippedOrderHistory->created_at,
-                        'updated_at' => $shippedOrderHistory->upated_at,
+                        'updated_at' => $shippedOrderHistory->updated_at,
                     ]);
                 });
 

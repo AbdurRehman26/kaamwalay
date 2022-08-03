@@ -109,7 +109,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
             ->whereBetween("orders.shipped_at", [$fromDate, $toDate])
             ->first()->avg . ' Day(s)',
 
-        'Average number of days taken from grading to shipping' => (int) Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
+        'Average number of days taken from grading to shipping' => (int) Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))->whereBetween('orders.shipped_at', [$fromDate, $toDate])->first()->avg . ' Day(s)',
         'Average time from submission to payment' => (int) Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))->betweenDates($fromDate, $toDate)->first()->avg . ' Day(s)',
         'Average time from signup to submission' => (int) User::select(DB::raw("AVG(DATEDIFF(orders.created_at, users.created_at)) as avg"))
             ->join('orders', 'orders.user_id', '=', 'users.id')

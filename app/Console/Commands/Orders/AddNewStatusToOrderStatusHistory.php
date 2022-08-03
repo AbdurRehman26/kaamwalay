@@ -4,6 +4,7 @@ namespace App\Console\Commands\Orders;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
 use Illuminate\Console\Command;
 
 class AddNewStatusToOrderStatusHistory extends Command

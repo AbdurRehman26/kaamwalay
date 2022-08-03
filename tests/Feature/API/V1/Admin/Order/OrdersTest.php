@@ -30,10 +30,10 @@ beforeEach(function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['id' => 1, 'order_status_id' => OrderStatus::PLACED],
-        ['id' => 2, 'order_status_id' => OrderStatus::CONFIRMED],
-        ['id' => 3, 'order_status_id' => OrderStatus::GRADED],
-        ['id' => 4, 'order_status_id' => OrderStatus::SHIPPED],
+        ['order_status_id' => OrderStatus::PLACED],
+        ['order_status_id' => OrderStatus::CONFIRMED],
+        ['order_status_id' => OrderStatus::GRADED],
+        ['order_status_id' => OrderStatus::SHIPPED],
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -131,15 +131,6 @@ it('returns only placed orders', function () {
         ->assertOk()
         ->assertJsonFragment([
             'order_status_id' => OrderStatus::PLACED,
-        ]);
-});
-
-it('returns only reviewed orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=reviewed')
-        ->assertOk()
-        ->assertJsonCount(1, ['data'])
-        ->assertJsonFragment([
-            'order_status_id' => OrderStatus::REVIEWED,
         ]);
 });
 

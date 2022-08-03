@@ -80,6 +80,7 @@ export function CustomerSubmissionListView() {
 
     useEffect(() => {
         if (!orders$.isLoading && isSearchEnabled) {
+            // noinspection JSIgnoredPromiseFromCall
             orders$.search(
                 toApiPropertiesObject({
                     search,
@@ -87,7 +88,8 @@ export function CustomerSubmissionListView() {
                 }),
             );
         }
-    }, [orders$, paymentStatus, search, isSearchEnabled]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search, isSearchEnabled]);
 
     const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (

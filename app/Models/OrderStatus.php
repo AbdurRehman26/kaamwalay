@@ -43,6 +43,9 @@ class OrderStatus extends Model
         return $this->belongsTo(OrderState::class);
     }
 
+    /**
+     * @return HasMany <OrderStatusHistory>
+     */
     public function orderStatusHistories(): HasMany
     {
         return $this->hasMany(OrderStatusHistory::class);

@@ -78,20 +78,16 @@ export function CustomerSubmissionListView() {
         ...bracketParams(),
     });
 
-    useEffect(
-        () => {
-            if (!orders$.isLoading && isSearchEnabled) {
-                orders$.search(
-                    toApiPropertiesObject({
-                        search,
-                        paymentStatus,
-                    }),
-                );
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search, isSearchEnabled],
-    );
+    useEffect(() => {
+        if (!orders$.isLoading && isSearchEnabled) {
+            orders$.search(
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                }),
+            );
+        }
+    }, [orders$, paymentStatus, search, isSearchEnabled]);
 
     const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (

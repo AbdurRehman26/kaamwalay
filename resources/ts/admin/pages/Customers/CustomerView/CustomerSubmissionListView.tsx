@@ -81,7 +81,6 @@ export function CustomerSubmissionListView() {
     useEffect(
         () => {
             if (!orders$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
                 orders$.search(
                     toApiPropertiesObject({
                         search,

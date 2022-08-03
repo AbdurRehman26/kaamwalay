@@ -124,7 +124,8 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         $order->save();
     }
 
-    protected function addEstimatedDeliveryDateToOrder(Order $order): void {
+    protected function addEstimatedDeliveryDateToOrder(Order $order): void
+    {
         try {
             $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);
 

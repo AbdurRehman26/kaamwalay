@@ -926,20 +926,20 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
         [2, 10, false],
     ]);
 
-    test('a customer can see estimated delivery date in order', function () {
-        $this->actingAs($this->user);
-        $order = Order::factory()->for($this->user)->create();
+test('a customer can see estimated delivery date in order', function () {
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
     
-        $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'data' => ['id', 'estimated_delivery_start_at', 'estimated_delivery_start_at'],
-        ]);
+    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data' => ['id', 'estimated_delivery_start_at', 'estimated_delivery_start_at'],
+    ]);
         
-        $response->assertJsonFragment([
-            'id' => $order->id,
-            'order_number' => $order->order_number,
-            'estimated_delivery_start_at' => $order->estimated_delivery_start_at,
-            'estimated_delivery_end_at' => $order->estimated_delivery_end_at,
-        ]);
-    });
+    $response->assertJsonFragment([
+        'id' => $order->id,
+        'order_number' => $order->order_number,
+        'estimated_delivery_start_at' => $order->estimated_delivery_start_at,
+        'estimated_delivery_end_at' => $order->estimated_delivery_end_at,
+    ]);
+});

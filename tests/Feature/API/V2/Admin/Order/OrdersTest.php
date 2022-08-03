@@ -9,9 +9,9 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\PaymentPlan;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserCard;
+use Carbon\Carbon;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -435,5 +435,4 @@ it('calculates estimated delivery date when order is market as reviewed', functi
     $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertOk();
-    
 });

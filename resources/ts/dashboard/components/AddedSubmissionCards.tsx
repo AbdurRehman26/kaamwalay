@@ -168,9 +168,10 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     );
 
     function handleChange(card: SearchResultItemCardProps, qty: any) {
-        setOnChangeValue(qty);
+        const value = qty.replace(/[^\d]/, '');
+        setOnChangeValue(value);
         setShowQuantity(false);
-        dispatch(changeSelectedCardQty({ card, qty: qty }));
+        dispatch(changeSelectedCardQty({ card, qty: value }));
     }
 
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {

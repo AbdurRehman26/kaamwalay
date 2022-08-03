@@ -1,12 +1,17 @@
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
 import Grid, { GridProps } from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import makeStyles from '@mui/styles/makeStyles';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -32,6 +37,22 @@ const Root = styled(Grid)(() => ({
     },
 }));
 
+const useStyles = makeStyles(
+    (theme) => ({
+        newCustomerBtn: {
+            borderRadius: 24,
+            padding: '12px 24px',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: 'auto',
+                padding: '9px 16px',
+            },
+        },
+    }),
+    {
+        name: 'ListPageHeader',
+    },
+);
+
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ListPageHeader
@@ -39,7 +60,10 @@ const Root = styled(Grid)(() => ({
  * @time: 21:44
  */
 export function ListPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
+    const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
+    const [addCustomerDialog, setAddCustomerDialog] = useState(false);
+    const navigate = useNavigate();
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -58,40 +82,64 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
         [handleSearch],
     );
 
+    const redirectToCustomerProfile = useCallback(
+        (customer: CustomerEntity) => {
+            navigate(`/customers/${customer.id}/view`);
+        },
+        [navigate],
+    );
+
     useEffect(() => {
         setSearch(value ?? '');
     }, [value]);
 
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
-            <Grid container alignItems={'center'}>
-                <Typography variant={'h4'} fontWeight={500} mr={3}>
-                    {title}
-                </Typography>
-                {searchField && (
-                    <TextField
-                        className={'ListPageHeader-search'}
-                        value={search}
-                        onChange={handleSearchValue}
-                        onKeyDown={handleKeyDown}
-                        placeholder={'Search...'}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position={'start'}>
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                            endAdornment:
-                                search || search === '' ? (
-                                    <InputAdornment position={'end'}>
-                                        <IconButton onClick={handleSearch}>
-                                            <SendIcon />
-                                        </IconButton>
+            <CustomerAddDialog
+                customerAdded={redirectToCustomerProfile}
+                open={addCustomerDialog}
+                onClose={() => setAddCustomerDialog(!addCustomerDialog)}
+            />
+            <Grid container justifyContent={'space-between'}>
+                <Grid display={'flex'} alignItems={'center'} item>
+                    <Typography variant={'h4'} fontWeight={500} mr={3}>
+                        {title}
+                    </Typography>
+                    {searchField && (
+                        <TextField
+                            className={'ListPageHeader-search'}
+                            value={search}
+                            onChange={handleSearchValue}
+                            onKeyDown={handleKeyDown}
+                            placeholder={'Search...'}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position={'start'}>
+                                        <SearchIcon />
                                     </InputAdornment>
-                                ) : null,
-                        }}
-                    />
-                )}
+                                ),
+                                endAdornment:
+                                    search || search === '' ? (
+                                        <InputAdornment position={'end'}>
+                                            <IconButton onClick={handleSearch}>
+                                                <SendIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ) : null,
+                            }}
+                        />
+                    )}
+                </Grid>
+                <Grid item>
+                    <Button
+                        onClick={() => setAddCustomerDialog(true)}
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.newCustomerBtn}
+                    >
+                        Add Customer
+                    </Button>
+                </Grid>
             </Grid>
             {children}
         </Root>

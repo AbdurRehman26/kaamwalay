@@ -135,9 +135,9 @@ test('a customer can not resend user access email', function () {
 });
 
 test('a guest can not resend user access email', function () {
-    $newUser = User::factory()->create(['last_login_at' => null]);
+    $user = User::factory()->create(['last_login_at' => null]);
 
-    postJson(route('v2.customers.send-access-email', $newUser))
+    postJson(route('v2.customers.send-access-email', $user))
         ->assertStatus(401);
 });
 

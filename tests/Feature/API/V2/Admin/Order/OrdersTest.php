@@ -8,6 +8,8 @@ use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\PaymentPlan;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
@@ -419,3 +421,19 @@ it('returns only orders with filtered payment status', function ($data) {
     fn () => ['id' => 101, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::PAID->value],
     fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
 ]);
+
+it('calculates estimated delivery date when order is market as reviewed', function () {
+    $order = Order::factory()->create();
+
+    $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);
+
+    $order->estimated_delivery_start_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
+    $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
+
+    $order->save();
+
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ])->assertOk();
+    
+});

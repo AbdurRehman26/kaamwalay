@@ -12,23 +12,18 @@ use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use App\Services\AGS\AgsService;
+use App\Models\PaymentPlan;
 use App\Models\User;
-use App\Services\Admin\V1\OrderService;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
-use App\Services\Admin\V2\OrderService as AdminOrderService;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
 class OrderStatusHistoryService extends V1OrderStatusHistoryService
 {
-    public function __construct(
-        protected AgsService $agsService, protected OrderService $orderService, protected AdminOrderService $adminOrderService
-    ) {
-        parent::__construct($this->agsService, $this->orderService);
-    }
-
     /**
      * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
@@ -103,7 +98,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         }
 
         if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
-            $this->adminOrderService->addEstimatedDeliveryDateToOrder($order);
+            $this->addEstimatedDeliveryDateToOrder($order);
         }
 
         return QueryBuilder::for(OrderStatusHistory::class)
@@ -127,5 +122,20 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         };
 
         $order->save();
+    }
+
+    protected function addEstimatedDeliveryDateToOrder(Order $order): void {
+        try {
+            $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);
+
+            $order->estimated_delivery_start_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
+            $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
+            $order->save();
+        } catch (Exception $e) {
+            Log::error('Could Not Calculate Order Estimated Date :' . $order->order_number, [
+                'message' => $e->getMessage(),
+            ]);
+            report($e);
+        }
     }
 }

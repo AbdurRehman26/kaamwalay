@@ -932,9 +932,6 @@ test('a customer can see estimated delivery date in order', function () {
     
     $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
     $response->assertStatus(200);
-    $response->assertJsonStructure([
-        'data' => ['id', 'estimated_delivery_start_at', 'estimated_delivery_start_at'],
-    ]);
         
     $response->assertJsonFragment([
         'id' => $order->id,

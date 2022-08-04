@@ -422,7 +422,7 @@ it('returns only orders with filtered payment status', function ($data) {
     fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
 ]);
 
-it('calculates estimated delivery date when order is marked as confirmed', function () {
+it('calculates estimated delivery date when admins marks the order as reviewed', function () {
     Event::fake();
     Bus::fake();
     Http::fake([

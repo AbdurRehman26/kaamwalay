@@ -12,7 +12,6 @@ use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 use Carbon\Carbon;
@@ -127,7 +126,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
     protected function addEstimatedDeliveryDateToOrder(Order $order): void
     {
         try {
-            $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);
+            $paymentPlan = $order->originalPaymentPlan;
 
             $order->estimated_delivery_start_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
             $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);

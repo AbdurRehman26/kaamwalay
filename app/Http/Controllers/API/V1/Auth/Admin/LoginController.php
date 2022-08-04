@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Auth\Admin;
 
+use App\Events\API\Auth\UserLoggedIn;
 use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
@@ -24,6 +25,8 @@ class LoginController extends Controller
         $token = auth()->attempt($request->validated());
 
         throw_if(empty($token), AuthenticationException::class);
+
+        UserLoggedIn::dispatch(auth()->user());
 
         return new JsonResponse(
             [

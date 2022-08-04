@@ -1,0 +1,1 @@
+export { CustomerAddDialog } from './CustomerAddDialog';

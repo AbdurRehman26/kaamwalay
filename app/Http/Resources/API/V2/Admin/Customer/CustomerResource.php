@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\Customer;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -29,8 +30,10 @@ class CustomerResource extends BaseResource
             'submissions' => $this->orders()->paid()->count(),
             'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
+            'created_by' => new UserResource($this->createdBy),
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
+            'last_login_at' => $this->formatDate($this->last_login_at),
         ];
     }
 }

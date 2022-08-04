@@ -102,9 +102,11 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount
                         />
                     ) : null}
                 </Grid>
-                <Grid container item xs justifyContent={'flex-end'}>
-                    {barCodeButton}
-                </Grid>
+                {barCodeButton ? (
+                    <Grid container item xs justifyContent={'flex-end'}>
+                        {barCodeButton}
+                    </Grid>
+                ) : null}
             </Grid>
             {tabs}
         </Grid>

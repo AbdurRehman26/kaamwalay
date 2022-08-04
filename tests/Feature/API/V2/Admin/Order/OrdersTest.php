@@ -428,7 +428,7 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
 
-    $order = Order::factory()->insuredShipping()->create();
+    $order = Order::factory()->create();
     $paymentPlan = $order->originalPaymentPlan;
 
     $estimatedDeliveryStartAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);

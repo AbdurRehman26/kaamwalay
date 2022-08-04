@@ -156,7 +156,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
     return (
         <>
             <Stack py={1} alignItems={'flex-start'}>
-                <Typography variant={'body1'} fontWeight={500}>
+                <Typography variant={'body1'} fontWeight={500} sx={{ fontSize: '14px' }}>
                     Shipping/Storage Selection
                 </Typography>
                 <Grid container alignItems={'center'}>

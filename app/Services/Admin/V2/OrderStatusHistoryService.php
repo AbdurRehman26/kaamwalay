@@ -87,7 +87,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 
-        if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
+        if ($orderStatusId === OrderStatus::CONFIRMED) {
             $this->addEstimatedDeliveryDateToOrder($order);
         }
 

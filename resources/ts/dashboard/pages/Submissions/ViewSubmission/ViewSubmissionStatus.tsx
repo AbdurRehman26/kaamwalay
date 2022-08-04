@@ -138,7 +138,14 @@ export function ViewSubmissionStatus({
                 mt={3}
                 width={'100%'}
             >
-                <Grid item md={6} sm={12} xs={12} p={2} sx={{ border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+                <Grid
+                    item
+                    md={6}
+                    sm={12}
+                    xs={12}
+                    p={2}
+                    sx={{ border: '1px solid #E0E0E0', borderRadius: '4px', paddingBottom: isPaid ? '0px' : '12px' }}
+                >
                     <SubmissionShippingMethod orderId={orderId} shippingMethod={shippingMethod} paid={isPaid} />
                 </Grid>
                 {estimatedDeliveryStartAt && estimatedDeliveryEndAt && !isVaultStorage ? (
@@ -150,7 +157,11 @@ export function ViewSubmissionStatus({
                         p={2}
                         ml={!isMobile ? 2 : 0}
                         mt={isMobile ? 2 : 0}
-                        sx={{ border: '1px solid #E0E0E0', borderRadius: '4px' }}
+                        sx={{
+                            border: '1px solid #E0E0E0',
+                            borderRadius: '4px',
+                            paddingBottom: isPaid ? '0px' : '12px',
+                        }}
                     >
                         <SubmissionEstimatedDelivery
                             serviceLevel={serviceLevel}

@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import { useCallback, useState } from 'react';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
@@ -82,9 +83,11 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                             <Typography className={'CustomerHeading'}>Accessed:</Typography>
                         </div>
                         <div>
-                            <Typography className={'CustomerValue'}>{customer.signedUpAt ?? '-'}</Typography>
                             <Typography className={'CustomerValue'}>
-                                {customer.createdBy ? `Admin(${customer.createdBy})` : 'User'}
+                                {formatDate(customer.createdAt, 'MM/DD/YYYY') ?? '-'}
+                            </Typography>
+                            <Typography className={'CustomerValue'}>
+                                {customer?.createdBy?.getFullName() ?? 'User'}
                             </Typography>
                             <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
                         </div>

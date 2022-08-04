@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { countDecimals } from '@shared/lib/utils/countDecimals';
 import { APIService } from '@shared/services/APIService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
@@ -35,6 +36,14 @@ export const updateRemoteHumanGrades = createAsyncThunk(
         });
     },
 );
+
+export const reSendAccessEmail = createAsyncThunk('reSendAccessEmail', async (userId: any) => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/customers/${userId}/send-access-email`);
+    const reSendEmail = await endpoint.post('');
+    NotificationsService.success('Access email has been sent.');
+    return reSendEmail;
+});
 
 export const markRemoteCardAsGraded = createAsyncThunk(
     'submissionGrades/markRemoteCardAsGraded',

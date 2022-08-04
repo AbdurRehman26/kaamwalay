@@ -6,11 +6,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerDataQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
+import { reSendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -70,6 +72,7 @@ const Root = styled(Grid)({
 export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
+    const dispatch = useDispatch();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -77,16 +80,20 @@ export function CustomerView() {
         resourceId: Number(id),
     });
 
-    const handleOption = useCallback((action: RowOption, value?: any) => {
-        switch (action) {
-            case RowOption.CreditCustomer:
-                setCreditDialog(true);
-                break;
+    const handleOption = useCallback(
+        (action: RowOption) => {
+            switch (action) {
+                case RowOption.CreditCustomer:
+                    setCreditDialog(true);
+                    break;
 
-            case RowOption.ResendAccessEmail:
-                break;
-        }
-    }, []);
+                case RowOption.ResendAccessEmail:
+                    dispatch(reSendAccessEmail(id));
+                    break;
+            }
+        },
+        [dispatch, id],
+    );
 
     if (isLoading || !data) {
         return (
@@ -129,7 +136,9 @@ export function CustomerView() {
                     </Button>
                     <OptionsMenu onClick={handleOption}>
                         <OptionsMenuItem action={RowOption.CreditCustomer}>Credit Customer</OptionsMenuItem>
-                        <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
+                        {data.createdBy && !data.lastLoginAt ? (
+                            <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
+                        ) : null}
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog

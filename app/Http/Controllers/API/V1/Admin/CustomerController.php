@@ -9,7 +9,7 @@ use App\Services\Admin\CustomerService;
 
 class CustomerController extends Controller
 {
-    public function __construct(private CustomerService $customerService)
+    public function __construct(protected CustomerService $customerService)
     {
     }
 

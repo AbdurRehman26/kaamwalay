@@ -1,17 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search';
-import TabList from '@mui/lab/TabList';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
 import InputAdornment from '@mui/material/InputAdornment';
-import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
 import theme from '@shared/styles/theme';
 
 interface HeaderProps {
@@ -19,6 +13,8 @@ interface HeaderProps {
     isCustomerDetailPage?: boolean;
     dataLength?: number;
     ordersCount?: number;
+    tabs?: React.ReactNode;
+    barCodeButton?: React.ReactNode;
 }
 const styles = {
     header: {
@@ -26,9 +22,6 @@ const styles = {
     },
     customerSearch: {
         padding: '0px',
-    },
-    scanButton: {
-        borderRadius: 18,
     },
     searchField: {
         backgroundColor: '#fff',
@@ -65,7 +58,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount }: HeaderProps) {
+export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount, barCodeButton, tabs }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -109,34 +102,11 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount
                         />
                     ) : null}
                 </Grid>
-                {!isCustomerDetailPage ? (
-                    <Grid container item xs justifyContent={'flex-end'}>
-                        <Tooltip title={'Coming Soon'}>
-                            <span>
-                                <Button
-                                    variant={'contained'}
-                                    color={'primary'}
-                                    startIcon={<Icon>qr_code_scanner</Icon>}
-                                    sx={styles.scanButton}
-                                    disabled
-                                >
-                                    Scan Barcode
-                                </Button>
-                            </span>
-                        </Tooltip>
-                    </Grid>
-                ) : null}
+                <Grid container item xs justifyContent={'flex-end'}>
+                    {barCodeButton}
+                </Grid>
             </Grid>
-            {!isCustomerDetailPage ? (
-                <TabList indicatorColor={'primary'} textColor={'primary'}>
-                    <Tab component={Link} to={'/submissions/all/list'} value={'all'} label="All" />
-                    <Tab component={Link} to={'/submissions/pending/list'} value={'pending'} label="Pending" />
-                    <Tab component={Link} to={'/submissions/reviewed/list'} value={'reviewed'} label="Reviewed" />
-                    <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
-                    <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
-                    <Tab component={Link} to={'/submissions/incomplete/list'} value={'incomplete'} label="Incomplete" />
-                </TabList>
-            ) : null}
+            {tabs}
         </Grid>
     );
 }

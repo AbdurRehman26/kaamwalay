@@ -1,10 +1,16 @@
 import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import Tab from '@mui/material/Tab';
+import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '@shared/components/Customers/Header';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { SubmissionsTable } from './SubmissionsTable';
@@ -19,10 +25,38 @@ const TabContent = styled(TabPanel)(
 export function SubmissionsList() {
     const { tab } = useParams<{ tab: string }>();
     const [search, setSearch] = useState('');
+
+    const tabs = (
+        <TabList indicatorColor={'primary'} textColor={'primary'}>
+            <Tab component={Link} to={'/submissions/all/list'} value={'all'} label="All" />
+            <Tab component={Link} to={'/submissions/pending/list'} value={'pending'} label="Pending" />
+            <Tab component={Link} to={'/submissions/reviewed/list'} value={'reviewed'} label="Reviewed" />
+            <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
+            <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
+            <Tab component={Link} to={'/submissions/incomplete/list'} value={'incomplete'} label="Incomplete" />
+        </TabList>
+    );
+
+    const barCodeButton = (
+        <Tooltip title={'Coming Soon'}>
+            <span>
+                <Button
+                    variant={'contained'}
+                    color={'primary'}
+                    startIcon={<Icon>qr_code_scanner</Icon>}
+                    sx={{ borderRadius: 18 }}
+                    disabled
+                >
+                    Scan Barcode
+                </Button>
+            </span>
+        </Tooltip>
+    );
+
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <Header onSearch={setSearch} />
+                <Header onSearch={setSearch} tabs={tabs} barCodeButton={barCodeButton} />
 
                 <Divider />
                 <TabContent value={'all'}>

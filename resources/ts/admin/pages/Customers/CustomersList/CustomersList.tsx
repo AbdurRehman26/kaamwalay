@@ -8,14 +8,17 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -25,6 +28,7 @@ import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerTableRow } from './CustomerTableRow';
 
@@ -54,6 +58,22 @@ const getFilters = (values: InitialValues) => ({
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
 
+const useStyles = makeStyles(
+    (theme) => ({
+        newCustomerBtn: {
+            borderRadius: 24,
+            padding: '12px 24px',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: 'auto',
+                padding: '9px 16px',
+            },
+        },
+    }),
+    {
+        name: 'ListPageHeader',
+    },
+);
+
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: CustomersListPage
@@ -61,11 +81,22 @@ const getFilters = (values: InitialValues) => ({
  * @time: 21:39
  */
 export function CustomersList() {
+    const classes = useStyles();
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
+    const [addCustomerDialog, setAddCustomerDialog] = useState(false);
+
+    const navigate = useNavigate();
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+
+    const redirectToCustomerProfile = useCallback(
+        (customer: CustomerEntity) => {
+            navigate(`/customers/${customer.id}/view`);
+        },
+        [navigate],
+    );
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -162,6 +193,17 @@ export function CustomersList() {
         }
     }, [dataExportRepository, notifications]);
 
+    const addCustomerButton = (
+        <Button
+            onClick={() => setAddCustomerDialog(true)}
+            variant={'contained'}
+            color={'primary'}
+            className={classes.newCustomerBtn}
+        >
+            Add Customer
+        </Button>
+    );
+
     return (
         <Grid container>
             <ListPageHeader
@@ -169,7 +211,12 @@ export function CustomersList() {
                 title={'Customers'}
                 value={initialValues.search}
                 onSearch={handleSearch}
-                isCustomerPage={true}
+                addCustomerButton={addCustomerButton}
+            />
+            <CustomerAddDialog
+                customerAdded={redirectToCustomerProfile}
+                open={addCustomerDialog}
+                onClose={() => setAddCustomerDialog(!addCustomerDialog)}
             />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>

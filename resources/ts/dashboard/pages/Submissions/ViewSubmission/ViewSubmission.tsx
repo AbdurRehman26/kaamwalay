@@ -90,6 +90,10 @@ export function ViewSubmission() {
                 orderShipment={data?.orderShipment}
                 shippingMethod={data?.shippingMethod}
                 isPaid={data?.paymentStatus === PaymentStatusEnum.PAID}
+                estimatedDeliveryStartAt={data?.estimatedDeliveryStartAt}
+                estimatedDeliveryEndAt={data?.estimatedDeliveryEndAt}
+                serviceLevel={`$${data?.paymentPlan?.price} / Card`}
+                turnAround={data?.paymentPlan.turnaround}
             />
             <Divider />
             <ViewSubmissionInformation

@@ -14,7 +14,10 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -84,6 +87,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 
+        if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
+            $this->addEstimatedDeliveryDateToOrder($order);
+        }
+
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
@@ -114,5 +121,21 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         };
 
         $order->save();
+    }
+
+    protected function addEstimatedDeliveryDateToOrder(Order $order): void
+    {
+        try {
+            $paymentPlan = $order->originalPaymentPlan;
+
+            $order->estimated_delivery_start_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
+            $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
+            $order->save();
+        } catch (Exception $e) {
+            Log::error('Could Not Calculate Order Estimated Date :' . $order->order_number, [
+                'message' => $e->getMessage(),
+            ]);
+            report($e);
+        }
     }
 }

@@ -1,6 +1,5 @@
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
@@ -156,8 +155,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
 
     return (
         <>
-            <Divider sx={{ mt: 3 }} />
-            <Stack py={4} alignItems={'flex-start'}>
+            <Stack py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500}>
                     Shipping/Storage Selection
                 </Typography>

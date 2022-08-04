@@ -422,7 +422,11 @@ it('returns only orders with filtered payment status', function ($data) {
     fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
 ]);
 
-it('calculates estimated delivery date when order is market as reviewed', function () {
+it('calculates estimated delivery date when order is marked as reviewed', function () {
+    Http::fake([
+        'ags.api/*/certificates/*' => Http::response(['data']),
+    ]);
+    
     $order = Order::factory()->create();
 
     $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);

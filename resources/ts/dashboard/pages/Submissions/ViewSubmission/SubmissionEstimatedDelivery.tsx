@@ -18,7 +18,7 @@ export function SubmissionEstimatedDelivery({
     return (
         <>
             <Grid py={1} alignItems={'flex-start'}>
-                <Typography variant={'body1'} fontWeight={500}>
+                <Typography variant={'body1'} fontWeight={500} sx={{ fontSize: '14px' }}>
                     Estimated Delivery
                 </Typography>
                 <Grid container alignItems={'center'}>

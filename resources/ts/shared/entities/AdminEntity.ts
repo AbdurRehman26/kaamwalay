@@ -12,13 +12,10 @@ export class AdminEntity extends Entity {
     public profileImage!: string | null;
     public phone!: string;
     public stripeId!: string;
+    public fullName!: string;
 
     public wallet!: WalletEntity;
 
     @Type(() => RoleEntity)
     public roles!: RoleEntity[];
-
-    public getFullName() {
-        return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
-    }
 }

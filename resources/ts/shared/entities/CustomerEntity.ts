@@ -13,4 +13,8 @@ export class CustomerEntity extends Entity {
     public signedUpAt!: string;
     public createdBy!: string;
     public lastLoginAt!: string;
+
+    public getFullName() {
+        return this.fullName;
+    }
 }

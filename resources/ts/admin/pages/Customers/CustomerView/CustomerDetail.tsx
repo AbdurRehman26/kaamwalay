@@ -9,7 +9,7 @@ import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
-    customerData: CustomerEntity;
+    customer: CustomerEntity;
 }
 
 const Root = styled(Grid)({
@@ -20,7 +20,7 @@ const Root = styled(Grid)({
         margin: '20px',
         padding: '20px',
     },
-    '.CustomerDataHeading': {
+    '.CustomerHeading': {
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
@@ -28,7 +28,7 @@ const Root = styled(Grid)({
         color: 'rgba(0, 0, 0, 0.54)',
         padding: '3px 0px',
     },
-    '.CustomerDataValue': {
+    '.CustomerValue': {
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
@@ -66,7 +66,7 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ customerData }: CustomerDetailProps) {
+export function CustomerDetail({ customer }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
     const handleClick = useCallback(() => setCreditDialog(true), []);
@@ -77,25 +77,23 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'stretch' }}>
                         <div>
-                            <Typography className={'CustomerDataHeading'}>Signed Up:</Typography>
-                            <Typography className={'CustomerDataHeading'}>Created By:</Typography>
-                            <Typography className={'CustomerDataHeading'}>Accessed:</Typography>
+                            <Typography className={'CustomerHeading'}>Signed Up:</Typography>
+                            <Typography className={'CustomerHeading'}>Created By:</Typography>
+                            <Typography className={'CustomerHeading'}>Accessed:</Typography>
                         </div>
                         <div>
-                            <Typography className={'CustomerDataValue'}>{customerData.signedUpAt ?? '-'}</Typography>
-                            <Typography className={'CustomerDataValue'}>
-                                {customerData.createdBy ? `Admin(${customerData.createdBy})` : '-'}
+                            <Typography className={'CustomerValue'}>{customer.signedUpAt ?? '-'}</Typography>
+                            <Typography className={'CustomerValue'}>
+                                {customer.createdBy ? `Admin(${customer.createdBy})` : 'User'}
                             </Typography>
-                            <Typography className={'CustomerDataValue'}>
-                                {customerData.lastLoginAt ? 'Yes' : 'No'}
-                            </Typography>
+                            <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
                         </div>
                     </Grid>
                 </Grid>
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <div>
                         <Typography className={'Submissions'}>Paid Submissions</Typography>
-                        <Typography className={'TotalSubmissions'}>{customerData?.submissions}</Typography>
+                        <Typography className={'TotalSubmissions'}>{customer?.submissions}</Typography>
                     </div>
                 </Grid>
                 <Grid container item xs className={'CustomerDetailBox'}>
@@ -103,7 +101,7 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                         <div>
                             <Typography className={'Wallet'}>Wallet </Typography>
                             <Typography className={'WalletTotalAmount'}>
-                                ${round(customerData?.wallet?.balance, 2).toFixed(2)}
+                                ${round(customer?.wallet?.balance, 2).toFixed(2)}
                             </Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
@@ -112,8 +110,8 @@ export function CustomerDetail({ customerData }: CustomerDetailProps) {
                     </Grid>
                 </Grid>
                 <CustomerCreditDialog
-                    customerName={customerData.fullName}
-                    wallet={customerData.wallet}
+                    customer={customer}
+                    wallet={customer.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
                 />

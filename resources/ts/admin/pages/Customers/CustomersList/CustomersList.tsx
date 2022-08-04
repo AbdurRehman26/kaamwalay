@@ -295,7 +295,7 @@ export function CustomersList() {
                     </TableHead>
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customerData={customer} />
+                            <CustomerTableRow customer={customer} />
                         ))}
                     </TableBody>
                     <TableFooter>

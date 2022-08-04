@@ -41,7 +41,7 @@ const Root = styled(Grid)({
         lineHeight: '28px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
-    '.CustomerDataHeading': {
+    '.CustomerHeading': {
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
@@ -49,10 +49,10 @@ const Root = styled(Grid)({
         color: 'rgba(0, 0, 0, 0.54)',
         padding: '2px 0px',
     },
-    '.CustomerData': {
+    '.Customer': {
         paddingTop: '10px',
     },
-    '.CustomerDataValue': {
+    '.CustomerValue': {
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
@@ -105,16 +105,16 @@ export function CustomerView() {
                     </Avatar>
                 </Grid>
                 <Grid container item xs alignItems={'center'} pl={2}>
-                    <Grid className={'CustomerData'}>
+                    <Grid className={'Customer'}>
                         <Typography className={'CustomerName'}>{data.fullName}</Typography>
-                        <Typography className={'CustomerDataHeading'}>
-                            Customer ID: <span className={'CustomerDataValue'}>{data.customerNumber}</span>
+                        <Typography className={'CustomerHeading'}>
+                            Customer ID: <span className={'CustomerValue'}>{data.customerNumber}</span>
                         </Typography>
-                        <Typography className={'CustomerDataHeading'}>
-                            Email: <span className={'CustomerDataValue'}>{data.email}</span>
+                        <Typography className={'CustomerHeading'}>
+                            Email: <span className={'CustomerValue'}>{data.email}</span>
                         </Typography>
-                        <Typography className={'CustomerDataHeading'}>
-                            Phone: <span className={'CustomerDataValue'}>{data.phone ?? '-'}</span>
+                        <Typography className={'CustomerHeading'}>
+                            Phone: <span className={'CustomerValue'}>{data.phone ?? '-'}</span>
                         </Typography>
                     </Grid>
                 </Grid>
@@ -133,13 +133,13 @@ export function CustomerView() {
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog
-                    customerName={data.fullName}
+                    customer={data}
                     wallet={data?.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
                 />
             </Root>
-            <CustomerDetail customerData={data} />
+            <CustomerDetail customer={data} />
         </>
     );
 }

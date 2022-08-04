@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { ChangeEvent, useCallback, useState } from 'react';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { WalletEntity } from '@shared/entities/WalletEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -24,9 +25,8 @@ import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
 interface Props extends DialogProps {
-    customer?: UserEntity | null;
+    customer?: UserEntity | CustomerEntity | null;
     wallet?: WalletEntity | null;
-    customerName?: string;
 }
 
 const Root = styled(Dialog)(({ theme }) => ({
@@ -90,7 +90,7 @@ const Root = styled(Dialog)(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 18:31
  */
-export function CustomerCreditDialog({ customer, customerName, wallet, onClose, ...rest }: Props) {
+export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -174,7 +174,7 @@ export function CustomerCreditDialog({ customer, customerName, wallet, onClose, 
 
                 <Stack mt={3.5} mb={2}>
                     <Typography variant={'subtitle1'} fontWeight={500}>
-                        {customerName ?? customer?.getFullName()}
+                        {customer?.getFullName()}
                     </Typography>
                     <Grid container alignItems={'center'}>
                         <Typography variant={'body2'} fontWeight={500} color={'textSecondary'}>

@@ -15,8 +15,8 @@ import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 
-interface CustomerTableRowProps {
-    customerData: CustomerEntity;
+interface props {
+    customer: CustomerEntity;
 }
 
 enum RowOption {
@@ -32,11 +32,9 @@ const styles = {
     },
 };
 
-export function CustomerTableRow(props: CustomerTableRowProps) {
-    const { customerData } = props;
+export function CustomerTableRow({ customer }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
-    const customerViewUrl = `/customers/${customerData.id}/view`;
     const navigate = useNavigate();
 
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -66,37 +64,37 @@ export function CustomerTableRow(props: CustomerTableRowProps) {
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
             if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(customerViewUrl);
+                navigate(`/customers/${customer.id}/view`);
             }
         },
-        [navigate, customerViewUrl],
+        [navigate, customer.id],
     );
 
     return (
         <>
-            <TableRow key={customerData.id} onClick={handleRowClick} sx={styles.TableRow}>
+            <TableRow key={customer.id} onClick={handleRowClick} sx={styles.TableRow}>
                 <TableCell variant={'body'}>
                     <Grid container>
-                        <Avatar src={customerData.profileImage ?? ''}>{nameInitials(customerData.fullName)}</Avatar>
+                        <Avatar src={customer.profileImage ?? ''}>{nameInitials(customer.fullName)}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
-                            <Typography variant={'body2'}>{customerData.customerNumber}</Typography>
+                            <Typography variant={'body2'}>{customer.customerNumber}</Typography>
                             <Typography variant={'caption'} color={'textSecondary'}>
-                                {customerData.customerNumber}
+                                {customer.customerNumber}
                             </Typography>
                         </Grid>
                     </Grid>
                 </TableCell>
-                <TableCell variant={'body'}>{customerData.email ?? '-'}</TableCell>
-                <TableCell variant={'body'}>{customerData.phone ?? '-'}</TableCell>
-                <TableCell variant={'body'}>{formatDate(customerData.createdAt, 'MM/DD/YYYY')}</TableCell>
+                <TableCell variant={'body'}>{customer.email ?? '-'}</TableCell>
+                <TableCell variant={'body'}>{customer.phone ?? '-'}</TableCell>
+                <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
                 <TableCell variant={'body'} align={'right'}>
-                    {customerData.submissions ?? 0}
+                    {customer.submissions ?? 0}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
-                    {customerData.cardsCount}
+                    {customer.cardsCount}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
-                    {formatCurrency(customerData.wallet?.balance ?? 0)}
+                    {formatCurrency(customer.wallet?.balance ?? 0)}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <IconButton onClick={handleClickOptions} size="large">
@@ -108,8 +106,8 @@ export function CustomerTableRow(props: CustomerTableRowProps) {
                 </TableCell>
             </TableRow>
             <CustomerCreditDialog
-                customerName={customerData.fullName}
-                wallet={customerData.wallet}
+                customer={customer}
+                wallet={customer.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
             />

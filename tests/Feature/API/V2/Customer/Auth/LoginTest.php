@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Auth\UserLoggedIn;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -8,6 +9,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 test('user can login with valid credentials without platform', function () {
+    Event::fake();
+
     $user = User::factory()->create();
 
     $response = $this->postJson('/api/v2/auth/login', [
@@ -21,6 +24,7 @@ test('user can login with valid credentials without platform', function () {
         'type',
         'expiry',
     ]);
+    Event::assertDispatched(UserLoggedIn::class);
 })->group('auth');
 
 test('user can not login with invalid email', function () {

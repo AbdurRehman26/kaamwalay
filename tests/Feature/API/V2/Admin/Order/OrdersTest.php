@@ -428,17 +428,19 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
     Http::fake([
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
-    
-    $order = Order::factory()->create();
 
-    $paymentPlan = PaymentPlan::find($order->originalPaymentPlan->id);
+    $order = Order::factory()->insuredShipping()->create();
+    $paymentPlan = $order->originalPaymentPlan;
 
-    $order->estimated_delivery_start_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
-    $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
-
-    $order->save();
+    $estimatedDeliveryStartAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
+    $estimatedDeliveryEndAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
 
     $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertOk();
+
+    $order->refresh();
+
+    expect($order->estimated_delivery_start_at)->toEqual($estimatedDeliveryStartAt)
+        ->and($order->estimated_delivery_end_at)->toEqual($estimatedDeliveryEndAt);
 });

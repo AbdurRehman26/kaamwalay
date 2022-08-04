@@ -87,6 +87,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
 
         $this->updateStatusDateOnOrder($order, $orderStatusHistory);
 
+        if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
+            $this->addEstimatedDeliveryDateToOrder($order);
+        }
+
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
@@ -94,10 +98,6 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->notes = $notes;
             $orderStatusHistory->save();
-        }
-
-        if ($orderStatusId === OrderStatus::CONFIRMED && $order->hasInsuredShipping()) {
-            $this->addEstimatedDeliveryDateToOrder($order);
         }
 
         return QueryBuilder::for(OrderStatusHistory::class)

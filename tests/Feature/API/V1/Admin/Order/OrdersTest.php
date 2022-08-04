@@ -88,7 +88,8 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('/api/v1/admin/orders/1?include=customer,orderItems')
+    $order = Order::first();
+    $this->getJson('/api/v1/admin/orders/'. $order->id . '?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -106,8 +107,9 @@ it('returns order details', function () {
 });
 
 test('orders throws error for roles other than admin', function () {
+    $order = Order::first();
     $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
-        ->getJson('/api/v1/admin/orders/1')
+        ->getJson('/api/v1/admin/orders/'. $order->id)
         ->assertForbidden();
 });
 

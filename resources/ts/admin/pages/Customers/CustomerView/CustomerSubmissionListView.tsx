@@ -78,21 +78,18 @@ export function CustomerSubmissionListView() {
         ...bracketParams(),
     });
 
-    useEffect(
-        () => {
-            if (!orders$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
-                orders$.search(
-                    toApiPropertiesObject({
-                        search,
-                        paymentStatus,
-                    }),
-                );
-            }
-        },
+    useEffect(() => {
+        if (!orders$.isLoading && isSearchEnabled) {
+            // noinspection JSIgnoredPromiseFromCall
+            orders$.search(
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                }),
+            );
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search, isSearchEnabled],
-    );
+    }, [search, isSearchEnabled]);
 
     const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (

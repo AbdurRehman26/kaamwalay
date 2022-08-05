@@ -1,5 +1,5 @@
-import { AdminEntity } from './AdminEntity';
 import { Entity } from './Entity';
+import { UserEntity } from './UserEntity';
 import { WalletEntity } from './WalletEntity';
 
 export class CustomerEntity extends Entity {
@@ -11,7 +11,7 @@ export class CustomerEntity extends Entity {
     public submissions!: number;
     public cardsCount!: number;
     public wallet!: WalletEntity;
-    public createdBy!: AdminEntity;
+    public createdBy!: UserEntity;
     public lastLoginAt!: string;
 
     public getFullName() {

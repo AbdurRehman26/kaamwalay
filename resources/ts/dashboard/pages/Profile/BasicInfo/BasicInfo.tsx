@@ -144,7 +144,7 @@ export function BasicInfo() {
     const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
     const [isNewNameSaveDisabled, setIsNewNameSaveDisabled] = useState<boolean>(false);
 
-    const [newUserName, setNewUserName] = useState<string>(user$?.username || '');
+    const [newUserName, setNewUserName] = useState<string>(user$?.userName || '');
     const [isNewUserNameSaveDisabled, setIsNewUserNameSaveDisabled] = useState<boolean>(false);
 
     const [currentPassword, setCurrentPassword] = useState<string>('');
@@ -222,7 +222,7 @@ export function BasicInfo() {
                 case 'userName':
                     setShowName(false);
                     setShowUserName((prev) => !prev);
-                    setNewUserName(user$?.username || '');
+                    setNewUserName(user$?.userName || '');
                     setShowPhone(false);
                     setShowPassword(false);
                     break;
@@ -243,7 +243,7 @@ export function BasicInfo() {
                     break;
             }
         },
-        [user$?.firstName, user$?.lastName, user$?.phone, user$?.username],
+        [user$?.firstName, user$?.lastName, user$?.phone, user$?.userName],
     );
 
     const handleOnNameEdit = useCallback(() => {
@@ -423,7 +423,7 @@ export function BasicInfo() {
                 </BasicInfoRow>
                 <BasicInfoRow
                     label={'username'}
-                    value={user$?.username || '-'}
+                    value={user$?.userName || '-'}
                     shown={showUserName}
                     onSave={onNewUserNameSave}
                     onEdit={handleOnUserNameEdit}
@@ -436,7 +436,7 @@ export function BasicInfo() {
                         </Typography>
 
                         <CustomTextField
-                            label="Enter Username "
+                            label="Enter Username"
                             value={newUserName}
                             onChange={onNewUserNameChange}
                             rows={1}

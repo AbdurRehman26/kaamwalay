@@ -7,7 +7,7 @@ import { Entity } from './Entity';
 import { RoleEntity } from './RoleEntity';
 
 export class UserEntity extends Entity {
-    public username!: string;
+    public userName!: string;
     public email!: string;
     public phone!: string;
     public firstName!: string;
@@ -16,6 +16,7 @@ export class UserEntity extends Entity {
     public customerNumber!: string;
     public profileImage!: string;
     public emailSubscription!: number;
+    public fullName!: string;
 
     public wallet!: WalletEntity;
 

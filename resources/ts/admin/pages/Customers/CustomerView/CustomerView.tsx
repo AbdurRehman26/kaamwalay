@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
-import { useAdminCustomerDataQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
@@ -76,7 +76,7 @@ export function CustomerView() {
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
-    const { data, isLoading } = useAdminCustomerDataQuery({
+    const { data, isLoading } = useAdminCustomerQuery({
         resourceId: Number(id),
     });
 

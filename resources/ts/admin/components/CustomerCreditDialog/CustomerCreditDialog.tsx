@@ -24,7 +24,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
 interface Props extends DialogProps {
-    customer?: UserEntity | null;
+    customer: UserEntity | null;
     wallet?: WalletEntity | null;
 }
 

@@ -7,7 +7,7 @@ import { Entity } from './Entity';
 import { RoleEntity } from './RoleEntity';
 
 export class UserEntity extends Entity {
-    public userName!: string;
+    public username!: string;
     public email!: string;
     public phone!: string;
     public firstName!: string;

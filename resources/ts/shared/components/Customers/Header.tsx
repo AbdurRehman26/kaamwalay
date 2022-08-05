@@ -10,7 +10,7 @@ import theme from '@shared/styles/theme';
 
 interface HeaderProps {
     onSearch?: (query: string) => void;
-    isCustomerDetailPage?: boolean;
+    headerStyles?: any;
     dataLength?: number;
     ordersCount?: number;
     tabs?: React.ReactNode;
@@ -28,12 +28,7 @@ const styles = {
         borderRadius: 24,
         marginLeft: theme.spacing(2),
     },
-    CustomerTitle: {
-        fontWeight: 500,
-        fontSize: '20px',
-        lineHeight: '23px',
-    },
-    Title: {
+    title: {
         fontWeight: 500,
         fontSize: '32px',
         lineHeight: '44px',
@@ -58,7 +53,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount, barCodeButton, tabs }: HeaderProps) {
+export function Header({ onSearch, dataLength, ordersCount, barCodeButton, tabs, headerStyles }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -75,10 +70,10 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount
     );
 
     return (
-        <Grid component={'header'} container sx={{ backgroundColor: isCustomerDetailPage ? '#ffffff' : '#f9f9f9' }}>
-            <Grid container alignItems={'center'} sx={isCustomerDetailPage ? styles.customerSearch : styles.header}>
+        <Grid component={'header'} container sx={{ backgroundColor: headerStyles?.backgroundColor ?? '#f9f9f9' }}>
+            <Grid container alignItems={'center'} sx={headerStyles?.header ?? styles.header}>
                 <Grid item container xs alignItems={'center'}>
-                    <Typography variant={'h4'} sx={isCustomerDetailPage ? styles.CustomerTitle : styles.Title}>
+                    <Typography variant={'h4'} sx={headerStyles?.title ?? styles.title}>
                         Submissions
                     </Typography>
                     {dataLength !== 0 || ordersCount !== 0 ? (

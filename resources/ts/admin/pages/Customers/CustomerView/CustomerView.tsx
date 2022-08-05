@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
@@ -73,12 +73,24 @@ export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
     const dispatch = useDispatch();
+    const [resendCall, setResendCall] = useState(false);
 
-    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const handleCreditDialogClose = useCallback(() => {
+        setCreditDialog(false);
+        setResendCall(!resendCall);
+    }, [resendCall]);
 
-    const { data, isLoading } = useAdminCustomerQuery({
+    const customer$ = useAdminCustomerQuery({
         resourceId: Number(id),
     });
+
+    useEffect(() => {
+        customer$.request();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resendCall]);
+
+    const { data, isLoading } = customer$;
 
     const handleOption = useCallback(
         (action: RowOption) => {

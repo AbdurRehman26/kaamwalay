@@ -87,7 +87,7 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                                 {formatDate(customer.createdAt, 'MM/DD/YYYY') ?? '-'}
                             </Typography>
                             <Typography className={'CustomerValue'}>
-                                {customer?.createdBy?.fullName ?? 'User'}
+                                {customer?.createdBy ? `Admin (${customer?.createdBy?.fullName})` : 'User'}
                             </Typography>
                             <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
                         </div>

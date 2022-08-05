@@ -38,19 +38,21 @@ export function SubmissionsList() {
     );
 
     const headerActions = (
-        <Tooltip title={'Coming Soon'}>
-            <span>
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    startIcon={<Icon>qr_code_scanner</Icon>}
-                    sx={{ borderRadius: 18 }}
-                    disabled
-                >
-                    Scan Barcode
-                </Button>
-            </span>
-        </Tooltip>
+        <Grid container item xs justifyContent={'flex-end'}>
+            <Tooltip title={'Coming Soon'}>
+                <span>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        startIcon={<Icon>qr_code_scanner</Icon>}
+                        sx={{ borderRadius: 18 }}
+                        disabled
+                    >
+                        Scan Barcode
+                    </Button>
+                </span>
+            </Tooltip>
+        </Grid>
     );
 
     return (

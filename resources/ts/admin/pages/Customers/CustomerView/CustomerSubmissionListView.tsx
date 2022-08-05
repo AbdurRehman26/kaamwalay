@@ -51,6 +51,18 @@ const Root = styled(Grid)({
     },
 });
 
+const headerStyles = {
+    backgroundColor: '#fff',
+    header: {
+        padding: '0px',
+    },
+    title: {
+        fontWeight: 500,
+        fontSize: '20px',
+        lineHeight: '23px',
+    },
+};
+
 export function CustomerSubmissionListView() {
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(null);
@@ -138,7 +150,7 @@ export function CustomerSubmissionListView() {
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
                 <Grid sx={{ padding: '20px' }}>
                     <Header
-                        isCustomerDetailPage={true}
+                        headerStyles={headerStyles}
                         dataLength={orders$.data.length}
                         ordersExist={!!ordersCount}
                         onSearch={setSearch}

@@ -7,14 +7,14 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use Illuminate\Console\Command;
 
-class AddNewStatusToOrderStatusHistory extends Command
+class AddAssembledStatusToOrderStatusHistory extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'orders:add-status-history';
+    protected $signature = 'orders:add-assembled-in-status-history';
 
     /**
      * The console command description.
@@ -47,9 +47,11 @@ class AddNewStatusToOrderStatusHistory extends Command
                         'created_at' => $shippedOrderHistory->created_at,
                         'updated_at' => $shippedOrderHistory->updated_at,
                     ]);
+
+                    $this->info("Order: {$order->id} has been updated.");
                 });
 
-            $this->info('All shipped orders are now have assembled status!');
+            $this->info('All shipped orders now have assembled status!');
         }
 
         return 0;

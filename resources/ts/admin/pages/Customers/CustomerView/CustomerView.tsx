@@ -12,7 +12,7 @@ import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerDataQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
-import { reSendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
+import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -88,7 +88,7 @@ export function CustomerView() {
                     break;
 
                 case RowOption.ResendAccessEmail:
-                    dispatch(reSendAccessEmail(id));
+                    dispatch(resendAccessEmail(id));
                     break;
             }
         },

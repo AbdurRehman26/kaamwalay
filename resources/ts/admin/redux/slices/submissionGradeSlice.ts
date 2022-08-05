@@ -37,12 +37,12 @@ export const updateRemoteHumanGrades = createAsyncThunk(
     },
 );
 
-export const reSendAccessEmail = createAsyncThunk('reSendAccessEmail', async (userId: any) => {
+export const resendAccessEmail = createAsyncThunk('resendAccessEmail', async (userId: any) => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/customers/${userId}/send-access-email`);
-    const reSendEmail = await endpoint.post('');
+    const resendEmail = await endpoint.post('');
     NotificationsService.success('Access email has been sent.');
-    return reSendEmail;
+    return resendEmail;
 });
 
 export const markRemoteCardAsGraded = createAsyncThunk(

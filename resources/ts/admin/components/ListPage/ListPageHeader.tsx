@@ -13,7 +13,7 @@ interface Props extends GridProps {
     searchField?: boolean;
     value?: string;
     onSearch?: (search: string) => void;
-    addCustomerButton?: React.ReactNode;
+    headerActions?: React.ReactNode;
 }
 
 const Root = styled(Grid)(() => ({
@@ -39,7 +39,7 @@ const Root = styled(Grid)(() => ({
  * @date: 23.12.2021
  * @time: 21:44
  */
-export function ListPageHeader({ title, searchField, value, onSearch, children, addCustomerButton, ...rest }: Props) {
+export function ListPageHeader({ title, searchField, value, onSearch, children, headerActions, ...rest }: Props) {
     const [search, setSearch] = useState(value ?? '');
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
@@ -95,7 +95,7 @@ export function ListPageHeader({ title, searchField, value, onSearch, children, 
                         />
                     )}
                 </Grid>
-                <Grid item>{addCustomerButton}</Grid>
+                <Grid item>{headerActions}</Grid>
             </Grid>
             {children}
         </Root>

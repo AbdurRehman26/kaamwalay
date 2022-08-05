@@ -14,7 +14,7 @@ interface HeaderProps {
     dataLength?: number;
     ordersCount?: number;
     tabs?: React.ReactNode;
-    barCodeButton?: React.ReactNode;
+    headerActions?: React.ReactNode;
 }
 const styles = {
     header: {
@@ -58,7 +58,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount, barCodeButton, tabs }: HeaderProps) {
+export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount, headerActions, tabs }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -102,9 +102,9 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount
                         />
                     ) : null}
                 </Grid>
-                {barCodeButton ? (
+                {headerActions ? (
                     <Grid container item xs justifyContent={'flex-end'}>
-                        {barCodeButton}
+                        {headerActions}
                     </Grid>
                 ) : null}
             </Grid>

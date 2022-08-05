@@ -193,7 +193,7 @@ export function CustomersList() {
         }
     }, [dataExportRepository, notifications]);
 
-    const addCustomerButton = (
+    const headerActions = (
         <Button
             onClick={() => setAddCustomerDialog(true)}
             variant={'contained'}
@@ -211,7 +211,7 @@ export function CustomersList() {
                 title={'Customers'}
                 value={initialValues.search}
                 onSearch={handleSearch}
-                addCustomerButton={addCustomerButton}
+                headerActions={headerActions}
             />
             <CustomerAddDialog
                 customerAdded={redirectToCustomerProfile}

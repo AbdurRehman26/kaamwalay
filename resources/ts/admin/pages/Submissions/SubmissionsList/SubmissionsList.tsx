@@ -37,7 +37,7 @@ export function SubmissionsList() {
         </TabList>
     );
 
-    const barCodeButton = (
+    const headerActions = (
         <Tooltip title={'Coming Soon'}>
             <span>
                 <Button
@@ -56,7 +56,7 @@ export function SubmissionsList() {
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <Header onSearch={setSearch} tabs={tabs} barCodeButton={barCodeButton} />
+                <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
 
                 <Divider />
                 <TabContent value={'all'}>

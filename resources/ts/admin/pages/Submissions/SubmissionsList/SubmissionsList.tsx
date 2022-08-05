@@ -37,26 +37,28 @@ export function SubmissionsList() {
         </TabList>
     );
 
-    const barCodeButton = (
-        <Tooltip title={'Coming Soon'}>
-            <span>
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    startIcon={<Icon>qr_code_scanner</Icon>}
-                    sx={{ borderRadius: 18 }}
-                    disabled
-                >
-                    Scan Barcode
-                </Button>
-            </span>
-        </Tooltip>
+    const headerActions = (
+        <Grid container item xs justifyContent={'flex-end'}>
+            <Tooltip title={'Coming Soon'}>
+                <span>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        startIcon={<Icon>qr_code_scanner</Icon>}
+                        sx={{ borderRadius: 18 }}
+                        disabled
+                    >
+                        Scan Barcode
+                    </Button>
+                </span>
+            </Tooltip>
+        </Grid>
     );
 
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <Header onSearch={setSearch} tabs={tabs} barCodeButton={barCodeButton} />
+                <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
 
                 <Divider />
                 <TabContent value={'all'}>

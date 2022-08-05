@@ -185,7 +185,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 })}
             </Grid>
             <TableContainer>
-                <CustomerSubmissionsList orderData={orders$.data} paginationProp={orders$.paginationProps} />
+                <CustomerSubmissionsList orders={orders$.data} paginationProp={orders$.paginationProps} />
             </TableContainer>
         </Grid>
     );

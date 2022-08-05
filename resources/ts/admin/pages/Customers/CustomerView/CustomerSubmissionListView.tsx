@@ -179,7 +179,7 @@ export function CustomerSubmissionListView() {
                                 </Grid>
                                 <TableContainer>
                                     <CustomerSubmissionsList
-                                        orderData={orders$.data}
+                                        orders={orders$.data}
                                         paginationProp={orders$.paginationProps}
                                         isCustomerDetailPage={true}
                                     />

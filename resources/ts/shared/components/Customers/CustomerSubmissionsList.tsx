@@ -13,14 +13,14 @@ import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/Submis
 
 interface CustomerSubmissionsListProps {
     tabFilter?: OrderStatusEnum;
-    orderData: OrderEntity[];
+    orders: OrderEntity[];
     paginationProp?: any;
     isCustomerDetailPage?: boolean;
 }
 
 export function CustomerSubmissionsList({
     tabFilter,
-    orderData,
+    orders,
     paginationProp,
     isCustomerDetailPage,
 }: CustomerSubmissionsListProps) {
@@ -48,8 +48,8 @@ export function CustomerSubmissionsList({
                 </TableRow>
             </TableHead>
             <TableBody>
-                {orderData?.length > 0 ? (
-                    orderData.map((order) => (
+                {orders?.length > 0 ? (
+                    orders.map((order) => (
                         <SubmissionsTableRow
                             order={order}
                             key={order.id}

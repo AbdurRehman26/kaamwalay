@@ -140,7 +140,7 @@ export function CustomerSubmissionListView() {
                     <Header
                         isCustomerDetailPage={true}
                         dataLength={orders$.data.length}
-                        ordersCount={ordersCount}
+                        ordersExist={!!ordersCount}
                         onSearch={setSearch}
                     />
                 </Grid>

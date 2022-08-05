@@ -12,7 +12,7 @@ interface HeaderProps {
     onSearch?: (query: string) => void;
     isCustomerDetailPage?: boolean;
     dataLength?: number;
-    ordersCount?: number;
+    ordersExist?: boolean;
     tabs?: React.ReactNode;
     headerActions?: React.ReactNode;
 }
@@ -58,7 +58,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount, headerActions, tabs }: HeaderProps) {
+export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersExist, headerActions, tabs }: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -81,7 +81,7 @@ export function Header({ onSearch, isCustomerDetailPage, dataLength, ordersCount
                     <Typography variant={'h4'} sx={isCustomerDetailPage ? styles.CustomerTitle : styles.Title}>
                         Submissions
                     </Typography>
-                    {dataLength !== 0 || ordersCount !== 0 ? (
+                    {dataLength !== 0 || ordersExist ? (
                         <TextField
                             variant={'outlined'}
                             onChange={handleSearch}

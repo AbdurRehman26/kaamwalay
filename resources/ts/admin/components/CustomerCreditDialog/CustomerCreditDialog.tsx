@@ -13,7 +13,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { ChangeEvent, useCallback, useState } from 'react';
-import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { WalletEntity } from '@shared/entities/WalletEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -25,7 +24,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
 interface Props extends DialogProps {
-    customer?: UserEntity | CustomerEntity | null;
+    customer?: UserEntity | null;
     wallet?: WalletEntity | null;
 }
 

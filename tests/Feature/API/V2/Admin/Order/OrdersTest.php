@@ -135,6 +135,15 @@ it('returns only placed orders', function () {
         ]);
 });
 
+it('returns only reviewed orders', function () {
+    $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[status]=confirmed')
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'order_status_id' => OrderStatus::CONFIRMED,
+        ]);
+});
+
 it('returns only graded orders', function () {
     $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[status]=graded')
         ->assertOk()
@@ -246,6 +255,24 @@ it(
     fn () => $this->orders[0]->user->first_name,
     fn () => '000000100', // cert number of the first order's first item
 ]);
+
+test('an admin can complete review of an order', function () {
+    Http::fake([
+        'ags.api/*/certificates/*' => Http::response(['data']),
+    ]);
+    Bus::fake();
+    $response = $this->postJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/status-history', [
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+
+    $response->assertSuccessful();
+    $response->assertJson([
+        'data' => [
+            'order_id' => $this->orders[0]->id,
+            'order_status_id' => OrderStatus::CONFIRMED,
+        ],
+    ]);
+});
 
 test('an admin can not complete review of an order if error occurred with AGS client', function () {
     Http::fake([

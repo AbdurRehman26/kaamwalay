@@ -1,7 +1,6 @@
 import { UserEntity } from './UserEntity';
 
 export class CustomerEntity extends UserEntity {
-    public fullName!: string;
     public submissions!: number;
     public cardsCount!: number;
     public createdBy!: UserEntity;

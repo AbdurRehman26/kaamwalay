@@ -436,7 +436,7 @@ export function BasicInfo() {
                         </Typography>
 
                         <CustomTextField
-                            label="Enter Username"
+                            label="Enter Username "
                             value={newUserName}
                             onChange={onNewUserNameChange}
                             rows={1}

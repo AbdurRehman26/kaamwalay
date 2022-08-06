@@ -1,4 +1,3 @@
-import ErrorIcon from '@mui/icons-material/Error';
 import InfoTwoTone from '@mui/icons-material/Info';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -71,7 +70,7 @@ export function ViewSubmissionStatus({
     const steps = useMemo(() => Object.values(SubmissionSteps), []);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    function getpreShipmentNoteContent() {
+    function getPreShipmentNoteContent() {
         const isVaultStorage = shippingMethod?.code === ShippingMethodType.VaultStorage;
         const preShipmentNote = 'PLEASE NOTE: You won’t be able to see your grades until your cards are ';
         if (isVaultStorage) {
@@ -110,22 +109,6 @@ export function ViewSubmissionStatus({
             <Typography variant={'caption'} color={'primary'} className={cx(classes.textGutter, classes.darkText)}>
                 {statusDescription}
             </Typography>
-            <Grid marginBottom={1} item alignItems={'end'} display={'flex'}>
-                <ErrorIcon
-                    sx={{
-                        marginRight: '4px',
-                        color: 'rgba(0, 0, 0, 0.54)',
-                    }}
-                />
-                <Typography
-                    mt={1}
-                    variant={'body2'}
-                    color={'primary'}
-                    className={cx(classes.fontMedium, classes.darkText)}
-                >
-                    PLEASE NOTE: You won't be able to see your grades until your cards are shipped.
-                </Typography>
-            </Grid>
             {orderStatus.toLowerCase() !== 'shipped' ? (
                 <Box display={'flex'} alignItems={'center'}>
                     <IconButton sx={{ paddingLeft: '0px', paddingRight: '6px', paddingTop: '6px' }}>
@@ -133,7 +116,7 @@ export function ViewSubmissionStatus({
                     </IconButton>
 
                     <Typography sx={{ fontWeight: '500', fontSize: '14px' }} mt={isMobile ? 2 : 0}>
-                        {getpreShipmentNoteContent()}
+                        {getPreShipmentNoteContent()}
                     </Typography>
                 </Box>
             ) : null}

@@ -16,7 +16,7 @@ class PaymentPlan extends Model
      *
      * @var array
      */
-    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position'];
+    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position', 'estimated_delivery_days_min', 'estimated_delivery_days_max'];
 
     /**
      * The attributes that should be cast to native types.
@@ -31,5 +31,7 @@ class PaymentPlan extends Model
         'turnaround' => 'string',
         'max_protection_amount' => 'float',
         'display_position' => 'integer',
+        'estimated_delivery_days_min' => 'integer',
+        'estimated_delivery_days_max' => 'integer',
     ];
 }

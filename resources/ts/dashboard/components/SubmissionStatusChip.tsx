@@ -13,7 +13,6 @@ const colorsMap: { [key in OrderStatusEnum]: StatusColorProps } = {
     [OrderStatusEnum.GRADED]: { primary: 'rgba(33, 70, 199, 1)', secondary: 'rgba(33, 70, 199, 0.12)' },
     [OrderStatusEnum.SHIPPED]: { primary: 'rgba(32, 169, 38, 1)', secondary: 'rgba(32, 169, 38, 0.12)' },
     [OrderStatusEnum.CANCELLED]: { primary: '#000000', secondary: 'rgba(0, 0, 0, 0.12)' },
-    [OrderStatusEnum.REVIEWED]: { primary: '#000000', secondary: 'rgba(0, 0, 0, 0.12)' },
     [OrderStatusEnum.ASSEMBLED]: { primary: '#000000', secondary: 'rgba(0, 0, 0, 0.12)' },
 };
 

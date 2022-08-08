@@ -30,7 +30,7 @@ const STATUS_DESCRIPTION_MAP = {
     gradedVaultStorage:
         'Your cards have been graded! We are now preparing your cards for vault storage. You can see all grades in "Your Cards" tab, once they are stored in the vault.',
     assembled:
-        'Your graded cards have been slabbed and packed for shipment! We will notify you via email as soon as your cards are graded so you can preview your grades.',
+        'Your graded cards have been slabbed and packed for shipment! We will notify you via email as soon as your cards are shipped so you can preview your grades.',
     shipped: 'Your cards have been shipped! You can now see all your grades in "Your Cards" tab.',
     shippedVaultStorage:
         'Your cards have been stored in the AGS vault! You can now see all your grades in "Your Cards" tab.',

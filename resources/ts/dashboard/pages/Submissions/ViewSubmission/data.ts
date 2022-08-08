@@ -20,7 +20,7 @@ export const SubmissionDetails: Record<SubmissionSteps, string[]> = {
         'We are now preparing your cards for return shipment.',
     ],
     Assembled: [
-        'Your graded cards have been slabbed and packed for shipment! We will notify you via email as soon as your cards are graded so you can preview your grades.',
+        'Your graded cards have been slabbed and packed for shipment! We will notify you via email as soon as your cards are shipped so you can preview your grades.',
     ],
     Shipped: ['We have sent out the return shipment. You can track your shipment here:'],
 };

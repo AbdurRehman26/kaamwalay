@@ -143,7 +143,7 @@ export function SubmissionActionButton({
                             Mark Shipped
                         </LoadingButton>
                     )
-                ) : !inVault ? (
+                ) : !inVault && orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     <>
                         {!buttonOnly ? (
                             <EditTrackingInformation

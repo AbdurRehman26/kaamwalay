@@ -69,8 +69,13 @@ const Root = styled(Grid)({
 
 export function CustomerDetail({ customer }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
-    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const [resendCall, setResendCall] = useState(false);
     const handleClick = useCallback(() => setCreditDialog(true), []);
+
+    const handleCreditDialogClose = useCallback(() => {
+        setCreditDialog(false);
+        setResendCall(!resendCall);
+    }, [resendCall]);
 
     return (
         <>

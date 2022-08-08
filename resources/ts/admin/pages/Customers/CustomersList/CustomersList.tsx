@@ -1,4 +1,3 @@
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -9,16 +8,17 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
+import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
-import { UserEntity } from '@shared/entities/UserEntity';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -26,12 +26,11 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { nameInitials } from '@shared/lib/strings/initials';
-import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
+import { CustomerTableRow } from './CustomerTableRow';
 
 type InitialValues = {
     minSubmissions: string;
@@ -59,9 +58,21 @@ const getFilters = (values: InitialValues) => ({
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
 
-enum RowOption {
-    CreditCustomer,
-}
+const useStyles = makeStyles(
+    (theme) => ({
+        newCustomerBtn: {
+            borderRadius: 24,
+            padding: '12px 24px',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: 'auto',
+                padding: '9px 16px',
+            },
+        },
+    }),
+    {
+        name: 'ListPageHeader',
+    },
+);
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -69,14 +80,23 @@ enum RowOption {
  * @date: 23.12.2021
  * @time: 21:39
  */
-export function CustomersListPage() {
-    const [customer, setCustomer] = useState<UserEntity | null>(null);
-
+export function CustomersList() {
+    const classes = useStyles();
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
+    const [addCustomerDialog, setAddCustomerDialog] = useState(false);
+
+    const navigate = useNavigate();
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+
+    const redirectToCustomerProfile = useCallback(
+        (customer: CustomerEntity) => {
+            navigate(`/customers/${customer.id}/view`);
+        },
+        [navigate],
+    );
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -88,8 +108,6 @@ export function CustomersListPage() {
         }),
         [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
     );
-
-    const handleCreditDialogClose = useCallback(() => setCustomer(null), []);
 
     const customers = useAdminCustomersQuery({
         params: {
@@ -160,20 +178,6 @@ export function CustomersListPage() {
         [customers, setQuery],
     );
 
-    const handleOption = useCallback((action: RowOption, value?: any) => {
-        switch (action) {
-            case RowOption.CreditCustomer:
-                const [firstName, lastName] = value.fullName.split(' ');
-                const user = new UserEntity();
-                user.id = value.id;
-                user.firstName = firstName;
-                user.lastName = lastName;
-                user.wallet = value.wallet;
-                setCustomer(user);
-                break;
-        }
-    }, []);
-
     const handleExportData = useCallback(async () => {
         try {
             const exportData = await dataExportRepository.export({
@@ -189,9 +193,31 @@ export function CustomersListPage() {
         }
     }, [dataExportRepository, notifications]);
 
+    const headerActions = (
+        <Button
+            onClick={() => setAddCustomerDialog(true)}
+            variant={'contained'}
+            color={'primary'}
+            className={classes.newCustomerBtn}
+        >
+            Add Customer
+        </Button>
+    );
+
     return (
         <Grid container>
-            <ListPageHeader searchField title={'Customers'} value={initialValues.search} onSearch={handleSearch} />
+            <ListPageHeader
+                searchField
+                title={'Customers'}
+                value={initialValues.search}
+                onSearch={handleSearch}
+                headerActions={headerActions}
+            />
+            <CustomerAddDialog
+                customerAdded={redirectToCustomerProfile}
+                open={addCustomerDialog}
+                onClose={() => setAddCustomerDialog(!addCustomerDialog)}
+            />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'subtitle1'}>{customers.pagination.meta.total} Result(s)</Typography>
@@ -316,40 +342,7 @@ export function CustomersListPage() {
                     </TableHead>
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <TableRow key={customer.id}>
-                                <TableCell variant={'body'}>
-                                    <Grid container>
-                                        <Avatar src={customer.profileImage ?? ''}>
-                                            {nameInitials(customer.fullName)}
-                                        </Avatar>
-                                        <Grid item xs container direction={'column'} pl={2}>
-                                            <Typography variant={'body2'}>{customer.fullName}</Typography>
-                                            <Typography variant={'caption'} color={'textSecondary'}>
-                                                {customer.customerNumber}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </TableCell>
-                                <TableCell variant={'body'}>{customer.email ?? '-'}</TableCell>
-                                <TableCell variant={'body'}>{customer.phone ?? '-'}</TableCell>
-                                <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {customer.submissions ?? 0}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {customer.cardsCount}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    {formatCurrency(customer.wallet?.balance ?? 0)}
-                                </TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.CreditCustomer} value={customer}>
-                                            Credit Customer
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
-                                </TableCell>
-                            </TableRow>
+                            <CustomerTableRow customer={customer} />
                         ))}
                     </TableBody>
                     <TableFooter>
@@ -359,15 +352,8 @@ export function CustomersListPage() {
                     </TableFooter>
                 </Table>
             </TableContainer>
-
-            <CustomerCreditDialog
-                customer={customer}
-                wallet={customer?.wallet}
-                open={!!customer}
-                onClose={handleCreditDialogClose}
-            />
         </Grid>
     );
 }
 
-export default CustomersListPage;
+export default CustomersList;

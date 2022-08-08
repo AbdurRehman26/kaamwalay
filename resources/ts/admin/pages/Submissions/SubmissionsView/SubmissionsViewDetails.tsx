@@ -62,6 +62,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         customerEmail,
         customerPhone,
         customerNumber,
+        customerId,
         serviceFee,
         shippingFee,
         cleaningFee,
@@ -102,13 +103,13 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                     '',
                     <>
                         Customer ID:&nbsp;
-                        <MuiLink component={Link} to={`/customers/list?search=${customerNumber}`} color={'primary'}>
+                        <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
                             {customerNumber}
                         </MuiLink>
                     </>,
                 ],
             ].filter(Boolean),
-        [customerEmail, customerName, customerNumber, customerPhone],
+        [customerEmail, customerName, customerNumber, customerPhone, customerId],
     );
 
     const paymentInfo = useMemo(

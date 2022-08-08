@@ -16,6 +16,7 @@ export class UserEntity extends Entity {
     public customerNumber!: string;
     public profileImage!: string;
     public emailSubscription!: number;
+    public fullName!: string;
 
     public wallet!: WalletEntity;
 

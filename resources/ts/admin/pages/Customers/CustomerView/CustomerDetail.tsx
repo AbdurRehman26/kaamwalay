@@ -11,6 +11,7 @@ import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
     customer: CustomerEntity;
+    onResend?: any;
 }
 
 const Root = styled(Grid)({
@@ -67,7 +68,7 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ customer }: CustomerDetailProps) {
+export function CustomerDetail({ customer, onResend }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
     const [resendCall, setResendCall] = useState(false);
     const handleClick = useCallback(() => setCreditDialog(true), []);
@@ -75,6 +76,9 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
         setResendCall(!resendCall);
+        onResend(resendCall);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resendCall]);
 
     return (

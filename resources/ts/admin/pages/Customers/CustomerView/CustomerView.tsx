@@ -160,7 +160,7 @@ export function CustomerView() {
                     onClose={handleCreditDialogClose}
                 />
             </Root>
-            <CustomerDetail customer={data} />
+            <CustomerDetail customer={data} onResend={setResendCall} />
         </>
     );
 }

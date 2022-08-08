@@ -29,6 +29,7 @@ test('an admin can ship order when shipping method is insured', function () {
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
         'shipping_method_id' => 1,
+        'order_status_id' => OrderStatus::ASSEMBLED,
     ]);
 
     postJson(route('v2.admin.orders.update-shipment', ['order' => $this->order]), [
@@ -57,6 +58,7 @@ test('an admin can ship order when shipping method is vault', function () {
 
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
+        'order_status_id' => OrderStatus::ASSEMBLED,
         'shipping_method_id' => ShippingMethod::factory()->create([
             'code' => 'vault_storage',
         ])->id,

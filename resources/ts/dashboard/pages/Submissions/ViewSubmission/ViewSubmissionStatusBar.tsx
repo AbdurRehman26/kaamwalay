@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
 import { cx } from '@shared/lib/utils/cx';
@@ -29,16 +30,18 @@ export function ViewSubmissionStatusBar({ currentStep, steps, isVaultStorage }: 
     };
 
     return (
-        <nav className={classes.root}>
-            {steps.map((step, index) => (
-                <div className={classes.itemHolder} key={index}>
-                    <div className={cx(classes.item, { [classes.itemActive]: index <= stepIndex })}>
-                        <Typography variant={'body2'} className={classes.label}>
-                            {getLabel(step)}
-                        </Typography>
+        <Box className={classes.parentDiv}>
+            <nav className={classes.root}>
+                {steps.map((step, index) => (
+                    <div className={classes.itemHolder} key={index}>
+                        <div className={cx(classes.item, { [classes.itemActive]: index <= stepIndex })}>
+                            <Typography variant={'body2'} className={classes.label}>
+                                {getLabel(step)}
+                            </Typography>
+                        </div>
                     </div>
-                </div>
-            ))}
-        </nav>
+                ))}
+            </nav>
+        </Box>
     );
 }

@@ -4,15 +4,14 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
-import { RootState } from '@admin/redux/store';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
     customer: CustomerEntity;
+    handleResendCall?: any;
 }
 
 const Root = styled(Grid)({
@@ -69,9 +68,8 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ customer }: CustomerDetailProps) {
+export function CustomerDetail({ customer, handleResendCall }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
-    const amount = useSelector((state: RootState) => state.wallet.walletAmountState.amount);
 
     const handleCreditDialog = useCallback(() => {
         setCreditDialog(!creditDialog);
@@ -108,7 +106,9 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                     <Grid container>
                         <div>
                             <Typography className={'Wallet'}>Wallet </Typography>
-                            <Typography className={'WalletTotalAmount'}>${round(amount, 2).toFixed(2)}</Typography>
+                            <Typography className={'WalletTotalAmount'}>
+                                ${round(customer?.wallet?.balance, 2).toFixed(2)}
+                            </Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
                             <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />
@@ -119,8 +119,8 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                     customer={customer}
                     wallet={customer.wallet}
                     open={creditDialog}
+                    onSubmit={handleResendCall}
                     onClose={handleCreditDialog}
-                    walletBalance={amount}
                 />
             </Root>
             <CustomerSubmissionListView />

@@ -20,14 +20,12 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { updateOrderWalletById } from '@shared/redux/slices/adminOrdersSlice';
 import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
-import { setWalletAmount } from '@admin/redux/slices/walletSlice';
 import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
 interface Props extends DialogProps {
     customer?: UserEntity | null;
     wallet?: WalletEntity | null;
-    walletBalance?: number;
 }
 
 const Root = styled(Dialog)(({ theme }) => ({
@@ -91,7 +89,7 @@ const Root = styled(Dialog)(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 18:31
  */
-export function CustomerCreditDialog({ customer, wallet, onClose, walletBalance, ...rest }: Props) {
+export function CustomerCreditDialog({ customer, wallet, onClose, onSubmit, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -118,7 +116,10 @@ export function CustomerCreditDialog({ customer, wallet, onClose, walletBalance,
                 setLoading(true);
                 await walletRepository.addCredit(wallet.id, amount);
                 const result = await dispatch(updateOrderWalletById(wallet.id));
-                dispatch(setWalletAmount(result.payload.balance));
+
+                if (onSubmit) {
+                    onSubmit(result.payload.balance);
+                }
             } catch (e: any) {
                 notifications.exception(e);
                 return;
@@ -129,7 +130,7 @@ export function CustomerCreditDialog({ customer, wallet, onClose, walletBalance,
         }
 
         handleClose({});
-    }, [amount, dispatch, handleClose, notifications, wallet?.id, walletRepository]);
+    }, [amount, dispatch, handleClose, notifications, onSubmit, wallet?.id, walletRepository]);
 
     return (
         <Root onClose={handleClose} {...rest}>
@@ -183,7 +184,7 @@ export function CustomerCreditDialog({ customer, wallet, onClose, walletBalance,
                             Wallet Balance:
                         </Typography>
                         <Typography variant={'body2'} ml={0.5}>
-                            {formatCurrency(walletBalance ?? wallet?.balance ?? 0)}
+                            {formatCurrency(wallet?.balance ?? 0)}
                         </Typography>
                     </Grid>
                 </Stack>

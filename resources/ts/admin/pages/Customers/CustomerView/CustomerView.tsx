@@ -5,16 +5,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
-import { setWalletAmount } from '@admin/redux/slices/walletSlice';
-import { RootState } from '@admin/redux/store';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -74,7 +72,6 @@ const Root = styled(Grid)({
 export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
-    const amount = useSelector((state: RootState) => state.wallet.walletAmountState.amount);
     const dispatch = useDispatch();
 
     const handleCreditDialogClose = useCallback(() => {
@@ -85,11 +82,11 @@ export function CustomerView() {
         resourceId: Number(id),
     });
 
-    const { data, isLoading } = customer$;
+    const handleReloadCustomerData = useCallback(() => {
+        customer$.request();
+    }, [customer$]);
 
-    useEffect(() => {
-        dispatch(setWalletAmount(data?.wallet?.balance ?? 0));
-    }, [dispatch, data?.wallet?.balance]);
+    const { data, isLoading } = customer$;
 
     const handleOption = useCallback(
         (action: RowOption) => {
@@ -157,10 +154,10 @@ export function CustomerView() {
                     wallet={data?.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
-                    walletBalance={amount}
+                    onSubmit={handleReloadCustomerData}
                 />
             </Root>
-            <CustomerDetail customer={data} />
+            <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
         </>
     );
 }

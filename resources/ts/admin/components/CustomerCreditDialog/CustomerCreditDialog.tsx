@@ -20,6 +20,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { updateOrderWalletById } from '@shared/redux/slices/adminOrdersSlice';
 import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
+import { setWalletAmount } from '@admin/redux/slices/walletSlice';
 import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
@@ -115,7 +116,8 @@ export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Pro
             try {
                 setLoading(true);
                 await walletRepository.addCredit(wallet.id, amount);
-                await dispatch(updateOrderWalletById(wallet.id));
+                const result = await dispatch(updateOrderWalletById(wallet.id));
+                dispatch(setWalletAmount(result.payload.balance));
             } catch (e: any) {
                 notifications.exception(e);
                 return;

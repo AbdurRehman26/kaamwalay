@@ -396,6 +396,7 @@ export const adminOrdersSlice = createSlice({
         });
 
         builder.addCase(updateOrderWalletById.fulfilled, (state, { payload }) => {
+            console.log(state);
             const entities = { ...state.entities };
             Object.entries(entities).forEach(([key, value]) => {
                 if (value?.customer?.wallet?.id === payload.id) {

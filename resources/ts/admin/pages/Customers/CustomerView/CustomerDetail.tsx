@@ -4,14 +4,15 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
+import { RootState } from '@admin/redux/store';
 import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
     customer: CustomerEntity;
-    onResend?: any;
 }
 
 const Root = styled(Grid)({
@@ -68,18 +69,13 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ customer, onResend }: CustomerDetailProps) {
+export function CustomerDetail({ customer }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
-    const [resendCall, setResendCall] = useState(false);
-    const handleClick = useCallback(() => setCreditDialog(true), []);
+    const amount = useSelector((state: RootState) => state.wallet.walletAmountState.amount);
 
-    const handleCreditDialogClose = useCallback(() => {
-        setCreditDialog(false);
-        setResendCall(!resendCall);
-        onResend(resendCall);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resendCall]);
+    const handleCreditDialog = useCallback(() => {
+        setCreditDialog(!creditDialog);
+    }, [creditDialog]);
 
     return (
         <>
@@ -113,11 +109,11 @@ export function CustomerDetail({ customer, onResend }: CustomerDetailProps) {
                         <div>
                             <Typography className={'Wallet'}>Wallet </Typography>
                             <Typography className={'WalletTotalAmount'}>
-                                ${round(customer?.wallet?.balance, 2).toFixed(2)}
+                                ${round(amount !== 0 ? amount : customer?.wallet?.balance, 2).toFixed(2)}
                             </Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
-                            <AddIcon onClick={handleClick} sx={{ cursor: 'pointer' }} />
+                            <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -125,7 +121,7 @@ export function CustomerDetail({ customer, onResend }: CustomerDetailProps) {
                     customer={customer}
                     wallet={customer.wallet}
                     open={creditDialog}
-                    onClose={handleCreditDialogClose}
+                    onClose={handleCreditDialog}
                 />
             </Root>
             <CustomerSubmissionListView />

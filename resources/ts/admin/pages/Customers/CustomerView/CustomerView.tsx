@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
@@ -73,22 +73,18 @@ export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
     const dispatch = useDispatch();
-    const [resendCall, setResendCall] = useState(false);
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
-        setResendCall(!resendCall);
-    }, [resendCall]);
+    }, []);
 
     const customer$ = useAdminCustomerQuery({
         resourceId: Number(id),
     });
 
-    useEffect(() => {
+    const handleReloadCustomerData = useCallback(() => {
         customer$.request();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resendCall]);
+    }, [customer$]);
 
     const { data, isLoading } = customer$;
 
@@ -158,9 +154,10 @@ export function CustomerView() {
                     wallet={data?.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
+                    onSubmit={handleReloadCustomerData}
                 />
             </Root>
-            <CustomerDetail customer={data} />
+            <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
         </>
     );
 }

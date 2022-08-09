@@ -11,6 +11,7 @@ import { CustomerSubmissionListView } from './CustomerSubmissionListView';
 
 interface CustomerDetailProps {
     customer: CustomerEntity;
+    handleResendCall?: any;
 }
 
 const Root = styled(Grid)({
@@ -67,10 +68,12 @@ const Root = styled(Grid)({
     },
 });
 
-export function CustomerDetail({ customer }: CustomerDetailProps) {
+export function CustomerDetail({ customer, handleResendCall }: CustomerDetailProps) {
     const [creditDialog, setCreditDialog] = useState(false);
-    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
-    const handleClick = useCallback(() => setCreditDialog(true), []);
+
+    const handleCreditDialog = useCallback(() => {
+        setCreditDialog(!creditDialog);
+    }, [creditDialog]);
 
     return (
         <>
@@ -108,7 +111,7 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                             </Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
-                            <AddIcon onClick={handleClick} sx={{ cursor: 'pointer' }} />
+                            <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -116,7 +119,8 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                     customer={customer}
                     wallet={customer.wallet}
                     open={creditDialog}
-                    onClose={handleCreditDialogClose}
+                    onSubmit={handleResendCall}
+                    onClose={handleCreditDialog}
                 />
             </Root>
             <CustomerSubmissionListView />

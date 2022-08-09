@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
@@ -13,6 +13,7 @@ import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
+import { setWalletAmount } from '@admin/redux/slices/walletSlice';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -83,6 +84,10 @@ export function CustomerView() {
     });
 
     const { data, isLoading } = customer$;
+
+    useEffect(() => {
+        dispatch(setWalletAmount(data?.wallet?.balance ?? 0));
+    }, [dispatch, data?.wallet?.balance]);
 
     const handleOption = useCallback(
         (action: RowOption) => {

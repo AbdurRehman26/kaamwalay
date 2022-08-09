@@ -108,9 +108,7 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                     <Grid container>
                         <div>
                             <Typography className={'Wallet'}>Wallet </Typography>
-                            <Typography className={'WalletTotalAmount'}>
-                                ${round(amount !== 0 ? amount : customer?.wallet?.balance, 2).toFixed(2)}
-                            </Typography>
+                            <Typography className={'WalletTotalAmount'}>${round(amount, 2).toFixed(2)}</Typography>
                         </div>
                         <Grid container item xs justifyContent={'flex-end'}>
                             <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />

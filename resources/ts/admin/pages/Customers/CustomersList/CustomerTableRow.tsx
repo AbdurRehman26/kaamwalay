@@ -77,7 +77,7 @@ export function CustomerTableRow({ customer }: props) {
                     <Grid container>
                         <Avatar src={customer.profileImage ?? ''}>{nameInitials(customer.fullName)}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
-                            <Typography variant={'body2'}>{customer.customerNumber}</Typography>
+                            <Typography variant={'body2'}>{customer.fullName}</Typography>
                             <Typography variant={'caption'} color={'textSecondary'}>
                                 {customer.customerNumber}
                             </Typography>

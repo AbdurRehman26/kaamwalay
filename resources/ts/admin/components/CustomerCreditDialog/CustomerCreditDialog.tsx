@@ -27,6 +27,7 @@ import { CustomerCreditHistory } from './CustomerCreditHistory';
 interface Props extends DialogProps {
     customer?: UserEntity | null;
     wallet?: WalletEntity | null;
+    walletBalance?: number;
 }
 
 const Root = styled(Dialog)(({ theme }) => ({
@@ -90,7 +91,7 @@ const Root = styled(Dialog)(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 18:31
  */
-export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Props) {
+export function CustomerCreditDialog({ customer, wallet, onClose, walletBalance, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -182,7 +183,7 @@ export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Pro
                             Wallet Balance:
                         </Typography>
                         <Typography variant={'body2'} ml={0.5}>
-                            {formatCurrency(wallet?.balance ?? 0)}
+                            {formatCurrency(walletBalance ?? wallet?.balance ?? 0)}
                         </Typography>
                     </Grid>
                 </Stack>

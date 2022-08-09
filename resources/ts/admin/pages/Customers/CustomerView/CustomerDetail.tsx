@@ -120,6 +120,7 @@ export function CustomerDetail({ customer }: CustomerDetailProps) {
                     wallet={customer.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialog}
+                    walletBalance={amount}
                 />
             </Root>
             <CustomerSubmissionListView />

@@ -27,7 +27,7 @@ export class UserEntity extends Entity {
     public roles!: RoleEntity[];
 
     public getFullName() {
-        return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
+        return this.fullName ?? `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
     }
 
     public hasRole(role: RolesEnum): boolean {

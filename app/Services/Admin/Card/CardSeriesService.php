@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardSeriesCreatedEvent;
+use App\Models\CardCategory;
 use App\Models\CardSeries;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,7 +28,7 @@ class CardSeriesService
 
     public function create(array $data): CardSeries
     {
-        $this->createSeriesOnAgs($data['name'], $data['image_path']);
+        $this->createSeriesOnAgs($data['card_category_id'], $data['name'], $data['image_path']);
 
         $series = CardSeries::create([
             'name' => $data['name'],
@@ -41,14 +42,23 @@ class CardSeriesService
         return $series;
     }
 
-    protected function createSeriesOnAgs(string $seriesName, string $seriesImage): void
+    protected function createSeriesOnAgs(int $cardCategoryId, string $seriesName, string $seriesImage): void
     {
+        $categoryName = CardCategory::find($cardCategoryId)->name;
+
         //Check if series already exists in AGS DB
-        $seriesResponse = $this->agsService->getCardSeries(['name' => $seriesName]);
+        $seriesResponse = $this->agsService->getCardSeries([
+            'name' => $seriesName,
+            'category_name' => $categoryName,
+        ]);
 
         //If it doesn't exist, and we have required parameters, create it in AGS side
         if ($seriesResponse['count'] < 1 && $seriesName && $seriesImage) {
-            $this->agsService->createCardSeries(['name' => $seriesName, 'image_path' => $seriesImage]);
+            $this->agsService->createCardSeries([
+                'name' => $seriesName,
+                'image_path' => $seriesImage,
+                'category_name' => $categoryName,
+            ]);
         }
     }
 }

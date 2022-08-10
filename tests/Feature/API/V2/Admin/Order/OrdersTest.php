@@ -38,7 +38,6 @@ beforeEach(function () {
         ['order_status_id' => OrderStatus::CONFIRMED],
         ['order_status_id' => OrderStatus::GRADED],
         ['order_status_id' => OrderStatus::SHIPPED],
-        ['order_status_id' => OrderStatus::REVIEWED]
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -138,11 +137,11 @@ it('returns only placed orders', function () {
 });
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[status]=reviewed')
+    $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[status]=confirmed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'order_status_id' => OrderStatus::REVIEWED,
+            'order_status_id' => OrderStatus::CONFIRMED,
         ]);
 });
 
@@ -262,15 +261,16 @@ test('an admin can complete review of an order', function () {
     Http::fake([
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
+    Bus::fake();
     $response = $this->postJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/status-history', [
-        'order_status_id' => OrderStatus::REVIEWED,
+        'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertSuccessful();
     $response->assertJson([
         'data' => [
             'order_id' => $this->orders[0]->id,
-            'order_status_id' => OrderStatus::REVIEWED,
+            'order_status_id' => OrderStatus::CONFIRMED,
         ],
     ]);
 });
@@ -371,7 +371,10 @@ test('order can not be shipped if its not paid', function () {
 test('order can be shipped if its not paid', function () {
     /** @var Order $order */
     Event::fake();
-    $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
+    $order = Order::factory()->create([
+        'payment_status' => OrderPaymentStatusEnum::PAID,
+        'order_status_id' => OrderStatus::ASSEMBLED,
+    ]);
     $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::SHIPPED,
     ])->assertOk();
@@ -421,6 +424,32 @@ it('returns only orders with filtered payment status', function ($data) {
     fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
 ]);
 
+it('admin can mark graded order as assembled', function () {
+    Event::fake();
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create([
+        'order_status_id' => OrderStatus::GRADED,
+    ]);
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ASSEMBLED,
+    ])->assertOk();
+});
+
+it('admin can not mark ungraded order as assembled', function () {
+    Event::fake();
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create([
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ASSEMBLED,
+    ])->assertUnprocessable();
+});
+
 it('calculates estimated delivery date when admins marks the order as reviewed', function () {
     Event::fake();
     Bus::fake();
@@ -428,7 +457,7 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
 
-    $order = Order::factory()->insuredShipping()->create();
+    $order = Order::factory()->create();
     $paymentPlan = $order->originalPaymentPlan;
 
     $estimatedDeliveryStartAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);

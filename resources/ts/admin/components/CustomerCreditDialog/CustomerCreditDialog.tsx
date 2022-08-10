@@ -89,7 +89,7 @@ const Root = styled(Dialog)(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 18:31
  */
-export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Props) {
+export function CustomerCreditDialog({ customer, wallet, onClose, onSubmit, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -115,7 +115,11 @@ export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Pro
             try {
                 setLoading(true);
                 await walletRepository.addCredit(wallet.id, amount);
-                await dispatch(updateOrderWalletById(wallet.id));
+                const result = await dispatch(updateOrderWalletById(wallet.id));
+
+                if (onSubmit) {
+                    onSubmit(result.payload.balance);
+                }
             } catch (e: any) {
                 notifications.exception(e);
                 return;
@@ -126,7 +130,7 @@ export function CustomerCreditDialog({ customer, wallet, onClose, ...rest }: Pro
         }
 
         handleClose({});
-    }, [amount, dispatch, handleClose, notifications, wallet?.id, walletRepository]);
+    }, [amount, dispatch, handleClose, notifications, onSubmit, wallet?.id, walletRepository]);
 
     return (
         <Root onClose={handleClose} {...rest}>

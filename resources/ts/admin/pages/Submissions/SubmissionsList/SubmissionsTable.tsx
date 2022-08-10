@@ -3,19 +3,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import { upperFirst } from 'lodash';
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
-import { TablePagination } from '@shared/components/TablePagination';
+import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
@@ -26,7 +20,6 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -192,43 +185,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 })}
             </Grid>
             <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell variant={'head'}>Submission #</TableCell>
-                            <TableCell variant={'head'}>
-                                {tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed'}
-                            </TableCell>
-                            <TableCell variant={'head'}>Reviewed</TableCell>
-                            <TableCell variant={'head'}>Customer</TableCell>
-                            <TableCell variant={'head'}>Cards</TableCell>
-                            <TableCell variant={'head'}>Status</TableCell>
-                            <TableCell variant={'head'}>Payment</TableCell>
-                            <TableCell variant={'head'}>Declared Value</TableCell>
-                            <TableCell variant={'head'}>Order Total</TableCell>
-                            <TableCell variant={'head'} />
-                            <TableCell variant={'head'} />
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orders$.data?.length > 0 ? (
-                            orders$.data.map((order) => <SubmissionsTableRow order={order} key={order.id} />)
-                        ) : (
-                            <TableRow>
-                                <TableCell align={'center'} colSpan={9}>
-                                    <Box padding={2}>
-                                        <Typography variant={'subtitle2'}>We couldn't found any orders yet.</Typography>
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination {...orders$.paginationProps} />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
+                <CustomerSubmissionsList orders={orders$.data} paginationProp={orders$.paginationProps} />
             </TableContainer>
         </Grid>
     );

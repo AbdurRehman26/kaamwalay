@@ -21,6 +21,19 @@ class OrderPaymentResource extends BaseResource
             return $this->getUnpaidOrderPaymentResponse();
         }
 
+        // In the case of extra charge or refunds happened before the user pays for the order
+        // the data does not contain all the fields.
+        if (empty(json_decode($this->response)) && in_array($this->type, [OrderPayment::TYPE_EXTRA_CHARGE, OrderPayment::TYPE_REFUND])) {
+            return [
+                'id' => $this->id,
+                'notes' => $this->notes,
+                'amount' => $this->amount,
+                'type' => $this->type,
+                'user' => new UserResource($this->user),
+                'created_at' => $this->formatDate($this->created_at),
+            ];
+        }
+
         if (! $this->response) {
             return [];
         }

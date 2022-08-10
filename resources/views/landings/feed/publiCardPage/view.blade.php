@@ -12,6 +12,7 @@
         <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
         <script defer>
             var swiper = new Swiper(".mySwiper", {
@@ -72,6 +73,74 @@
                     ],
                 });
             })
+
+            var options = {
+                series: [{
+                    data: [8, 200, 400, 600, 22, 200, 400, 600, 45, 200, 421, 600, 5, 200, 400, 600, 55, 200, 400]
+                }],
+                chart: {
+                    height: 350,
+                    padding: 10,
+                    type: 'bar',
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '45%',
+                        distributed: false,
+                        borderRadius: 8,
+                    },
+                },
+                colors: [
+                    "#6C31BC"
+                ],
+                title: {
+                    text: 'AGS Population',
+                },
+                fill: {
+                    type: 'solid'
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                legend: {
+                    show: false
+                },
+                xaxis: {
+                    categories: [
+                        ['PR', '1'],
+                        ['FR', '1.5'],
+                        ['GOOD', '2'],
+                        ['GOOD+', '2.5'],
+                        ['VG', '3'],
+                        ['VG+', '3'],
+                        ['VG-EX', '4'],
+                        ['VG-EX+', '4.5'],
+                        ['EX', '5'],
+                        ['EX+', '5.5'],
+                        ['EX-MT', '6'],
+                        ['EX-MT+', '6.5'],
+                        ['NM', '7'],
+                        ['NM+', '7.5'],
+                        ['NM-MT', '8'],
+                        ['NM-MT+', '8.5'],
+                        ['MINT', '9'],
+                        ['MINT+', '9.5'],
+                        ['GEM-MT', '10'],
+
+                    ],
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    },
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector(".feed-view__graph__content"), options);
+            chart.render();
         </script>
     </x-slot>
     <header class="feed-view__header">
@@ -109,7 +178,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <span class="material-icons">content_copy_rounded</span>
+                            <button class="material-icons">content_copy_rounded</button>
                         </div>
                         <table class="feed-view__table">
                             <tbody>
@@ -210,65 +279,7 @@
             </div>
         </div>
     </section>
-    <section class="feed-view__breakdown feed-view__breakdown--front">
-        <div class="feed-view__breakdown__front">
-            <h4 class="feed-view__breakdown__heading">Front of Card Breakdown</h4>
-            <div class="feed-view__breakdown__scores">
-                <table class="feed-view__breakdown__table">
-                    <tbody>
-                        <tr>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Centering (Front)</p>
-                                <p class="feed-view__breakdown__value">8.00</p>
-                            </td>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Surface (Front)</p>
-                                <p class="feed-view__breakdown__value">7.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Edges (Front)</p>
-                                <p class="feed-view__breakdown__value">8.00</p>
-                            </td>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Corners (Front)</p>
-                                <p class="feed-view__breakdown__value">9.00</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="feed-view__breakdown__back">
-            <h4 class="feed-view__breakdown__heading">Back of Card Breakdown</h4>
-            <div class="feed-view__breakdown__scores">
-                <table class="feed-view__breakdown__table">
-                    <tbody>
-                        <tr>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Centering (Back)</p>
-                                <p class="feed-view__breakdown__value">8.00</p>
-                            </td>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Surface (Back)</p>
-                                <p class="feed-view__breakdown__value">7.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Edges (Back)</p>
-                                <p class="feed-view__breakdown__value">8.00</p>
-                            </td>
-                            <td class="feed-view__breakdown__table-cell">
-                                <p class="feed-view__breakdown__label">Corners (Back)</p>
-                                <p class="feed-view__breakdown__value">9.00</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+    @include('landings.feed.publiCardPage.grades')
     @include('landings.feed.publiCardPage.populationGraph')
+    @include('landings.feed.publiCardPage.generatedImages')
 </x-layout>

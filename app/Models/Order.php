@@ -561,4 +561,9 @@ class Order extends Model implements Exportable
             $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid()
         );
     }
+
+    public function isShipped(): bool
+    {
+        return $this->order_status_id === OrderStatus::SHIPPED;
+    }
 }

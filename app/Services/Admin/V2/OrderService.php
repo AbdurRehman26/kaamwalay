@@ -142,11 +142,13 @@ class OrderService extends V1OrderService
         /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 
-        $orderStatusHistoryService->addStatusToOrder(
-            OrderStatus::SHIPPED,
-            $order,
-            auth()->user(),
-        );
+        if (! $order->isShipped()) {
+            $orderStatusHistoryService->addStatusToOrder(
+                OrderStatus::SHIPPED,
+                $order,
+                auth()->user(),
+            );
+        }
 
         return true;
     }

@@ -209,6 +209,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                 <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
 
                                 {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
+                                order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                                 order?.orderStatus.is(OrderStatusEnum.SHIPPED)
                                     ? [
                                           <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>

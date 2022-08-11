@@ -21,6 +21,7 @@ class ListOrders extends ListRecords
                     4 => 'Graded',
                     5 => 'Shipped',
                     6 => 'Cancelled',
+                    7 => 'Assembled',
                 ])
                 ->label('Status'),
         ];

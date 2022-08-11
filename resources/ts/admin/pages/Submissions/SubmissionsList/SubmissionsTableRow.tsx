@@ -30,6 +30,7 @@ import { SubmissionActionButton } from '../../../components/SubmissionActionButt
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
+    isCustomerDetailPage: boolean;
 }
 
 enum Options {
@@ -56,7 +57,7 @@ const useStyles = makeStyles(
  * @date: 15.09.2021
  * @time: 04:42
  */
-export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({ order, isCustomerDetailPage }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
@@ -138,21 +139,25 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     </MuiLink>
                 </TableCell>
                 <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                <TableCell>
-                    {order.customer?.id && order.customer?.customerNumber ? (
-                        <MuiLink
-                            component={Link}
-                            color={'primary'}
-                            to={`/customers/list?search=${order.customer?.customerNumber}`}
-                            className={font.fontWeightMedium}
-                        >
-                            {order.customer?.customerNumber}
-                        </MuiLink>
-                    ) : (
-                        '-'
-                    )}
-                </TableCell>
+                {isCustomerDetailPage ? (
+                    <>
+                        <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
+                        <TableCell>
+                            {order.customer?.id && order.customer?.customerNumber ? (
+                                <MuiLink
+                                    component={Link}
+                                    color={'primary'}
+                                    to={`/customers/${order.customer?.id}/view`}
+                                    className={font.fontWeightMedium}
+                                >
+                                    {order.customer?.customerNumber}
+                                </MuiLink>
+                            ) : (
+                                '-'
+                            )}
+                        </TableCell>
+                    </>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

@@ -335,7 +335,9 @@ export const adminOrdersSlice = createSlice({
             const order = plainToInstance(OrderEntity, state.entities[orderStatusHistory.orderId]);
 
             if (order) {
-                order.orderStatusHistory = [...order.orderStatusHistory, orderStatusHistory];
+                if (order.orderStatusHistory) {
+                    order.orderStatusHistory = [...order.orderStatusHistory, orderStatusHistory];
+                }
                 order.orderStatus = orderStatusHistory.orderStatus;
 
                 state.entities[orderStatusHistory.orderId] = instanceToPlain(order) as any;

@@ -65,6 +65,8 @@ class Order extends Model implements Exportable
         'salesman_id',
         'requires_cleaning',
         'cleaning_fee',
+        'estimated_delivery_start_at',
+        'estimated_delivery_end_at',
     ];
 
     /**
@@ -104,6 +106,8 @@ class Order extends Model implements Exportable
         'payment_status' => OrderPaymentStatusEnum::class,
         'requires_cleaning' => 'bool',
         'cleaning_fee' => 'float',
+        'estimated_delivery_start_at' => 'datetime',
+        'estimated_delivery_end_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -544,5 +548,22 @@ class Order extends Model implements Exportable
     public function requiresCardCleaning(): bool
     {
         return $this->requires_cleaning;
+    }
+
+    public function isEligibleToMarkAsAssembled(): bool
+    {
+        return $this->orderStatus()->value('id') === OrderStatus::GRADED;
+    }
+
+    public function isEligibleToMarkAsShipped(): bool
+    {
+        return (
+            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid()
+        );
+    }
+
+    public function isShipped(): bool
+    {
+        return $this->order_status_id === OrderStatus::SHIPPED;
     }
 }

@@ -130,7 +130,9 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
                 <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
-                {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                {orderStatus.is(OrderStatusEnum.GRADED) ||
+                orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
+                orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                 ) : null}
             </Menu>

@@ -2,22 +2,23 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
+import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
+import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
+import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -39,6 +40,51 @@ type InitialValues = {
     signedUpEnd: DateLike;
     search: string;
 };
+
+const headings: EnhancedTableHeadCell[] = [
+    {
+        id: 'full_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Name / ID',
+    },
+    {
+        id: 'email',
+        numeric: false,
+        disablePadding: false,
+        label: 'Email',
+    },
+    {
+        id: 'phone',
+        numeric: false,
+        disablePadding: false,
+        label: 'Phone',
+    },
+    {
+        id: 'created_at',
+        numeric: false,
+        disablePadding: false,
+        label: 'Signed Up',
+    },
+    {
+        id: 'submissions',
+        numeric: true,
+        disablePadding: false,
+        label: 'Submissions',
+    },
+    {
+        id: 'cards',
+        numeric: true,
+        disablePadding: false,
+        label: 'Cards',
+    },
+    {
+        id: 'wallet',
+        numeric: true,
+        disablePadding: false,
+        label: 'Wallet Balance',
+    },
+];
 
 const joinFilterValues = (values: any[], separator = ',') =>
     values
@@ -85,6 +131,9 @@ export function CustomersList() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
     const [addCustomerDialog, setAddCustomerDialog] = useState(false);
+    const [order, setOrder] = useState<TableSortType>('desc');
+    const [orderBy, setOrderBy] = useState<string>('created_at');
+    const [sortFilter, setSortFilter] = useState('-created_at');
 
     const navigate = useNavigate();
 
@@ -111,6 +160,7 @@ export function CustomersList() {
 
     const customers = useAdminCustomersQuery({
         params: {
+            sort: sortFilter,
             filter: getFilters(query),
         },
 
@@ -122,28 +172,30 @@ export function CustomersList() {
         formikRef.current?.setFieldValue('maxSubmissions', '');
         delQuery('minSubmissions', 'maxSubmissions');
 
-        await customers.search(
+        await customers.searchSorted(
+            { sort: sortFilter },
             getFilters({
                 ...formikRef.current!.values,
                 minSubmissions: '',
                 maxSubmissions: '',
             }),
         );
-    }, [customers, delQuery]);
+    }, [sortFilter, customers, delQuery]);
 
     const handleClearSignUp = useCallback(async () => {
         formikRef.current?.setFieldValue('signedUpStart', '');
         formikRef.current?.setFieldValue('signedUpEnd', '');
         delQuery('signedUpStart', 'signedUpEnd');
 
-        await customers.search(
+        await customers.searchSorted(
+            { sort: sortFilter },
             getFilters({
                 ...formikRef.current!.values,
                 signedUpStart: '',
                 signedUpEnd: '',
             }),
         );
-    }, [customers, delQuery]);
+    }, [sortFilter, customers, delQuery]);
 
     const handleSearch = useCallback(
         async (search: string) => {
@@ -154,14 +206,15 @@ export function CustomersList() {
             }
 
             formikRef.current?.setFieldValue('search', search);
-            await customers.search(
+            await customers.searchSorted(
+                { sort: sortFilter },
                 getFilters({
                     ...formikRef.current!.values,
                     search,
                 }),
             );
         },
-        [addQuery, customers, delQuery],
+        [addQuery, customers, delQuery, sortFilter],
     );
 
     const handleSubmit = useCallback(
@@ -171,17 +224,31 @@ export function CustomersList() {
                 signedUpStart: formatDate(values.signedUpStart, 'YYYY-MM-DD'),
                 signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
             });
-            await customers.search(getFilters(values));
+
+            await customers.searchSorted({ sort: sortFilter }, getFilters(values));
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [customers, setQuery],
+        [customers, setQuery, sortFilter],
     );
+
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    useEffect(() => {
+        setSortFilter((order === 'desc' ? '-' : '') + orderBy);
+
+        formikRef.current?.submitForm();
+    }, [order, orderBy]);
 
     const handleExportData = useCallback(async () => {
         try {
             const exportData = await dataExportRepository.export({
                 model: ExportableModelsEnum.User,
+                sort: { sort: sortFilter },
                 filter: getFilters({
                     ...formikRef.current!.values,
                 }),
@@ -191,7 +258,7 @@ export function CustomersList() {
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [dataExportRepository, notifications]);
+    }, [dataExportRepository, notifications, sortFilter]);
 
     const headerActions = (
         <Button
@@ -323,23 +390,13 @@ export function CustomersList() {
             </Grid>
             <TableContainer>
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell variant={'head'}>Name / ID</TableCell>
-                            <TableCell variant={'head'}>Email</TableCell>
-                            <TableCell variant={'head'}>Phone</TableCell>
-                            <TableCell variant={'head'}>Signed Up</TableCell>
-                            <TableCell variant={'head'} align={'right'}>
-                                Submissions
-                            </TableCell>
-                            <TableCell variant={'head'} align={'right'}>
-                                Cards
-                            </TableCell>
-                            <TableCell variant={'head'} align={'right'}>
-                                Wallet Balance
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <EnhancedTableHead
+                        onRequestSort={handleRequestSort}
+                        order={order}
+                        orderBy={orderBy}
+                        headCells={headings}
+                    />
+
                     <TableBody>
                         {customers.data.map((customer) => (
                             <CustomerTableRow customer={customer} />

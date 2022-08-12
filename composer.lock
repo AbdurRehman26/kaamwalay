@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ed99f3f3e6fcd5fec7c88cf97be8f1a",
+    "content-hash": "20ffb00f77a288aeec660cfbe88398ed",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -2670,6 +2670,64 @@
                 }
             ],
             "time": "2022-06-20T21:43:11+00:00"
+        },
+        {
+            "name": "hammerstone/sidecar",
+            "version": "v0.3.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hammerstonedev/sidecar.git",
+                "reference": "b519523d789ccb5f11ee40a266aa3ac3578b0a76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hammerstonedev/sidecar/zipball/b519523d789ccb5f11ee40a266aa3ac3578b0a76",
+                "reference": "b519523d789ccb5f11ee40a266aa3ac3578b0a76",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.216.1",
+                "guzzlehttp/guzzle": "^6.3|^7.2",
+                "illuminate/console": "^7.0|^8.0|^9.0",
+                "illuminate/filesystem": "^7.0|^8.0|^9.0",
+                "illuminate/support": "^7.0|^8.0|^9.0",
+                "maennchen/zipstream-php": "^2.1",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.3",
+                "orchestra/testbench": "^5|^6|^7",
+                "phpunit/phpunit": "^8|^9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hammerstone\\Sidecar\\Providers\\SidecarServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hammerstone\\Sidecar\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Francis",
+                    "email": "aaron@hammerstone.dev"
+                }
+            ],
+            "description": "A Laravel package to deploy Lambda functions alongside your main application.",
+            "support": {
+                "issues": "https://github.com/hammerstonedev/sidecar/issues",
+                "source": "https://github.com/hammerstonedev/sidecar/tree/v0.3.12"
+            },
+            "time": "2022-05-22T19:22:08+00:00"
         },
         {
             "name": "http-interop/http-factory-guzzle",
@@ -7966,6 +8024,72 @@
             "time": "2022-07-18T08:51:21+00:00"
         },
         {
+            "name": "spatie/browsershot",
+            "version": "3.57.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/browsershot.git",
+                "reference": "f430a81b1b8e07f089046984ae0f53c9161b1477"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/browsershot/zipball/f430a81b1b8e07f089046984ae0f53c9161b1477",
+                "reference": "f430a81b1b8e07f089046984ae0f53c9161b1477",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4|^8.0",
+                "spatie/image": "^1.5.3|^2.0",
+                "spatie/temporary-directory": "^1.1|^2.0",
+                "symfony/process": "^4.2|^5.0|^6.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.20",
+                "spatie/phpunit-snapshot-assertions": "^4.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Browsershot\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://github.com/freekmurze",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert a webpage to an image or pdf using headless Chrome",
+            "homepage": "https://github.com/spatie/browsershot",
+            "keywords": [
+                "chrome",
+                "convert",
+                "headless",
+                "image",
+                "pdf",
+                "puppeteer",
+                "screenshot",
+                "webpage"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/browsershot/tree/3.57.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-08-03T11:26:45+00:00"
+        },
+        {
             "name": "spatie/dropbox-api",
             "version": "1.20.2",
             "source": {
@@ -12277,6 +12401,90 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wnx/sidecar-browsershot",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stefanzweifel/sidecar-browsershot.git",
+                "reference": "2ba11a183908a842ddc45b40bcb0626e9c915f7b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stefanzweifel/sidecar-browsershot/zipball/2ba11a183908a842ddc45b40bcb0626e9c915f7b",
+                "reference": "2ba11a183908a842ddc45b40bcb0626e9c915f7b",
+                "shasum": ""
+            },
+            "require": {
+                "hammerstone/sidecar": "^0.3.7",
+                "illuminate/contracts": "^8.0|^9.0",
+                "php": "^8.0",
+                "spatie/browsershot": "^3.52",
+                "spatie/laravel-package-tools": "^1.9.2"
+            },
+            "require-dev": {
+                "league/flysystem-aws-s3-v3": "^1.0|^2.0|^3.0",
+                "nunomaduro/collision": "^5.10|^6.0",
+                "nunomaduro/larastan": "^1.0|^2.0",
+                "orchestra/testbench": "^6.22|^7.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wnx\\SidecarBrowsershot\\SidecarBrowsershotServiceProvider"
+                    ],
+                    "aliases": {
+                        "SidecarBrowsershot": "Wnx\\SidecarBrowsershot\\Facades\\SidecarBrowsershot"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wnx\\SidecarBrowsershot\\": "src",
+                    "Wnx\\SidecarBrowsershot\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan Zweifel",
+                    "email": "hello@stefanzweifel.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Sidecar function to run Browsershot on Lambda.",
+            "homepage": "https://github.com/stefanzweifel/sidecar-browsershot",
+            "keywords": [
+                "browsershot",
+                "lambda",
+                "laravel",
+                "sidecar",
+                "sidecar-browsershot",
+                "wnx"
+            ],
+            "support": {
+                "issues": "https://github.com/stefanzweifel/sidecar-browsershot/issues",
+                "source": "https://github.com/stefanzweifel/sidecar-browsershot/tree/v1.2.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/stefanzweifel",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-07-15T18:21:50+00:00"
         }
     ],
     "packages-dev": [

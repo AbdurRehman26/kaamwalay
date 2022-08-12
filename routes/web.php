@@ -8,6 +8,7 @@ use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
 use Illuminate\Support\Facades\Route;
+use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +45,8 @@ Route::prefix('pop')->group(function () {
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
+
+Route::get('social', function () {
+    return view('social.card');
+//    return response(BrowsershotLambda::html(view('social.facebook')->render())->screenshot())->header('Content-Type', 'image/png');
+});

@@ -47,11 +47,11 @@ Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->nam
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
 
 Route::get('social', function () {
-//    return view('social.card');
-    return response(
-        BrowsershotLambda::html(view('social.card')->render())
-            ->windowSize(420, 800)
-            ->setScreenshotType('jpeg', 100)
-            ->screenshot()
-    )->header('Content-Type', 'image/jpeg');
+    return view('social.card');
+//    return response(
+//        BrowsershotLambda::html(view('social.card')->render())
+//            ->windowSize(420, 800)
+//            ->setScreenshotType('jpeg', 100)
+//            ->screenshot()
+//    )->header('Content-Type', 'image/jpeg');
 });

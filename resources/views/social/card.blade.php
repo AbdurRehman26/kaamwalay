@@ -30,7 +30,7 @@
                 <span class="text-sm lg:text-lg font-normal">GEM-MT</span>
                 <span class="text-5xl lg:text-7xl font-black">10</span>
             </div>
-            <div class="mt-8 text-4xl lg:text-6xl text-white font-black">Charizard VMAX</div>
+            <div class="mt-8 text-4xl lg:text-6xl text-white text-center font-black">Charizard VMAX</div>
             <div class="mt-2 lg:mt-5 text-sm lg:text-lg text-white tracking-tight font-medium">AGS 10 . GEM-MT</div>
         </div>
         <div class="mt-5 sm:mt-0">

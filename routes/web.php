@@ -48,5 +48,10 @@ Route::get('/terms-and-conditions', TermsAndConditionsController::class);
 
 Route::get('social', function () {
     return view('social.card');
-//    return response(BrowsershotLambda::html(view('social.facebook')->render())->screenshot())->header('Content-Type', 'image/png');
+//    return response(
+//        BrowsershotLambda::html(view('social.card')->render())
+//            ->windowSize(1200, 630)
+//            ->setScreenshotType('jpeg', 100)
+//            ->screenshot()
+//    )->header('Content-Type', 'image/jpeg');
 });

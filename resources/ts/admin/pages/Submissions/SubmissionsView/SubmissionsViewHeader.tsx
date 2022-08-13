@@ -149,7 +149,9 @@ export function SubmissionsViewHeader({
                     ) : null}
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                    {orderStatus.is(OrderStatusEnum.GRADED) ||
+                    orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
+                    orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                         <Button
                             {...sharedProps}
                             startIcon={<Icon>printer</Icon>}

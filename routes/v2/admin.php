@@ -110,3 +110,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('export-data', DataExportController::class)->name('admin.export-data');
 });
 
+Route::get('/test', [OrderController::class, 'OrderLabelService']);

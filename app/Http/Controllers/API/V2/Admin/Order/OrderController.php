@@ -10,6 +10,7 @@ use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
+use App\Services\Admin\Order\OrderLabelService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -95,5 +96,11 @@ class OrderController extends V1OrderController
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function OrderLabelService()
+    {
+        $orderLabelService = resolve(OrderLabelService::class);
+        $orderLabelService->getCardLabel(Order::find(3528));
     }
 }

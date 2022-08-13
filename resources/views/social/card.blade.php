@@ -19,7 +19,6 @@
     <title>Robograding Card Social Preview</title>
 </head>
 <body class="font-sans">
-{{--<div class="flex w-screen h-screen bg-black bg-[url('https://svgshare.com/i/jyq.svg')] bg-no-repeat bg-left-top">--}}
 <div class="flex w-screen h-screen bg-gradient-to-r from-[#140078] to-[#6C31BC]">
     <div class="container m-auto p-5 flex flex-col sm:flex-row sm:justify-between items-center">
         <div class="flex flex-col items-center sm:block">

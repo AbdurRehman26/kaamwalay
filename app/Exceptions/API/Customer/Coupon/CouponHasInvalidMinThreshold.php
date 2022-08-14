@@ -2,8 +2,6 @@
 
 namespace App\Exceptions\API\Customer\Coupon;
 
-use App\Enums\Coupon\CouponMinThresholdTypeEnum;
-use App\Models\Coupon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -57,7 +57,7 @@ const initialState: NewPromoCodeDialogState = {
     isPermanent: true,
     usageAllowed: null,
     minThresholdType: MinThresholdTypeEnum.None,
-    minThresholdValue: 0,
+    minThresholdValue: 2,
 };
 
 export const adminNewPromoCodeSlice = createSlice({

@@ -242,6 +242,9 @@ export function PromoCodeModal() {
         if (!isPermanent && !discountEndDate) {
             validationErrors.push('End date is required');
         }
+        if (minThresholdType === MinThresholdTypeEnum.CardCount && minThresholdValue < 2) {
+            validationErrors.push('Card minimum should be greater than 2');
+        }
         return !!validationErrors.length;
     };
 
@@ -629,7 +632,7 @@ export function PromoCodeModal() {
                                 variant={'caption'}
                                 className={classes.secondaryLabel}
                                 sx={{
-                                    fontWeight: isPermanent ? 'bold' : 'normal',
+                                    fontWeight: minThresholdType === MinThresholdTypeEnum.None ? 'bold' : 'normal',
                                 }}
                             >
                                 No Card Minimum
@@ -637,24 +640,58 @@ export function PromoCodeModal() {
                         </Paper>
                     </Box>
 
-                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} minWidth={'100%'}>
-                        <Paper variant={'outlined'} sx={{ width: '99.5%', marginRight: '10px', padding: '8px' }}>
-                            <Radio
-                                checked={minThresholdType === MinThresholdTypeEnum.CardCount}
-                                onChange={handleMinThresholdTypeChange(MinThresholdTypeEnum.CardCount)}
-                                value={MinThresholdTypeEnum.CardCount}
-                            />
-                            <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        minWidth={'100%'}
+                        marginTop={1}
+                    >
+                        <Paper
+                            variant={'outlined'}
+                            sx={{
+                                width: '99.5%',
+                                marginRight: '10px',
+                                padding: '8px',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
+                                <Radio
+                                    checked={minThresholdType === MinThresholdTypeEnum.CardCount}
+                                    onChange={handleMinThresholdTypeChange(MinThresholdTypeEnum.CardCount)}
+                                    value={MinThresholdTypeEnum.CardCount}
+                                />
                                 <Typography
                                     variant={'caption'}
                                     className={classes.secondaryLabel}
                                     sx={{
-                                        fontWeight: 'normal',
+                                        fontWeight:
+                                            minThresholdType === MinThresholdTypeEnum.CardCount ? 'bold' : 'normal',
                                     }}
                                 >
                                     Card Minimum
                                 </Typography>
-                                {minThresholdType === MinThresholdTypeEnum.CardCount ? (
+                            </Box>
+                            {minThresholdType === MinThresholdTypeEnum.CardCount ? (
+                                <Box
+                                    display={'flex'}
+                                    flexDirection={'row'}
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                >
+                                    <Typography
+                                        variant={'caption'}
+                                        className={classes.secondaryLabel}
+                                        sx={{
+                                            fontWeight: 'normal',
+                                            color: 'rgba(0, 0, 0, 0.54)',
+                                        }}
+                                    >
+                                        Card Minimum:
+                                    </Typography>
                                     <TextField
                                         placeholder={'2'}
                                         type={'number'}
@@ -663,9 +700,11 @@ export function PromoCodeModal() {
                                         variant="outlined"
                                         value={minThresholdValue}
                                         onChange={handleMinThresholdValueChange}
+                                        error={minThresholdValue < 2}
+                                        helperText={minThresholdValue < 2 ? 'The minimum must be 2 or greater' : ''}
                                     />
-                                ) : null}
-                            </Box>
+                                </Box>
+                            ) : null}
                         </Paper>
                     </Box>
                 </Box>

@@ -72,25 +72,25 @@
                 series: [{
                     name: '',
                     data: [
-                        JSON.parse("{{ $graphPopData['PR'] }}"),
-                        JSON.parse("{{ $graphPopData['FR'] }}"),
-                        JSON.parse("{{ $graphPopData['GOOD'] }}"),
-                        JSON.parse("{{ $graphPopData['GOOD+'] }}"),
-                        JSON.parse("{{ $graphPopData['VG'] }}"),
-                        JSON.parse("{{ $graphPopData['VG+'] }}"),
-                        JSON.parse("{{ $graphPopData['VG-EX'] }}"),
-                        JSON.parse("{{ $graphPopData['VG-EX+'] }}"),
-                        JSON.parse("{{ $graphPopData['EX'] }}"),
-                        JSON.parse("{{ $graphPopData['EX+'] }}"),
-                        JSON.parse("{{ $graphPopData['EX-MT'] }}"),
-                        JSON.parse("{{ $graphPopData['EX-MT+'] }}"),
-                        JSON.parse("{{ $graphPopData['NM'] }}"),
-                        JSON.parse("{{ $graphPopData['NM+'] }}"),
-                        JSON.parse("{{ $graphPopData['NM-MT'] }}"),
-                        JSON.parse("{{ $graphPopData['NM-MT+'] }}"),
-                        JSON.parse("{{ $graphPopData['MINT'] }}"),
-                        JSON.parse("{{ $graphPopData['MINT+'] }}"),
-                        JSON.parse("{{ $graphPopData['GEM-MT'] }}"),
+                        JSON.parse("{{ $popData['PR'] }}"),
+                        JSON.parse("{{ $popData['FR'] }}"),
+                        JSON.parse("{{ $popData['GOOD'] }}"),
+                        JSON.parse("{{ $popData['GOOD+'] }}"),
+                        JSON.parse("{{ $popData['VG'] }}"),
+                        JSON.parse("{{ $popData['VG+'] }}"),
+                        JSON.parse("{{ $popData['VG-EX'] }}"),
+                        JSON.parse("{{ $popData['VG-EX+'] }}"),
+                        JSON.parse("{{ $popData['EX'] }}"),
+                        JSON.parse("{{ $popData['EX+'] }}"),
+                        JSON.parse("{{ $popData['EX-MT'] }}"),
+                        JSON.parse("{{ $popData['EX-MT+'] }}"),
+                        JSON.parse("{{ $popData['NM'] }}"),
+                        JSON.parse("{{ $popData['NM+'] }}"),
+                        JSON.parse("{{ $popData['NM-MT'] }}"),
+                        JSON.parse("{{ $popData['NM-MT+'] }}"),
+                        JSON.parse("{{ $popData['MINT'] }}"),
+                        JSON.parse("{{ $popData['MINT+'] }}"),
+                        JSON.parse("{{ $popData['GEM-MT'] }}"),
                     ]
                 }],
                 chart: {
@@ -232,7 +232,7 @@
                         <div class="feed-view__ags-population">
                             <div>
                                 <p class="feed-view__ags-population__title">AGS POPULATION</p>
-                                <p class="feed-view__ags-population__count">{{ $totalAgsPopulation }}</p>
+                                <p class="feed-view__ags-population__count">{{ $popData['totalPopForCurrentCard'] }}</p>
                             </div>
                             <div class="feed-view__ags-population__icon">
                                 <div><span class="material-icons">analytics</span></div>

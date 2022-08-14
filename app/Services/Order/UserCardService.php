@@ -69,7 +69,7 @@ class UserCardService
         ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])
         ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
         ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
-        ->select(['user_cards.*', 'order_item_status_histories.created_at as graded_at'])
+        ->select(['user_cards.*','order_item_status_histories.created_at as graded_at'])
         ->orderBy('graded_at', 'desc')
         ->paginate($itemsPerPage);
     }
@@ -100,29 +100,16 @@ class UserCardService
         ->defaultSort('-order_item_status_histories.created_at')
         ->paginate($itemsPerPage);
     }
-    
-    /**
-     * @param  string  $certificateId
-     * @return mixed
-     */
-    public function getPopDataForSpecificCard(string $certificateId, string $gradeName): mixed
-    {
-        $cardProductId = $this->getCardProductId($certificateId);
-        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName);
-
-        $totalPop = PopReportsCard::where('card_product_id', $cardProductId)->pluck($gradeNickName)->first();
-        
-        return $totalPop;
-    }
 
     /**
      * @param  string  $certificateId
      * @return array
      */
-    public function getPopDataForGraph(string $certificateId): array
+    public function getAgsPopulationData(string $certificateId, string $gradeName): array
     {
         $cardProductId = $this->getCardProductId($certificateId);
         $popData = PopReportsCard::where('card_product_id', $cardProductId)->first();
+        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName);
 
         return [
             'PR' => $popData->pr,
@@ -144,7 +131,8 @@ class UserCardService
             'MINT' => $popData->mint,
             'MINT+' => $popData->mint_plus,
             'GEM-MT' => $popData->gem_mt,
-            'totalAgsPop' => $popData->total + $popData->total_plus,
+            'totalPop' => $popData->total + $popData->total_plus,
+            'totalPopForCurrentCard' => $popData->$gradeNickName,
         ];
     }
     

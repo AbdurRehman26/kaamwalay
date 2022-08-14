@@ -24,8 +24,7 @@ class FeedController extends Controller
     public function getView(string $certificateId): View
     {
         $data = $this->userCardService->getDataForPublicCardPage($certificateId);
-        $data['totalAgsPopulation'] = $this->userCardService->getPopDataForSpecificCard($certificateId, $data['grade']['nickname']);
-        $data['graphPopData'] = $this->userCardService->getPopDataForGraph($certificateId);
+        $data['popData'] = $this->userCardService->getAgsPopulationData($certificateId, $data['grade']['nickname']);
 
         return view('landings.feed.publiCardPage.view', $data);
     }

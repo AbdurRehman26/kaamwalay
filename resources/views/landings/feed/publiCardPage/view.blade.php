@@ -15,6 +15,33 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
         <script defer>
+            const front = document.getElementsByClassName("feed-view__images__cards-front");
+            const back = document.getElementsByClassName("feed-view__images__cards-back");
+            const frontButton = document.getElementsByClassName("feed-view__generated-images__buttons__front");
+            const backButton = document.getElementsByClassName("feed-view__generated-images__buttons__back");
+
+            function frontButtonToggle() {
+                front[0].style.display = "flex";
+                frontButton[0].style.background = "rgba(32, 191, 184, 0.08)"
+                frontButton[0].style.border = "1px solid #20bfb8";
+                frontButton[0].style.color = "#20bfb8";
+                backButton[0].style.background = "#FFFFFF"
+                backButton[0].style.border = "1px solid rgba(0, 0, 0, 0.18)";
+                backButton[0].style.color = "rgba(0, 0, 0, 0.54)";
+                back[0].style.display = "none";
+            }
+
+            function backButtonToggle() {
+                back[0].style.display = "flex";
+                backButton[0].style.background = "rgba(32, 191, 184, 0.08)"
+                backButton[0].style.border = "1px solid #20bfb8";
+                backButton[0].style.color = "#20bfb8";
+                frontButton[0].style.background = "#FFFFFF"
+                frontButton[0].style.border = "1px solid rgba(0, 0, 0, 0.18)";
+                frontButton[0].style.color = "rgba(0, 0, 0, 0.54)";
+                front[0].style.display = "none";
+            }
+
             var swiper = new Swiper(".mySwiper", {
                 loop: false,
                 spaceBetween: 10,
@@ -41,46 +68,37 @@
                 keyControls: true,
             });
 
-            $(function() {
-                $('.feed-view__slider--js').slick({
-                    infinite: false,
-                    arrows: true,
-                    dots: false,
-                    speed: 300,
-                    slidesToShow: 5,
-                    slidesToScroll: 5,
-                    responsive: [{
-                            breakpoint: 960,
-                            settings: {
-                                slidesToShow: 3,
-                                slidesToScroll: 3,
-                            },
-                        },
-                        {
-                            breakpoint: 600,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 2,
-                            },
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                slidesToShow: 1,
-                                slidesToScroll: 1,
-                            },
-                        },
-                    ],
-                });
-            })
-
             var options = {
                 series: [{
-                    data: [8, 200, 400, 600, 22, 200, 400, 600, 45, 200, 421, 600, 5, 200, 400, 600, 55, 200, 400]
+                    name: '',
+                    data: [
+                        JSON.parse("{{ $graphPopData['PR'] }}"),
+                        JSON.parse("{{ $graphPopData['FR'] }}"),
+                        JSON.parse("{{ $graphPopData['GOOD'] }}"),
+                        JSON.parse("{{ $graphPopData['GOOD+'] }}"),
+                        JSON.parse("{{ $graphPopData['VG'] }}"),
+                        JSON.parse("{{ $graphPopData['VG+'] }}"),
+                        JSON.parse("{{ $graphPopData['VG-EX'] }}"),
+                        JSON.parse("{{ $graphPopData['VG-EX+'] }}"),
+                        JSON.parse("{{ $graphPopData['EX'] }}"),
+                        JSON.parse("{{ $graphPopData['EX+'] }}"),
+                        JSON.parse("{{ $graphPopData['EX-MT'] }}"),
+                        JSON.parse("{{ $graphPopData['EX-MT+'] }}"),
+                        JSON.parse("{{ $graphPopData['NM'] }}"),
+                        JSON.parse("{{ $graphPopData['NM+'] }}"),
+                        JSON.parse("{{ $graphPopData['NM-MT'] }}"),
+                        JSON.parse("{{ $graphPopData['NM-MT+'] }}"),
+                        JSON.parse("{{ $graphPopData['MINT'] }}"),
+                        JSON.parse("{{ $graphPopData['MINT+'] }}"),
+                        JSON.parse("{{ $graphPopData['GEM-MT'] }}"),
+                    ]
                 }],
                 chart: {
-                    height: 350,
-                    padding: 10,
+                    height: '450px',
+                    width: '100%',
+                    padding: '20px',
+                    background: '#F4F4FB',
+                    borderRadius: '8px',
                     type: 'bar',
                     toolbar: {
                         show: false,
@@ -88,7 +106,7 @@
                 },
                 plotOptions: {
                     bar: {
-                        columnWidth: '45%',
+                        columnWidth: 70,
                         distributed: false,
                         borderRadius: 8,
                     },
@@ -96,9 +114,6 @@
                 colors: [
                     "#6C31BC"
                 ],
-                title: {
-                    text: 'AGS Population',
-                },
                 fill: {
                     type: 'solid'
                 },
@@ -141,26 +156,34 @@
 
             var chart = new ApexCharts(document.querySelector(".feed-view__graph__content"), options);
             chart.render();
+
+            $(".feed-view__ags-population__icon").click(function() {
+                $('html,body').animate({
+                        scrollTop: $(".feed-view__graph").offset().top
+                    },
+                    'slow');
+            });
         </script>
     </x-slot>
+    @if($grades_available)
     <header class="feed-view__header">
         <div class="feed-view__header__overlay">
             <img class="feed-view__header__overlay-background" src="{{ asset('assets/images/public-card-background.png') }}" alt="Wallpaper">
             <div class="feed-view__header__overlay-color"></div>
         </div>
 
-        <div class="container feed-view__header__container">
+        <div class="feed-view__header__container">
             <div class="feed-view__card-holder"></div>
             <div class="feed-view__header__content">
                 <div class="feed-view__header__details">
-                    <p class="feed-view__header__certificate">Certificate #00000750</p>
-                    <h1 class="feed-view__header__heading">Weepinbell</h1>
-                    <h1 class="feed-view__header__subheading">2021 Pokemon SWSH Shining Fates FA/Charizard VMAX </h1>
+                    <p class="feed-view__header__certificate">Certificate #{{ $certificate_id }}</p>
+                    <h1 class="feed-view__header__heading">{{ $card['name'] }}</h1>
+                    <h1 class="feed-view__header__subheading">{{ $card['full_name'] }}</h1>
                 </div>
                 <div class="feed-view__header__score">
                     <div class="feed-view__header__grade">
-                        <p class="feed-view__header__grade-label">NM+</p>
-                        <p class="feed-view__header__grade-score">7.5</p>
+                        <p class="feed-view__header__grade-label">{{ $grade['nickname'] }}</p>
+                        <p class="feed-view__header__grade-score">{{ $grade['grade'] }}</p>
                     </div>
                 </div>
             </div>
@@ -174,105 +197,111 @@
                 </div>
             </div>
             <div class="feed-view__details">
-                <div class="feed-view__details-col feed-view__details-col--card">
-                    <div class="feed-view__left-side">
-                        <div class="feed-view__share">
-                            <p class="feed-view__share__title">SHARE</p>
-                            <button class="material-icons">content_copy_rounded</button>
-                        </div>
-                        <table class="feed-view__table">
-                            <tbody>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
-                                    <td class="feed-view__table-cell">
-                                        Pokemon
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
-                                    <td class="feed-view__table-cell">
-                                        Sword & Shield Series
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
-                                    <td class="feed-view__table-cell">
-                                        Battle Styles
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="feed-view__right-side">
-                        <div class="feed-view__ags-population">
-                            <div>
-                                <p class="feed-view__ags-population__title">AGS POPULATION</p>
-                                <p class="feed-view__ags-population__count">20</p>
-                            </div>
-                            <div class="feed-view__ags-population__icon">
-                                <div><span class="material-icons">analytics</span></div>
-                                <div>
-                                    <p class="feed-view__ags-population__icon__text">View Chart</p>
+                <div class="container">
+                    <div class="feed-view__details-col feed-view__details-col--card">
+                        <div class="feed-view__left-side">
+                            <div class="feed-view__share">
+                                <p class="feed-view__share__title">SHARE</p>
+                                <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="Start a submission">
+                                    {{-- JS runtime actions --}}
                                 </div>
                             </div>
+                            <table class="feed-view__table">
+                                <tbody>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['type'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['series'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['set'] }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table class="feed-view__table">
-                            <tbody>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
-                                    <td class="feed-view__table-cell">
-                                        March 19, 2021
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
-                                    <td class="feed-view__table-cell">
-                                        #SV107
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
-                                    <td class="feed-view__table-cell">
-                                        pokepoke231
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="feed-view__right-side">
+                            <div class="feed-view__ags-population">
+                                <div>
+                                    <p class="feed-view__ags-population__title">AGS POPULATION</p>
+                                    <p class="feed-view__ags-population__count">{{ $totalAgsPopulation }}</p>
+                                </div>
+                                <div class="feed-view__ags-population__icon">
+                                    <div><span class="material-icons">analytics</span></div>
+                                    <div>
+                                        <p class="feed-view__ags-population__icon__text">View Chart</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="feed-view__table">
+                                <tbody>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['release_date'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['number'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $owner }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="feed-view__breakdown__scores-holder">
-                    <div class="feed-view__breakdown__scores feed-view__breakdown__scores--contained">
-                        <div class="feed-view__breakdown__scores-score">
-                            <p class="feed-view__breakdown__label">
-                                Centering
-                                <br />
-                                (Overall)
-                            </p>
-                            <p class="feed-view__breakdown__value">9.5</p>
-                        </div>
-                        <div class="feed-view__breakdown__scores-score">
-                            <p class="feed-view__breakdown__label">
-                                Surface
-                                <br />
-                                (Overall)
-                            </p>
-                            <p class="feed-view__breakdown__value">9.5</p>
-                        </div>
-                        <div class="feed-view__breakdown__scores-score">
-                            <p class="feed-view__breakdown__label">
-                                Edges
-                                <br />
-                                (Overall)
-                            </p>
-                            <p class="feed-view__breakdown__value">9.5</p>
-                        </div>
-                        <div class="feed-view__breakdown__scores-score">
-                            <p class="feed-view__breakdown__label">
-                                Corners
-                                <br />
-                                (Overall)
-                            </p>
-                            <p class="feed-view__breakdown__value">9.5</p>
+                    <div class="container">
+                        <div class="feed-view__breakdown__scores feed-view__breakdown__scores--contained">
+                            <div class="feed-view__breakdown__scores-score">
+                                <p class="feed-view__breakdown__label">
+                                    Centering
+                                    <br />
+                                    (Overall)
+                                </p>
+                                <p class="feed-view__breakdown__value">{{ $overall['centering'] }}</p>
+                            </div>
+                            <div class="feed-view__breakdown__scores-score">
+                                <p class="feed-view__breakdown__label">
+                                    Surface
+                                    <br />
+                                    (Overall)
+                                </p>
+                                <p class="feed-view__breakdown__value">{{ $overall['surface'] }}</p>
+                            </div>
+                            <div class="feed-view__breakdown__scores-score">
+                                <p class="feed-view__breakdown__label">
+                                    Edges
+                                    <br />
+                                    (Overall)
+                                </p>
+                                <p class="feed-view__breakdown__value">{{ $overall['edges'] }}</p>
+                            </div>
+                            <div class="feed-view__breakdown__scores-score">
+                                <p class="feed-view__breakdown__label">
+                                    Corners
+                                    <br />
+                                    (Overall)
+                                </p>
+                                <p class="feed-view__breakdown__value">{{ $overall['corners'] }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -282,4 +311,8 @@
     @include('landings.feed.publiCardPage.grades')
     @include('landings.feed.publiCardPage.populationGraph')
     @include('landings.feed.publiCardPage.generatedImages')
+    @include('landings.feed.publiCardPage.conclusion')
+    @else
+    Grades are not available yet.
+    @endif
 </x-layout>

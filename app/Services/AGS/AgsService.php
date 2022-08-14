@@ -284,74 +284,45 @@ class AgsService
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
         $imagesData = [
-            [
-                'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Front Centering',
+            'front' => [
+                [
+                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Centering',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Surface',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Edges',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Corners',
+                ],
             ],
-            [
-                'output_image' => $data['front_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Front Surface',
-            ],
-            [
-                'output_image' => $data['front_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Front Edges',
-            ],
-            [
-                'output_image' => $data['front_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Front Corners',
-            ],
-            [
-                'output_image' => $data['back_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Back Centering',
-            ],
-            [
-                'output_image' => $data['back_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Back Surface',
-            ],
-            [
-                'output_image' => $data['back_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Back Edges',
-            ],
-            [
-                'output_image' => $data['back_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Back Corners',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Laser Front Centering',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Laser Front Surface',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Laser Front Edges',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Laser Front Corners',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Laser Back Centering',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Laser Back Surface',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Laser Back Edges',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Laser Back Corners',
+            'back' => [
+                [
+                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Centering',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Surface',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Edges',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Corners',
+                ],
             ],
         ];
-
         return array_filter($imagesData, function (array $imageData) {
-            return $imageData['output_image'] !== null;
+            return $imageData !== null;
         });
     }
 

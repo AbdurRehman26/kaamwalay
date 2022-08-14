@@ -32,18 +32,4 @@ class CouponHasInvalidMinThreshold extends Exception
             'error' => sprintf($this->message, $this->itemsCount),
         ], $this->code);
     }
-
-//    protected function getCouponMinimumThresholdAmount(): string|int
-//    {
-//        return $this->coupon->min_threshold_type === CouponMinThresholdTypeEnum::CARD_COUNT
-//            ? $this->coupon->min_threshold_value
-//            : '$' . $this->coupon->min_threshold_value;
-//    }
-//
-//    protected function getCouponMinimumThresholdType()
-//    {
-//        return $this->coupon->min_threshold_type === CouponMinThresholdTypeEnum::CARD_COUNT
-//            ? 'cards'
-//            : 'grand total';
-//    }
 }

@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { MinThresholdTypeEnum } from '@shared/constants/MinThresholdTypeEnum';
 import { CouponApplicableEntity } from '@shared/entities/CouponApplicableEntity';
 
 export interface NewPromoCodeDialogState {
@@ -23,6 +24,8 @@ export interface NewPromoCodeDialogState {
     isTableLoading: boolean;
     description: string;
     usageAllowed: null | number;
+    minThresholdType: MinThresholdTypeEnum;
+    minThresholdValue: number;
 }
 
 const initialState: NewPromoCodeDialogState = {
@@ -53,6 +56,8 @@ const initialState: NewPromoCodeDialogState = {
     discountDateType: DiscountDateTypeEnum.permanent,
     isPermanent: true,
     usageAllowed: null,
+    minThresholdType: MinThresholdTypeEnum.None,
+    minThresholdValue: 0,
 };
 
 export const adminNewPromoCodeSlice = createSlice({
@@ -125,6 +130,12 @@ export const adminNewPromoCodeSlice = createSlice({
             }
         },
         clearNewPromoCodeState: () => initialState,
+        setMinThresholdType: (state, action: PayloadAction<MinThresholdTypeEnum>) => {
+            state.minThresholdType = action.payload;
+        },
+        setMinThresholdValue: (state, action: PayloadAction<number>) => {
+            state.minThresholdValue = action.payload;
+        },
     },
     extraReducers: {},
 });
@@ -147,4 +158,6 @@ export const {
     setCouponablesForApplicables,
     setIsTableLoading,
     setDescription,
+    setMinThresholdValue,
+    setMinThresholdType,
 } = adminNewPromoCodeSlice.actions;

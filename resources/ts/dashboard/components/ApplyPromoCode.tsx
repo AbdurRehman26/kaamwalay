@@ -66,7 +66,7 @@ export function ApplyPromoCode() {
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}&items_count=${selectedCards.length}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -84,7 +84,7 @@ export function ApplyPromoCode() {
                 dispatch(setValidCouponId(-1));
             }
         },
-        [apiService, dispatch, selectedServiceLevelID, showInvalidState],
+        [apiService, dispatch, selectedServiceLevelID, showInvalidState, selectedCards.length],
     );
 
     const debounceCheckCoupon = useMemo(

@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Coupon;
 
+use App\Enums\Coupon\CouponMinThresholdTypeEnum;
 use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
@@ -72,6 +73,10 @@ class CouponService
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
         $coupon->created_by = $user->id;
         $coupon->usage_allowed_per_user = $data['usage_allowed_per_user'];
+
+        if (! empty($data['has_minimum_cards_threshold'])) {
+            $this->handleCouponMinThreshold($data, $coupon);
+        }
 
         $coupon->save();
 
@@ -265,5 +270,11 @@ class CouponService
         return $couponableManager->entity(
             CouponApplicable::ENTITIES_MAPPING[$couponApplicableId]
         );
+    }
+
+    protected function handleCouponMinThreshold(array $data, Coupon &$coupon): void
+    {
+        $coupon->min_threshold_type = CouponMinThresholdTypeEnum::CARD_COUNT;
+        $coupon->min_threshold_value = $data['min_threshold_value'];
     }
 }

@@ -12,13 +12,16 @@ import { DropzoneOptions, useDropzone } from 'react-dropzone';
 interface ImageUploaderProps {
     onChange: (file: File | null) => void;
     profilePicMode?: boolean;
+    maxHeight?: string;
+    maxWidth?: string;
+    isSmall?: boolean;
 }
 
 const useStyles = makeStyles(
     () => ({
         uploadedImage: {
-            maxWidth: '210px',
-            maxHeight: '176px',
+            // maxWidth: '210px',
+            // maxHeight: '176px',
             marginTop: '6px',
             imageRendering: 'pixelated',
         },
@@ -68,8 +71,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
         return (
             <Box
                 sx={{ backgroundColor: '#F9F9F9', border: '1px solid #E0E0E0' }}
-                minWidth={'214px'}
-                minHeight={'214px'}
+                maxWidth={props.maxWidth ? props.maxWidth : '214px'}
+                maxHeight={props.maxHeight ? props.maxHeight : '214px'}
                 display={'flex'}
                 flexDirection={'column'}
                 alignItems={'center'}
@@ -77,8 +80,21 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 {...getRootProps()}
             >
                 <input {...getInputProps()} />
-                <img src={URL.createObjectURL(uploadedImage)} alt="" className={classes.uploadedImage} />
-                <ButtonGroup variant="contained" sx={{ marginTop: '6px', marginBottom: '6px' }}>
+                <img
+                    src={URL.createObjectURL(uploadedImage)}
+                    alt=""
+                    className={classes.uploadedImage}
+                    style={{
+                        maxHeight: props.maxHeight ? props.maxHeight : '176px',
+                        maxWidth: props.maxWidth ? props.maxWidth : '210px',
+                    }}
+                />
+                <ButtonGroup
+                    size={props.isSmall ? 'small' : 'medium'}
+                    color={props.isSmall ? 'inherit' : 'primary'}
+                    variant="contained"
+                    sx={{ marginTop: '6px', marginBottom: '6px' }}
+                >
                     <Button onClick={deleteImage}>Delete</Button>
                     <Button onClick={replaceImage}>Replace</Button>
                 </ButtonGroup>
@@ -127,8 +143,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 backgroundColor: '#F9F9F9',
                 border: '1px solid #E0E0E0',
             }}
-            minHeight={'214px'}
-            minWidth={'214px'}
+            minHeight={props.maxHeight ? props.maxHeight : '176px'}
+            minWidth={props.maxWidth ? props.maxWidth : '214px'}
             display={'flex'}
             flexDirection={'column'}
             alignItems={'center'}

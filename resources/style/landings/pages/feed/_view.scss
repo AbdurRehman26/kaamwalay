@@ -38,6 +38,10 @@
         &__text {
             padding: 60px;
 
+            @include breakpoints.down(768) {
+                padding: 0px;
+            }
+
             &__heading {
                 font-weight: 500;
                 font-size: 16px;
@@ -55,6 +59,11 @@
                 line-height: 47px;
                 text-align: center;
                 color: rgba(0, 0, 0, 0.87);
+
+                @include breakpoints.down(768) {
+                    font-size: 32px;
+                    line-height: 38px;
+                }
             }
         }
     }
@@ -132,6 +141,10 @@
         display: flex;
         justify-content: space-between;
 
+        @include breakpoints.down(768) {
+            width: 360px;
+        }
+
         &__count {
             font-weight: 800;
             font-size: 20px;
@@ -173,6 +186,18 @@
 
     &__right-side {
         margin-left: 15px;
+
+        @include breakpoints.down(768) {
+            margin-left: 0px;
+        }
+    }
+
+    &__left-side {
+        margin-left: 15px;
+
+        @include breakpoints.down(768) {
+            display: none;
+        }
     }
 
     &__generated-images {
@@ -307,6 +332,8 @@
 
             @include breakpoints.down(768) {
                 max-width: 100%;
+                margin-bottom: 50%;
+                margin-top: 20px;
             }
 
             @include breakpoints.down(xs) {
@@ -534,7 +561,8 @@
             height: 560px;
 
             @include breakpoints.down(768) {
-                margin-top: 24px;
+                width: 100%;
+                height: 100%;
             }
         }
     }
@@ -550,6 +578,7 @@
 
         @include breakpoints.down(768) {
             padding-left: 0;
+            margin-left: 0px;
         }
 
         &-col {
@@ -574,6 +603,14 @@
     &__table {
         width: 100%;
         margin-top: 30px;
+
+        &__mobile-content {
+            display: none;
+
+            @include breakpoints.down(768) {
+                display: table-row;
+            }
+        }
 
         &-cell {
             font-size: 14px;
@@ -626,6 +663,10 @@
 
         .container {
             display: flex;
+
+            @include breakpoints.down(768) {
+                display: block;
+            }
         }
 
         &--overall,
@@ -650,6 +691,11 @@
             width: 100%;
             padding: 20px;
             margin-left: 12px;
+
+            @include breakpoints.down(768) {
+                margin-left: 0px;
+                margin-top: 30px;
+            }
         }
 
         &__table {
@@ -793,6 +839,10 @@
         padding-bottom: 40px;
         background: #fff;
 
+        @include breakpoints.down(768) {
+            padding-bottom: 0px;
+        }
+
         &__image {
             display: block;
             width: 403px;
@@ -809,6 +859,11 @@
             background: rgba(31, 31, 31, 0.49);
             border-radius: 20px;
             padding: 10px 20px;
+
+            @include breakpoints.down(768) {
+                bottom: 15px;
+                right: 0px;
+            }
         }
 
         &__card {

@@ -243,6 +243,24 @@
                         </div>
                         <table class="feed-view__table">
                             <tbody>
+                                <tr class="feed-view__table__mobile-content">
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['type'] }}
+                                    </td>
+                                </tr>
+                                <tr class="feed-view__table__mobile-content">
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['series'] }}
+                                    </td>
+                                </tr>
+                                <tr class="feed-view__table__mobile-content">
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['set'] }}
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
                                     <td class="feed-view__table-cell">

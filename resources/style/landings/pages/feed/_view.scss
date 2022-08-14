@@ -118,6 +118,7 @@
             color: rgba(0, 0, 0, 0.54);
             padding: 0px 15px;
         }
+
         &__icon:hover {
             cursor: pointer;
         }
@@ -149,9 +150,11 @@
             color: rgba(0, 0, 0, 0.54);
             padding: 15px;
         }
+
         &__icon:hover {
             cursor: pointer;
         }
+
         &__icon {
             display: flex;
             padding: 10px;
@@ -169,7 +172,7 @@
     }
 
     &__right-side {
-        margin-left: 30px;
+        margin-left: 15px;
     }
 
     &__generated-images {
@@ -301,8 +304,6 @@
             display: flex;
             align-items: center;
             width: 100%;
-            padding: 24px 0 24px 24px;
-            max-width: calc(100% - 224px);
 
             @include breakpoints.down(768) {
                 max-width: 100%;
@@ -413,8 +414,12 @@
     &__card {
         margin-top: 50px;
 
+        .container {
+            width: 546px;
+        }
+
         &-holder {
-            width: 90%;
+            width: 92%;
 
             @include breakpoints.down(768) {
                 width: 100%;
@@ -520,14 +525,13 @@
             }
         }
 
-        .feed-view__card-holder {
-            position: relative;
+        &__card-holder {
             margin-top: -170px;
-            width: 546px;
-            height: 600px;
             background: #f9f9f9;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
+            width: 546px;
+            height: 560px;
 
             @include breakpoints.down(768) {
                 margin-top: 24px;
@@ -537,7 +541,8 @@
 
     &__details {
         padding-top: 24px;
-        padding-left: 60px;
+        width: 100%;
+        margin-left: 60px;
 
         @include breakpoints.down(md) {
             flex-direction: column;
@@ -550,7 +555,6 @@
         &-col {
             display: inline-flex;
             align-items: flex-start;
-            padding: 0 14px;
 
             @include breakpoints.down(md) {
                 padding: 0;
@@ -635,8 +639,7 @@
             background: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
-            width: 600px;
-            height: 255px;
+            width: 100%;
             padding: 20px;
         }
 
@@ -644,10 +647,9 @@
             background: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
-            width: 600px;
-            height: 255px;
+            width: 100%;
             padding: 20px;
-            margin-left: 50px;
+            margin-left: 12px;
         }
 
         &__table {
@@ -793,27 +795,35 @@
 
         &__image {
             display: block;
-            border: 0;
-            width: 100%;
-            height: auto;
+            width: 403px;
+            height: 288px;
+            border-radius: 8px;
+        }
+
+        &__caption {
+            position: absolute;
+            bottom: 130px;
+            right: 231px;
+            transform: rotate(90deg);
+            color: white;
+            background: rgba(31, 31, 31, 0.49);
+            border-radius: 20px;
+            padding: 10px 20px;
         }
 
         &__card {
             background: white;
-            margin-bottom: 2em;
-            flex: 0 1 24%;
+            transform: rotate(-90deg);
         }
 
         &__cards-front {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            margin-top: 50px;
         }
 
         &__cards-back {
             display: none;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            margin-top: 50px;
         }
     }
 

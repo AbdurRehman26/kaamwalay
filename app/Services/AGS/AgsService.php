@@ -287,37 +287,37 @@ class AgsService
             'front' => [
                 [
                     'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Laser Front Centering',
+                    'name' => 'Centering',
                 ],
                 [
                     'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Laser Front Surface',
+                    'name' => 'Surface',
                 ],
                 [
                     'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Laser Front Edges',
+                    'name' => 'Edges',
                 ],
                 [
                     'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Laser Front Corners',
+                    'name' => 'Corners',
                 ],
             ],
             'back' => [
                 [
                     'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Laser Back Centering',
+                    'name' => 'Centering',
                 ],
                 [
                     'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Laser Back Surface',
+                    'name' => 'Surface',
                 ],
                 [
                     'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Laser Back Edges',
+                    'name' => 'Edges',
                 ],
                 [
                     'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Laser Back Corners',
+                    'name' => 'Corners',
                 ],
             ],
         ];

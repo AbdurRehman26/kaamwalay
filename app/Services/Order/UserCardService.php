@@ -63,15 +63,15 @@ class UserCardService
         $itemsPerPage = request('per_page');
 
         return UserCard::with(['orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory', 'user'])
-            ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
-            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-            ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
-            ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])
-            ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
-            ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
-            ->select(['user_cards.*', 'order_item_status_histories.created_at as graded_at'])
-            ->orderBy('graded_at', 'desc')
-            ->paginate($itemsPerPage);
+        ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+        ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])
+        ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
+        ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
+        ->select(['user_cards.*', 'order_item_status_histories.created_at as graded_at'])
+        ->orderBy('graded_at', 'desc')
+        ->paginate($itemsPerPage);
     }
 
     public function getCustomerCards(User $user): LengthAwarePaginator
@@ -79,29 +79,33 @@ class UserCardService
         $itemsPerPage = request('per_page');
 
         $query = UserCard::with(['orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory'])
-            ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
-            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-            ->join('card_products', 'card_products.id', '=', 'order_items.card_product_id')
-            ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
-            ->where('user_cards.user_id', $user->id)
-            ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
-            ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
-            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-            ->select(['user_cards.*']);
+        ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('card_products', 'card_products.id', '=', 'order_items.card_product_id')
+        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+        ->where('user_cards.user_id', $user->id)
+        ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
+        ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
+        ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+        ->select(['user_cards.*']);
 
         return QueryBuilder::for($query)
-            ->allowedFilters([
-                AllowedFilter::custom('search', new UserCardSearchFilter),
-            ])
-            ->allowedSorts([
-                AllowedSort::field('name', 'card_products.name'),
-                AllowedSort::field('date', 'order_item_status_histories.created_at'),
-            ])
-            ->defaultSort('-order_item_status_histories.created_at')
-            ->paginate($itemsPerPage);
+        ->allowedFilters([
+            AllowedFilter::custom('search', new UserCardSearchFilter),
+        ])
+        ->allowedSorts([
+            AllowedSort::field('name', 'card_products.name'),
+            AllowedSort::field('date', 'order_item_status_histories.created_at'),
+        ])
+        ->defaultSort('-order_item_status_histories.created_at')
+        ->paginate($itemsPerPage);
     }
-
-    public function getPopDataForSpecificCard(string $certificateId, $gradeName)
+    
+    /**
+     * @param  string  $certificateId
+     * @return mixed
+     */
+    public function getPopDataForSpecificCard(string $certificateId, string $gradeName): mixed
     {
         $cardProductId = $this->getCardProductId($certificateId);
         $gradeNickName = $this->convertGradeNicknameToColumn($gradeName);
@@ -111,6 +115,10 @@ class UserCardService
         return $totalPop;
     }
 
+    /**
+     * @param  string  $certificateId
+     * @return array
+     */
     public function getPopDataForGraph(string $certificateId): array
     {
         $cardProductId = $this->getCardProductId($certificateId);
@@ -139,12 +147,20 @@ class UserCardService
             'totalAgsPop' => $popData->total + $popData->total_plus,
         ];
     }
-
+    
+    /**
+     * @param  string  $nickname
+     * @return string
+     */
     private function convertGradeNicknameToColumn(string $nickname): string
     {
         return strtolower(str_replace('-', '_', str_replace('+', '_plus', $nickname)));
     }
 
+    /**
+     * @param  string  $certificateId
+     * @return int
+     */
     private function getCardProductId(string $certificateId): int
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();

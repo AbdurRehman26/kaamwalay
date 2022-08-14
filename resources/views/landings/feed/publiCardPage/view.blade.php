@@ -172,7 +172,7 @@
             <div class="feed-view__header__overlay-color"></div>
         </div>
 
-        <div class="feed-view__header__container">
+        <div class="container feed-view__header__container">
             <div class="feed-view__card-holder"></div>
             <div class="feed-view__header__content">
                 <div class="feed-view__header__details">
@@ -191,117 +191,113 @@
     </header>
     <section class="feed-view__content">
         <div class="container feed-view__content__container">
-            <div class="feed-view__card-holder">
+            <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
                     @include('landings.feed.publiCardPage.cardsImageSlider')
                 </div>
             </div>
             <div class="feed-view__details">
-                <div class="container">
-                    <div class="feed-view__details-col feed-view__details-col--card">
-                        <div class="feed-view__left-side">
-                            <div class="feed-view__share">
-                                <p class="feed-view__share__title">SHARE</p>
-                                <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="Start a submission">
-                                    {{-- JS runtime actions --}}
-                                </div>
+                <div class="feed-view__details-col feed-view__details-col--card">
+                    <div class="feed-view__left-side">
+                        <div class="feed-view__share">
+                            <p class="feed-view__share__title">SHARE</p>
+                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="Start a submission">
+                                {{-- JS runtime actions --}}
                             </div>
-                            <table class="feed-view__table">
-                                <tbody>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $card['type'] }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $card['series'] }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $card['set'] }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
-                        <div class="feed-view__right-side">
-                            <div class="feed-view__ags-population">
+                        <table class="feed-view__table">
+                            <tbody>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['type'] }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['series'] }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['set'] }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="feed-view__right-side">
+                        <div class="feed-view__ags-population">
+                            <div>
+                                <p class="feed-view__ags-population__title">AGS POPULATION</p>
+                                <p class="feed-view__ags-population__count">{{ $totalAgsPopulation }}</p>
+                            </div>
+                            <div class="feed-view__ags-population__icon">
+                                <div><span class="material-icons">analytics</span></div>
                                 <div>
-                                    <p class="feed-view__ags-population__title">AGS POPULATION</p>
-                                    <p class="feed-view__ags-population__count">{{ $totalAgsPopulation }}</p>
-                                </div>
-                                <div class="feed-view__ags-population__icon">
-                                    <div><span class="material-icons">analytics</span></div>
-                                    <div>
-                                        <p class="feed-view__ags-population__icon__text">View Chart</p>
-                                    </div>
+                                    <p class="feed-view__ags-population__icon__text">View Chart</p>
                                 </div>
                             </div>
-                            <table class="feed-view__table">
-                                <tbody>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $card['release_date'] }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $card['number'] }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
-                                        <td class="feed-view__table-cell">
-                                            {{ $owner }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
+                        <table class="feed-view__table">
+                            <tbody>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['release_date'] }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $card['number'] }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
+                                    <td class="feed-view__table-cell">
+                                        {{ $owner }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="feed-view__breakdown__scores-holder">
-                    <div class="container">
-                        <div class="feed-view__breakdown__scores feed-view__breakdown__scores--contained">
-                            <div class="feed-view__breakdown__scores-score">
-                                <p class="feed-view__breakdown__label">
-                                    Centering
-                                    <br />
-                                    (Overall)
-                                </p>
-                                <p class="feed-view__breakdown__value">{{ $overall['centering'] }}</p>
-                            </div>
-                            <div class="feed-view__breakdown__scores-score">
-                                <p class="feed-view__breakdown__label">
-                                    Surface
-                                    <br />
-                                    (Overall)
-                                </p>
-                                <p class="feed-view__breakdown__value">{{ $overall['surface'] }}</p>
-                            </div>
-                            <div class="feed-view__breakdown__scores-score">
-                                <p class="feed-view__breakdown__label">
-                                    Edges
-                                    <br />
-                                    (Overall)
-                                </p>
-                                <p class="feed-view__breakdown__value">{{ $overall['edges'] }}</p>
-                            </div>
-                            <div class="feed-view__breakdown__scores-score">
-                                <p class="feed-view__breakdown__label">
-                                    Corners
-                                    <br />
-                                    (Overall)
-                                </p>
-                                <p class="feed-view__breakdown__value">{{ $overall['corners'] }}</p>
-                            </div>
+                    <div class="feed-view__breakdown__scores feed-view__breakdown__scores--contained">
+                        <div class="feed-view__breakdown__scores-score">
+                            <p class="feed-view__breakdown__label">
+                                Centering
+                                <br />
+                                (Overall)
+                            </p>
+                            <p class="feed-view__breakdown__value">{{ $overall['centering'] }}</p>
+                        </div>
+                        <div class="feed-view__breakdown__scores-score">
+                            <p class="feed-view__breakdown__label">
+                                Surface
+                                <br />
+                                (Overall)
+                            </p>
+                            <p class="feed-view__breakdown__value">{{ $overall['surface'] }}</p>
+                        </div>
+                        <div class="feed-view__breakdown__scores-score">
+                            <p class="feed-view__breakdown__label">
+                                Edges
+                                <br />
+                                (Overall)
+                            </p>
+                            <p class="feed-view__breakdown__value">{{ $overall['edges'] }}</p>
+                        </div>
+                        <div class="feed-view__breakdown__scores-score">
+                            <p class="feed-view__breakdown__label">
+                                Corners
+                                <br />
+                                (Overall)
+                            </p>
+                            <p class="feed-view__breakdown__value">{{ $overall['corners'] }}</p>
                         </div>
                     </div>
                 </div>

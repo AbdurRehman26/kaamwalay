@@ -14,6 +14,7 @@
             @foreach($generated_images['front'] as $front_image)
             <article class="feed-view__images__card">
                 <img class="feed-view__images__image" src="{{ $front_image['output_image'] }}" data-imagebox="gallery" data-imagebox-caption="{{ $front_image['name'] }}">
+                <p class="feed-view__images__caption">{{ $front_image['name'] }}</p>
             </article>
             @endforeach
         </div>
@@ -21,6 +22,7 @@
             @foreach($generated_images['back'] as $back_image)
             <article class="feed-view__images__card">
                 <img class="feed-view__images__image" src="{{ $back_image['output_image'] }}" data-imagebox="gallery" data-imagebox-caption="{{ $back_image['name'] }}">
+                <p class="feed-view__images__caption">{{ $back_image['name'] }}</p>
             </article>
             @endforeach
         </div>

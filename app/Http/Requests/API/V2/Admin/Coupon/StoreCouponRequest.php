@@ -17,7 +17,7 @@ class StoreCouponRequest extends V1StoreCouponRequest
         $rules = parent::rules();
 
         return array_merge($rules, [
-            'has_minimum_cards_threshold' => ['required', 'boolean'],
+            'has_minimum_cards_threshold' => ['sometimes', 'boolean'],
             'min_threshold_value' => [
                 'required_if:has_minimum_cards_threshold,true',
                 'numeric',

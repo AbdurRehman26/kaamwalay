@@ -193,7 +193,7 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    @include('landings.feed.publiCardPage.cardsImageSlider')
+                    @include('landings.feed.publiCardPage.cards-image-slider')
                 </div>
             </div>
             <div class="feed-view__details">
@@ -305,8 +305,8 @@
         </div>
     </section>
     @include('landings.feed.publiCardPage.grades')
-    @include('landings.feed.publiCardPage.populationGraph')
-    @include('landings.feed.publiCardPage.generatedImages')
+    @include('landings.feed.publiCardPage.population-graph')
+    @include('landings.feed.publiCardPage.generated-images')
     @include('landings.feed.publiCardPage.conclusion')
     @else
     Grades are not available yet.

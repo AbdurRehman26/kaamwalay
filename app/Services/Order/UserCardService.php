@@ -12,7 +12,6 @@ use App\Models\UserCard;
 use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
 use App\Services\AGS\AgsService;
-use Arr;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -177,7 +176,7 @@ class UserCardService
                 'type' => $userCard->orderItem->cardProduct->cardCategory->name,
                 'series' => $userCard->orderItem->cardProduct->cardSet->cardSeries->name,
                 'set' => $userCard->orderItem->cardProduct->cardSet->name,
-                'release_date' => !empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
+                'release_date' => ! empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
                     Carbon::parse($userCard->orderItem->cardProduct->cardSet->release_date)->format('F d, Y') :
                     null,
                 'number' => $userCard->orderItem->cardProduct->card_number_order ?? null,

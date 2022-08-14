@@ -656,6 +656,9 @@ export function PromoCodeModal() {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
+                                ...(minThresholdValue < 2 && {
+                                    borderColor: '#BE1A1A',
+                                }),
                             }}
                         >
                             <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
@@ -701,12 +704,18 @@ export function PromoCodeModal() {
                                         value={minThresholdValue}
                                         onChange={handleMinThresholdValueChange}
                                         error={minThresholdValue < 2}
-                                        helperText={minThresholdValue < 2 ? 'The minimum must be 2 or greater' : ''}
                                     />
                                 </Box>
                             ) : null}
                         </Paper>
                     </Box>
+                    {minThresholdValue < 2 && minThresholdType === MinThresholdTypeEnum.CardCount ? (
+                        <Box display={'flex'} justifyContent={'flex-end'} flexDirection={'row'} width={'98%'}>
+                            <Typography sx={{ color: '#BE1A1A', fontSize: '0.75rem' }}>
+                                The minimum must be 2 or greater
+                            </Typography>
+                        </Box>
+                    ) : null}
                 </Box>
             </DialogContent>
             <DialogActions>

@@ -110,7 +110,7 @@
     &__share {
         background: #f4f4fb;
         border-radius: 8px;
-        width: 310px;
+        width: 320px;
         height: 80px;
 
         &__title {
@@ -136,7 +136,7 @@
     &__ags-population {
         background: #f4f4fb;
         border-radius: 8px;
-        width: 310px;
+        width: 320px;
         height: 80px;
         display: flex;
         justify-content: space-between;
@@ -193,8 +193,6 @@
     }
 
     &__left-side {
-        margin-left: 15px;
-
         @include breakpoints.down(768) {
             display: none;
         }
@@ -570,7 +568,7 @@
     &__details {
         padding-top: 24px;
         width: 100%;
-        margin-left: 60px;
+        margin-left: 50px;
 
         @include breakpoints.down(md) {
             flex-direction: column;

@@ -13,7 +13,7 @@
         <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+        @if($grades_available)
         <script defer>
             const front = document.getElementsByClassName("feed-view__images__cards-front");
             const back = document.getElementsByClassName("feed-view__images__cards-back");
@@ -165,7 +165,6 @@
             });
         </script>
     </x-slot>
-    @if($grades_available)
     <header class="feed-view__header">
         <div class="feed-view__header__overlay">
             <img class="feed-view__header__overlay-background" src="{{ asset('assets/images/public-card-background.png') }}" alt="Wallpaper">
@@ -201,7 +200,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="Start a submission">
+                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ env('APP_URL') }}/feed/{{ $certificate_id }}/view">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

@@ -227,12 +227,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 setPaymentStatus(selectedPaymentStatus);
             }
 
-            orders$.searchSorted(
+            orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
                 }),
+                1,
             );
         },
         [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
@@ -242,12 +243,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         () => {
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
-                orders$.searchSorted(
+                orders$.searchSortedWithPagination(
                     { sort: sortFilter },
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
                     }),
+                    1,
                 );
             }
         },

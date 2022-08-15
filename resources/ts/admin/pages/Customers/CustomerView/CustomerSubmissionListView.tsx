@@ -175,12 +175,13 @@ export function CustomerSubmissionListView() {
     useEffect(() => {
         if (!orders$.isLoading && isSearchEnabled) {
             // noinspection JSIgnoredPromiseFromCall
-            orders$.searchSorted(
+            orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
                     search,
                     paymentStatus,
                 }),
+                1,
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -208,12 +209,13 @@ export function CustomerSubmissionListView() {
                 setPaymentStatus(selectedPaymentStatus);
             }
 
-            orders$.searchSorted(
+            orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
                 }),
+                1,
             );
         },
         [orders$, search, paymentStatus, setPaymentStatus, sortFilter],

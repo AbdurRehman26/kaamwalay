@@ -186,13 +186,14 @@ export function CustomersList() {
         formikRef.current?.setFieldValue('maxSubmissions', '');
         delQuery('minSubmissions', 'maxSubmissions');
 
-        await customers.searchSorted(
+        await customers.searchSortedWithPagination(
             { sort: sortFilter },
             getFilters({
                 ...formikRef.current!.values,
                 minSubmissions: '',
                 maxSubmissions: '',
             }),
+            1,
         );
     }, [sortFilter, customers, delQuery]);
 
@@ -201,13 +202,14 @@ export function CustomersList() {
         formikRef.current?.setFieldValue('signedUpEnd', '');
         delQuery('signedUpStart', 'signedUpEnd');
 
-        await customers.searchSorted(
+        await customers.searchSortedWithPagination(
             { sort: sortFilter },
             getFilters({
                 ...formikRef.current!.values,
                 signedUpStart: '',
                 signedUpEnd: '',
             }),
+            1,
         );
     }, [sortFilter, customers, delQuery]);
 
@@ -220,12 +222,13 @@ export function CustomersList() {
             }
 
             formikRef.current?.setFieldValue('search', search);
-            await customers.searchSorted(
+            await customers.searchSortedWithPagination(
                 { sort: sortFilter },
                 getFilters({
                     ...formikRef.current!.values,
                     search,
                 }),
+                1,
             );
         },
         [addQuery, customers, delQuery, sortFilter],
@@ -239,7 +242,7 @@ export function CustomersList() {
                 signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
             });
 
-            await customers.searchSorted({ sort: sortFilter }, getFilters(values));
+            await customers.searchSortedWithPagination({ sort: sortFilter }, getFilters(values), 1);
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },

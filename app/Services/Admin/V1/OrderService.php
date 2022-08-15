@@ -46,7 +46,7 @@ class OrderService
             ->excludeCancelled()
             ->allowedFilters(Order::getAllowedAdminFilters())
             ->allowedIncludes(Order::getAllowedAdminIncludes())
-            ->allowedSorts(['grand_total'])
+            ->allowedSorts(Order::getAllowedAdminSorts())
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }

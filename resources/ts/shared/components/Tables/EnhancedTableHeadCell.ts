@@ -3,4 +3,6 @@ export default interface EnhancedTableHeadCell {
     id: string;
     label: string;
     numeric: boolean;
+    align: 'right' | 'left';
+    sortable: boolean;
 }

@@ -197,7 +197,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const handleExportData = useCallback(async () => {
         try {
-            console.log(sortFilter);
             const exportData = await dataExportRepository.export({
                 model: ExportableModelsEnum.Order,
                 sort: { sort: sortFilter },
@@ -262,8 +261,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     useEffect(() => {
         setSortFilter((orderDirection === 'desc' ? '-' : '') + orderBy);
-
-        console.log((orderDirection === 'desc' ? '-' : '') + orderBy);
     }, [orderDirection, orderBy]);
 
     if (orders$.isLoading) {

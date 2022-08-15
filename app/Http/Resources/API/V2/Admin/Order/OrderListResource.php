@@ -34,7 +34,7 @@ class OrderListResource extends BaseResource
             'order_number' => $this->order_number,
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
-            'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
+            'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'payment_status' => $this->payment_status,

@@ -169,7 +169,6 @@ class Order extends Model implements Exportable
     {
         return [
             AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
-            AllowedSort::custom('grand_total_paid', new AdminSubmissionsGrandTotalPaidSort),
             AllowedSort::custom('total_declared_value', new AdminSubmissionsTotalDeclaredValueSort),
             AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
             AllowedSort::custom('status', new AdminSubmissionsStatusSort),
@@ -177,6 +176,7 @@ class Order extends Model implements Exportable
             'created_at',
             'order_number',
             'arrived_at',
+            'grand_total',
         ];
     }
 

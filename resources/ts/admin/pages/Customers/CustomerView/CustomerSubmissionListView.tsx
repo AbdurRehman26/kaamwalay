@@ -115,7 +115,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: true,
     },
     {
-        id: 'grand_total_paid',
+        id: 'grand_total',
         numeric: true,
         disablePadding: false,
         label: 'Order Total',

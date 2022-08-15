@@ -133,7 +133,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
-            id: 'grand_total_paid',
+            id: 'grand_total',
             numeric: true,
             disablePadding: false,
             label: 'Order Total',

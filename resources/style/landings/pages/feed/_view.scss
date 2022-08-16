@@ -74,6 +74,12 @@
         justify-content: space-between;
         background: #fff;
 
+        &__container {
+            @include breakpoints.down(768) {
+                overflow: scroll;
+            }
+        }
+
         &__content {
             .apexcharts-title-text {
                 padding: 20px !important;
@@ -842,9 +848,6 @@
         }
 
         &__image {
-            display: block;
-            width: 403px;
-            height: 288px;
             border-radius: 8px;
         }
 
@@ -866,7 +869,7 @@
 
         &__card {
             background: white;
-            transform: rotate(-90deg);
+            //transform: rotate(-90deg);
         }
 
         &__cards-front {

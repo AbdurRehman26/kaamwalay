@@ -31,9 +31,9 @@ class HubspotService
 
             $owner = new Owners($hubspotClient);
             
-            $owners = explode(',' , config('services.hubspot.owner_email'));
+            $owners = explode(',', config('services.hubspot.owner_email'));
 
-            if (!Cache::has('iteration')) {
+            if (! Cache::has('iteration')) {
                 Cache::put('iteration', 0);
             }
 

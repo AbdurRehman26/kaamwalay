@@ -11,7 +11,6 @@ use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
 use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
-use App\Http\Sorts\AdminSubmissionsGrandTotalPaidSort;
 use App\Http\Sorts\AdminSubmissionsPaymentStatusSort;
 use App\Http\Sorts\AdminSubmissionsStatusSort;
 use App\Http\Sorts\AdminSubmissionsTotalDeclaredValueSort;

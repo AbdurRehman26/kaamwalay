@@ -67,6 +67,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store']);
         Route::get('/', [CardProductController::class, 'index']);
+        Route::put('/{cardProduct}', [CardProductController::class, 'update']);
     });
 
     Route::prefix('certificates')->group(function () {

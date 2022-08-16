@@ -33,6 +33,6 @@ class ChangeDealStageForOrderPlacedUserHubspot implements ShouldQueue, ShouldBeE
             return;
         }
 
-        $this->hubspotService->updateDealStageForOrderPlacedUser($event->order->user);
+        $this->hubspotService->updateDealStageForOrderPlacedUser($event->order);
     }
 }

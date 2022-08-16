@@ -137,6 +137,7 @@ class UserCardService
                 'totalPopForCurrentCard' => $popData->$gradeNickName,
             ];
         }
+
         return $data;
     }
     

@@ -230,7 +230,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     /**
-     * @return HasManyThrough
+     * @return HasManyThrough<OrderItem>
      */
     public function orderItems(): HasManyThrough
     {

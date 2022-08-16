@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -152,5 +153,26 @@ class CardProduct extends Model
     public function getSearchableName(): string
     {
         return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
+    }
+
+    public function scopeCardCategory(Builder $query, int $categoryId): Builder
+    {
+        return $query->whereHas(
+            'cardCategory',
+            fn (Builder $subQuery) => $subQuery->where('card_categories.id', $categoryId)
+        );
+    }
+
+    public function scopeReleaseDate(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereHas(
+            'cardSet',
+            fn (Builder $subQuery) => (
+                $subQuery->whereBetween(
+                    'card_sets.release_date',
+                    [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]
+                )
+            )
+        );
     }
 }

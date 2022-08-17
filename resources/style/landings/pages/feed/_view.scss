@@ -361,6 +361,7 @@
             letter-spacing: 0.7px;
             text-transform: uppercase;
             margin-bottom: 12px;
+
             @include breakpoints.down(768) {
                 margin-bottom: 30px;
             }
@@ -371,6 +372,7 @@
             justify-content: flex-end;
             margin-bottom: 35px;
             display: none;
+
             @include breakpoints.down(xs) {
                 display: flex;
             }
@@ -560,6 +562,7 @@
     &__content {
         z-index: 3;
         background-color: #fff;
+
         @include breakpoints.down(768) {
             z-index: 2;
         }
@@ -667,6 +670,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            margin-left: 10px;
         }
 
         &__heading {
@@ -859,18 +863,22 @@
         padding-bottom: 40px;
         background: #fff;
 
+        .container {
+            height: 530px;
+        }
+
         @include breakpoints.down(768) {
             padding-bottom: 0px;
         }
 
         &__image {
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 20px;
         }
 
         &__caption {
             position: absolute;
-            bottom: 130px;
-            right: 231px;
+            margin-top: -180px;
             transform: rotate(90deg);
             color: white;
             background: rgba(31, 31, 31, 0.49);
@@ -884,13 +892,18 @@
         }
 
         &__cards-front {
-            display: flex;
-            //margin-top: 50px;
+            width: 433px;
+            height: 100%;
+            transform: translateX(-100%) rotate(-90deg);
+            transform-origin: right top;
         }
 
         &__cards-back {
             display: none;
-            //margin-top: 50px;
+            width: 433px;
+            height: 100%;
+            transform: translateX(-100%) rotate(-90deg);
+            transform-origin: right top;
         }
     }
 
@@ -924,41 +937,6 @@
                     @include mixins.materialIcon('chevron_left');
                 }
             }
-        }
-
-        &__item {
-            position: relative;
-            padding: 8px;
-        }
-
-        &__link {
-            display: block;
-            width: 100%;
-            position: relative;
-            border-radius: 3px;
-            overflow: hidden;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        &__image {
-            margin: 40px 0px;
-            width: 20%;
-            position: relative;
-            z-index: 1;
-            transform: rotate(-90deg);
-        }
-
-        &__caption {
-            z-index: 3;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            padding: 8px;
-            text-align: left;
-            width: 100%;
-            right: 0;
-            color: #fff;
-            background-color: rgba(0, 0, 0, 0.7);
         }
     }
 }

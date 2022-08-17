@@ -363,6 +363,16 @@
             margin-bottom: 12px;
         }
 
+        &__copy-to-clipBoard {
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            display: none;
+            @include breakpoints.down(xs) {
+                display: flex;
+            }
+        }
+
         &__heading,
         &__subheading {
             color: #fff;
@@ -547,6 +557,9 @@
     &__content {
         z-index: 3;
         background-color: #fff;
+        @include breakpoints.down(768) {
+            z-index: 2;
+        }
 
         &__container {
             display: flex;
@@ -867,19 +880,14 @@
             }
         }
 
-        &__card {
-            background: white;
-            //transform: rotate(-90deg);
-        }
-
         &__cards-front {
             display: flex;
-            margin-top: 50px;
+            //margin-top: 50px;
         }
 
         &__cards-back {
             display: none;
-            margin-top: 50px;
+            //margin-top: 50px;
         }
     }
 

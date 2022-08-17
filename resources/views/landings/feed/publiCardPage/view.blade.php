@@ -179,10 +179,17 @@
                     <h1 class="feed-view__header__heading">{{ $card['name'] }}</h1>
                     <h1 class="feed-view__header__subheading">{{ $card['full_name'] }}</h1>
                 </div>
-                <div class="feed-view__header__score">
-                    <div class="feed-view__header__grade">
-                        <p class="feed-view__header__grade-label">{{ $grade['nickname'] }}</p>
-                        <p class="feed-view__header__grade-score">{{ $grade['grade'] }}</p>
+                <div>
+                    <div class="feed-view__header__copy-to-clipBoard">
+                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board-mobile" data-content="{{ env('APP_URL') }}/feed/{{ $certificate_id }}/view">
+                            {{-- JS runtime actions --}}
+                        </div>
+                    </div>
+                    <div class="feed-view__header__score">
+                        <div class="feed-view__header__grade">
+                            <p class="feed-view__header__grade-label">{{ $grade['nickname'] }}</p>
+                            <p class="feed-view__header__grade-score">{{ $grade['grade'] }}</p>
+                        </div>
                     </div>
                 </div>
             </div>

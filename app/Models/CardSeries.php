@@ -34,7 +34,11 @@ class CardSeries extends Model
         return $this->hasOne(CardSet::class)->oldest('release_date')->first()?->release_date ?? '';
     }
 
-    public function scopeCategory(Builder $query, CardCategory $cardCategory)
+    /**
+     * @param  Builder <CardSeries> $query
+     * @return Builder <CardSeries>
+     */
+    public function scopeCategory(Builder $query, CardCategory $cardCategory): Builder
     {
         return $query->where('card_category_id', $cardCategory->id);
     }

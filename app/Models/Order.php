@@ -309,6 +309,9 @@ class Order extends Model implements Exportable
         return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
     }
 
+    /**
+     * @return HasMany<OrderItem>
+     */
     public function gradedOrderItems(): HasMany
     {
         return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED);

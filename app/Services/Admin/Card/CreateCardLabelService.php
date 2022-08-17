@@ -21,7 +21,7 @@ class CreateCardLabelService
     protected CardSet $cardSet;
     protected string $cardSeriesName;
     protected string $cardSetName;
-    protected string $year;
+    protected int $year;
 
     public function createLabelForOrder(Order $order): void
     {
@@ -128,9 +128,9 @@ class CreateCardLabelService
                     }else{
                         $label_line_one = [$this->year, strlen($this->cardProduct->getCategoryAbbreviation()), $this->cardProduct->getLanguageAbbreviation()];
                     }
-                }else if (Carbon::parse($this->year)->year <= 2001 AND $this->cardSeries->name === 'E-CARD ERA'){
+                }else if ($this->year <= 2001 AND $this->cardSeries->name === 'E-CARD ERA'){
                     $label_line_one = [$this->year, $this->category->name, $language];
-                }else if (Carbon::parse($this->year)->year >= 2001 AND $this->cardSeries->name !== 'NEO ERA'){
+                }else if ($this->year >= 2001 AND $this->cardSeries->name !== 'NEO ERA'){
 
                     if ((strlen($this->year . $this->category->name . $language . $this->cardProduct->getSeriesNickname())) < 22){
                         $label_line_one = [$this->year, $this->category->name, $language, $this->cardProduct->getSeriesNickname()];
@@ -238,9 +238,9 @@ class CreateCardLabelService
             if($this->cardProduct->language === 'JAPANESE') {
                 if(Str::contains($this->cardSeries->name, 'PROMOS')){
                     $label_line_three = [$this->cardSet->name];
-                }else if (Carbon::parse($this->year)->year <= 2001 AND $this->cardSeries->name === 'E-CARD ERA'){
+                }else if ($this->year <= 2001 AND $this->cardSeries->name === 'E-CARD ERA'){
                     $label_line_three = [$this->cardSet->name];
-                }else if (Carbon::parse($this->year)->year >= 2001 AND $this->cardSeries->name !== 'NEO ERA'){
+                }else if ($this->year >= 2001 AND $this->cardSeries->name !== 'NEO ERA'){
 
                     if($this->cardProduct->edition === 'UNLIMITED'){
                         $label_line_three = [$this->cardSet->name];

@@ -10,13 +10,21 @@ class CardSetAbbreviation extends Model
 {
     use HasFactory;
 
-    public function scopeCategory(Builder $query, CardCategory $category)
+    /**
+     * @param  Builder  <CardSetAbbreviation> $query
+     * @return Builder <CardSetAbbreviation>
+     */
+    public function scopeCategory(Builder $query, CardCategory $category): Builder
     {
-        $query->where('card_category_id', $category->id);
+        return $query->where('card_category_id', $category->id);
     }
 
-    public function scopeLanguage(Builder $query, string $language)
+    /**
+     * @param  Builder <CardSetAbbreviation> $query
+     * @return Builder <CardSetAbbreviation>
+     */
+    public function scopeLanguage(Builder $query, string $language): Builder
     {
-        $query->where('language', $language);
+        return $query->where('language', $language);
     }
 }

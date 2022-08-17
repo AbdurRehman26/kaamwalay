@@ -237,6 +237,9 @@ class CardProduct extends Model
         return $languageList[Str::lower($this->language)];
     }
 
+    /**
+     * @return HasOne <CardLabel>
+     */
     public function cardLabel(): HasOne
     {
         return $this->hasOne(CardLabel::class);

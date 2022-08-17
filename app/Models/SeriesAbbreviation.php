@@ -14,4 +14,9 @@ class SeriesAbbreviation extends Model
     {
         $query->where('card_category_id', $category->id);
     }
+
+    public function scopeLanguage(Builder $query, string $language)
+    {
+        $query->where('language', $language);
+    }
 }

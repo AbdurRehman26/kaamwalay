@@ -14,20 +14,19 @@ use Illuminate\Support\Str;
 
 class CreateCardLabelService
 {
-    public OrderItem $orderItem;
-    public CardProduct $cardProduct;
-    public CardCategory $category;
-    public CardSeries $cardSeries;
-    public CardSet $cardSet;
-    public string $cardSeriesName;
-    public string $cardSetName;
-    public string $year;
-
+    protected OrderItem $orderItem;
+    protected CardProduct $cardProduct;
+    protected CardCategory $category;
+    protected CardSeries $cardSeries;
+    protected CardSet $cardSet;
+    protected string $cardSeriesName;
+    protected string $cardSetName;
+    protected string $year;
 
     public function createLabelForOrder(Order $order): void
     {
         foreach ($order->orderItems as $orderItem){
-            if($orderItem->cardProduct->cardLabel()->doesntExist()){
+            if($orderItem->canCreateLabel()){
                 $this->createLabel($orderItem->cardProduct);
             }
         }
@@ -47,8 +46,9 @@ class CreateCardLabelService
     public function createLabel(CardProduct $cardProduct): void
     {
         $this->initializeValues($cardProduct);
+
         CardLabel::create(
-            [
+             [
                 'card_product_id' => $cardProduct->id,
                 'line_one' => $this->getFirstLine(),
                 'line_two' => $this->getSecondLine(),
@@ -71,7 +71,7 @@ class CreateCardLabelService
         if (
             $this->category->name == 'Pokemon' &&
             $this->cardProduct->language === 'English' &&
-            Str::lower($this->cardSet->name) == 'radiant collection'
+            Str::lower($this->cardSetName) == 'radiant collection'
         ){
             $card_number = '#RC' . $card_number_order;
         }
@@ -87,7 +87,6 @@ class CreateCardLabelService
             $this->category->name == 'Pokemon'
         ){
             if($this->cardProduct->language === 'English'){
-
                 if (Str::contains($this->cardSeriesName, 'PROMOS') || Str::contains($this->cardSetName, 'PROMOS')) {
                     $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getSeriesNickname(), 'PROMO'];
 
@@ -95,7 +94,6 @@ class CreateCardLabelService
                         $label_line_one = [$this->year, $this->category->name];
                     }
                 }else if($this->year > 2002 || in_array($this->cardSetName, ['LEGENDARY COLLECTION', 'EXPEDITION'])){
-
                     if ($this->cardSetName === $this->cardSeriesName){
                         return implode(' ', [$this->year, $this->category->name]);
                     }
@@ -108,7 +106,7 @@ class CreateCardLabelService
                         $label_line_one = [$this->year, $this->category->name, 'BW'];
                     }
                 } else if ($this->year < 2002 or $this->cardSetName == 'NEO DESTINY'){
-                    $label_line_one = $this->checkLineOneLength([$this->year, $this->category->name, $this->cardProduct->getSetNickname()]);
+                    $label_line_one = $this->checkLineOneLengthOld([$this->year, $this->category->name, $this->cardProduct->getSetNickname()]);
                     if ($this->cardSetName == 'SOUTHERN ISLANDS'){
                         $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getSetNickname()];
                     }
@@ -301,12 +299,31 @@ class CreateCardLabelService
     protected function checkLineOneLength(array $label_line_one): array
     {
         $length = strlen(implode(' ', $label_line_one));
-        if ($length > 20 AND strlen(implode('', $label_line_one)) > 2 and (int) ($label_line_one[0])){
+        if ($length > 20 AND count($label_line_one) > 2 AND (int) ($label_line_one[0])){
             $label_line_one[2] =  $this->cardProduct->getSeriesNickname();
         }
 
         if ($label_line_one[2] == 'EX Ruby & Sapphire'){
             $label_line_one[2] = $this->cardProduct->getSeriesNickname();
+        }
+
+        return $label_line_one;
+    }
+
+    protected function checkLineOneLengthOld(array $label_line_one): array
+    {
+        $length = strlen(implode('', $label_line_one));
+
+        if ($length > 30 AND count($label_line_one) > 2 AND (int)($label_line_one[0])){
+            $label_line_one[2] = $this->cardProduct->getSetNickname();
+        }
+
+        if (Str::lower($label_line_one[2]) == 'base set'){
+            $label_line_one[2] = $this->cardProduct->getSetNickname();
+        }
+
+        if (Str::lower($label_line_one[2]) == 'base set 2'){
+            $label_line_one[2] = $this->cardProduct->getSetNickname();
         }
 
         return $label_line_one;

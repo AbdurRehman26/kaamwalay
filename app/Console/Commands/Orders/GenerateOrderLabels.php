@@ -49,7 +49,9 @@ class GenerateOrderLabels extends Command
         $orders = $ordersQuery->get();
         $this->info("Total {$orders->count()} orders found");
 
-        $orders->each(/*** @throws AgsServiceIsDisabled|OrderLabelCouldNotBeGeneratedException */ function (Order $order) use ($orderLabelService) {
+        $orders->each(/**
+         * @throws OrderLabelCouldNotBeGeneratedException
+         */ function (Order $order) use ($orderLabelService) {
             $this->info("Generating label for order # {$order->order_number} ...");
             $orderLabelService->generateLabel($order);
             $this->info('Label has been generated.');

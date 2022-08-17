@@ -2,11 +2,11 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
+use App\Services\Admin\Card\CreateCardLabelService;
 use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Support\Facades\Storage;
@@ -17,19 +17,21 @@ class OrderLabelService
 {
     public function __construct(
         protected AgsService $agsService,
-        protected OrderService $orderService
+        protected OrderService $orderService,
+        protected CreateCardLabelService $createCardLabelService
     ) {
     }
 
     /**
-     * @throws AgsServiceIsDisabled
      * @throws OrderLabelCouldNotBeGeneratedException
      */
     public function generateLabel(Order $order): void
     {
+        $this->createCardLabelService->createLabelForOrder($order);
+
         $response = $this->getCardLabel($order);
 
-        if (empty($response) || (isset($response['app_status']) && $response['app_status'] === 2)) {
+        if (empty($response)) {
             throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
         }
 
@@ -59,10 +61,21 @@ class OrderLabelService
 
     public function getCardLabel(Order $order): array
     {
-        $label = [];
-        foreach ($order->orderItems as $orderItem){
-            $label [] = $orderItem->cardProduct->cardLabel;
+        $labels = [];
+        foreach ($order->gradedOrderItems as $orderItem){
+            $cardLabel = $orderItem->cardProduct->cardLabel->toArray();
+            $cardLabel['label_line_one'] = $cardLabel['line_one'];
+            $cardLabel['label_line_two'] = $cardLabel['line_two'];
+            $cardLabel['label_line_three'] = $cardLabel['line_three'];
+            $cardLabel['label_line_four'] = $cardLabel['line_four'];
+            $cardLabel['card_number'] = $cardLabel['line_four'];
+            $cardLabel['order_id'] = $orderItem->order_id;
+            $cardLabel['card_reference_id'] = $orderItem->cardProduct->card_reference_id;
+            $cardLabel['certificate_id'] = $orderItem->userCard->certificate_number;
+            $cardLabel['final_grade'] = $orderItem->userCard->overall_grade;
+            $cardLabel['grade_nickname'] = $orderItem->userCard->overall_grade_nickname;
+            $labels[] = $cardLabel;
         }
-        return $label;
+        return $labels;
     }
 }

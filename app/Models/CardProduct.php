@@ -171,7 +171,13 @@ class CardProduct extends Model
 
     public function getSeriesNickname(): string
     {
-        $seriesAbbreviationQuery = SeriesAbbreviation::category($this->cardCategory)->where('name', $this->cardSet->cardSeries->name);
+        $seriesAbbreviationQuery = SeriesAbbreviation::category($this->cardCategory)
+            ->language($this->language)
+            ->where(function ($query){
+            $query->where('name', $this->cardSet->cardSeries->name)
+                ->orWhere('name', str_replace(' Series', '', $this->cardSet->cardSeries->name));
+        });
+
         if($seriesAbbreviationQuery->doesntExist()){
             return '';
         }
@@ -181,10 +187,12 @@ class CardProduct extends Model
 
     public function getSetNickname(): string
     {
-        $setAbbreviationQuery = SetAbbreviation::
-            category($this->cardCategory)
+        $setAbbreviationQuery = SetAbbreviation::category($this->cardCategory)
             ->language($this->language)
-            ->where('name', $this->cardSet->name);
+            ->where(function ($query){
+            $query->where('name', $this->cardSet->name)
+                ->orWhere('name', str_replace(' Set', '', $this->cardSet->name));
+        });
 
         if($setAbbreviationQuery->doesntExist()){
             return '';

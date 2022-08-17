@@ -26,6 +26,7 @@ class UpdateCardProductRequest extends FormRequest
                 Rule::unique('card_products', 'card_number_order')->where(function ($query) {
                     /** @var CardProduct $cardProduct */
                     $cardProduct = $this->route('cardProduct');
+
                     return $query->where('id', '!=', $cardProduct->id)
                         ->where('card_set_id', $this->set_id)
                         ->where('language', $this->language)

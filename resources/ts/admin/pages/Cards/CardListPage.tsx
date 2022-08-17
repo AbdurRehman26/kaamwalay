@@ -1,5 +1,7 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -26,7 +28,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCardQuery } from '@shared/redux/hooks/useCardsQuery';
-import { deleteCard, getCardCategories } from '@shared/redux/slices/adminCardsSlice';
+import { deleteCard, getAllCards, getCardCategories, getCardData } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
 import { CardPageHeader } from './CardPageHeader';
@@ -60,6 +62,8 @@ const getFilters = (values: InitialValues) => ({
 export function CardsListPage() {
     const [categoryName, setCategoryName] = useState('');
     const [addCardDialog, setAddCardDialog] = useState(false);
+    const [updateCardData, setUpdateCardData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(0);
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
@@ -75,8 +79,13 @@ export function CardsListPage() {
 
     const handleDeleteSubmit = async () => {
         try {
-            dispatch(deleteCard(deleteId));
+            setIsLoading(true);
+            await dispatch(deleteCard(deleteId));
+            const response = await dispatch(getAllCards);
+            response.payload = cards;
+            setIsLoading(false);
         } catch (e: any) {
+            setIsLoading(false);
             notifications.exception(e);
         }
     };
@@ -103,7 +112,18 @@ export function CardsListPage() {
 
     const handleDelete = (cardId: number) => {
         setShowDeleteModal(true);
+        setAnchorEl(null);
         setDeleteId(cardId);
+    };
+
+    const handleEdit = async (cardId: number) => {
+        setIsLoading(true);
+        setAnchorEl(null);
+        const cardData = await dispatch(getCardData(cardId));
+        console.log('IIIII ', cardData.payload.data);
+        setAddCardDialog(true);
+        setUpdateCardData(cardData.payload.data);
+        setIsLoading(false);
     };
 
     const handleClearCategory = useCallback(async () => {
@@ -179,161 +199,170 @@ export function CardsListPage() {
 
     return (
         <>
-            <Grid container>
-                <CardPageHeader searchField title={'Cards'} onSearch={handleSearch} />
-                <CardAddDialog
-                    onSubmit={() => {}}
-                    open={addCardDialog}
-                    isUpdate={true}
-                    onClose={() => setAddCardDialog(false)}
-                />
-                <DeleteCardDialog
-                    open={showDeleteModal}
-                    onClose={() => setShowDeleteModal(false)}
-                    onSubmit={() => handleDeleteSubmit()}
-                ></DeleteCardDialog>
-                <Grid container p={2.5} alignItems={'center'}>
-                    <Grid item xs container alignItems={'center'}>
-                        <Typography variant={'subtitle1'}>{cards.pagination.meta.total} Result(s)</Typography>
-                        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                            {({ values }) => (
-                                <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
-                                    <CardPageSelector
-                                        label={'Categories'}
-                                        value={categoriesFilter(categoryName)}
-                                        onClear={handleClearCategory}
-                                    >
-                                        {availableCategories?.map((item: any) => {
-                                            return (
-                                                <Grid component={Form}>
-                                                    <MenuItem
-                                                        onClick={() => handleCategory(item.name)}
-                                                        key={item.id}
-                                                        value={item.id}
-                                                    >
-                                                        {item.name}
-                                                    </MenuItem>
-                                                </Grid>
-                                            );
-                                        })}
-                                    </CardPageSelector>
-
-                                    <CardPageSelector
-                                        label={'Released Date'}
-                                        value={releaseDateFilter(
-                                            values.releasedDateStart,
-                                            values.releasedDateEnd,
-                                            ' - ',
-                                            'MM/DD/YY',
-                                        )}
-                                        onClear={handleClearReleaseDate}
-                                    >
-                                        <Grid container component={Form} direction={'column'}>
-                                            <Grid container alignItems={'center'}>
-                                                <Grid item xs>
-                                                    <FormikDesktopDatePicker
-                                                        name={'releasedDateStart'}
-                                                        label={'Start Date'}
-                                                        fullWidth
-                                                    />
-                                                </Grid>
-                                                <Grid
-                                                    item
-                                                    xs
-                                                    container
-                                                    justifyContent={'center'}
-                                                    maxWidth={'28px !important'}
-                                                >
-                                                    <Typography variant={'body2'}>-</Typography>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <FormikDesktopDatePicker
-                                                        name={'releasedDateEnd'}
-                                                        label={'End Date'}
-                                                        minDate={values.releasedDateStart}
-                                                        fullWidth
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                            <Grid container justifyContent={'flex-end'} mt={2.5}>
-                                                <FormikButton variant={'contained'} color={'primary'}>
-                                                    Apply
-                                                </FormikButton>
-                                            </Grid>
-                                        </Grid>
-                                    </CardPageSelector>
-                                </Grid>
-                            )}
-                        </Formik>
-                    </Grid>
-                </Grid>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell variant={'head'}>Card</TableCell>
-                                <TableCell variant={'head'}>No</TableCell>
-                                <TableCell variant={'head'}>Category</TableCell>
-                                <TableCell variant={'head'}>Series</TableCell>
-                                <TableCell variant={'head'}>Set</TableCell>
-                                <TableCell variant={'head'}>Release Date</TableCell>
-                                <TableCell variant={'head'}>
-                                    {' '}
-                                    <TableSortLabel direction={'asc'} active={true}></TableSortLabel> Population
-                                </TableCell>
-                                <TableCell variant={'head'}></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {cards.data.map((card) => (
-                                <TableRow key={card.id}>
-                                    <TableCell variant={'body'}>
-                                        <Grid container>
-                                            <Avatar
-                                                variant={'square'}
-                                                sx={{ height: '48px', width: '35px' }}
-                                                src={card.imagePath ?? ''}
-                                            ></Avatar>
-                                            <Grid item xs container alignItems={'center'} direction={'row'} pl={2}>
-                                                <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
-                                                    {card.cardCategoryName}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                    <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{card.cardSetName}</TableCell>
-                                    <TableCell variant={'body'}>{formatDate(card.releaseDate, 'MM/DD/YYYY')}</TableCell>
-                                    <TableCell variant={'body'} align={'center'}>
-                                        {card.population ?? 0}
-                                    </TableCell>
-                                    <TableCell variant={'body'} align={'right'}>
-                                        <IconButton onClick={handleClickOptions} size="large">
-                                            <MoreIcon />
-                                        </IconButton>
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={!!anchorEl}
-                                            onClose={handleCloseOptions}
-                                            sx={{ background: 'transparent' }}
+            {cards.isLoading || isLoading ? (
+                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <Grid container>
+                    <CardPageHeader searchField title={'Cards'} onSearch={handleSearch} />
+                    <CardAddDialog
+                        onSubmit={() => {}}
+                        open={addCardDialog}
+                        isUpdate={true}
+                        onClose={() => setAddCardDialog(false)}
+                        updateCard={updateCardData}
+                    />
+                    <DeleteCardDialog
+                        open={showDeleteModal}
+                        onClose={() => setShowDeleteModal(false)}
+                        onSubmit={() => handleDeleteSubmit()}
+                    ></DeleteCardDialog>
+                    <Grid container p={2.5} alignItems={'center'}>
+                        <Grid item xs container alignItems={'center'}>
+                            <Typography variant={'subtitle1'}>{cards.pagination.meta.total} Result(s)</Typography>
+                            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+                                {({ values }) => (
+                                    <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
+                                        <CardPageSelector
+                                            label={'Categories'}
+                                            value={categoriesFilter(categoryName)}
+                                            onClear={handleClearCategory}
                                         >
-                                            <MenuItem onClick={() => setAddCardDialog(true)}>Edit</MenuItem>
-                                            <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
-                                        </Menu>
+                                            {availableCategories?.map((item: any) => {
+                                                return (
+                                                    <Grid component={Form}>
+                                                        <MenuItem
+                                                            onClick={() => handleCategory(item.name)}
+                                                            key={item.id}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </MenuItem>
+                                                    </Grid>
+                                                );
+                                            })}
+                                        </CardPageSelector>
+
+                                        <CardPageSelector
+                                            label={'Released Date'}
+                                            value={releaseDateFilter(
+                                                values.releasedDateStart,
+                                                values.releasedDateEnd,
+                                                ' - ',
+                                                'MM/DD/YY',
+                                            )}
+                                            onClear={handleClearReleaseDate}
+                                        >
+                                            <Grid container component={Form} direction={'column'}>
+                                                <Grid container alignItems={'center'}>
+                                                    <Grid item xs>
+                                                        <FormikDesktopDatePicker
+                                                            name={'releasedDateStart'}
+                                                            label={'Start Date'}
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                    <Grid
+                                                        item
+                                                        xs
+                                                        container
+                                                        justifyContent={'center'}
+                                                        maxWidth={'28px !important'}
+                                                    >
+                                                        <Typography variant={'body2'}>-</Typography>
+                                                    </Grid>
+                                                    <Grid item xs>
+                                                        <FormikDesktopDatePicker
+                                                            name={'releasedDateEnd'}
+                                                            label={'End Date'}
+                                                            minDate={values.releasedDateStart}
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container justifyContent={'flex-end'} mt={2.5}>
+                                                    <FormikButton variant={'contained'} color={'primary'}>
+                                                        Apply
+                                                    </FormikButton>
+                                                </Grid>
+                                            </Grid>
+                                        </CardPageSelector>
+                                    </Grid>
+                                )}
+                            </Formik>
+                        </Grid>
+                    </Grid>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell variant={'head'}>Card</TableCell>
+                                    <TableCell variant={'head'}>No</TableCell>
+                                    <TableCell variant={'head'}>Category</TableCell>
+                                    <TableCell variant={'head'}>Series</TableCell>
+                                    <TableCell variant={'head'}>Set</TableCell>
+                                    <TableCell variant={'head'}>Release Date</TableCell>
+                                    <TableCell variant={'head'}>
+                                        {' '}
+                                        <TableSortLabel direction={'asc'} active={true}></TableSortLabel> Population
                                     </TableCell>
+                                    <TableCell variant={'head'}></TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination {...cards.paginationProps} />
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                </TableContainer>
-            </Grid>
+                            </TableHead>
+                            <TableBody>
+                                {cards.data.map((card) => (
+                                    <TableRow key={card.id}>
+                                        <TableCell variant={'body'}>
+                                            <Grid container>
+                                                <Avatar
+                                                    variant={'square'}
+                                                    sx={{ height: '48px', width: '35px' }}
+                                                    src={card.imagePath ?? ''}
+                                                ></Avatar>
+                                                <Grid item xs container alignItems={'center'} direction={'row'} pl={2}>
+                                                    <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
+                                                        {card.cardCategoryName}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </TableCell>
+                                        <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
+                                        <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
+                                        <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
+                                        <TableCell variant={'body'}>{card.cardSetName}</TableCell>
+                                        <TableCell variant={'body'}>
+                                            {formatDate(card.releaseDate, 'MM/DD/YYYY')}
+                                        </TableCell>
+                                        <TableCell variant={'body'} align={'center'}>
+                                            {card.population ?? 0}
+                                        </TableCell>
+                                        <TableCell variant={'body'} align={'right'}>
+                                            <IconButton onClick={handleClickOptions} size="large">
+                                                <MoreIcon />
+                                            </IconButton>
+                                            <Menu
+                                                anchorEl={anchorEl}
+                                                open={!!anchorEl}
+                                                onClose={handleCloseOptions}
+                                                sx={{ background: 'transparent' }}
+                                            >
+                                                <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
+                                                <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
+                                            </Menu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination {...cards.paginationProps} />
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+            )}
         </>
     );
 }

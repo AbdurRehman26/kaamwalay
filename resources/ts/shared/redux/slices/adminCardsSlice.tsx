@@ -22,6 +22,13 @@ interface StateType extends APIState<CardProductEntity> {}
 
 const adminCardsThunk = createRepositoryThunk('adminCards', CardsRepository);
 
+export const getAllCards = createAsyncThunk('newCard/getAllCards', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/cards`);
+    const cardCategories = await endpoint.get('');
+    return cardCategories.data;
+});
+
 export const getCardCategories = createAsyncThunk('newCard/getCardCategories', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/cards/categories`);
@@ -32,8 +39,7 @@ export const getCardCategories = createAsyncThunk('newCard/getCardCategories', a
 export const getCardSeries = createAsyncThunk('newCard/getCardSeries', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/cards/series`);
-    const cardSeries = await endpoint.get('');
-    return cardSeries.data;
+    return await endpoint.get('');
 });
 
 export const getCardSets = createAsyncThunk('newCard/getCardSets', async () => {
@@ -48,6 +54,12 @@ export const deleteCard = createAsyncThunk('newCard/deleteCard', async (cardId: 
     const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
     const cardSets = await endpoint.delete('');
     return cardSets.data;
+});
+
+export const getCardData = createAsyncThunk('newCard/getCardData', async (cardId: number) => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
+    return await endpoint.get('');
 });
 
 export const adminCardsSlice = createSlice({

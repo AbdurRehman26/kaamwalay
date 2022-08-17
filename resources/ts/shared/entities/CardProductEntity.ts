@@ -13,6 +13,11 @@ export class CardProductEntity extends Entity {
     public shortName!: string;
     public longName!: string;
     public addedByCustomer!: boolean;
+    public surface?: string;
+    public varient?: string;
+    public language?: string;
+    public rarity?: string;
+    public edition?: string;
 
     public getName() {
         return this.name || 'Unknown';

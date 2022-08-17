@@ -15,6 +15,7 @@ interface ImageUploaderProps {
     maxHeight?: string;
     maxWidth?: string;
     isSmall?: boolean;
+    imageUrl?: string;
 }
 
 const useStyles = makeStyles(
@@ -81,7 +82,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
             >
                 <input {...getInputProps()} />
                 <img
-                    src={URL.createObjectURL(uploadedImage)}
+                    src={props.imageUrl ? props.imageUrl : URL.createObjectURL(uploadedImage)}
                     alt=""
                     className={classes.uploadedImage}
                     style={{

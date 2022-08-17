@@ -40,6 +40,7 @@ import { APIService } from '@shared/services/APIService';
 export interface CardAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
     isUpdate?: boolean;
+    updateCard?: CardProductEntity | never;
     addressId?: number;
     onSubmit(): Promise<void> | void;
 }
@@ -91,7 +92,7 @@ interface CardSurface {
     name: string;
 }
 export const CardAddDialog = (props: CardAddDialogProps) => {
-    const { onClose, onSubmit, isUpdate, dialogTitle, addressId, ...rest } = props;
+    const { onClose, onSubmit, isUpdate, updateCard, dialogTitle, addressId, ...rest } = props;
     const classes = useStyles();
     const dialogState = useManageCardDialogState();
 
@@ -177,8 +178,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     //     [apiService],
     // );
 
-    // fetchCard(3);
-
     const fetchSets = useCallback(
         async (seriesId: Number) => {
             const endpoint = apiService.createEndpoint(`admin/cards/sets?series_id=` + seriesId);
@@ -261,7 +260,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
                 setAvailableCategories(response.data);
                 setCardCategory(categoryId);
-
+                // fetchCard(3);
                 dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
 
                 await fetchSeries(categoryId);
@@ -689,7 +688,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                         <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
                             Category
                         </FormHelperText>
-                        <Select value={cardCategory} onChange={handleCardCategoryChange}>
+                        <Select
+                            value={isUpdate ? updateCard?.cardCategoryName : cardCategory}
+                            onChange={handleCardCategoryChange}
+                        >
                             {availableCategories?.map((item) => {
                                 return (
                                     <MenuItem key={item.id} value={item.id}>
@@ -713,7 +715,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                 Series
                             </FormHelperText>
                             <Autocomplete
-                                value={selectedSeries}
+                                value={isUpdate ? updateCard?.cardSeriesName : selectedSeries}
                                 onChange={handleSeriesChange}
                                 options={availableSeries}
                                 fullWidth
@@ -731,7 +733,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                         </Button>
                     </Box>
 
-                    {selectedSeries ? (
+                    {selectedSeries || isUpdate ? (
                         <Box
                             display={'flex'}
                             flexDirection={'row'}
@@ -745,7 +747,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                     Set
                                 </FormHelperText>
                                 <Autocomplete
-                                    value={selectedSet}
+                                    value={isUpdate ? updateCard?.cardSetName : selectedSet}
                                     onChange={handleSetChange}
                                     options={availableSets}
                                     fullWidth
@@ -764,7 +766,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                         </Box>
                     ) : null}
 
-                    {selectedSet ? (
+                    {selectedSet || isUpdate ? (
                         <>
                             <Divider className={classes.topDivider} />
                             <Grid container direction={'row'} sx={{ marginTop: '12px' }} padding={'12px'}>
@@ -780,6 +782,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Card Photo
                                         </FormHelperText>
                                         <ImageUploader
+                                            imageUrl={isUpdate ? updateCard?.imagePath : ''}
                                             isSmall={true}
                                             maxHeight="150px"
                                             maxWidth="155px"
@@ -801,7 +804,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={cardName}
+                                            value={isUpdate ? updateCard?.cardSetName : cardName}
                                             onChange={handleCardNameChange}
                                             placeholder={'Enter card name'}
                                             sx={{ minWidth: '333px' }}
@@ -820,7 +823,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={cardNumber}
+                                            value={isUpdate ? updateCard?.cardNumberOrder : cardNumber}
                                             onChange={handleCardNumberChange}
                                             placeholder={'Enter card number'}
                                             sx={{ minWidth: '333px' }}
@@ -844,7 +847,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         <LocalizationProvider dateAdapter={DateAdapter}>
                                             <DesktopDatePicker
                                                 inputFormat="MM/DD/yyyy"
-                                                value={releaseDate}
+                                                value={isUpdate ? updateCard?.releaseDate : releaseDate}
                                                 onChange={handleReleaseDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
@@ -862,7 +865,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Rarity
                                         </FormHelperText>
                                         <Autocomplete
-                                            value={selectedRarity}
+                                            value={isUpdate ? updateCard?.rarity : selectedRarity}
                                             onChange={handleRarityChange}
                                             options={availableRarities}
                                             fullWidth
@@ -883,7 +886,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Surface <span className={classes.label}>(optional)</span>
                                         </FormHelperText>
                                         <Autocomplete
-                                            value={selectedSurface}
+                                            value={isUpdate ? updateCard?.surface : selectedSurface}
                                             onChange={handleSurfaceChange}
                                             options={availableSurfaces}
                                             fullWidth
@@ -905,7 +908,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Language
                                         </FormHelperText>
-                                        <Select value={selectedLanguage || 'none'} onChange={handleLanguageChange}>
+                                        <Select
+                                            value={isUpdate ? updateCard?.language : selectedLanguage || 'none'}
+                                            onChange={handleLanguageChange}
+                                        >
                                             <MenuItem value="none" disabled>
                                                 Select Language
                                             </MenuItem>
@@ -929,7 +935,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Edition <span className={classes.label}>(optional)</span>
                                         </FormHelperText>
-                                        <Select value={selectedEdition || 'none'} onChange={handleEditionChange}>
+                                        <Select
+                                            value={isUpdate ? updateCard?.edition : selectedEdition || 'none'}
+                                            onChange={handleEditionChange}
+                                        >
                                             <MenuItem value="none">Select edition</MenuItem>
                                             {availableEditions?.map((item) => {
                                                 return (
@@ -953,7 +962,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={productVariant}
+                                            value={isUpdate ? updateCard.varient : productVariant}
                                             onChange={handleProductVariantChange}
                                             placeholder={'Enter product/variant'}
                                         />

@@ -47,11 +47,21 @@ Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->nam
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
 
 Route::get('social', function () {
-//    return view('social.card');
-    return response(
-        BrowsershotLambda::html(view('social.card')->render())
-            ->windowSize(420, 800)
-            ->setScreenshotType('jpeg', 100)
-            ->screenshot()
-    )->header('Content-Type', 'image/jpeg');
+    $viewData = [
+        'card_name' => 'Pignite',
+        'card_image' => 'https://den-cards.pokellector.com/305/Pignite.SWSH05.24.37551.png',
+        'overall_grade' => '10',
+        'overall_grade_nickname' => 'MINT+',
+    ];
+
+    return view('social.card', $viewData);
+
+//    $name = Str::uuid();
+//
+//    return response(
+//        BrowsershotLambda::html(view('social.card', $viewData)->render())
+//            ->windowSize(420, 800)
+//            ->setScreenshotType('jpeg', 100)
+//            ->saveToS3("social-previews/user-cards/$name.jpg")
+//    )->header('Content-Type', 'image/jpeg');
 });

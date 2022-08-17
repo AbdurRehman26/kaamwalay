@@ -49,6 +49,7 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->processPushNotification($event);
         $this->indexCardsForFeed($event);
         $this->createOrderOnShipStation($event);
+        $this->createSocialPreviewsForCards($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -209,6 +210,13 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         if ($event->orderStatus->id === OrderStatus::CONFIRMED && $event->order->hasInsuredShipping() && ! app()->environment('local')) {
             $this->shipStationService->createOrder($event->order);
+        }
+    }
+
+    protected function createSocialPreviewsForCards(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id === OrderStatus::SHIPPED && ! app()->environment('local')) {
+            $this->adminOrderService->generateSocialPreviewsForCards($event->order);
         }
     }
 }

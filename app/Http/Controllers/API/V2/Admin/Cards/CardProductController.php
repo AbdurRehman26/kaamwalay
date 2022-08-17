@@ -31,7 +31,7 @@ class CardProductController extends V1CardProductController
         return new CardProductResource($cardProduct);
     }
 
-    public function destroy(CardProduct $cardProduct)
+    public function destroy(CardProduct $cardProduct): JsonResponse
     {
         $cardProduct->deleteOrFail();
 

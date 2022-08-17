@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
+use App\Models\CardProduct;
 use App\Services\Admin\Card\CardProductService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,9 @@ class UpdateCardProductRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('card_products', 'card_number_order')->where(function ($query) {
-                    return $query->where('id', '!=', $this->route('cardProduct')->id)
+                    /** @var CardProduct $cardProduct */
+                    $cardProduct = $this->route('cardProduct');
+                    return $query->where('id', '!=', $cardProduct->id)
                         ->where('card_set_id', $this->set_id)
                         ->where('language', $this->language)
                         ->where('rarity', $this->rarity)

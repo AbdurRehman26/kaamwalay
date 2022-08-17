@@ -336,7 +336,7 @@ return new class extends Migration
             }
         }
 
-        DB::table('set_abbreviations')->insert($abbreviations);
+        DB::table('card_set_abbreviations')->insert($abbreviations);
     }
 
     /**

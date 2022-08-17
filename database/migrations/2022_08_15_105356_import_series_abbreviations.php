@@ -103,7 +103,7 @@ return new class extends Migration
             }
         }
 
-        DB::table('series_abbreviations')->insert($abbreviations);
+        DB::table('card_series_abbreviations')->insert($abbreviations);
 
     }
 

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('series_abbreviations', function (Blueprint $table) {
+        Schema::create('card_series_abbreviations', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
             $table->string('abbreviation', 200);
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('series_abbreviations');
+        Schema::dropIfExists('card_series_abbreviations');
     }
 };

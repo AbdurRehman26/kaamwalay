@@ -171,7 +171,7 @@ class CardProduct extends Model
 
     public function getSeriesNickname(): string
     {
-        $seriesAbbreviationQuery = SeriesAbbreviation::category($this->cardCategory)
+        $seriesAbbreviationQuery = CardSeriesAbbreviation::category($this->cardCategory)
             ->language($this->language)
             ->where(function ($query){
             $query->where('name', $this->cardSet->cardSeries->name)
@@ -187,7 +187,7 @@ class CardProduct extends Model
 
     public function getSetNickname(): string
     {
-        $setAbbreviationQuery = SetAbbreviation::category($this->cardCategory)
+        $setAbbreviationQuery = CardSetAbbreviation::category($this->cardCategory)
             ->language($this->language)
             ->where(function ($query){
             $query->where('name', $this->cardSet->name)
@@ -203,33 +203,24 @@ class CardProduct extends Model
 
     public function getSurfaceAbbreviation(): string
     {
-        $surfaceList = [
-            'Holo' => 'HOLO',
-            'Cracked Ice Holo' => 'CI.HOLO',
-            'Cosmos Holo' => 'C.HOLO',
-            'Reverse Holo' => 'REV.HOLO',
-            'Reverse Foil' => 'REV.FOIL',
-            'Cracked Ice Reverse Holo' => 'CI REV.HOLO',
-            'Sheen Holo' => 'SHEEN HOLO',
-            'Mirror Holo' => 'MIR.HOLO',
-            'Tinsel Holo' => 'TNSL.HOLO',
-            'Speckle Holo' => 'SPKLE.HOLO',
-            'Sparkle Holo' => 'SPRKL.HOLO',
-            'Crosshatch Holo' => 'XHTCH.HOLO'
-        ];
+        $query = CardSurfaceAbbreviation::whereName($this->surface);
 
-        return !empty($surfaceList[$this->surface]) ? $surfaceList[$this->surface] : '';
+        if($query->doesntExist()){
+            return '';
+        }
+
+        return $query->first()->abbreviation;
     }
 
     public function getEditionAbbreviation(): string
     {
-        $editionList = [
-            'Kickstarter' => 'KS',
-            '1st Edition' => '1ST ED',
-            '2nd Edition' => '2ND ED'
-        ];
+        $query = CardEditionAbbreviation::whereName($this->edition);
 
-        return !empty($editionList[$this->edition]) ? $editionList[$this->edition] : '';
+        if($query->doesntExist()){
+            return '';
+        }
+
+        return $query->first()->abbreviation;
     }
 
     public function getLanguageAbbreviation(): string

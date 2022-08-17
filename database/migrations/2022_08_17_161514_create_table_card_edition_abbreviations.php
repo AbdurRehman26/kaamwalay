@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('card_set_abbreviations', function (Blueprint $table) {
+        Schema::create('card_edition_abbreviations', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
             $table->string('abbreviation', 200);
-            $table->string('language', 50)->default('English');
-            $table->foreignId('card_category_id')->constrained();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card_set_abbreviations');
+        Schema::dropIfExists('card_edition_abbreviations');
     }
 };

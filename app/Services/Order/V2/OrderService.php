@@ -101,7 +101,6 @@ class OrderService extends V1OrderService
         float $walletAmount = 0.0,
         float $discountedAmount = 0.0,
     ): float {
-
         Log::info('CALC_CC_PRICE_REQUEST', [
             'orderNumber' => $order->order_number,
             'paymentBlockchainNetwork' => $paymentBlockchainNetwork,

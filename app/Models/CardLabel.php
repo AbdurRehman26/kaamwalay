@@ -19,6 +19,6 @@ class CardLabel extends Model
         'line_one',
         'line_two',
         'line_three',
-        'line_four'
+        'line_four',
     ];
 }

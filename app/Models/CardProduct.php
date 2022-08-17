@@ -157,13 +157,13 @@ class CardProduct extends Model
 
     public function getCategoryAbbreviation(): string
     {
-        if(!in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])){
+        if (! in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])) {
             return '';
         }
 
         $categoryList = [
             'Pokemon' => 'P.M.',
-            'MetaZoo' => 'M.T.Z.'
+            'MetaZoo' => 'M.T.Z.',
         ];
 
         return $categoryList[Str::lower($this->cardCategory->name)];
@@ -173,12 +173,12 @@ class CardProduct extends Model
     {
         $seriesAbbreviationQuery = CardSeriesAbbreviation::category($this->cardCategory)
             ->language($this->language)
-            ->where(function ($query){
-            $query->where('name', $this->cardSet->cardSeries->name)
+            ->where(function ($query) {
+                $query->where('name', $this->cardSet->cardSeries->name)
                 ->orWhere('name', str_replace(' Series', '', $this->cardSet->cardSeries->name));
-        });
+            });
 
-        if($seriesAbbreviationQuery->doesntExist()){
+        if ($seriesAbbreviationQuery->doesntExist()) {
             return '';
         }
 
@@ -189,12 +189,12 @@ class CardProduct extends Model
     {
         $setAbbreviationQuery = CardSetAbbreviation::category($this->cardCategory)
             ->language($this->language)
-            ->where(function ($query){
-            $query->where('name', $this->cardSet->name)
+            ->where(function ($query) {
+                $query->where('name', $this->cardSet->name)
                 ->orWhere('name', str_replace(' Set', '', $this->cardSet->name));
-        });
+            });
 
-        if($setAbbreviationQuery->doesntExist()){
+        if ($setAbbreviationQuery->doesntExist()) {
             return '';
         }
 
@@ -205,7 +205,7 @@ class CardProduct extends Model
     {
         $query = CardSurfaceAbbreviation::whereName($this->surface);
 
-        if($query->doesntExist()){
+        if ($query->doesntExist()) {
             return '';
         }
 
@@ -216,7 +216,7 @@ class CardProduct extends Model
     {
         $query = CardEditionAbbreviation::whereName($this->edition);
 
-        if($query->doesntExist()){
+        if ($query->doesntExist()) {
             return '';
         }
 
@@ -225,13 +225,13 @@ class CardProduct extends Model
 
     public function getLanguageAbbreviation(): string
     {
-        if(!in_array(Str::lower($this->language), ['english', 'japanese'])){
+        if (! in_array(Str::lower($this->language), ['english', 'japanese'])) {
             return '';
         }
 
         $languageList = [
             'english' => 'ENG',
-            'japanese' => 'JPN.'
+            'japanese' => 'JPN.',
         ];
 
         return $languageList[Str::lower($this->language)];
@@ -244,5 +244,4 @@ class CardProduct extends Model
     {
         return $this->hasOne(CardLabel::class);
     }
-
 }

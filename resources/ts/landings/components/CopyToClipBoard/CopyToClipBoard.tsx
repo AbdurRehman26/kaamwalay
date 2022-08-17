@@ -1,5 +1,5 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -26,7 +26,7 @@ export default function CopyClipboard({ content }: Props) {
     return (
         <>
             <CopyToClipboard text={content} onCopy={() => handleClick()}>
-                <ContentCopyRoundedIcon />
+                <ContentCopyOutlinedIcon />
             </CopyToClipboard>
             <Snackbar
                 open={open}

@@ -361,12 +361,15 @@
             letter-spacing: 0.7px;
             text-transform: uppercase;
             margin-bottom: 12px;
+            @include breakpoints.down(768) {
+                margin-bottom: 30px;
+            }
         }
 
         &__copy-to-clipBoard {
             align-items: center;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 35px;
             display: none;
             @include breakpoints.down(xs) {
                 display: flex;

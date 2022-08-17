@@ -36,7 +36,8 @@ export default function CopyClipboardMobile({ content }: Props) {
                     background: '#20BFB8',
                     borderRadius: '28px',
                     padding: '15px 25px',
-                    right: '100px!important',
+                    left: '100px!important',
+                    right: 'auto!important',
                 }}
             >
                 <Typography

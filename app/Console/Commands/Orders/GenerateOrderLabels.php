@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Orders;
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
 use App\Models\OrderStatus;

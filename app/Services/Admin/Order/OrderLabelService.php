@@ -62,7 +62,7 @@ class OrderLabelService
     public function getCardLabel(Order $order): array
     {
         $labels = [];
-        foreach ($order->gradedOrderItems as $orderItem){
+        foreach ($order->gradedOrderItems as $orderItem) {
             $cardLabel = $orderItem->cardProduct->cardLabel->toArray();
             $cardLabel['label_line_one'] = $cardLabel['line_one'];
             $cardLabel['label_line_two'] = $cardLabel['line_two'];
@@ -76,6 +76,7 @@ class OrderLabelService
             $cardLabel['grade_nickname'] = $orderItem->userCard->overall_grade_nickname;
             $labels[] = $cardLabel;
         }
+
         return $labels;
     }
 }

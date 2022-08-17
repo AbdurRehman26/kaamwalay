@@ -101,6 +101,7 @@ class OrderController extends V1OrderController
     public function OrderLabelService()
     {
         $orderLabelService = resolve(OrderLabelService::class);
+
         return $orderLabelService->getCardLabel(Order::find(3857));
     }
 }

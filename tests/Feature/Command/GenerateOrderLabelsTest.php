@@ -3,8 +3,13 @@
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 
+use App\Models\UserCard;
+
+use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
@@ -13,41 +18,32 @@ beforeEach(function () {
 });
 
 it('generates order label for specific order', function () {
-    Http::fake([
-        'ags.api/card-labels/' => Http::response(json_decode(file_get_contents(
-            base_path() . '/tests/stubs/AGS_create_card_label_response_200.json'
-        ), associative: true)),
-    ]);
+
     $order = Order::factory()->create(['order_status_id' => OrderStatus::GRADED]);
+
+    $orderItems = OrderItem::factory()->for($order)->count(5)->create(['order_item_status_id' => OrderItemStatus::GRADED]);
+
+    foreach ($orderItems as $orderItem){
+        UserCard::factory()->for($orderItem)->create();
+    }
 
     $this->artisan('orders:generate-label ' . $order->order_number)->assertExitCode(0);
     assertDatabaseHas('order_labels', ['order_id' => $order->id]);
+    assertDatabaseCount('card_labels', count($orderItems));
 });
 
 it('generates order label for already graded orders', function () {
-    Http::fake([
-        'ags.api/card-labels/' => Http::response(json_decode(file_get_contents(
-            base_path() . '/tests/stubs/AGS_create_card_label_response_200.json'
-        ), associative: true)),
-    ]);
-    $orders = Order::factory()->count(2)->create(['order_status_id' => OrderStatus::GRADED]);
+
+    $orders = Order::factory()->count(5)->create(['order_status_id' => OrderStatus::GRADED]);
+
+    $orders->each(function (Order $order){
+        $orderItems = OrderItem::factory()->for($order)->count(5)->create(['order_item_status_id' => OrderItemStatus::GRADED]);
+        foreach ($orderItems as $orderItem){
+            UserCard::factory()->for($orderItem)->create();
+        }
+    });
+
     $this->artisan('orders:generate-label')->assertExitCode(0);
     assertDatabaseHas('order_labels', ['order_id' => $orders->first()->id]);
+    assertDatabaseCount('card_labels', OrderItem::count());
 });
-
-it('throws exception if AGS service is disabled', function () {
-    Order::factory()->create(['order_status_id' => OrderStatus::GRADED]);
-    config(['services.ags.is_platform_enabled' => false]);
-    $this->artisan('orders:generate-label');
-})->throws(AgsServiceIsDisabled::class);
-
-it('throws exception if AGS responds with error', function () {
-    Http::fake([
-        'ags.api/card-labels/' => Http::response(json_decode(file_get_contents(
-            base_path() . '/tests/stubs/AGS_create_card_label_error_response_404.json'
-        ), associative: true)),
-    ]);
-    $order = Order::factory()->create(['order_status_id' => OrderStatus::GRADED]);
-
-    $this->artisan('orders:generate-label ' . $order->order_number)->assertExitCode(0);
-})->throws(OrderLabelCouldNotBeGeneratedException::class);

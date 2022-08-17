@@ -21,7 +21,7 @@
             const backButton = document.getElementsByClassName("feed-view__generated-images__buttons__back");
 
             function frontButtonToggle() {
-                front[0].style.display = "block";
+                front[0].style.display = "flex";
                 frontButton[0].style.background = "rgba(32, 191, 184, 0.08)"
                 frontButton[0].style.border = "1px solid #20bfb8";
                 frontButton[0].style.color = "#20bfb8";
@@ -32,7 +32,7 @@
             }
 
             function backButtonToggle() {
-                back[0].style.display = "block";
+                back[0].style.display = "flex";
                 backButton[0].style.background = "rgba(32, 191, 184, 0.08)"
                 backButton[0].style.border = "1px solid #20bfb8";
                 backButton[0].style.color = "#20bfb8";

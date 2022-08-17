@@ -148,7 +148,7 @@
         justify-content: space-between;
 
         @include breakpoints.down(768) {
-            width: 360px;
+            width: 100%;
         }
 
         &__count {
@@ -390,7 +390,7 @@
             font-weight: 700;
 
             @include breakpoints.down(xs) {
-                font-size: 32px;
+                font-size: 24px;
             }
         }
 
@@ -409,6 +409,8 @@
         }
 
         &__grade {
+            min-width: 84px;
+            min-height: 86px;
             background: #20bfb8;
             border-radius: 8px;
             padding: 18px;
@@ -419,6 +421,8 @@
 
             @include breakpoints.down(xs) {
                 padding: 10px 14px;
+                min-width: 71px;
+                min-height: 82px;
             }
 
             &-label,
@@ -611,6 +615,7 @@
             @include breakpoints.down(md) {
                 padding: 0;
                 max-width: 100%;
+                display: block;
             }
 
             &:first-child {
@@ -678,6 +683,10 @@
             font-size: 20px;
             line-height: 30px;
             color: rgba(0, 0, 0, 0.87);
+
+            @include breakpoints.down(768) {
+                font-size: 16px;
+            }
         }
     }
 
@@ -886,24 +895,42 @@
             padding: 10px 20px;
 
             @include breakpoints.down(768) {
-                bottom: 15px;
-                right: 0px;
+                margin-top: -120px;
+            }
+        }
+
+        &__card {
+            @include breakpoints.down(768) {
+                width: 200px;
             }
         }
 
         &__cards-front {
+            display: flex;
+            flex-wrap: wrap;
             width: 433px;
             height: 100%;
             transform: translateX(-100%) rotate(-90deg);
             transform-origin: right top;
+
+            @include breakpoints.down(768) {
+                width: 400px;
+                height: 60%;
+            }
         }
 
         &__cards-back {
             display: none;
             width: 433px;
             height: 100%;
+            flex-wrap: wrap;
             transform: translateX(-100%) rotate(-90deg);
             transform-origin: right top;
+
+            @include breakpoints.down(768) {
+                width: 400px;
+                height: 60%;
+            }
         }
     }
 
@@ -950,4 +977,7 @@
         margin-top: -22px;
         width: 100px;
     }
+}
+.ib-image {
+    transform: translate(-50%, -50%) rotate(-90deg) !important;
 }

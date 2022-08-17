@@ -1,0 +1,351 @@
+<?php
+
+use App\Models\CardSet;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        //Pokemon
+        $pokemonCategory = DB::table('card_categories')->where('name', 'Pokemon')->first();
+
+        $abbreviations = [];
+
+        if ($pokemonCategory) {
+
+            $pokemonEnglishAbbreviations = [
+                "Battle Styles" => "BAT. STY.",
+                "Shining Fates" => "SHIN.FATES",
+                "McDonald's 25th Anniversary" => "MCD'S COLL.",
+                "Vivid Voltage" => "VIV.VOLT",
+                "Champion's Path" => "CHMPN.PATH",
+                "Pokemon Futsal Promos" => "FUTSAL",
+                "Darkness Ablaze" => "DRK ABLZ",
+                "Rebel Clash" => "RCL",
+                "Sword & Shield Promos" => "SWSH",
+                "Sword & Shield" => "SWSH",
+                "Cosmic Eclipse" => "COS ECLP",
+                "McDonald's Collection (2019" => "MCD'S COLL.",
+                "Hidden Fates" => "HDN.FATES",
+                "Unified Minds" => "UNIF.MNDS",
+                "Unbroken Bonds" => "UNBRKN.BNDS",
+                "Detective Pikachu" => "DET.PIKACHU",
+                "Team Up" => "TM.UP",
+                "Lost Thunder" => "LOST.THNDR",
+                "McDonald's Collection (2018" => "MCD'S COLL.",
+                "Dragon Majesty" => "DRGN.MAJ",
+                "Celestial Storm" => "CEL.STORM",
+                "Forbidden Light" => "FRBDN.LHT",
+                "Ultra Prism" => "ULT.PRSM",
+                "Crimson Invasion" => "CRIM.INVSN",
+                "Shining Legends" => "SHIN.LGDS",
+                "McDonald's Collection (2017" => "MCD'S COLL.",
+                "Guardians Rising" => "GUARD.RISNG",
+                "Sun & Moon Promos" => "SM",
+                "Sun & Moon" => "SM",
+                "Evolutions" => "EVO",
+                "McDonald's Collection (2016" => "MCD'S COLL.",
+                "Steam Siege" => "STM.SIEGE",
+                "Fates Collide" => "FTS COLLD.",
+                "Generations" => "GENS.",
+                "BREAKPoint" => "BRKPOINT",
+                "McDonald's Collection (2015" => "MCD'S COLL.",
+                "XY BREAKthrough" => "XY BRKTHR",
+                "Ancient Origins" => "ANCNT ORG",
+                "Roaring Skies" => "ROAR.SKY",
+                "Double Crisis" => "DBLE CRIS.",
+                "Primal Clash" => "PRI.CLSH",
+                "Phantom Forces" => "PHNTM FRCE",
+                "Furious Fists" => "FRUS FIST",
+                "McDonald's Collection (2014" => "MCD'S COLL.",
+                "XY Flashfire" => "XY FLFR",
+                "Kalos Starter Set" => "KLS STRT SET",
+                "XY Promos" => "XY PRO.",
+                "XY" => "XY",
+                "Radiant Collection" => "RDNT COLL.",
+                "Legendary Treasures" => "LGNDRY TRES.",
+                "Plasma Blast" => "PLSM BLST",
+                "Plasma Freeze" => "PLSM FREZ.",
+                "Plasma Storm" => "PLSM STRM",
+                "Boundaries Crossed" => "BUNDS CROS.",
+                "Dragon Vault" => "DRGN VLT",
+                "Dragons Exalted" => "DRGN EXLTD",
+                "Dark Explorers" => "DRK EXPLR",
+                "Next Destinies" => "NXT. DST",
+                "Noble Victories" => "NBLE VCTR",
+                "Emerging Powers" => "EMRGNG POW.",
+                "Black & White" => "BW",
+                "McDonald's Collection (2013" => "MCD'S COLL.",
+                "McDonald's Collection (2012" => "MCD'S COLL.",
+                "McDonald's Collection (2011" => "MCD'S COLL.",
+                "Black & White Promos" => "BW PRO",
+                "Call of Legends" => "CALL OF LGDS",
+                "HS Triumphant" => "HS TRI.",
+                "HS Undaunted" => "HS UND.",
+                "HS Unleashed" => "HS UNLSHD",
+                "HeartGold SoulSilver Promos" => "HGSS",
+                "HeartGold SoulSilver" => "HGSS",
+                "Pokemon Rumble" => "P.M. RMBL",
+                "Platinum - Arceus" => "PLTNM ARCEUS",
+                "Platinum - Supreme Victors" => "PLTNM SPRME.VIC",
+                "Platinum - Rising Rivals" => "PLTNM R.R",
+                "Platinum" => "PLTNM",
+                "POP Series 9" => "POP 9",
+                "POP Series 8" => "POP 8",
+                "POP Series 7" => "POP 7",
+                "POP Series 6" => "POP 6",
+                "POP Series 5" => "POP 5",
+                "POP Series 4" => "POP 4",
+                "POP Series 3" => "POP 3",
+                "POP Series 2" => "POP 2",
+                "POP Series 1" => "POP 1",
+                "Nintendo Promos" => "NIN.PRO",
+                "Stormfront" => "STRMFRT",
+                "Legends Awakened" => "LGDS.AWKND",
+                "Majestic Dawn" => "MJSTC.DAWN",
+                "Great Encounters" => "GRT.ENCTRS",
+                "Secret Wonders" => "SCRT.WNDS",
+                "Mysterious Treasures" => "MYSTR.TRES",
+                "DP Black Star Promos" => "DP BLCK STR PRO",
+                "Diamond & Pearl" => "DP",
+                "EX Power Keepers" => "POW.KPRS",
+                "EX Dragon Frontiers" => "DRGN.FRNTRS",
+                "EX Crystal Guardians" => "CRSTL.GRDS",
+                "EX Holon Phantoms" => "HOL.PHTM",
+                "EX Legend Maker" => "LGN.MKR",
+                "EX Delta Species" => "DEL.SPCS",
+                "EX Unseen Forces Unown Collection" => "UNSN.FRCE UN.COLL.",
+                "EX Unseen Forces" => "UNSN.FRCE",
+                "EX Emerald" => "EM.",
+                "EX Deoxys" => "DEO.",
+                "EX Team Rocket Returns" => "TM ROC. RETRN",
+                "EX FireRed & LeafGreen" => "FR.LG",
+                "EX Hidden Legends" => "HIDD.LGDS",
+                "EX Team Magma vs Team Aqua" => "TM MAG. TM AQ",
+                "EX Dragon" => "DRGN",
+                "EX Sandstorm" => "SND.STRM",
+                "EX Ruby & Sapphire" => "RB SP",
+                "Skyridge" => "SKYRDGE",
+                "Aquapolis" => "AQUPLS",
+                "Best of Game" => "BEST OF GAME",
+                "Expedition" => "EXPEND",
+                "Legendary Collection" => "LGNDRY.COLL.",
+                "Neo Destiny" => "NEO.DST",
+                "Neo Revelation" => "NEO.REV",
+                "Southern Islands" => "SO. ISLANDS",
+                "Neo Discovery" => "NEO.DIS",
+                "Neo Genesis" => "NEO.GEN",
+                "Gym Challenge" => "GYM.CHALL",
+                "Gym Heroes" => "GYM.HERO",
+                "Team Rocket" => "ROCKET",
+                "Base Set 2" => "BASE II",
+                "Fossil" => "FOSSIL",
+                "Wizards of the Coast Promos" => "WZRDS",
+                "Jungle" => "JUNGLE",
+                "Base Set" => "GAME",
+                "Burning Shadows" => "BRN.SHDW",
+            ];
+
+            $pokemonJapaneseAbbreviations = [
+                "Start Deck 100 Set" => "START DECK 100",
+                "VMAX Climax" => "VMAX CLIMAX ",
+                "25th Anniversary Promo Pack" => "25TH ANNIV. PROMO PACK",
+                "25th Anniversary Collection" => "25TH ANNIVERSARY COLL.",
+                "Fusion Arts" => "FUSION ARTS",
+                "Towering Perfection" => "TOWERING PERFECTION",
+                "Blue Sky Stream" => "BLUE SKY STREAM",
+                "Eevee Heroes" => "EEVEE HEROES",
+                "Jet-Black Spirit" => "JET-BLACK SPIRIT",
+                "Silver Lance" => "SILVER LANCE",
+                "Matchless Fighter" => "MATCHLESS FIGHTER",
+                "Single Strike Master" => "SINGLE STRIKE MASTER",
+                "Rapid Strike Master" => "RAPID STRIKE MASTER",
+                "Shiny Star V" => "SHINY STAR V",
+                "Electrifying Tackle" => "ELECTRIFYING TACKLE",
+                "Legendary Pulse" => "LEGENDARY PULSE",
+                "Infinity Zone" => "INFINITY ZONE",
+                "Explosive Walker" => "EXPLOSIVE WALKER",
+                "Rebellion Crash" => "REBELLION CRASH",
+                "VMAX Rising" => "VMAX RISING",
+                "Shield" => "SHIELD",
+                "Sword" => "SWORD",
+                "VMAX Special" => "VMAX SPECIAL",
+                "Tag Team GX All Stars" => "TAG TEAM GX ALL STARS",
+                "Alter Genesis" => "ALTER GENESIS",
+                "Dream League" => "DREAM LEAGUE",
+                "Remix Bout" => "REMIX BOUT",
+                "Miracle Twins" => "MIRACLE TWINS",
+                "Sky Legend" => "SKY LEGEND",
+                "Detective Pikachu" => "DETECTIVE PIKACHU",
+                "GG End" => "GG END",
+                "Double Blaze" => "DOUBLE BLAZE",
+                "Full Metal Wall" => "FULL METAL WALL",
+                "Night Unison" => "NIGHT UNISON",
+                "Tag Bolt" => "TAG BOLT",
+                "Ultra Shiny GX" => "ULTRA SHINY GX",
+                "Dark Order" => "DARK ORDER",
+                "Super-Burst Impact" => "SUPER-BURST IMPACT",
+                "Fairy Rise" => "FAIRY RISE",
+                "Thunderclap Spark" => "THUNDERCLAP SPARK",
+                "Sky-Splitting Charisma" => "SKY-SPLITTING CHARISMA",
+                "Forbidden Light" => "FORBIDDEN LIGHT",
+                "Ultra Force" => "ULTRA FORCE",
+                "Ultra Sun" => "ULTRA SUN",
+                "Ultra Moon" => "ULTRA MOON",
+                "GX Battle Boost" => "GX BATTLE BOOST",
+                "Ultradimensionalt Beasts" => "ULTRADIMENSIONALT BEASTS",
+                "Awakened Heroes" => "AWAKENED HEROES",
+                "Darkness that Consumes Light" => "DRKNSS THAT CONSUMES LGHT",
+                "To Have SeenThe Battle Rainbow" => "T.H.S.T. BATTLE RAINBOW",
+                "Alolan Moonlight" => "ALOLAN MOONLIGHT",
+                "Islands Await You" => "ISLANDS AWAIT YOU",
+                "Collection Sun" => "COLLECTION SUN",
+                "Collection Moon" => "COLLECTION MOON",
+                "Expansion Pack 20th Anniversary" => "EXPANSION PACK 20TH ANNIVERSARY",
+                "Mythical & Legendary Dream Shine Collection" => "M.L DREAM SHINE COLL.",
+                "Fever-Burst Fighter" => "FEVER-BURST FIGHTER",
+                "Cruel Traitor" => "CRUEL TRAITOR",
+                "Premium Champion Pack" => "PREMIUM CHAMPION PACK",
+                "Awakening Psychic King" => "AWAKENING PSYCHIC KING",
+                "Blue Shock" => "BLUE SHOCK",
+                "Red Flash" => "RED FLASH",
+                "Bandit Ring" => "BANDIT RING",
+                "Emerald Break" => "EMERALD BREAK",
+                "Magma Gang vs Aqua Gang: Double Crisis" => "MG VS AG: DOUBLE CRISIS",
+                "Gaia Volcano" => "GAIA VOLCANO",
+                "Tidal Storm" => "TIDAL STORM",
+                "Phantom Gate" => "PHANTOM GATE",
+                "Rising Fist" => "RISING FIST",
+                "Wild Blaze" => "WILD BLAZE",
+                "Collection Y" => "COLLECTION Y",
+                "Collection X" => "COLLECTION X",
+                "EX Battle Boost" => "EX BATTLE BOOST",
+                "Megalo Cannon" => "MEGALO CANNON",
+                "Thunder Knuckle" => "THUNDER KNUCKLE",
+                "Spiral Force" => "SPIRAL FORCE",
+                "Plasma Gale" => "PLASMA GALE",
+                "Freeze Bolt" => "FREEZE BOLT",
+                "Cold Flare" => "COLD FLARE",
+                "Dragon Blade" => "DRAGON BLADE",
+                "Dragon Blast" => "DRAGON BLAST",
+                "Dark Rush" => "DARK RUSH",
+                "Hail Blizzard" => "HAIL BLIZZARD",
+                "Psycho Drive" => "PSYCHO DRIVE",
+                "Red Collection" => "RED COLLECTION",
+                "White Collection" => "WHITE COLLECTION",
+                "Black Collection" => "BLACK COLLECTION",
+                "Beat of the Frontier Set" => "BEAT OF THE FRONTIER SET",
+                "Bonds to the End of Time Set" => "BONDS TO THE END OF TIME SET",
+                "Galactic's Conquest" => "GALACTIC'S CONQUEST",
+                "Neo Destiny" => "NEO DESTINY",
+                "Neo Revelation" => "NEO REVELATION",
+                "Neo Discovery" => "NEO DISCOVERY",
+                "Neo Genesis" => "NEO GENESIS",
+                "Gym Challenge" => "GYM 2",
+                "Gym Heroes" => "GYM",
+                "Rocket" => "ROCKET",
+                "Fossil" => "FOSSIL",
+                "Jungle" => "JUNGLE",
+                "Base Set" => "BASIC",
+                "Web" => "WEB",
+                "Wind from the Sea" => "WIND FROM THE SEA",
+                "The Town on No Map" => "THE TOWN ON NO MAP",
+                "Split Earth" => "SPLIT EARTH",
+                "Mysterious Mountains" => "MYSTERIOUS MOUNTAINS",
+                "ADV Expansion Pack" => "ADV EXPANSION PACK",
+                "Miracle of the Desert" => "MIRACLE OF THE DESERT",
+                "Rulers of the Heavens" => "RULERS OF THE HEAVENS",
+                "Magma vs Aqua: Two Ambitions" => "M VS A: TWO AMBITIONS",
+                "Undone Seal" => "UNDONE SEAL",
+                "Flight of Legends" => "FLIGHT OF LEGENDS",
+                "Clash of the Blue Sky" => "CLASH OF THE BLUE SKY",
+                "Rocket Gang Strikes Back" => "ROCKET GANG STRIKES BACK",
+                "Golden Sky, Silvery Ocean" => "GOLDEN SKY, SILVERY OCEAN",
+                "Mirage Forest" => "MIRAGE FOREST",
+                "Holon Research Tower" => "HOLON RESEARCH TOWER",
+                "Holon Phantom" => "HOLON PHANTOM",
+                "Miracle Crystal" => "MIRACLE CRYSTAL",
+                "Offense and Defense of the Furthest Ends" => "OFF DEF OF THE FURTHEST ENDS",
+                "Advent of Arceus" => "ADVENT OF ARCEUS",
+                "Intense Fight in the Destroyed Sky" => "INTENSE FIGHT IN THE DESTROYED SKY",
+                "World Champions Pack" => "WORLD CHAMPIONS PACK",
+                "Clash at the Summit" => "CLASH AT THE SUMMIT",
+                "HeartGold Collection" => "HEARTGOLD COLLECTION",
+                "Reviving Legends" => "REVIVING LEGENDS",
+                "SoulSilver Collection" => "SOULSILVER COLLECTION",
+                "Rage of the Broken Heavens" => "RAGE OF THE BROKEN HEAVENS",
+                "Amazing Volt Tackle" => "AMAZING VOLT TACKLE",
+                "Skyscraping Perfection" => "SKYSCRAPING PERFECTION",
+                "Black & White Promos" => "BW",
+                "Diamond & Pearl Promos" => "DIAMOND & PEARL",
+                "XY Promos" => "XY",
+                "Sun & Moon Promos" => "SUN & MOON",
+                "Sword & Shield Promos" => "SWSH"
+            ];
+
+            foreach ($pokemonEnglishAbbreviations as $key => $pokemonEnglishAbbreviation){
+                $abbreviations[] = [
+                    'name' => $key,
+                    'abbreviation' => $pokemonEnglishAbbreviation,
+                    'language' => 'English',
+                    'card_category_id' => $pokemonCategory->id,
+                    'created_at' => now()->toDateString(),
+                    'updated_at' => now()->toDateString(),
+                ];
+            }
+
+            foreach ($pokemonJapaneseAbbreviations as $key => $pokemonJapaneseAbbreviation){
+                $abbreviations[] = [
+                    'name' => $key,
+                    'abbreviation' => $pokemonJapaneseAbbreviation,
+                    'language' => 'English',
+                    'card_category_id' => $pokemonCategory->id,
+                    'created_at' => now()->toDateString(),
+                    'updated_at' => now()->toDateString(),
+                ];
+            }
+
+        }
+
+        //MetaZoo
+        $metaZooCategory = DB::table('card_categories')->where('name', 'MetaZoo')->first();
+
+        if ($metaZooCategory) {
+            $metaZooAbbreviations = [
+                'Cryptid Nation' => 'CN',
+                'Holiday Series' => 'HS'
+            ];
+
+            foreach ($metaZooAbbreviations as $key => $metaZooAbbreviation){
+                $abbreviations[] = [
+                    'card_category_id' => $pokemonCategory->id,
+                    'name' => $key,
+                    'abbreviation' => $metaZooAbbreviation,
+                    'language' => 'English',
+                    'created_at' => now()->toDateString(),
+                    'updated_at' => now()->toDateString(),
+                ];
+            }
+        }
+
+        DB::table('set_abbreviations')->insert($abbreviations);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+    }
+};

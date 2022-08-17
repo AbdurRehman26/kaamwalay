@@ -2,10 +2,8 @@
 
 namespace App\Jobs\Admin\Order;
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
-use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
-use App\Services\Admin\Order\OrderLabelService;
+use App\Services\Admin\Card\CreateCardLabelService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,12 +26,11 @@ class CreateOrderLabel implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  OrderLabelService  $orderLabelService
+     * @param  CreateCardLabelService  $createCardLabelService
      * @return void
-     * @throws AgsServiceIsDisabled|OrderLabelCouldNotBeGeneratedException
      */
-    public function handle(OrderLabelService $orderLabelService): void
+    public function handle(CreateCardLabelService $createCardLabelService): void
     {
-        $orderLabelService->generateLabel($this->order);
+        $createCardLabelService->createLabelForOrder($this->order);
     }
 }

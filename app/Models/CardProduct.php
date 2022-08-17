@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
@@ -153,4 +154,93 @@ class CardProduct extends Model
     {
         return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
+
+    public function getCategoryAbbreviation(): string
+    {
+        if(!in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])){
+            return '';
+        }
+
+        $categoryList = [
+            'Pokemon' => 'P.M.',
+            'MetaZoo' => 'M.T.Z.'
+        ];
+
+        return $categoryList[Str::lower($this->cardCategory->name)];
+    }
+
+    public function getSeriesNickname(): string
+    {
+        $seriesAbbreviationQuery = SeriesAbbreviation::category($this->cardCategory)->where('name', $this->cardSet->cardSeries->name);
+        if($seriesAbbreviationQuery->doesntExist()){
+            return '';
+        }
+
+        return $seriesAbbreviationQuery->first()->abbreviation;
+    }
+
+    public function getSetNickname(): string
+    {
+        $setAbbreviationQuery = SetAbbreviation::
+            category($this->cardCategory)
+            ->language($this->language)
+            ->where('name', $this->cardSet->name);
+
+        if($setAbbreviationQuery->doesntExist()){
+            return '';
+        }
+
+        return $setAbbreviationQuery->first()->abbreviation;
+    }
+
+    public function getSurfaceAbbreviation(): string
+    {
+        $surfaceList = [
+            'Holo' => 'HOLO',
+            'Cracked Ice Holo' => 'CI.HOLO',
+            'Cosmos Holo' => 'C.HOLO',
+            'Reverse Holo' => 'REV.HOLO',
+            'Reverse Foil' => 'REV.FOIL',
+            'Cracked Ice Reverse Holo' => 'CI REV.HOLO',
+            'Sheen Holo' => 'SHEEN HOLO',
+            'Mirror Holo' => 'MIR.HOLO',
+            'Tinsel Holo' => 'TNSL.HOLO',
+            'Speckle Holo' => 'SPKLE.HOLO',
+            'Sparkle Holo' => 'SPRKL.HOLO',
+            'Crosshatch Holo' => 'XHTCH.HOLO'
+        ];
+
+        return !empty($surfaceList[$this->surface]) ? $surfaceList[$this->surface] : '';
+    }
+
+    public function getEditionAbbreviation(): string
+    {
+        $editionList = [
+            'Kickstarter' => 'KS',
+            '1st Edition' => '1ST ED',
+            '2nd Edition' => '2ND ED'
+        ];
+
+        return !empty($editionList[$this->edition]) ? $editionList[$this->edition] : '';
+    }
+
+    public function getLanguageAbbreviation(): string
+    {
+        if(!in_array(Str::lower($this->language), ['english', 'japanese'])){
+            return '';
+        }
+
+        $languageList = [
+            'english' => 'ENG',
+            'japanese' => 'JPN.'
+        ];
+
+        return $languageList[Str::lower($this->language)];
+    }
+
+    public function cardLabel(): HasOne
+    {
+        return $this->hasOne(CardLabel::class);
+    }
+
 }

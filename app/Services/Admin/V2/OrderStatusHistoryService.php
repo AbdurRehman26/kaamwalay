@@ -69,7 +69,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $response = $this->agsService->createCertificates($data);
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
-            CreateOrderFoldersOnDropbox::dispatch($order);
+//            CreateOrderFoldersOnDropbox::dispatch($order);
         }
 
         if ($orderStatusId === OrderStatus::GRADED) {

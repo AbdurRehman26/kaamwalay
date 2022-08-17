@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,5 +32,10 @@ class CardSeries extends Model
     public function getReleaseDateAttribute(): string
     {
         return $this->hasOne(CardSet::class)->oldest('release_date')->first()?->release_date ?? '';
+    }
+
+    public function scopeCategory(Builder $query, CardCategory $cardCategory)
+    {
+        return $query->where('card_category_id', $cardCategory->id);
     }
 }

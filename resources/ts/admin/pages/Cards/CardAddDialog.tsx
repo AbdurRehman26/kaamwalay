@@ -166,6 +166,19 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         [apiService],
     );
 
+    // const fetchCard = useCallback(
+    //     async (categoryId: Number) => {
+    //         const endpoint = apiService.createEndpoint(`admin/cards/` + categoryId);
+    //         const response = await endpoint.get('');
+
+    //         console.log("AAAA A " , response)
+
+    //     },
+    //     [apiService],
+    // );
+
+    // fetchCard(3);
+
     const fetchSets = useCallback(
         async (seriesId: Number) => {
             const endpoint = apiService.createEndpoint(`admin/cards/sets?series_id=` + seriesId);

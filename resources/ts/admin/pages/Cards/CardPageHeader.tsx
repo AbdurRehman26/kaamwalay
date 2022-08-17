@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CardAddDialog } from './CardAddDialog';
 
 interface Props extends GridProps {
@@ -54,21 +54,16 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
     const [search, setSearch] = useState(value ?? '');
     const [addCardDialog, setAddCardDialog] = useState(false);
 
-    const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
-
-    const handleSearch = useCallback(() => {
-        setTimeout(() => {
-            if (onSearch) {
-                onSearch(search);
-            }
-        }, 300);
-    }, [onSearch, search]);
-
-    const handleKeyDown = useCallback(
-        (e: KeyboardEvent<HTMLInputElement>) => {
-            e.key === 'Enter' && handleSearch();
+    const handleSearch = useCallback(
+        (e) => {
+            setSearch(e.target.value);
+            setTimeout(() => {
+                if (onSearch) {
+                    onSearch(search);
+                }
+            }, 300);
         },
-        [handleSearch],
+        [onSearch, search],
     );
 
     useEffect(() => {
@@ -87,8 +82,7 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
                         <TextField
                             className={'ListPageHeader-search'}
                             value={search}
-                            onChange={handleSearchValue}
-                            onKeyDown={handleKeyDown}
+                            onChange={handleSearch}
                             placeholder={'Search...'}
                             InputProps={{
                                 startAdornment: (
@@ -96,8 +90,6 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
                                         <SearchIcon />
                                     </InputAdornment>
                                 ),
-                                endAdornment:
-                                    search || search === '' ? <InputAdornment position={'end'}></InputAdornment> : null,
                             }}
                         />
                     )}

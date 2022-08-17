@@ -52,7 +52,7 @@ const releaseDateFilter = (start: DateLike, end: DateLike, separator = ',', form
 const categoriesFilter = (cardCategory: string) => cardCategory;
 
 const getFilters = (values: InitialValues) => ({
-    // search: values.search,
+    search: values.search,
     releaseDate: releaseDateFilter(values.releasedDateStart, values.releasedDateEnd),
     cardCategory: categoriesFilter(values.cardCategory),
 });
@@ -306,7 +306,7 @@ export function CardsListPage() {
                                     <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                     <TableCell variant={'body'}>{card.cardSetName}</TableCell>
                                     <TableCell variant={'body'}>{formatDate(card.releaseDate, 'MM/DD/YYYY')}</TableCell>
-                                    <TableCell variant={'body'} align={'right'}>
+                                    <TableCell variant={'body'} align={'center'}>
                                         {card.population ?? 0}
                                     </TableCell>
                                     <TableCell variant={'body'} align={'right'}>

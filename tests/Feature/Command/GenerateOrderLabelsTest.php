@@ -1,7 +1,5 @@
 <?php
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
-use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
@@ -18,12 +16,11 @@ beforeEach(function () {
 });
 
 it('generates order label for specific order', function () {
-
     $order = Order::factory()->create(['order_status_id' => OrderStatus::GRADED]);
 
     $orderItems = OrderItem::factory()->for($order)->count(5)->create(['order_item_status_id' => OrderItemStatus::GRADED]);
 
-    foreach ($orderItems as $orderItem){
+    foreach ($orderItems as $orderItem) {
         UserCard::factory()->for($orderItem)->create();
     }
 
@@ -33,12 +30,11 @@ it('generates order label for specific order', function () {
 });
 
 it('generates order label for already graded orders', function () {
-
     $orders = Order::factory()->count(5)->create(['order_status_id' => OrderStatus::GRADED]);
 
-    $orders->each(function (Order $order){
+    $orders->each(function (Order $order) {
         $orderItems = OrderItem::factory()->for($order)->count(5)->create(['order_item_status_id' => OrderItemStatus::GRADED]);
-        foreach ($orderItems as $orderItem){
+        foreach ($orderItems as $orderItem) {
             UserCard::factory()->for($orderItem)->create();
         }
     });

@@ -15,6 +15,7 @@ use App\Services\Payment\V2\Providers\Contracts\PaymentProviderVerificationInter
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use TypeError;
 use Web3\Exceptions\ErrorException;
 use Web3\Exceptions\TransporterException;
@@ -88,7 +89,12 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             //Get Collector Coin amount from USD (Order grand total)
             $response = $this->getPaymentReferenceResponse($order);
             $data['amount'] = $response['amount'] ?? 0;
-            
+
+            Log::info('CC_PAYMENT_CHARGE_REQUEST', [
+                'orderNumber' => $order->order_number,
+                'request' => $data,
+            ]);
+
             $transactionData = $this->getTransaction($data['transaction_hash']);
 
             $this->validateTransaction($data, $transactionData);
@@ -96,6 +102,14 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             // Include Transaction Hash and destination wallet in response in case validation goes through
             $response['txn_hash'] = $data['transaction_hash'];
             $response['destination_wallet'] = $transactionData['destination_wallet'];
+
+            Log::info('CC_PAYMENT_CHARGE_RESULT', [
+                'orderNumber' => $order->order_number,
+                'request' => $data,
+                'response' => $response,
+                'payment_provider_reference_id' => $data['transaction_hash'],
+                'amount' => $orderPayment->amount,
+            ]);
 
             return [
                 'request' => $data,
@@ -161,6 +175,11 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
         $collectorCoin = $value / $divider;
 
+        Log::info('CALC_CC_PRICE_RESULT', [
+            'value' => $value,
+            'exchangeRate' => $divider,
+            'result' => round($collectorCoin, 2),
+        ]);
         return round($collectorCoin, 2);
     }
 

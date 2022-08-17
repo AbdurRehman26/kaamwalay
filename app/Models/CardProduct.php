@@ -141,7 +141,7 @@ class CardProduct extends Model
         return 'Added Manually';
     }
 
-    public function getLongName(): string
+    public function getLongName(): ?string
     {
         if ($this->isCardInformationComplete()) {
             $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';

@@ -15,6 +15,7 @@ use App\Models\Order;
 use App\Services\AGS\AgsService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -135,21 +136,24 @@ class CardProductService
 
     public function getCards(): LengthAwarePaginator
     {
-        /**
-         * return QueryBuilder::for(Order::class)
-        ->excludeCancelled()
-        ->allowedFilters(Order::getAllowedAdminFilters())
-        ->allowedIncludes(Order::getAllowedAdminIncludes())
-        ->allowedSorts(['grand_total'])
-        ->defaultSort('-orders.created_at')
-        ->paginate($itemsPerPage);
-         */
         return QueryBuilder::for(CardProduct::class)
+            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
+            ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
                 AllowedFilter::scope('release_date'),
                 AllowedFilter::custom('search', new AdminCardProductSearchFilter),
             ])
+            ->allowedSorts(['population'])
+            ->defaultSort('-population')
             ->paginate(request('per_page', 10));
+    }
+
+    public function updateCard(CardProduct $cardProduct, array $data): CardProduct
+    {
+        $cardProduct->fill($data);
+        $cardProduct->save();
+
+        return $cardProduct;
     }
 }

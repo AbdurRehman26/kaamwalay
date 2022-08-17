@@ -26,7 +26,7 @@ class CardProductController extends V1CardProductController
 
     public function update(UpdateCardProductRequest $request, CardProduct $cardProduct): CardProductResource
     {
-        $cardProduct->update($request->validated());
+        $cardProduct = $this->cardProductService->updateCard($cardProduct, $request->validated());
 
         return new CardProductResource($cardProduct);
     }

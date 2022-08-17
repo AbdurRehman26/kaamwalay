@@ -12,7 +12,7 @@ class CardLabel extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'card_product_id',

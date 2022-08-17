@@ -7,6 +7,8 @@ use App\Http\Requests\API\V2\Admin\Card\UpdateCardProductRequest;
 use App\Http\Resources\API\V2\CardProduct\CardProductCollection;
 use App\Http\Resources\API\V2\CardProduct\CardProductResource;
 use App\Models\CardProduct;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CardProductController extends V1CardProductController
 {
@@ -17,10 +19,22 @@ class CardProductController extends V1CardProductController
         return new CardProductCollection($cards);
     }
 
+    public function show(CardProduct $cardProduct): CardProductResource
+    {
+        return new CardProductResource($cardProduct);
+    }
+
     public function update(UpdateCardProductRequest $request, CardProduct $cardProduct): CardProductResource
     {
         $cardProduct->update($request->validated());
 
         return new CardProductResource($cardProduct);
+    }
+
+    public function destroy(CardProduct $cardProduct)
+    {
+        $cardProduct->deleteOrFail();
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }

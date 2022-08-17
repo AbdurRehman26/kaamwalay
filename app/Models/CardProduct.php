@@ -141,7 +141,7 @@ class CardProduct extends Model
         return 'Added Manually';
     }
 
-    public function getLongName(): string
+    public function getLongName(): ?string
     {
         if ($this->isCardInformationComplete()) {
             $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
@@ -157,6 +157,10 @@ class CardProduct extends Model
         return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
 
+    /**
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
+     */
     public function scopeCardCategory(Builder $query, int $categoryId): Builder
     {
         return $query->whereHas(
@@ -165,6 +169,10 @@ class CardProduct extends Model
         );
     }
 
+    /**
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
+     */
     public function scopeReleaseDate(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereHas(

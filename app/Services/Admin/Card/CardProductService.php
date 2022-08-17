@@ -11,7 +11,6 @@ use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\CardSurface;
-use App\Models\Order;
 use App\Services\AGS\AgsService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

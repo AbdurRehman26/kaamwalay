@@ -50,9 +50,10 @@ export function useShowQuery<
         () => ({
             data,
             error,
+            request,
             isLoading: isLoading || typeof isLoading === 'undefined',
             isError: !!error,
         }),
-        [data, error, isLoading],
+        [request, data, error, isLoading],
     );
 }

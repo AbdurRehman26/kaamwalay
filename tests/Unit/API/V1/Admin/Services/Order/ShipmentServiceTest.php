@@ -1,7 +1,9 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\OrderItem;
 use App\Models\OrderShipment;
+use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\Order\ShipmentService;
 
@@ -19,7 +21,8 @@ it('can update order shipment details', function () {
     $order = $orderItem->order;
 
     $order->update([
-        'payment_status' => \App\Enums\Order\OrderPaymentStatusEnum::PAID,
+        'payment_status' => OrderPaymentStatusEnum::PAID,
+        'order_status_id' => OrderStatus::ASSEMBLED,
     ]);
 
     resolve(ShipmentService::class)->updateShipment($order, $shippingProvider, $trackingNumber);

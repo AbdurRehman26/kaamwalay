@@ -8,6 +8,7 @@ export class CardProductEntity extends Entity {
     public releaseYear!: number;
     public releaseDate!: string;
     public cardNumberOrder!: string;
+    public population!: number;
     public imagePath!: string;
     public shortName!: string;
     public longName!: string;

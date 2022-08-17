@@ -7,7 +7,7 @@ import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
-import { setOrderShipment } from '@shared/redux/slices/adminOrdersSlice';
+import { addOrderStatusHistory, setOrderShipment } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '../../redux/hooks';
 import EditTrackingInformation from './EditTrackingInformation';
 
@@ -86,6 +86,12 @@ export function SubmissionActionButton({
         setLoading(false);
     }, [dispatch, orderId]);
 
+    const handleMarkAssembled = useCallback(async () => {
+        setLoading(true);
+        await dispatch(addOrderStatusHistory({ orderId: orderId, orderStatusId: OrderStatusEnum.ASSEMBLED }));
+        setLoading(false);
+    }, [dispatch, orderId]);
+
     const handleCloseShipmentDialog = useCallback(() => {
         setIsShipmentDialogOpen(false);
     }, []);
@@ -106,7 +112,11 @@ export function SubmissionActionButton({
         );
     }
 
-    if (orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED)) {
+    if (
+        orderStatus.is(OrderStatusEnum.GRADED) ||
+        orderStatus.is(OrderStatusEnum.SHIPPED) ||
+        orderStatus.is(OrderStatusEnum.ASSEMBLED)
+    ) {
         return (
             <>
                 <ShipmentDialog
@@ -117,7 +127,13 @@ export function SubmissionActionButton({
                     onSubmit={handleShipmentSubmit}
                 />
 
-                {orderStatus.is(OrderStatusEnum.GRADED) ? (
+                {orderStatus.is(OrderStatusEnum.GRADED) && (
+                    <LoadingButton {...sharedProps} onClick={handleMarkAssembled}>
+                        Mark Assembled
+                    </LoadingButton>
+                )}
+
+                {orderStatus.is(OrderStatusEnum.ASSEMBLED) ? (
                     inVault ? (
                         <LoadingButton {...sharedProps} onClick={handleMarkStoredInVault}>
                             Mark Stored In Vault
@@ -127,7 +143,7 @@ export function SubmissionActionButton({
                             Mark Shipped
                         </LoadingButton>
                     )
-                ) : !inVault ? (
+                ) : !inVault && orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     <>
                         {!buttonOnly ? (
                             <EditTrackingInformation
@@ -139,7 +155,7 @@ export function SubmissionActionButton({
                             Edit Tracking
                         </LoadingButton>
                     </>
-                ) : !orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                ) : !orderStatus.is(OrderStatusEnum.SHIPPED) && orderStatus.is(OrderStatusEnum.ASSEMBLED) ? (
                     view$
                 ) : null}
             </>

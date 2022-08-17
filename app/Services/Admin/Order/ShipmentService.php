@@ -25,7 +25,9 @@ class ShipmentService
 
         $order->orderShipment()->associate($orderShipment)->save();
 
-        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
+        if (! $order->isShipped()) {
+            $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
+        }
 
         return $orderShipment;
     }

@@ -255,6 +255,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                 </TableCell>
                                 <TableCell>
                                     {(orderStatusID === OrderStatusEnum.GRADED ||
+                                        orderStatusID === OrderStatusEnum.ASSEMBLED ||
                                         orderStatusID === OrderStatusEnum.SHIPPED) &&
                                     item?.userCard?.overallGrade !== '0' &&
                                     item?.userCard?.overallGradeNickname ? (

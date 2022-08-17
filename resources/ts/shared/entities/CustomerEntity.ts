@@ -1,13 +1,8 @@
-import { Entity } from './Entity';
-import { WalletEntity } from './WalletEntity';
+import { UserEntity } from './UserEntity';
 
-export class CustomerEntity extends Entity {
-    public profileImage!: string | null;
-    public fullName!: string;
-    public customerNumber!: string;
-    public email!: string;
-    public phone!: string;
+export class CustomerEntity extends UserEntity {
     public submissions!: number;
     public cardsCount!: number;
-    public wallet!: WalletEntity;
+    public createdBy!: UserEntity;
+    public lastLoginAt!: string;
 }

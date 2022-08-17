@@ -6,5 +6,12 @@ use App\Http\Resources\API\V1\CardProduct\CardProductResource as V1CardProductRe
 
 class CardProductResource extends V1CardProductResource
 {
-    //
+    public function toArray($request): array
+    {
+        $data = parent::toArray($request);
+
+        return array_merge($data, [
+            'population' => 10,
+        ]);
+    }
 }

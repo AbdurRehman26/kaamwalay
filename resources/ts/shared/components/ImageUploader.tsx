@@ -20,8 +20,8 @@ interface ImageUploaderProps {
 const useStyles = makeStyles(
     () => ({
         uploadedImage: {
-            // maxWidth: '210px',
-            // maxHeight: '176px',
+            maxWidth: '210px',
+            maxHeight: '176px',
             marginTop: '6px',
             imageRendering: 'pixelated',
         },

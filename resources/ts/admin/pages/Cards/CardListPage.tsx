@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
@@ -25,7 +26,6 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCardQuery } from '@shared/redux/hooks/useCardsQuery';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { deleteCard, getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
@@ -34,7 +34,7 @@ import { CardPageSelector } from './CardPageSelector';
 import DeleteCardDialog from './DeleteCardDialog';
 
 type InitialValues = {
-    category: string;
+    cardCategory: string;
     releasedDateStart: DateLike;
     releasedDateEnd: DateLike;
     search: string;
@@ -49,12 +49,12 @@ const joinFilterValues = (values: any[], separator = ',') =>
 const releaseDateFilter = (start: DateLike, end: DateLike, separator = ',', format = 'YYYY-MM-DD') =>
     joinFilterValues([formatDate(start, format), formatDate(end, format)], separator);
 
-const categoriesFilter = (category: string) => category;
+const categoriesFilter = (cardCategory: string) => cardCategory;
 
 const getFilters = (values: InitialValues) => ({
-    search: values.search,
-    signedUpBetween: releaseDateFilter(values.releasedDateStart, values.releasedDateEnd),
-    submissions: categoriesFilter(values.category),
+    // search: values.search,
+    releaseDate: releaseDateFilter(values.releasedDateStart, values.releasedDateEnd),
+    cardCategory: categoriesFilter(values.cardCategory),
 });
 
 export function CardsListPage() {
@@ -85,23 +85,15 @@ export function CardsListPage() {
 
     const initialValues = useMemo<InitialValues>(
         () => ({
-            category: query.category ?? '',
+            cardCategory: query.cardCategory ?? '',
             releasedDateStart: query.releasedDateStart ? moment(query.releasedDateStart) : '',
             releasedDateEnd: query.releasedDateEnd ? moment(query.releasedDateEnd) : '',
             search: query.search ?? '',
         }),
-        [query.category, query.releasedDateStart, query.releasedDateEnd, query.search],
+        [query.search, query.cardCategory, query.releasedDateStart, query.releasedDateEnd],
     );
 
     const cards = useAdminCardQuery({
-        params: {
-            filter: getFilters(query),
-        },
-
-        ...bracketParams(),
-    });
-
-    const customers = useAdminCustomersQuery({
         params: {
             filter: getFilters(query),
         },
@@ -115,30 +107,35 @@ export function CardsListPage() {
     };
 
     const handleClearCategory = useCallback(async () => {
-        formikRef.current?.setFieldValue('category', '');
-        delQuery('category');
+        formikRef.current?.setFieldValue('cardCategory', '');
+        delQuery('cardCategory');
 
-        await customers.search(
+        await cards.search(
             getFilters({
                 ...formikRef.current!.values,
-                category: '',
+                cardCategory: '',
             }),
         );
-    }, [customers, delQuery]);
+    }, [cards, delQuery]);
+
+    const handleCategory = useCallback(async (category: string) => {
+        setCategoryName(category);
+        // handleSubmit(values);
+    }, []);
 
     const handleClearReleaseDate = useCallback(async () => {
         formikRef.current?.setFieldValue('releasedDateStart', '');
         formikRef.current?.setFieldValue('releasedDateEnd', '');
         delQuery('releasedDateStart', 'releasedDateEnd');
 
-        await customers.search(
+        await cards.search(
             getFilters({
                 ...formikRef.current!.values,
                 releasedDateStart: '',
                 releasedDateEnd: '',
             }),
         );
-    }, [customers, delQuery]);
+    }, [cards, delQuery]);
 
     const handleSearch = useCallback(
         async (search: string) => {
@@ -149,14 +146,14 @@ export function CardsListPage() {
             }
 
             formikRef.current?.setFieldValue('search', search);
-            await customers.search(
+            await cards.search(
                 getFilters({
                     ...formikRef.current!.values,
                     search,
                 }),
             );
         },
-        [addQuery, customers, delQuery],
+        [addQuery, cards, delQuery],
     );
 
     const handleSubmit = useCallback(
@@ -166,11 +163,11 @@ export function CardsListPage() {
                 releasedDateStart: formatDate(values.releasedDateStart, 'YYYY-MM-DD'),
                 releasedDateEnd: formatDate(values.releasedDateEnd, 'YYYY-MM-DD'),
             });
-            await customers.search(getFilters(values));
+            await cards.search(getFilters(values));
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [customers, setQuery],
+        [cards, setQuery],
     );
 
     useEffect(() => {
@@ -197,7 +194,7 @@ export function CardsListPage() {
                 ></DeleteCardDialog>
                 <Grid container p={2.5} alignItems={'center'}>
                     <Grid item xs container alignItems={'center'}>
-                        <Typography variant={'subtitle1'}>{customers.pagination.meta.total} Result(s)</Typography>
+                        <Typography variant={'subtitle1'}>{cards.pagination.meta.total} Result(s)</Typography>
                         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
                             {({ values }) => (
                                 <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
@@ -208,13 +205,15 @@ export function CardsListPage() {
                                     >
                                         {availableCategories?.map((item: any) => {
                                             return (
-                                                <MenuItem
-                                                    onClick={() => setCategoryName(item.name)}
-                                                    key={item.id}
-                                                    value={item.id}
-                                                >
-                                                    {item.name}
-                                                </MenuItem>
+                                                <Grid component={Form}>
+                                                    <MenuItem
+                                                        onClick={() => handleCategory(item.name)}
+                                                        key={item.id}
+                                                        value={item.id}
+                                                    >
+                                                        {item.name}
+                                                    </MenuItem>
+                                                </Grid>
                                             );
                                         })}
                                     </CardPageSelector>
@@ -278,7 +277,10 @@ export function CardsListPage() {
                                 <TableCell variant={'head'}>Series</TableCell>
                                 <TableCell variant={'head'}>Set</TableCell>
                                 <TableCell variant={'head'}>Release Date</TableCell>
-                                <TableCell variant={'head'}>Population</TableCell>
+                                <TableCell variant={'head'}>
+                                    {' '}
+                                    <TableSortLabel direction={'asc'} active={true}></TableSortLabel> Population
+                                </TableCell>
                                 <TableCell variant={'head'}></TableCell>
                             </TableRow>
                         </TableHead>
@@ -287,32 +289,36 @@ export function CardsListPage() {
                                 <TableRow key={card.id}>
                                     <TableCell variant={'body'}>
                                         <Grid container>
-                                            <Avatar src={card.imagePath ?? ''}></Avatar>
-                                            <Grid item xs container direction={'column'} pl={2}>
-                                                <Typography variant={'body2'}>{card.cardNumberOrder}</Typography>
-                                                <Typography variant={'caption'} color={'textSecondary'}>
+                                            <Avatar
+                                                variant={'square'}
+                                                sx={{ height: '48px', width: '35px' }}
+                                                src={card.imagePath ?? ''}
+                                            ></Avatar>
+                                            <Grid item xs container alignItems={'center'} direction={'row'} pl={2}>
+                                                <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
                                                     {card.cardCategoryName}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                     </TableCell>
+                                    <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
+                                    <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                     <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{card.cardSetName ?? '-'}</TableCell>
+                                    <TableCell variant={'body'}>{card.cardSetName}</TableCell>
                                     <TableCell variant={'body'}>{formatDate(card.releaseDate, 'MM/DD/YYYY')}</TableCell>
                                     <TableCell variant={'body'} align={'right'}>
-                                        {card.addedByCustomer ?? 0}
+                                        {card.population ?? 0}
                                     </TableCell>
                                     <TableCell variant={'body'} align={'right'}>
-                                        {card.addedByCustomer}
-                                    </TableCell>
-                                    <TableCell variant={'body'} align={'right'}>
-                                        <Grid container alignItems={'center'} justifyContent={'flex-end'}>
-                                            <IconButton onClick={handleClickOptions} size="large">
-                                                <MoreIcon />
-                                            </IconButton>
-                                        </Grid>
-
-                                        <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                                        <IconButton onClick={handleClickOptions} size="large">
+                                            <MoreIcon />
+                                        </IconButton>
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            open={!!anchorEl}
+                                            onClose={handleCloseOptions}
+                                            sx={{ background: 'transparent' }}
+                                        >
                                             <MenuItem onClick={() => setAddCardDialog(true)}>Edit</MenuItem>
                                             <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
                                         </Menu>
@@ -322,7 +328,7 @@ export function CardsListPage() {
                         </TableBody>
                         <TableFooter>
                             <TableRow>
-                                <TablePagination {...customers.paginationProps} />
+                                <TablePagination {...cards.paginationProps} />
                             </TableRow>
                         </TableFooter>
                     </Table>

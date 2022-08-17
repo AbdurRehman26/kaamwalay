@@ -10,8 +10,12 @@ use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\CardSurface;
+use App\Models\Order;
 use App\Services\AGS\AgsService;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CardProductService
 {
@@ -126,5 +130,24 @@ class CardProductService
             'name' => $setName,
             'serie' => $seriesId,
         ])['results'][0]['id'];
+    }
+
+    public function getCards(): LengthAwarePaginator
+    {
+        /**
+         * return QueryBuilder::for(Order::class)
+        ->excludeCancelled()
+        ->allowedFilters(Order::getAllowedAdminFilters())
+        ->allowedIncludes(Order::getAllowedAdminIncludes())
+        ->allowedSorts(['grand_total'])
+        ->defaultSort('-orders.created_at')
+        ->paginate($itemsPerPage);
+         */
+        return QueryBuilder::for(CardProduct::class)
+            ->allowedFilters([
+                AllowedFilter::scope('card_category'),
+                AllowedFilter::scope('release_date'),
+            ])
+            ->paginate(request('per_page', 10));
     }
 }

@@ -30,11 +30,10 @@ beforeEach(function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['id' => 1, 'order_status_id' => OrderStatus::PLACED],
-        ['id' => 2, 'order_status_id' => OrderStatus::CONFIRMED],
-        ['id' => 3, 'order_status_id' => OrderStatus::GRADED],
-        ['id' => 4, 'order_status_id' => OrderStatus::SHIPPED],
-        ['id' => 5, 'order_status_id' => OrderStatus::REVIEWED]
+        ['order_status_id' => OrderStatus::PLACED],
+        ['order_status_id' => OrderStatus::CONFIRMED],
+        ['order_status_id' => OrderStatus::GRADED],
+        ['order_status_id' => OrderStatus::SHIPPED],
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -89,7 +88,8 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('/api/v1/admin/orders/1?include=customer,orderItems')
+    $order = Order::first();
+    $this->getJson('/api/v1/admin/orders/'. $order->id . '?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -107,8 +107,9 @@ it('returns order details', function () {
 });
 
 test('orders throws error for roles other than admin', function () {
+    $order = Order::first();
     $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
-        ->getJson('/api/v1/admin/orders/1')
+        ->getJson('/api/v1/admin/orders/'. $order->id)
         ->assertForbidden();
 });
 
@@ -136,11 +137,11 @@ it('returns only placed orders', function () {
 });
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=reviewed')
+    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=confirmed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'order_status_id' => OrderStatus::REVIEWED,
+            'order_status_id' => OrderStatus::CONFIRMED,
         ]);
 });
 
@@ -256,22 +257,6 @@ it(
     fn () => '000000100', // cert number of the first order's first item
 ]);
 
-test('an admin can complete review of an order', function () {
-    Http::fake([
-        'ags.api/*/certificates/*' => Http::response(['data']),
-    ]);
-    $response = $this->postJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/status-history', [
-        'order_status_id' => OrderStatus::REVIEWED,
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'data' => [
-            'order_id' => $this->orders[0]->id,
-            'order_status_id' => OrderStatus::REVIEWED,
-        ],
-    ]);
-});
 
 test('an admin can not complete review of an order if error occurred with AGS client', function () {
     Http::fake([
@@ -281,6 +266,25 @@ test('an admin can not complete review of an order if error occurred with AGS cl
     $this->postJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertStatus(422);
+});
+
+test('an admin can complete review of an order', function () {
+    Http::fake([
+        'ags.api/*/certificates/*' => Http::response(['data']),
+    ]);
+    Bus::fake();
+    Event::fake();
+    $response = $this->postJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/status-history', [
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+
+    $response->assertSuccessful();
+    $response->assertJson([
+        'data' => [
+            'order_id' => $this->orders[0]->id,
+            'order_status_id' => OrderStatus::CONFIRMED,
+        ],
+    ]);
 });
 
 test('an admin can get order cards if AGS API fails to return grades', function () {

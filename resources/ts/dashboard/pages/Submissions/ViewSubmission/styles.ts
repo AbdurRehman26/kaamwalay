@@ -42,7 +42,17 @@ export const useViewSubmissionStatusStyles = makeStyles(
 
 export const useViewSubmissionStatusBarStyles = makeStyles(
     (theme) => ({
+        parentDiv: {
+            overflow: 'hidden',
+            width: '100%',
+            [theme.breakpoints.down(500)]: {
+                overflowX: 'scroll',
+            },
+        },
         root: {
+            [theme.breakpoints.down(500)]: {
+                minWidth: '600px',
+            },
             width: '100%',
             backgroundColor: '#fff',
             borderRadius: 24,
@@ -100,11 +110,6 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
             [theme.breakpoints.down('sm')]: {
                 fontSize: 12,
                 marginLeft: 14,
-            },
-            [theme.breakpoints.down(400)]: {
-                fontSize: 8,
-                marginLeft: 8,
-                whiteSpace: 'nowrap',
             },
         },
         itemActive: {

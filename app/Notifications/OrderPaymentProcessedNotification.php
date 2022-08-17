@@ -41,7 +41,7 @@ class OrderPaymentProcessedNotification extends Notification
 
     protected function getMessage(): ?string
     {
-        $paymentCode = ucfirst($this->order->paymentMethod->code);
+        $paymentCode = ucfirst($this->order->paymentMethod?->code ?? 'Marked Paid Manually');
 
         return match ($this->paymentType) {
             OrderPayment::TYPE_ORDER_PAYMENT => $this->getMessageForOrderPaid($paymentCode),

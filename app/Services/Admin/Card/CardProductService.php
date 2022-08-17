@@ -4,6 +4,7 @@ namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
+use App\Http\Filters\AdminCardProductSearchFilter;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardRarity;
@@ -147,6 +148,7 @@ class CardProductService
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
                 AllowedFilter::scope('release_date'),
+                AllowedFilter::custom('search', new AdminCardProductSearchFilter),
             ])
             ->paginate(request('per_page', 10));
     }

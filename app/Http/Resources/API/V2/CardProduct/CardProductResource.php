@@ -14,9 +14,7 @@ class CardProductResource extends V1CardProductResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            $this->mergeWhen($this->population, [
-                'population' => $this->population,
-            ]),
+            'population' => $this->population ?? 0,
         ]);
     }
 }

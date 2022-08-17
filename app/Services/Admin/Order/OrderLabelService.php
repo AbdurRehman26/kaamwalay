@@ -29,7 +29,7 @@ class OrderLabelService
     {
         $this->createCardLabelService->createLabelForOrder($order);
 
-        $response = $this->getCardLabel($order);
+        $response = $this->getCardLabels($order);
 
         if (empty($response)) {
             throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
@@ -59,7 +59,7 @@ class OrderLabelService
         );
     }
 
-    public function getCardLabel(Order $order): array
+    protected function getCardLabels(Order $order): array
     {
         $labels = [];
         foreach ($order->gradedOrderItems as $orderItem) {

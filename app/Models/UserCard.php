@@ -29,7 +29,7 @@ class UserCard extends Model
         'grade_delta',
         'shipping_status',
         'is_fake',
-        'social_images'
+        'social_images',
     ];
 
     protected $casts = [

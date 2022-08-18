@@ -37,7 +37,7 @@ class OrderPaymentDueReminderCheck implements ReschedulingCheckInterface, Should
 
         // Do not send payment reminder email anymore if it's been more than 10 days
         // since order was graded
-        if(now()->diff($order->graded_at)->days > 10) {
+        if (now()->diff($order->graded_at)->days > 10) {
             return false;
         }
 

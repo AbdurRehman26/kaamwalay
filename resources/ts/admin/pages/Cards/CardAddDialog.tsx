@@ -260,7 +260,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
                 setAvailableCategories(response.data);
                 setCardCategory(categoryId);
-                // fetchCard(3);
                 dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
 
                 await fetchSeries(categoryId);

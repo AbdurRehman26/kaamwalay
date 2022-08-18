@@ -51,16 +51,14 @@ const joinFilterValues = (values: any[], separator = ',') =>
 const releaseDateFilter = (start: DateLike, end: DateLike, separator = ',', format = 'YYYY-MM-DD') =>
     joinFilterValues([formatDate(start, format), formatDate(end, format)], separator);
 
-const categoriesFilter = (cardCategory: string) => cardCategory;
-
 const getFilters = (values: InitialValues) => ({
     search: values.search,
     releaseDate: releaseDateFilter(values.releasedDateStart, values.releasedDateEnd),
-    cardCategory: categoriesFilter(values.cardCategory),
+    cardCategory: values.cardCategory,
 });
 
 export function CardsListPage() {
-    const [categoryName, setCategoryName] = useState('');
+    const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: '' });
     const [addCardDialog, setAddCardDialog] = useState(false);
     const [updateCardData, setUpdateCardData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +67,10 @@ export function CardsListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
 
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-    const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
-
-    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+    const [menuOpen, setMenuOpen] = useState<Element | null>(null);
+    const handleOpenMenu = useCallback<MouseEventHandler>((e) => setMenuOpen(e.target as Element), [setMenuOpen]);
+    const [sortFilter, setSortFilter] = useState(false);
+    const handleCloseOptions = useCallback(() => setMenuOpen(null), [setMenuOpen]);
 
     const dispatch = useAppDispatch();
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
@@ -102,9 +100,21 @@ export function CardsListPage() {
         [query.search, query.cardCategory, query.releasedDateStart, query.releasedDateEnd],
     );
 
+    useEffect(
+        () => {
+            if (!cards.isLoading) {
+                cards.sort({ sort: sortFilter ? 'population' : '-population' });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sortFilter],
+    );
+
     const cards = useAdminCardQuery({
         params: {
             filter: getFilters(query),
+            sort: sortFilter ? 'population' : '-population',
+            perPage: 48,
         },
 
         ...bracketParams(),
@@ -112,13 +122,13 @@ export function CardsListPage() {
 
     const handleDelete = (cardId: number) => {
         setShowDeleteModal(true);
-        setAnchorEl(null);
+        setMenuOpen(null);
         setDeleteId(cardId);
     };
 
     const handleEdit = async (cardId: number) => {
         setIsLoading(true);
-        setAnchorEl(null);
+        setMenuOpen(null);
         const cardData = await dispatch(getCardData(cardId));
         console.log('IIIII ', cardData.payload.data);
         setAddCardDialog(true);
@@ -129,7 +139,7 @@ export function CardsListPage() {
     const handleClearCategory = useCallback(async () => {
         formikRef.current?.setFieldValue('cardCategory', '');
         delQuery('cardCategory');
-
+        setCategoryName({ categoryId: '', categoryName: '' });
         await cards.search(
             getFilters({
                 ...formikRef.current!.values,
@@ -138,9 +148,11 @@ export function CardsListPage() {
         );
     }, [cards, delQuery]);
 
-    const handleCategory = useCallback(async (category: string) => {
-        setCategoryName(category);
-        // handleSubmit(values);
+    const handleCategory = useCallback(async (values, category) => {
+        values = { ...values, cardCategory: category.id };
+        setCategoryName({ categoryName: category.name, categoryId: category.id });
+        handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClearReleaseDate = useCallback(async () => {
@@ -190,6 +202,10 @@ export function CardsListPage() {
         [cards, setQuery],
     );
 
+    const handleSort = (value: boolean) => {
+        setSortFilter(value);
+    };
+
     useEffect(() => {
         (async () => {
             const result = await dispatch(getCardCategories());
@@ -199,170 +215,188 @@ export function CardsListPage() {
 
     return (
         <>
-            {cards.isLoading || isLoading ? (
-                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                    <CircularProgress />
-                </Box>
-            ) : (
-                <Grid container>
-                    <CardPageHeader searchField title={'Cards'} onSearch={handleSearch} />
-                    <CardAddDialog
-                        onSubmit={() => {}}
-                        open={addCardDialog}
-                        isUpdate={true}
-                        onClose={() => setAddCardDialog(false)}
-                        updateCard={updateCardData}
-                    />
-                    <DeleteCardDialog
-                        open={showDeleteModal}
-                        onClose={() => setShowDeleteModal(false)}
-                        onSubmit={() => handleDeleteSubmit()}
-                    ></DeleteCardDialog>
-                    <Grid container p={2.5} alignItems={'center'}>
-                        <Grid item xs container alignItems={'center'}>
-                            <Typography variant={'subtitle1'}>{cards.pagination.meta.total} Result(s)</Typography>
-                            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                                {({ values }) => (
-                                    <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
-                                        <CardPageSelector
-                                            label={'Categories'}
-                                            value={categoriesFilter(categoryName)}
-                                            onClear={handleClearCategory}
-                                        >
-                                            {availableCategories?.map((item: any) => {
-                                                return (
-                                                    <Grid component={Form}>
-                                                        <MenuItem
-                                                            onClick={() => handleCategory(item.name)}
-                                                            key={item.id}
-                                                            value={item.id}
-                                                        >
-                                                            {item.name}
-                                                        </MenuItem>
-                                                    </Grid>
-                                                );
-                                            })}
-                                        </CardPageSelector>
+            <Grid container>
+                <CardPageHeader searchField title={'Cards'} onSearch={handleSearch} />
+                {cards.isLoading || isLoading ? (
+                    <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <>
+                        <CardAddDialog
+                            onSubmit={() => {}}
+                            open={addCardDialog}
+                            isUpdate={true}
+                            onClose={() => setAddCardDialog(false)}
+                            updateCard={updateCardData}
+                        />
+                        <DeleteCardDialog
+                            open={showDeleteModal}
+                            onClose={() => setShowDeleteModal(false)}
+                            onSubmit={() => handleDeleteSubmit()}
+                        ></DeleteCardDialog>
+                        <Grid container p={2.5} alignItems={'center'}>
+                            <Grid item xs container alignItems={'center'}>
+                                <Typography variant={'subtitle1'}>{cards.pagination.meta.total} Result(s)</Typography>
+                                <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
+                                    {({ values }) => (
+                                        <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
+                                            <CardPageSelector
+                                                label={'Categories'}
+                                                value={categoryName.categoryName}
+                                                onClear={handleClearCategory}
+                                            >
+                                                {availableCategories?.map((item: any) => {
+                                                    return (
+                                                        <Grid>
+                                                            <MenuItem
+                                                                onClick={() => handleCategory(values, item)}
+                                                                key={item.id}
+                                                                value={item.id}
+                                                            >
+                                                                {item.name}
+                                                            </MenuItem>
+                                                        </Grid>
+                                                    );
+                                                })}
+                                            </CardPageSelector>
 
-                                        <CardPageSelector
-                                            label={'Released Date'}
-                                            value={releaseDateFilter(
-                                                values.releasedDateStart,
-                                                values.releasedDateEnd,
-                                                ' - ',
-                                                'MM/DD/YY',
-                                            )}
-                                            onClear={handleClearReleaseDate}
-                                        >
-                                            <Grid container component={Form} direction={'column'}>
-                                                <Grid container alignItems={'center'}>
-                                                    <Grid item xs>
-                                                        <FormikDesktopDatePicker
-                                                            name={'releasedDateStart'}
-                                                            label={'Start Date'}
-                                                            fullWidth
-                                                        />
+                                            <CardPageSelector
+                                                label={'Released Date'}
+                                                value={releaseDateFilter(
+                                                    values.releasedDateStart,
+                                                    values.releasedDateEnd,
+                                                    ' - ',
+                                                    'MM/DD/YY',
+                                                )}
+                                                onClear={handleClearReleaseDate}
+                                            >
+                                                <Grid container component={Form} direction={'column'}>
+                                                    <Grid container alignItems={'center'}>
+                                                        <Grid item xs>
+                                                            <FormikDesktopDatePicker
+                                                                name={'releasedDateStart'}
+                                                                label={'Start Date'}
+                                                                fullWidth
+                                                            />
+                                                        </Grid>
+                                                        <Grid
+                                                            item
+                                                            xs
+                                                            container
+                                                            justifyContent={'center'}
+                                                            maxWidth={'28px !important'}
+                                                        >
+                                                            <Typography variant={'body2'}>-</Typography>
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormikDesktopDatePicker
+                                                                name={'releasedDateEnd'}
+                                                                label={'End Date'}
+                                                                minDate={values.releasedDateStart}
+                                                                fullWidth
+                                                            />
+                                                        </Grid>
                                                     </Grid>
+                                                    <Grid container justifyContent={'flex-end'} mt={2.5}>
+                                                        <FormikButton variant={'contained'} color={'primary'}>
+                                                            Apply
+                                                        </FormikButton>
+                                                    </Grid>
+                                                </Grid>
+                                            </CardPageSelector>
+                                        </Grid>
+                                    )}
+                                </Formik>
+                            </Grid>
+                        </Grid>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell variant={'head'}>Card</TableCell>
+                                        <TableCell variant={'head'}>No</TableCell>
+                                        <TableCell variant={'head'}>Category</TableCell>
+                                        <TableCell variant={'head'}>Series</TableCell>
+                                        <TableCell variant={'head'}>Set</TableCell>
+                                        <TableCell variant={'head'}>Release Date</TableCell>
+                                        <TableCell align="center" variant={'head'}>
+                                            <TableSortLabel
+                                                sx={{ float: 'right', marginRight: '40%', color: '#0000008A' }}
+                                                onClick={() => handleSort(!sortFilter)}
+                                                direction={!sortFilter ? 'desc' : 'asc'}
+                                                active={true}
+                                            ></TableSortLabel>{' '}
+                                            Population
+                                        </TableCell>
+                                        <TableCell variant={'head'}></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {cards.data.map((card) => (
+                                        <TableRow key={card.id}>
+                                            <TableCell variant={'body'}>
+                                                <Grid container>
+                                                    <Avatar
+                                                        variant={'square'}
+                                                        sx={{ height: '48px', width: '35px' }}
+                                                        src={card.imagePath ?? ''}
+                                                    ></Avatar>
                                                     <Grid
                                                         item
                                                         xs
                                                         container
-                                                        justifyContent={'center'}
-                                                        maxWidth={'28px !important'}
+                                                        alignItems={'center'}
+                                                        direction={'row'}
+                                                        pl={2}
                                                     >
-                                                        <Typography variant={'body2'}>-</Typography>
-                                                    </Grid>
-                                                    <Grid item xs>
-                                                        <FormikDesktopDatePicker
-                                                            name={'releasedDateEnd'}
-                                                            label={'End Date'}
-                                                            minDate={values.releasedDateStart}
-                                                            fullWidth
-                                                        />
+                                                        <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
+                                                            {card.cardCategoryName}
+                                                        </Typography>
                                                     </Grid>
                                                 </Grid>
-                                                <Grid container justifyContent={'flex-end'} mt={2.5}>
-                                                    <FormikButton variant={'contained'} color={'primary'}>
-                                                        Apply
-                                                    </FormikButton>
-                                                </Grid>
-                                            </Grid>
-                                        </CardPageSelector>
-                                    </Grid>
-                                )}
-                            </Formik>
-                        </Grid>
-                    </Grid>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell variant={'head'}>Card</TableCell>
-                                    <TableCell variant={'head'}>No</TableCell>
-                                    <TableCell variant={'head'}>Category</TableCell>
-                                    <TableCell variant={'head'}>Series</TableCell>
-                                    <TableCell variant={'head'}>Set</TableCell>
-                                    <TableCell variant={'head'}>Release Date</TableCell>
-                                    <TableCell variant={'head'}>
-                                        {' '}
-                                        <TableSortLabel direction={'asc'} active={true}></TableSortLabel> Population
-                                    </TableCell>
-                                    <TableCell variant={'head'}></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {cards.data.map((card) => (
-                                    <TableRow key={card.id}>
-                                        <TableCell variant={'body'}>
-                                            <Grid container>
-                                                <Avatar
-                                                    variant={'square'}
-                                                    sx={{ height: '48px', width: '35px' }}
-                                                    src={card.imagePath ?? ''}
-                                                ></Avatar>
-                                                <Grid item xs container alignItems={'center'} direction={'row'} pl={2}>
-                                                    <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
-                                                        {card.cardCategoryName}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                        </TableCell>
-                                        <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
-                                        <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
-                                        <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
-                                        <TableCell variant={'body'}>{card.cardSetName}</TableCell>
-                                        <TableCell variant={'body'}>
-                                            {formatDate(card.releaseDate, 'MM/DD/YYYY')}
-                                        </TableCell>
-                                        <TableCell variant={'body'} align={'center'}>
-                                            {card.population ?? 0}
-                                        </TableCell>
-                                        <TableCell variant={'body'} align={'right'}>
-                                            <IconButton onClick={handleClickOptions} size="large">
-                                                <MoreIcon />
-                                            </IconButton>
-                                            <Menu
-                                                anchorEl={anchorEl}
-                                                open={!!anchorEl}
-                                                onClose={handleCloseOptions}
-                                                sx={{ background: 'transparent' }}
-                                            >
-                                                <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
-                                                <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
-                                            </Menu>
-                                        </TableCell>
+                                            </TableCell>
+                                            <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
+                                            <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
+                                            <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
+                                            <TableCell variant={'body'}>{card.cardSetName}</TableCell>
+                                            <TableCell variant={'body'}>
+                                                {formatDate(card.releaseDate, 'MM/DD/YYYY')}
+                                            </TableCell>
+                                            <TableCell variant={'body'} align={'center'}>
+                                                {card.population ?? 0}
+                                            </TableCell>
+                                            <TableCell variant={'body'} align={'right'}>
+                                                <IconButton onClick={handleOpenMenu} size="large">
+                                                    <MoreIcon />
+                                                </IconButton>
+                                                <Menu
+                                                    elevation={0.7}
+                                                    anchorEl={menuOpen}
+                                                    open={!!menuOpen}
+                                                    onClose={handleCloseOptions}
+                                                >
+                                                    <>
+                                                        <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
+                                                        <MenuItem onClick={() => handleDelete(card.id)}>
+                                                            Delete
+                                                        </MenuItem>
+                                                    </>
+                                                </Menu>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                <TableFooter>
+                                    <TableRow>
+                                        <TablePagination {...cards.paginationProps} />
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination {...cards.paginationProps} />
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
-                </Grid>
-            )}
+                                </TableFooter>
+                            </Table>
+                        </TableContainer>
+                    </>
+                )}
+            </Grid>
         </>
     );
 }

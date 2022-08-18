@@ -6,7 +6,8 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { useCallback, useState } from 'react';
 import { CardAddDialog } from './CardAddDialog';
 
 interface Props extends GridProps {
@@ -54,21 +55,21 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
     const [search, setSearch] = useState(value ?? '');
     const [addCardDialog, setAddCardDialog] = useState(false);
 
+    const debouncedFunc = debounce((func: any) => {
+        func();
+    }, 300);
+
     const handleSearch = useCallback(
         (e) => {
             setSearch(e.target.value);
-            setTimeout(() => {
-                if (onSearch) {
-                    onSearch(search);
-                }
-            }, 300);
+            if (onSearch) {
+                debouncedFunc(() => {
+                    onSearch(e.target.value);
+                });
+            }
         },
-        [onSearch, search],
+        [setSearch, onSearch, debouncedFunc],
     );
-
-    useEffect(() => {
-        setSearch(value ?? '');
-    }, [value]);
 
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>

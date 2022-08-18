@@ -384,9 +384,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
         setIsLoading(true);
         try {
-            const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+            // const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
             const DTO = {
-                imagePath: cardPublicImage,
+                imagePath: 'https://den-media.pokellector.com/logos/Battle-Styles.logo.305.png',
                 name: cardName,
                 category: cardCategory,
                 releaseDate: releaseDate,
@@ -718,7 +718,22 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                 onChange={handleSeriesChange}
                                 options={availableSeries}
                                 fullWidth
-                                renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        placeholder={'Enter Series'}
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: selectedSeries ? (
+                                                <img
+                                                    src={selectedSeries?.imagePath}
+                                                    alt=""
+                                                    style={{ height: '19px', width: '49px', marginLeft: '10px' }}
+                                                />
+                                            ) : null,
+                                        }}
+                                    />
+                                )}
                             />
                         </FormControl>
                         <Button
@@ -961,7 +976,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={isUpdate ? updateCard.varient : productVariant}
+                                            value={isUpdate ? updateCard?.varient : productVariant}
                                             onChange={handleProductVariantChange}
                                             placeholder={'Enter product/variant'}
                                         />

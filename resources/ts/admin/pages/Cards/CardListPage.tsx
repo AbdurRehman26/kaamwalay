@@ -130,7 +130,6 @@ export function CardsListPage() {
         setIsLoading(true);
         setMenuOpen(null);
         const cardData = await dispatch(getCardData(cardId));
-        console.log('IIIII ', cardData.payload.data);
         setAddCardDialog(true);
         setUpdateCardData(cardData.payload.data);
         setIsLoading(false);

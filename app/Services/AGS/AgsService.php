@@ -104,7 +104,7 @@ class AgsService
         ) {
             return [
                 'image_path' => $data['results'][0]['card']['image_path'],
-            ] ?? [];
+            ];
         }
 
         return  [

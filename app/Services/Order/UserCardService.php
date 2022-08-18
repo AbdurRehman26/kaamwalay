@@ -225,11 +225,12 @@ class UserCardService
     {
         $uid = Str::uuid();
         $certificateNumber = $userCard->certificate_number;
+        $overallGrade = $this->prepareGradeForPublicCardPage($userCard);
         $viewData = [
             'card_name' => $userCard->orderItem->cardProduct->name,
             'card_image' => $userCard->orderItem->cardProduct->image_path,
-            'overall_grade' => $userCard->overall_grade,
-            'overall_grade_nickname' => $userCard->overall_grade_nickname,
+            'overall_grade' => $overallGrade['grade'],
+            'overall_grade_nickname' => $overallGrade['nickname'],
         ];
 
         $socialPreviewLambdaService = new SocialPreviewLambdaService();

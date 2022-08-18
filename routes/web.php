@@ -8,7 +8,6 @@ use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
 use Illuminate\Support\Facades\Route;
-use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,23 +44,3 @@ Route::prefix('pop')->group(function () {
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
-
-Route::get('social', function () {
-    $viewData = [
-        'card_name' => 'Pignite',
-        'card_image' => 'https://den-cards.pokellector.com/305/Pignite.SWSH05.24.37551.png',
-        'overall_grade' => '10',
-        'overall_grade_nickname' => 'MINT+',
-    ];
-
-    return view('social.card', $viewData);
-
-//    $name = Str::uuid();
-//
-//    return response(
-//        BrowsershotLambda::html(view('social.card', $viewData)->render())
-//            ->windowSize(420, 800)
-//            ->setScreenshotType('jpeg', 100)
-//            ->saveToS3("social-previews/user-cards/$name.jpg")
-//    )->header('Content-Type', 'image/jpeg');
-});

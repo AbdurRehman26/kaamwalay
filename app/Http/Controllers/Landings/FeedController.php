@@ -25,6 +25,7 @@ class FeedController extends Controller
     {
         $data = $this->userCardService->getDataForPublicCardPage($certificateId);
         $data['popData'] = $this->userCardService->getAgsPopulationData($certificateId);
+        $data['pageUrl'] = $this->userCardService->getPageUrl($certificateId);
 
         return view('landings.feed.publiCardPage.view', $data);
     }

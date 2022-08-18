@@ -181,7 +181,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__copy-to-clipBoard">
-                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board-mobile" data-content="{{ env('APP_URL') }}/feed/{{ $certificate_id }}/view">
+                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board-mobile" data-content="{{ $pageUrl }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ env('APP_URL') }}/feed/{{ $certificate_id }}/view">
+                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $pageUrl }}">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

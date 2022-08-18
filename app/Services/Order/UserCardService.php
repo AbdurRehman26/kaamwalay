@@ -103,6 +103,15 @@ class UserCardService
 
     /**
      * @param  string  $certificateId
+     * @return string
+     */
+    public function getPageUrl(string $certificateId): string
+    {
+        return env('APP_URL').'/feed/'.$certificateId.'/view';
+    }
+
+    /**
+     * @param  string  $certificateId
      * @return array
      */
     public function getAgsPopulationData(string $certificateId): array

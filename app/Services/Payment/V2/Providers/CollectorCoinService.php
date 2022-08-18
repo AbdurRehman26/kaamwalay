@@ -176,6 +176,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             'exchangeRate' => $divider,
             'result' => round($collectorCoin, 2),
         ]);
+
         return round($collectorCoin, 2);
     }
 

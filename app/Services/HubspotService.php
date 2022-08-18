@@ -33,9 +33,8 @@ class HubspotService
 
             $owners = explode(',', config('services.hubspot.owner_email'));
 
-            if(count($owners) > 1) {
-
-                if (!Cache::has('hubspot:iteration')) {
+            if (count($owners) > 1) {
+                if (! Cache::has('hubspot:iteration')) {
                     Cache::put('hubspot:iteration', 0);
                 }
     
@@ -46,7 +45,6 @@ class HubspotService
                 } else {
                     Cache::put('hubspot:iteration', 0);
                 }
-
             } else {
                 Cache::put('hubspot:owner', $owners);
             }

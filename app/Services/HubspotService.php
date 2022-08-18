@@ -33,16 +33,21 @@ class HubspotService
             
             $owners = explode(',' , config('services.hubspot.owner_email'));
 
-            if (!Cache::has('iteration')) {
-                Cache::put('iteration', 0);
-            }
+            if(count($owners) > 1) {
 
-            if (Cache::get('iteration') < count($owners) - 1) {
-                Cache::put('hubspot:owner', $owners[Cache::get('iteration')]);
-                Cache::increment('iteration');
+                if (!Cache::has('hubspot:iteration')) {
+                    Cache::put('hubspot:iteration', 0);
+                }
+    
+                Cache::put('hubspot:owner', $owners[Cache::get('hubspot:iteration')]);
+
+                if (Cache::get('hubspot:iteration') < count($owners) - 1) {
+                    Cache::increment('hubspot:iteration');
+                } else {
+                    Cache::put('hubspot:iteration', 0);
+                }
             } else {
-                Cache::put('hubspot:owner', $owners[Cache::get('iteration')]);
-                Cache::put('iteration', 0);
+                Cache::put('hubspot:owner', $owners);
             }
 
             $ownerResponse = $owner->all(['email' => Cache::get('hubspot:owner')]);

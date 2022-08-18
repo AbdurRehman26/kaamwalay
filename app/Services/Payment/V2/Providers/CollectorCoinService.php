@@ -90,10 +90,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $response = $this->getPaymentReferenceResponse($order);
             $data['amount'] = $response['amount'] ?? 0;
 
-            Log::info('CC_PAYMENT_CHARGE_REQUEST', [
-                'orderNumber' => $order->order_number,
-                'request' => $data,
-            ]);
+            Log::info('CC_PAYMENT_CHARGE_REQUEST_' . $order->order_number, $data);
 
             $transactionData = $this->getTransaction($data['transaction_hash']);
 
@@ -103,8 +100,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $response['txn_hash'] = $data['transaction_hash'];
             $response['destination_wallet'] = $transactionData['destination_wallet'];
 
-            Log::info('CC_PAYMENT_CHARGE_RESULT', [
-                'orderNumber' => $order->order_number,
+            Log::info('CC_PAYMENT_CHARGE_RESULT_' . $order->order_number, [
                 'request' => $data,
                 'response' => $response,
                 'payment_provider_reference_id' => $data['transaction_hash'],
@@ -175,7 +171,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
         $collectorCoin = $value / $divider;
 
-        Log::info('CALC_CC_PRICE_RESULT', [
+        Log::info('CC_PAYMENT_CALC_PRICE_RESULT', [
             'value' => $value,
             'exchangeRate' => $divider,
             'result' => round($collectorCoin, 2),

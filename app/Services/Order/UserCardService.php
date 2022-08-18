@@ -191,6 +191,7 @@ class UserCardService
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
             'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
+            'slabbed_images' => resolve(AgsService::class)->getSlabbedImagesByCertificateId($certificateId),
         ];
     }
 

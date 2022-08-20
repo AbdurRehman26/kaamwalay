@@ -75,7 +75,7 @@ class CouponService
         $coupon->usage_allowed_per_user = $data['usage_allowed_per_user'];
 
         if (! empty($data['has_minimum_cards_threshold'])) {
-            $this->handleCouponMinThreshold($data, $coupon);
+            $this->addCouponMinThreshold($data, $coupon);
         }
 
         $coupon->save();
@@ -272,7 +272,7 @@ class CouponService
         );
     }
 
-    protected function handleCouponMinThreshold(array $data, Coupon &$coupon): void
+    protected function addCouponMinThreshold(array $data, Coupon &$coupon): void
     {
         $coupon->min_threshold_type = CouponMinThresholdTypeEnum::CARD_COUNT;
         $coupon->min_threshold_value = $data['min_threshold_value'];

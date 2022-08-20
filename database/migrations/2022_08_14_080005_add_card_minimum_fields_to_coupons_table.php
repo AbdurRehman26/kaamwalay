@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->tinyInteger('min_threshold_type')
-                ->after('capped_amount')
-                ->default(0)
-                ->comment('0 => No threshold, 1 => card count, 2 => amount');
             $table->integer('min_threshold_value')
                 ->after('capped_amount')
                 ->default(0)
                 ->comment('when 0 it means no threshold');
+            $table->tinyInteger('min_threshold_type')
+                ->after('capped_amount')
+                ->default(0)
+                ->comment('0 => No threshold, 1 => card count, 2 => amount');
         });
     }
 

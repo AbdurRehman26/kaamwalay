@@ -60,6 +60,9 @@ class CouponController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateDiscount(CalculateCouponDiscountRequest $request): JsonResponse
     {
         try {
@@ -67,7 +70,6 @@ class CouponController extends Controller
                 'couponables_id' => $request->payment_plan['id'],
                 'items_count' => $request->input('items_count', 0),
             ];
-            dump($couponParams);
 
             $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
 
@@ -77,7 +79,7 @@ class CouponController extends Controller
             );
         } catch (Exception $e) {
             return match (true) {
-                $e instanceof CouponHasInvalidMinThreshold => new $e,
+                $e instanceof CouponHasInvalidMinThreshold => throw $e,
                 default => new JsonResponse(
                     [
                         'error' => $e->getMessage(),

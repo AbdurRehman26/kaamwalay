@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V2\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource
@@ -27,6 +28,10 @@ class OrderPaymentResource extends BaseResource
                 'type' => $this->type,
                 'created_at' => $this->formatDate($this->created_at),
             ];
+        }
+
+        if ($this->paymentMethod->isManual()) {
+            return $this->getManualPaymentResponse();
         }
 
         if ($this->order->paymentMethod->code === 'paypal' && $this->type !== OrderPayment::TYPE_REFUND) {
@@ -83,6 +88,18 @@ class OrderPaymentResource extends BaseResource
                 'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
                 'complete_hash' => $response['txn_hash'],
             ],
+        ];
+    }
+
+    protected function getManualPaymentResponse(): array
+    {
+        return [
+            'id' => $this->id,
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => $this->getPaymentType($this->type),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 }

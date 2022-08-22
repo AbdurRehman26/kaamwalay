@@ -60,7 +60,7 @@ const getFilters = (values: InitialValues) => ({
 export function CardsListPage() {
     const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: '' });
     const [addCardDialog, setAddCardDialog] = useState(false);
-    const [updateCardData, setUpdateCardData] = useState([]);
+    const [updateCardData, setUpdateCardData] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(0);
@@ -74,13 +74,14 @@ export function CardsListPage() {
 
     const dispatch = useAppDispatch();
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
+    const notifications = useNotifications();
 
     const handleDeleteSubmit = async () => {
         try {
             setIsLoading(true);
             await dispatch(deleteCard(deleteId));
-            const response = await dispatch(getAllCards);
-            response.payload = cards;
+            notifications.success('Card Deleted Successfully!');
+            await dispatch(getAllCards);
             setIsLoading(false);
         } catch (e: any) {
             setIsLoading(false);
@@ -88,7 +89,17 @@ export function CardsListPage() {
         }
     };
 
-    const notifications = useNotifications();
+    const handleAddSubmit = async () => {
+        try {
+            setIsLoading(true);
+            setAddCardDialog(false);
+            await dispatch(getAllCards);
+            setIsLoading(false);
+        } catch (e: any) {
+            setIsLoading(false);
+            notifications.exception(e);
+        }
+    };
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -130,8 +141,8 @@ export function CardsListPage() {
         setIsLoading(true);
         setMenuOpen(null);
         const cardData = await dispatch(getCardData(cardId));
-        setAddCardDialog(true);
         setUpdateCardData(cardData.payload.data);
+        setAddCardDialog(true);
         setIsLoading(false);
     };
 
@@ -223,7 +234,7 @@ export function CardsListPage() {
                 ) : (
                     <>
                         <CardAddDialog
-                            onSubmit={() => {}}
+                            onSubmit={handleAddSubmit}
                             open={addCardDialog}
                             isUpdate={true}
                             onClose={() => setAddCardDialog(false)}
@@ -313,13 +324,25 @@ export function CardsListPage() {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell variant={'head'}>Card</TableCell>
-                                        <TableCell variant={'head'}>No</TableCell>
-                                        <TableCell variant={'head'}>Category</TableCell>
-                                        <TableCell variant={'head'}>Series</TableCell>
-                                        <TableCell variant={'head'}>Set</TableCell>
-                                        <TableCell variant={'head'}>Release Date</TableCell>
-                                        <TableCell align="center" variant={'head'}>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Card
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            No
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Category
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Series
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Set
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Release Date
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} align="center" variant={'head'}>
                                             <TableSortLabel
                                                 sx={{ float: 'right', marginRight: '40%', color: '#0000008A' }}
                                                 onClick={() => handleSort(!sortFilter)}
@@ -355,7 +378,7 @@ export function CardsListPage() {
                                                     </Grid>
                                                 </Grid>
                                             </TableCell>
-                                            <TableCell variant={'body'}>{card.cardNumberOrder ?? '-'}</TableCell>
+                                            <TableCell variant={'body'}>{card.cardNumber ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSetName}</TableCell>
@@ -370,17 +393,12 @@ export function CardsListPage() {
                                                     <MoreIcon />
                                                 </IconButton>
                                                 <Menu
-                                                    elevation={0.7}
                                                     anchorEl={menuOpen}
                                                     open={!!menuOpen}
                                                     onClose={handleCloseOptions}
                                                 >
-                                                    <>
-                                                        <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
-                                                        <MenuItem onClick={() => handleDelete(card.id)}>
-                                                            Delete
-                                                        </MenuItem>
-                                                    </>
+                                                    <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
+                                                    <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
                                                 </Menu>
                                             </TableCell>
                                         </TableRow>

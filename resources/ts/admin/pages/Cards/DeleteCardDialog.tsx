@@ -54,7 +54,7 @@ function DeleteCardDialog(props: DeleteCardDialogProps) {
 
     return (
         <Dialog onClose={handleClose} {...rest}>
-            <DialogTitle>Delete Card</DialogTitle>
+            <DialogTitle>Are you sure you want to delete this card?</DialogTitle>
             <Formik initialValues={{}} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                     <Form>

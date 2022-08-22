@@ -8,18 +8,6 @@ import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<CardProductEntity> {}
 
-// interface AddCardDialogState {
-//     cardCategories?: CardCategoryEntity | null;
-//     cardSeries?: CardSeriesEntity | null;
-//     cardSets?: CardSetEntity | null;
-// }
-
-// const initialState: AddCardDialogState = {
-//     cardCategories: null,
-//     cardSeries: null,
-//     cardSets: null,
-// }
-
 const adminCardsThunk = createRepositoryThunk('adminCards', CardsRepository);
 
 export const getAllCards = createAsyncThunk('newCard/getAllCards', async () => {
@@ -42,13 +30,6 @@ export const getCardSeries = createAsyncThunk('newCard/getCardSeries', async () 
     return await endpoint.get('');
 });
 
-export const getCardSets = createAsyncThunk('newCard/getCardSets', async () => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/cards/sets`);
-    const cardSets = await endpoint.get('');
-    return cardSets.data;
-});
-
 export const deleteCard = createAsyncThunk('newCard/deleteCard', async (cardId: number) => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
@@ -68,17 +49,6 @@ export const adminCardsSlice = createSlice({
         ...adminCardsThunk.initialState,
     } as StateType,
     reducers: {},
-    // extraReducers: {
-    // [getCardCategories.fulfilled as any]: (state, action) => {
-    //     state.cardCategories = action.payload;
-    // },
-    // [getCardSeries.fulfilled as any]: (state, action) => {
-    //     state.cardSeries = action.payload;
-    // },
-    // [getCardSets.fulfilled as any]: (state, action) => {
-    //     state.cardSets = action.payload;
-    // },
-    // }
     extraReducers(builder) {
         adminCardsThunk.buildReducers(builder);
     },

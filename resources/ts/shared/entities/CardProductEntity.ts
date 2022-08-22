@@ -8,16 +8,17 @@ export class CardProductEntity extends Entity {
     public releaseYear!: number;
     public releaseDate!: string;
     public cardNumberOrder!: string;
+    public cardNumber!: string;
     public population!: number;
     public imagePath!: string;
     public shortName!: string;
     public longName!: string;
     public addedByCustomer!: boolean;
-    public surface?: string;
-    public varient?: string;
-    public language?: string;
-    public rarity?: string;
-    public edition?: string;
+    public surface!: string;
+    public variant!: string;
+    public language!: string;
+    public rarity!: string;
+    public edition!: string;
 
     public getName() {
         return this.name || 'Unknown';

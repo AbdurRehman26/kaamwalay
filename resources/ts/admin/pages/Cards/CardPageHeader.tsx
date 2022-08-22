@@ -1,5 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid, { GridProps } from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -8,6 +10,9 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { getAllCards } from '@shared/redux/slices/adminCardsSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
 
 interface Props extends GridProps {
@@ -54,6 +59,9 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
     const [addCardDialog, setAddCardDialog] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useAppDispatch();
+    const notifications = useNotifications();
 
     const debouncedFunc = debounce((func: any) => {
         func();
@@ -71,42 +79,66 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
         [setSearch, onSearch, debouncedFunc],
     );
 
+    const handleAddSubmit = async () => {
+        try {
+            setIsLoading(true);
+            setAddCardDialog(false);
+            await dispatch(getAllCards);
+            setIsLoading(false);
+        } catch (e: any) {
+            setIsLoading(false);
+            notifications.exception(e);
+        }
+    };
+
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
-            <CardAddDialog onSubmit={() => {}} open={addCardDialog} onClose={() => setAddCardDialog(false)} />
-            <Grid container justifyContent={'space-between'}>
-                <Grid display={'flex'} alignItems={'center'} item>
-                    <Typography variant={'h4'} fontWeight={500} mr={3}>
-                        {title}
-                    </Typography>
-                    {searchField && (
-                        <TextField
-                            className={'ListPageHeader-search'}
-                            value={search}
-                            onChange={handleSearch}
-                            placeholder={'Search...'}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position={'start'}>
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    )}
-                </Grid>
-                <Grid item>
-                    <Button
-                        onClick={() => setAddCardDialog(true)}
-                        variant={'contained'}
-                        color={'primary'}
-                        className={classes.newCustomerBtn}
-                    >
-                        Create Card
-                    </Button>
-                </Grid>
-            </Grid>
-            {children}
+            {isLoading ? (
+                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
+                    <CardAddDialog
+                        onSubmit={handleAddSubmit}
+                        open={addCardDialog}
+                        onClose={() => setAddCardDialog(false)}
+                    />
+                    <Grid container justifyContent={'space-between'}>
+                        <Grid display={'flex'} alignItems={'center'} item>
+                            <Typography variant={'h4'} fontWeight={500} mr={3}>
+                                {title}
+                            </Typography>
+                            {searchField && (
+                                <TextField
+                                    className={'ListPageHeader-search'}
+                                    value={search}
+                                    onChange={handleSearch}
+                                    placeholder={'Search...'}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position={'start'}>
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            )}
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                onClick={() => setAddCardDialog(true)}
+                                variant={'contained'}
+                                color={'primary'}
+                                className={classes.newCustomerBtn}
+                            >
+                                Create Card
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    {children}
+                </>
+            )}
         </Root>
     );
 }

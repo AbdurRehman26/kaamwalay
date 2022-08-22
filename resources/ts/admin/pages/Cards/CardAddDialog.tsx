@@ -23,24 +23,23 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { batch } from 'react-redux';
 import ImageUploader from '@shared/components/ImageUploader';
-import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
 import { CardSetEntity } from '@shared/entities/CardSetEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
-import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { APIService } from '@shared/services/APIService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 export interface CardAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
     isUpdate?: boolean;
-    updateCard?: CardProductEntity | never;
+    updateCard?: CardProductEntity;
     addressId?: number;
     onSubmit(): Promise<void> | void;
 }
@@ -105,38 +104,27 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
     const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
     const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
-    const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
+    const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null | string | undefined>(null);
     const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
     const [selectedRarity, setSelectedRarity] = useState<CardRarity | null>(null);
     const [availableSurfaces, setAvailableSurfaces] = useState<CardSurface[]>([]);
-    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null>(null);
-    const [releaseDate, setReleaseDate] = useState<Date | null>(null);
+    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null | undefined>(null);
+    const [releaseDate, setReleaseDate] = useState<Date | string | null>(null);
     const [availableLanguages, setAvailableLanguages] = useState<string[] | null>(null);
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('none');
+    const [selectedLanguage, setSelectedLanguage] = useState<string | null | undefined>(null);
     const [availableEditions, setAvailableEditions] = useState<string[] | null>(null);
-    const [selectedEdition, setSelectedEdition] = useState<string>('none');
-    const [productVariant, setProductVariant] = useState<string>('');
-    const [cardName, setCardName] = useState('');
-    const [cardNumber, setCardNumber] = useState('');
-
+    const [selectedEdition, setSelectedEdition] = useState<string | null | undefined>(null);
+    const [productVariant, setProductVariant] = useState<string | null | undefined>(null);
+    const [cardName, setCardName] = useState<string | null | undefined>(null);
+    const [cardNumber, setCardNumber] = useState<string | null | undefined>(null);
     const [createCardView, setCreateCardView] = useState(true);
     const [createSeriesView, setCreateSeriesView] = useState(false);
     const [createSetView, setCreateSetView] = useState(false);
-
-    //
     const [newSetName, setNewSetName] = useState('');
     const [newSetLogo, setNewSetLogo] = useState<File | null>(null);
     const [newSetReleaseDate, setNewSetReleaseDate] = useState<Date | null>(null);
-
-    //
-
-    //
     const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
     const [newSeriesName, setNewSeriesName] = useState('');
-    //
-
-    const Notifications = useNotifications();
-
     const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
@@ -150,7 +138,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [onClose]);
 
     const fetchSeries = useCallback(
-        async (categoryId: Number) => {
+        async (categoryId: any) => {
             const endpoint = apiService.createEndpoint(`admin/cards/series?category_id=` + categoryId);
             const response = await endpoint.get('');
             setAvailableSeries(
@@ -166,17 +154,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         },
         [apiService],
     );
-
-    // const fetchCard = useCallback(
-    //     async (categoryId: Number) => {
-    //         const endpoint = apiService.createEndpoint(`admin/cards/` + categoryId);
-    //         const response = await endpoint.get('');
-
-    //         console.log("AAAA A " , response)
-
-    //     },
-    //     [apiService],
-    // );
 
     const fetchSets = useCallback(
         async (seriesId: Number) => {
@@ -377,19 +354,19 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             selectedRarity &&
             selectedLanguage !== 'none'
         );
-    }, [selectedSeries, selectedSet, selectedCardPhoto, cardName, selectedLanguage, selectedRarity, cardNumber]);
+    }, [selectedSeries, selectedSet, cardName, selectedCardPhoto, selectedLanguage, selectedRarity, cardNumber]);
 
     const handleAddCard = async () => {
-        const endpoint = apiService.createEndpoint('/admin/cards');
+        const endpoint = apiService.createEndpoint(isUpdate ? `admin/cards/${updateCard?.id}` : `admin/cards`);
 
         setIsLoading(true);
         try {
-            // const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+            const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
             const DTO = {
-                imagePath: 'https://den-media.pokellector.com/logos/Battle-Styles.logo.305.png',
-                name: cardName,
+                imagePath: cardPublicImage,
+                name: cardName || updateCard?.cardSetName,
                 category: cardCategory,
-                releaseDate: releaseDate,
+                releaseDate: releaseDate || updateCard?.releaseDate,
                 seriesId: selectedSeries?.id,
                 seriesName: null,
                 seriesImage: null,
@@ -397,24 +374,26 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 setName: null,
                 setImage: null,
                 cardNumber: cardNumber,
-                language: selectedLanguage,
-                rarity: selectedRarity?.name,
-                edition: selectedEdition !== 'none' ? selectedEdition : null,
-                surface: selectedSurface?.name ?? null,
-                variant: productVariant,
+                language: selectedLanguage || updateCard?.language,
+                rarity: selectedRarity?.name || updateCard?.rarity,
+                edition: selectedEdition !== 'none' ? selectedEdition : updateCard?.edition,
+                surface: selectedSurface?.name ?? updateCard?.surface,
+                variant: productVariant || updateCard?.variant,
             };
-            const responseItem = await endpoint.post('', DTO);
-            batch(() => {
-                dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-            });
+            if (isUpdate) {
+                await endpoint.put('', DTO);
+                NotificationsService.success('Card Updated successfully!');
+            } else {
+                await endpoint.post('', DTO);
+                NotificationsService.success('Card Added successfully!');
+            }
+            onSubmit();
         } catch (e: any) {
-            Notifications.exception(e);
+            NotificationsService.exception(e);
         }
         setIsLoading(false);
     };
 
-    // set start
     const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
         setNewSetLogo(newSetLogo);
     }, []);
@@ -441,18 +420,18 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 imagePath: SetLogoPublicImage,
             };
             const responseItem = await endpoint.post('', DTO);
+            NotificationsService.success('Set Added Successfully');
+            setSelectedSeriesFromState();
+
             batch(() => {
                 dispatch(manageCardDialogActions.setSelectedCardSet(responseItem.data as CardSetEntity));
-                dispatch(manageCardDialogActions.navigateToPreviousView());
             });
         } catch (e: any) {
-            Notifications.exception(e);
+            NotificationsService.exception(e);
         }
         setIsLoading(false);
     };
-    // set end
 
-    // series start
     const handleNewSeriesLogoChange = useCallback((newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo), []);
 
     const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
@@ -472,23 +451,36 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 imagePath: seriesLogoPublicImage,
             };
             const responseItem = await endpoint.post('', DTO);
+            NotificationsService.success('Series Added Successfully');
+            setSelectedSeriesFromState();
+
+            await fetchSeries(dialogState.selectedCategory?.id);
             batch(() => {
                 dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
-                dispatch(manageCardDialogActions.navigateToPreviousView());
             });
         } catch (e: any) {
-            Notifications.exception(e);
+            NotificationsService.exception(e);
         }
         setIsLoading(false);
     };
+
+    useEffect(() => {
+        setCardName(updateCard?.name);
+        setCardNumber(updateCard?.cardNumber);
+        setReleaseDate(updateCard?.releaseDate);
+        setSelectedCardPhoto(updateCard?.imagePath);
+        setSelectedRarity(updateCard?.rarity);
+        setSelectedSurface(updateCard?.surface);
+        setSelectedEdition(updateCard?.edition);
+        setSelectedLanguage(updateCard?.language);
+        setProductVariant(updateCard?.variant);
+    }, [isUpdate, updateCard]);
 
     const handleModalBack = () => {
         setCreateCardView(true);
         setCreateSetView(false);
         setCreateSeriesView(false);
     };
-
-    // series end
 
     const closeIcon = (
         <IconButton
@@ -678,76 +670,84 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const createCard = (
         <>
             <DialogTitle>
-                {isUpdate ? 'Update Card' : 'Create a New Card'}
+                {isUpdate ? 'Edit Card' : 'Create a New Card'}
                 {closeIcon}
             </DialogTitle>
             <DialogContent className={classes.dialog}>
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
-                    <FormControl sx={{ m: 1, minWidth: '97%' }}>
-                        <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                            Category
-                        </FormHelperText>
-                        <Select
-                            value={isUpdate ? updateCard?.cardCategoryName : cardCategory}
-                            onChange={handleCardCategoryChange}
-                        >
-                            {availableCategories?.map((item) => {
-                                return (
-                                    <MenuItem key={item.id} value={item.id}>
-                                        {item.name}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
+                    {!isUpdate ? (
+                        <>
+                            <FormControl sx={{ m: 1, minWidth: '97%' }}>
+                                <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
+                                    Category
+                                </FormHelperText>
+                                <Select
+                                    value={cardCategory}
+                                    onChange={handleCardCategoryChange}
+                                    defaultValue={cardCategory}
+                                >
+                                    {availableCategories?.map((item) => {
+                                        return (
+                                            <MenuItem key={item.id} value={item.id}>
+                                                {item.name}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
 
-                    <Box
-                        display={'flex'}
-                        flexDirection={'row'}
-                        justifyContent={'space-between'}
-                        alignItems={'flex-end'}
-                        padding={'6px'}
-                        marginTop={'12px'}
-                    >
-                        <FormControl sx={{ minWidth: '70%' }}>
-                            <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                                Series
-                            </FormHelperText>
-                            <Autocomplete
-                                value={isUpdate ? updateCard?.cardSeriesName : selectedSeries}
-                                onChange={handleSeriesChange}
-                                options={availableSeries}
-                                fullWidth
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        placeholder={'Enter Series'}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            startAdornment: selectedSeries ? (
-                                                <img
-                                                    src={selectedSeries?.imagePath}
-                                                    alt=""
-                                                    style={{ height: '19px', width: '49px', marginLeft: '10px' }}
-                                                />
-                                            ) : null,
-                                        }}
+                            <Box
+                                display={'flex'}
+                                flexDirection={'row'}
+                                justifyContent={'space-between'}
+                                alignItems={'flex-end'}
+                                padding={'6px'}
+                                marginTop={'12px'}
+                            >
+                                <FormControl sx={{ minWidth: '70%' }}>
+                                    <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
+                                        Series
+                                    </FormHelperText>
+                                    <Autocomplete
+                                        value={selectedSeries}
+                                        onChange={handleSeriesChange}
+                                        options={availableSeries}
+                                        fullWidth
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                placeholder={'Enter Series'}
+                                                InputProps={{
+                                                    ...params.InputProps,
+                                                    startAdornment: selectedSeries ? (
+                                                        <img
+                                                            src={selectedSeries?.imagePath}
+                                                            alt=""
+                                                            style={{
+                                                                height: '19px',
+                                                                width: '49px',
+                                                                marginLeft: '10px',
+                                                            }}
+                                                        />
+                                                    ) : null,
+                                                }}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </FormControl>
-                        <Button
-                            disabled={isUpdate}
-                            variant={'outlined'}
-                            color={'primary'}
-                            sx={{ minHeight: '56px', width: '145px' }}
-                            onClick={toggleNewSeries}
-                        >
-                            Add series
-                        </Button>
-                    </Box>
-
-                    {selectedSeries || isUpdate ? (
+                                </FormControl>
+                                <Button
+                                    disabled={isUpdate}
+                                    variant={'outlined'}
+                                    color={'primary'}
+                                    sx={{ minHeight: '56px', width: '145px' }}
+                                    onClick={toggleNewSeries}
+                                >
+                                    Add series
+                                </Button>
+                            </Box>
+                        </>
+                    ) : null}
+                    {selectedSeries && !isUpdate ? (
                         <Box
                             display={'flex'}
                             flexDirection={'row'}
@@ -761,7 +761,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                     Set
                                 </FormHelperText>
                                 <Autocomplete
-                                    value={isUpdate ? updateCard?.cardSetName : selectedSet}
+                                    value={selectedSet}
                                     onChange={handleSetChange}
                                     options={availableSets}
                                     fullWidth
@@ -782,7 +782,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
                     {selectedSet || isUpdate ? (
                         <>
-                            <Divider className={classes.topDivider} />
+                            {!isUpdate ? <Divider className={classes.topDivider} /> : null}
                             <Grid container direction={'row'} sx={{ marginTop: '12px' }} padding={'12px'}>
                                 <Grid item md={4}>
                                     <FormControl>
@@ -818,10 +818,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={isUpdate ? updateCard?.cardSetName : cardName}
+                                            value={cardName}
                                             onChange={handleCardNameChange}
                                             placeholder={'Enter card name'}
-                                            sx={{ minWidth: '333px' }}
+                                            sx={{ width: '366px' }}
                                         />
                                     </FormControl>
 
@@ -837,16 +837,72 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={isUpdate ? updateCard?.cardNumberOrder : cardNumber}
+                                            value={cardNumber}
                                             onChange={handleCardNumberChange}
                                             placeholder={'Enter card number'}
-                                            sx={{ minWidth: '333px' }}
+                                            sx={{ width: '366px' }}
                                         />
                                     </FormControl>
                                 </Grid>
                             </Grid>
 
-                            <Grid container direction={'row'} sx={{ marginTop: '12px' }} spacing={2} padding={'12px'}>
+                            {isUpdate ? (
+                                <>
+                                    <Grid container direction={'row'} spacing={2} padding={'16px'}>
+                                        <FormControl sx={{ minWidth: '99%', ml: 1.5 }}>
+                                            <FormHelperText
+                                                className={classes.label}
+                                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}
+                                            >
+                                                Category
+                                            </FormHelperText>
+                                            <Select displayEmpty disabled value={updateCard?.cardCategoryName}>
+                                                <MenuItem value={updateCard?.cardCategoryName}>
+                                                    {updateCard?.cardCategoryName}
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid container direction={'row'} spacing={2} padding={'16px'}>
+                                        <FormControl sx={{ minWidth: '99%', ml: 1.5 }}>
+                                            <FormHelperText
+                                                className={classes.label}
+                                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}
+                                            >
+                                                Series
+                                            </FormHelperText>
+                                            <Select displayEmpty value={updateCard?.cardSeriesName} disabled>
+                                                <MenuItem value={updateCard?.cardSeriesName}>
+                                                    {updateCard?.cardSeriesName}
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid container direction={'row'} spacing={2} padding={'16px'}>
+                                        <FormControl sx={{ minWidth: '99%', ml: 1.5 }}>
+                                            <FormHelperText
+                                                className={classes.label}
+                                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}
+                                            >
+                                                Set
+                                            </FormHelperText>
+                                            <Select displayEmpty value={updateCard?.cardSetName} disabled>
+                                                <MenuItem value={updateCard?.cardSetName}>
+                                                    {updateCard?.cardSetName}
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                </>
+                            ) : null}
+
+                            <Grid
+                                container
+                                direction={'row'}
+                                sx={{ marginTop: isUpdate ? 0 : '12px' }}
+                                spacing={2}
+                                padding={'12px'}
+                            >
                                 <Grid item md={6}>
                                     <FormControl fullWidth>
                                         <FormHelperText
@@ -861,7 +917,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         <LocalizationProvider dateAdapter={DateAdapter}>
                                             <DesktopDatePicker
                                                 inputFormat="MM/DD/yyyy"
-                                                value={isUpdate ? updateCard?.releaseDate : releaseDate}
+                                                value={releaseDate}
                                                 onChange={handleReleaseDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
@@ -879,7 +935,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Rarity
                                         </FormHelperText>
                                         <Autocomplete
-                                            value={isUpdate ? updateCard?.rarity : selectedRarity}
+                                            value={selectedRarity}
                                             onChange={handleRarityChange}
                                             options={availableRarities}
                                             fullWidth
@@ -900,7 +956,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Surface <span className={classes.label}>(optional)</span>
                                         </FormHelperText>
                                         <Autocomplete
-                                            value={isUpdate ? updateCard?.surface : selectedSurface}
+                                            value={selectedSurface}
                                             onChange={handleSurfaceChange}
                                             options={availableSurfaces}
                                             fullWidth
@@ -922,10 +978,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Language
                                         </FormHelperText>
-                                        <Select
-                                            value={isUpdate ? updateCard?.language : selectedLanguage || 'none'}
-                                            onChange={handleLanguageChange}
-                                        >
+                                        <Select value={selectedLanguage} onChange={handleLanguageChange}>
                                             <MenuItem value="none" disabled>
                                                 Select Language
                                             </MenuItem>
@@ -949,10 +1002,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Edition <span className={classes.label}>(optional)</span>
                                         </FormHelperText>
-                                        <Select
-                                            value={isUpdate ? updateCard?.edition : selectedEdition || 'none'}
-                                            onChange={handleEditionChange}
-                                        >
+                                        <Select value={selectedEdition} onChange={handleEditionChange}>
                                             <MenuItem value="none">Select edition</MenuItem>
                                             {availableEditions?.map((item) => {
                                                 return (
@@ -976,7 +1026,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         </FormHelperText>
                                         <TextField
                                             variant="outlined"
-                                            value={isUpdate ? updateCard?.varient : productVariant}
+                                            value={productVariant}
                                             onChange={handleProductVariantChange}
                                             placeholder={'Enter product/variant'}
                                         />
@@ -992,14 +1042,14 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                     <Box
                         display={'flex'}
                         flexDirection={'row'}
-                        justifyContent={selectedSet ? 'space-between' : 'end'}
+                        justifyContent={selectedSet || isUpdate ? 'space-between' : 'end'}
                         minWidth={'150px'}
                         marginRight={'13px'}
                     >
                         <Button variant="text" sx={{ color: '#000' }} onClick={handleClose}>
                             Cancel
                         </Button>
-                        {selectedSet ? (
+                        {selectedSet || isUpdate ? (
                             <Button
                                 variant="contained"
                                 color={'primary'}

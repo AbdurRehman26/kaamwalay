@@ -34,7 +34,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const classes = useStyles();
     const [uploadedImage, setUploadedImage] = useState(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
     const onDrop = useCallback(
         (acceptedFiles) => {
             setUploadedImage(acceptedFiles[acceptedFiles.length - 1]);
@@ -68,16 +67,16 @@ export default function ImageUploader(props: ImageUploaderProps) {
         [inputRef],
     );
 
-    if (uploadedImage) {
+    if (uploadedImage || props.imageUrl) {
         return (
             <Box
                 sx={{ backgroundColor: '#F9F9F9', border: '1px solid #E0E0E0' }}
-                maxWidth={props.maxWidth ? props.maxWidth : '214px'}
-                maxHeight={props.maxHeight ? props.maxHeight : '214px'}
+                minWidth={props.maxWidth ? props.maxWidth : '214px'}
+                minHeight={props.maxHeight ? props.maxHeight : '214px'}
                 display={'flex'}
                 flexDirection={'column'}
                 alignItems={'center'}
-                justifyContent={'center'}
+                justifyContent={'space-between'}
                 {...getRootProps()}
             >
                 <input {...getInputProps()} />
@@ -92,12 +91,33 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 />
                 <ButtonGroup
                     size={props.isSmall ? 'small' : 'medium'}
-                    color={props.isSmall ? 'inherit' : 'primary'}
-                    variant="contained"
-                    sx={{ marginTop: '6px', marginBottom: '6px' }}
+                    sx={{
+                        marginTop: '6px',
+                        marginBottom: '6px',
+                        backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                        border: '1px solid #CCCCCC',
+                    }}
                 >
-                    <Button onClick={deleteImage}>Delete</Button>
-                    <Button onClick={replaceImage}>Replace</Button>
+                    <Button
+                        variant={'contained'}
+                        sx={{
+                            color: props.isSmall ? 'black' : 'white',
+                            backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                        }}
+                        onClick={deleteImage}
+                    >
+                        Delete
+                    </Button>
+                    <Button
+                        variant={'contained'}
+                        sx={{
+                            color: props.isSmall ? 'black' : 'white',
+                            backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                        }}
+                        onClick={replaceImage}
+                    >
+                        Replace
+                    </Button>
                 </ButtonGroup>
             </Box>
         );

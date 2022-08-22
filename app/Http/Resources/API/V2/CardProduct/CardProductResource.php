@@ -15,6 +15,8 @@ class CardProductResource extends V1CardProductResource
 
         return array_merge($data, [
             'population' => $this->population ?? 0,
+            'rarity' => $this->rarity,
+            'card_number' => $this->card_number
         ]);
     }
 }

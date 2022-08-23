@@ -113,6 +113,7 @@ class CardProductService
             ]);
 
             Log::info('CARD_CREATION_AGS_REQUEST', $createData);
+
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {
             report($e);

@@ -35,13 +35,13 @@ class OrdersCertificateExport implements FromArray, WithHeadings
     public function array(): array
     {
         $array = [];
-        foreach ($this->order->orderItems as $orderItem){
-            if(empty($orderItem->userCard)){
+        foreach ($this->order->orderItems as $orderItem) {
+            if (empty($orderItem->userCard)) {
                 continue;
             }
             $array [] = [
                 '#'. $orderItem->userCard->certificate_number . "\n" . $this->getName($orderItem->cardProduct),
-                $this->order->order_number
+                $this->order->order_number,
             ];
         }
 

@@ -6,9 +6,9 @@ use App\Models\Order;
 use App\Services\Admin\Order\OrderCertificateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Bus\Dispatchable;
 
 class CreateOrderCertificateExport implements ShouldQueue
 {

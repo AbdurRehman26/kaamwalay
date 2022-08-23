@@ -572,5 +572,4 @@ class Order extends Model implements Exportable
     {
         return $this->hasOne(OrderCertificate::class);
     }
-
 }

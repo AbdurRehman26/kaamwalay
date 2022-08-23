@@ -32,6 +32,7 @@ export function SubmissionsView() {
                     'extraCharges',
                     'refunds',
                     'orderLabel',
+                    'orderCertificate',
                     'orderStatusHistory.orderStatus',
                     'coupon',
                 ],
@@ -58,6 +59,7 @@ export function SubmissionsView() {
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}
                 orderLabel={data?.orderLabel}
+                orderCertificate={data?.orderCertificate}
                 customer={data?.customer}
                 isVault={isVault}
             />

@@ -40,7 +40,7 @@ export function SubmissionsGrade() {
         resourceId: Number(id),
         config: {
             params: {
-                include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
+                include: ['orderItems', 'orderStatus', 'orderCertificate', 'orderStatusHistory.orderStatus'],
             },
         },
     });
@@ -54,6 +54,7 @@ export function SubmissionsGrade() {
                 orderNumber={data?.orderNumber}
                 reviewedAt={data?.reviewedAt}
                 reviewer={data?.reviewedBy}
+                orderCertificate={data?.orderCertificate}
             />
             <Divider />
             <Container>

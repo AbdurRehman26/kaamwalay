@@ -7,6 +7,7 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class CouponDateRange implements CastsAttributes
 {
+
     /**
      * @inheritDoc
      * @retrun Carbon

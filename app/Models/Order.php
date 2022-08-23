@@ -568,6 +568,9 @@ class Order extends Model implements Exportable
         return $this->order_status_id === OrderStatus::SHIPPED;
     }
 
+    /**
+     * @return HasOne<OrderCertificate>
+     */
     public function orderCertificate(): HasOne
     {
         return $this->hasOne(OrderCertificate::class);

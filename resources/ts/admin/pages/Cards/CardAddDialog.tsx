@@ -131,6 +131,15 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const handleClose = useCallback(() => {
         if (onClose) {
             (onClose as any)();
+
+            setSelectedSeries(null);
+            setSelectedSet(null);
+            setSelectedLanguage(null);
+            setSelectedRarity(null);
+            setSelectedSurface(null);
+            setProductVariant(null);
+            setReleaseDate(null);
+
             setCreateCardView(true);
             setCreateSetView(false);
             setCreateSeriesView(false);
@@ -465,6 +474,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     };
 
     useEffect(() => {
+        setCardCategory(updateCard?.cardCategoryName);
+        setSelectedSeries(updateCard?.cardSeriesName);
+        setSelectedSet(updateCard?.cardSetName);
         setCardName(updateCard?.name);
         setCardNumber(updateCard?.cardNumber);
         setReleaseDate(updateCard?.releaseDate);

@@ -95,24 +95,24 @@ export default function ImageUploader(props: ImageUploaderProps) {
                         marginTop: '6px',
                         marginBottom: '6px',
                         backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
-                        border: '1px solid #CCCCCC',
+                        border: props.isSmall ? '1px solid #CCCCCC' : '',
                     }}
                 >
                     <Button
-                        variant={'contained'}
                         sx={{
                             color: props.isSmall ? 'black' : 'white',
                             backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                            border: props.isSmall ? '1px solid #CCCCCC' : '',
                         }}
                         onClick={deleteImage}
                     >
                         Delete
                     </Button>
                     <Button
-                        variant={'contained'}
                         sx={{
                             color: props.isSmall ? 'black' : 'white',
                             backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                            border: props.isSmall ? '1px solid #CCCCCC' : '',
                         }}
                         onClick={replaceImage}
                     >

@@ -1,10 +1,7 @@
-import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,7 +14,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
@@ -34,6 +31,7 @@ import { CardAddDialog } from './CardAddDialog';
 import { CardPageHeader } from './CardPageHeader';
 import { CardPageSelector } from './CardPageSelector';
 import DeleteCardDialog from './DeleteCardDialog';
+import MoreAction from './MoreAction';
 
 type InitialValues = {
     cardCategory: string;
@@ -66,12 +64,7 @@ export function CardsListPage() {
     const [deleteId, setDeleteId] = useState(0);
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
-
-    const [menuOpen, setMenuOpen] = useState<Element | null>(null);
-    const handleOpenMenu = useCallback<MouseEventHandler>((e) => setMenuOpen(e.target as Element), [setMenuOpen]);
     const [sortFilter, setSortFilter] = useState(false);
-    const handleCloseOptions = useCallback(() => setMenuOpen(null), [setMenuOpen]);
-
     const dispatch = useAppDispatch();
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const notifications = useNotifications();
@@ -133,13 +126,11 @@ export function CardsListPage() {
 
     const handleDelete = (cardId: number) => {
         setShowDeleteModal(true);
-        setMenuOpen(null);
         setDeleteId(cardId);
     };
 
     const handleEdit = async (cardId: number) => {
         setIsLoading(true);
-        setMenuOpen(null);
         const cardData = await dispatch(getCardData(cardId));
         setUpdateCardData(cardData.payload.data);
         setAddCardDialog(true);
@@ -331,6 +322,9 @@ export function CardsListPage() {
                                             No
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                            Id
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                             Category
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
@@ -379,6 +373,7 @@ export function CardsListPage() {
                                                 </Grid>
                                             </TableCell>
                                             <TableCell variant={'body'}>{card.cardNumber ?? '-'}</TableCell>
+                                            <TableCell variant={'body'}>{card.id ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSetName}</TableCell>
@@ -389,17 +384,11 @@ export function CardsListPage() {
                                                 {card.population ?? 0}
                                             </TableCell>
                                             <TableCell variant={'body'} align={'right'}>
-                                                <IconButton onClick={handleOpenMenu} size="large">
-                                                    <MoreIcon />
-                                                </IconButton>
-                                                <Menu
-                                                    anchorEl={menuOpen}
-                                                    open={!!menuOpen}
-                                                    onClose={handleCloseOptions}
-                                                >
-                                                    <MenuItem onClick={() => handleEdit(card.id)}>Edit</MenuItem>
-                                                    <MenuItem onClick={() => handleDelete(card.id)}>Delete</MenuItem>
-                                                </Menu>
+                                                <MoreAction
+                                                    handleEditAction={handleEdit}
+                                                    handleDeleteAction={handleDelete}
+                                                    id={card.id}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     ))}

@@ -28,11 +28,11 @@ class GenerateOrderCertificates extends Command
         $ordersQuery = Order::excludeCancelled()->where('order_status_id', '>=', OrderStatus::CONFIRMED);
         $orderNumber = $this->argument('orderNumber');
 
-        $ordersQuery->when($orderNumber, function ($query) use ($orderNumber){
+        $ordersQuery->when($orderNumber, function ($query) use ($orderNumber) {
             $query->where('order_number', $orderNumber);
         });
 
-        $ordersQuery->when(!$orderNumber, function ($query) use ($orderNumber){
+        $ordersQuery->when(! $orderNumber, function ($query) use ($orderNumber) {
             $query->doesntHave('orderCertificate');
         });
 

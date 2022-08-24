@@ -7,8 +7,8 @@ use App\Models\Order;
 use App\Models\OrderCertificate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Excel as ExcelWriter;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderCertificateService
 {

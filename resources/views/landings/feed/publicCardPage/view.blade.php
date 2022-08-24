@@ -60,6 +60,7 @@
                     swiper: swiper
                 }
             });
+
             imagebox.options({
                 info: false,
                 swipeToChange: true,
@@ -199,7 +200,7 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    @include('landings.feed.publiCardPage.cards-image-slider')
+                    @include('landings.feed.publicCardPage.cards-image-slider')
                 </div>
             </div>
             <div class="feed-view__details">
@@ -328,10 +329,10 @@
             </div>
         </div>
     </section>
-    @include('landings.feed.publiCardPage.grades')
-    @include('landings.feed.publiCardPage.population-graph')
-    @include('landings.feed.publiCardPage.generated-images')
-    @include('landings.feed.publiCardPage.conclusion')
+    @include('landings.feed.publicCardPage.grades')
+    @include('landings.feed.publicCardPage.population-graph')
+    @include('landings.feed.publicCardPage.generated-images')
+    @include('landings.feed.publicCardPage.conclusion')
     @else
     Grades are not available yet.
     @endif

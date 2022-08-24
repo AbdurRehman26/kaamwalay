@@ -27,7 +27,7 @@ class FeedController extends Controller
         $data['popData'] = $this->userCardService->getAgsPopulationData($certificateId);
         $data['pageUrl'] = $this->userCardService->getPageUrl($certificateId);
 
-        return view('landings.feed.publiCardPage.view', $data);
+        return view('landings.feed.publicCardPage.view', $data);
     }
 
     public function cardRedirect(string $certificateId): RedirectResponse

@@ -3,7 +3,7 @@
     <div class="swiper-wrapper">
       @foreach($slabbed_images as $slabbed_image)
       <div class="swiper-slide">
-        <img src="{{ $slabbed_image }}" alt="{{ $card['name'] }}" data-imagebox="gallery" />
+        <img src="{{ $slabbed_image }}" alt="{{ $card['name'] }}" />
       </div>
       @endforeach
     </div>

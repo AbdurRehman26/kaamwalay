@@ -348,7 +348,7 @@ class AgsService
         ];
 
         return array_filter($imagesData, function (array $imageData) {
-            return $imageData !== null;
+            return $imageData[0]['output_image'] !== null;
         });
     }
 

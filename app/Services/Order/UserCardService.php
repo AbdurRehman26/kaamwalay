@@ -107,7 +107,7 @@ class UserCardService
      */
     public function getPageUrl(string $certificateId): string
     {
-        return env('APP_URL').'/feed/'.$certificateId.'/view';
+        return config('app.url').'/feed/'.$certificateId.'/view';
     }
 
     /**

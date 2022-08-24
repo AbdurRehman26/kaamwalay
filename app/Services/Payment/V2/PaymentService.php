@@ -11,6 +11,7 @@ use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V1\PaymentService as V1PaymentService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
+use App\Services\Payment\V2\Providers\ManualPaymentService;
 use App\Services\Payment\V2\Providers\PaypalService;
 use App\Services\Payment\V2\Providers\StripeService;
 use App\Services\Payment\V2\Providers\WalletService;
@@ -26,6 +27,7 @@ class PaymentService extends V1PaymentService
         'paypal' => PaypalService::class,
         'collector_coin' => CollectorCoinService::class,
         'wallet' => WalletService::class,
+        'manual' => ManualPaymentService::class,
     ];
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array

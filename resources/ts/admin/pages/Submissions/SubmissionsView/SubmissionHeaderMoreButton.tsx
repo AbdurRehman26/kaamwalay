@@ -15,6 +15,7 @@ import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsV
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import DialogMarkAsPaid from './DialogMarkAsPaid';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -31,6 +32,7 @@ enum Options {
     CustomerCredit,
     ViewGrades,
     CancelOrder,
+    MarkAsPaid,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -49,12 +51,17 @@ export default function SubmissionHeaderMoreButton({
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [markPaidDialog, setMarkPaidDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+
+    const handleOrderPaid = useCallback(() => {
+        setMarkPaidDialog(false);
+    }, []);
 
     const handleViewGrades = useCallback(() => {
         navigate(`/submissions/${orderId}/grade`);
@@ -115,9 +122,12 @@ export default function SubmissionHeaderMoreButton({
                 case Options.CancelOrder:
                     await setCancelDialog();
                     break;
+                case Options.MarkAsPaid:
+                    await setMarkPaidDialog(true);
+                    break;
             }
         },
-        [setCancelDialog, handleClose, handleViewGrades],
+        [setCancelDialog, handleClose, handleViewGrades, setMarkPaidDialog],
     );
 
     return (
@@ -130,6 +140,7 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
                 <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
+                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
                 {orderStatus.is(OrderStatusEnum.GRADED) ||
                 orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                 orderStatus.is(OrderStatusEnum.SHIPPED) ? (
@@ -149,6 +160,11 @@ export default function SubmissionHeaderMoreButton({
                     onClose={handleCreditDialogClose}
                 />
             ) : null}
+            <DialogMarkAsPaid
+                onSubmit={handleOrderPaid}
+                open={markPaidDialog}
+                onClose={() => setMarkPaidDialog(false)}
+            />
         </>
     );
 }

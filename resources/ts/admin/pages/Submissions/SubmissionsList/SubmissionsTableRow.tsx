@@ -27,6 +27,7 @@ import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
+import DialogMarkAsPaid from '../SubmissionsView/DialogMarkAsPaid';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -39,6 +40,7 @@ enum Options {
     ViewGrades,
     CreditCustomer,
     Delete,
+    MarkAsPaid,
 }
 
 const useStyles = makeStyles(
@@ -61,6 +63,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [markPaidDialog, setMarkPaidDialog] = useState(false);
     const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
@@ -101,6 +104,9 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 case Options.Delete:
                     setDisplayOrderDeleteDialog(!displayOrderDeleteDialog);
                     break;
+                case Options.MarkAsPaid:
+                    setMarkPaidDialog(!markPaidDialog);
+                    break;
             }
         },
         [
@@ -112,8 +118,13 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
             order.invoice,
             order.orderLabel,
             order.orderNumber,
+            markPaidDialog,
         ],
     );
+
+    const handleOrderPaid = useCallback(() => {
+        setMarkPaidDialog(false);
+    }, []);
 
     const handleOrderDeleteSubmit = useCallback(
         async ({ orderId }: Record<any, number>) => {
@@ -207,6 +218,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                 </MenuItem>
 
                                 <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
 
                                 {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
                                 order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
@@ -242,6 +254,12 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 orderNumber={order.orderNumber}
                 orderId={order.id}
                 onSubmit={handleOrderDeleteSubmit}
+            />
+
+            <DialogMarkAsPaid
+                onSubmit={handleOrderPaid}
+                open={markPaidDialog}
+                onClose={() => setMarkPaidDialog(false)}
             />
         </>
     );

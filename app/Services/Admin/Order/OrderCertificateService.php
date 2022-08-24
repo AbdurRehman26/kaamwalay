@@ -8,6 +8,7 @@ use App\Models\OrderCertificate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelWriter;
 
 class OrderCertificateService
 {
@@ -20,7 +21,7 @@ class OrderCertificateService
     protected function generateFileAndUploadToCloud(Order $order): string
     {
         $filePath = 'order-certificates/' . $order->order_number . '_certificate_' . Str::uuid() . '.xlsx';
-        Excel::store(new OrdersCertificateExport($order), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
+        Excel::store(new OrdersCertificateExport($order), $filePath, 's3', ExcelWriter::XLSX);
 
         return Storage::disk('s3')->url($filePath);
     }

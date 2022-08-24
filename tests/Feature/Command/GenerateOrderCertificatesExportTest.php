@@ -28,5 +28,5 @@ it('generates order certificates export for already confirmed orders', function 
     ))->create();
 
     $this->artisan('orders:generate-certificates-export')->assertExitCode(0);
-    assertDatabaseCount('order_certificates', 4);
+    assertDatabaseCount('order_certificates', $orders->count());
 });

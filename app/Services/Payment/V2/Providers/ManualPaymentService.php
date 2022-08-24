@@ -5,8 +5,9 @@ namespace App\Services\Payment\V2\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Payment\V2\Providers\Contracts\PaymentProviderServiceInterface;
 
-class ManualPaymentService implements Contracts\PaymentProviderServiceInterface
+class ManualPaymentService implements PaymentProviderServiceInterface
 {
     public function charge(Order $order, array $data = []): array
     {

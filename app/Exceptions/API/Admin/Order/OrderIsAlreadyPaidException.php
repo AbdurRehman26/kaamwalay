@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderCanNotBeMarkedAsPaid extends Exception
+class OrderIsAlreadyPaidException extends Exception
 {
     /** @var string */
     protected $message = 'Order can not be marked as paid as it is already paid.';

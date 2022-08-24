@@ -131,7 +131,9 @@ export function SubmissionViewBilling({
                     Shipping Address
                 </Typography>
                 <Typography variant={'body2'}>{shippingAddress?.getFullName()}</Typography>
-                <Typography variant={'body2'}>{shippingAddress?.getAddress()}</Typography>
+                <Typography variant={'body2'}>
+                    {shippingAddress?.getAddress()} {shippingAddress?.getAddress2()}{' '}
+                </Typography>
                 <Typography variant={'body2'}>{shippingAddress?.getAddressLine2()}</Typography>
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>

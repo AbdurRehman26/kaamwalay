@@ -35,7 +35,7 @@ export function AddressItem({ address }: Props) {
                         {address.getFullName()}
                     </Typography>
                     <Typography variant={'body2'} align={'left'}>
-                        {address.getAddress()}
+                        {address.getAddress()} {address.getAddress2()}
                     </Typography>
                     <Typography variant={'body2'} align={'left'}>
                         {address.getAddressLine2()}

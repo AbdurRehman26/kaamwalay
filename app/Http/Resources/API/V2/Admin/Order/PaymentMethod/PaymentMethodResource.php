@@ -2,8 +2,12 @@
 
 namespace App\Http\Resources\API\V2\Admin\Order\PaymentMethod;
 
+use App\Models\PaymentMethod;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin PaymentMethod
+*/
 class PaymentMethodResource extends JsonResource
 {
     public function toArray($request): array

@@ -6,6 +6,9 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\OrderPayment;
 
+/**
+ * @mixin OrderPayment
+*/
 class OrderPaymentResource extends BaseResource
 {
     /**

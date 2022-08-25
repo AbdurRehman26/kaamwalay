@@ -7,26 +7,44 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Order\MarkOrderPaidRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
-use App\Models\PaymentMethod;
+use App\Services\Admin\V2\OrderService;
 use App\Services\Payment\V2\PaymentService;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class MarkOrderPaidController extends Controller
 {
-    public function __construct(protected PaymentService $paymentService)
+    public function __construct(protected PaymentService $paymentService, protected OrderService $orderService)
     {
     }
 
+    /**
+     * @throws Throwable
+     */
     public function __invoke(MarkOrderPaidRequest $request, Order $order): OrderResource
     {
         throw_if($order->isPaid(), OrderIsAlreadyPaidException::class);
 
-        $order->orderPayments()->create([
-            'payment_method_id' => PaymentMethod::whereCode('manual')->value('id'),
-            'user_id' => $request->user()->id,
-        ]);
+        try {
+            DB::beginTransaction();
+            $this->orderService->createManualPayment($order, $request->user());
 
-        $this->paymentService->charge($order, []);
+            $this->paymentService->charge($order->refresh(), []);
 
-        return new OrderResource($order);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            logger()->error('Error occurred while marking order as PAID.');
+            logger()->error($e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            throw $e;
+        }
+
+        return new OrderResource($order->refresh());
     }
 }

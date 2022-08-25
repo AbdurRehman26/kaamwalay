@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Services\Admin\V2\OrderService;
 use App\Services\Payment\V2\PaymentService;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class MarkOrderPaidController extends Controller
@@ -26,10 +27,15 @@ class MarkOrderPaidController extends Controller
         throw_if($order->isPaid(), OrderIsAlreadyPaidException::class);
 
         try {
+            DB::beginTransaction();
             $this->orderService->createManualPayment($order, $request->user());
 
             $this->paymentService->charge($order->refresh(), []);
+
+            DB::commit();
         } catch (Exception $e) {
+            DB::rollBack();
+
             logger()->error('Error occurred while marking order as PAID.');
             logger()->error($e->getMessage(), [
                 'file' => $e->getFile(),
@@ -39,6 +45,6 @@ class MarkOrderPaidController extends Controller
             throw $e;
         }
 
-        return new OrderResource($order);
+        return new OrderResource($order->refresh());
     }
 }

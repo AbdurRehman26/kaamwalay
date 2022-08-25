@@ -46,7 +46,7 @@ export function ViewSubmission() {
             },
         },
     });
-
+    console.log('Data ', data);
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
     const { featureOrderWalletCreditEnabled } = useConfiguration();

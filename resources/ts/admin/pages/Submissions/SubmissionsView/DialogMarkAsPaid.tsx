@@ -10,8 +10,11 @@ import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback } from 'react';
+import { markOrderAsPaid } from '@shared/redux/slices/adminOrdersSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface DialogMarkAsPaidProps extends Omit<DialogProps, 'onSubmit'> {
+    orderId: number;
     onSubmit(): Promise<void> | void;
 }
 
@@ -36,8 +39,9 @@ const useStyles = makeStyles(
 );
 
 function DialogMarkAsPaid(props: DialogMarkAsPaidProps) {
-    const { onClose, onSubmit, ...rest } = props;
+    const { onClose, onSubmit, orderId, ...rest } = props;
     const classes = useStyles();
+    const dispatch = useAppDispatch();
 
     const handleClose = useCallback(
         (...args) => {
@@ -49,9 +53,10 @@ function DialogMarkAsPaid(props: DialogMarkAsPaidProps) {
     );
 
     const handleSubmit = useCallback(async () => {
+        dispatch(markOrderAsPaid(orderId));
         await onSubmit();
         handleClose();
-    }, [handleClose, onSubmit]);
+    }, [handleClose, onSubmit, orderId, dispatch]);
 
     return (
         <Dialog onClose={handleClose} {...rest}>

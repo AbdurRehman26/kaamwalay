@@ -257,6 +257,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
             />
 
             <DialogMarkAsPaid
+                orderId={order.id}
                 onSubmit={handleOrderPaid}
                 open={markPaidDialog}
                 onClose={() => setMarkPaidDialog(false)}

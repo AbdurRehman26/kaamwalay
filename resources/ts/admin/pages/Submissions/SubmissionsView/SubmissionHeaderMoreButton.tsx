@@ -161,6 +161,7 @@ export default function SubmissionHeaderMoreButton({
                 />
             ) : null}
             <DialogMarkAsPaid
+                orderId={orderId}
                 onSubmit={handleOrderPaid}
                 open={markPaidDialog}
                 onClose={() => setMarkPaidDialog(false)}

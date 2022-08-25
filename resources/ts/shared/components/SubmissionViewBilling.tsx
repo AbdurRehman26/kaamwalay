@@ -9,6 +9,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
@@ -123,6 +124,17 @@ export function SubmissionViewBilling({
         return null;
     }, [card?.expMonth, card?.expYear, paymentMethodId, payer?.email, payment?.transaction?.hash]);
 
+    const orderPaid = (
+        <Box alignItems={'center'} width={'100%'} mt={1} pt={0.5}>
+            <Typography variant={'body2'} color={'textPrimary'}>
+                Mark Payed by {paymentHeading}
+            </Typography>
+            <Typography variant={'caption'} color={'textSecondary'}>
+                {formatDate(payment?.createdAt, 'MM/DD/YYYY')} at {formatDate(payment?.createdAt, 'h:mm a')}
+            </Typography>
+        </Box>
+    );
+
     const columnWidth = coupon?.code ? 3 : 4;
     return (
         <Grid container direction={'row'} spacing={4} className={classes.root}>
@@ -154,7 +166,9 @@ export function SubmissionViewBilling({
                             <Typography variant={'body2'}>(Credit Applied: ${walletPayment})</Typography>
                         ) : null}
                     </>
-                ) : null}
+                ) : (
+                    orderPaid
+                )}
                 {hasPayment ? (
                     <>
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
@@ -174,6 +188,7 @@ export function SubmissionViewBilling({
                                 ) : null}
                             </Box>
                         </Box>
+                        {orderPaid}
                     </>
                 ) : null}
             </Grid>

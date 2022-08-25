@@ -33,13 +33,7 @@ beforeEach(function () {
 
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
-        'payment_method_id' => PaymentMethod::whereCode('manual')->value('id'),
-    ]);
-
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => Str::random(25),
+        'payment_method_id' => null, // intentionally null, because a new order do not have the payment method ID
     ]);
 
     OrderStatusHistory::factory()->create([

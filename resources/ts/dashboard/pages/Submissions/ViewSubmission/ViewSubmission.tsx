@@ -46,7 +46,6 @@ export function ViewSubmission() {
             },
         },
     });
-    console.log('Data ', data);
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;
     const { featureOrderWalletCreditEnabled } = useConfiguration();
@@ -124,9 +123,11 @@ export function ViewSubmission() {
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
                 paymentMethodId={data?.paymentMethodId}
+                paymentMethod={data?.orderPayment?.paymentMethod}
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
                 mode={'customer'}
+                customer={data?.customer?.getFullName()}
             />
             <Box marginTop={'24px'} />
             <Divider />

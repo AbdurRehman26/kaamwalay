@@ -124,6 +124,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
 
     const handleOrderPaid = useCallback(() => {
         setMarkPaidDialog(false);
+        window.location.reload();
     }, []);
 
     const handleOrderDeleteSubmit = useCallback(

@@ -65,6 +65,7 @@ export function SubmissionsView() {
             <SubmissionsViewDetails
                 serviceLevelFee={data.paymentPlan?.price}
                 paymentMethodId={data?.paymentMethodId}
+                paymentMethod={data?.paymentMethod}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
                 amountPaidFromWallet={data?.amountPaidFromWallet}

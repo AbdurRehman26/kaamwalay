@@ -3,6 +3,7 @@ import { BlockchainTransactionEntity } from '@shared/entities/BlockchainTransact
 import { CardEntity } from './CardEntity';
 import { Entity } from './Entity';
 import { PayerEntity } from './PayerEntity';
+import { PaymentMethodEntity } from './PaymentMethodEntity';
 
 export class OrderPaymentEntity extends Entity {
     @Type(() => CardEntity)
@@ -10,6 +11,9 @@ export class OrderPaymentEntity extends Entity {
 
     @Type(() => PayerEntity)
     public payer?: PayerEntity | null;
+
+    @Type(() => PaymentMethodEntity)
+    public paymentMethod!: PaymentMethodEntity;
 
     @Type(() => BlockchainTransactionEntity)
     public transaction!: BlockchainTransactionEntity | null;

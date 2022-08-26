@@ -11,6 +11,7 @@ import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
+import { PaymentMethodEntity } from '@shared/entities/PaymentMethodEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -38,6 +39,7 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodId: number;
+    paymentMethod: PaymentMethodEntity;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
@@ -75,6 +77,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         discountedAmount,
         paymentMethodDiscountedAmount,
         paymentMethodId,
+        paymentMethod,
         coupon,
         amountPaidFromWallet,
         walletPayment,
@@ -163,9 +166,11 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 coupon={coupon}
                 payment={payment}
                 paymentMethodId={paymentMethodId}
+                paymentMethod={paymentMethod}
                 walletPayment={walletPayment}
                 paymentStatus={paymentStatus}
                 mode={'admin'}
+                customer={customerName}
             />
         </Grid>
     );

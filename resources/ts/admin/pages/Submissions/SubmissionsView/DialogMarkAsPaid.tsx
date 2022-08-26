@@ -53,7 +53,7 @@ function DialogMarkAsPaid(props: DialogMarkAsPaidProps) {
     );
 
     const handleSubmit = useCallback(async () => {
-        dispatch(markOrderAsPaid(orderId));
+        await dispatch(markOrderAsPaid(orderId));
         await onSubmit();
         handleClose();
     }, [handleClose, onSubmit, orderId, dispatch]);

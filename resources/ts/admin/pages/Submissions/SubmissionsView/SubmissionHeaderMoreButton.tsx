@@ -61,6 +61,7 @@ export default function SubmissionHeaderMoreButton({
 
     const handleOrderPaid = useCallback(() => {
         setMarkPaidDialog(false);
+        window.location.reload();
     }, []);
 
     const handleViewGrades = useCallback(() => {

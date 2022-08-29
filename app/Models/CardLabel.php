@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CardLabel extends Model
 {
@@ -21,4 +22,12 @@ class CardLabel extends Model
         'line_three',
         'line_four',
     ];
+
+    /**
+     * @return BelongsTo<CardProduct>
+     */
+    public function cardProduct(): BelongsTo
+    {
+        return $this->belongsTo(CardProduct::class);
+    }
 }

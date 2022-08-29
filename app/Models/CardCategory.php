@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class CardCategory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'image_url', 'is_enabled',
+        'name', 'image_url', 'is_enabled', 'type',
     ];
 
     public function cardSeries(): HasMany
@@ -53,5 +54,21 @@ class CardCategory extends Model
     public function cardSurfaces(): HasMany
     {
         return $this->hasMany(CardSurface::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTCG(): bool
+    {
+        return $this->type === 'TCG';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSports(): bool
+    {
+        return $this->type === 'Sports';
     }
 }

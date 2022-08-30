@@ -68,8 +68,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     async markOrderAsPaid(input: { orderId: number }) {
         const { orderId } = input;
         const { data } = await this.endpoint.post(`${orderId}/mark-paid`);
-        console.log('Data ', data);
-        // return plainToInstance(OrderEntity, data);
+        return plainToInstance(OrderEntity, data);
     }
 
     async editTransactionNotes(input: EditTransactionNotesDto) {

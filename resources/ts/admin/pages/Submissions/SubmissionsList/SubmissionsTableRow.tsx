@@ -27,7 +27,7 @@ import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
-import DialogMarkAsPaid from '../SubmissionsView/DialogMarkAsPaid';
+import MarkAsPaidDialog from '../SubmissionsView/MarkAsPaidDialog';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -63,7 +63,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
-    const [markPaidDialog, setMarkPaidDialog] = useState(false);
+    const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
@@ -105,7 +105,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     setDisplayOrderDeleteDialog(!displayOrderDeleteDialog);
                     break;
                 case Options.MarkAsPaid:
-                    setMarkPaidDialog(!markPaidDialog);
+                    setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
             }
         },
@@ -118,12 +118,12 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
             order.invoice,
             order.orderLabel,
             order.orderNumber,
-            markPaidDialog,
+            showMarkPaidDialog,
         ],
     );
 
     const handleOrderPaid = useCallback(() => {
-        setMarkPaidDialog(false);
+        setShowMarkPaidDialog(false);
         window.location.reload();
     }, []);
 
@@ -257,11 +257,11 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 onSubmit={handleOrderDeleteSubmit}
             />
 
-            <DialogMarkAsPaid
+            <MarkAsPaidDialog
                 orderId={order.id}
                 onSubmit={handleOrderPaid}
-                open={markPaidDialog}
-                onClose={() => setMarkPaidDialog(false)}
+                open={showMarkPaidDialog}
+                onClose={() => setShowMarkPaidDialog(false)}
             />
         </>
     );

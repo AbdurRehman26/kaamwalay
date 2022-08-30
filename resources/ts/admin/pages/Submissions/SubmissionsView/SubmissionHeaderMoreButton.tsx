@@ -15,7 +15,7 @@ import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsV
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
-import DialogMarkAsPaid from './DialogMarkAsPaid';
+import MarkAsPaidDialog from './MarkAsPaidDialog';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -51,7 +51,7 @@ export default function SubmissionHeaderMoreButton({
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
-    const [markPaidDialog, setMarkPaidDialog] = useState(false);
+    const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -60,7 +60,7 @@ export default function SubmissionHeaderMoreButton({
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
     const handleOrderPaid = useCallback(() => {
-        setMarkPaidDialog(false);
+        setShowMarkPaidDialog(false);
         window.location.reload();
     }, []);
 
@@ -124,11 +124,11 @@ export default function SubmissionHeaderMoreButton({
                     await setCancelDialog();
                     break;
                 case Options.MarkAsPaid:
-                    await setMarkPaidDialog(true);
+                    await setShowMarkPaidDialog(true);
                     break;
             }
         },
-        [setCancelDialog, handleClose, handleViewGrades, setMarkPaidDialog],
+        [setCancelDialog, handleClose, handleViewGrades, setShowMarkPaidDialog],
     );
 
     return (
@@ -161,11 +161,11 @@ export default function SubmissionHeaderMoreButton({
                     onClose={handleCreditDialogClose}
                 />
             ) : null}
-            <DialogMarkAsPaid
+            <MarkAsPaidDialog
                 orderId={orderId}
                 onSubmit={handleOrderPaid}
-                open={markPaidDialog}
-                onClose={() => setMarkPaidDialog(false)}
+                open={showMarkPaidDialog}
+                onClose={() => setShowMarkPaidDialog(false)}
             />
         </>
     );

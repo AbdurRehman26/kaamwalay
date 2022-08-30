@@ -13,7 +13,7 @@ import React, { useCallback } from 'react';
 import { markOrderAsPaid } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 
-interface DialogMarkAsPaidProps extends Omit<DialogProps, 'onSubmit'> {
+interface MarkAsPaidDialogProps extends Omit<DialogProps, 'onSubmit'> {
     orderId: number;
     onSubmit(): Promise<void> | void;
 }
@@ -35,10 +35,10 @@ const useStyles = makeStyles(
                 marginLeft: '12px',
             },
         }),
-    { name: 'DialogMarkAsPaid' },
+    { name: 'MarkAsPaidDialog' },
 );
 
-function DialogMarkAsPaid(props: DialogMarkAsPaidProps) {
+function MarkAsPaidDialog(props: MarkAsPaidDialogProps) {
     const { onClose, onSubmit, orderId, ...rest } = props;
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -89,4 +89,4 @@ function DialogMarkAsPaid(props: DialogMarkAsPaidProps) {
     );
 }
 
-export default DialogMarkAsPaid;
+export default MarkAsPaidDialog;

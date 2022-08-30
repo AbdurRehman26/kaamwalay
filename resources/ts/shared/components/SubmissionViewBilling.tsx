@@ -9,7 +9,6 @@ import { Link, useParams } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
-import { PaymentMethodEntity } from '@shared/entities/PaymentMethodEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
@@ -22,11 +21,10 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
     paymentMethodId?: number;
-    paymentMethod?: PaymentMethodEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     mode: 'customer' | 'admin';
-    customer: string;
+    admin: string;
 }
 
 export const useStyles = makeStyles(
@@ -57,11 +55,10 @@ export function SubmissionViewBilling({
     payment,
     coupon,
     paymentMethodId,
-    paymentMethod,
     paymentStatus,
     walletPayment,
     mode = 'customer',
-    customer,
+    admin,
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
@@ -189,7 +186,7 @@ export function SubmissionViewBilling({
                                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                                     Payment Method
                                 </Typography>
-                                <Typography variant={'body2'} color={'textPrimary'} sx={{ fontWeight: 500 }}>
+                                <Typography variant={'body2'} color={'#000000DE'} sx={{ fontWeight: 400 }}>
                                     Manual Payment
                                 </Typography>
                             </>
@@ -197,13 +194,13 @@ export function SubmissionViewBilling({
                         {mode === 'admin' && !hasPayment ? (
                             <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                                 <Typography variant={'body2'} color={'textSecondary'}>
-                                    Mark Payed by {customer}
+                                    Marked Paid by {admin}
                                 </Typography>
                             </Box>
                         ) : null}
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                             <Typography variant={'body2'} color={'textSecondary'}>
-                                {formatDate(payment?.createdAt, 'MM/DD/YYYY [at] hh:mm A')}
+                                {payment?.createdAt ? formatDate(payment?.createdAt, 'MM/DD/YYYY [at] hh:mm A') : null}
                             </Typography>
                         </Box>
                     </>

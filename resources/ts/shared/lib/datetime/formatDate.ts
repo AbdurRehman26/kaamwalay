@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { DateLike } from './DateLike';
 
-export function formatDate(date: DateLike | undefined, format: string) {
+export function formatDate(date: DateLike, format: string) {
     if (!date) {
         return null;
     }

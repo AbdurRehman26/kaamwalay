@@ -123,11 +123,10 @@ export function ViewSubmission() {
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
                 paymentMethodId={data?.paymentMethodId}
-                paymentMethod={data?.orderPayment?.paymentMethod}
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
                 mode={'customer'}
-                customer={data?.customer?.getFullName()}
+                admin={data?.customer?.getFullName()}
             />
             <Box marginTop={'24px'} />
             <Divider />

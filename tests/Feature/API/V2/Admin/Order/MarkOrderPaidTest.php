@@ -3,10 +3,8 @@
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
-use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use App\Models\PaymentMethod;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
@@ -14,7 +12,6 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 
 use function Pest\Laravel\postJson;
 
@@ -33,13 +30,7 @@ beforeEach(function () {
 
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
-        'payment_method_id' => PaymentMethod::whereCode('manual')->value('id'),
-    ]);
-
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => Str::random(25),
+        'payment_method_id' => null, // intentionally null, because a new order do not have the payment method ID
     ]);
 
     OrderStatusHistory::factory()->create([

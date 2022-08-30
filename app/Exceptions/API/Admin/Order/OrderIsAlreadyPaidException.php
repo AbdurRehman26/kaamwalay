@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderIsAlreadyPaidException extends Exception
 {
     /** @var string */
-    protected $message = 'Order can not be marked as paid as it is already paid.';
+    protected $message = 'Order cannot be marked as paid as it is already paid.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

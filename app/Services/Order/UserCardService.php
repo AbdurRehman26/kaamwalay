@@ -156,7 +156,7 @@ class UserCardService
      */
     private function convertGradeNicknameToColumn(string $nickname): string
     {
-        return strtolower(str_replace('-', '_', str_replace('+', '_plus', $nickname)));
+        return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
     }
 
     public function getDataForPublicCardPage(string $certificateId): array

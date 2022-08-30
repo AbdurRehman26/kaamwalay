@@ -59,13 +59,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
+        Route::get('labels', [CardLabelController::class, 'getOrderLabels']);
     });
 
     Route::prefix('cards')->group(function () {
         Route::get('categories', [CardCategoryController::class, 'index']);
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
-        Route::apiResource('labels', CardLabelController::class)->only(['index', 'update']);
+        Route::apiResource('labels', CardLabelController::class)->only(['update']);
         Route::get('cards/{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store']);

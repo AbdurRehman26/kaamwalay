@@ -5,6 +5,9 @@ namespace App\Services\Admin\Card;
 use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelResource;
 use App\Models\CardLabel;
 use App\Models\CardProduct;
+use App\Models\Order;
+use App\Models\OrderItemStatus;
+use App\Models\UserCard;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,19 +18,12 @@ class CardLabelService
     {
     }
 
-    public function search(): Collection
+    public function getOrderGradedCards(Order $order): Collection
     {
-        $query = CardLabel::query();
-
-        $cardProductIds = [];
-        if (request('order_id')) {
-            $cardProductIds = CardProduct::join('order_items', 'order_items.card_product_id', 'card_products.id')
-                ->where('order_id', request('order_id'))->select('card_products.*')->pluck('id')->toArray();
-        }
-
-        if (count($cardProductIds) > 0) {
-            $query->whereIn('card_product_id', $cardProductIds);
-        }
+        $query = UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
+            ->where('order_id', $order->id)
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->select('user_cards.*');
 
         return QueryBuilder::for($query)->get();
     }

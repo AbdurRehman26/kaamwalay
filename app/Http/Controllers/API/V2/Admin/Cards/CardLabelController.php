@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Cards;
 
+use App\Exceptions\API\Admin\CardLabelsCanNotBeExportedForOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\CardLabel\UpdateCardLabelRequest;
 use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelCollection;
 use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelResource;
+use App\Http\Resources\API\V2\Admin\UserCard\UserCardLabelCollection;
 use App\Models\CardLabel;
 use App\Models\CardProduct;
+use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Services\Admin\Card\CardLabelService;
 use Illuminate\Http\Request;
 
@@ -20,10 +24,15 @@ class CardLabelController extends Controller
     /**
      * @return CardLabelCollection
      */
-    public function index(): CardLabelCollection
+    public function getOrderLabels(Order $order): UserCardLabelCollection
     {
-        return new CardLabelCollection(
-            $this->cardLabelService->search()
+        //throw error if order is not graded yet
+        if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])) {
+            throw new CardLabelsCanNotBeExportedForOrder;
+        }
+
+        return new UserCardLabelCollection(
+            $this->cardLabelService->getOrderGradedCards($order)
         );
     }
 

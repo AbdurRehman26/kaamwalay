@@ -53,10 +53,6 @@ export class AddressEntity extends Entity {
     }
 
     public getAddress() {
-        return this.address;
-    }
-
-    public getAddress2() {
-        return this.address2;
+        return `${this.address} ${this.address2}`;
     }
 }

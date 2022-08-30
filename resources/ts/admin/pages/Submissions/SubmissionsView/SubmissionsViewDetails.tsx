@@ -39,7 +39,7 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodId: number;
-    paymentMethod: PaymentMethodEntity;
+    paymentMethod?: PaymentMethodEntity;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;

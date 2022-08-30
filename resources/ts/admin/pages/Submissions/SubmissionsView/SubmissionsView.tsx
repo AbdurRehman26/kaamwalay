@@ -59,6 +59,7 @@ export function SubmissionsView() {
                 orderShipment={data?.orderShipment}
                 orderLabel={data?.orderLabel}
                 customer={data?.customer}
+                paymentStatus={data.paymentStatus}
                 isVault={isVault}
             />
             <Divider />

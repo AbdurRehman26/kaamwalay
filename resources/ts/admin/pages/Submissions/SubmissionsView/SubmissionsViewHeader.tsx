@@ -29,6 +29,7 @@ interface SubmissionViewHeaderProps {
     orderLabel?: OrderLabelEntity | null;
     customer: UserEntity | null;
     isVault?: boolean;
+    paymentStatus?: number;
 }
 
 const useStyles = makeStyles(
@@ -78,6 +79,7 @@ export function SubmissionsViewHeader({
     customer,
     orderLabel,
     isVault,
+    paymentStatus,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
@@ -168,7 +170,12 @@ export function SubmissionsViewHeader({
                         shippingProvider={orderShipment?.shippingProvider}
                         inVault={isVault}
                     />
-                    <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} customer={customer} />
+                    <SubmissionHeaderMoreButton
+                        paymentStatus={paymentStatus}
+                        orderId={orderId}
+                        orderStatus={orderStatus}
+                        customer={customer}
+                    />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

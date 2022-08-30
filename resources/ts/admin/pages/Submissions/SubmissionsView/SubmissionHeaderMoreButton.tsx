@@ -6,6 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -15,7 +16,7 @@ import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsV
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
-import DialogMarkAsPaid from './DialogMarkAsPaid';
+import MarkAsPaidDialog from './MarkAsPaidDialog';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -39,19 +40,21 @@ interface SubmissionHeaderMoreButtonProps {
     orderId: number;
     orderStatus: OrderStatusEntity;
     customer: UserEntity | null;
+    paymentStatus?: number;
 }
 
 export default function SubmissionHeaderMoreButton({
     orderId,
     orderStatus,
     customer,
+    paymentStatus,
 }: SubmissionHeaderMoreButtonProps) {
     const confirm = useConfirmation();
     const classes = useStyles();
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
-    const [markPaidDialog, setMarkPaidDialog] = useState(false);
+    const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -60,7 +63,7 @@ export default function SubmissionHeaderMoreButton({
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
     const handleOrderPaid = useCallback(() => {
-        setMarkPaidDialog(false);
+        setShowMarkPaidDialog(false);
         window.location.reload();
     }, []);
 
@@ -124,11 +127,11 @@ export default function SubmissionHeaderMoreButton({
                     await setCancelDialog();
                     break;
                 case Options.MarkAsPaid:
-                    await setMarkPaidDialog(true);
+                    await setShowMarkPaidDialog(true);
                     break;
             }
         },
-        [setCancelDialog, handleClose, handleViewGrades, setMarkPaidDialog],
+        [setCancelDialog, handleClose, handleViewGrades, setShowMarkPaidDialog],
     );
 
     return (
@@ -141,7 +144,9 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
                 <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
-                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                {paymentStatus !== PaymentStatusEnum.PAID ? (
+                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                ) : null}
                 {orderStatus.is(OrderStatusEnum.GRADED) ||
                 orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                 orderStatus.is(OrderStatusEnum.SHIPPED) ? (
@@ -161,11 +166,11 @@ export default function SubmissionHeaderMoreButton({
                     onClose={handleCreditDialogClose}
                 />
             ) : null}
-            <DialogMarkAsPaid
+            <MarkAsPaidDialog
                 orderId={orderId}
                 onSubmit={handleOrderPaid}
-                open={markPaidDialog}
-                onClose={() => setMarkPaidDialog(false)}
+                open={showMarkPaidDialog}
+                onClose={() => setShowMarkPaidDialog(false)}
             />
         </>
     );

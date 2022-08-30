@@ -170,7 +170,7 @@ class OrderService extends V1OrderService
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
     }
 
-    public function generateSocialPreviewsForCards(Order $order)
+    public function generateSocialPreviewsForCards(Order $order): void
     {
         $order->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->each(function (OrderItem $orderItem) {
             CreateSocialPreviewsForUserCard::dispatch($orderItem->userCard);

@@ -16,7 +16,7 @@ class CreateOrderLabel implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 5;
+    public int $tries = 5;
 
     /**
      * Create a new job instance.

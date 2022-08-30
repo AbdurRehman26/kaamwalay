@@ -4,6 +4,7 @@ import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
@@ -13,10 +14,10 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { setEditLabelDialog } from '@shared/redux/slices/adminEditLabelDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
 import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
@@ -81,7 +82,7 @@ export function SubmissionsViewHeader({
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
-    const notifications = useNotifications();
+    const dispatch = useDispatch();
 
     const sharedProps: any = useMemo(
         () => ({
@@ -119,17 +120,22 @@ export function SubmissionsViewHeader({
         [isVault, orderStatusHistory],
     );
 
-    const DownloadOrderLabel = useCallback(async () => {
-        if (!orderLabel) {
-            notifications.error('Order Label is generating at the moment, try again in some minutes!');
-            return;
-        }
+    // const DownloadOrderLabel = useCallback(async () => {
+    //     if (!orderLabel) {
+    //         notifications.error('Order Label is generating at the moment, try again in some minutes!');
+    //         return;
+    //     }
 
-        await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
-    }, [notifications, orderLabel, orderNumber]);
+    //     await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
+    // }, [notifications, orderLabel, orderNumber]);
+
+    const handleLabelDialog = useCallback(async () => {
+        dispatch(setEditLabelDialog(true));
+    }, [dispatch]);
 
     return (
         <Grid container className={classes.root}>
+            <EditLabelDialog />
             <Grid container className={classes.header}>
                 <Grid container item xs alignItems={'center'}>
                     <Typography variant={'h6'} className={classes.heading}>
@@ -155,10 +161,10 @@ export function SubmissionsViewHeader({
                         <Button
                             {...sharedProps}
                             startIcon={<Icon>printer</Icon>}
-                            onClick={DownloadOrderLabel}
+                            onClick={handleLabelDialog}
                             disabled={!orderLabel}
                         >
-                            Print Stickers
+                            Export Labels
                         </Button>
                     ) : null}
                     <SubmissionActionButton

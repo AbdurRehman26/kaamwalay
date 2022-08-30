@@ -220,7 +220,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                               onClick={handleOption(Options.DownloadOrderLabel)}
                                               disabled={!order.orderLabel}
                                           >
-                                              Print Stickers
+                                              Export Labels
                                           </MenuItem>,
                                       ]
                                     : null}

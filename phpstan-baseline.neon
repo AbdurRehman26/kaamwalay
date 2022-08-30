@@ -1741,46 +1741,6 @@ parameters:
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
-			count: 5
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
 			message: "#^Method App\\\\Http\\\\Sorts\\\\AdminCustomerFullNameSort\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Sorts/AdminCustomerFullNameSort.php

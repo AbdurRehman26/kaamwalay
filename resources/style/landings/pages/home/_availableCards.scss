@@ -36,8 +36,12 @@
 }
 
 .Home-availableCardsImage {
-    max-width: 110px;
-    max-height: 70px;
-    min-height: 45px;
+    max-width: 8em;
+    max-height: 5em;
+    min-height: 3em;
     margin: auto;
+    @media screen and (max-width: 600px) {
+        max-width: 7em;
+        max-height: 4em;
+    }
 }

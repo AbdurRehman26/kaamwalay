@@ -14,7 +14,7 @@ import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -219,7 +219,9 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                 </MenuItem>
 
                                 <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
-                                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                                {order.paymentStatus !== PaymentStatusEnum.PAID ? (
+                                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                                ) : null}
 
                                 {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
                                 order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||

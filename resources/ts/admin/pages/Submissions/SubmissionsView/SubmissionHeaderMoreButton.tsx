@@ -6,6 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -39,12 +40,14 @@ interface SubmissionHeaderMoreButtonProps {
     orderId: number;
     orderStatus: OrderStatusEntity;
     customer: UserEntity | null;
+    paymentStatus?: number;
 }
 
 export default function SubmissionHeaderMoreButton({
     orderId,
     orderStatus,
     customer,
+    paymentStatus,
 }: SubmissionHeaderMoreButtonProps) {
     const confirm = useConfirmation();
     const classes = useStyles();
@@ -141,7 +144,9 @@ export default function SubmissionHeaderMoreButton({
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
                 <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
-                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                {paymentStatus !== PaymentStatusEnum.PAID ? (
+                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                ) : null}
                 {orderStatus.is(OrderStatusEnum.GRADED) ||
                 orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                 orderStatus.is(OrderStatusEnum.SHIPPED) ? (

@@ -141,6 +141,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('orderCertificate'),
         ];
     }
 
@@ -565,5 +566,13 @@ class Order extends Model implements Exportable
     public function isShipped(): bool
     {
         return $this->order_status_id === OrderStatus::SHIPPED;
+    }
+
+    /**
+     * @return HasOne<OrderCertificate>
+     */
+    public function orderCertificate(): HasOne
+    {
+        return $this->hasOne(OrderCertificate::class);
     }
 }

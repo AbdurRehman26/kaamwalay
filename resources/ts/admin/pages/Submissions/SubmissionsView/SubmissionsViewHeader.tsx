@@ -27,6 +27,7 @@ interface SubmissionViewHeaderProps {
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
     orderLabel?: OrderLabelEntity | null;
+    orderCertificate?: OrderLabelEntity | null;
     customer: UserEntity | null;
     isVault?: boolean;
 }
@@ -77,6 +78,7 @@ export function SubmissionsViewHeader({
     orderShipment,
     customer,
     orderLabel,
+    orderCertificate,
     isVault,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
@@ -128,6 +130,15 @@ export function SubmissionsViewHeader({
         await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
     }, [notifications, orderLabel, orderNumber]);
 
+    const ExportCertificateIds = useCallback(async () => {
+        if (!orderCertificate) {
+            notifications.error('Order Label is generating at the moment, try again in some minutes!');
+            return;
+        }
+
+        await downloadFromUrl(orderCertificate.path, `${orderNumber}_certificate.xlsx`);
+    }, [notifications, orderCertificate, orderNumber]);
+
     return (
         <Grid container className={classes.root}>
             <Grid container className={classes.header}>
@@ -149,17 +160,30 @@ export function SubmissionsViewHeader({
                     ) : null}
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {orderStatus.is(OrderStatusEnum.GRADED) ||
+                    {orderStatus.is(OrderStatusEnum.CONFIRMED) ||
+                    orderStatus.is(OrderStatusEnum.GRADED) ||
                     orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                     orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <Button
-                            {...sharedProps}
-                            startIcon={<Icon>printer</Icon>}
-                            onClick={DownloadOrderLabel}
-                            disabled={!orderLabel}
-                        >
-                            Print Stickers
-                        </Button>
+                        <>
+                            <Button
+                                {...sharedProps}
+                                startIcon={<Icon>qr_code</Icon>}
+                                onClick={ExportCertificateIds}
+                                disabled={!orderCertificate}
+                            >
+                                Export Cert ID's
+                            </Button>
+                            {!orderStatus.is(OrderStatusEnum.CONFIRMED) ? (
+                                <Button
+                                    {...sharedProps}
+                                    startIcon={<Icon>printer</Icon>}
+                                    onClick={DownloadOrderLabel}
+                                    disabled={!orderLabel}
+                                >
+                                    Print Stickers
+                                </Button>
+                            ) : null}
+                        </>
                     ) : null}
                     <SubmissionActionButton
                         orderId={orderId}

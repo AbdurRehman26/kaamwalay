@@ -183,7 +183,6 @@ class OrderService extends V1OrderService
         ]);
 
         return $order;
-
     }
 
     public function generateSocialPreviewsForCards(Order $order): void

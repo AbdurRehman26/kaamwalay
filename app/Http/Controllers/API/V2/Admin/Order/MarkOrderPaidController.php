@@ -11,6 +11,7 @@ use App\Services\Admin\V2\OrderService;
 use App\Services\Payment\V2\PaymentService;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class MarkOrderPaidController extends Controller
@@ -36,8 +37,8 @@ class MarkOrderPaidController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            logger()->error('Error occurred while marking order as PAID.');
-            logger()->error($e->getMessage(), [
+            Log::error('Error occurred while marking order as PAID.');
+            Log::error($e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);

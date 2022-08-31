@@ -24,7 +24,7 @@ interface SubmissionViewBillingProps {
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     mode: 'customer' | 'admin';
-    admin: string;
+    admin?: string;
 }
 
 export const useStyles = makeStyles(
@@ -62,7 +62,7 @@ export function SubmissionViewBilling({
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
-    const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
+    const hasPayment = [1, 2, 3, 5].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
@@ -105,6 +105,10 @@ export function SubmissionViewBilling({
 
         if (paymentMethodId === 3) {
             return `Collector Coin`;
+        }
+
+        if (paymentMethodId === 5) {
+            return `Manual Payment`;
         }
 
         return 'Unknown card';
@@ -166,7 +170,7 @@ export function SubmissionViewBilling({
 
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                             {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
-                            <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
+                            <Box display={'flex'} flexDirection={'column'} flexGrow={1}>
                                 <Typography variant={'body2'} color={'textPrimary'}>
                                     {paymentHeading}
                                 </Typography>
@@ -181,17 +185,7 @@ export function SubmissionViewBilling({
                 ) : null}
                 {isPaid ? (
                     <>
-                        {!hasPayment ? (
-                            <>
-                                <Typography variant={'body1'} className={font.fontWeightMedium}>
-                                    Payment Method
-                                </Typography>
-                                <Typography variant={'body2'} color={'#000000DE'} sx={{ fontWeight: 400 }}>
-                                    Manual Payment
-                                </Typography>
-                            </>
-                        ) : null}
-                        {mode === 'admin' && !hasPayment ? (
+                        {mode === 'admin' && paymentMethodId === 5 ? (
                             <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                                 <Typography variant={'body2'} color={'textSecondary'}>
                                     Marked Paid by {admin}

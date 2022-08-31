@@ -126,7 +126,6 @@ export function ViewSubmission() {
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
                 mode={'customer'}
-                admin={data?.customer?.getFullName()}
             />
             <Box marginTop={'24px'} />
             <Divider />

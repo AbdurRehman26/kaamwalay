@@ -16,7 +16,7 @@ class RevenueStatsMonthly extends Model
      *
      * @var array
      */
-    protected $fillable = ['event_at', 'profit', 'revenue'];
+    protected $fillable = ['event_at', 'profit', 'revenue', 'total_cards'];
 
     /**
      * The attributes that should be cast to native types.
@@ -27,5 +27,6 @@ class RevenueStatsMonthly extends Model
         'id' => 'integer',
         'profit' => 'float',
         'revenue' => 'float',
+        'total_cards' => 'integer',
     ];
 }

@@ -61,11 +61,13 @@ class RevenueStatsService
             'profit' => 0,
             'revenue' => 0,
             'event_at' => $currentDate,
+            'total_cards' => 0,
         ];
 
         foreach ($orderPayments as $orderPayment) {
             $revenueData['profit'] += $orderPayment->order->service_fee - $orderPayment->provider_fee;
             $revenueData['revenue'] += $orderPayment->amount;
+            $revenueData['total_cards'] += $orderPayment->order->orderItems->sum('quantity');
         }
 
         if (
@@ -79,6 +81,7 @@ class RevenueStatsService
 
             $revenue->profit = $revenueData['profit'];
             $revenue->revenue = $revenueData['revenue'];
+            $revenue->total_cards = $revenueData['total_cards'];
         }
         $revenue->save();
 

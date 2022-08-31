@@ -2,30 +2,20 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelResource;
 use App\Models\CardLabel;
 use App\Models\CardProduct;
 use App\Models\Order;
-use App\Models\OrderItemStatus;
 use App\Models\UserCard;
+use App\Services\Admin\Order\OrderLabelService;
 use App\Services\AGS\AgsService;
-use Illuminate\Database\Eloquent\Collection;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class CardLabelService
 {
-    public function __construct(protected AgsService $agsService, protected CreateCardLabelService $createCardLabelService)
-    {
-    }
-
-    public function getOrderGradedCards(Order $order): Collection
-    {
-        $query = UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
-            ->where('order_id', $order->id)
-            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-            ->select('user_cards.*');
-
-        return QueryBuilder::for($query)->get();
+    public function __construct(
+        protected AgsService $agsService,
+        protected CreateCardLabelService $createCardLabelService,
+        protected OrderLabelService $orderLabelService
+    ) {
     }
 
     public function getOrCreateCardProductLabel(CardProduct $cardProduct): CardLabel
@@ -42,5 +32,44 @@ class CardLabelService
         $cardLabel->update($data);
 
         return $cardLabel->fresh();
+    }
+
+
+    public function updateAndExportLabels(Order $order, array $data): string
+    {
+        $exportLabels = [];
+
+        foreach ($data as $certificateData) {
+
+            $userCard = UserCard::whereCertificateNumber($certificateData['certificate_number'])->first();
+            $orderItem = $userCard->orderItem;
+            $cardLabel = $orderItem->cardProduct->cardLabel;
+
+            if ($certificateData['persist_changes']) {
+                $cardLabel->line_one = $certificateData['line_one'];
+                $cardLabel->line_two = $certificateData['line_two'];
+                $cardLabel->line_three = $certificateData['line_three'];
+                $cardLabel->line_four = $certificateData['line_four'];
+                $cardLabel->save();
+            }
+
+            $exportLabels[] = [
+                'label_line_one' => $certificateData['line_one'],
+                'label_line_two' => $certificateData['line_two'],
+                'label_line_three' => $certificateData['line_three'],
+                'label_line_four' => $certificateData['line_four'],
+                'card_number' => $certificateData['line_four'],
+                'order_id' => $orderItem->order_id,
+                'card_reference_id' => $orderItem->cardProduct->card_reference_id,
+                'certificate_id' => $orderItem->userCard->certificate_number,
+                'final_grade' => $orderItem->userCard->overall_grade,
+                'grade_nickname' => $orderItem->userCard->overall_grade_nickname,
+            ];
+        }
+
+        $fileUrl = $this->orderLabelService->generateFileAndUploadToCloud($order, $exportLabels);
+        $this->orderLabelService->saveCardLabel($order, $fileUrl);
+
+        return $fileUrl;
     }
 }

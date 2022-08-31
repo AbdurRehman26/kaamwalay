@@ -60,6 +60,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
         Route::get('labels', [CardLabelController::class, 'getOrderLabels']);
+        Route::put('labels', [CardLabelController::class, 'updateAndExportOrderLabels']);
     });
 
     Route::prefix('cards')->group(function () {

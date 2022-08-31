@@ -9,6 +9,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
@@ -23,6 +24,7 @@ interface SubmissionViewBillingProps {
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     mode: 'customer' | 'admin';
+    admin?: string;
 }
 
 export const useStyles = makeStyles(
@@ -56,10 +58,11 @@ export function SubmissionViewBilling({
     paymentStatus,
     walletPayment,
     mode = 'customer',
+    admin,
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
-    const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
+    const hasPayment = [1, 2, 3, 5].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
@@ -102,6 +105,10 @@ export function SubmissionViewBilling({
 
         if (paymentMethodId === 3) {
             return `Collector Coin`;
+        }
+
+        if (paymentMethodId === 5) {
+            return `Manual Payment`;
         }
 
         return 'Unknown card';
@@ -163,7 +170,7 @@ export function SubmissionViewBilling({
 
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                             {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
-                            <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
+                            <Box display={'flex'} flexDirection={'column'} flexGrow={1}>
                                 <Typography variant={'body2'} color={'textPrimary'}>
                                     {paymentHeading}
                                 </Typography>
@@ -173,6 +180,22 @@ export function SubmissionViewBilling({
                                     </Typography>
                                 ) : null}
                             </Box>
+                        </Box>
+                    </>
+                ) : null}
+                {isPaid ? (
+                    <>
+                        {mode === 'admin' && paymentMethodId === 5 ? (
+                            <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
+                                <Typography variant={'body2'} color={'textSecondary'}>
+                                    Marked Paid by {admin}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
+                            <Typography variant={'body2'} color={'textSecondary'}>
+                                {payment?.createdAt ? formatDate(payment?.createdAt, 'MM/DD/YYYY [at] hh:mm A') : null}
+                            </Typography>
                         </Box>
                     </>
                 ) : null}

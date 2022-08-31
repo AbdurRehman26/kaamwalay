@@ -61,6 +61,7 @@ export function SubmissionsView() {
                 orderLabel={data?.orderLabel}
                 orderCertificate={data?.orderCertificate}
                 customer={data?.customer}
+                paymentStatus={data.paymentStatus}
                 isVault={isVault}
             />
             <Divider />
@@ -90,6 +91,7 @@ export function SubmissionsView() {
                 extraChargesTotal={String(data?.extraChargeTotal)}
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
+                admin={data?.orderPayment?.user?.fullName}
             />
             <Divider />
             <RefundsAndExtraCharges

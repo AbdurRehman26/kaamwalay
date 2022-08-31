@@ -1,9 +1,11 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -76,7 +78,7 @@ const CardDiv = styled(Grid)({
     },
     '.LableImage': {
         padding: '20px',
-        width: '270px',
+        width: '290px',
     },
     '.TextBoxNumber': {
         fontWeight: 500,
@@ -86,13 +88,40 @@ const CardDiv = styled(Grid)({
         color: 'rgba(0, 0, 0, 0.54)',
         marginRight: '10px',
     },
+    '.CheckBoxLabel': {
+        '& .MuiFormControlLabel-label': {
+            fontSize: '14px!important',
+            lineHeight: '20px',
+            letterSpacing: '0.1px',
+            color: '#20BFB8',
+        },
+    },
+    '.LabelImageLeftText': {
+        position: 'absolute',
+        top: '223px',
+        right: '127px',
+    },
+    '.LabelImageRightText': {
+        position: 'absolute',
+        right: '33px',
+        top: '224px',
+        textAlign: 'end',
+    },
+    '.LabelText': {
+        fontSize: '10px',
+        fontWeight: 'bold',
+    },
+    '.GradeText': {
+        fontSize: '20px',
+        fontWeight: 'bold',
+    },
 });
 
-const LabelDialog = styled(Dialog)(({ theme }) => ({
+const LabelDialog = styled(Dialog)({
     '& .MuiDialogContent-root': {
         padding: '0px 0px',
     },
-}));
+});
 
 export function EditLabelDialog() {
     const dispatch = useDispatch();
@@ -196,15 +225,32 @@ export function EditLabelDialog() {
                                 }}
                             />
                         </div>
+                        <FormControlLabel
+                            className={'CheckBoxLabel'}
+                            control={<Checkbox defaultChecked />}
+                            label="Save changes to this card’s label"
+                        />
                     </div>
                     <div className={'RightSideDiv'}>
                         <Typography className={'LabelPreviewText'}>Label Preview</Typography>
+                        <div className={'LabelImageLeftText'}>
+                            <Typography className={'LabelText'}>2021 P.M. JAPANESE SWSH</Typography>
+                            <Typography className={'LabelText'}>FA/GENGAR VMAX</Typography>
+                            <Typography className={'LabelText'}>GENGAR VMAX HIGH-CLS.</Typography>
+                            <Typography className={'LabelText'}>#003</Typography>
+                        </div>
+                        <div className={'LabelImageRightText'}>
+                            <Typography className={'LabelText'}>MINT</Typography>
+                            <Typography className={'GradeText'}>9</Typography>
+                            <Typography className={'LabelText'}>0000001</Typography>
+                        </div>
                         <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
                     </div>
                 </CardDiv>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleModal}>Cancel</Button>
+                <Button onClick={handleModal}>Export</Button>
             </DialogActions>
         </LabelDialog>
     );

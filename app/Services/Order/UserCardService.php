@@ -24,6 +24,10 @@ class UserCardService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
 
+    public function __construct(protected AgsService $agsService)
+    {
+    }
+
     public function createItemUserCard(OrderItem $item): UserCard
     {
         $cardGradingService = new CardGradingService;
@@ -190,8 +194,8 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
-            'slabbed_images' => resolve(AgsService::class)->getSlabbedImagesByCertificateId($certificateId),
+            'generated_images' => $this->agsService->getScannedImagesByCertificateId($certificateId),
+            'slabbed_images' => $this->agsService->getSlabbedImagesByCertificateId($certificateId),
         ];
     }
 

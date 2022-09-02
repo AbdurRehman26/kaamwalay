@@ -309,7 +309,7 @@
                     @if(!empty($shippingAddress))
                         {{$shippingAddress->getFullName()}}
                         <br/>
-                        {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
+                        {{$shippingAddress->address}} {{$shippingAddress->address_2}} @if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
                         <br/>
                         {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
                         <br/>

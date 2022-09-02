@@ -33,7 +33,6 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     ]);
 
     foreach ($this->users as $user) {
-
         /* Four graded orders */
         /* Four shipped orders */
 
@@ -136,7 +135,6 @@ it('checks if template exists', function () {
 });
 
 dataset('reportable', function () {
-
     /* Weekly */
     yield function () {
         return [

@@ -5,7 +5,6 @@
     .Home-sectionContentText {
         margin-bottom: 0;
     }
-
     .Home-sectionContentHeadline {
         font-size: 24px;
     }
@@ -37,5 +36,12 @@
 }
 
 .Home-availableCardsImage {
-    max-width: 80%;
+    max-width: 8em;
+    max-height: 5em;
+    min-height: 3em;
+    margin: auto;
+    @media screen and (max-width: 600px) {
+        max-width: 7em;
+        max-height: 4em;
+    }
 }

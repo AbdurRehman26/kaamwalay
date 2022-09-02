@@ -11,6 +11,7 @@ use App\Models\UserCard;
 use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
 use App\Services\AGS\AgsService;
+use App\Services\SocialPreviewLambdaService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -131,6 +132,7 @@ class UserCardService
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
             'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
+            'social_images' => $userCard->social_images,
         ];
     }
 
@@ -217,5 +219,50 @@ class UserCardService
 
         return QueryBuilder::for($query)
             ->firstOrFail();
+    }
+
+    public function generateSocialPreview(UserCard $userCard): void
+    {
+        $uid = Str::uuid();
+        $certificateNumber = $userCard->certificate_number;
+        $overallGrade = $this->prepareGradeForPublicCardPage($userCard);
+        $viewData = [
+            'card_name' => $userCard->orderItem->cardProduct->name,
+            'card_image' => $userCard->orderItem->cardProduct->image_path,
+            'overall_grade' => $overallGrade['grade'],
+            'overall_grade_nickname' => $overallGrade['nickname'],
+        ];
+
+        $socialPreviewLambdaService = new SocialPreviewLambdaService();
+
+        // For Facebook, Twitter, Instagram Post
+        $squareImageUrl = $socialPreviewLambdaService->generateFromView(
+            'social.card',
+            $viewData,
+            'jpeg',
+            100,
+            700,
+            700,
+            "social-previews/user-cards/$certificateNumber-square-$uid.jpg"
+        );
+
+        // For Instagram Story
+        $verticalImageUrl = $socialPreviewLambdaService->generateFromView(
+            'social.card',
+            $viewData,
+            'jpeg',
+            100,
+            420,
+            800,
+            "social-previews/user-cards/$certificateNumber-vertical-$uid.jpg"
+        );
+
+        UserCard::withoutSyncingToSearch(function () use ($userCard, $squareImageUrl, $verticalImageUrl) {
+            $userCard->social_images = [
+                'square' => $squareImageUrl,
+                'vertical' => $verticalImageUrl,
+            ];
+            $userCard->save();
+        });
     }
 }

@@ -39,7 +39,8 @@
         "spatie/laravel-webhook-client": "^3.1",
         "taylornetwork/laravel-username-generator": "^2.6",
         "tomfordrumm/jwt-auth": "dev-develop",
-        "web3-php/web3": "dev-master"
+        "web3-php/web3": "dev-master",
+        "wnx/sidecar-browsershot": "^1.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

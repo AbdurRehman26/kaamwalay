@@ -60,6 +60,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
         Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
+
+        Route::post('generate-label', [OrderController::class, 'generateLabel']);
     });
 
     Route::prefix('cards')->group(function () {

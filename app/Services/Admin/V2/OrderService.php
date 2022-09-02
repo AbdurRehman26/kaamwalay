@@ -170,6 +170,21 @@ class OrderService extends V1OrderService
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
     }
 
+    public function createManualPayment(Order $order, User $user): Order
+    {
+        $manualPaymentMethodId = PaymentMethod::whereCode('manual')->value('id');
+
+        $order->payment_method_id = $manualPaymentMethodId;
+        $order->save();
+
+        $order->orderPayments()->create([
+            'payment_method_id' => $manualPaymentMethodId,
+            'user_id' => $user->id,
+        ]);
+
+        return $order;
+    }
+
     public function generateSocialPreviewsForCards(Order $order): void
     {
         $order->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->each(function (OrderItem $orderItem) {

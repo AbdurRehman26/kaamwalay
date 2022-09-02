@@ -1,10 +1,15 @@
+import QrCodeIcon from '@mui/icons-material/QrCode';
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
@@ -16,6 +21,7 @@ interface SubmissionsGradeHeaderProps {
     reviewedAt: DateLike;
     reviewer: string;
     cardsGraded: number;
+    orderCertificate?: OrderLabelEntity | null;
     cardsInOrder: number;
 }
 
@@ -49,8 +55,19 @@ export function SubmissionsGradeHeader({
     cardsGraded,
     reviewedAt,
     cardsInOrder,
+    orderCertificate,
 }: SubmissionsGradeHeaderProps) {
     const classes = useStyles();
+
+    const notifications = useNotifications();
+    const ExportCertificateIds = useCallback(async () => {
+        if (!orderCertificate) {
+            notifications.error('Order Label is generating at the moment, try again in some minutes!');
+            return;
+        }
+
+        await downloadFromUrl(orderCertificate.path, `${orderNumber}_certificate.xlsx`);
+    }, [notifications, orderCertificate, orderNumber]);
 
     return (
         <header className={classes.root}>
@@ -68,7 +85,7 @@ export function SubmissionsGradeHeader({
                             </Typography>
                         </Typography>
                     </Grid>
-                    <Grid container item xs justifyContent={'flex-end'}>
+                    <Grid container item xs justifyContent={'flex-end'} flexGrow={'2 !important'}>
                         <Button
                             className={cx(classes.buttonDisabled, classes.button)}
                             variant={'outlined'}
@@ -96,6 +113,17 @@ export function SubmissionsGradeHeader({
                         >
                             View Submission
                         </Button>
+                        {orderCertificate && (
+                            <Button
+                                onClick={ExportCertificateIds}
+                                className={classes.button}
+                                variant={'contained'}
+                                color={'inherit'}
+                                startIcon={<QrCodeIcon color={'inherit'} />}
+                            >
+                                Export Cert ID's
+                            </Button>
+                        )}
                     </Grid>
                 </Grid>
             </Container>

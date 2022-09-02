@@ -4,6 +4,7 @@ import { Entity } from './Entity';
 
 export class AddressEntity extends Entity {
     public address!: string;
+    public address2!: string;
     public city!: string;
     public state!: string;
     public zip!: string;
@@ -52,6 +53,6 @@ export class AddressEntity extends Entity {
     }
 
     public getAddress() {
-        return this.address;
+        return `${this.address} ${this.address2}`;
     }
 }

@@ -12,7 +12,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 uses(WithFaker::class);
 
 beforeEach(function () {
-
     /* @var Order $order */
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,

@@ -38,7 +38,7 @@ class UnpaidOrdersStats extends Notification
             ->success()
             ->attachment(function ($attachment) use ($monthYear) {
                 $attachment->title('Unpaid Orders Stats')
-                    ->content("Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']})\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']})");
+                    ->content("Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}), Total Cards: {$this->unpaidDailyStats['total_cards']},\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']}),Total Cards: {$this->unpaidDailyStats['total_cards']}");
             });
     }
 }

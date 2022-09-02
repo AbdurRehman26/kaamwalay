@@ -3,6 +3,7 @@
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\V1\PaymentService;
@@ -38,6 +39,10 @@ beforeEach(function () {
             ];
             }
         ));
+
+    foreach($this->orders as $order) {
+        OrderItem::factory()->for($order)->create();
+    }
 });
 
 it('adds daily revenue stats', function () {
@@ -61,9 +66,15 @@ it('adds daily revenue stats', function () {
         )
     );
 
+    $toatalCards = 0;
+    foreach ($orders as $order) {
+        $toatalCards += ($order->orderItems->sum('quantity'));
+    }
+
     $revenueStats = $this->revenueStatsService->addDailyStats($getRandomOrder->created_at->toDateString());
     expect(round($revenue, 2))->toBe(round($revenueStats['revenue'], 2));
     expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
+    expect($toatalCards)->toBe($revenueStats->total_cards);
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
@@ -84,8 +95,14 @@ it('adds monthly revenue stats for the current month', function () {
         )
     );
 
+    $toatalCards = 0;
+    foreach ($orders as $order) {
+        $toatalCards += ($order->orderItems->sum('quantity'));
+    }
+    
     $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 
     expect($revenue)->toBe($revenueStats->revenue);
     expect(round($profit, 2))->toBe(round($revenueStats->profit, 2));
+    expect($toatalCards)->toBe($revenueStats->total_cards);
 })->group('revenue-stats');

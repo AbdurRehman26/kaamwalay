@@ -121,6 +121,23 @@ const LabelDialog = styled(Dialog)({
     '& .MuiDialogContent-root': {
         padding: '0px 0px',
     },
+    '.CancelButton': {
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        textAlign: 'center',
+        letterSpacing: '0.35px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
+    '.ExportButton': {
+        background: '#20BFB8',
+        borderRadius: '4px',
+        color: '#fff',
+        padding: '10px 20px',
+        '&:hover': {
+            background: '#20BFB8',
+        },
+    },
 });
 
 export function EditLabelDialog() {
@@ -249,8 +266,12 @@ export function EditLabelDialog() {
                 </CardDiv>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleModal}>Cancel</Button>
-                <Button onClick={handleModal}>Export</Button>
+                <Button className={'CancelButton'} onClick={handleModal}>
+                    Cancel
+                </Button>
+                <Button className={'ExportButton'} onClick={handleModal}>
+                    Export
+                </Button>
             </DialogActions>
         </LabelDialog>
     );

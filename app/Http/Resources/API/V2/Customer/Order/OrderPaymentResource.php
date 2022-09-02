@@ -70,7 +70,7 @@ class OrderPaymentResource extends BaseResource
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
             'payment_method' => new PaymentMethodResource($this->paymentMethod),
-            'created_at' => $this->formatDate($this->created_at)
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 

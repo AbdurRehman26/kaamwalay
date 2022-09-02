@@ -88,7 +88,7 @@ class OrderPaymentResource extends BaseResource
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
             'payment_method' => new PaymentMethodResource($this->paymentMethod),
-            'created_at' => $this->formatDate($this->created_at)
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
     
@@ -101,7 +101,7 @@ class OrderPaymentResource extends BaseResource
                 'complete_hash' => $response['txn_hash'],
             ],
             'payment_method' => new PaymentMethodResource($this->paymentMethod),
-            'created_at' => $this->formatDate($this->created_at)
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 

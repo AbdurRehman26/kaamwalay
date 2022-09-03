@@ -64,7 +64,6 @@ const useStyles = makeStyles(
     { name: 'CardAddDialog' },
 );
 
-// TODO: These interfaces will be moved to entities, once we'll have some time to think about this.
 interface CardSets {
     id: number;
     cardSeriesId: number;
@@ -98,18 +97,20 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<number | null>(dialogState.selectedCategory?.id ?? null);
+    const [cardCategory, setCardCategory] = useState<number | string | undefined | null>(
+        dialogState.selectedCategory?.id ?? null,
+    );
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
-    const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
-    const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
+    const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | string | undefined>(null);
+    const [selectedSet, setSelectedSet] = useState<CardSets | string | undefined | null>(null);
     const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null | string | undefined>(null);
     const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
-    const [selectedRarity, setSelectedRarity] = useState<CardRarity | null>(null);
+    const [selectedRarity, setSelectedRarity] = useState<CardRarity | string | undefined | null>(null);
     const [availableSurfaces, setAvailableSurfaces] = useState<CardSurface[]>([]);
-    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null | undefined>(null);
-    const [releaseDate, setReleaseDate] = useState<Date | string | null>(null);
+    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null | string | undefined>(null);
+    const [releaseDate, setReleaseDate] = useState<Date | string | undefined | null>(null);
     const [availableLanguages, setAvailableLanguages] = useState<string[] | null>(null);
     const [selectedLanguage, setSelectedLanguage] = useState<string | null | undefined>(null);
     const [availableEditions, setAvailableEditions] = useState<string[] | null>(null);
@@ -990,7 +991,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Language
                                         </FormHelperText>
-                                        <Select value={selectedLanguage} onChange={handleLanguageChange}>
+                                        <Select value={selectedLanguage || 'none'} onChange={handleLanguageChange}>
                                             <MenuItem value="none" disabled>
                                                 Select Language
                                             </MenuItem>
@@ -1014,8 +1015,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         >
                                             Edition <span className={classes.label}>(optional)</span>
                                         </FormHelperText>
-                                        <Select value={selectedEdition} onChange={handleEditionChange}>
-                                            <MenuItem value="none">Select edition</MenuItem>
+                                        <Select value={selectedEdition || 'none'} onChange={handleEditionChange}>
+                                            <MenuItem value="none" disabled>
+                                                Select edition
+                                            </MenuItem>
                                             {availableEditions?.map((item) => {
                                                 return (
                                                     <MenuItem key={item} value={item}>

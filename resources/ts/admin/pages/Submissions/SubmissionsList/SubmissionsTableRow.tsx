@@ -14,7 +14,7 @@ import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -27,6 +27,7 @@ import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
+import MarkAsPaidDialog from '../SubmissionsView/MarkAsPaidDialog';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -39,6 +40,7 @@ enum Options {
     ViewGrades,
     CreditCustomer,
     Delete,
+    MarkAsPaid,
 }
 
 const useStyles = makeStyles(
@@ -61,6 +63,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
@@ -101,6 +104,9 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 case Options.Delete:
                     setDisplayOrderDeleteDialog(!displayOrderDeleteDialog);
                     break;
+                case Options.MarkAsPaid:
+                    setShowMarkPaidDialog(!showMarkPaidDialog);
+                    break;
             }
         },
         [
@@ -112,8 +118,14 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
             order.invoice,
             order.orderLabel,
             order.orderNumber,
+            showMarkPaidDialog,
         ],
     );
+
+    const handleOrderPaid = useCallback(() => {
+        setShowMarkPaidDialog(false);
+        window.location.reload();
+    }, []);
 
     const handleOrderDeleteSubmit = useCallback(
         async ({ orderId }: Record<any, number>) => {
@@ -207,8 +219,12 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                 </MenuItem>
 
                                 <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                                {order.paymentStatus !== PaymentStatusEnum.PAID ? (
+                                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                                ) : null}
 
                                 {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
+                                order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                                 order?.orderStatus.is(OrderStatusEnum.SHIPPED)
                                     ? [
                                           <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
@@ -241,6 +257,13 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 orderNumber={order.orderNumber}
                 orderId={order.id}
                 onSubmit={handleOrderDeleteSubmit}
+            />
+
+            <MarkAsPaidDialog
+                orderId={order.id}
+                onSubmit={handleOrderPaid}
+                open={showMarkPaidDialog}
+                onClose={() => setShowMarkPaidDialog(false)}
             />
         </>
     );

@@ -11,7 +11,6 @@ import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 
@@ -75,7 +74,7 @@ export function CustomerTableRow({ customer }: props) {
             <TableRow key={customer.id} onClick={handleRowClick} sx={styles.TableRow}>
                 <TableCell variant={'body'}>
                     <Grid container>
-                        <Avatar src={customer.profileImage ?? ''}>{nameInitials(customer.fullName)}</Avatar>
+                        <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
                             <Typography variant={'body2'}>{customer.fullName}</Typography>
                             <Typography variant={'caption'} color={'textSecondary'}>

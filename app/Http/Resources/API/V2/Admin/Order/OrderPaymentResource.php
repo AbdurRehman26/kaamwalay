@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Admin\Order\PaymentMethod\PaymentMethodResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
@@ -21,8 +22,25 @@ class OrderPaymentResource extends BaseResource
             return $this->getUnpaidOrderPaymentResponse();
         }
 
+        // In the case of extra charge or refunds happened before the user pays for the order
+        // the data does not contain all the fields.
+        if (empty(json_decode($this->response)) && in_array($this->type, [OrderPayment::TYPE_EXTRA_CHARGE, OrderPayment::TYPE_REFUND])) {
+            return [
+                'id' => $this->id,
+                'notes' => $this->notes,
+                'amount' => $this->amount,
+                'type' => $this->getPaymentType($this->type),
+                'user' => new UserResource($this->user),
+                'created_at' => $this->formatDate($this->created_at),
+            ];
+        }
+
         if (! $this->response) {
             return [];
+        }
+
+        if ($this->paymentMethod->isManual()) {
+            return $this->getManualPaymentResponse();
         }
 
         if ($this->order->paymentMethod->code === 'paypal' && $this->type !== OrderPayment::TYPE_REFUND) {
@@ -86,6 +104,19 @@ class OrderPaymentResource extends BaseResource
     {
         return [
             'id' => $this->id,
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => $this->getPaymentType($this->type),
+            'user' => new UserResource($this->user),
+            'created_at' => $this->formatDate($this->created_at),
+        ];
+    }
+
+    protected function getManualPaymentResponse(): array
+    {
+        return [
+            'id' => $this->id,
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),

@@ -182,7 +182,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__copy-to-clipBoard">
-                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board-mobile" data-content="{{ $pageUrl }}">
+                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board" data-content="{{ $pageUrl }}" data-button-content="mobile">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>

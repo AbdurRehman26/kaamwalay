@@ -1,5 +1,4 @@
 import { CopyToClipBoardAtom } from '../atoms/CopyToClipBoardAtom';
-import { CopyToClipBoardMobileAtom } from '../atoms/CopyToClipBoardMobileAtom';
 import { FeedSearchAtom } from '../atoms/FeedSearchAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
 import { SubmissionButtonAtom } from '../atoms/SubmissionButtonAtom';
@@ -17,7 +16,7 @@ class FeedController extends Controller implements CanSetup<FeedController> {
     }
 
     public feedView() {
-        mountAtom(SubmissionButtonAtom, CopyToClipBoardAtom, CopyToClipBoardMobileAtom);
+        mountAtom(SubmissionButtonAtom, CopyToClipBoardAtom);
     }
 }
 

@@ -1,5 +1,6 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -7,9 +8,10 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 interface Props {
     content: string;
+    buttonContent?: string;
 }
 
-export default function CopyClipboard({ content }: Props) {
+export default function CopyClipboard({ content, buttonContent }: Props) {
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {
@@ -26,7 +28,7 @@ export default function CopyClipboard({ content }: Props) {
     return (
         <>
             <CopyToClipboard text={content} onCopy={() => handleClick()}>
-                <ContentCopyOutlinedIcon />
+                {buttonContent === 'mobile' ? <IosShareOutlinedIcon /> : <ContentCopyOutlinedIcon />}
             </CopyToClipboard>
             <Snackbar
                 open={open}
@@ -36,7 +38,8 @@ export default function CopyClipboard({ content }: Props) {
                     background: '#20BFB8',
                     borderRadius: '28px',
                     padding: '15px 25px',
-                    left: 'auto!important',
+                    left: buttonContent === 'mobile' ? '100px!important' : 'auto!important',
+                    right: 'auto!important',
                 }}
             >
                 <Typography

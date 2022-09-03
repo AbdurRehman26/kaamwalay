@@ -340,6 +340,10 @@
                             {{$orderPayment->transaction->hash}}
                             <br/>
                         @endif
+                        @elseif(property_exists($orderPayment,'manual'))
+                            Manual Payment
+                            <br/>
+                        @endif
                         @if($order->amount_paid_from_wallet > 0)
                             (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif

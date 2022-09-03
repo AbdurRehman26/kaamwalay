@@ -96,20 +96,20 @@ class AgsService
     {
         $data = $this->getGradesByCertificateId($certificateId);
 
-        if (empty($data) || $data['count'] === 0 ||
-            (
-                empty($data['results'][0]['front_slab_image']) &&
-                empty($data['results'][0]['back_slab_image'])
-            )
+        if (empty($data) || $data['count'] === 0) {
+            return [];
+        }
+        if (
+            !empty($data['results'][0]['front_slab_image']) &&
+            !empty($data['results'][0]['back_slab_image'])
         ) {
-            return [
-                'image_path' => $data['results'][0]['card']['image_path'],
+            return  [
+                    'front_slab_image' => $data['results'][0]['front_slab_image'],
+                    'back_slab_image' => $data['results'][0]['back_slab_image'],
             ];
         }
-
-        return  [
-                'front_slab_image' => $data['results'][0]['front_slab_image'],
-                'back_slab_image' => $data['results'][0]['back_slab_image'],
+        return [
+            'image_path' => $data['results'][0]['card']['image_path'] ?? null,
         ];
     }
 

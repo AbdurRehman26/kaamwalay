@@ -35,7 +35,7 @@ class CardLabelController extends Controller
         }
 
         return new UserCardLabelCollection(
-            $this->orderLabelService->getOrderGradedCards($order)
+            $this->cardLabelService->getOrderLabels($order)
         );
     }
 

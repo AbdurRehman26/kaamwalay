@@ -23,7 +23,7 @@ class CardLabelResource extends BaseResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
+            'card_label_id' => $this->id,
             'line_one' => $this->line_one,
             'line_two' => $this->line_two,
             'line_three' => $this->line_three,

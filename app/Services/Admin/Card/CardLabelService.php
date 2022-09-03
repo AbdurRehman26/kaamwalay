@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderLabelService;
 use App\Services\AGS\AgsService;
+use Illuminate\Support\Collection;
 
 class CardLabelService
 {
@@ -40,7 +41,6 @@ class CardLabelService
         $exportLabels = [];
 
         foreach ($data as $certificateData) {
-
             $userCard = UserCard::whereCertificateNumber($certificateData['certificate_number'])->first();
             $orderItem = $userCard->orderItem;
             $cardLabel = $orderItem->cardProduct->cardLabel;
@@ -71,5 +71,20 @@ class CardLabelService
         $this->orderLabelService->saveCardLabel($order, $fileUrl);
 
         return $fileUrl;
+    }
+
+    public function getOrderLabels(Order $order): Collection
+    {
+        $orderCards = $this->orderLabelService->getOrderGradedCards($order);
+
+        $cardsWithoutLabel = $orderCards->filter(function ($card, $key) {
+            return $card->orderItem->cardProduct->cardLabel()->doesntExist();
+        });
+
+        foreach ($cardsWithoutLabel as $card) {
+            $this->createCardLabelService->createLabel($card->orderItem->cardProduct);
+        }
+
+        return $orderCards;
     }
 }

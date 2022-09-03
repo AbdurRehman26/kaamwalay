@@ -339,7 +339,6 @@
                             <br/>
                             {{$orderPayment->transaction->hash}}
                             <br/>
-                        @endif
                         @elseif(property_exists($orderPayment,'manual'))
                             Manual Payment
                             <br/>

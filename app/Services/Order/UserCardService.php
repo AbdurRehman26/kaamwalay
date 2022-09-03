@@ -112,7 +112,7 @@ class UserCardService
      */
     public function getPageUrl(string $certificateId): string
     {
-        return config('app.url').'/feed/'.$certificateId.'/view';
+        return route('feed.publicCardPage.view', $certificateId);
     }
 
     /**

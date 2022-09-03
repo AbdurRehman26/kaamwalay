@@ -114,6 +114,7 @@ class InvoiceService
         } else {
             $card = $paymentResponse->charges->data[0]->payment_method_details->card;
         }
+
         return json_decode(json_encode([
             'card' => [
                 'brand' => $card->brand,

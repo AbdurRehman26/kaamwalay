@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderLabelService;
 use App\Services\AGS\AgsService;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class CardLabelService
 {
@@ -73,6 +73,10 @@ class CardLabelService
         return $fileUrl;
     }
 
+    /**
+     * @param  Order  $order
+     * @return Collection<int, UserCard>
+     */
     public function getOrderLabels(Order $order): Collection
     {
         $orderCards = $this->orderLabelService->getOrderGradedCards($order);

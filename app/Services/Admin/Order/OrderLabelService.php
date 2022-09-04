@@ -12,6 +12,7 @@ use App\Services\Admin\Card\CreateCardLabelService;
 use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -84,6 +85,10 @@ class OrderLabelService
         return $labels;
     }
 
+    /**
+     * @param  Order  $order
+     * @return Collection<int, UserCard>
+     */
     public function getOrderGradedCards(Order $order): Collection
     {
         $query = UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')

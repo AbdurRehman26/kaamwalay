@@ -24,7 +24,7 @@ class CardLabel extends Model
     ];
 
     /**
-     * @return BelongsTo<CardProduct>
+     * @return BelongsTo<CardProduct, CardLabel>
      */
     public function cardProduct(): BelongsTo
     {

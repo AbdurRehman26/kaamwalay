@@ -16,6 +16,9 @@ class CardCategory extends Model
         'name', 'image_url', 'is_enabled', 'type', 'card_category_type_id',
     ];
 
+    /**
+     * @return BelongsTo<CardCategoryType, CardCategory>
+     */
     public function cardCategoryType(): BelongsTo
     {
         return $this->belongsTo(CardCategoryType::class);

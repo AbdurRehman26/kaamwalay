@@ -25,7 +25,9 @@ class CardLabelController extends Controller
     }
 
     /**
-     * @return CardLabelCollection
+     * @param  Order  $order
+     * @return UserCardLabelCollection
+     * @throws CardLabelsCanNotBeExportedForOrder
      */
     public function getOrderLabels(Order $order): UserCardLabelCollection
     {

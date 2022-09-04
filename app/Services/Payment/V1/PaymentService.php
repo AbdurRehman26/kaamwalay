@@ -52,7 +52,6 @@ class PaymentService
         }
 
         if (! empty($data['success'])) {
-
             /* Partial Payments */
             if ($this->checkForPartialPayment()) {
                 $this->updatePartialPayment();

@@ -40,7 +40,7 @@ beforeEach(function () {
             }
         ));
 
-    foreach($this->orders as $order) {
+    foreach ($this->orders as $order) {
         OrderItem::factory()->for($order)->create();
     }
 });

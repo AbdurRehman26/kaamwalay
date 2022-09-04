@@ -64,6 +64,7 @@ const useStyles = makeStyles(
     { name: 'CardAddDialog' },
 );
 
+// TODO: These interfaces will be moved to entities, once we'll have some time to think about this.
 interface CardSets {
     id: number;
     cardSeriesId: number;
@@ -97,19 +98,19 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<number | string | undefined | null>(
+    const [cardCategory, setCardCategory] = useState<number | undefined | null>(
         dialogState.selectedCategory?.id ?? null,
     );
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
-    const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | string | undefined>(null);
-    const [selectedSet, setSelectedSet] = useState<CardSets | string | undefined | null>(null);
-    const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null | string | undefined>(null);
+    const [selectedSeries, setSelectedSeries] = useState<CardSeries | undefined | null>(null);
+    const [selectedSet, setSelectedSet] = useState<CardSets | undefined | null>(null);
+    const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null | undefined>(null);
     const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
-    const [selectedRarity, setSelectedRarity] = useState<CardRarity | string | undefined | null>(null);
+    const [selectedRarity, setSelectedRarity] = useState<CardRarity | undefined | null>(null);
     const [availableSurfaces, setAvailableSurfaces] = useState<CardSurface[]>([]);
-    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null | string | undefined>(null);
+    const [selectedSurface, setSelectedSurface] = useState<CardSurface | null | undefined>(null);
     const [releaseDate, setReleaseDate] = useState<Date | string | undefined | null>(null);
     const [availableLanguages, setAvailableLanguages] = useState<string[] | null>(null);
     const [selectedLanguage, setSelectedLanguage] = useState<string | null | undefined>(null);
@@ -371,7 +372,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
         setIsLoading(true);
         try {
-            const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+            const cardPublicImage = updateCard?.imagePath
+                ? updateCard.imagePath
+                : await filesRepository.uploadFile(selectedCardPhoto!);
             const DTO = {
                 imagePath: cardPublicImage,
                 name: cardName || updateCard?.cardSetName,
@@ -475,18 +478,18 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     };
 
     useEffect(() => {
-        setCardCategory(updateCard?.cardCategoryName);
+        setCardCategory(updateCard?.id);
         setSelectedSeries(updateCard?.cardSeriesName);
         setSelectedSet(updateCard?.cardSetName);
         setCardName(updateCard?.name);
         setCardNumber(updateCard?.cardNumber);
         setReleaseDate(updateCard?.releaseDate);
-        setSelectedCardPhoto(updateCard?.imagePath);
         setSelectedRarity(updateCard?.rarity);
         setSelectedSurface(updateCard?.surface);
         setSelectedEdition(updateCard?.edition);
         setSelectedLanguage(updateCard?.language);
         setProductVariant(updateCard?.variant);
+        setSelectedCardPhoto(updateCard?.imagePath);
     }, [isUpdate, updateCard]);
 
     const handleModalBack = () => {
@@ -809,8 +812,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                             Card Photo
                                         </FormHelperText>
                                         <ImageUploader
-                                            imageUrl={isUpdate ? updateCard?.imagePath : ''}
+                                            imageUrl={isUpdate ? selectedCardPhoto : null}
                                             isSmall={true}
+                                            onDelete={() => setSelectedCardPhoto(null)}
                                             maxHeight="150px"
                                             maxWidth="155px"
                                             onChange={handleCardPhotoChange}

@@ -5,16 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class CardCategory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'image_url', 'is_enabled', 'type',
+        'name', 'image_url', 'is_enabled', 'type', 'card_category_type_id',
     ];
+
+    public function cardCategoryType(): BelongsTo
+    {
+        return $this->belongsTo(CardCategoryType::class);
+    }
 
     public function cardSeries(): HasMany
     {
@@ -61,7 +66,7 @@ class CardCategory extends Model
      */
     public function isTCG(): bool
     {
-        return $this->type === 'TCG';
+        return $this->cardCategoryType->name === 'TCG';
     }
 
     /**
@@ -69,6 +74,6 @@ class CardCategory extends Model
      */
     public function isSports(): bool
     {
-        return $this->type === 'Sports';
+        return $this->cardCategoryType->name === 'Sports';
     }
 }

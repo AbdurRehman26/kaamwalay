@@ -68,7 +68,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
         Route::apiResource('labels', CardLabelController::class)->only(['update']);
-        Route::get('cards/{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
+        Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store']);
     });

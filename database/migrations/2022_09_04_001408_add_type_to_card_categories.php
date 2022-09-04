@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('card_categories', function (Blueprint $table) {
-            $table->string('type')->nullable()->after('is_enabled');
+            $table->unsignedBigInteger('card_category_type_id')->nullable()->after('is_enabled');
+            $table->foreign('card_category_type_id')->references('id')->on('card_category_types');
         });
     }
 
@@ -26,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('card_categories', function (Blueprint $table) {
-            $table->dropColumn('type');
+            $table->dropForeign(['card_category_type_id']);
+            $table->dropColumn('card_category_type_id');
         });
     }
 };

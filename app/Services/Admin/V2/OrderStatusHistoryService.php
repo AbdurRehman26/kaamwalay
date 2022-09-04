@@ -73,7 +73,6 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         }
 
         if ($orderStatusId === OrderStatus::GRADED) {
-            CreateOrderLabel::dispatch($order);
             if (! $order->isPaid()) {
                 $order->payment_status = OrderPaymentStatusEnum::DUE;
                 $order->save();

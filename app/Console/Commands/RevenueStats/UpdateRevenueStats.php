@@ -44,10 +44,10 @@ class UpdateRevenueStats extends Command
 
         $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);
 
-        // if (! app()->environment('local')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly));
-        // }
+        }
 
         $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Completed');
         $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Completed');

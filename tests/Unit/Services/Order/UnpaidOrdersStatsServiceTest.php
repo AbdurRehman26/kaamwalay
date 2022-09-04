@@ -59,8 +59,14 @@ it('calculates daily unpaid orders stats', function () {
 
     $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrderDate);
 
+    $toatalCards = 0;
+    foreach ($orders as $order) {
+        $toatalCards += $order->orderItems->sum('quantity');
+    }
+
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
+    expect($unpaidDailyStats['total_cards'])->toBe($toatalCards);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
@@ -71,6 +77,12 @@ it('calculates monthly unpaid orders stats for the current month', function () {
 
     $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrderDate);
 
+    $toatalCards = 0;
+    foreach ($orders as $order) {
+        $toatalCards += $order->orderItems->sum('quantity');
+    }
+
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
+    expect($unpaidMonthlyStats['total_cards'])->toBe($toatalCards);
 })->group('unpaid-orders-stats');

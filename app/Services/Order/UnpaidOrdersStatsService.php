@@ -14,10 +14,17 @@ class UnpaidOrdersStatsService
         $unpaidOrders = $this->dailyUnpaidOrders($currentDate)
             ->sum('grand_total');
 
+        $orders = Order::placed()->forDate($currentDate)->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->get();
+        $totalCards = 0;
+        foreach( $orders as $order ) {
+            $totalCards += $order->orderItems->sum('quantity');
+        }
+
         return [
             'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
             'total_orders' => $this->dailyOrdersCount($currentDate),
+            'total_cards' => $totalCards
         ];
     }
 
@@ -26,10 +33,17 @@ class UnpaidOrdersStatsService
         $unpaidOrders = $this->monthlyUnpaidOrders($currentDate)
             ->sum('grand_total');
 
+        $orders = Order::placed()->forMonth($currentDate)->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->get();
+        $totalCards = 0;
+        foreach( $orders as $order ) {
+            $totalCards += $order->orderItems->sum('quantity');
+        }
+    
         return [
             'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
             'total_orders' => $this->monthlyOrdersCount($currentDate),
+            'total_cards' => $totalCards
         ];
     }
 

@@ -32,7 +32,7 @@ export class CardProductEntity extends Entity {
     public cardNumberOrder!: string;
     public cardNumber!: string;
     public population!: number;
-    public imagePath!: string;
+    public imagePath!: any;
     public shortName!: string;
     public longName!: string;
     public addedByCustomer!: boolean;

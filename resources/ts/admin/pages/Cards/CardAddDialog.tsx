@@ -39,7 +39,7 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 export interface CardAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
     isUpdate?: boolean;
-    updateCard?: CardProductEntity;
+    updateCard?: CardProductEntity | any;
     addressId?: number;
     onSubmit(): Promise<void> | void;
 }

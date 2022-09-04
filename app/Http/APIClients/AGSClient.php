@@ -6,6 +6,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class AGSClient
 {
@@ -231,5 +232,46 @@ class AGSClient
         }
 
         return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/');
+    }
+
+    public function findCard(string $cardReference)
+    {
+        $route = '/find-card/';
+        $payload = [
+            'card_reference_id' => $cardReference,
+        ];
+        $response = Http::withToken($this->getAuthToken())
+            ->post($this->getBaseUrl() . $route, $payload);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: $route, payload: [$payload]);
+    }
+
+    public function updateCard(array $data, int|string $cardId): array
+    {
+        $route = '/cards/' . $cardId . '/';
+        $response = Http::withToken($this->getAuthToken())
+            ->patch($this->getBaseUrl() . $route, $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: $route, payload: [$data]);
+    }
+
+    public function deleteCard(int|string $cardId): array
+    {
+        $route = '/cards/' . $cardId . '/';
+        $response = Http::withToken($this->getAuthToken())->delete($this->getBaseUrl() . $route);
+
+        if ($response->status() === SymfonyResponse::HTTP_NO_CONTENT) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: $route, payload: []);
     }
 }

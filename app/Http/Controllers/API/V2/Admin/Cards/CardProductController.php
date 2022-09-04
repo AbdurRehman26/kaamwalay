@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Cards;
 
+use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
+use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
 use App\Http\Controllers\API\V1\Admin\Cards\CardProductController as V1CardProductController;
 use App\Http\Requests\API\V2\Admin\Card\UpdateCardProductRequest;
 use App\Http\Resources\API\V2\CardProduct\CardProductCollection;
@@ -24,6 +26,9 @@ class CardProductController extends V1CardProductController
         return new CardProductResource($cardProduct);
     }
 
+    /**
+     * @throws CardProductCanNotBeUpdated
+     */
     public function update(UpdateCardProductRequest $request, CardProduct $cardProduct): CardProductResource
     {
         $cardProduct = $this->cardProductService->updateCard($cardProduct, $request->validated());
@@ -31,9 +36,12 @@ class CardProductController extends V1CardProductController
         return new CardProductResource($cardProduct);
     }
 
+    /**
+     * @throws CardProductCanNotBeDeleted
+     */
     public function destroy(CardProduct $cardProduct): JsonResponse
     {
-        $cardProduct->deleteOrFail();
+        $this->cardProductService->deleteCard($cardProduct);
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }

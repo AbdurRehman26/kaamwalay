@@ -4,6 +4,8 @@ namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
+use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
+use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
 use App\Http\Filters\AdminCardProductSearchFilter;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
@@ -148,11 +150,68 @@ class CardProductService
             ->paginate(request('per_page', 10));
     }
 
+    /**
+     * @throws CardProductCanNotBeUpdated
+     */
     public function updateCard(CardProduct $cardProduct, array $data): CardProduct
     {
+        $agsResponse = $this->updateCardProductOnAgs($cardProduct, $data);
+
+        if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
+            throw new CardProductCanNotBeUpdated;
+        }
+
         $cardProduct->fill($data);
         $cardProduct->save();
 
         return $cardProduct;
+    }
+
+    protected function updateCardProductOnAgs(CardProduct $cardProduct, array $data): array
+    {
+        $updateData = [
+            'card_reference_id' => $cardProduct->card_reference_id,
+            'image_path' => $data['image_path'],
+            'name' => $data['name'],
+            'card_number_order' => $data['card_number'],
+            'language' => $data['language'],
+            'rarity' => $data['rarity'],
+            'edition' => $data['edition'] ?? 'Unlimited',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+        ];
+
+        try {
+            return $this->agsService->updateCard($updateData);
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
+        }
+    }
+
+    /**
+     * @throws CardProductCanNotBeDeleted
+     */
+    public function deleteCard(CardProduct $cardProduct)
+    {
+        $agsResponse = $this->deleteCardProductFromAgs($cardProduct);
+
+        if (! $agsResponse || ! array_key_exists('app_message', $agsResponse)) {
+            throw new CardProductCanNotBeDeleted;
+        }
+
+        $cardProduct->delete();
+    }
+
+    protected function deleteCardProductFromAgs(CardProduct $cardProduct): array
+    {
+        try {
+            return $this->agsService->deleteCard($cardProduct->card_reference_id);
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
+        }
     }
 }

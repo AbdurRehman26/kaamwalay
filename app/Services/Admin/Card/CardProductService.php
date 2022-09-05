@@ -13,6 +13,8 @@ use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\CardSurface;
+use App\Models\OrderStatus;
+use App\Models\UserCard;
 use App\Services\AGS\AgsService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -164,6 +166,8 @@ class CardProductService
         $cardProduct->fill($data);
         $cardProduct->save();
 
+        $this->reindexUserCards($cardProduct);
+
         return $cardProduct;
     }
 
@@ -202,6 +206,7 @@ class CardProductService
         }
 
         $cardProduct->delete();
+        $this->reindexUserCards($cardProduct, 'delete');
     }
 
     protected function deleteCardProductFromAgs(CardProduct $cardProduct): array
@@ -213,5 +218,19 @@ class CardProductService
 
             return [];
         }
+    }
+
+    protected function reindexUserCards(CardProduct $cardProduct, string $action = 'update'): void
+    {
+        $orderItemIds = $cardProduct->orderItems()
+            ->whereHas(
+                'order',
+                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
+            )
+            ->pluck('order_items.id')
+            ->toArray();
+
+        $userCards = UserCard::query()->whereIn('order_item_id', $orderItemIds);
+        $action === 'update' ? $userCards->searchable() : $userCards->unsearchable();
     }
 }

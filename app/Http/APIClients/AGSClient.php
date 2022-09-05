@@ -234,7 +234,7 @@ class AGSClient
         return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/');
     }
 
-    public function findCard(string $cardReference)
+    public function findCard(string $cardReference): array
     {
         $route = '/find-card/';
         $payload = [

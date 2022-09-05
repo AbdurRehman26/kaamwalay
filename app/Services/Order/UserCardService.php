@@ -6,6 +6,7 @@ use App\Http\Filters\UserCardSearchFilter;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Models\PopReportsCard;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
@@ -23,6 +24,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 class UserCardService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
+
+    public function __construct(protected AgsService $agsService)
+    {
+    }
 
     public function createItemUserCard(OrderItem $item): UserCard
     {
@@ -101,6 +106,64 @@ class UserCardService
         ->paginate($itemsPerPage);
     }
 
+    /**
+     * @param  string  $certificateId
+     * @return string
+     */
+    public function getPageUrl(string $certificateId): string
+    {
+        return route('feed.publicCardPage.view', $certificateId);
+    }
+
+    /**
+     * @param  string  $certificateId
+     * @return array
+     */
+    public function getAgsPopulationData(string $certificateId): array
+    {
+        $userCard = UserCard::where('certificate_number', $certificateId)->first();
+        $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
+        $gradeName = $this->prepareGradeForPublicCardPage($userCard);
+        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName['nickname'] ?? '');
+        $data = [];
+        if ($popData) {
+            $data = [
+                'PR' => $popData->pr,
+                'FR' => $popData->fr,
+                'GOOD' => $popData->good,
+                'GOOD+' => $popData->good_plus,
+                'VG' => $popData->vg,
+                'VG+' => $popData->vg_plus,
+                'VG-EX' => $popData->vg_ex,
+                'VG-EX+' => $popData->vg_ex_plus,
+                'EX' => $popData->ex,
+                'EX+' => $popData->ex_plus,
+                'EX-MT' => $popData->ex_mt,
+                'EX-MT+' => $popData->ex_mt_plus,
+                'NM' => $popData->nm,
+                'NM+' => $popData->nm_plus,
+                'NM-MT' => $popData->nm_mt,
+                'NM-MT+' => $popData->nm_mt_plus,
+                'MINT' => $popData->mint,
+                'MINT+' => $popData->mint_plus,
+                'GEM-MT' => $popData->gem_mt,
+                'totalPop' => $popData->total + $popData->total_plus,
+                'totalPopForCurrentCard' => $popData->$gradeNickName,
+            ];
+        }
+
+        return $data;
+    }
+    
+    /**
+     * @param  string  $nickname
+     * @return string
+     */
+    private function convertGradeNicknameToColumn(string $nickname): string
+    {
+        return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
+    }
+
     public function getDataForPublicCardPage(string $certificateId): array
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();
@@ -116,6 +179,7 @@ class UserCardService
             'is_fake' => $userCard->is_fake,
             'certificate_id' => $userCard->certificate_number,
             'grade' => $this->prepareGradeForPublicCardPage($userCard),
+            'owner' => $userCard->user->username,
             'card' => [
                 'name' => $userCard->orderItem->cardProduct->name,
                 'full_name' => $userCard->orderItem->cardProduct->getSearchableName(),
@@ -131,7 +195,8 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
+            'generated_images' => $this->agsService->getScannedImagesByCertificateId($certificateId),
+            'slabbed_images' => $this->agsService->getSlabbedImagesByCertificateId($certificateId),
             'social_images' => $userCard->social_images,
         ];
     }

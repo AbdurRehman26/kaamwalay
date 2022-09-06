@@ -131,7 +131,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             'email',
             'customer_number',
             'created_at',
-            'phone',
         ];
     }
 

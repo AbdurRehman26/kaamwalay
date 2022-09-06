@@ -44,7 +44,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                                 ) : null}
                             </TableSortLabel>
                         ) : (
-                            <TableCell variant={'head'}>{headCell.label}</TableCell>
+                            <>{headCell.label}</>
                         )}
                     </TableCell>
                 ))}

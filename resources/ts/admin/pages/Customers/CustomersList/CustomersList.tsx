@@ -64,7 +64,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'Phone',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'created_at',

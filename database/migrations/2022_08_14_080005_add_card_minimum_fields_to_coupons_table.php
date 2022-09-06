@@ -33,7 +33,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('coupons', function (Blueprint $table) {
-            //
+            $table->dropColumn(['min_threshold_value', 'min_threshold_type']);
         });
     }
 };

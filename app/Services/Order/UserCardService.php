@@ -146,7 +146,6 @@ class UserCardService
     }
 
      /**
-     * @param  string  $certificateId
      * @param  UserCard  $userCard
      * @return array
      */

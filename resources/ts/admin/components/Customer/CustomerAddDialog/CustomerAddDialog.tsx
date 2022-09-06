@@ -24,7 +24,8 @@ import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
-    customerAdded(customer: CustomerEntity): void;
+    customerAdded?(customer: CustomerEntity): void;
+    fromSubmission?: boolean;
 }
 
 const Root = styled(Dialog)(({ theme }) => ({
@@ -95,7 +96,7 @@ const useStyles = makeStyles(
     { name: 'AddCustomerDialog' },
 );
 
-export function CustomerAddDialog({ onClose, customerAdded, ...rest }: CustomerAddDialogProps) {
+export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: CustomerAddDialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -129,7 +130,7 @@ export function CustomerAddDialog({ onClose, customerAdded, ...rest }: CustomerA
                     .unwrap()
                     .then((customer: CustomerEntity) => {
                         handleClose({});
-                        customerAdded(customer);
+                        customerAdded?.(customer);
                     });
             } catch (e: any) {
                 notifications.exception(e);
@@ -258,7 +259,7 @@ export function CustomerAddDialog({ onClose, customerAdded, ...rest }: CustomerA
                                 loading={loading}
                                 variant={'contained'}
                             >
-                                Add Customer
+                                {fromSubmission ? 'Add Customer & Start Submission' : 'Add Customer'}
                             </LoadingButton>
                         </DialogActions>
                     </Form>

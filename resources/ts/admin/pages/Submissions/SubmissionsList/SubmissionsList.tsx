@@ -26,7 +26,7 @@ const TabContent = styled(TabPanel)(
 export function SubmissionsList() {
     const { tab } = useParams<{ tab: string }>();
     const [search, setSearch] = useState('');
-    const [createSubmission, setCreateSubmission] = useState(false);
+    const [createSubmission, setCreateSubmission] = useState(true);
 
     const tabs = (
         <TabList indicatorColor={'primary'} textColor={'primary'}>

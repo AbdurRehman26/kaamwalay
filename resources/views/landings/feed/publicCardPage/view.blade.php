@@ -187,7 +187,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__copy-to-clipBoard">
-                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board" data-content="{{ $pageUrl }}" data-button-content="mobile">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $pageUrl }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>

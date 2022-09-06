@@ -106,64 +106,6 @@ class UserCardService
         ->paginate($itemsPerPage);
     }
 
-    /**
-     * @param  string  $certificateId
-     * @return string
-     */
-    public function getPageUrl(string $certificateId): string
-    {
-        return route('feed.publicCardPage.view', $certificateId);
-    }
-
-    /**
-     * @param  string  $certificateId
-     * @return array
-     */
-    public function getAgsPopulationData(string $certificateId): array
-    {
-        $userCard = UserCard::where('certificate_number', $certificateId)->first();
-        $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
-        $gradeName = $this->prepareGradeForPublicCardPage($userCard);
-        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName['nickname'] ?? '');
-        $data = [];
-        if ($popData) {
-            $data = [
-                'PR' => $popData->pr,
-                'FR' => $popData->fr,
-                'GOOD' => $popData->good,
-                'GOOD+' => $popData->good_plus,
-                'VG' => $popData->vg,
-                'VG+' => $popData->vg_plus,
-                'VG-EX' => $popData->vg_ex,
-                'VG-EX+' => $popData->vg_ex_plus,
-                'EX' => $popData->ex,
-                'EX+' => $popData->ex_plus,
-                'EX-MT' => $popData->ex_mt,
-                'EX-MT+' => $popData->ex_mt_plus,
-                'NM' => $popData->nm,
-                'NM+' => $popData->nm_plus,
-                'NM-MT' => $popData->nm_mt,
-                'NM-MT+' => $popData->nm_mt_plus,
-                'MINT' => $popData->mint,
-                'MINT+' => $popData->mint_plus,
-                'GEM-MT' => $popData->gem_mt,
-                'totalPop' => $popData->total + $popData->total_plus,
-                'totalPopForCurrentCard' => $popData->$gradeNickName,
-            ];
-        }
-
-        return $data;
-    }
-    
-    /**
-     * @param  string  $nickname
-     * @return string
-     */
-    private function convertGradeNicknameToColumn(string $nickname): string
-    {
-        return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
-    }
-
     public function getDataForPublicCardPage(string $certificateId): array
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();
@@ -198,7 +140,68 @@ class UserCardService
             'generated_images' => $this->agsService->getScannedImagesByCertificateId($certificateId),
             'slabbed_images' => $this->agsService->getSlabbedImagesByCertificateId($certificateId),
             'social_images' => $userCard->social_images,
+            'page_url' => $this->getPageUrl($certificateId),
+            'pop_data' => $this->getAgsPopulationData($userCard),
         ];
+    }
+
+     /**
+     * @param  string  $certificateId
+     * @param  UserCard  $userCard
+     * @return array
+     */
+    protected function getAgsPopulationData(UserCard $userCard): array
+    {
+        $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
+        $gradeName = $this->prepareGradeForPublicCardPage($userCard);
+        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName['nickname'] ?? '');
+
+        $data = [];
+        if ($popData) {
+            $data = [
+                'PR' => $popData->pr,
+                'FR' => $popData->fr,
+                'GOOD' => $popData->good,
+                'GOOD+' => $popData->good_plus,
+                'VG' => $popData->vg,
+                'VG+' => $popData->vg_plus,
+                'VG-EX' => $popData->vg_ex,
+                'VG-EX+' => $popData->vg_ex_plus,
+                'EX' => $popData->ex,
+                'EX+' => $popData->ex_plus,
+                'EX-MT' => $popData->ex_mt,
+                'EX-MT+' => $popData->ex_mt_plus,
+                'NM' => $popData->nm,
+                'NM+' => $popData->nm_plus,
+                'NM-MT' => $popData->nm_mt,
+                'NM-MT+' => $popData->nm_mt_plus,
+                'MINT' => $popData->mint,
+                'MINT+' => $popData->mint_plus,
+                'GEM-MT' => $popData->gem_mt,
+                'totalPop' => $popData->total + $popData->total_plus,
+                'totalPopForCurrentCard' => $popData->$gradeNickName,
+            ];
+        }
+
+        return $data;
+    }
+
+     /**
+     * @param  string  $nickname
+     * @return string
+     */
+    protected function convertGradeNicknameToColumn(string $nickname): string
+    {
+        return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
+    }
+
+    /**
+     * @param  string  $certificateId
+     * @return string
+     */
+    protected function getPageUrl(string $certificateId): string
+    {
+        return route('feed.card.view', $certificateId);
     }
 
     protected function prepareGradeForPublicCardPage(UserCard $userCard): array

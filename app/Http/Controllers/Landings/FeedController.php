@@ -24,14 +24,12 @@ class FeedController extends Controller
     public function getView(string $certificateId): View
     {
         $data = $this->userCardService->getDataForPublicCardPage($certificateId);
-        $data['popData'] = $this->userCardService->getAgsPopulationData($certificateId);
-        $data['pageUrl'] = $this->userCardService->getPageUrl($certificateId);
 
-        return view('landings.feed.publicCardPage.view', $data);
+        return view('landings.feed.card.view', $data);
     }
 
     public function cardRedirect(string $certificateId): RedirectResponse
     {
-        return redirect()->route('feed.view', ['certificateId' => $certificateId]);
+        return redirect()->route('feed.card.view', ['certificateId' => $certificateId]);
     }
 }

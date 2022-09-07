@@ -2,14 +2,14 @@
 
 namespace App\Http\Sorts;
 
-use App\Models\User;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Sorts\Sort;
 
-class AdminCustomerFullNameSort implements Sort
+class AdminSubmissionsCardsSort implements Sort
 {
     /**
-     * @param  Builder<User>  $query
+     * @param  Builder<Order>  $query
      * @param  bool  $descending
      * @param  string  $property
      * @return void
@@ -18,6 +18,6 @@ class AdminCustomerFullNameSort implements Sort
     {
         $direction = $descending ? 'DESC' : 'ASC';
 
-        $query->orderBy('first_name', $direction)->orderBy('last_name', $direction);
+        $query->withSum('orderItems', 'quantity')->orderBy('order_items_sum_quantity', $direction);
     }
 }

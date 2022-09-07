@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Sorts\Sort;
 
-class AdminCustomerFullNameSort implements Sort
+class AdminCustomerWalletSort implements Sort
 {
     /**
      * @param  Builder<User>  $query
@@ -18,6 +18,6 @@ class AdminCustomerFullNameSort implements Sort
     {
         $direction = $descending ? 'DESC' : 'ASC';
 
-        $query->orderBy('first_name', $direction)->orderBy('last_name', $direction);
+        $query->withSum('wallet', 'balance')->orderBy('wallet_sum_balance', $direction);
     }
 }

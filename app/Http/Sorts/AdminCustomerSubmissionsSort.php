@@ -2,11 +2,12 @@
 
 namespace App\Http\Sorts;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Sorts\Sort;
 
-class AdminCustomerFullNameSort implements Sort
+class AdminCustomerSubmissionsSort implements Sort
 {
     /**
      * @param  Builder<User>  $query
@@ -18,6 +19,8 @@ class AdminCustomerFullNameSort implements Sort
     {
         $direction = $descending ? 'DESC' : 'ASC';
 
-        $query->orderBy('first_name', $direction)->orderBy('last_name', $direction);
+        $query->withCount(['orders' => function (Builder $q) {
+            $q->where('payment_status', OrderPaymentStatusEnum::PAID);
+        }])->orderBy('orders_count', $direction);
     }
 }

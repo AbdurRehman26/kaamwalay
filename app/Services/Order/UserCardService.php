@@ -116,6 +116,8 @@ class UserCardService
             ];
         }
 
+        $data = $this->agsService->getGradesByCertificateId($certificateId);
+
         return [
             'grades_available' => true,
             'is_fake' => $userCard->is_fake,
@@ -137,11 +139,108 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->agsService->getScannedImagesByCertificateId($certificateId),
-            'slabbed_images' => $this->agsService->getSlabbedImagesByCertificateId($certificateId),
+            'generated_images' => $this->getScannedImagesByCertificateId($data),
+            'slabbed_images' => $this->getSlabbedImagesByCertificateId($data),
             'social_images' => $userCard->social_images,
             'page_url' => $this->getPageUrl($certificateId),
             'pop_data' => $this->getAgsPopulationData($userCard),
+        ];
+    }
+
+     /**
+     * @param  array  $data
+     * @return array
+     */
+    public function getScannedImagesByCertificateId(array $data): array
+    {
+        if (
+            empty($data) ||
+            $data['count'] === 0 ||
+            (
+                empty($data['results'][0]['laser_front_scan']) &&
+                empty($data['results'][0]['laser_back_scan']) &&
+                empty($data['results'][0]['front_scan']) &&
+                empty($data['results'][0]['back_scan'])
+            )
+        ) {
+            return [];
+        }
+
+        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
+    }
+
+    /**
+     * @param  array  $data
+     * @return array
+     */
+    protected function prepareGeneratedImagesForPublicPage(array $data): array
+    {
+        $imagesData = [
+            'front' => [
+                [
+                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+            'back' => [
+                [
+                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+        ];
+
+        return array_filter($imagesData, function (array $imageData) {
+            return $imageData[0]['output_image'] !== null;
+        });
+    }
+
+    /**
+     * @param  array  $data
+     * @return array
+     */
+    protected function getSlabbedImagesByCertificateId(array $data): array
+    {
+
+        if (empty($data) || $data['count'] === 0) {
+            return [];
+        }
+        if (
+            ! empty($data['results'][0]['front_slab_image']) &&
+            ! empty($data['results'][0]['back_slab_image'])
+        ) {
+            return  [
+                    'front_slab_image' => $data['results'][0]['front_slab_image'],
+                    'back_slab_image' => $data['results'][0]['back_slab_image'],
+            ];
+        }
+
+        return [
+            'image_path' => $data['results'][0]['card']['image_path'] ?? null,
         ];
     }
 
@@ -200,7 +299,7 @@ class UserCardService
      */
     protected function getPageUrl(string $certificateId): string
     {
-        return route('feed.card.view', $certificateId);
+        return route('feed.view', $certificateId);
     }
 
     protected function prepareGradeForPublicCardPage(UserCard $userCard): array

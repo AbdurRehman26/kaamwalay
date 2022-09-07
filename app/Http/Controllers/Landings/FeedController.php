@@ -30,6 +30,6 @@ class FeedController extends Controller
 
     public function cardRedirect(string $certificateId): RedirectResponse
     {
-        return redirect()->route('feed.card.view', ['certificateId' => $certificateId]);
+        return redirect()->route('feed.view', ['certificateId' => $certificateId]);
     }
 }

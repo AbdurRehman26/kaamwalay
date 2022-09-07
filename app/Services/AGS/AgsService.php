@@ -88,51 +88,7 @@ class AgsService
         ]);
     }
 
-    /**
-     * @param  string  $certificateId
-     * @return array
-     */
-    public function getSlabbedImagesByCertificateId(string $certificateId): array
-    {
-        $data = $this->getGradesByCertificateId($certificateId);
-
-        if (empty($data) || $data['count'] === 0) {
-            return [];
-        }
-        if (
-            ! empty($data['results'][0]['front_slab_image']) &&
-            ! empty($data['results'][0]['back_slab_image'])
-        ) {
-            return  [
-                    'front_slab_image' => $data['results'][0]['front_slab_image'],
-                    'back_slab_image' => $data['results'][0]['back_slab_image'],
-            ];
-        }
-
-        return [
-            'image_path' => $data['results'][0]['card']['image_path'] ?? null,
-        ];
-    }
-
-    public function getScannedImagesByCertificateId(string $certificateId): array
-    {
-        $data = $this->getGradesByCertificateId($certificateId);
-
-        if (
-            empty($data) ||
-            $data['count'] === 0 ||
-            (
-                empty($data['results'][0]['laser_front_scan']) &&
-                empty($data['results'][0]['laser_back_scan']) &&
-                empty($data['results'][0]['front_scan']) &&
-                empty($data['results'][0]['back_scan'])
-            )
-        ) {
-            return [];
-        }
-
-        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
-    }
+    
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
@@ -170,7 +126,6 @@ class AgsService
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
             'back_scan' => $this->prepareBackScanGradesForPublicPage($data),
-            'generated_images' => $this->prepareGeneratedImagesForPublicPage($data),
         ];
     }
 
@@ -301,56 +256,6 @@ class AgsService
             'edges' => $data['back_edges_human_grade'] ?? $data['back_scan']['edges_grade']['grade'] ?? null,
             'corners' => $data['back_corners_human_grade'] ?? $data['back_scan']['corners_grade']['grade'] ?? null,
         ];
-    }
-
-    /**
-     * @param  array  $data
-     * @return array
-     */
-    protected function prepareGeneratedImagesForPublicPage(array $data): array
-    {
-        $imagesData = [
-            'front' => [
-                [
-                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Centering',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Surface',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Edges',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Corners',
-                ],
-            ],
-            'back' => [
-                [
-                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Centering',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Surface',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Edges',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Corners',
-                ],
-            ],
-        ];
-
-        return array_filter($imagesData, function (array $imageData) {
-            return $imageData[0]['output_image'] !== null;
-        });
     }
 
     public function getCardSeries(array $data): array

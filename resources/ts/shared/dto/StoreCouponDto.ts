@@ -11,4 +11,6 @@ export class StoreCouponDto {
     couponables!: number[];
     description!: string;
     usageAllowedPerUser!: number | null;
+    hasMinimumCardsThreshold!: boolean;
+    minThresholdValue!: number;
 }

@@ -92,6 +92,18 @@ export function useListQuery<
         [fetch],
     );
 
+    const searchSortedWithPagination = useCallback(
+        (sortFilter: Record<string, any>, searchFilter: Record<string, any>, pageNumber?: number) =>
+            fetch({
+                params: {
+                    sort: sortFilter,
+                    filter: searchFilter,
+                    page: Math.min(lastPage, Math.max(1, pageNumber ?? currentPage)),
+                },
+            }),
+        [fetch, lastPage, currentPage],
+    );
+
     const handleChangePage = useCallback(
         async function handleChangePage(e, page: number) {
             await getPage(page + 1);
@@ -131,6 +143,7 @@ export function useListQuery<
             search,
             sort,
             searchSorted,
+            searchSortedWithPagination,
             paginationProps: {
                 count: pagination.meta?.total || 0,
                 page: currentPage - 1,
@@ -150,6 +163,7 @@ export function useListQuery<
             previousPage,
             sort,
             searchSorted,
+            searchSortedWithPagination,
             search,
             currentPage,
             perPage,

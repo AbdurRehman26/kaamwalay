@@ -37,7 +37,7 @@ class OrderPaymentResource extends BaseResource
             return $this->getManualPaymentResponse();
         }
 
-        if ($this->order->paymentMethod->code === 'paypal' && $this->type !== OrderPayment::TYPE_REFUND) {
+        if ($this->order->paymentMethod->isPaypal() && $this->type !== OrderPayment::TYPE_REFUND) {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         } elseif ($this->paymentMethod->isCollectorCoin()) {
             return $this->collectorCoinData(json_decode($this->response, associative: true) ?? []);
@@ -69,6 +69,7 @@ class OrderPaymentResource extends BaseResource
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
             'created_at' => $this->formatDate($this->created_at),
         ];
     }
@@ -80,6 +81,8 @@ class OrderPaymentResource extends BaseResource
                 "email" => $response['payer']['email_address'] ?? "N/A",
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 
@@ -91,6 +94,8 @@ class OrderPaymentResource extends BaseResource
                 'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
                 'complete_hash' => $response['txn_hash'],
             ],
+            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 

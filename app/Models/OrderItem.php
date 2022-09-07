@@ -100,4 +100,14 @@ class OrderItem extends Model
     {
         return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
     }
+
+    public function isGraded(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::GRADED;
+    }
+
+    public function canCreateLabel(): bool
+    {
+        return $this->cardProduct->cardLabel()->doesntExist() && $this->isGraded();
+    }
 }

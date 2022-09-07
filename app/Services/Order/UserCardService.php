@@ -139,8 +139,8 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->getScannedImagesByCertificateId($data),
-            'slabbed_images' => $this->getSlabbedImagesByCertificateId($data),
+            'generated_images' => $this->pepareScannedImagesForPublicCardPage($data),
+            'slabbed_images' => $this->prepareSlabbedImagesForPublicCardPage($data),
             'social_images' => $userCard->social_images,
             'page_url' => $this->getPageUrl($certificateId),
             'pop_data' => $this->getAgsPopulationData($userCard),
@@ -151,7 +151,7 @@ class UserCardService
      * @param  array  $data
      * @return array
      */
-    public function getScannedImagesByCertificateId(array $data): array
+    public function pepareScannedImagesForPublicCardPage(array $data): array
     {
         if (
             empty($data) ||
@@ -223,7 +223,7 @@ class UserCardService
      * @param  array  $data
      * @return array
      */
-    protected function getSlabbedImagesByCertificateId(array $data): array
+    protected function prepareSlabbedImagesForPublicCardPage(array $data): array
     {
         if (empty($data) || $data['count'] === 0) {
             return [];

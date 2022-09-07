@@ -1741,11 +1741,6 @@ parameters:
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Sorts\\\\AdminCustomerFullNameSort\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Sorts/AdminCustomerFullNameSort.php
-
-		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Imports/CardProductAttributesUpdate.php
@@ -3034,4 +3029,3 @@ parameters:
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
-

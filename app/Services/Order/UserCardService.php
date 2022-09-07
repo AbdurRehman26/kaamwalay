@@ -225,7 +225,6 @@ class UserCardService
      */
     protected function getSlabbedImagesByCertificateId(array $data): array
     {
-
         if (empty($data) || $data['count'] === 0) {
             return [];
         }

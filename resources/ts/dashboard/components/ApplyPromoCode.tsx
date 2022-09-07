@@ -62,11 +62,12 @@ export function ApplyPromoCode() {
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
+    const totalCardItems = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
 
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}&items_count=${totalCardItems}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -84,7 +85,7 @@ export function ApplyPromoCode() {
                 dispatch(setValidCouponId(-1));
             }
         },
-        [apiService, dispatch, selectedServiceLevelID, showInvalidState],
+        [apiService, dispatch, selectedServiceLevelID, showInvalidState, totalCardItems],
     );
 
     const debounceCheckCoupon = useMemo(
@@ -140,6 +141,7 @@ export function ApplyPromoCode() {
                 code: couponCode,
                 id: validCouponId,
             },
+            itemsCount: totalCardItems,
         };
         try {
             const endpointUrl = id

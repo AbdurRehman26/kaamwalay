@@ -16,6 +16,8 @@
  * @apiParam {Boolean} is_permanent boolean value representing whether the code is for permanent use. Example: true or 1
  * @apiParam {String} available_till datetime value representing the end of availability of the coupon, accepted format is: Y-m-d H:i:s.
  * @apiParam {Array} couponables array containing IDs of the resource to which the coupon will be applied. Example: [1,2,3]
+ * @apiParam {Boolean} has_minimum_cards_threshold boolean to indicate whether the card has min card count threshold or not. Example: true
+ * @apiParam {Number} min_threshold_value min card count threshold. Example: 2
  * @apiSuccess {Object} data Coupon data
  *
  * @apiSuccessExample Success-Response:

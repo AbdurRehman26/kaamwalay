@@ -264,7 +264,8 @@ class CreateOrderService
     protected function storeCouponAndDiscount(array $couponData): void
     {
         if (! empty($couponData['code'])) {
-            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
+            $couponParams = ['items_count' => $this->order->orderItems()->count()];
+            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'], $couponParams)->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             $this->order->save();
         }

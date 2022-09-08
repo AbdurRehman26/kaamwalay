@@ -102,9 +102,11 @@
             justify-content: space-between;
             background: rgb(244, 244, 251);
             padding: 20px;
+
             @include breakpoints.down(768) {
                 width: 100% !important;
             }
+
             @include breakpoints.down(1024) {
                 width: 1200px;
             }
@@ -412,8 +414,8 @@
         }
 
         &__heading {
-            font-size: 40px;
-            line-height: 34px;
+            font-size: 34px;
+            line-height: 40px;
             margin-bottom: 6px;
             font-weight: 700;
 
@@ -446,10 +448,9 @@
 
         &__grade {
             width: 84px;
-            height: 86px;
+            height: 90px;
             background: #20bfb8;
             border-radius: 8px;
-            padding: 18px;
             display: inline-flex;
             flex-direction: column;
             align-items: center;
@@ -468,24 +469,30 @@
             }
 
             &-label {
-                font-size: 20px;
-                line-height: 20px;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 12px;
+                text-align: center;
+                letter-spacing: 0.5px;
+                color: #ffffff;
                 margin-bottom: 6px;
                 text-transform: uppercase;
 
                 @include breakpoints.down(xs) {
-                    font-size: 16px;
+                    font-size: 12px;
                     margin-bottom: 0;
                 }
             }
 
             &-score {
-                font-weight: 700;
-                font-size: 40px;
-                line-height: 40px;
+                font-weight: 900;
+                font-size: 44px;
+                line-height: 52px;
+                text-align: center;
+                color: #ffffff;
 
                 @include breakpoints.down(xs) {
-                    font-size: 28px;
+                    font-size: 40px;
                 }
             }
         }
@@ -629,7 +636,7 @@
             }
 
             @include breakpoints.down(1024) {
-                width: 360px;
+                width: 340px;
                 height: 450px;
             }
         }
@@ -659,6 +666,7 @@
                 max-width: 100%;
                 display: block !important;
             }
+
             @include breakpoints.down(1024) {
                 display: flex;
             }
@@ -756,6 +764,7 @@
         &--back {
             padding-top: 40px;
             padding-bottom: 60px;
+
             @include breakpoints.down(1024) {
                 padding-bottom: 40px;
             }
@@ -926,6 +935,14 @@
 
         .container {
             height: 530px;
+
+            @media only screen and (min-width: 768px) {
+                height: 410px;
+            }
+
+            @media only screen and (min-width: 1280px) {
+                height: 530px;
+            }
         }
 
         @include breakpoints.down(768) {
@@ -939,6 +956,33 @@
             @include breakpoints.down(768) {
                 padding: 5px 5px 0px 0px;
                 border-radius: 8px;
+                width: 260px;
+                height: 183px;
+            }
+
+            @media only screen and (min-width: 360px) {
+                height: 163px;
+            }
+
+            @media only screen and (min-width: 375px) {
+                height: 170px;
+            }
+
+            @media only screen and (min-width: 390px) {
+                height: 177px;
+            }
+
+            @media only screen and (min-width: 414px) {
+                height: 189px;
+            }
+
+            @media only screen and (min-width: 412px) {
+                height: 183px;
+            }
+
+            @media only screen and (min-width: 540px) {
+                width: 100%;
+                height: 100%;
             }
         }
 
@@ -951,8 +995,30 @@
             border-radius: 20px;
             padding: 10px 20px;
 
+            @include breakpoints.down(1024) {
+                margin-top: -120px;
+            }
+
             @include breakpoints.down(768) {
-                margin-top: -100px;
+                margin-top: -100px !important;
+                margin-left: -20px;
+            }
+
+            @media only screen and (min-width: 1024px) {
+                margin-top: -136px;
+            }
+
+            @media only screen and (min-width: 658px) {
+                margin-top: -110px;
+                margin-left: 0px;
+            }
+
+            @media only screen and (min-width: 1280px) {
+                margin-top: -180px;
+            }
+
+            @media only screen and (min-width: 540px) and (max-width: 720px) {
+                margin-top: -80px;
                 margin-left: -20px;
             }
         }
@@ -975,6 +1041,44 @@
                 width: 470px;
                 height: 66%;
             }
+
+            @media only screen and (min-width: 360px) {
+                width: 470px;
+                height: 60%;
+            }
+
+            @media only screen and (min-width: 412px) {
+                width: 470px;
+                height: 70%;
+            }
+
+            @media only screen and (min-width: 600px) and (max-width: 1024px) {
+                width: 322px;
+            }
+
+            @media only screen and (min-width: 768px) and (max-width: 1024px) {
+                width: 254px;
+            }
+
+            @media only screen and (min-width: 540px) and (max-width: 720px) {
+                width: 175px;
+            }
+
+            @media only screen and (min-width: 820px) and (max-width: 1180px) {
+                width: 270px;
+            }
+
+            @media only screen and (min-width: 912px) and (max-width: 1368px) {
+                width: 305px;
+            }
+
+            @media only screen and (min-width: 1024px) {
+                width: 325px;
+            }
+
+            @media only screen and (min-width: 1280px) {
+                width: 433px;
+            }
         }
 
         &__cards-back {
@@ -988,6 +1092,34 @@
             @include breakpoints.down(768) {
                 width: 470px;
                 height: 66%;
+            }
+
+            @media only screen and (min-width: 600px) and (max-width: 1024px) {
+                width: 322px;
+            }
+
+            @media only screen and (min-width: 768px) and (max-width: 1024px) {
+                width: 254px;
+            }
+
+            @media only screen and (min-width: 540px) and (max-width: 720px) {
+                width: 175px;
+            }
+
+            @media only screen and (min-width: 820px) and (max-width: 1180px) {
+                width: 270px;
+            }
+
+            @media only screen and (min-width: 912px) and (max-width: 1368px) {
+                width: 305px;
+            }
+
+            @media only screen and (min-width: 1024px) {
+                width: 325px;
+            }
+
+            @media only screen and (min-width: 1280px) {
+                width: 433px;
             }
         }
     }

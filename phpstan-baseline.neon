@@ -2816,6 +2816,16 @@ parameters:
 			path: app/Services/Admin/Card/CardSetService.php
 
 		-
+			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'CN'\\} given\\.$#"
+			count: 1
+			path: app/Services/Admin/Card/CreateCardLabelService.php
+
+		-
+			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'DECK', 'BOX TOPPER', 'PIN CLUB'\\} given\\.$#"
+			count: 2
+			path: app/Services/Admin/Card/CreateCardLabelService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/CardGradingService.php

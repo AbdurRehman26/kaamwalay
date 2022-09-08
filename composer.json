@@ -26,6 +26,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mailchimp/marketing": "*",
+        "opcodesio/log-viewer": "^1.2",
         "paypal/paypal-checkout-sdk": "^1.0",
         "picqer/php-barcode-generator": "^2.2",
         "predis/predis": "^1.1",

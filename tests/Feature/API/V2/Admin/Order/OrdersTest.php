@@ -34,10 +34,10 @@ beforeEach(function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['order_status_id' => OrderStatus::PLACED],
-        ['order_status_id' => OrderStatus::CONFIRMED],
-        ['order_status_id' => OrderStatus::GRADED],
-        ['order_status_id' => OrderStatus::SHIPPED],
+        ['order_status_id' => OrderStatus::PLACED, 'created_at' => '2022-01-01 00:00:00'],
+        ['order_status_id' => OrderStatus::CONFIRMED, 'created_at' => '2022-02-01 00:00:00'],
+        ['order_status_id' => OrderStatus::GRADED, 'created_at' => '2022-03-01 00:00:00'],
+        ['order_status_id' => OrderStatus::SHIPPED, 'created_at' => '2022-04-01 00:00:00'],
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -48,13 +48,22 @@ beforeEach(function () {
         ['order_status_id' => $this->orders[4]->order_status_id, 'order_id' => $this->orders[4]->id, 'user_id' => $this->orders[4]->user_id]
     )->create();
 
-    OrderItem::factory()->count(2)
+    OrderItem::factory()->count(5)
         ->state(new Sequence(
             [
                 'order_id' => $this->orders[0]->id,
             ],
             [
                 'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[2]->id,
+            ],
+            [
+                'order_id' => $this->orders[3]->id,
+            ],
+            [
+                'order_id' => $this->orders[4]->id,
             ]
         ))
         ->create();

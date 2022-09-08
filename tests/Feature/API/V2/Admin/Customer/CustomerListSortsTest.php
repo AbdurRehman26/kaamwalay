@@ -110,28 +110,6 @@ it('returns customers list order by desc signed up date', function () {
     );
 });
 
-it('returns customers list order by asc phone', function () {
-    $response = $this->getJson(route('v2.customers.index', [
-        'sort' => 'phone',
-    ]))->assertOk();
-
-    $this->assertEquals(
-        User::customer()->orderBy('phone')->pluck('email')->toArray(),
-        collect($response->getData()->data)->pluck('email')->toArray()
-    );
-});
-
-it('returns customers list order by desc phone', function () {
-    $response = $this->getJson(route('v2.customers.index', [
-        'sort' => '-phone',
-    ]))->assertOk();
-
-    $this->assertEquals(
-        User::customer()->orderBy('phone', 'DESC')->pluck('email')->toArray(),
-        collect($response->getData()->data)->pluck('email')->toArray()
-    );
-});
-
 it('returns customers list order by asc submissions number', function () {
     $response = $this->getJson(route('v2.customers.index', [
         'sort' => 'submissions',

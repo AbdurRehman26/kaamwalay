@@ -106,25 +106,153 @@ class UserCardService
         ->paginate($itemsPerPage);
     }
 
-    /**
-     * @param  string  $certificateId
-     * @return string
-     */
-    public function getPageUrl(string $certificateId): string
+    public function getDataForPublicCardPage(string $certificateId): array
     {
-        return route('feed.publicCardPage.view', $certificateId);
+        $userCard = UserCard::where('certificate_number', $certificateId)->first();
+
+        if (empty($userCard) || $userCard->orderItem->order->order_status_id !== OrderStatus::SHIPPED) {
+            return [
+                'grades_available' => false,
+            ];
+        }
+
+        $data = $this->agsService->getGradesByCertificateId($certificateId);
+
+        return [
+            'grades_available' => true,
+            'is_fake' => $userCard->is_fake,
+            'certificate_id' => $userCard->certificate_number,
+            'grade' => $this->prepareGradeForPublicCardPage($userCard),
+            'owner' => $userCard->user->username,
+            'card' => [
+                'name' => $userCard->orderItem->cardProduct->name,
+                'full_name' => $userCard->orderItem->cardProduct->getSearchableName(),
+                'image_path' => $userCard->orderItem->cardProduct->image_path,
+                'type' => $userCard->orderItem->cardProduct->cardCategory->name,
+                'series' => $userCard->orderItem->cardProduct->cardSet->cardSeries->name,
+                'set' => $userCard->orderItem->cardProduct->cardSet->name,
+                'release_date' => ! empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
+                    Carbon::parse($userCard->orderItem->cardProduct->cardSet->release_date)->format('F d, Y') :
+                    null,
+                'number' => $userCard->orderItem->cardProduct->card_number_order ?? null,
+            ],
+            'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
+            'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
+            'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
+            'generated_images' => $this->pepareScannedImagesForPublicCardPage($data),
+            'slabbed_images' => $this->prepareSlabbedImagesForPublicCardPage($data),
+            'social_images' => $userCard->social_images,
+            'page_url' => $this->getPageUrl($certificateId),
+            'pop_data' => $this->getAgsPopulationData($userCard),
+        ];
+    }
+
+     /**
+     * @param  array  $data
+     * @return array
+     */
+    public function pepareScannedImagesForPublicCardPage(array $data): array
+    {
+        if (
+            empty($data) ||
+            $data['count'] === 0 ||
+            (
+                empty($data['results'][0]['laser_front_scan']) &&
+                empty($data['results'][0]['laser_back_scan']) &&
+                empty($data['results'][0]['front_scan']) &&
+                empty($data['results'][0]['back_scan'])
+            )
+        ) {
+            return [];
+        }
+
+        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
     }
 
     /**
-     * @param  string  $certificateId
+     * @param  array  $data
      * @return array
      */
-    public function getAgsPopulationData(string $certificateId): array
+    protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
-        $userCard = UserCard::where('certificate_number', $certificateId)->first();
+        $imagesData = [
+            'front' => [
+                [
+                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+            'back' => [
+                [
+                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+        ];
+
+        return array_filter($imagesData, function (array $imageData) {
+            return $imageData[0]['output_image'] !== null;
+        });
+    }
+
+    /**
+     * @param  array  $data
+     * @return array
+     */
+    protected function prepareSlabbedImagesForPublicCardPage(array $data): array
+    {
+        if (empty($data) || $data['count'] === 0) {
+            return [];
+        }
+        if (
+            ! empty($data['results'][0]['front_slab_image']) &&
+            ! empty($data['results'][0]['back_slab_image'])
+        ) {
+            return  [
+                    'front_slab_image' => $data['results'][0]['front_slab_image'],
+                    'back_slab_image' => $data['results'][0]['back_slab_image'],
+            ];
+        }
+
+        return [
+            'image_path' => $data['results'][0]['card']['image_path'] ?? null,
+        ];
+    }
+
+     /**
+     * @param  UserCard  $userCard
+     * @return array
+     */
+    protected function getAgsPopulationData(UserCard $userCard): array
+    {
         $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
         $gradeName = $this->prepareGradeForPublicCardPage($userCard);
         $gradeNickName = $this->convertGradeNicknameToColumn($gradeName['nickname'] ?? '');
+
         $data = [];
         if ($popData) {
             $data = [
@@ -154,51 +282,23 @@ class UserCardService
 
         return $data;
     }
-    
-    /**
+
+     /**
      * @param  string  $nickname
      * @return string
      */
-    private function convertGradeNicknameToColumn(string $nickname): string
+    protected function convertGradeNicknameToColumn(string $nickname): string
     {
         return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
     }
 
-    public function getDataForPublicCardPage(string $certificateId): array
+    /**
+     * @param  string  $certificateId
+     * @return string
+     */
+    protected function getPageUrl(string $certificateId): string
     {
-        $userCard = UserCard::where('certificate_number', $certificateId)->first();
-
-        if (empty($userCard) || $userCard->orderItem->order->order_status_id !== OrderStatus::SHIPPED) {
-            return [
-                'grades_available' => false,
-            ];
-        }
-
-        return [
-            'grades_available' => true,
-            'is_fake' => $userCard->is_fake,
-            'certificate_id' => $userCard->certificate_number,
-            'grade' => $this->prepareGradeForPublicCardPage($userCard),
-            'owner' => $userCard->user->username,
-            'card' => [
-                'name' => $userCard->orderItem->cardProduct->name,
-                'full_name' => $userCard->orderItem->cardProduct->getSearchableName(),
-                'image_path' => $userCard->orderItem->cardProduct->image_path,
-                'type' => $userCard->orderItem->cardProduct->cardCategory->name,
-                'series' => $userCard->orderItem->cardProduct->cardSet->cardSeries->name,
-                'set' => $userCard->orderItem->cardProduct->cardSet->name,
-                'release_date' => ! empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
-                    Carbon::parse($userCard->orderItem->cardProduct->cardSet->release_date)->format('F d, Y') :
-                    null,
-                'number' => $userCard->orderItem->cardProduct->card_number_order ?? null,
-            ],
-            'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
-            'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
-            'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->agsService->getScannedImagesByCertificateId($certificateId),
-            'slabbed_images' => $this->agsService->getSlabbedImagesByCertificateId($certificateId),
-            'social_images' => $userCard->social_images,
-        ];
+        return route('feed.view', $certificateId);
     }
 
     protected function prepareGradeForPublicCardPage(UserCard $userCard): array

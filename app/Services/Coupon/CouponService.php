@@ -3,6 +3,7 @@
 namespace App\Services\Coupon;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
+use App\Exceptions\API\Customer\Coupon\CouponHasInvalidMinThreshold;
 use App\Exceptions\API\Customer\Coupon\CouponUsageLimitReachedException;
 use App\Models\Coupon;
 use App\Models\CouponLog;
@@ -25,7 +26,10 @@ class CouponService
         throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
         throw_if($coupon->validForUserLimit($couponCode, auth()->user())->doesntExist(), CouponUsageLimitReachedException::class);
 
-        return $coupon->first();
+        $coupon = $coupon->first();
+        throw_if($coupon->hasInvalidMinThreshold($couponParams['items_count'] ?? 0), CouponHasInvalidMinThreshold::class, $coupon->min_threshold_value);
+
+        return $coupon;
     }
 
     public function calculateDiscount(Coupon $coupon, array|Order $order): float

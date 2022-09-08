@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
+use App\Enums\Coupon\CouponMinThresholdTypeEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,6 +44,8 @@ class Coupon extends Model
         'available_till',
         'coupon_status_id',
         'deleted_at',
+        'min_threshold_type',
+        'min_threshold_value',
     ];
 
     protected $casts = [
@@ -53,6 +56,7 @@ class Coupon extends Model
         'type' => CouponType::class,
         'available_from' => CouponDateRange::class,
         'available_till' => CouponDateRange::class,
+        'min_threshold_type' => CouponMinThresholdTypeEnum::class,
     ];
 
     public function couponStatusHistories(): HasMany
@@ -184,5 +188,13 @@ class Coupon extends Model
             'paymentPlans',
             'createdBy',
         ];
+    }
+
+    public function hasInvalidMinThreshold(int $itemsCount = 0): bool
+    {
+        return match ($this->min_threshold_type) {
+            CouponMinThresholdTypeEnum::CARD_COUNT => $itemsCount < $this->min_threshold_value,
+            default => false,
+        };
     }
 }

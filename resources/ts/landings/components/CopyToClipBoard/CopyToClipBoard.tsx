@@ -1,5 +1,6 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+import Avatar from '@mui/material/Avatar';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -27,7 +28,15 @@ export default function CopyClipboard({ content, buttonContent }: Props) {
     return (
         <>
             <CopyToClipboard text={content} onCopy={() => handleClick()}>
-                <ContentCopyOutlinedIcon />
+                <Avatar
+                    sx={{
+                        color: 'rgba(0, 0, 0, 0.38)',
+                        border: '2px solid rgba(0, 0, 0, 0.24)',
+                        background: '#F4F4FB',
+                    }}
+                >
+                    <ContentCopyOutlinedIcon />
+                </Avatar>
             </CopyToClipboard>
             <Snackbar
                 open={open}

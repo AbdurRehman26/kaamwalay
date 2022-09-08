@@ -73,25 +73,25 @@
                 series: [{
                     name: '',
                     data: [
-                        JSON.parse("{{ $popData['PR'] }}"),
-                        JSON.parse("{{ $popData['FR'] }}"),
-                        JSON.parse("{{ $popData['GOOD'] }}"),
-                        JSON.parse("{{ $popData['GOOD+'] }}"),
-                        JSON.parse("{{ $popData['VG'] }}"),
-                        JSON.parse("{{ $popData['VG+'] }}"),
-                        JSON.parse("{{ $popData['VG-EX'] }}"),
-                        JSON.parse("{{ $popData['VG-EX+'] }}"),
-                        JSON.parse("{{ $popData['EX'] }}"),
-                        JSON.parse("{{ $popData['EX+'] }}"),
-                        JSON.parse("{{ $popData['EX-MT'] }}"),
-                        JSON.parse("{{ $popData['EX-MT+'] }}"),
-                        JSON.parse("{{ $popData['NM'] }}"),
-                        JSON.parse("{{ $popData['NM+'] }}"),
-                        JSON.parse("{{ $popData['NM-MT'] }}"),
-                        JSON.parse("{{ $popData['NM-MT+'] }}"),
-                        JSON.parse("{{ $popData['MINT'] }}"),
-                        JSON.parse("{{ $popData['MINT+'] }}"),
-                        JSON.parse("{{ $popData['GEM-MT'] }}"),
+                        JSON.parse("{{ $pop_data['PR'] }}"),
+                        JSON.parse("{{ $pop_data['FR'] }}"),
+                        JSON.parse("{{ $pop_data['GOOD'] }}"),
+                        JSON.parse("{{ $pop_data['GOOD+'] }}"),
+                        JSON.parse("{{ $pop_data['VG'] }}"),
+                        JSON.parse("{{ $pop_data['VG+'] }}"),
+                        JSON.parse("{{ $pop_data['VG-EX'] }}"),
+                        JSON.parse("{{ $pop_data['VG-EX+'] }}"),
+                        JSON.parse("{{ $pop_data['EX'] }}"),
+                        JSON.parse("{{ $pop_data['EX+'] }}"),
+                        JSON.parse("{{ $pop_data['EX-MT'] }}"),
+                        JSON.parse("{{ $pop_data['EX-MT+'] }}"),
+                        JSON.parse("{{ $pop_data['NM'] }}"),
+                        JSON.parse("{{ $pop_data['NM+'] }}"),
+                        JSON.parse("{{ $pop_data['NM-MT'] }}"),
+                        JSON.parse("{{ $pop_data['NM-MT+'] }}"),
+                        JSON.parse("{{ $pop_data['MINT'] }}"),
+                        JSON.parse("{{ $pop_data['MINT+'] }}"),
+                        JSON.parse("{{ $pop_data['GEM-MT'] }}"),
                     ]
                 }],
                 chart: {
@@ -187,7 +187,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__copy-to-clipBoard">
-                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $pageUrl }}">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>
@@ -205,7 +205,7 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    @include('landings.feed.publicCardPage.cards-image-slider')
+                    @include('landings.feed.card.cards-image-slider')
                 </div>
             </div>
             <div class="feed-view__details">
@@ -213,7 +213,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $pageUrl }}">
+                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $page_url }}">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                         <div class="feed-view__ags-population">
                             <div>
                                 <p class="feed-view__ags-population__title">AGS POPULATION</p>
-                                <p class="feed-view__ags-population__count">{{ $popData['totalPopForCurrentCard'] }}</p>
+                                <p class="feed-view__ags-population__count">{{ $pop_data['totalPopForCurrentCard'] }}</p>
                             </div>
                             <div class="feed-view__ags-population__icon">
                                 <div><span class="material-icons">analytics</span></div>
@@ -334,10 +334,10 @@
             </div>
         </div>
     </section>
-    @include('landings.feed.publicCardPage.grades')
-    @include('landings.feed.publicCardPage.population-graph')
-    @include('landings.feed.publicCardPage.generated-images')
-    @include('landings.feed.publicCardPage.conclusion')
+    @include('landings.feed.card.grades')
+    @include('landings.feed.card.population-graph')
+    @include('landings.feed.card.generated-images')
+    @include('landings.feed.card.conclusion')
     @else
     Grades are not available yet.
     @endif

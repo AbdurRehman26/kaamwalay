@@ -1,7 +1,10 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Illuminate\Database\Eloquent\Builder;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
@@ -103,6 +106,80 @@ it('returns customers list order by desc signed up date', function () {
 
     $this->assertEquals(
         User::customer()->orderBy('created_at', 'DESC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by asc submissions number', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => 'submissions',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withCount(['orders' => function (Builder $q) {
+            $q->where('payment_status', OrderPaymentStatusEnum::PAID);
+        }])->orderBy('orders_count', 'ASC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by desc submissions number', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => '-submissions',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withCount(['orders' => function (Builder $q) {
+            $q->where('payment_status', OrderPaymentStatusEnum::PAID);
+        }])->orderBy('orders_count', 'DESC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by asc cards number', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => 'cards',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withSum(['orderItems' => function (Builder $q) {
+            $q->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
+        }], 'quantity')->orderBy('order_items_sum_quantity', 'ASC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by desc cards number', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => '-cards',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withSum(['orderItems' => function (Builder $q) {
+            $q->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
+        }], 'quantity')->orderBy('order_items_sum_quantity', 'DESC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by asc wallet balance', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => 'wallet',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withSum('wallet', 'balance')->orderBy('wallet_sum_balance', 'ASC')->pluck('email')->toArray(),
+        collect($response->getData()->data)->pluck('email')->toArray()
+    );
+});
+
+it('returns customers list order by desc wallet balance', function () {
+    $response = $this->getJson(route('v2.customers.index', [
+        'sort' => '-wallet',
+    ]))->assertOk();
+
+    $this->assertEquals(
+        User::customer()->withSum('wallet', 'balance')->orderBy('wallet_sum_balance', 'DESC')->pluck('email')->toArray(),
         collect($response->getData()->data)->pluck('email')->toArray()
     );
 });

@@ -2,25 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Customer\Coupon;
 
-use App\Http\Resources\API\BaseResource;
-use App\Models\Coupon;
-use Illuminate\Http\Request;
+use App\Http\Resources\API\V1\Customer\Coupon\CouponResource as V1CouponResource;
 
-/** @mixin Coupon */
-class CouponResource extends BaseResource
+class CouponResource extends V1CouponResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        return [
-            'id' => $this->id,
-            'code' => $this->code,
-            'discount_statement' => $this->description,
-        ];
-    }
+    //
 }

@@ -42,6 +42,7 @@ class OrderPaymentService
      */
     protected function validate(): self
     {
+        $this->data['items'] = $this->order->orderItems()->count();
         CouponAppliedValidator::validate($this->data);
         WalletCreditAppliedValidator::validate($this->data);
 

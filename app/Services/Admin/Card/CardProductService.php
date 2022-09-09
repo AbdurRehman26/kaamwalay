@@ -146,6 +146,7 @@ class CardProductService
 
     public function getCards(): LengthAwarePaginator
     {
+        // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
             ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
             ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
@@ -231,6 +232,7 @@ class CardProductService
 
     protected function reindexUserCards(CardProduct $cardProduct): void
     {
+        // @phpstan-ignore-next-line
         $cardProduct->userCards()->get()->searchable();
     }
 }

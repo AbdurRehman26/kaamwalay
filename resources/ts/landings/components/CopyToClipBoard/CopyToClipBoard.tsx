@@ -37,9 +37,11 @@ export default function CopyClipboard({ content, buttonContent }: Props) {
                             color: 'rgba(0, 0, 0, 0.38)',
                             border: '2px solid rgba(0, 0, 0, 0.24)',
                             background: '#F4F4FB',
+                            width: '28px',
+                            height: '28px',
                         }}
                     >
-                        <ContentCopyOutlinedIcon />
+                        <ContentCopyOutlinedIcon sx={{ width: '15px' }} />
                     </Avatar>
                 )}
             </CopyToClipboard>

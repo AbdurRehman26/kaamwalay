@@ -105,6 +105,14 @@
                         show: false,
                     }
                 },
+                states: {
+                    normal: {
+                        filter: {
+                            type: 'none',
+                            value: 0,
+                        }
+                    },
+                },
                 plotOptions: {
                     bar: {
                         columnWidth: 70,

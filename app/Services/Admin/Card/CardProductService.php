@@ -207,7 +207,7 @@ class CardProductService
      * @throws CardProductCanNotBeDeleted
      * @throws Throwable
      */
-    public function deleteCard(CardProduct $cardProduct)
+    public function deleteCard(CardProduct $cardProduct): void
     {
         throw_if($cardProduct->userCards()->count() > 0, CardProductHasUserCardException::class);
 
@@ -233,6 +233,6 @@ class CardProductService
 
     protected function reindexUserCards(CardProduct $cardProduct): void
     {
-        $cardProduct->userCards()->searchable();
+        $cardProduct->userCards()->get()->searchable();
     }
 }

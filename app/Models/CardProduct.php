@@ -188,6 +188,9 @@ class CardProduct extends Model
         );
     }
 
+    /**
+     * @return HasMany<OrderItem>
+     */
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -282,6 +285,9 @@ class CardProduct extends Model
         return $this->hasOne(CardLabel::class);
     }
 
+    /**
+     * @return Builder<UserCard>
+     */
     public function userCards(): Builder
     {
         $orderItemIds = $this->orderItems()

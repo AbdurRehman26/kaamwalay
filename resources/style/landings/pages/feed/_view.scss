@@ -1164,6 +1164,25 @@
     }
 }
 
+.SubmissionButton {
+    padding: 14px 24px;
+    background-color: #20bfb8;
+    border-radius: 28px;
+    display: inline-block;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.35px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+    text-align: center;
+    &:hover {
+        background-color: lighten(#20bfb8, 10%);
+    }
+}
+
 .feed-pagination-section {
     display: flex;
     justify-content: flex-end;

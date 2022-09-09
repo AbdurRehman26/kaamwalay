@@ -79,6 +79,7 @@
         align-items: center;
         justify-content: space-between;
         background: #fff;
+        padding-bottom: 60px;
 
         .apexcharts-bar-area:hover {
             fill: #20bfb8;
@@ -743,7 +744,7 @@
 
         &__heading {
             font-weight: 500;
-            font-size: 16px;
+            font-size: 20px;
             line-height: 30px;
             color: rgba(0, 0, 0, 0.87);
 
@@ -935,7 +936,6 @@
     }
 
     &__images {
-        padding-top: 40px;
         padding-bottom: 40px;
         background: #fff;
 

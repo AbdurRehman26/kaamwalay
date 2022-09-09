@@ -159,12 +159,15 @@ test('admins can update cards manually', function () {
 });
 
 test('admins can delete a card', function () {
-    Http::fake(Http::fake(['*' => Http::response([
-        "app_status" => 1,
-        "app_message" => [
-            "Removed successfully",
-        ],
-    ])]));
+    Http::fake([
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/cards/*' => Http::response([
+                "app_status" => 1,
+                "app_message" => [
+                    "Removed successfully",
+                ],
+            ], 204),
+    ]);
     $this->card->card_reference_id = Str::random();
     $this->card->save();
 

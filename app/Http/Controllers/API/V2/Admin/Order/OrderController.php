@@ -12,7 +12,6 @@ use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
-use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderLabelService;

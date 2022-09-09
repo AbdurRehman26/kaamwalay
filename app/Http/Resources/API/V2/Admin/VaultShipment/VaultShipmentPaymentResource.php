@@ -27,7 +27,7 @@ class VaultShipmentPaymentResource extends BaseResource
 
         $response = [];
 
-        if ($this->paymentMethod->code === 'paypal') {
+        if ($this->paymentMethod->isPaypal()) {
             $response = $this->paypalData(json_decode($this->response, associative: true) ?? []);
         } elseif ($this->paymentMethod->code === 'stripe') {
             $response = $this->stripeData($this->response);

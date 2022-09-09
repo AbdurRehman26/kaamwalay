@@ -21,6 +21,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {
@@ -58,8 +59,12 @@ class CardProductService
 
         $set = CardSet::find($data['set_id']);
 
+        Log::info('CARD_CREATION_REQUEST', $data);
+
         //store in AGS
         $agsResponse = $this->createCardProductOnAgs($category, $seriesName, $set->name, $data);
+
+        Log::info('CARD_CREATION_AGS_RESPONSE', $agsResponse);
 
         if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;
@@ -115,6 +120,8 @@ class CardProductService
                 'variant' => $data['variant'] ?? '',
                 'language' => $data['language'],
             ]);
+
+            Log::info('CARD_CREATION_AGS_REQUEST', $createData);
 
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {

@@ -5,6 +5,7 @@ namespace App\Http\Resources\API\V2\Admin\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\V1\Admin\Order\OrderResource as V1OrderResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
@@ -95,6 +96,7 @@ class OrderResource extends V1OrderResource
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
+            'order_certificate' => $this->whenLoaded('orderCertificate', OrderCertificateResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),

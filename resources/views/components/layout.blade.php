@@ -5,7 +5,7 @@
 @endphp
 <html class="page" lang="{{ app()->getLocale() }}">
     <head>
-        <x-meta/>
+        <x-meta :title="$title ?? null" :description="$description ?? null" :image="$seoImage ?? null"/>
         <x-head-scripts :appName="$appName"/>
         <x-layout.preload :appName="$appName"/>
         <x-layout.css :appName="$appName"/>

@@ -20,6 +20,7 @@ import moment from 'moment/moment';
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { MinThresholdTypeEnum } from '@shared/constants/MinThresholdTypeEnum';
 import { ServiceLevelApplicableItemEntity } from '@shared/entities/ServiceLevelApplicableItemEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
@@ -34,6 +35,8 @@ import {
     setDiscountStartDate,
     setDiscountType,
     setDiscountValue,
+    setMinThresholdType,
+    setMinThresholdValue,
     setPromoCodeTextValue,
     setShowNewPromoCodeDialog,
     setUsageAllowedType,
@@ -85,6 +88,8 @@ export function PromoCodeModal() {
     const showModal = useSharedSelector((state) => state.adminNewPromoCodeSlice.showNewPromoCodeDialog);
     const applicables = useSharedSelector((state) => state.adminNewPromoCodeSlice.applicables);
     const description = useSharedSelector((state) => state.adminNewPromoCodeSlice.description);
+    const minThresholdType = useSharedSelector((state) => state.adminNewPromoCodeSlice.minThresholdType);
+    const minThresholdValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.minThresholdValue);
 
     const serviceLevelApplicableIndex = useMemo(
         () => applicables!.findIndex((applicableItem) => applicableItem.code === 'service_level'),
@@ -123,6 +128,24 @@ export function PromoCodeModal() {
     const handleDiscountValueChange = useCallback(
         (event: any) => {
             dispatch(setDiscountValue(event.target.value));
+        },
+        [dispatch],
+    );
+
+    const handleMinThresholdValueChange = useCallback(
+        (event: any) => {
+            if (event.target.value >= 0) {
+                dispatch(setMinThresholdValue(event.target.value));
+            }
+        },
+        [dispatch],
+    );
+
+    const handleMinThresholdTypeChange = useCallback(
+        (minThresholdType: MinThresholdTypeEnum) => {
+            return () => {
+                dispatch(setMinThresholdType(minThresholdType));
+            };
         },
         [dispatch],
     );
@@ -219,6 +242,9 @@ export function PromoCodeModal() {
         if (!isPermanent && !discountEndDate) {
             validationErrors.push('End date is required');
         }
+        if (minThresholdType === MinThresholdTypeEnum.CardCount && minThresholdValue < 2) {
+            validationErrors.push('Card minimum should be greater than 2');
+        }
         return !!validationErrors.length;
     };
 
@@ -236,6 +262,8 @@ export function PromoCodeModal() {
                 discountValue: discountValue!,
                 usageAllowedPerUser: usageAllowed,
                 description: description,
+                hasMinimumCardsThreshold: minThresholdType === MinThresholdTypeEnum.CardCount,
+                minThresholdValue: minThresholdValue,
             }),
         );
     };
@@ -588,6 +616,106 @@ export function PromoCodeModal() {
                             </Typography>
                         </Paper>
                     </Box>
+                </Box>
+                <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
+                    <Typography variant={'subtitle1'}>
+                        <span className={classes.label}>Card Minimum to Apply?</span>
+                    </Typography>
+                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} minWidth={'100%'}>
+                        <Paper variant={'outlined'} sx={{ width: '99.5%', marginRight: '10px', padding: '8px' }}>
+                            <Radio
+                                checked={minThresholdType === MinThresholdTypeEnum.None}
+                                onChange={handleMinThresholdTypeChange(MinThresholdTypeEnum.None)}
+                                value={MinThresholdTypeEnum.None}
+                            />
+                            <Typography
+                                variant={'caption'}
+                                className={classes.secondaryLabel}
+                                sx={{
+                                    fontWeight: minThresholdType === MinThresholdTypeEnum.None ? 'bold' : 'normal',
+                                }}
+                            >
+                                No Card Minimum
+                            </Typography>
+                        </Paper>
+                    </Box>
+
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        minWidth={'100%'}
+                        marginTop={1}
+                    >
+                        <Paper
+                            variant={'outlined'}
+                            sx={{
+                                width: '99.5%',
+                                marginRight: '10px',
+                                padding: '8px',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                ...(minThresholdValue < 2 && {
+                                    borderColor: '#BE1A1A',
+                                }),
+                            }}
+                        >
+                            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
+                                <Radio
+                                    checked={minThresholdType === MinThresholdTypeEnum.CardCount}
+                                    onChange={handleMinThresholdTypeChange(MinThresholdTypeEnum.CardCount)}
+                                    value={MinThresholdTypeEnum.CardCount}
+                                />
+                                <Typography
+                                    variant={'caption'}
+                                    className={classes.secondaryLabel}
+                                    sx={{
+                                        fontWeight:
+                                            minThresholdType === MinThresholdTypeEnum.CardCount ? 'bold' : 'normal',
+                                    }}
+                                >
+                                    Card Minimum
+                                </Typography>
+                            </Box>
+                            {minThresholdType === MinThresholdTypeEnum.CardCount ? (
+                                <Box
+                                    display={'flex'}
+                                    flexDirection={'row'}
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                >
+                                    <Typography
+                                        variant={'caption'}
+                                        className={classes.secondaryLabel}
+                                        sx={{
+                                            fontWeight: 'normal',
+                                            color: 'rgba(0, 0, 0, 0.54)',
+                                        }}
+                                    >
+                                        Card Minimum:
+                                    </Typography>
+                                    <TextField
+                                        placeholder={'2'}
+                                        type={'number'}
+                                        size={'small'}
+                                        sx={{ maxWidth: '120px', marginLeft: '3px' }}
+                                        variant="outlined"
+                                        value={minThresholdValue}
+                                        onChange={handleMinThresholdValueChange}
+                                        error={minThresholdValue < 2}
+                                    />
+                                </Box>
+                            ) : null}
+                        </Paper>
+                    </Box>
+                    {minThresholdValue < 2 && minThresholdType === MinThresholdTypeEnum.CardCount ? (
+                        <Box display={'flex'} justifyContent={'flex-end'} flexDirection={'row'} width={'98%'}>
+                            <Typography sx={{ color: '#BE1A1A', fontSize: '0.75rem' }}>
+                                The minimum must be 2 or greater
+                            </Typography>
+                        </Box>
+                    ) : null}
                 </Box>
             </DialogContent>
             <DialogActions>

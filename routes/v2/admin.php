@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V2\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponStatusController;
 use App\Http\Controllers\API\V2\Admin\CustomerController;
+use App\Http\Controllers\API\V2\Admin\Order\MarkOrderPaidController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderExtraChargeController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderItemController;
@@ -58,6 +59,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
+        Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
     });
 
     Route::prefix('cards')->group(function () {

@@ -14,15 +14,13 @@ use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\CardSurface;
-use App\Models\OrderStatus;
-use App\Models\UserCard;
 use App\Services\AGS\AgsService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class CardProductService

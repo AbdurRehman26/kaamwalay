@@ -159,6 +159,12 @@ test('admins can update cards manually', function () {
 });
 
 test('admins can delete a card', function () {
+    Http::fake(Http::fake(['*' => Http::response([
+        "app_status" => 1,
+        "app_message" => [
+            "Removed successfully",
+        ],
+    ])]));
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
 
     $response->assertNoContent();

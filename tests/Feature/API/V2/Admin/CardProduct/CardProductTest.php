@@ -165,6 +165,9 @@ test('admins can delete a card', function () {
             "Removed successfully",
         ],
     ])]));
+    $this->card->card_reference_id = Str::random();
+    $this->card->save();
+
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
 
     $response->assertNoContent();

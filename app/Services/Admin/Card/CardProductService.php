@@ -6,6 +6,7 @@ use App\Events\API\Admin\Card\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
 use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
+use App\Exceptions\API\Admin\CardProductHasUserCardException;
 use App\Http\Filters\AdminCardProductSearchFilter;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CardProductService
 {
@@ -203,9 +205,12 @@ class CardProductService
 
     /**
      * @throws CardProductCanNotBeDeleted
+     * @throws Throwable
      */
     public function deleteCard(CardProduct $cardProduct)
     {
+        throw_if($cardProduct->userCards()->count() > 0, CardProductHasUserCardException::class);
+
         $agsResponse = $this->deleteCardProductFromAgs($cardProduct);
 
         if (! $agsResponse || ! array_key_exists('app_message', $agsResponse)) {
@@ -213,7 +218,6 @@ class CardProductService
         }
 
         $cardProduct->delete();
-        $this->reindexUserCards($cardProduct, 'delete');
     }
 
     protected function deleteCardProductFromAgs(CardProduct $cardProduct): array
@@ -227,17 +231,8 @@ class CardProductService
         }
     }
 
-    protected function reindexUserCards(CardProduct $cardProduct, string $action = 'update'): void
+    protected function reindexUserCards(CardProduct $cardProduct): void
     {
-        $orderItemIds = $cardProduct->orderItems()
-            ->whereHas(
-                'order',
-                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
-            )
-            ->pluck('order_items.id')
-            ->toArray();
-
-        $userCards = UserCard::query()->whereIn('order_item_id', $orderItemIds);
-        $action === 'update' ? $userCards->searchable() : $userCards->unsearchable();
+        $cardProduct->userCards()->searchable();
     }
 }

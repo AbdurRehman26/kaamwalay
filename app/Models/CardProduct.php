@@ -281,4 +281,17 @@ class CardProduct extends Model
     {
         return $this->hasOne(CardLabel::class);
     }
+
+    public function userCards(): Builder
+    {
+        $orderItemIds = $this->orderItems()
+            ->whereHas(
+                'order',
+                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
+            )
+            ->pluck('order_items.id')
+            ->toArray();
+
+        return UserCard::query()->whereIn('order_item_id', $orderItemIds);
+    }
 }

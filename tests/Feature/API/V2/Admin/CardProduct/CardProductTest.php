@@ -25,6 +25,7 @@ beforeEach(function () {
         'language' => 'English',
         'rarity' => 'Common',
         'surface' => '',
+        'card_reference_id' => Str::random(),
     ]);
 
     $this->user = User::factory()
@@ -131,6 +132,7 @@ test('admins can update cards manually', function () {
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
     $response = $this->put(route('v2.admin.card-products.update', ['cardProduct' => $this->card]), [
@@ -168,8 +170,6 @@ test('admins can delete a card', function () {
                 ],
             ], 204),
     ]);
-    $this->card->card_reference_id = Str::random();
-    $this->card->save();
 
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
 

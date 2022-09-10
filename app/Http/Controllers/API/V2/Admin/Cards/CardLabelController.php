@@ -6,7 +6,6 @@ use App\Exceptions\API\Admin\CardLabelsCanNotBeExportedForOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\CardLabel\UpdateCardLabelRequest;
 use App\Http\Requests\API\V2\Admin\CardLabel\UpdateOrderLabelsRequest;
-use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelCollection;
 use App\Http\Resources\API\V2\Admin\CardLabel\CardLabelResource;
 use App\Http\Resources\API\V2\Admin\UserCard\UserCardLabelCollection;
 use App\Models\CardLabel;
@@ -16,7 +15,6 @@ use App\Models\OrderStatus;
 use App\Services\Admin\Card\CardLabelService;
 use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CardLabelController extends Controller
 {

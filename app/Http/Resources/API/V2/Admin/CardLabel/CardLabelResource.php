@@ -5,8 +5,6 @@ namespace App\Http\Resources\API\V2\Admin\CardLabel;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\CardProduct\CardProductResource;
 use App\Models\CardLabel;
-use App\Models\CardProduct;
-use App\Models\UserCard;
 use Illuminate\Http\Request;
 
 /**

@@ -21,7 +21,6 @@ class UserCardLabelResource extends BaseResource
      */
     public function toArray($request): array
     {
-
         /** @var CardProduct $cardProduct */
         $cardProduct = $this->orderItem->cardProduct;
 
@@ -37,6 +36,5 @@ class UserCardLabelResource extends BaseResource
             'line_four' => $cardProduct->cardLabel->line_four,
             'card_product' => new CardProductResource($cardProduct),
         ];
-
     }
 }

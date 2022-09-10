@@ -4,7 +4,6 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
-use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;

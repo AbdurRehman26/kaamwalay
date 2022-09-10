@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
@@ -96,14 +97,19 @@ const styles = {
         color: 'rgba(0, 0, 0, 0.54)',
         padding: '10px',
     },
+    InputBox: {
+        background: '#F0F0F0',
+        borderRadius: '28px',
+        padding: '10px 15px',
+        width: '100%',
+    },
 };
 
 interface CardPageShareModalProp {
-    shareLink: string;
     content: string;
 }
 
-export function CardPageShareModal({ shareLink, content }: CardPageShareModalProp) {
+export function CardPageShareModal({ content }: CardPageShareModalProp) {
     const [openModal, setOpenModal] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -139,18 +145,18 @@ export function CardPageShareModal({ shareLink, content }: CardPageShareModalPro
                             <Typography sx={styles.ShareLinkText}>Share Link</Typography>
                             <Input
                                 type="text"
-                                value={shareLink}
+                                value={content}
                                 disableUnderline
-                                sx={{
-                                    background: '#F0F0F0',
-                                    borderRadius: '28px',
-                                    padding: '10px 15px',
-                                    width: '100%',
-                                }}
+                                sx={styles.InputBox}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <CopyToClipboard text={content} onCopy={() => handleClick()}>
+                                            <ContentCopyOutlinedIcon />
+                                        </CopyToClipboard>
+                                    </InputAdornment>
+                                }
+                                disabled
                             />
-                            <CopyToClipboard text={content} onCopy={() => handleClick()}>
-                                <ContentCopyOutlinedIcon />
-                            </CopyToClipboard>
                         </div>
                         <div>
                             <Button sx={styles.Twitter}>

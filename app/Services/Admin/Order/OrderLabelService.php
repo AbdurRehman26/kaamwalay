@@ -5,13 +5,18 @@ namespace App\Services\Admin\Order;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
+use App\Models\OrderItemStatus;
 use App\Models\OrderLabel;
+use App\Models\UserCard;
 use App\Services\Admin\Card\CreateCardLabelService;
 use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderLabelService
 {
@@ -39,7 +44,7 @@ class OrderLabelService
         $this->saveCardLabel($order, $fileUrl);
     }
 
-    protected function generateFileAndUploadToCloud(Order $order, array $response): string
+    public function generateFileAndUploadToCloud(Order $order, array $response): string
     {
         $filePath = 'order-labels/' . $order->order_number . '_label_' . Str::uuid() . '.xlsx';
         Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
@@ -47,7 +52,7 @@ class OrderLabelService
         return Storage::disk('s3')->url($filePath);
     }
 
-    protected function saveCardLabel(Order $order, string $fileUrl): void
+    public function saveCardLabel(Order $order, string $fileUrl): void
     {
         OrderLabel::updateOrCreate(
             [
@@ -59,7 +64,7 @@ class OrderLabelService
         );
     }
 
-    protected function getCardLabels(Order $order): array
+    public function getCardLabels(Order $order): array
     {
         $labels = [];
         foreach ($order->gradedOrderItems as $orderItem) {
@@ -79,4 +84,19 @@ class OrderLabelService
 
         return $labels;
     }
+
+    /**
+     * @param  Order  $order
+     * @return Collection<int, UserCard>
+     */
+    public function getOrderGradedCards(Order $order): Collection
+    {
+        $query = UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
+            ->where('order_id', $order->id)
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->select('user_cards.*');
+
+        return QueryBuilder::for($query)->get();
+    }
+
 }

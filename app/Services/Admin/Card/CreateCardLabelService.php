@@ -43,11 +43,11 @@ class CreateCardLabelService
         $this->cardSeriesName = Str::upper($this->cardSet->cardSeries->name);
     }
 
-    public function createLabel(CardProduct $cardProduct): void
+    public function createLabel(CardProduct $cardProduct): CardLabel
     {
         $this->initializeValues($cardProduct);
 
-        CardLabel::create(
+        return CardLabel::create(
             [
                'card_product_id' => $cardProduct->id,
                'line_one' => $this->getFirstLine(),
@@ -164,6 +164,10 @@ class CreateCardLabelService
             } else {
                 $label_line_one = ['ERROR'];
             }
+        } elseif ($this->category->isTCG()) {
+            $label_line_one = [$this->year, $this->category->name];
+        } elseif ($this->category->isSports()) {
+            $label_line_one = [$this->year, $this->cardSeries->name, $this->cardSet->name];
         }
 
         return implode(' ', $label_line_one);
@@ -180,7 +184,8 @@ class CreateCardLabelService
 
         $label_line_two = [$card_name];
 
-        if (! empty($surface)) {
+        if (($this->category->name == 'Pokemon' || $this->category->name == 'MetaZoo')
+            && ! empty($surface)) {
             $label_line_two = [$card_name, ' - ', $this->cardProduct->getSurfaceAbbreviation()];
         }
 
@@ -268,6 +273,37 @@ class CreateCardLabelService
                 }
             } else {
                 $label_line_three = ['ERROR'];
+            }
+        } elseif ($this->category->isTCG()) {
+            $label_line_three = [$this->cardSet->name];
+
+            $editionAbbreviation = $this->cardProduct->getEditionAbbreviation();
+            if ($editionAbbreviation) {
+                $label_line_three = array_merge($label_line_three, ['-', $editionAbbreviation]);
+            }
+            if ($this->cardProduct->surface) {
+                $label_line_three = array_merge($label_line_three, ['-', $this->cardProduct->getSurfaceAbbreviation()]);
+            }
+            if ($this->cardProduct->variant) {
+                $label_line_three = array_merge($label_line_three, ['-', $this->cardProduct->variant]);
+            }
+        } elseif ($this->category->isSports()) {
+            $editionAbbreviation = $this->cardProduct->getEditionAbbreviation();
+
+            if ($editionAbbreviation) {
+                $label_line_three[] = $editionAbbreviation;
+            }
+            if ($this->cardProduct->surface) {
+                if (count($label_line_three) > 0) {
+                    $label_line_three[] = '-';
+                }
+                $label_line_three[] = strlen($this->cardProduct->getSurfaceAbbreviation()) > 0 ? $this->cardProduct->getSurfaceAbbreviation() : $this->cardProduct->surface;
+            }
+            if ($this->cardProduct->variant) {
+                if (count($label_line_three) > 0) {
+                    $label_line_three[] = '-';
+                }
+                $label_line_three[] = $this->cardProduct->variant;
             }
         }
 

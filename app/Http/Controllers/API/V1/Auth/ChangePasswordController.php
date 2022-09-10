@@ -82,7 +82,7 @@ class ChangePasswordController extends Controller
 
         if (! empty($response['code'])) {
             throw_if(
-                ! empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST,
+                $response['code'] === Response::HTTP_BAD_REQUEST,
                 new InvalidAgsDataForCustomer($response['message'], Response::HTTP_UNPROCESSABLE_ENTITY)
             );
         }

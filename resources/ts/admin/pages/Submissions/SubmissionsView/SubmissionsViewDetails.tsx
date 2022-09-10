@@ -37,10 +37,11 @@ interface SubmissionsViewDetailsProps {
     paymentMethodDiscountedAmount: string;
     discountedAmount: string;
     amountPaidFromWallet: string;
-    paymentMethodId: number;
+    paymentMethodCode: string;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
+    admin?: string;
 }
 
 const useStyles = makeStyles(
@@ -74,11 +75,12 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         refundsTotal,
         discountedAmount,
         paymentMethodDiscountedAmount,
-        paymentMethodId,
+        paymentMethodCode,
         coupon,
         amountPaidFromWallet,
         walletPayment,
         paymentStatus,
+        admin,
     } = props;
 
     const classes = useStyles();
@@ -162,10 +164,11 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 shippingAddress={shippingAddress}
                 coupon={coupon}
                 payment={payment}
-                paymentMethodId={paymentMethodId}
+                paymentMethodCode={paymentMethodCode}
                 walletPayment={walletPayment}
                 paymentStatus={paymentStatus}
                 mode={'admin'}
+                admin={admin}
             />
         </Grid>
     );

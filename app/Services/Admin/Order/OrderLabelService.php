@@ -32,7 +32,7 @@ class OrderLabelService
      */
     public function generateLabel(Order $order): void
     {
-        $this->createCardLabelService->createLabelForOrder($order);
+        $this->createCardLabelService->createLabelsForOrder($order);
 
         $response = $this->getCardLabels($order);
 

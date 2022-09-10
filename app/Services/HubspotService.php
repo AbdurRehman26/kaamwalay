@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\HubspotDeal;
+use App\Models\Order;
 use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Contacts;
@@ -28,7 +30,26 @@ class HubspotService
             $hubspotClient = $this->getClient();
 
             $owner = new Owners($hubspotClient);
-            $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
+
+            $owners = explode(',', config('services.hubspot.owner_email'));
+
+            if (count($owners) > 1) {
+                if (! Cache::has('hubspot:iteration')) {
+                    Cache::put('hubspot:iteration', 0);
+                }
+    
+                Cache::put('hubspot:owner', $owners[Cache::get('hubspot:iteration')]);
+
+                if (Cache::get('hubspot:iteration') < count($owners) - 1) {
+                    Cache::increment('hubspot:iteration');
+                } else {
+                    Cache::put('hubspot:iteration', 0);
+                }
+            } else {
+                Cache::put('hubspot:owner', $owners);
+            }
+
+            $ownerResponse = $owner->all(['email' => Cache::get('hubspot:owner')]);
 
             $createDeal = [
                 [
@@ -97,13 +118,13 @@ class HubspotService
         }
     }
 
-    public function updateDealStageForOrderPlacedUser(User $user): void
+    public function updateDealStageForOrderPlacedUser(Order $order): void
     {
-        $deal = HubspotDeal::where('user_email', $user->email)->first();
+        $deal = HubspotDeal::where('user_email', $order->user->email)->first();
 
         if (! $deal) {
             Log::error('Hubspot deal not found', [
-                'user_email' => $user->email,
+                'user_email' => $order->user->email,
             ]);
 
             return;
@@ -114,6 +135,10 @@ class HubspotService
                 [
                     'value' => config('services.hubspot.pipline_stage_id_new_customer'),
                     'name' => 'dealstage',
+                ],
+                [
+                    'value' => $order->grand_total,
+                    'name' => 'amount',
                 ],
             ];
 

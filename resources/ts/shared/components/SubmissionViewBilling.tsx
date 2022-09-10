@@ -9,6 +9,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
@@ -19,10 +20,11 @@ interface SubmissionViewBillingProps {
     billingAddress?: AddressEntity;
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
-    paymentMethodId?: number;
+    paymentMethodCode: string;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     mode: 'customer' | 'admin';
+    admin?: string;
 }
 
 export const useStyles = makeStyles(
@@ -52,33 +54,34 @@ export function SubmissionViewBilling({
     billingAddress,
     payment,
     coupon,
-    paymentMethodId,
+    paymentMethodCode,
     paymentStatus,
     walletPayment,
     mode = 'customer',
+    admin,
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
-    const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
+    const hasPayment = ['stripe', 'paypal', 'collector_coin', 'manual'].includes(paymentMethodCode); // Checking if one of our supported payment methods is on the order
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
     const { cardIcon, cardBrand } = useMemo(() => {
-        if (paymentMethodId === 1) {
+        if (paymentMethodCode === 'stripe') {
             return {
                 cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
                 cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
             };
         }
 
-        if (paymentMethodId === 2) {
+        if (paymentMethodCode === 'paypal') {
             return {
                 cardIcon: getPaymentIcon('paypal'),
                 cardBrand: getPaymentTitle('paypal'),
             };
         }
 
-        if (paymentMethodId === 3) {
+        if (paymentMethodCode === 'collector_coin') {
             return {
                 cardIcon: getPaymentIcon('collectorCoin'),
                 cardBrand: getPaymentTitle('collectorCoin'),
@@ -89,39 +92,43 @@ export function SubmissionViewBilling({
             cardIcon: '',
             cardBrand: '',
         };
-    }, [card?.brand, paymentMethodId]);
+    }, [card?.brand, paymentMethodCode]);
 
     const paymentHeading = useMemo(() => {
-        if (paymentMethodId === 1) {
+        if (paymentMethodCode === 'stripe') {
             return `${cardBrand} ending in ${card?.last4}`;
         }
 
-        if (paymentMethodId === 2) {
+        if (paymentMethodCode === 'paypal') {
             return payer?.name;
         }
 
-        if (paymentMethodId === 3) {
+        if (paymentMethodCode === 'collector_coin') {
             return `Collector Coin`;
         }
 
+        if (paymentMethodCode === 'manual') {
+            return `Manual Payment`;
+        }
+
         return 'Unknown card';
-    }, [card?.last4, cardBrand, paymentMethodId, payer?.name]);
+    }, [card?.last4, cardBrand, paymentMethodCode, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
-        if (paymentMethodId === 1) {
+        if (paymentMethodCode === 'stripe') {
             return `Expires ${card?.expMonth}/${card?.expYear}`;
         }
 
-        if (paymentMethodId === 2) {
+        if (paymentMethodCode === 'paypal') {
             return payer?.email;
         }
 
-        if (paymentMethodId === 3) {
+        if (paymentMethodCode === 'collector_coin') {
             return payment?.transaction?.hash;
         }
 
         return null;
-    }, [card?.expMonth, card?.expYear, paymentMethodId, payer?.email, payment?.transaction?.hash]);
+    }, [card?.expMonth, card?.expYear, paymentMethodCode, payer?.email, payment?.transaction?.hash]);
 
     const columnWidth = coupon?.code ? 3 : 4;
     return (
@@ -163,7 +170,7 @@ export function SubmissionViewBilling({
 
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                             {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
-                            <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
+                            <Box display={'flex'} flexDirection={'column'} flexGrow={1}>
                                 <Typography variant={'body2'} color={'textPrimary'}>
                                     {paymentHeading}
                                 </Typography>
@@ -173,6 +180,22 @@ export function SubmissionViewBilling({
                                     </Typography>
                                 ) : null}
                             </Box>
+                        </Box>
+                    </>
+                ) : null}
+                {isPaid ? (
+                    <>
+                        {mode === 'admin' && paymentMethodCode === 'manual' ? (
+                            <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
+                                <Typography variant={'body2'} color={'textSecondary'}>
+                                    Marked Paid by {admin}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
+                            <Typography variant={'body2'} color={'textSecondary'}>
+                                {payment?.createdAt ? formatDate(payment?.createdAt, 'MM/DD/YYYY [at] hh:mm A') : null}
+                            </Typography>
                         </Box>
                     </>
                 ) : null}

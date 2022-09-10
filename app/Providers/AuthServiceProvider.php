@@ -30,5 +30,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function (User $user, $ability) {
             return $user->isSuperAdmin() ? true : null;
         });
+
+        // Allow access to Laser (log viewer)
+        Gate::define('viewLogViewer', function (?User $user) {
+            return auth('web')->user()->isSuperAdmin();
+        });
     }
 }

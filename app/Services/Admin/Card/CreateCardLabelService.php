@@ -23,7 +23,7 @@ class CreateCardLabelService
     protected string $cardSetName;
     protected int $year;
 
-    public function createLabelForOrder(Order $order): void
+    public function createLabelsForOrder(Order $order): void
     {
         foreach ($order->orderItems as $orderItem) {
             if ($orderItem->canCreateLabel()) {

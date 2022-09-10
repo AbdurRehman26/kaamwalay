@@ -62,6 +62,33 @@
                         },
                     ],
                 });
+                $('.Home-cards--js').slick({
+                    arrows: false,
+                    infinite: true,
+                    auto: true,
+                    autoplay: true,
+                    slidesToShow: 12,
+                    responsive: [
+                        {
+                            breakpoint: 1280,
+                            settings: {
+                                slidesToShow: 4,
+                            },
+                        },
+                        {
+                            breakpoint: 1000,
+                            settings: {
+                                slidesToShow: 3,
+                            },
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 3,
+                            },
+                        },
+                    ],
+                });
             });
         </script>
     </x-slot>

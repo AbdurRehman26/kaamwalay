@@ -29,6 +29,7 @@ class UserCard extends Model
         'grade_delta',
         'shipping_status',
         'is_fake',
+        'social_images',
     ];
 
     protected $casts = [
@@ -43,6 +44,7 @@ class UserCard extends Model
         'grade_delta' => 'float',
         'shipping_status' => UserCardShippingStatus::class,
         'is_fake' => 'boolean',
+        'social_images' => 'array',
     ];
 
     /**

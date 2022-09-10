@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
@@ -152,5 +153,95 @@ class CardProduct extends Model
     public function getSearchableName(): string
     {
         return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
+    }
+
+    public function getCategoryAbbreviation(): string
+    {
+        if (! in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])) {
+            return '';
+        }
+
+        $categoryList = [
+            'Pokemon' => 'P.M.',
+            'MetaZoo' => 'M.T.Z.',
+        ];
+
+        return $categoryList[Str::lower($this->cardCategory->name)];
+    }
+
+    public function getSeriesNickname(): string
+    {
+        $seriesAbbreviationQuery = CardSeriesAbbreviation::category($this->cardCategory)
+            ->language($this->language)
+            ->where(function ($query) {
+                $query->where('name', $this->cardSet->cardSeries->name)
+                ->orWhere('name', str_replace(' Series', '', $this->cardSet->cardSeries->name));
+            });
+
+        if ($seriesAbbreviationQuery->doesntExist()) {
+            return '';
+        }
+
+        return $seriesAbbreviationQuery->first()->abbreviation;
+    }
+
+    public function getSetNickname(): string
+    {
+        $setAbbreviationQuery = CardSetAbbreviation::category($this->cardCategory)
+            ->language($this->language)
+            ->where(function ($query) {
+                $query->where('name', $this->cardSet->name)
+                ->orWhere('name', str_replace(' Set', '', $this->cardSet->name));
+            });
+
+        if ($setAbbreviationQuery->doesntExist()) {
+            return '';
+        }
+
+        return $setAbbreviationQuery->first()->abbreviation;
+    }
+
+    public function getSurfaceAbbreviation(): string
+    {
+        $query = CardSurfaceAbbreviation::whereName($this->surface);
+
+        if ($query->doesntExist()) {
+            return '';
+        }
+
+        return $query->first()->abbreviation;
+    }
+
+    public function getEditionAbbreviation(): string
+    {
+        $query = CardEditionAbbreviation::whereName($this->edition);
+
+        if ($query->doesntExist()) {
+            return '';
+        }
+
+        return $query->first()->abbreviation;
+    }
+
+    public function getLanguageAbbreviation(): string
+    {
+        if (! in_array(Str::lower($this->language), ['english', 'japanese'])) {
+            return '';
+        }
+
+        $languageList = [
+            'english' => 'ENG',
+            'japanese' => 'JPN.',
+        ];
+
+        return $languageList[Str::lower($this->language)];
+    }
+
+    /**
+     * @return HasOne <CardLabel>
+     */
+    public function cardLabel(): HasOne
+    {
+        return $this->hasOne(CardLabel::class);
     }
 }

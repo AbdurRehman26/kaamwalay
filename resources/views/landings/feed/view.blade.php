@@ -1,4 +1,15 @@
 <x-layout>
+    <x-slot name="title">
+        {{ $card['full_name'] }}
+    </x-slot>
+    <x-slot name="description">
+        Join the grading revolution. Start a Robograding submission and get your cards graded with artificial intelligence.
+    </x-slot>
+    @isset($social_images['square'])
+        <x-slot name="seoImage">
+            {{ $social_images['square'] }}
+        </x-slot>
+    @endisset
     <x-slot name="head">
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>

@@ -17,6 +17,7 @@ use App\Http\Controllers\API\V2\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderRefundController;
 use App\Http\Controllers\API\V2\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Admin\Order\PaymentMethodController;
+use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
@@ -44,6 +45,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
         Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
         Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
+        Route::post('shipping-fee', ShippingFeeController::class);
 
         Route::prefix('{order}')->group(function () {
             Route::post('items/bulk/change-status', [OrderItemController::class, 'changeStatusBulk']);

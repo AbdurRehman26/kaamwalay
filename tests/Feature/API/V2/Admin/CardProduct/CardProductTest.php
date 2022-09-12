@@ -108,11 +108,14 @@ it('fails on repeated card number and params', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson(route('v2.admin.card-products.update', ['cardProduct' => $this->card]), [
+    $response = $this->postJson(route('v2.admin.card-products.store', ['cardProduct' => $this->card]), [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
         'release_date' => '2021-11-06',
+        'series_id' => $this->card->cardSet->card_series_id,
+        'set_id' => $this->card->card_set_id,
         'card_number' => strval($this->card->card_number_order),
         'language' => $this->card->language,
         'rarity' => $this->card->rarity,

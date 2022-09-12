@@ -182,7 +182,7 @@ test('admins can delete a card', function () {
 test('admins can get a single card', function () {
     $response = $this->getJson(route('v2.admin.card-products.show', ['cardProduct' => $this->card]));
 
-    $response->successful();
+    $response->assertSuccessful();
 });
 
 test('admins can get a list of cards', function () {

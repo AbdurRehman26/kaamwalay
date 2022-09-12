@@ -13,7 +13,9 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import LabelLogo from '@shared/assets/label.png';
+import { useAdminOrderLabelQuery } from '@shared/redux/hooks/useOrderLabelQuery';
 import { setEditLabelDialog } from '@shared/redux/slices/adminEditLabelDialogSlice';
 import { RootState } from '../../redux/store';
 
@@ -142,7 +144,14 @@ const LabelDialog = styled(Dialog)({
 
 export function EditLabelDialog() {
     const dispatch = useDispatch();
+    const { id } = useParams<'id'>();
     const labelDialog = useSelector((state: RootState) => state.adminEditLabelDialog.openLabelDialog.labelDialog);
+
+    const { data, isLoading } = useAdminOrderLabelQuery({
+        resourceId: Number(id),
+    });
+
+    console.log(data, isLoading);
 
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
@@ -151,7 +160,7 @@ export function EditLabelDialog() {
     return (
         <LabelDialog onClose={handleModal} open={labelDialog} maxWidth={'sm'} fullWidth>
             <DialogTitle>
-                Edit Label Text
+                Edit Label Text {id}
                 <IconButton
                     onClick={handleModal}
                     aria-label="close"

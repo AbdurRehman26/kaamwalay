@@ -17,6 +17,8 @@ trait CouponApplicables
                 return $this->getPercentageDiscount($coupon, $order);
             case 'flat':
                 return $this->getFlatDiscount($coupon, $order);
+            case 'free_cards':
+                return $this->getFreeCardsDiscount($coupon, $order);
             default:
                 return $this->getFixedDiscount($coupon, $order);
         }
@@ -57,5 +59,12 @@ trait CouponApplicables
             array_sum(array_column($this->getOrderItems($order), 'declared_value_per_unit')),
             array_sum(array_column($this->getOrderItems($order), 'quantity'))
         );
+    }
+
+    public function getFreeCardsDiscount(Coupon $coupon, Order|array $order): float
+    {
+        $totalCards = array_sum(array_column($this->getOrderItems($order), 'quantity'));
+
+        return (int) $coupon->discount_value < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) :  ( $totalCards * $this->getPaymentPlan($order)->price);
     }
 }

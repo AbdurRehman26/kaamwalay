@@ -449,6 +449,49 @@ export function PromoCodeModal() {
                                 ) : null}
                             </Box>
                         </Paper>
+                        <Paper
+                            variant={'outlined'}
+                            className={classes.discountOption}
+                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.freeCards)}
+                        >
+                            <Radio
+                                checked={discountType === DiscountTypeEnums.freeCards}
+                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.freeCards)}
+                                value={DiscountTypeEnums.freeCards}
+                            />
+                            <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                                <Typography
+                                    variant={'caption'}
+                                    className={classes.secondaryLabel}
+                                    sx={{
+                                        fontWeight: discountType === DiscountTypeEnums.freeCards ? 'bold' : 'normal',
+                                    }}
+                                >
+                                    Free Cards
+                                </Typography>
+                                {discountType === DiscountTypeEnums.freeCards ? (
+                                    <TextField
+                                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                        placeholder={'0'}
+                                        size={'small'}
+                                        sx={{ maxWidth: '120px', marginLeft: '3px' }}
+                                        variant="outlined"
+                                        value={discountValue}
+                                        onChange={(event) =>
+                                            dispatch(
+                                                setDiscountValue(
+                                                    event.target.value
+                                                        ? parseInt(event.target.value)
+                                                            ? parseInt(event.target.value).toString()
+                                                            : ''
+                                                        : '',
+                                                ),
+                                            )
+                                        }
+                                    />
+                                ) : null}
+                            </Box>
+                        </Paper>
                     </Box>
                     <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
                         <Typography variant={'subtitle1'} className={classes.label}>

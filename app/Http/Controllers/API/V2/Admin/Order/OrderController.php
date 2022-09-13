@@ -6,11 +6,14 @@ use App\Exceptions\API\Admin\Order\OrderCanNotBeCancelled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
+use App\Http\Requests\API\V2\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
+use App\Http\Resources\API\V2\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Admin\V2\OrderService;
+use App\Services\Order\V2\CreateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +69,25 @@ class OrderController extends V1OrderController
         $order = $this->ordersService->getOrder($orderId);
 
         return new OrderResource($order);
+    }
+
+
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    {
+        try {
+            $createOrderService = resolve(CreateOrderService::class);
+
+            $order = $createOrderService->create($request->validated());
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return new OrderCreateResource($order);
     }
 
     /**

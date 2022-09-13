@@ -71,7 +71,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
         });
     });
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'destroy']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
 
 
     Route::prefix('cards')->group(function () {

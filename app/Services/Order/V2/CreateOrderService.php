@@ -15,6 +15,7 @@ use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
+use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\CleaningFee\CleaningFeeService;
@@ -28,6 +29,7 @@ use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -36,6 +38,7 @@ class CreateOrderService
 {
     protected Order $order;
     protected array $data;
+    protected User|Authenticatable $orderUser;
 
     public function __construct(
         protected OrderItemService $orderItemService,
@@ -50,6 +53,13 @@ class CreateOrderService
     public function create(array $data): Order
     {
         $this->data = $data;
+
+        $authUser = auth()->user();
+        if ($authUser->isAdmin() && array_key_exists('user_id', $this->data)) {
+            $this->orderUser = User::find($this->data['user_id']);
+        } else {
+            $this->orderUser = $authUser;
+        }
 
         try {
             $this->validate();
@@ -168,7 +178,7 @@ class CreateOrderService
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [
-                    'user_id' => auth()->user()->id,
+                    'user_id' => $this->orderUser->id,
                 ]
             ));
         }
@@ -176,7 +186,7 @@ class CreateOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->user()->associate(auth()->user());
+        $this->order->user()->associate($this->orderUser);
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();

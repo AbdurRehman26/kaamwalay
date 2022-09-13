@@ -18,7 +18,7 @@
     </div>
 
     <div class="container Home-sectionContainer">
-        <div class="Home-availableCardsImages">
+        <div class="Home-availableCardsImages Home-cards--js">
             @foreach($categories as $category)
                 <div class="Home-availableCardsColumn" data-aos="fade" data-aos-delay="100">
                     <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="Home-availableCardsImage" />

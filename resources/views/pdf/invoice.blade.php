@@ -309,7 +309,7 @@
                     @if(!empty($shippingAddress))
                         {{$shippingAddress->getFullName()}}
                         <br/>
-                        {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
+                        {{$shippingAddress->address}} {{$shippingAddress->address_2}} @if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
                         <br/>
                         {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
                         <br/>
@@ -338,6 +338,9 @@
                             Collector Coin ({{$orderPayment->transaction->amount}} AGS)
                             <br/>
                             {{$orderPayment->transaction->hash}}
+                            <br/>
+                        @elseif(property_exists($orderPayment,'manual'))
+                            Manual Payment
                             <br/>
                         @endif
                         @if($order->amount_paid_from_wallet > 0)

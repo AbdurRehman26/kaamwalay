@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        Log::shareContext([
+            'trace-id' => (string) Str::uuid(),
+        ]);
+
         if ($this->app->environment('local')) {
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

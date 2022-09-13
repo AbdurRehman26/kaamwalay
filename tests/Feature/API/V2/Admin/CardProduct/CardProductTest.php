@@ -3,7 +3,9 @@
 use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSurface;
+use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
@@ -25,6 +27,7 @@ beforeEach(function () {
         'language' => 'English',
         'rarity' => 'Common',
         'surface' => '',
+        'card_reference_id' => Str::random(),
     ]);
 
     $this->user = User::factory()
@@ -107,11 +110,14 @@ it('fails on repeated card number and params', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson(route('v2.admin.card-products.update', ['cardProduct' => $this->card]), [
+    $response = $this->postJson(route('v2.admin.card-products.store', ['cardProduct' => $this->card]), [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
         'release_date' => '2021-11-06',
+        'series_id' => $this->card->cardSet->card_series_id,
+        'set_id' => $this->card->card_set_id,
         'card_number' => strval($this->card->card_number_order),
         'language' => $this->card->language,
         'rarity' => $this->card->rarity,
@@ -131,6 +137,7 @@ test('admins can update cards manually', function () {
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
     $response = $this->put(route('v2.admin.card-products.update', ['cardProduct' => $this->card]), [
@@ -159,6 +166,16 @@ test('admins can update cards manually', function () {
 });
 
 test('admins can delete a card', function () {
+    Http::fake([
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/cards/*' => Http::response([
+                "app_status" => 1,
+                "app_message" => [
+                    "Removed successfully",
+                ],
+            ], 204),
+    ]);
+
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
 
     $response->assertNoContent();
@@ -167,11 +184,25 @@ test('admins can delete a card', function () {
 test('admins can get a single card', function () {
     $response = $this->getJson(route('v2.admin.card-products.show', ['cardProduct' => $this->card]));
 
-    $response->successful();
+    $response->assertSuccessful();
 });
 
 test('admins can get a list of cards', function () {
     $response = $this->getJson(route('v2.admin.card-products.index'));
 
     $response->assertSuccessful();
+});
+
+test('admins can not delete a card if it has graded items', function () {
+    $orderItem = OrderItem::factory()->create([
+        'card_product_id' => $this->card->id,
+    ]);
+
+    UserCard::factory()->create([
+        'order_item_id' => $orderItem->id,
+    ]);
+
+    $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
+
+    $response->assertForbidden();
 });

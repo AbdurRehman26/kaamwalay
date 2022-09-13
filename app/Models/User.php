@@ -6,7 +6,10 @@ use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
+use App\Http\Sorts\AdminCustomerSubmissionsSort;
+use App\Http\Sorts\AdminCustomerWalletSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
@@ -19,6 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -120,8 +124,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public static function getAllowedAdminSorts(): array
     {
         return [
-            AllowedSort::field('submissions', 'orders_count'),
+            AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
             AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
+            AllowedSort::custom('wallet', new AdminCustomerWalletSort),
+            AllowedSort::custom('cards', new AdminCustomerCardsSort),
             'email',
             'customer_number',
             'created_at',
@@ -220,6 +226,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return HasManyThrough<OrderItem>
+     */
+    public function orderItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderItem::class, Order::class);
     }
 
     /**
@@ -347,7 +361,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->created_at,
             $row->orders()->paid()->count(),
             $row->cardsCount(),
-            $this->wallet?->balance,
+            $row->wallet?->balance,
         ];
     }
 

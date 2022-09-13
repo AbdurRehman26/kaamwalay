@@ -6,6 +6,8 @@ use App\Http\Resources\API\V1\CardProduct\CardProductResource as V1CardProductRe
 
 /**
  * @property-read int $population
+ * @property mixed $rarity
+ * @property mixed $card_number
 */
 class CardProductResource extends V1CardProductResource
 {

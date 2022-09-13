@@ -7,7 +7,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { UserEntity } from '@shared/entities/UserEntity';
 
 const useStyles = makeStyles({
-    textColor: {
+    textColorSecondary: {
         color: '#0000008A',
     },
 });
@@ -35,10 +35,11 @@ export function CustomerCardView(props: CustomerCardViewProps) {
                             <Grid ml={1}>
                                 <Typography sx={{ fontSize: '12px' }}>{customer.getFullName()}</Typography>
                                 <Typography sx={{ fontSize: '12px' }}>
-                                    Customer Id: <span className={classes.textColor}>{customer.customerNumber}</span>{' '}
+                                    Customer Id:{' '}
+                                    <span className={classes.textColorSecondary}>{customer.customerNumber}</span>{' '}
                                 </Typography>
                                 <Typography sx={{ fontSize: '12px' }}>
-                                    Email: <span className={classes.textColor}>{customer.email}</span>{' '}
+                                    Email: <span className={classes.textColorSecondary}>{customer.email}</span>{' '}
                                 </Typography>
                             </Grid>
                         </Grid>

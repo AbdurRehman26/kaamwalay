@@ -65,6 +65,6 @@ trait CouponApplicables
     {
         $totalCards = array_sum(array_column($this->getOrderItems($order), 'quantity'));
 
-        return (int) $coupon->discount_value < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) :  ( $totalCards * $this->getPaymentPlan($order)->price);
+        return (int) $coupon->discount_value < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) :  ($totalCards * $this->getPaymentPlan($order)->price);
     }
 }

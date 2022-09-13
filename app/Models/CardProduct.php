@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -286,18 +287,10 @@ class CardProduct extends Model
     }
 
     /**
-     * @return Builder<UserCard>
+     * @return HasManyThrough<UserCard>
      */
-    public function userCards(): Builder
+    public function userCards(): HasManyThrough
     {
-        $orderItemIds = $this->orderItems()
-            ->whereHas(
-                'order',
-                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
-            )
-            ->pluck('order_items.id')
-            ->toArray();
-
-        return UserCard::query()->whereIn('order_item_id', $orderItemIds);
+        return $this->hasManyThrough(UserCard::class, OrderItem::class);
     }
 }

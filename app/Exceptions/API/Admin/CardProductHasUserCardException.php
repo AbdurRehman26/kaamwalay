@@ -13,7 +13,7 @@ class CardProductHasUserCardException extends Exception
     protected $message = 'Card can not be deleted because it has a graded user card.';
 
     /** @var int */
-    protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+    protected $code = Response::HTTP_FORBIDDEN;
 
     /**
      * @param Request|array $request

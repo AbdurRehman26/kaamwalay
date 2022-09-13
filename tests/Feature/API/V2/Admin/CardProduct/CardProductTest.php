@@ -3,7 +3,9 @@
 use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSurface;
+use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
@@ -189,4 +191,18 @@ test('admins can get a list of cards', function () {
     $response = $this->getJson(route('v2.admin.card-products.index'));
 
     $response->assertSuccessful();
+});
+
+test('admins can not delete a card if it has graded items', function () {
+    $orderItem = OrderItem::factory()->create([
+        'card_product_id' => $this->card->id,
+    ]);
+
+    UserCard::factory()->create([
+        'order_item_id' => $orderItem->id,
+    ]);
+
+    $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
+
+    $response->assertForbidden();
 });

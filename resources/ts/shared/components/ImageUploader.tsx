@@ -83,7 +83,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
             >
                 <input {...getInputProps()} />
                 <img
-                    src={props.imageUrl ? props.imageUrl : URL.createObjectURL(props.imageUrl)}
+                    src={uploadedImage ? URL.createObjectURL(uploadedImage) : props.imageUrl}
                     alt=""
                     className={classes.uploadedImage}
                     style={{

@@ -291,6 +291,10 @@ class CardProduct extends Model
      */
     public function userCards(): HasManyThrough
     {
-        return $this->hasManyThrough(UserCard::class, OrderItem::class);
+        return $this->hasManyThrough(UserCard::class, OrderItem::class)
+            ->whereHas(
+                'orderItem.order',
+                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
+            );
     }
 }

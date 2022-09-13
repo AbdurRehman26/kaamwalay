@@ -233,6 +233,6 @@ class CardProductService
     protected function reindexUserCards(CardProduct $cardProduct): void
     {
         // @phpstan-ignore-next-line
-        $cardProduct->userCards()->get()->searchable();
+        $cardProduct->userCards()->searchable();
     }
 }

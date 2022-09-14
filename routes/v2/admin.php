@@ -69,6 +69,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
                 ->name('payments.extra-charge');
             Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
             Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
+            Route::post('coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('admin.orders.coupon.discount');
         });
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);

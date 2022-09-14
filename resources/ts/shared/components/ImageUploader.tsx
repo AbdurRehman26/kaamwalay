@@ -12,6 +12,11 @@ import { DropzoneOptions, useDropzone } from 'react-dropzone';
 interface ImageUploaderProps {
     onChange: (file: File | null) => void;
     profilePicMode?: boolean;
+    maxHeight?: string;
+    maxWidth?: string;
+    isSmall?: boolean;
+    imageUrl?: any;
+    onDelete?: () => void;
 }
 
 const useStyles = makeStyles(
@@ -30,7 +35,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const classes = useStyles();
     const [uploadedImage, setUploadedImage] = useState(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
     const onDrop = useCallback(
         (acceptedFiles) => {
             setUploadedImage(acceptedFiles[acceptedFiles.length - 1]);
@@ -49,6 +53,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
             e.stopPropagation();
             setUploadedImage(null);
             props.onChange(null);
+            props.onDelete?.();
         },
         [props],
     );
@@ -64,23 +69,57 @@ export default function ImageUploader(props: ImageUploaderProps) {
         [inputRef],
     );
 
-    if (uploadedImage) {
+    if (uploadedImage || props.imageUrl) {
         return (
             <Box
                 sx={{ backgroundColor: '#F9F9F9', border: '1px solid #E0E0E0' }}
-                minWidth={'214px'}
-                minHeight={'214px'}
+                minWidth={props.maxWidth ? props.maxWidth : '214px'}
+                minHeight={props.maxHeight ? props.maxHeight : '214px'}
                 display={'flex'}
                 flexDirection={'column'}
                 alignItems={'center'}
-                justifyContent={'center'}
+                justifyContent={'space-between'}
                 {...getRootProps()}
             >
                 <input {...getInputProps()} />
-                <img src={URL.createObjectURL(uploadedImage)} alt="" className={classes.uploadedImage} />
-                <ButtonGroup variant="contained" sx={{ marginTop: '6px', marginBottom: '6px' }}>
-                    <Button onClick={deleteImage}>Delete</Button>
-                    <Button onClick={replaceImage}>Replace</Button>
+                <img
+                    src={uploadedImage ? URL.createObjectURL(uploadedImage) : props.imageUrl}
+                    alt=""
+                    className={classes.uploadedImage}
+                    style={{
+                        maxHeight: props.maxHeight ? props.maxHeight : '176px',
+                        maxWidth: props.maxWidth ? props.maxWidth : '210px',
+                    }}
+                />
+                <ButtonGroup
+                    size={props.isSmall ? 'small' : 'medium'}
+                    sx={{
+                        marginTop: '6px',
+                        marginBottom: '6px',
+                        backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                        border: props.isSmall ? '1px solid #CCCCCC' : '',
+                    }}
+                >
+                    <Button
+                        sx={{
+                            color: props.isSmall ? 'black' : 'white',
+                            backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                            border: props.isSmall ? '1px solid #CCCCCC' : '',
+                        }}
+                        onClick={deleteImage}
+                    >
+                        Delete
+                    </Button>
+                    <Button
+                        sx={{
+                            color: props.isSmall ? 'black' : 'white',
+                            backgroundColor: props.isSmall ? '#F9F9F9' : '#20BFB8',
+                            border: props.isSmall ? '1px solid #CCCCCC' : '',
+                        }}
+                        onClick={replaceImage}
+                    >
+                        Replace
+                    </Button>
                 </ButtonGroup>
             </Box>
         );
@@ -127,8 +166,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 backgroundColor: '#F9F9F9',
                 border: '1px solid #E0E0E0',
             }}
-            minHeight={'214px'}
-            minWidth={'214px'}
+            minHeight={props.maxHeight ? props.maxHeight : '176px'}
+            minWidth={props.maxWidth ? props.maxWidth : '214px'}
             display={'flex'}
             flexDirection={'column'}
             alignItems={'center'}

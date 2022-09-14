@@ -71,6 +71,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
             Route::patch('update-billing-address', [OrderController::class, 'updateBillingAddress'])
                 ->name('admin.orders.update-billing-address');
+            Route::post('coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('admin.orders.coupon.discount');
         });
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);

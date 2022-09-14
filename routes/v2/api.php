@@ -81,7 +81,6 @@ Route::prefix('customer')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::get('{orderId}', [OrderController::class, 'show']);
-            Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
@@ -89,7 +88,6 @@ Route::prefix('customer')->group(function () {
             Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class)
                 ->name('customer.orders.update-shipping-method');
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
-            Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
             Route::post('{order}/coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('orders.coupon.discount');
 

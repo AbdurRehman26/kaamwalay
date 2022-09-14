@@ -7,6 +7,7 @@ use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\StoreOrderRequest;
+use App\Http\Requests\API\V2\Admin\Order\UpdateBillingAddressRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
@@ -117,5 +118,18 @@ class OrderController extends V1OrderController
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request): JsonResponse
+    {
+
+        /** @var OrderService $orderService */
+        $orderService = resolve(OrderService::class);
+        $orderService->updateBillingAddress($order, $request->validated());
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Billing Address Updated successfully.',
+        ]);
     }
 }

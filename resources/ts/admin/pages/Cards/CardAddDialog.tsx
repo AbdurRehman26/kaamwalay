@@ -424,13 +424,13 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         const endpoint = apiService.createEndpoint('/admin/cards/sets');
         setIsLoading(true);
         try {
-            const SetLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
+            const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
 
             const DTO = {
                 cardSeriesId: dialogState.selectedCardSeries?.id,
                 name: newSetName,
                 releaseDate: newSetReleaseDate,
-                imagePath: SetLogoPublicImage,
+                imagePath: setLogoPublicImage,
             };
             const responseItem = await endpoint.post('', DTO);
             NotificationsService.success('Set Added Successfully');

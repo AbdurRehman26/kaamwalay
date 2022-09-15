@@ -7,7 +7,10 @@ export class CardLabelEntity extends Entity {
     public lineTwo!: string;
     public lineThree!: string;
     public lineFour!: string;
+    public nickName!: string;
+    public certificateNumber!: string;
+    public grade!: number;
 
     @Type(() => CardProductEntity)
-    public CardProduct!: CardProductEntity;
+    public cardProduct!: CardProductEntity;
 }

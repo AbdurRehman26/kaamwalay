@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -13,10 +14,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import LabelLogo from '@shared/assets/label.png';
-import { useAdminOrderLabelQuery } from '@shared/redux/hooks/useOrderLabelQuery';
-import { setEditLabelDialog } from '@shared/redux/slices/adminEditLabelDialogSlice';
+import { setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
 
 const CardDiv = styled(Grid)({
@@ -144,23 +143,20 @@ const LabelDialog = styled(Dialog)({
 
 export function EditLabelDialog() {
     const dispatch = useDispatch();
-    const { id } = useParams<'id'>();
-    const labelDialog = useSelector((state: RootState) => state.adminEditLabelDialog.openLabelDialog.labelDialog);
-
-    const { data, isLoading } = useAdminOrderLabelQuery({
-        resourceId: Number(id),
-    });
-
-    console.log(data, isLoading);
+    const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
+    const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
 
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
     }, [dispatch]);
 
+    if (orderLabels) {
+        <CircularProgress size={24} color={'inherit'} />;
+    }
     return (
         <LabelDialog onClose={handleModal} open={labelDialog} maxWidth={'sm'} fullWidth>
             <DialogTitle>
-                Edit Label Text {id}
+                Edit Label Text
                 <IconButton
                     onClick={handleModal}
                     aria-label="close"
@@ -175,104 +171,106 @@ export function EditLabelDialog() {
                 </IconButton>
             </DialogTitle>
             <DialogContent dividers>
-                <CardDiv>
-                    <div className={'LeftSideDiv'}>
-                        <div className={'CardInfo'}>
-                            <div className={'CardImageDiv'}>
-                                <img
-                                    src="https://den-cards.pokellector.com/197/Charizard.EVO.11.13280.png"
-                                    alt="cardImage"
-                                    className={'CardImage'}
+                {orderLabels.map((orderLabel) => (
+                    <CardDiv>
+                        <div className={'LeftSideDiv'}>
+                            <div className={'CardInfo'}>
+                                <div className={'CardImageDiv'}>
+                                    <img
+                                        src={orderLabel.cardProduct?.imagePath}
+                                        alt={orderLabel.cardProduct?.name}
+                                        className={'CardImage'}
+                                    />
+                                </div>
+                                <div className={'CardTextDiv'}>
+                                    <Typography className={'CardName'}>{orderLabel.cardProduct?.name}</Typography>
+                                    <Typography className={'CardLongName'}>
+                                        {orderLabel.cardProduct?.longName}
+                                    </Typography>
+                                </div>
+                            </div>
+                            <div>
+                                <Typography className={'LinesText'}>Lines 1 - 4</Typography>
+                            </div>
+                            <div className={'InputTextDiv'}>
+                                <Typography className={'TextBoxNumber'}>1:</Typography>
+                                <Input
+                                    type="text"
+                                    value={orderLabel?.lineOne}
+                                    disableUnderline
+                                    sx={{
+                                        border: '1px solid #DADADA',
+                                        borderRadius: '4px',
+                                        padding: '5px',
+                                        width: '100%',
+                                    }}
                                 />
                             </div>
-                            <div className={'CardTextDiv'}>
-                                <Typography className={'CardName'}>Charizard</Typography>
-                                <Typography className={'CardLongName'}>
-                                    2020 Pokemon Sword & Shield Vivid Voltag...
-                                </Typography>
+                            <div className={'InputTextDiv'}>
+                                <Typography className={'TextBoxNumber'}>2:</Typography>
+                                <Input
+                                    type="text"
+                                    value={orderLabel?.lineTwo}
+                                    disableUnderline
+                                    sx={{
+                                        border: '1px solid #DADADA',
+                                        borderRadius: '4px',
+                                        padding: '5px',
+                                        width: '100%',
+                                    }}
+                                />
                             </div>
-                        </div>
-                        <div>
-                            <Typography className={'LinesText'}>Lines 1 - 4</Typography>
-                        </div>
-                        <div className={'InputTextDiv'}>
-                            <Typography className={'TextBoxNumber'}>1:</Typography>
-                            <Input
-                                type="text"
-                                value={'2021 P.M. JAPANESE SWSH'}
-                                disableUnderline
-                                sx={{
-                                    border: '1px solid #DADADA',
-                                    borderRadius: '4px',
-                                    padding: '5px',
-                                    width: '100%',
-                                }}
+                            <div className={'InputTextDiv'}>
+                                <Typography className={'TextBoxNumber'}>3:</Typography>
+                                <Input
+                                    type="text"
+                                    value={orderLabel?.lineThree}
+                                    disableUnderline
+                                    sx={{
+                                        border: '1px solid #DADADA',
+                                        borderRadius: '4px',
+                                        padding: '5px',
+                                        width: '100%',
+                                    }}
+                                />
+                            </div>
+                            <div className={'InputTextDiv'}>
+                                <Typography className={'TextBoxNumber'}>4:</Typography>
+                                <Input
+                                    type="text"
+                                    value={orderLabel?.lineFour}
+                                    disableUnderline
+                                    sx={{
+                                        border: '1px solid #DADADA',
+                                        borderRadius: '4px',
+                                        padding: '5px',
+                                        width: '100%',
+                                    }}
+                                />
+                            </div>
+                            <FormControlLabel
+                                className={'CheckBoxLabel'}
+                                control={<Checkbox defaultChecked />}
+                                label="Save changes to this card’s label"
                             />
                         </div>
-                        <div className={'InputTextDiv'}>
-                            <Typography className={'TextBoxNumber'}>2:</Typography>
-                            <Input
-                                type="text"
-                                value={'FA/GENGAR VMAX'}
-                                disableUnderline
-                                sx={{
-                                    border: '1px solid #DADADA',
-                                    borderRadius: '4px',
-                                    padding: '5px',
-                                    width: '100%',
-                                }}
-                            />
+                        <div className={'RightSideDiv'}>
+                            <Typography className={'LabelPreviewText'}>Label Preview</Typography>
+                            <div className={'LabelImageLeftText'}>
+                                <Typography className={'LabelText'}>{orderLabel?.lineOne}</Typography>
+                                <Typography className={'LabelText'}>{orderLabel?.lineTwo}</Typography>
+                                <Typography className={'LabelText'}>{orderLabel?.lineThree}</Typography>
+                                <Typography className={'LabelText'}>{orderLabel?.lineFour}</Typography>
+                            </div>
+                            <div className={'LabelImageRightText'}>
+                                <Typography className={'LabelText'}>{orderLabel?.nickName}</Typography>
+                                <Typography className={'GradeText'}>{orderLabel?.grade}</Typography>
+                                <Typography className={'LabelText'}>{orderLabel?.certificateNumber}</Typography>
+                            </div>
+                            <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
                         </div>
-                        <div className={'InputTextDiv'}>
-                            <Typography className={'TextBoxNumber'}>3:</Typography>
-                            <Input
-                                type="text"
-                                value={'2GENGAR VMAX HIGH-CLS. DK.'}
-                                disableUnderline
-                                sx={{
-                                    border: '1px solid #DADADA',
-                                    borderRadius: '4px',
-                                    padding: '5px',
-                                    width: '100%',
-                                }}
-                            />
-                        </div>
-                        <div className={'InputTextDiv'}>
-                            <Typography className={'TextBoxNumber'}>4:</Typography>
-                            <Input
-                                type="text"
-                                value={'#002'}
-                                disableUnderline
-                                sx={{
-                                    border: '1px solid #DADADA',
-                                    borderRadius: '4px',
-                                    padding: '5px',
-                                    width: '100%',
-                                }}
-                            />
-                        </div>
-                        <FormControlLabel
-                            className={'CheckBoxLabel'}
-                            control={<Checkbox defaultChecked />}
-                            label="Save changes to this card’s label"
-                        />
-                    </div>
-                    <div className={'RightSideDiv'}>
-                        <Typography className={'LabelPreviewText'}>Label Preview</Typography>
-                        <div className={'LabelImageLeftText'}>
-                            <Typography className={'LabelText'}>2021 P.M. JAPANESE SWSH</Typography>
-                            <Typography className={'LabelText'}>FA/GENGAR VMAX</Typography>
-                            <Typography className={'LabelText'}>GENGAR VMAX HIGH-CLS.</Typography>
-                            <Typography className={'LabelText'}>#003</Typography>
-                        </div>
-                        <div className={'LabelImageRightText'}>
-                            <Typography className={'LabelText'}>MINT</Typography>
-                            <Typography className={'GradeText'}>9</Typography>
-                            <Typography className={'LabelText'}>0000001</Typography>
-                        </div>
-                        <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
-                    </div>
-                </CardDiv>
+                    </CardDiv>
+                ))}
             </DialogContent>
             <DialogActions>
                 <Button className={'CancelButton'} onClick={handleModal}>

@@ -29,7 +29,7 @@ class UserCardLabelResource extends BaseResource
             'card_label_id' => $cardProduct->cardLabel->id,
             'certificate_number' => $this->certificate_number,
             'grade' => $this->resource->overall_grade,
-            'nickname' => $this->overall_grade_nickname,
+            'nick_name' => $this->overall_grade_nickname,
             'line_one' => $cardProduct->cardLabel->line_one,
             'line_two' => $cardProduct->cardLabel->line_two,
             'line_three' => $cardProduct->cardLabel->line_three,

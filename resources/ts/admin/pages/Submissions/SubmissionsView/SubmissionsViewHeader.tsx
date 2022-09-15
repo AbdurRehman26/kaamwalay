@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
@@ -16,7 +17,7 @@ import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
-import { setEditLabelDialog } from '@shared/redux/slices/adminEditLabelDialogSlice';
+import { getOrderLabels, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
@@ -90,6 +91,7 @@ export function SubmissionsViewHeader({
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
     const dispatch = useDispatch();
     const notifications = useNotifications();
+    const { id } = useParams<'id'>();
 
     const sharedProps: any = useMemo(
         () => ({
@@ -138,7 +140,10 @@ export function SubmissionsViewHeader({
 
     const handleLabelDialog = useCallback(async () => {
         dispatch(setEditLabelDialog(true));
-    }, [dispatch]);
+        if (id) {
+            await dispatch(getOrderLabels({ id }));
+        }
+    }, [dispatch, id]);
 
     const ExportCertificateIds = useCallback(async () => {
         if (!orderCertificate) {

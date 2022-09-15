@@ -1,41 +1,50 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { instanceToPlain } from 'class-transformer';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
 import { app } from '@shared/lib/app';
-import { NotificationsService } from '@shared/services/NotificationsService';
-import { CardLabelEntity } from '../../entities/CardLabelEntity';
-import { OrderLabelsRepository } from '../../repositories/Admin/OrderLabelsRepository';
-import { APIState } from '../../types/APIState';
-import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
+import { APIService } from '@shared/services/APIService';
 
-interface StateType extends APIState<CardLabelEntity> {}
+export interface OpenLabelDialog {
+    labelDialog: boolean;
+}
 
-const adminOrderLabelsThunk = createRepositoryThunk('adminOrderLabels', OrderLabelsRepository);
+export interface OrderLabels {
+    labels: CardLabelEntity[];
+}
 
-export const storeOrderLabel = createAsyncThunk('storeOrderLabel', async (input, thunkAPI) => {
-    const orderLabelsRepository = app(OrderLabelsRepository);
+export interface AdminOrderLabelsSliceState {
+    openLabelDialog: OpenLabelDialog;
+    orderLabels: OrderLabels;
+}
 
-    try {
-        const customer: CardLabelEntity = await orderLabelsRepository.storeOrderLabel(input);
-        NotificationsService.success('OrderLabel updated successfully!');
-        return instanceToPlain(customer);
-    } catch (e: any) {
-        NotificationsService.exception(e);
-        return thunkAPI.rejectWithValue(e);
-    }
+const initialState: AdminOrderLabelsSliceState = {
+    openLabelDialog: {
+        labelDialog: false,
+    },
+    orderLabels: {
+        labels: [],
+    },
+};
+
+export const getOrderLabels = createAsyncThunk('orderLabels/getOrderLabels', async (input: { id: string }) => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
+    const orderLabels = await endpoint.get('');
+    return orderLabels.data;
 });
 
 export const adminOrderLabelsSlice = createSlice({
-    name: adminOrderLabelsThunk.name,
-    initialState: {
-        ...adminOrderLabelsThunk.initialState,
-    } as StateType,
+    name: 'adminOrderLabels',
+    initialState,
     reducers: {
-        invalidateAdminOrderLabels: adminOrderLabelsThunk.invalidateEntities,
+        setEditLabelDialog: (state, action: PayloadAction<boolean>) => {
+            state.openLabelDialog.labelDialog = action.payload;
+        },
     },
-    extraReducers: (builder) => {
-        adminOrderLabelsThunk.buildReducers(builder);
+    extraReducers: {
+        [getOrderLabels.fulfilled as any]: (state, action) => {
+            state.orderLabels.labels = action.payload;
+        },
     },
 });
 
-export const { invalidateAdminOrderLabels } = adminOrderLabelsSlice.actions;
-export const { listAction: listAdminOrderLabelsAction, showAction: showAdminOrderLabelAction } = adminOrderLabelsThunk;
+export const { setEditLabelDialog } = adminOrderLabelsSlice.actions;

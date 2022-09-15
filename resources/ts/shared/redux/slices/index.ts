@@ -14,5 +14,4 @@ export { pendingOrdersSlice as pendingOrders } from './pendingOrdersSlice';
 export { vaultShipmentsSlice as vaultShipments } from './vaultShipmentsSlice';
 export { modalsSlice as modals } from './modalsSlice';
 export { countrySlice as countries } from './countrySlice';
-export { adminEditLabelDialogSlice as adminEditLabelDialog } from './adminEditLabelDialogSlice';
 export { adminOrderLabelsSlice as adminOrderLabels } from './adminOrderLabelsSlice';

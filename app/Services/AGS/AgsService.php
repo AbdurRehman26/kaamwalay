@@ -2,10 +2,13 @@
 
 namespace App\Services\AGS;
 
+use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
+use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
 use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class AgsService
 {
@@ -304,5 +307,36 @@ class AgsService
         }
 
         return null;
+    }
+
+    protected function findCard(string $cardReference): array
+    {
+        return $this->client->findCard($cardReference);
+    }
+
+    /**
+     * @throws CardProductCanNotBeUpdated
+     */
+    public function updateCard(array $data): array
+    {
+        $cardDataFromAgs = $this->findCard($data['card_reference_id']);
+        if (array_key_exists('id', $cardDataFromAgs)) {
+            return $this->client->updateCard(Arr::except($data, 'card_reference_id'), $cardDataFromAgs['id']);
+        }
+
+        throw new CardProductCanNotBeUpdated;
+    }
+
+    /**
+     * @throws CardProductCanNotBeDeleted
+     */
+    public function deleteCard(string $cardReferenceId): array
+    {
+        $cardDataFromAgs = $this->findCard($cardReferenceId);
+        if (array_key_exists('id', $cardDataFromAgs)) {
+            return $this->client->deleteCard($cardDataFromAgs['id']);
+        }
+
+        throw new CardProductCanNotBeDeleted;
     }
 }

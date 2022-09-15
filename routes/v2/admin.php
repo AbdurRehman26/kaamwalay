@@ -61,8 +61,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
         Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
+<<<<<<< HEAD
         Route::get('labels', [CardLabelController::class, 'getOrderLabels']);
         Route::put('labels', [CardLabelController::class, 'updateAndExportOrderLabels']);
+=======
+
+        Route::post('generate-label', [OrderController::class, 'generateLabel']);
+>>>>>>> 84cafac2392e9a4fe1b77d2006a9ae6bd8d5b32a
     });
 
     Route::prefix('cards')->group(function () {
@@ -72,7 +77,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('labels', CardLabelController::class)->only(['update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
-        Route::post('/', [CardProductController::class, 'store']);
+        Route::post('/', [CardProductController::class, 'store'])->name('admin.card-products.store');
+        Route::get('/', [CardProductController::class, 'index'])->name('admin.card-products.index');
+        Route::get('/{cardProduct}', [CardProductController::class, 'show'])->name('admin.card-products.show');
+        Route::put('/{cardProduct}', [CardProductController::class, 'update'])->name('admin.card-products.update');
+        Route::delete('/{cardProduct}', [CardProductController::class, 'destroy'])->name('admin.card-products.destroy');
     });
 
     Route::prefix('certificates')->group(function () {

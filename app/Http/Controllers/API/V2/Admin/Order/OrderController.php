@@ -5,11 +5,16 @@ namespace App\Http\Controllers\API\V2\Admin\Order;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeCancelled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
+use App\Exceptions\API\Admin\Order\OrderLabelCanNotBeGenerated;
+use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
+use App\Models\OrderStatus;
+use App\Services\Admin\Order\OrderLabelService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -95,5 +100,27 @@ class OrderController extends V1OrderController
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @throws OrderLabelCouldNotBeGeneratedException
+     * @throws AgsServiceIsDisabled
+     * @throws Throwable
+     */
+    public function generateLabel(Order $order): OrderResource
+    {
+        throw_if(
+            $order->order_status_id >= OrderStatus::GRADED && $order->order_status_id !== OrderStatus::CANCELLED,
+            new OrderLabelCanNotBeGenerated
+        );
+
+        /** @var OrderLabelService $orderLabelService */
+        $orderLabelService = resolve(OrderLabelService::class);
+
+        $orderLabelService->generateLabel($order);
+
+        $order->load('orderLabel');
+
+        return new OrderResource($order);
     }
 }

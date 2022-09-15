@@ -15,3 +15,4 @@ export { vaultShipmentsSlice as vaultShipments } from './vaultShipmentsSlice';
 export { modalsSlice as modals } from './modalsSlice';
 export { countrySlice as countries } from './countrySlice';
 export { adminOrderLabelsSlice as adminOrderLabels } from './adminOrderLabelsSlice';
+export { adminCardsSlice as adminCards } from './adminCardsSlice';

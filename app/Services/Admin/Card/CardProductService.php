@@ -4,6 +4,10 @@ namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
+use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
+use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
+use App\Exceptions\API\Admin\CardProductHasUserCardException;
+use App\Http\Filters\AdminCardProductSearchFilter;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardRarity;
@@ -12,7 +16,12 @@ use App\Models\CardSet;
 use App\Models\CardSurface;
 use App\Services\AGS\AgsService;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class CardProductService
 {
@@ -133,5 +142,97 @@ class CardProductService
             'name' => $setName,
             'serie' => $seriesId,
         ])['results'][0]['id'];
+    }
+
+    public function getCards(): LengthAwarePaginator
+    {
+        // @phpstan-ignore-next-line
+        return QueryBuilder::for(CardProduct::class)
+            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
+            ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
+            ->allowedFilters([
+                AllowedFilter::scope('card_category'),
+                AllowedFilter::scope('release_date'),
+                AllowedFilter::custom('search', new AdminCardProductSearchFilter),
+            ])
+            ->allowedSorts(['population'])
+            ->defaultSort('-population')
+            ->paginate(request('per_page', 10));
+    }
+
+    /**
+     * @throws CardProductCanNotBeUpdated
+     */
+    public function updateCard(CardProduct $cardProduct, array $data): CardProduct
+    {
+        $agsResponse = $this->updateCardProductOnAgs($cardProduct, $data);
+
+        if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
+            throw new CardProductCanNotBeUpdated;
+        }
+
+        $cardProduct->fill($data);
+        $cardProduct->save();
+
+        $this->reindexUserCards($cardProduct);
+
+        return $cardProduct;
+    }
+
+    protected function updateCardProductOnAgs(CardProduct $cardProduct, array $data): array
+    {
+        $updateData = [
+            'card_reference_id' => $cardProduct->card_reference_id,
+            'image_path' => $data['image_path'],
+            'name' => $data['name'],
+            'card_number_order' => $data['card_number'],
+            'language' => $data['language'],
+            'rarity' => $data['rarity'],
+            'edition' => $data['edition'] ?? 'Unlimited',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+        ];
+
+        try {
+            return $this->agsService->updateCard($updateData);
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
+        }
+    }
+
+    /**
+     * @throws CardProductCanNotBeDeleted
+     * @throws Throwable
+     */
+    public function deleteCard(CardProduct $cardProduct): void
+    {
+        throw_if($cardProduct->userCards()->count() > 0, CardProductHasUserCardException::class);
+
+        $agsResponse = $this->deleteCardProductFromAgs($cardProduct);
+
+        if (! $agsResponse || ! array_key_exists('app_message', $agsResponse)) {
+            throw new CardProductCanNotBeDeleted;
+        }
+
+        $cardProduct->delete();
+    }
+
+    protected function deleteCardProductFromAgs(CardProduct $cardProduct): array
+    {
+        try {
+            return $this->agsService->deleteCard($cardProduct->card_reference_id);
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
+        }
+    }
+
+    protected function reindexUserCards(CardProduct $cardProduct): void
+    {
+        // @phpstan-ignore-next-line
+        $cardProduct->userCards()->searchable();
     }
 }

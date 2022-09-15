@@ -11,7 +11,10 @@ use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Jobs\Admin\CreateSocialPreviewsForUserCard;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
@@ -165,5 +168,27 @@ class OrderService extends V1OrderService
         /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
+    }
+
+    public function createManualPayment(Order $order, User $user): Order
+    {
+        $manualPaymentMethodId = PaymentMethod::whereCode('manual')->value('id');
+
+        $order->payment_method_id = $manualPaymentMethodId;
+        $order->save();
+
+        $order->orderPayments()->create([
+            'payment_method_id' => $manualPaymentMethodId,
+            'user_id' => $user->id,
+        ]);
+
+        return $order;
+    }
+
+    public function generateSocialPreviewsForCards(Order $order): void
+    {
+        $order->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->each(function (OrderItem $orderItem) {
+            CreateSocialPreviewsForUserCard::dispatch($orderItem->userCard);
+        });
     }
 }

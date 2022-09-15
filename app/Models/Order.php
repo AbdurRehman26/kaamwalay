@@ -9,6 +9,11 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
+use App\Http\Sorts\AdminSubmissionsCardsSort;
+use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
+use App\Http\Sorts\AdminSubmissionsPaymentStatusSort;
+use App\Http\Sorts\AdminSubmissionsStatusSort;
+use App\Http\Sorts\AdminSubmissionsTotalDeclaredValueSort;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +26,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\AllowedSort;
 
 class Order extends Model implements Exportable
 {
@@ -141,6 +147,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('orderCertificate'),
         ];
     }
 
@@ -155,6 +162,21 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('customer_id'),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
+        ];
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return [
+            AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
+            AllowedSort::custom('total_declared_value', new AdminSubmissionsTotalDeclaredValueSort),
+            AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
+            AllowedSort::custom('status', new AdminSubmissionsStatusSort),
+            AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            'created_at',
+            'order_number',
+            'arrived_at',
+            'grand_total',
         ];
     }
 
@@ -309,6 +331,14 @@ class Order extends Model implements Exportable
         return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
     }
 
+    /**
+     * @return HasMany<OrderItem>
+     */
+    public function gradedOrderItems(): HasMany
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED);
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
         return $query->whereHas(
@@ -428,6 +458,11 @@ class Order extends Model implements Exportable
     public function exportFilters(): array
     {
         return self::getAllowedAdminFilters();
+    }
+
+    public function exportSort(): array
+    {
+        return self::getAllowedAdminSorts();
     }
 
     public function exportIncludes(): array
@@ -565,5 +600,13 @@ class Order extends Model implements Exportable
     public function isShipped(): bool
     {
         return $this->order_status_id === OrderStatus::SHIPPED;
+    }
+
+    /**
+     * @return HasOne<OrderCertificate>
+     */
+    public function orderCertificate(): HasOne
+    {
+        return $this->hasOne(OrderCertificate::class);
     }
 }

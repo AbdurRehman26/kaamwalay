@@ -10,9 +10,11 @@ import classNames from 'classnames';
 import { upperFirst } from 'lodash';
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { TableSortType } from '@shared/constants/TableSortType';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -58,8 +60,103 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
+    const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
+    const [orderBy, setOrderBy] = useState<string>('created_at');
+    const [sortFilter, setSortFilter] = useState('-created_at');
+
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+
+    const headings: EnhancedTableHeadCell[] = [
+        {
+            id: 'order_number',
+            numeric: false,
+            disablePadding: false,
+            label: 'Submission #',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'created_at',
+            numeric: false,
+            disablePadding: false,
+            label: tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'arrived_at',
+            numeric: false,
+            disablePadding: false,
+            label: 'Reviewed',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'customer_number',
+            numeric: false,
+            disablePadding: false,
+            label: 'Customer',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'cards',
+            numeric: true,
+            disablePadding: false,
+            label: 'Cards',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'status',
+            numeric: false,
+            disablePadding: false,
+            label: 'Status',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'payment_status',
+            numeric: false,
+            disablePadding: false,
+            label: 'Payment',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'total_declared_value',
+            numeric: true,
+            disablePadding: false,
+            label: 'Declared Value',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'grand_total',
+            numeric: true,
+            disablePadding: false,
+            label: 'Order Total',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'buttons',
+            numeric: false,
+            disablePadding: false,
+            label: '',
+            align: 'left',
+            sortable: false,
+        },
+        {
+            id: 'options',
+            numeric: false,
+            disablePadding: false,
+            label: '',
+            align: 'left',
+            sortable: false,
+        },
+    ];
 
     const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
         return (
@@ -86,6 +183,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'orderLabel',
                 'shippingMethod',
             ],
+            sort: sortFilter,
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,
@@ -101,6 +199,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         try {
             const exportData = await dataExportRepository.export({
                 model: ExportableModelsEnum.Order,
+                sort: { sort: sortFilter },
                 filter: {
                     search,
                     status: all ? 'all' : tabFilter,
@@ -112,7 +211,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [paymentStatus, dataExportRepository, search, all, tabFilter, notifications]);
+    }, [paymentStatus, dataExportRepository, search, all, tabFilter, notifications, sortFilter]);
+
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+        const isAsc = orderBy === property && orderDirection === 'asc';
+        setOrderDirection(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
     const handleApplyFilter = useCallback(
         async (selectedPaymentStatus) => {
@@ -122,35 +227,43 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 setPaymentStatus(selectedPaymentStatus);
             }
 
-            orders$.search(
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
                 }),
+                1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
     );
 
     useEffect(
         () => {
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
-                orders$.search(
+                orders$.searchSortedWithPagination(
+                    { sort: sortFilter },
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
                     }),
+                    1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search, isSearchEnabled],
+        [search, isSearchEnabled, sortFilter],
     );
 
     useEffect(() => {
         setIsSearchEnabled(true);
     }, []);
+
+    useEffect(() => {
+        setSortFilter((orderDirection === 'desc' ? '-' : '') + orderBy);
+    }, [orderDirection, orderBy]);
 
     if (orders$.isLoading) {
         return (
@@ -185,7 +298,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 })}
             </Grid>
             <TableContainer>
-                <CustomerSubmissionsList orders={orders$.data} paginationProp={orders$.paginationProps} />
+                <CustomerSubmissionsList
+                    orders={orders$.data}
+                    paginationProp={orders$.paginationProps}
+                    headings={headings}
+                    handleRequestSort={handleRequestSort}
+                    orderBy={orderBy}
+                    orderDirection={orderDirection}
+                />
             </TableContainer>
         </Grid>
     );

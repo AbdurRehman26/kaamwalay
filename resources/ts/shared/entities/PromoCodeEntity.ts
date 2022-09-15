@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { MinThresholdTypeEnum } from '@shared/constants/MinThresholdTypeEnum';
 import { PromoCodeApplicableEntity } from '@shared/entities/PromoCodeApplicableEntity';
 import { PromoCodeStatsEntity } from '@shared/entities/PromoCodeStatsEntity';
 import { PromoCodeStatusEntity } from '@shared/entities/PromoCodeStatusEntity';
@@ -25,6 +26,8 @@ export class PromoCodeEntity extends Entity {
     public discountDateType!: DiscountDateTypeEnum;
     public isPermanent!: boolean;
     public usageAllowedPerUser!: number | null;
+    public minThresholdType!: MinThresholdTypeEnum;
+    public minThresholdValue!: number;
 
     @Type(() => PromoServiceLevelEntity)
     public selectedDiscountServiceLevels!: PromoServiceLevelEntity[];

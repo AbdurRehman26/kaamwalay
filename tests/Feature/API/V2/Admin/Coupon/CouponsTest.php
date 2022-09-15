@@ -289,3 +289,41 @@ test('admin cannot create coupon with zero or negative discount', function ($dis
         'is_permanent' => true,
     ])->assertJsonValidationErrors(['discount_value' => 'The discount value must be at least 1.']);
 })->with([0, -1]);
+
+test('admin can create coupon min card count constraint', function () {
+    actingAs($this->user);
+    postJson(route('v2.coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->toDateString(),
+        'is_permanent' => false,
+        'usage_allowed_per_user' => null,
+        'available_till' => now()->addDays(2)->toDateString(),
+        'couponables' => [1,2,3],
+        'has_minimum_cards_threshold' => 1,
+        'min_threshold_value' => 10,
+    ])
+        ->assertCreated();
+});
+
+test('admin can not create coupon min card count constraint of less than 2', function () {
+    actingAs($this->user);
+    postJson(route('v2.coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->toDateString(),
+        'is_permanent' => false,
+        'usage_allowed_per_user' => null,
+        'available_till' => now()->addDays(2)->toDateString(),
+        'couponables' => [1,2,3],
+        'has_minimum_cards_threshold' => 1,
+        'min_threshold_value' => 1,
+    ])
+        ->assertUnprocessable();
+});

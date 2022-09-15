@@ -16,7 +16,17 @@ class FeedController extends Controller implements CanSetup<FeedController> {
     }
 
     public feedView() {
-        mountAtom(SubmissionButtonAtom, CopyToClipBoardAtom);
+        mountAtom(
+            SubmissionButtonAtom.clone({
+                props: {
+                    className: 'SubmissionButton',
+                },
+                options: {
+                    replaceParent: true,
+                },
+            }),
+            CopyToClipBoardAtom,
+        );
     }
 }
 

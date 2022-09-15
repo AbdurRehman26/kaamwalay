@@ -102,4 +102,10 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const { data } = await this.endpoint.delete(`/${orderId}`);
         return plainToInstance(OrderEntity, data);
     }
+
+    async generateOrderLabel(input: { orderId: number }) {
+        const { orderId } = input;
+        const { data } = await this.endpoint.post(`/${orderId}/generate-label`);
+        return plainToInstance(OrderEntity, data);
+    }
 }

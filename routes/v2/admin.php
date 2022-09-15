@@ -61,13 +61,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
         Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
-<<<<<<< HEAD
         Route::get('labels', [CardLabelController::class, 'getOrderLabels']);
         Route::put('labels', [CardLabelController::class, 'updateAndExportOrderLabels']);
-=======
 
         Route::post('generate-label', [OrderController::class, 'generateLabel']);
->>>>>>> 84cafac2392e9a4fe1b77d2006a9ae6bd8d5b32a
     });
 
     Route::prefix('cards')->group(function () {

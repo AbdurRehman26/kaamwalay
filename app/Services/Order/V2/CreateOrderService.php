@@ -40,7 +40,7 @@ class CreateOrderService
 {
     protected Order $order;
     protected array $data;
-    protected User|Authenticatable $orderUser;
+    protected User $orderUser;
     protected bool $isCreatedByAdmin;
 
     public function __construct(

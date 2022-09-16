@@ -1,12 +1,8 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
-import Facebook from '@mui/icons-material/FacebookOutlined';
-import Instagram from '@mui/icons-material/Instagram';
 import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
-import Twitter from '@mui/icons-material/Twitter';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -14,17 +10,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
-import styled from '@mui/styles/styled';
 import * as React from 'react';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-const CardPageShareModalBox = styled(Box)({
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#FFFFFF',
-    overflowY: 'scroll',
-});
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import FacebookIcon from '@shared/assets/facebookIcon.svg';
+import TwitterIcon from '@shared/assets/twitterIcon.svg';
 
 const styles = {
     ModalHeader: {
@@ -43,36 +34,8 @@ const styles = {
         padding: '8px',
     },
     ContentDiv: {
-        padding: '20px',
+        padding: '20px 15px',
         marginTop: '100px',
-    },
-    Twitter: {
-        background: '#1DA1F2!important',
-        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
-        borderRadius: '28px',
-        fontWeight: 500,
-        fontSize: '14px',
-        lineHeight: '20px',
-        textAlign: 'center',
-        letterSpacing: '0.35px',
-        color: '#FFFFFF',
-        padding: '15px',
-        width: '100%',
-        marginTop: '30px',
-    },
-    Facebook: {
-        background: '#4267B2!important',
-        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
-        borderRadius: '28px',
-        fontWeight: 500,
-        fontSize: '14px',
-        lineHeight: '20px',
-        textAlign: 'center',
-        letterSpacing: '0.35px',
-        color: '#FFFFFF',
-        padding: '15px',
-        width: '100%',
-        marginTop: '30px',
     },
     Instagram: {
         background: ' #833AB4!important',
@@ -102,6 +65,13 @@ const styles = {
         borderRadius: '28px',
         padding: '10px 15px',
         width: '100%',
+        fontSize: '14px',
+    },
+    Box: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#FFFFFF',
+        overflowY: 'scroll',
     },
 };
 
@@ -131,7 +101,7 @@ export function CardPageShareModal({ content }: CardPageShareModalProp) {
         <Box>
             <IosShareOutlinedIcon onClick={handleModal} />
             <Modal open={openModal}>
-                <CardPageShareModalBox>
+                <Box sx={styles.Box}>
                     <Grid sx={styles.ModalHeader}>
                         <Typography variant="subtitle1" sx={styles.ModalHeaderHeading}>
                             Share
@@ -155,19 +125,72 @@ export function CardPageShareModal({ content }: CardPageShareModalProp) {
                                         </CopyToClipboard>
                                     </InputAdornment>
                                 }
-                                disabled
                             />
                         </div>
                         <div>
-                            <Button sx={styles.Twitter}>
-                                <Twitter sx={{ marginRight: '5px' }} /> SHARE ON TWITTER
-                            </Button>
-                            <Button sx={styles.Facebook}>
-                                <Facebook sx={{ marginRight: '5px' }} /> SHARE ON FACEBOOK
-                            </Button>
-                            <Button sx={styles.Instagram}>
+                            <TwitterShareButton
+                                style={{
+                                    background: '#1DA1F2',
+                                    boxShadow:
+                                        '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+                                    borderRadius: '28px',
+                                    padding: '15px',
+                                    width: '100%',
+                                    marginTop: '30px',
+                                }}
+                                url={content}
+                                hashtags={['gemsonly']}
+                                title={'@agsgrading'}
+                            >
+                                <Typography
+                                    sx={{
+                                        marginRight: '5px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        fontWeight: 500,
+                                        fontSize: '14px',
+                                        lineHeight: '20px',
+                                        textAlign: 'center',
+                                        letterSpacing: '0.35px',
+                                        color: '#FFFFFF',
+                                    }}
+                                >
+                                    <img src={TwitterIcon} alt={'Twitter'} style={{ marginRight: '10px' }} />
+                                    SHARE ON TWITTER
+                                </Typography>
+                            </TwitterShareButton>
+                            <FacebookShareButton
+                                style={{
+                                    background: '#4267B2',
+                                    boxShadow:
+                                        '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+                                    borderRadius: '28px',
+                                    padding: '15px',
+                                    width: '100%',
+                                    marginTop: '20px',
+                                }}
+                                url={content}
+                            >
+                                <Typography
+                                    sx={{
+                                        marginRight: '5px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        fontWeight: 500,
+                                        fontSize: '14px',
+                                        lineHeight: '20px',
+                                        textAlign: 'center',
+                                        letterSpacing: '0.35px',
+                                        color: '#FFFFFF',
+                                    }}
+                                >
+                                    <img src={FacebookIcon} alt={'Facebook'} style={{ marginRight: '10px' }} />
+                                    SHARE ON FACEBOOK
+                                </Typography>
+                            </FacebookShareButton>
+                            {/* <Button sx={styles.Instagram}>
                                 <Instagram sx={{ marginRight: '5px' }} /> SHARE ON INSTAGRAM
-                            </Button>
+                            </Button> */}
                         </div>
                         <Snackbar
                             open={open}
@@ -194,7 +217,7 @@ export function CardPageShareModal({ content }: CardPageShareModalProp) {
                             </Typography>
                         </Snackbar>
                     </Grid>
-                </CardPageShareModalBox>
+                </Box>
             </Modal>
         </Box>
     );

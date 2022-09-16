@@ -1,10 +1,14 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import FacebookIcon from '@shared/assets/facebookIconDesktop.svg';
+import TwitterIcon from '@shared/assets/twitterIconDesktop.svg';
 
 interface Props {
     content: string;
@@ -26,19 +30,32 @@ export default function CopyClipboard({ content }: Props) {
     };
     return (
         <>
-            <CopyToClipboard text={content} onCopy={() => handleClick()}>
-                <Avatar
-                    sx={{
-                        color: 'rgba(0, 0, 0, 0.38)',
-                        border: '2px solid rgba(0, 0, 0, 0.24)',
-                        background: '#F4F4FB',
-                        width: '28px',
-                        height: '28px',
-                    }}
+            <Grid sx={{ display: 'flex' }}>
+                <TwitterShareButton
+                    url={content}
+                    hashtags={['gemsonly']}
+                    title={'@agsgrading'}
+                    style={{ marginRight: '10px' }}
                 >
-                    <ContentCopyOutlinedIcon sx={{ width: '15px' }} />
-                </Avatar>
-            </CopyToClipboard>
+                    <img src={TwitterIcon} alt={'Twitter'} />
+                </TwitterShareButton>
+                <FacebookShareButton url={content} style={{ marginRight: '10px' }}>
+                    <img src={FacebookIcon} alt={'Facebook'} />
+                </FacebookShareButton>
+                <CopyToClipboard text={content} onCopy={() => handleClick()}>
+                    <Avatar
+                        sx={{
+                            color: 'rgba(0, 0, 0, 0.38)',
+                            border: '2px solid rgba(0, 0, 0, 0.24)',
+                            background: '#F4F4FB',
+                            width: '28px',
+                            height: '28px',
+                        }}
+                    >
+                        <ContentCopyOutlinedIcon sx={{ width: '15px' }} />
+                    </Avatar>
+                </CopyToClipboard>
+            </Grid>
             <Snackbar
                 open={open}
                 onClose={handleClose}

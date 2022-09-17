@@ -91,11 +91,6 @@ class OrderItem extends Model
         return $this->hasOne(UserCard::class);
     }
 
-    public function scopeForOrder(Builder $query, Order $order): Builder
-    {
-        return $query->where('order_id', $order->id);
-    }
-
     public function isValidForGrading(): bool
     {
         return $this->order_item_status_id === OrderItemStatus::CONFIRMED;

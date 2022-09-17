@@ -34,10 +34,10 @@ beforeEach(function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['order_status_id' => OrderStatus::PLACED],
-        ['order_status_id' => OrderStatus::CONFIRMED],
-        ['order_status_id' => OrderStatus::GRADED],
-        ['order_status_id' => OrderStatus::SHIPPED],
+        ['order_status_id' => OrderStatus::PLACED, 'created_at' => '2022-01-01 00:00:00'],
+        ['order_status_id' => OrderStatus::CONFIRMED, 'created_at' => '2022-02-01 00:00:00'],
+        ['order_status_id' => OrderStatus::GRADED, 'created_at' => '2022-03-01 00:00:00'],
+        ['order_status_id' => OrderStatus::SHIPPED, 'created_at' => '2022-04-01 00:00:00'],
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -48,13 +48,22 @@ beforeEach(function () {
         ['order_status_id' => $this->orders[4]->order_status_id, 'order_id' => $this->orders[4]->id, 'user_id' => $this->orders[4]->user_id]
     )->create();
 
-    OrderItem::factory()->count(2)
+    OrderItem::factory()->count(5)
         ->state(new Sequence(
             [
                 'order_id' => $this->orders[0]->id,
             ],
             [
                 'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[2]->id,
+            ],
+            [
+                'order_id' => $this->orders[3]->id,
+            ],
+            [
+                'order_id' => $this->orders[4]->id,
             ]
         ))
         ->create();
@@ -161,6 +170,132 @@ it('returns only shipped orders', function () {
         ->assertJsonFragment([
             'order_status_id' => OrderStatus::SHIPPED,
         ]);
+});
+
+it('returns orders order by asc order_number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=order_number')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('order_number')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc order_number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-order_number')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('order_number', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc created_at', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=created_at')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('created_at')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc created_at', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-created_at')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('created_at', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc arrived_at', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=arrived_at')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('arrived_at')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc arrived_at', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-arrived_at')
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('arrived_at', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc customer_number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=customer_number')
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('users', 'users.id', 'orders.user_id')->orderBy('users.customer_number', 'ASC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc customer_number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-customer_number')
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('users', 'users.id', 'orders.user_id')->orderBy('users.customer_number', 'DESC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc cards number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=cards')
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'quantity')->orderBy('order_items_sum_quantity', 'ASC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc cards number', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-cards')
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'quantity')->orderBy('order_items_sum_quantity', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc status', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=status')
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('order_statuses', 'order_statuses.id', 'orders.order_status_id')->orderBy('order_statuses.name', 'ASC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc status', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-status')
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('order_statuses', 'order_statuses.id', 'orders.order_status_id')->orderBy('order_statuses.name', 'DESC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc total_declared_value', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=total_declared_value')
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'declared_value_total')->orderBy('order_items_sum_declared_value_total', 'ASC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc total_declared_value', function () {
+    $response = $this->getJson('/api/v2/admin/orders?sort=-total_declared_value')
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'declared_value_total')->orderBy('order_items_sum_declared_value_total', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
 });
 
 it('returns orders order by asc grand_total', function () {

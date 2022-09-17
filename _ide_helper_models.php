@@ -267,7 +267,10 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Enums\Coupon\CouponMinThresholdTypeEnum;
+
+    /**
  * App\Models\Coupon
  *
  * @property int $id
@@ -282,6 +285,8 @@ namespace App\Models{
  * @property string $discount_value
  * @property bool $is_capped
  * @property float|null $capped_amount
+ * @property CouponMinThresholdTypeEnum $min_threshold_type
+ * @property int $min_threshold_value
  * @property $available_from
  * @property |null $available_till if its null then the coupon is permanent
  * @property int $coupon_applicable_id
@@ -300,7 +305,6 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
  * @method static \Database\Factories\CouponFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Coupon\CouponMinThresholdTypeEnum;
 use App\Models\Coupon;
 use App\Models\Couponable;
 use App\Models\CouponApplicable;
@@ -82,3 +83,51 @@ test('customer checks for valid coupon code on wrong service level', function ()
     ]))
         ->assertStatus(422);
 });
+
+test('customer checks for valid coupon code having items less than required', function ($count) {
+    actingAs($this->user);
+
+    $couponable = CouponApplicable::first();
+
+    $coupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponable->id,
+                'coupon_status_id' => 2,
+                'min_threshold_type' => CouponMinThresholdTypeEnum::CARD_COUNT,
+                'min_threshold_value' => 10,
+            ]
+        );
+
+    getJson(route('v2.coupon.verify', [
+        $coupon->code,
+        'couponables_type' => 'service_level',
+        'couponables_id' => $couponable->id,
+        'items_count' => 1,
+    ]))
+        ->assertStatus(422);
+})->with([1, 3, 5, 9]);
+
+test('customer checks for valid coupon code having more or equal required cards count', function ($count) {
+    actingAs($this->user);
+
+    $couponable = CouponApplicable::first();
+
+    $coupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponable->id,
+                'coupon_status_id' => 2,
+                'min_threshold_type' => CouponMinThresholdTypeEnum::CARD_COUNT,
+                'min_threshold_value' => 10,
+            ]
+        );
+
+    getJson(route('v2.coupon.verify', [
+        $coupon->code,
+        'couponables_type' => 'service_level',
+        'couponables_id' => $couponable->id,
+        'items_count' => $count,
+    ]))
+        ->assertSuccessful();
+})->with([10, 15, 20, 100]);

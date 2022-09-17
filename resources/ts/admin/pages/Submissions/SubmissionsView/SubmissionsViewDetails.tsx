@@ -37,7 +37,7 @@ interface SubmissionsViewDetailsProps {
     paymentMethodDiscountedAmount: string;
     discountedAmount: string;
     amountPaidFromWallet: string;
-    paymentMethodId: number;
+    paymentMethodCode: string;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
@@ -75,7 +75,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         refundsTotal,
         discountedAmount,
         paymentMethodDiscountedAmount,
-        paymentMethodId,
+        paymentMethodCode,
         coupon,
         amountPaidFromWallet,
         walletPayment,
@@ -164,7 +164,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 shippingAddress={shippingAddress}
                 coupon={coupon}
                 payment={payment}
-                paymentMethodId={paymentMethodId}
+                paymentMethodCode={paymentMethodCode}
                 walletPayment={walletPayment}
                 paymentStatus={paymentStatus}
                 mode={'admin'}

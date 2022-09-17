@@ -55,4 +55,9 @@ class PaymentMethod extends Model
     {
         return $this->code === 'manual';
     }
+
+    public function isPaypal(): bool
+    {
+        return $this->code === 'paypal';
+    }
 }

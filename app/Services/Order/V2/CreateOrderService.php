@@ -15,7 +15,9 @@ use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
+use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
+use App\Services\Admin\V2\OrderService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\CleaningFee\CleaningFeeService;
 use App\Services\Coupon\CouponService;
@@ -27,7 +29,9 @@ use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
+use App\Services\Payment\V2\PaymentService;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -36,11 +40,15 @@ class CreateOrderService
 {
     protected Order $order;
     protected array $data;
+    protected User $orderUser;
+    protected bool $isCreatedByAdmin;
 
     public function __construct(
         protected OrderItemService $orderItemService,
         protected CouponService $couponService,
-        protected OrderStatusHistoryService $orderStatusHistoryService
+        protected OrderStatusHistoryService $orderStatusHistoryService,
+        protected PaymentService $paymentService,
+        protected OrderService $orderService
     ) {
     }
 
@@ -51,6 +59,16 @@ class CreateOrderService
     {
         $this->data = $data;
 
+        //If creation is being done by an admin and a user id is passed in attributes, order will be linked to that user
+        $authUser = auth()->user();
+        if ($authUser->isAdmin() && array_key_exists('user_id', $this->data)) {
+            $this->orderUser = User::find($this->data['user_id']);
+            $this->isCreatedByAdmin = true;
+        } else {
+            $this->orderUser = $authUser;
+            $this->isCreatedByAdmin = false;
+        }
+
         try {
             $this->validate();
             $this->process();
@@ -58,7 +76,7 @@ class CreateOrderService
             return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
+            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 
             throw $e;
         }
@@ -103,6 +121,9 @@ class CreateOrderService
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
 
+        if ($this->isCreatedByAdmin) {
+            $this->processPayment();
+        }
         DB::commit();
     }
 
@@ -168,7 +189,7 @@ class CreateOrderService
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [
-                    'user_id' => auth()->user()->id,
+                    'user_id' => $this->orderUser->id,
                 ]
             ));
         }
@@ -176,7 +197,7 @@ class CreateOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->user()->associate(auth()->user());
+        $this->order->user()->associate($this->orderUser);
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
@@ -264,7 +285,11 @@ class CreateOrderService
     protected function storeCouponAndDiscount(array $couponData): void
     {
         if (! empty($couponData['code'])) {
-            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
+            $couponParams = [
+                'items_count' => $this->order->orderItems()->count(),
+                'couponables_id' => $couponData['couponables_id'] ?? $this->data['payment_plan']['id'],
+            ];
+            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'], $couponParams)->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             $this->order->save();
         }
@@ -305,6 +330,22 @@ class CreateOrderService
             $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
             $this->order->requires_cleaning = (bool) $this->data['requires_cleaning'];
             $this->order->save();
+        }
+    }
+
+    protected function processPayment(): void
+    {
+        if ($this->data['pay_now'] && ! empty($this->data['payment_method'])) {
+            $paymentMethod = PaymentMethod::find($this->data['payment_method']['id']);
+            if ($paymentMethod->isManual()) {
+                $this->orderService->createManualPayment($this->order, auth()->user());
+
+                $order = $this->order->refresh();
+                $this->paymentService->charge($order, []);
+
+                $order->markAsPaid();
+
+            }
         }
     }
 }

@@ -206,6 +206,11 @@ parameters:
 			path: app/Http/Filters/AdminCouponSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardProductSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminCardProductSearchFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCustomerSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
@@ -1741,11 +1746,6 @@ parameters:
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Sorts\\\\AdminCustomerFullNameSort\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Sorts/AdminCustomerFullNameSort.php
-
-		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Imports/CardProductAttributesUpdate.php
@@ -2821,6 +2821,16 @@ parameters:
 			path: app/Services/Admin/Card/CardSetService.php
 
 		-
+			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'CN'\\} given\\.$#"
+			count: 1
+			path: app/Services/Admin/Card/CreateCardLabelService.php
+
+		-
+			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'DECK', 'BOX TOPPER', 'PIN CLUB'\\} given\\.$#"
+			count: 2
+			path: app/Services/Admin/Card/CreateCardLabelService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/CardGradingService.php
@@ -3034,4 +3044,3 @@ parameters:
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
-

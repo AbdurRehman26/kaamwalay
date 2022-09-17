@@ -6,6 +6,7 @@ use App\Http\Filters\UserCardSearchFilter;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Models\PopReportsCard;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
@@ -23,6 +24,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 class UserCardService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
+
+    public function __construct(protected AgsService $agsService)
+    {
+    }
 
     public function createItemUserCard(OrderItem $item): UserCard
     {
@@ -111,11 +116,14 @@ class UserCardService
             ];
         }
 
+        $data = $this->agsService->getGradesByCertificateId($certificateId);
+
         return [
             'grades_available' => true,
             'is_fake' => $userCard->is_fake,
             'certificate_id' => $userCard->certificate_number,
             'grade' => $this->prepareGradeForPublicCardPage($userCard),
+            'owner' => $userCard->user->username,
             'card' => [
                 'name' => $userCard->orderItem->cardProduct->name,
                 'full_name' => $userCard->orderItem->cardProduct->getSearchableName(),
@@ -131,9 +139,163 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => resolve(AgsService::class)->getScannedImagesByCertificateId($certificateId),
+            'generated_images' => $this->pepareScannedImagesForPublicCardPage($data),
+            'slabbed_images' => $this->prepareSlabbedImagesForPublicCardPage($data, $userCard),
             'social_images' => $userCard->social_images,
+            'page_url' => $this->getPageUrl($certificateId),
+            'pop_data' => $this->getAgsPopulationData($userCard),
         ];
+    }
+
+     /**
+     * @param  array  $data
+     * @return array
+     */
+    public function pepareScannedImagesForPublicCardPage(array $data): array
+    {
+        if (
+            empty($data) ||
+            $data['count'] === 0 ||
+            (
+                empty($data['results'][0]['laser_front_scan']) &&
+                empty($data['results'][0]['laser_back_scan']) &&
+                empty($data['results'][0]['front_scan']) &&
+                empty($data['results'][0]['back_scan'])
+            )
+        ) {
+            return [];
+        }
+
+        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
+    }
+
+    /**
+     * @param  array  $data
+     * @return array
+     */
+    protected function prepareGeneratedImagesForPublicPage(array $data): array
+    {
+        $imagesData = [
+            'front' => [
+                [
+                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+            'back' => [
+                [
+                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Centering',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Surface',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Edges',
+                ],
+                [
+                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Corners',
+                ],
+            ],
+        ];
+
+        return array_filter($imagesData, function (array $imageData) {
+            return $imageData[0]['output_image'] !== null;
+        });
+    }
+
+    /**
+     * @param  array  $data
+     * @return array
+     */
+    protected function prepareSlabbedImagesForPublicCardPage(array $data, UserCard $userCard): array
+    {
+        if (
+            ! empty($data['results'][0]['front_slab_image']) &&
+            ! empty($data['results'][0]['back_slab_image'])
+        ) {
+            return  [
+                    'front_slab_image' => $data['results'][0]['front_slab_image'],
+                    'back_slab_image' => $data['results'][0]['back_slab_image'],
+            ];
+        }
+
+        return [
+            'image_path' => $userCard->orderItem->cardProduct->image_path ?? null,
+        ];
+    }
+
+     /**
+     * @param  UserCard  $userCard
+     * @return array
+     */
+    protected function getAgsPopulationData(UserCard $userCard): array
+    {
+        $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
+        $gradeName = $this->prepareGradeForPublicCardPage($userCard);
+        $gradeNickName = $this->convertGradeNicknameToColumn($gradeName['nickname'] ?? '');
+
+        $data = [];
+        if ($popData) {
+            $data = [
+                'PR' => $popData->pr,
+                'FR' => $popData->fr,
+                'GOOD' => $popData->good,
+                'GOOD+' => $popData->good_plus,
+                'VG' => $popData->vg,
+                'VG+' => $popData->vg_plus,
+                'VG-EX' => $popData->vg_ex,
+                'VG-EX+' => $popData->vg_ex_plus,
+                'EX' => $popData->ex,
+                'EX+' => $popData->ex_plus,
+                'EX-MT' => $popData->ex_mt,
+                'EX-MT+' => $popData->ex_mt_plus,
+                'NM' => $popData->nm,
+                'NM+' => $popData->nm_plus,
+                'NM-MT' => $popData->nm_mt,
+                'NM-MT+' => $popData->nm_mt_plus,
+                'MINT' => $popData->mint,
+                'MINT+' => $popData->mint_plus,
+                'GEM-MT' => $popData->gem_mt,
+                'totalPop' => $popData->total + $popData->total_plus,
+                'totalPopForCurrentCard' => $popData->$gradeNickName,
+            ];
+        }
+
+        return $data;
+    }
+
+     /**
+     * @param  string  $nickname
+     * @return string
+     */
+    protected function convertGradeNicknameToColumn(string $nickname): string
+    {
+        return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
+    }
+
+    /**
+     * @param  string  $certificateId
+     * @return string
+     */
+    protected function getPageUrl(string $certificateId): string
+    {
+        return route('feed.view', $certificateId);
     }
 
     protected function prepareGradeForPublicCardPage(UserCard $userCard): array

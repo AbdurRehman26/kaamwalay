@@ -17,6 +17,7 @@ class UpdateCardProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'exists:card_products,id',
             'image_path' => ['required', 'string'],
             'name' => ['required', 'string'],
             'release_date' => ['required', 'date'],

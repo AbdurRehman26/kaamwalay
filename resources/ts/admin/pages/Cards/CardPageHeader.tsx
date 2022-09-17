@@ -11,8 +11,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { getAllCards } from '@shared/redux/slices/adminCardsSlice';
-import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
 
 interface Props extends GridProps {
@@ -60,7 +58,6 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
     const [search, setSearch] = useState(value ?? '');
     const [addCardDialog, setAddCardDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const dispatch = useAppDispatch();
     const notifications = useNotifications();
 
     const debouncedFunc = debounce((func: any) => {
@@ -83,7 +80,7 @@ export function CardPageHeader({ title, searchField, value, onSearch, children, 
         try {
             setIsLoading(true);
             setAddCardDialog(false);
-            await dispatch(getAllCards);
+            window.location.reload();
             setIsLoading(false);
         } catch (e: any) {
             setIsLoading(false);

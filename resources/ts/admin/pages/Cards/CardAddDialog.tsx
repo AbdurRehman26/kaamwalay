@@ -392,6 +392,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 edition: selectedEdition !== 'none' ? selectedEdition : updateCard?.edition,
                 surface: selectedSurface?.name ?? updateCard?.surface,
                 variant: productVariant || updateCard?.variant,
+                id: isUpdate ? updateCard.id : '',
             };
             if (isUpdate) {
                 await endpoint.put('', DTO);

@@ -153,6 +153,7 @@ test('customers can not get order labels data', function () {
 });
 
 test('an admin can export and update order label details', function () {
+    Storage::fake('s3');
     $this->putJson('/api/v2/admin/orders/'. $this->order->id.'/labels', [
         'data' => [
             [

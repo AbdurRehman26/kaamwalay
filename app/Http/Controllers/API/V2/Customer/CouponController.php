@@ -42,7 +42,7 @@ class CouponController extends Controller
             );
         } catch (Exception $e) {
             return match (true) {
-                $e instanceof (CouponHasInvalidMinThreshold::class) => new $e,
+                $e instanceof CouponHasInvalidMinThreshold => throw $e,
                 default => new JsonResponse(
                     [
                         'error' => $e->getMessage(),

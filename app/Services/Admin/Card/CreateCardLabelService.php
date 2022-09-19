@@ -125,7 +125,6 @@ class CreateCardLabelService
             }
 
             if ($this->language === 'JAPANESE') {
-
                 if (Str::contains($this->cardSeriesName, 'PROMOS')) {
                     if ((strlen($this->year . $categoryName . $this->language) + 5) < 22) {
                         $label_line_one = [$this->year, $categoryName, $this->language];
@@ -242,7 +241,6 @@ class CreateCardLabelService
                     $label_line_three = ['ERROR'];
                 }
             }
-
         } elseif ($this->category->name === "MetaZoo") {
             if ($this->cardSeriesName === 'HOLIDAY SERIES' || Str::contains($this->cardSetName, ['DECK', 'BOX TOPPER', 'PIN CLUB'])) {
                 if ($this->editionName === 'UNLIMITED') {

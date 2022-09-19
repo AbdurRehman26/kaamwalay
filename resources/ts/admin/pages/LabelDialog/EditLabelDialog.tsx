@@ -1,124 +1,23 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { useFormik } from 'formik';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LabelLogo from '@shared/assets/label.png';
 import { setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { updateCardsLabel } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
-
-const CardDiv = styled(Grid)({
-    display: 'flex',
-    justifyContent: 'space-between',
-
-    '.CardInfo': {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-
-    '.CardName': {
-        fontWeight: '500',
-        fontSize: '14px',
-        lineHeight: '20px',
-        letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-    '.CardImage': {
-        width: '35px',
-        height: '48px',
-    },
-
-    '.CardLongName': {
-        fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-    '.CardImageDiv': {},
-    '.CardTextDiv': {
-        paddingLeft: '7px',
-    },
-    '.LinesText': {
-        fontWeight: 500,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.54)',
-    },
-    '.InputTextDiv': {
-        display: 'flex',
-        alignItems: 'center',
-        margin: '10px 0px',
-    },
-    '.RightSideDiv': {
-        background: '#5F5F5F',
-    },
-    '.LabelPreviewText': {
-        fontWeight: 500,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.2px',
-        color: '#FFFFFF',
-        padding: '20px',
-    },
-    '.LeftSideDiv': {
-        padding: '20px',
-    },
-    '.LableImage': {
-        padding: '20px',
-        width: '290px',
-    },
-    '.TextBoxNumber': {
-        fontWeight: 500,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.54)',
-        marginRight: '10px',
-    },
-    '.CheckBoxLabel': {
-        '& .MuiFormControlLabel-label': {
-            fontSize: '14px!important',
-            lineHeight: '20px',
-            letterSpacing: '0.1px',
-            color: '#20BFB8',
-        },
-    },
-    '.LabelImageLeftText': {
-        position: 'absolute',
-        top: '223px',
-        right: '127px',
-    },
-    '.LabelImageRightText': {
-        position: 'absolute',
-        right: '33px',
-        top: '224px',
-        textAlign: 'end',
-    },
-    '.LabelText': {
-        fontSize: '10px',
-        fontWeight: 'bold',
-    },
-    '.GradeText': {
-        fontSize: '20px',
-        fontWeight: 'bold',
-    },
-});
+import { LabelsContent } from './LabelsContent';
 
 const LabelDialog = styled(Dialog)({
+    '& .MuiPaper-root': {
+        maxWidth: '675px',
+    },
     '& .MuiDialogContent-root': {
         padding: '0px 0px',
     },
@@ -141,20 +40,33 @@ const LabelDialog = styled(Dialog)({
     },
 });
 
+const initialValues = {
+    cardLabelId: '1',
+    lineOne: '',
+    lineTwo: '',
+    lineThree: '',
+    lineFour: '',
+};
+
 export function EditLabelDialog() {
     const dispatch = useDispatch();
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
+    const cardLabels = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
+
+    const { handleChange, handleSubmit } = useFormik({
+        initialValues: initialValues,
+        onSubmit: async (values) => {
+            await dispatch(updateCardsLabel(values));
+        },
+    });
 
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
     }, [dispatch]);
 
-    if (orderLabels) {
-        <CircularProgress size={24} color={'inherit'} />;
-    }
     return (
-        <LabelDialog onClose={handleModal} open={labelDialog} maxWidth={'sm'} fullWidth>
+        <LabelDialog onClose={handleModal} open={labelDialog} fullWidth>
             <DialogTitle>
                 Edit Label Text
                 <IconButton
@@ -170,116 +82,31 @@ export function EditLabelDialog() {
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
-            <DialogContent dividers>
-                {orderLabels.map((orderLabel) => (
-                    <CardDiv>
-                        <div className={'LeftSideDiv'}>
-                            <div className={'CardInfo'}>
-                                <div className={'CardImageDiv'}>
-                                    <img
-                                        src={orderLabel.cardProduct?.imagePath}
-                                        alt={orderLabel.cardProduct?.name}
-                                        className={'CardImage'}
-                                    />
-                                </div>
-                                <div className={'CardTextDiv'}>
-                                    <Typography className={'CardName'}>{orderLabel.cardProduct?.name}</Typography>
-                                    <Typography className={'CardLongName'}>
-                                        {orderLabel.cardProduct?.longName}
-                                    </Typography>
-                                </div>
-                            </div>
-                            <div>
-                                <Typography className={'LinesText'}>Lines 1 - 4</Typography>
-                            </div>
-                            <div className={'InputTextDiv'}>
-                                <Typography className={'TextBoxNumber'}>1:</Typography>
-                                <Input
-                                    type="text"
-                                    value={orderLabel?.lineOne}
-                                    disableUnderline
-                                    sx={{
-                                        border: '1px solid #DADADA',
-                                        borderRadius: '4px',
-                                        padding: '5px',
-                                        width: '100%',
-                                    }}
-                                />
-                            </div>
-                            <div className={'InputTextDiv'}>
-                                <Typography className={'TextBoxNumber'}>2:</Typography>
-                                <Input
-                                    type="text"
-                                    value={orderLabel?.lineTwo}
-                                    disableUnderline
-                                    sx={{
-                                        border: '1px solid #DADADA',
-                                        borderRadius: '4px',
-                                        padding: '5px',
-                                        width: '100%',
-                                    }}
-                                />
-                            </div>
-                            <div className={'InputTextDiv'}>
-                                <Typography className={'TextBoxNumber'}>3:</Typography>
-                                <Input
-                                    type="text"
-                                    value={orderLabel?.lineThree}
-                                    disableUnderline
-                                    sx={{
-                                        border: '1px solid #DADADA',
-                                        borderRadius: '4px',
-                                        padding: '5px',
-                                        width: '100%',
-                                    }}
-                                />
-                            </div>
-                            <div className={'InputTextDiv'}>
-                                <Typography className={'TextBoxNumber'}>4:</Typography>
-                                <Input
-                                    type="text"
-                                    value={orderLabel?.lineFour}
-                                    disableUnderline
-                                    sx={{
-                                        border: '1px solid #DADADA',
-                                        borderRadius: '4px',
-                                        padding: '5px',
-                                        width: '100%',
-                                    }}
-                                />
-                            </div>
-                            <FormControlLabel
-                                className={'CheckBoxLabel'}
-                                control={<Checkbox defaultChecked />}
-                                label="Save changes to this card’s label"
-                            />
-                        </div>
-                        <div className={'RightSideDiv'}>
-                            <Typography className={'LabelPreviewText'}>Label Preview</Typography>
-                            <div className={'LabelImageLeftText'}>
-                                <Typography className={'LabelText'}>{orderLabel?.lineOne}</Typography>
-                                <Typography className={'LabelText'}>{orderLabel?.lineTwo}</Typography>
-                                <Typography className={'LabelText'}>{orderLabel?.lineThree}</Typography>
-                                <Typography className={'LabelText'}>{orderLabel?.lineFour}</Typography>
-                            </div>
-                            <div className={'LabelImageRightText'}>
-                                <Typography className={'LabelText'}>{orderLabel?.nickName}</Typography>
-                                <Typography className={'GradeText'}>{orderLabel?.grade}</Typography>
-                                <Typography className={'LabelText'}>{orderLabel?.certificateNumber}</Typography>
-                            </div>
-                            <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
-                        </div>
-                    </CardDiv>
-                ))}
-            </DialogContent>
-            <DialogActions>
-                <Button className={'CancelButton'} onClick={handleModal}>
-                    Cancel
-                </Button>
-                <Button className={'ExportButton'} onClick={handleModal}>
-                    Export
-                </Button>
-            </DialogActions>
+            {orderLabels.length !== 0 ? (
+                orderLabels.map((orderLabel) => (
+                    <form onSubmit={handleSubmit}>
+                        <DialogContent dividers>
+                            <LabelsContent labels={orderLabel} handleChange={handleChange} />
+                        </DialogContent>
+                    </form>
+                ))
+            ) : (
+                <form onSubmit={handleSubmit}>
+                    <DialogContent dividers>
+                        <LabelsContent labels={cardLabels} handleChange={handleChange} />
+                    </DialogContent>
+                </form>
+            )}
+            <form onSubmit={handleSubmit}>
+                <DialogActions>
+                    <Button className={'CancelButton'} onClick={handleModal}>
+                        Cancel
+                    </Button>
+                    <Button className={'ExportButton'} type={'submit'}>
+                        Export
+                    </Button>
+                </DialogActions>
+            </form>
         </LabelDialog>
     );
 }

@@ -63,8 +63,8 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     return (
         <>
-            <CustomerAddDialog open={showAddCustomer} fromSubmission={true} />
-            <Dialog {...rest} fullWidth>
+            <CustomerAddDialog onClose={() => setShowAddCustomer(false)} open={showAddCustomer} fromSubmission={true} />
+            <Dialog {...rest} fullWidth onClose={handleClose}>
                 <DialogTitle>
                     Select or Create a Customer
                     <IconButton

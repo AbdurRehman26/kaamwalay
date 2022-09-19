@@ -289,51 +289,54 @@ const initialState: AdminNewOrderSliceState = {
     },
 };
 
-export const getCountriesList = createAsyncThunk('newSubmission/getCountriesList', async () => {
+export const getCountriesList = createAsyncThunk('adminCreateOrderSlice/getCountriesList', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/countries');
     const countries = await endpoint.get('');
     return countries.data;
 });
 
-export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
-    const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/addresses');
-    const customerAddresses = await endpoint.get('');
-    const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
-        return {
-            id: address.id,
-            userId: address.userId,
-            firstName: address.firstName,
-            lastName: address.lastName,
-            address: address.address,
-            address2: address.address2,
-            zipCode: address.zip,
-            phoneNumber: address.phone,
-            flat: address.flat ?? '',
-            city: address.city,
-            isDefaultShipping: address.isDefaultShipping,
-            isDefaultBilling: address.isDefaultSilling,
-            // Doing this because the back-end can't give me this full object for the state
-            // so I'll just search for the complete object inside the existing states
-            state: availableStatesList.find((item: any) => item.code === address.state) ?? {
-                code: address.state,
-            },
-            country: {
-                id: address.country.id,
-                code: address.country.code,
-                name: address.country.name,
-                phoneCode: address.country.phoneCode,
-            },
-        };
-    });
-    console.log('F A ', formattedAddresses);
-    return formattedAddresses;
-});
+export const getSavedAddresses = createAsyncThunk(
+    'adminCreateOrderSlice/getSavedAddresses',
+    async (_, { getState }: any) => {
+        const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint('customer/addresses');
+        const customerAddresses = await endpoint.get('');
+        const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
+            return {
+                id: address.id,
+                userId: address.userId,
+                firstName: address.firstName,
+                lastName: address.lastName,
+                address: address.address,
+                address2: address.address2,
+                zipCode: address.zip,
+                phoneNumber: address.phone,
+                flat: address.flat ?? '',
+                city: address.city,
+                isDefaultShipping: address.isDefaultShipping,
+                isDefaultBilling: address.isDefaultSilling,
+                // Doing this because the back-end can't give me this full object for the state
+                // so I'll just search for the complete object inside the existing states
+                state: availableStatesList.find((item: any) => item.code === address.state) ?? {
+                    code: address.state,
+                },
+                country: {
+                    id: address.country.id,
+                    code: address.country.code,
+                    name: address.country.name,
+                    phoneCode: address.country.phoneCode,
+                },
+            };
+        });
+        console.log('F A ', formattedAddresses);
+        return formattedAddresses;
+    },
+);
 
 export const getShippingFee = createAsyncThunk(
-    'newSubmission/getShippingFee',
+    'adminCreateOrderSlice/getShippingFee',
     async (selectedCards: SearchResultItemCardProps[], thunk) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
@@ -372,29 +375,26 @@ export const getShippingFee = createAsyncThunk(
     },
 );
 
-export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
+export const getServiceLevels = createAsyncThunk('adminCreateOrderSlice/getServiceLevels', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const endpoint = apiService.createEndpoint('admin/orders/payment-plans');
     const serviceLevels = await endpoint.get('');
-    return serviceLevels.data.map((serviceLevel: any) => ({
-        id: serviceLevel.id,
-        type: 'card',
-        maxProtectionAmount: serviceLevel.maxProtectionAmount,
-        turnaround: serviceLevel.turnaround,
-        price: serviceLevel.price,
-        priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
-        discountPercentage: serviceLevel.discountPercentage,
-    }));
+
+    console.log('p ', serviceLevels);
+    return serviceLevels.data;
 });
 
-export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async (input?: { countryId: number }) => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(
-        `customer/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
-    );
-    const americanStates = await endpoint.get('');
-    return americanStates.data;
-});
+export const getStatesList = createAsyncThunk(
+    'adminCreateOrderSlice/getStatesList',
+    async (input?: { countryId: number }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `customer/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
+        );
+        const americanStates = await endpoint.get('');
+        return americanStates.data;
+    },
+);
 
 export const adminCreateOrderSlice = createSlice({
     name: 'adminCreateOrderSlice',
@@ -416,16 +416,6 @@ export const adminCreateOrderSlice = createSlice({
         },
         setSaveShippingAddress: (state, action: PayloadAction<boolean>) => {
             state.step03Data.saveForLater = action.payload;
-        },
-        [getServiceLevels.pending as any]: (state) => {
-            state.step01Data.status = 'loading';
-        },
-        [getServiceLevels.fulfilled as any]: (state, action: any) => {
-            state.step01Data.availableServiceLevels = action.payload;
-            state.step01Data.status = 'success';
-        },
-        [getServiceLevels.rejected as any]: (state) => {
-            state.step01Data.status = 'failed';
         },
         markCardAsSelected: (state, action: PayloadAction<SearchResultItemCardProps>) => {
             state.step02Data.selectedCards = [
@@ -515,6 +505,19 @@ export const adminCreateOrderSlice = createSlice({
                 state.step03Data.disableAllShippingInputs = false;
                 state.step03Data.useCustomShippingAddress = true;
             }
+        },
+        [getCountriesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableCountriesList = action.payload;
+        },
+        [getServiceLevels.pending as any]: (state) => {
+            state.step01Data.status = 'loading';
+        },
+        [getServiceLevels.fulfilled as any]: (state, action: any) => {
+            state.step01Data.availableServiceLevels = action.payload;
+            state.step01Data.status = 'success';
+        },
+        [getServiceLevels.rejected as any]: (state) => {
+            state.step01Data.status = 'failed';
         },
     },
 });

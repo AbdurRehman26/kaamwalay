@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import React, { useCallback } from 'react';
 import { UserEntity } from '@shared/entities/UserEntity';
 
 const useStyles = makeStyles({
@@ -17,11 +18,16 @@ interface CustomerCardViewProps {
 
 export function CustomerCardView(props: CustomerCardViewProps) {
     const classes = useStyles();
+    const createSubmission = useCallback(async (customer: UserEntity) => {
+        // window.location.href = `/dashboard/submissions/new?orderId=${customer}`;
+    }, []);
+
     return (
         <>
             {props.customer?.map((customer: UserEntity) => {
                 return (
                     <Grid
+                        onClick={() => createSubmission(customer)}
                         container
                         flexDirection={'row'}
                         justifyContent={'space-between'}

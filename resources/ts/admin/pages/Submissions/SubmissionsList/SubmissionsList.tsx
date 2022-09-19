@@ -41,7 +41,7 @@ export function SubmissionsList() {
     );
 
     const headerActions = (
-        <Grid container item xs justifyContent={'flex-end'}>
+        <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
             <Tooltip title={'Coming Soon'}>
                 <span>
                     <Button
@@ -58,7 +58,7 @@ export function SubmissionsList() {
             <Button
                 variant={'contained'}
                 color={'primary'}
-                sx={{ borderRadius: '24px', padding: '10px 20px' }}
+                sx={{ borderRadius: '24px', padding: '10px 20px', marginLeft: '10px' }}
                 onClick={() => setCreateSubmission(true)}
             >
                 CREATE SUBMISSION
@@ -70,7 +70,7 @@ export function SubmissionsList() {
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
                 <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
-                <SelectAndCreateCustomerDialog open={createSubmission} />
+                <SelectAndCreateCustomerDialog onClose={() => setCreateSubmission(false)} open={createSubmission} />
                 <Divider />
                 <TabContent value={'all'}>
                     <SubmissionsTable search={search} all />

@@ -135,7 +135,7 @@ test('customer checks for valid coupon code having more or equal required cards 
         ->assertSuccessful();
 })->with([10, 15, 20, 100]);
 
-test('customer checks for valid coupon code having more or equal required cards count with already created order', function ($count) {
+test('customer checks for valid coupon code having more or equal required cards count with already created order', function () {
     actingAs($this->user);
 
     $couponable = CouponApplicable::first();
@@ -162,4 +162,34 @@ test('customer checks for valid coupon code having more or equal required cards 
         'coupon' => ['code' => $coupon->code],
     ]))
         ->assertSuccessful();
-})->with([25, 30, 40, 50]);
+});
+
+test('customer checks for valid coupon code having less than the required cards count with already created order', function () {
+    actingAs($this->user);
+
+    $couponable = CouponApplicable::first();
+
+    $coupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponable->id,
+                'coupon_status_id' => 2,
+                'min_threshold_type' => CouponMinThresholdTypeEnum::CARD_COUNT,
+                'min_threshold_value' => 25,
+            ]
+        );
+
+    $order = Order::factory()->create();
+
+    OrderItem::factory()->count(5)->create([
+        'order_id' => $order->id,
+        'quantity' => 2,
+    ]);
+
+
+    postJson(route('v2.orders.coupon.discount', [
+        'order' => $order,
+        'coupon' => ['code' => $coupon->code],
+    ]))
+        ->assertUnprocessable();
+});

@@ -21,6 +21,8 @@ class CreateCardLabelService
     protected CardSet $cardSet;
     protected string $cardSeriesName;
     protected string $cardSetName;
+    protected string $editionName;
+    protected string $language;
     protected int $year;
 
     public function createLabelsForOrder(Order $order): void
@@ -41,21 +43,26 @@ class CreateCardLabelService
         $this->cardSeries = $this->cardSet->cardSeries;
         $this->cardSetName = Str::upper($cardProduct->cardSet->name);
         $this->cardSeriesName = Str::upper($this->cardSet->cardSeries->name);
+        $this->editionName = Str::upper($this->cardProduct->edition);
+        $this->language = Str::upper($this->cardProduct->language);
     }
 
-    public function createLabel(CardProduct $cardProduct): void
+    protected function createLabel(CardProduct $cardProduct): void
     {
         $this->initializeValues($cardProduct);
 
-        CardLabel::create(
-            [
-               'card_product_id' => $cardProduct->id,
-               'line_one' => $this->getFirstLine(),
-               'line_two' => $this->getSecondLine(),
-               'line_three' => $this->getThirdLine(),
-               'line_four' => $this->getCardNumber(),
-            ]
-        );
+        CardLabel::create($this->getCardLabel($cardProduct));
+    }
+
+    protected function getCardLabel(CardProduct $cardProduct): array
+    {
+        return [
+            'card_product_id' => $cardProduct->id,
+            'line_one' => $this->getFirstLine(),
+            'line_two' => $this->getSecondLine(),
+            'line_three' => $this->getThirdLine(),
+            'line_four' => $this->getCardNumber(),
+        ];
     }
 
     protected function getCardNumber(): string
@@ -83,56 +90,57 @@ class CreateCardLabelService
     {
         $label_line_one = [];
 
+        $categoryName = Str::upper($this->category->name);
+
         if (
             $this->category->name == 'Pokemon'
         ) {
-            if ($this->cardProduct->language === 'English') {
+            if ($this->language === 'ENGLISH') {
                 if (Str::contains($this->cardSeriesName, 'PROMOS') || Str::contains($this->cardSetName, 'PROMOS')) {
-                    $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getSeriesNickname(), 'PROMO'];
+                    $label_line_one = [$this->year, $categoryName, $this->cardProduct->getSeriesNickname(), 'PROMO'];
 
                     if (Str::contains($this->cardSetName, 'POP')) {
-                        $label_line_one = [$this->year, $this->category->name];
+                        $label_line_one = [$this->year, $categoryName];
                     }
                 } elseif ($this->year > 2002 || in_array($this->cardSetName, ['LEGENDARY COLLECTION', 'EXPEDITION'])) {
                     if ($this->cardSetName === $this->cardSeriesName) {
-                        return implode(' ', [$this->year, $this->category->name]);
+                        return implode(' ', [$this->year, $categoryName]);
                     }
 
                     $label_line_one = $this->checkLineOneLength(
-                        [$this->year, $this->category->name, $this->cardSeries->name]
+                        [$this->year, $categoryName, $this->cardSeries->name]
                     );
 
                     if ($this->cardSetName == 'RADIANT COLLECTION') {
-                        $label_line_one = [$this->year, $this->category->name, 'BW'];
+                        $label_line_one = [$this->year, $categoryName, 'BW'];
                     }
                 } elseif ($this->year < 2002 || $this->cardSetName == 'NEO DESTINY') {
-                    $label_line_one = $this->checkLineOneLengthOld([$this->year, $this->category->name, $this->cardProduct->getSetNickname()]);
+                    $label_line_one = $this->checkLineOneLengthOld([$this->year, $categoryName, $this->cardProduct->getSetNickname()]);
                     if ($this->cardSetName == 'SOUTHERN ISLANDS') {
-                        $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getSetNickname()];
+                        $label_line_one = [$this->year, $categoryName, $this->cardProduct->getSetNickname()];
                     }
                 } else {
-                    $label_line_one = [$this->year, $this->category->name, $this->cardSeries->name, $this->cardSet->name, 'ERROR'];
+                    $label_line_one = [$this->year, $categoryName, $this->cardSeriesName, $this->cardSetName, 'ERROR'];
                 }
             }
 
-            if ($this->cardProduct->language === 'Japanese') {
-                $language = $this->cardProduct->language;
+            if ($this->language === 'JAPANESE') {
 
-                if (Str::contains($this->cardSeries->name, 'PROMOS')) {
-                    if ((strlen($this->year . $this->category->name . $language) + 5) < 22) {
-                        $label_line_one = [$this->year, $this->category->name, $language];
-                    } elseif (strlen($this->year . $this->cardProduct->getCategoryAbbreviation() . $language) < 22) {
-                        $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getLanguageAbbreviation()];
+                if (Str::contains($this->cardSeriesName, 'PROMOS')) {
+                    if ((strlen($this->year . $categoryName . $this->language) + 5) < 22) {
+                        $label_line_one = [$this->year, $categoryName, $this->language];
+                    } elseif (strlen($this->year . $this->cardProduct->getCategoryAbbreviation() . $this->language) < 22) {
+                        $label_line_one = [$this->year, $categoryName, $this->cardProduct->getLanguageAbbreviation()];
                     } else {
                         $label_line_one = [$this->year, strlen($this->cardProduct->getCategoryAbbreviation()), $this->cardProduct->getLanguageAbbreviation()];
                     }
-                } elseif ($this->year <= 2001 && $this->cardSeries->name === 'E-CARD ERA') {
-                    $label_line_one = [$this->year, $this->category->name, $language];
-                } elseif ($this->year >= 2001 && $this->cardSeries->name !== 'NEO ERA') {
-                    if ((strlen($this->year . $this->category->name . $language . $this->cardProduct->getSeriesNickname())) < 22) {
-                        $label_line_one = [$this->year, $this->category->name, $language, $this->cardProduct->getSeriesNickname()];
+                } elseif ($this->year <= 2001 && $this->cardSeriesName !== 'E-CARD ERA') {
+                    $label_line_one = [$this->year, $categoryName, $this->language];
+                } elseif ($this->year >= 2001 && $this->cardSeriesName !== 'NEO ERA') {
+                    if ((strlen($this->year . $categoryName . $this->language . $this->cardProduct->getSeriesNickname())) < 22) {
+                        $label_line_one = [$this->year, $categoryName, $this->language, $this->cardProduct->getSeriesNickname()];
                     } else {
-                        $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getLanguageAbbreviation(), $this->cardProduct->getSeriesNickname()];
+                        $label_line_one = [$this->year, $categoryName, $this->cardProduct->getLanguageAbbreviation(), $this->cardProduct->getSeriesNickname()];
                     }
                 } else {
                     $label_line_one = ['ERROR'];
@@ -143,24 +151,24 @@ class CreateCardLabelService
 
             if ($this->cardSeriesName === 'HOLIDAY SERIES' || Str::contains($this->cardSetName, ['DECK', 'BOX TOPPER', 'PIN CLUB'])) {
                 if (Str::contains($this->cardSetName, 'BOX TOPPER') && $full_date->day === 30 && $full_date->month === 7 && $full_date->year === 2021) {
-                    $label_line_one = [$this->year, $this->category->name, 'CN'];
+                    $label_line_one = [$this->year, $categoryName, 'CN'];
                 } elseif (Str::contains($this->cardSetName, 'DECK') && $full_date->day === 30 && $full_date->month === 7 && $full_date->year === 2021) {
-                    $label_line_one = [$this->year, $this->category->name, 'CN'];
+                    $label_line_one = [$this->year, $categoryName, 'CN'];
                 } elseif (Str::contains($this->cardSetName, 'DECK') && $full_date->day === 22 && $full_date->month === 10 && $full_date->year === 2021) {
-                    $label_line_one = [$this->year, $this->category->name, 'NF'];
+                    $label_line_one = [$this->year, $categoryName, 'NF'];
                 } elseif (Str::contains($this->cardSetName, 'PIN CLUB') && $full_date->day === 17 && $full_date->month === 9 && $full_date->year === 2021) {
-                    $label_line_one = [$this->year, $this->category->name, 'CN'];
+                    $label_line_one = [$this->year, $categoryName, 'CN'];
                 } else {
-                    $label_line_one = [$this->year, $this->category->name];
+                    $label_line_one = [$this->year, $categoryName];
                 }
             } elseif ($this->cardSeriesName === 'CRYPTID NATION' && ! Str::contains($this->cardSetName, 'PROMOS')) {
-                if (strlen($this->year . $this->category->name . $this->cardSet->name) < 30) {
-                    $label_line_one = [$this->year, $this->category->name, $this->cardSet->name];
+                if (strlen($this->year . $categoryName . $this->cardSet->name) < 30) {
+                    $label_line_one = [$this->year, $categoryName, $this->cardSetName];
                 } else {
-                    $label_line_one = [$this->year, $this->category->name, $this->cardProduct->getSetNickname()];
+                    $label_line_one = [$this->year, $categoryName, $this->cardProduct->getSetNickname()];
                 }
             } elseif (Str::contains($this->cardSetName, 'PROMOS')) {
-                $label_line_one = [$this->year, $this->category->name];
+                $label_line_one = [$this->year, $categoryName];
             } else {
                 $label_line_one = ['ERROR'];
             }
@@ -181,7 +189,7 @@ class CreateCardLabelService
         $label_line_two = [$card_name];
 
         if (! empty($surface)) {
-            $label_line_two = [$card_name, ' - ', $this->cardProduct->getSurfaceAbbreviation()];
+            $label_line_two = [$card_name, '-', $this->cardProduct->getSurfaceAbbreviation()];
         }
 
         return implode(' ', $label_line_two);
@@ -190,78 +198,78 @@ class CreateCardLabelService
     protected function getThirdLine(): string
     {
         $label_line_three = [];
-
         if ($this->category->name == 'Pokemon') {
             if ($this->cardProduct->language === 'English') {
                 if (Str::contains($this->cardSeriesName, 'PROMOS') || Str::contains($this->cardSetName, 'PROMOS')) {
                     $label_line_three = ['BLACK STAR'];
 
                     if (Str::contains($this->cardSetName, 'POP')) {
-                        $label_line_three = [$this->cardSet->name];
+                        $label_line_three = [$this->cardSetName];
                     }
                 } elseif ($this->year > 2002 || in_array($this->cardSetName, ['LEGENDARY COLLECTION', 'EXPEDITION'])) {
-                    $label_line_three = [$this->cardSet->name];
+                    $label_line_three = [$this->cardSetName];
 
                     if (str_starts_with($this->cardSetName, 'EX') && $this->cardSetName != 'EX RUBY & SAPPHIRE') {
-                        $label_line_three[0] = substr($this->cardSet->name, 3);
+                        $label_line_three[0] = substr($this->cardSetName, 3);
                     }
 
                     if (Str::lower($this->cardSetName) == 'RADIANT COLLECTION') {
                         $label_line_three = ['LEGENDARY TREASURES'];
                     }
                 } elseif ($this->year < 2002 || $this->cardSetName == 'NEO DESTINY') {
-                    if (Str::upper($this->cardProduct->edition) === 'UNLIMITED') {
-                        $label_line_three = ['\n'];
+                    if ($this->editionName === 'UNLIMITED') {
+                        $label_line_three = ["\n"];
                     } else {
-                        $label_line_three = [$this->cardProduct->edition];
+                        $label_line_three = [$this->editionName];
                     }
                 } else {
                     $label_line_three = ['ERROR'];
                 }
             }
 
-            if ($this->cardProduct->language === 'JAPANESE') {
-                if (Str::contains($this->cardSeries->name, 'PROMOS')) {
-                    $label_line_three = [$this->cardSet->name];
-                } elseif ($this->year <= 2001 && $this->cardSeries->name === 'E-CARD ERA') {
-                    $label_line_three = [$this->cardSet->name];
-                } elseif ($this->year >= 2001 && $this->cardSeries->name !== 'NEO ERA') {
-                    if ($this->cardProduct->edition === 'UNLIMITED') {
-                        $label_line_three = [$this->cardSet->name];
+            if ($this->language === 'JAPANESE') {
+                if (Str::contains($this->cardSeriesName, 'PROMOS')) {
+                    $label_line_three = [$this->cardSetName];
+                } elseif ($this->year <= 2001 && $this->cardSeriesName !== 'E-CARD ERA') {
+                    $label_line_three = [$this->cardSetName];
+                } elseif ($this->year >= 2001 && $this->cardSeriesName !== 'NEO ERA') {
+                    if ($this->editionName === 'UNLIMITED') {
+                        $label_line_three = [$this->cardSetName];
                     } else {
-                        $label_line_three = [$this->cardSet->name, ' - ', $this->cardProduct->edition];
+                        $label_line_three = [$this->cardSetName, '-', $this->editionName];
                     }
                 } else {
                     $label_line_three = ['ERROR'];
                 }
             }
+
         } elseif ($this->category->name === "MetaZoo") {
             if ($this->cardSeriesName === 'HOLIDAY SERIES' || Str::contains($this->cardSetName, ['DECK', 'BOX TOPPER', 'PIN CLUB'])) {
-                if (Str::upper($this->cardProduct->edition) === 'UNLIMITED') {
-                    $label_line_three = [$this->cardSet->name];
+                if ($this->editionName === 'UNLIMITED') {
+                    $label_line_three = [$this->cardSetName];
                 } else {
                     if ((strlen($this->cardSet->name . $this->cardProduct->edition) + 4) < 28) {
-                        $label_line_three = [$this->cardSet->name, ' - ', $this->cardProduct->edition];
+                        $label_line_three = [$this->cardSetName, '-', $this->editionName];
                     } else {
                         $label_line_three = [$this->cardProduct->getSetNickname(), ' - ', $this->cardProduct->getEditionAbbreviation()];
                     }
                 }
             } elseif ($this->cardSeriesName === 'CRYPTID NATION' && ! Str::contains($this->cardSetName, 'PROMOS')) {
-                if (Str::upper($this->cardProduct->edition) === 'UNLIMITED') {
-                    $label_line_three = ['\n'];
-                } elseif (Str::upper($this->cardProduct->edition) === 'KICKSTARTER') {
-                    $label_line_three = ['1ST ED', ' - ', $this->cardProduct->edition];
+                if ($this->editionName === 'UNLIMITED') {
+                    $label_line_three = ["\n"];
+                } elseif ($this->editionName === 'KICKSTARTER') {
+                    $label_line_three = ['1ST ED', '-', $this->editionName];
                 } else {
-                    $label_line_three = [$this->cardProduct->edition];
+                    $label_line_three = [$this->editionName];
                 }
             } elseif (Str::contains($this->cardSetName, 'PROMOS')) {
-                if (Str::upper($this->cardProduct->edition) === 'UNLIMITED') {
+                if ($this->editionName === 'UNLIMITED') {
                     if (strlen($this->cardSet->name) < 30) {
-                        $label_line_three = [$this->cardSet->name];
+                        $label_line_three = [$this->cardSetName];
                     } else {
                         $label_line_three = [$this->cardProduct->getSetNickname()];
                     }
-                } elseif (Str::upper($this->cardProduct->edition) === 'KICKSTARTER') {
+                } elseif ($this->editionName === 'KICKSTARTER') {
                     $label_line_three = [$this->cardProduct->getSetNickname(), ' - 1ST ED - ', $this->cardProduct->getEditionAbbreviation()];
                 } else {
                     $label_line_three = [$this->cardProduct->getSetNickname(), ' - ', $this->cardProduct->getEditionAbbreviation()];

@@ -30,7 +30,7 @@ class CardLabelController extends Controller
     public function getOrderLabels(Order $order): UserCardLabelCollection
     {
         //throw error if order is not graded yet
-        if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])) {
+        if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED])) {
             throw new CardLabelsCanNotBeExportedForOrder;
         }
 
@@ -42,7 +42,7 @@ class CardLabelController extends Controller
     public function updateAndExportOrderLabels(UpdateOrderLabelsRequest $request, Order $order): JsonResponse
     {
         //throw error if order is not graded yet
-        if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])) {
+        if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED])) {
             throw new CardLabelsCanNotBeExportedForOrder;
         }
 

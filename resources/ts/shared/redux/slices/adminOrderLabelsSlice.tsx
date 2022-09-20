@@ -13,10 +13,6 @@ export interface OrderLabels {
     labels: CardLabelEntity[];
 }
 
-export interface EditOrderLabels {
-    editLabels: OrderLabelsDto[];
-}
-
 export interface CardsLabel {
     labels: CardLabelEntity;
 }

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
 
@@ -118,13 +118,22 @@ export function LabelsContent({ labels }: props) {
     const [lineTwo, setLineTwo] = useState(labels.lineTwo);
     const [lineThree, setLineThree] = useState(labels.lineThree);
     const [lineFour, setLineFour] = useState(labels.lineFour);
+    const [checked, setChecked] = useState(false);
+    const [labelData, setLabelData] = useState<any>([]);
+    const cardLabelId = labels.id;
 
-    function updateLabels() {
-        const cardsLabel = [];
-        cardsLabel.push({ cardLabelId: '1', lineOne, lineTwo, lineThree, lineFour });
-        console.log(cardsLabel);
-        // dispatch(updateCardsLabel(cardsLabel));
-    }
+    useEffect(() => {
+        if (checked) {
+            setLabelData(labelData.concat([{ cardLabelId, lineOne, lineTwo, lineThree, lineFour }]));
+            // setLabelData([...labelData, { cardLabelId, lineOne, lineTwo, lineThree, lineFour }]);
+        } else {
+            setLabelData([]);
+        }
+    }, [checked, cardLabelId, lineOne, lineTwo, lineThree, lineFour, labelData]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    };
 
     return (
         <CardDiv>
@@ -217,10 +226,9 @@ export function LabelsContent({ labels }: props) {
                         }}
                     />
                 </div>
-
                 <FormControlLabel
                     className={'CheckBoxLabel'}
-                    control={<Checkbox />}
+                    control={<Checkbox onChange={handleChange} />}
                     label="Save changes to this card’s label"
                 />
             </div>
@@ -239,7 +247,6 @@ export function LabelsContent({ labels }: props) {
                 </div>
                 <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
             </div>
-            <button onClick={updateLabels}></button>
         </CardDiv>
     );
 }

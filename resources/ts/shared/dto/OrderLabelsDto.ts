@@ -1,5 +1,5 @@
 export class OrderLabelsDto {
-    cardLabelId!: string;
+    cardLabelId!: number;
     lineOne!: string;
     lineTwo!: string;
     lineThree!: string;

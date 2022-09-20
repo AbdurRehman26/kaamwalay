@@ -119,7 +119,7 @@ export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
         },
         [confirm, dispatch, handleCloseOptions, promoCode?.id],
     );
-    console.log(promoCode?.type);
+
     return (
         <TableRow>
             <TableCell align={'left'} sx={{ fontWeight: 'bold' }}>

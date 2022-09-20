@@ -6,11 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { useFormik } from 'formik';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
-import { updateCardsLabel } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
 import { LabelsContent } from './LabelsContent';
 
@@ -40,26 +38,11 @@ const LabelDialog = styled(Dialog)({
     },
 });
 
-const initialValues = {
-    cardLabelId: '1',
-    lineOne: '',
-    lineTwo: '',
-    lineThree: '',
-    lineFour: '',
-};
-
 export function EditLabelDialog() {
     const dispatch = useDispatch();
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
     const cardLabels = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
-
-    const { handleChange, handleSubmit } = useFormik({
-        initialValues: initialValues,
-        onSubmit: async (values) => {
-            await dispatch(updateCardsLabel(values));
-        },
-    });
 
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
@@ -84,29 +67,23 @@ export function EditLabelDialog() {
             </DialogTitle>
             {orderLabels.length !== 0 ? (
                 orderLabels.map((orderLabel) => (
-                    <form onSubmit={handleSubmit}>
-                        <DialogContent dividers>
-                            <LabelsContent labels={orderLabel} handleChange={handleChange} />
-                        </DialogContent>
-                    </form>
+                    <DialogContent dividers>
+                        <LabelsContent labels={orderLabel} />
+                    </DialogContent>
                 ))
             ) : (
-                <form onSubmit={handleSubmit}>
-                    <DialogContent dividers>
-                        <LabelsContent labels={cardLabels} handleChange={handleChange} />
-                    </DialogContent>
-                </form>
+                <DialogContent dividers>
+                    <LabelsContent labels={cardLabels} />
+                </DialogContent>
             )}
-            <form onSubmit={handleSubmit}>
-                <DialogActions>
-                    <Button className={'CancelButton'} onClick={handleModal}>
-                        Cancel
-                    </Button>
-                    <Button className={'ExportButton'} type={'submit'}>
-                        Export
-                    </Button>
-                </DialogActions>
-            </form>
+            <DialogActions>
+                <Button className={'CancelButton'} onClick={handleModal}>
+                    Cancel
+                </Button>
+                <Button className={'ExportButton'} type={'submit'}>
+                    Export
+                </Button>
+            </DialogActions>
         </LabelDialog>
     );
 }

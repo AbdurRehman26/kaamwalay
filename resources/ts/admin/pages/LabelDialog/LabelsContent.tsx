@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
 
@@ -110,10 +111,21 @@ const CardDiv = styled(Grid)({
 
 interface props {
     labels: CardLabelEntity;
-    handleChange: any;
 }
 
-export function LabelsContent({ labels, handleChange }: props) {
+export function LabelsContent({ labels }: props) {
+    const [lineOne, setLineOne] = useState(labels.lineOne);
+    const [lineTwo, setLineTwo] = useState(labels.lineTwo);
+    const [lineThree, setLineThree] = useState(labels.lineThree);
+    const [lineFour, setLineFour] = useState(labels.lineFour);
+
+    function updateLabels() {
+        const cardsLabel = [];
+        cardsLabel.push({ cardLabelId: '1', lineOne, lineTwo, lineThree, lineFour });
+        console.log(cardsLabel);
+        // dispatch(updateCardsLabel(cardsLabel));
+    }
+
     return (
         <CardDiv>
             <div className={'LeftSideDiv'}>
@@ -142,11 +154,13 @@ export function LabelsContent({ labels, handleChange }: props) {
                             width: '100%',
                         }}
                         name={'lineOne'}
-                        value={labels.lineOne}
+                        value={lineOne}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setLineOne(e.target.value);
+                        }}
                     />
                 </div>
                 <div className={'InputTextDiv'}>
@@ -158,11 +172,13 @@ export function LabelsContent({ labels, handleChange }: props) {
                             width: '100%',
                         }}
                         name={'lineTwo'}
-                        value={labels.lineTwo}
+                        value={lineTwo}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setLineTwo(e.target.value);
+                        }}
                     />
                 </div>
                 <div className={'InputTextDiv'}>
@@ -174,11 +190,13 @@ export function LabelsContent({ labels, handleChange }: props) {
                             width: '100%',
                         }}
                         name={'lineThree'}
-                        value={labels.lineThree}
+                        value={lineThree}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setLineThree(e.target.value);
+                        }}
                     />
                 </div>
                 <div className={'InputTextDiv'}>
@@ -190,17 +208,19 @@ export function LabelsContent({ labels, handleChange }: props) {
                             width: '100%',
                         }}
                         name={'lineFour'}
-                        value={labels.lineFour}
+                        value={lineFour}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setLineFour(e.target.value);
+                        }}
                     />
                 </div>
 
                 <FormControlLabel
                     className={'CheckBoxLabel'}
-                    control={<Checkbox defaultChecked />}
+                    control={<Checkbox />}
                     label="Save changes to this card’s label"
                 />
             </div>
@@ -219,6 +239,7 @@ export function LabelsContent({ labels, handleChange }: props) {
                 </div>
                 <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
             </div>
+            <button onClick={updateLabels}></button>
         </CardDiv>
     );
 }

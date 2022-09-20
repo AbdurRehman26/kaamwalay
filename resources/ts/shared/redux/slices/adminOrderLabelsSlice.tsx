@@ -13,6 +13,10 @@ export interface OrderLabels {
     labels: CardLabelEntity[];
 }
 
+export interface EditOrderLabels {
+    editLabels: OrderLabelsDto[];
+}
+
 export interface CardsLabel {
     labels: CardLabelEntity;
 }
@@ -52,7 +56,7 @@ export const getCardsLabel = createAsyncThunk('orderLabels/getCardsLabel', async
 export const updateCardsLabel = createAsyncThunk('orderLabels/updateCardsLabel', async (input: OrderLabelsDto) => {
     try {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/cards/labels/${input.cardLabelId}`);
+        const endpoint = apiService.createEndpoint(`admin/cards/labels/1`);
         const orderLabels = await endpoint.put('', input);
         NotificationsService.success('Updated successfully!');
         return orderLabels.data;

@@ -3,8 +3,6 @@
     <x-slot name="title">
         {{ $card['full_name'] }}
     </x-slot>
-    @else
-        Grades not available
     @endif
     <x-slot name="description">
         Join the grading revolution. Start a Robograding submission and get your cards graded with artificial intelligence.

@@ -341,5 +341,3 @@ test('admin can create coupon with free cards', function () {
     ])
         ->assertCreated();
 });
-
-

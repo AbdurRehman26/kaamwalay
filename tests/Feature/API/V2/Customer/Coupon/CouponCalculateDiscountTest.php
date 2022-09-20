@@ -42,7 +42,7 @@ beforeEach(function () {
                 'coupon_status_id' => 2,
                 'type' => 'free_cards',
                 'code' => 'FREE_CARDS',
-                'discount_value' => 2
+                'discount_value' => 2,
             ]
         );
 
@@ -197,7 +197,7 @@ it('calculates coupon discount for free cards', function () {
     actingAs($this->user);
     $paymentPlan = PaymentPlan::factory()->create([
         'price' => 20,
-        'max_protection_amount' => 300
+        'max_protection_amount' => 300,
     ]);
 
     postJson(

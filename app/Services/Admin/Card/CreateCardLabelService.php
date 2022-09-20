@@ -23,6 +23,7 @@ class CreateCardLabelService
     protected string $cardSetName;
     protected string $editionName;
     protected string $language;
+    protected string $categoryName;
     protected int $year;
 
     public function createLabelsForOrder(Order $order): void
@@ -45,6 +46,7 @@ class CreateCardLabelService
         $this->cardSeriesName = Str::upper($this->cardSet->cardSeries->name);
         $this->editionName = Str::upper($this->cardProduct->edition);
         $this->language = Str::upper($this->cardProduct->language);
+        $this->categoryName = Str::upper($cardProduct->cardCategory->name);
     }
 
     protected function createLabel(CardProduct $cardProduct): void
@@ -76,8 +78,8 @@ class CreateCardLabelService
         }
 
         if (
-            $this->category->name == 'Pokemon' &&
-            $this->cardProduct->language === 'English' &&
+            $this->categoryName == 'POKEMON' &&
+            $this->language === 'ENGLISH' &&
             Str::lower($this->cardSetName) == 'radiant collection'
         ) {
             $card_number = '#RC' . $card_number_order;
@@ -93,7 +95,7 @@ class CreateCardLabelService
         $categoryName = Str::upper($this->category->name);
 
         if (
-            $this->category->name == 'Pokemon'
+            $this->categoryName == 'POKEMON'
         ) {
             if ($this->language === 'ENGLISH') {
                 if (Str::contains($this->cardSeriesName, 'PROMOS') || Str::contains($this->cardSetName, 'PROMOS')) {
@@ -145,7 +147,7 @@ class CreateCardLabelService
                     $label_line_one = ['ERROR'];
                 }
             }
-        } elseif ($this->category->name === "MetaZoo") {
+        } elseif ($this->categoryName == 'METAZOO') {
             $full_date = Carbon::parse($this->cardSet->release_date_formatted);
 
             if ($this->cardSeriesName === 'HOLIDAY SERIES' || Str::contains($this->cardSetName, ['DECK', 'BOX TOPPER', 'PIN CLUB'])) {
@@ -181,7 +183,7 @@ class CreateCardLabelService
         $card_name = Str::upper($this->cardProduct->name);
         $surface = Str::upper($this->cardProduct->surface);
 
-        if ($this->category->name == 'Pokemon' && Str::contains($card_name, 'VMAX')) {
+        if ($this->categoryName == 'POKEMON' && Str::contains($card_name, 'VMAX')) {
             $card_name = "FA/" . $card_name;
         }
 
@@ -197,8 +199,8 @@ class CreateCardLabelService
     protected function getThirdLine(): string
     {
         $label_line_three = [];
-        if ($this->category->name == 'Pokemon') {
-            if ($this->cardProduct->language === 'English') {
+        if ($this->categoryName == 'POKEMON') {
+            if ($this->language === 'ENGLISH') {
                 if (Str::contains($this->cardSeriesName, 'PROMOS') || Str::contains($this->cardSetName, 'PROMOS')) {
                     $label_line_three = ['BLACK STAR'];
 
@@ -241,7 +243,7 @@ class CreateCardLabelService
                     $label_line_three = ['ERROR'];
                 }
             }
-        } elseif ($this->category->name === "MetaZoo") {
+        } elseif ($this->categoryName == 'METAZOO') {
             if ($this->cardSeriesName === 'HOLIDAY SERIES' || Str::contains($this->cardSetName, ['DECK', 'BOX TOPPER', 'PIN CLUB'])) {
                 if ($this->editionName === 'UNLIMITED') {
                     $label_line_three = [$this->cardSetName];

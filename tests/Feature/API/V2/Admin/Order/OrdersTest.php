@@ -5,9 +5,13 @@ use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\CreateOrderLabel;
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
+use App\Models\PaymentPlan;
+use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use Carbon\Carbon;
@@ -74,6 +78,11 @@ beforeEach(function () {
             'certificate_number' => '000000100',
         ]
     ))->create();
+
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
+    $this->cardProduct = CardProduct::factory()->create();
+    $this->shippingMethod = ShippingMethod::factory()->insured()->create();
+    $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
@@ -606,4 +615,155 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
 
     expect($order->estimated_delivery_start_at)->toEqual($estimatedDeliveryStartAt)
         ->and($order->estimated_delivery_end_at)->toEqual($estimatedDeliveryEndAt);
+});
+
+test('an admin can place order for an user', function () {
+    Event::fake();
+
+    $customer = User::factory()->create();
+
+    $response = $this->postJson('/api/v2/admin/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'grand_total',
+        ],
+    ]);
+});
+
+test('an admin can place order for an user and mark it paid immediately', function () {
+    Event::fake();
+
+    $customer = User::factory()->create();
+
+    $response = $this->postJson('/api/v2/admin/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => true,
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'grand_total',
+        ],
+    ]);
 });

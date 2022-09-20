@@ -1,5 +1,7 @@
 <?php
-
+use App\Http\Controllers\API\V2\Admin\Address\CountryController;
+use App\Http\Controllers\API\V2\Admin\Address\CustomerAddressController;
+use App\Http\Controllers\API\V2\Admin\Address\StateController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
@@ -15,8 +17,8 @@ use App\Http\Controllers\API\V2\Admin\Order\OrderExtraChargeController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderRefundController;
-use App\Http\Controllers\API\V2\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Admin\Order\PaymentMethodController;
+use App\Http\Controllers\API\V2\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
@@ -78,6 +80,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
 
+    Route::prefix('addresses')->group(function () {
+        Route::apiResource('countries', CountryController::class)->only(['index']);
+        Route::apiResource('states', StateController::class)->only(['index']);
+    });
+
+    Route::get('customer/{user}/addresses', [CustomerAddressController::class, 'getCustomerAddresses']);
 
     Route::prefix('cards')->group(function () {
         Route::get('categories', [CardCategoryController::class, 'index']);
@@ -132,4 +140,3 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('export-data', DataExportController::class)->name('admin.export-data');
 });
-

@@ -301,7 +301,7 @@ export const getSavedAddresses = createAsyncThunk(
     async (_, { getState }: any) => {
         const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint('customer/addresses');
+        const endpoint = apiService.createEndpoint(`customer/1/addresses`);
         const customerAddresses = await endpoint.get('');
         const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
             return {
@@ -330,7 +330,7 @@ export const getSavedAddresses = createAsyncThunk(
                 },
             };
         });
-        console.log('F A ', formattedAddresses);
+        console.log('formattedAddresses ', formattedAddresses);
         return formattedAddresses;
     },
 );
@@ -380,7 +380,6 @@ export const getServiceLevels = createAsyncThunk('adminCreateOrderSlice/getServi
     const endpoint = apiService.createEndpoint('admin/orders/payment-plans');
     const serviceLevels = await endpoint.get('');
 
-    console.log('p ', serviceLevels);
     return serviceLevels.data;
 });
 
@@ -389,9 +388,10 @@ export const getStatesList = createAsyncThunk(
     async (input?: { countryId: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `customer/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
+            `admin/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
         );
         const americanStates = await endpoint.get('');
+        console.log('states ', americanStates.data);
         return americanStates.data;
     },
 );
@@ -501,10 +501,10 @@ export const adminCreateOrderSlice = createSlice({
     extraReducers: {
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
-            if (!action.payload.length) {
-                state.step03Data.disableAllShippingInputs = false;
-                state.step03Data.useCustomShippingAddress = true;
-            }
+            // if (!action.payload.length) {
+            //     state.step03Data.disableAllShippingInputs = false;
+            //     state.step03Data.useCustomShippingAddress = true;
+            // }
         },
         [getCountriesList.fulfilled as any]: (state, action) => {
             state.step03Data.availableCountriesList = action.payload;
@@ -518,6 +518,16 @@ export const adminCreateOrderSlice = createSlice({
         },
         [getServiceLevels.rejected as any]: (state) => {
             state.step01Data.status = 'failed';
+        },
+        [getStatesList.pending as any]: (state) => {
+            state.step03Data.fetchingStatus = 'loading';
+        },
+        [getStatesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableStatesList = action.payload;
+            state.step03Data.fetchingStatus = 'success';
+        },
+        [getStatesList.rejected as any]: (state) => {
+            state.step03Data.fetchingStatus = 'failed';
         },
     },
 });

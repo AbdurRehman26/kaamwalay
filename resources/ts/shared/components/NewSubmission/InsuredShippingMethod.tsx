@@ -265,7 +265,7 @@ export function InsuredShippingMethod() {
             dispatch(getStatesList({ countryId }));
         }
     }
-
+    console.log('existingAddresses ', existingAddresses);
     useEffect(
         () => {
             if (existingAddresses.length === 0 || useCustomShippingAddress) {
@@ -312,7 +312,7 @@ export function InsuredShippingMethod() {
 
     useEffect(
         () => {
-            dispatch(getStatesList());
+            // dispatch(getStatesList());
             // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
             // we'll check the first address in the list
             if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {

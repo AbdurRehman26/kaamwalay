@@ -21,7 +21,12 @@ import { ShippingMethods } from '@shared/components/NewSubmission/ShippingMethod
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 // import Alert from '@mui/material/Alert';
 import { cx } from '@shared/lib/utils/cx';
-import { getCountriesList, getServiceLevels } from '@shared/redux/slices/adminCreateOrderSlice';
+import {
+    getCountriesList,
+    getSavedAddresses,
+    getServiceLevels,
+    getStatesList,
+} from '@shared/redux/slices/adminCreateOrderSlice';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { CardSubmissionSearchField } from './CardSubmissionSearchField';
 
@@ -49,22 +54,26 @@ export function CreateSubmission() {
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
     const searchValue = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.searchValue);
     const serviceLevels = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.availableServiceLevels);
-    const availableCountriesList = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.availableCountriesList,
-    );
-    console.log('serviceLevels ', availableCountriesList);
+    // const availableCountriesList = useAppSelector(
+    //     (state) => state.adminCreateOrderSlice.step03Data.availableCountriesList,
+    // );
+
     useEffect(() => {
+        dispatch(getSavedAddresses());
         dispatch(getServiceLevels());
         dispatch(getCountriesList());
+        dispatch(getStatesList());
     }, [dispatch]);
 
-    // function getMaxProtectionAmount(maxProtectionAmount: any) {
-    //     const test = maxProtectionAmount >= 1000000
-    //         ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(maxProtectionAmount)
-    //         : maxProtectionAmount;
-    //     console.log('Test ', test)
-    //     return test;
-    // }
+    function getMaxProtectionAmount(maxProtectionAmount: any) {
+        const test =
+            maxProtectionAmount >= 1000000
+                ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(
+                      maxProtectionAmount,
+                  )
+                : maxProtectionAmount;
+        return test;
+    }
 
     const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer } = useConfiguration();
 
@@ -187,21 +196,9 @@ export function CreateSubmission() {
                                         {serviceLevels.map((item: any) => {
                                             return (
                                                 <option key={item.id} value={item.id}>
-                                                    {/* <span> { item?.price   '/ Up to'  getMaxProtectionAmount(item.maxProtectionAmount) | {item.turnaround}  </span> */}
-                                                    {/* {item?.price} / Up to&nbsp;
-                                                    <span>  
-                                                        { getMaxProtectionAmount(item.maxProtectionAmount) }  
-                                                        <NumberFormat
-                                                            value={getMaxProtectionAmount(item.maxProtectionAmount)}
-                                                            isNumericString
-                                                            displayType={'text'}
-                                                            thousandSeparator
-                                                            decimalSeparator={'.'}
-                                                            prefix={'$'}
-                                                            className={classes.protectionText}
-                                                        />
-                                                    </span>
-                                                    <span> | {item.turnaround} </span> */}
+                                                    {`$${item?.price} / Card (Up to $${getMaxProtectionAmount(
+                                                        item.maxProtectionAmount,
+                                                    )} | ${item.turnaround}) `}
                                                 </option>
                                             );
                                         })}

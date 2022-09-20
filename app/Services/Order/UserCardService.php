@@ -118,6 +118,8 @@ class UserCardService
 
         $data = $this->agsService->getGradesByCertificateId($certificateId);
 
+        $generatedImages = $this->pepareScannedImagesForPublicCardPage($data);
+
         return [
             'grades_available' => true,
             'is_fake' => $userCard->is_fake,
@@ -139,7 +141,9 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->pepareScannedImagesForPublicCardPage($data),
+            'generated_images' => $generatedImages,
+            'front_images_available' => array_key_exists('front', $generatedImages),
+            'back_images_available' => array_key_exists('back', $generatedImages),
             'slabbed_images' => $this->prepareSlabbedImagesForPublicCardPage($data, $userCard),
             'social_images' => $userCard->social_images,
             'page_url' => $this->getPageUrl($certificateId),

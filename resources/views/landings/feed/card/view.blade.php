@@ -1,6 +1,11 @@
 <x-layout>
     <x-slot name="title">
-        {{ $card['full_name'] }}
+        @if($grades_available)
+            {{ $card['full_name'] }}
+        @else
+            Grades not available
+        @endif
+
     </x-slot>
     <x-slot name="description">
         Join the grading revolution. Start a Robograding submission and get your cards graded with artificial intelligence.

@@ -11,11 +11,10 @@ use App\Models\UserCard;
 use App\Services\Admin\Card\CreateCardLabelService;
 use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderLabelService
 {
@@ -90,11 +89,9 @@ class OrderLabelService
      */
     public function getOrderGradedCards(Order $order): Collection
     {
-        $query = UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
+        return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
             ->where('order_id', $order->id)
             ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-            ->select('user_cards.*');
-
-        return QueryBuilder::for($query)->get();
+            ->select('user_cards.*')->get();
     }
 }

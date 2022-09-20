@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -89,11 +88,6 @@ class OrderItem extends Model
     public function userCard(): HasOne
     {
         return $this->hasOne(UserCard::class);
-    }
-
-    public function scopeForOrder(Builder $query, Order $order): Builder
-    {
-        return $query->where('order_id', $order->id);
     }
 
     public function isValidForGrading(): bool

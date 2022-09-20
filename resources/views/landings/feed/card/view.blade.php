@@ -1,7 +1,9 @@
 <x-layout>
+    @if($grades_available)
     <x-slot name="title">
         {{ $card['full_name'] }}
     </x-slot>
+    @endif
     <x-slot name="description">
         Join the grading revolution. Start a Robograding submission and get your cards graded with artificial intelligence.
     </x-slot>

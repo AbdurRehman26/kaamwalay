@@ -151,7 +151,7 @@ export function SubmissionsViewHeader({
 
     return (
         <Grid container className={classes.root}>
-            <EditLabelDialog />
+            <EditLabelDialog orderNumber={orderNumber} />
             <Grid container className={classes.header}>
                 <Grid container item xs alignItems={'center'}>
                     <Typography variant={'h6'} className={classes.heading}>

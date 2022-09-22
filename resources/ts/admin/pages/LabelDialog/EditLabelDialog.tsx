@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,9 +8,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { OrderLabelsDto } from '@shared/dto/OrderLabelsDto';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { setEditLabelDialog, updateCardLabel, updateMultipleLabels } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
 import { LabelsContent } from './LabelsContent';
@@ -40,27 +43,62 @@ const LabelDialog = styled(Dialog)({
     },
 });
 
-export function EditLabelDialog() {
+interface props {
+    orderNumber?: string;
+}
+
+export function EditLabelDialog({ orderNumber }: props) {
     const dispatch = useDispatch();
     const { id } = useParams<'id'>();
+    const [isLoading, setIsLoading] = useState(false);
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
     const cardLabel = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
     const singleLabelData = useSelector((state: RootState) => state.adminOrderLabels.singleLabelData.labelData);
     const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.mutlipleLabelData.labelData);
+    const cardsLabelFileData = useSelector((state: RootState) => state.adminOrderLabels.labelsUrl.url);
+    const labels: OrderLabelsDto[] = [];
 
     async function updateLabels() {
         if (multipleLabelData.length > 0) {
+            setIsLoading(true);
             await dispatch(
                 updateMultipleLabels({
                     data: multipleLabelData,
                     id: id,
                 }),
             );
+            await downloadFromUrl(cardsLabelFileData?.url, `${orderNumber}_label.xlsx`);
+            setIsLoading(false);
             dispatch(setEditLabelDialog(false));
         }
         if (JSON.stringify(cardLabel) !== '{}') {
+            setIsLoading(true);
             await dispatch(updateCardLabel(singleLabelData));
+            setIsLoading(false);
+            dispatch(setEditLabelDialog(false));
+        }
+        if (multipleLabelData.length === 0) {
+            setIsLoading(true);
+            orderLabels.map((orderLabel) => {
+                labels.push({
+                    cardLabelId: orderLabel.cardLabelId,
+                    certificateNumber: orderLabel.certificateNumber,
+                    lineOne: orderLabel.lineOne,
+                    lineTwo: orderLabel.lineTwo,
+                    lineThree: orderLabel.lineThree,
+                    lineFour: orderLabel.lineFour,
+                    persistChanges: false,
+                });
+            });
+            await dispatch(
+                updateMultipleLabels({
+                    data: labels,
+                    id: id,
+                }),
+            );
+            await downloadFromUrl(cardsLabelFileData?.url, `${orderNumber}_label.xlsx`);
+            setIsLoading(false);
             dispatch(setEditLabelDialog(false));
         }
     }
@@ -103,7 +141,13 @@ export function EditLabelDialog() {
                     Cancel
                 </Button>
                 <Button className={'ExportButton'} onClick={updateLabels}>
-                    {JSON.stringify(cardLabel) !== '{}' ? 'Save' : 'Export'}
+                    {isLoading ? (
+                        <CircularProgress sx={{ color: '#fff' }} />
+                    ) : JSON.stringify(cardLabel) !== '{}' ? (
+                        'Save'
+                    ) : (
+                        'Export'
+                    )}
                 </Button>
             </DialogActions>
         </LabelDialog>

@@ -29,6 +29,10 @@ export interface CardsLabel {
     labels: CardLabelEntity;
 }
 
+export interface CardsLabelFileUrl {
+    url: any;
+}
+
 export interface AdminOrderLabelsSliceState {
     openLabelDialog: OpenLabelDialog;
     orderLabels: OrderLabels;
@@ -36,6 +40,7 @@ export interface AdminOrderLabelsSliceState {
     singleLabelData: SingleLabelData;
     mutlipleLabelData: MultipleLabelData;
     cardId: CardLabelId;
+    labelsUrl: CardsLabelFileUrl;
 }
 
 const initialState: AdminOrderLabelsSliceState = {
@@ -56,6 +61,9 @@ const initialState: AdminOrderLabelsSliceState = {
     },
     cardId: {
         id: 0,
+    },
+    labelsUrl: {
+        url: {},
     },
 };
 
@@ -143,6 +151,9 @@ export const adminOrderLabelsSlice = createSlice({
         [getCardLabel.fulfilled as any]: (state, action) => {
             state.cardsLabel.labels = action.payload;
             state.orderLabels.labels = [];
+        },
+        [updateMultipleLabels.fulfilled as any]: (state, action) => {
+            state.labelsUrl.url = action.payload;
         },
     },
 });

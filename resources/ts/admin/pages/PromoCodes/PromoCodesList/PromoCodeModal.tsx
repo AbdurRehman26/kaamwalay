@@ -472,7 +472,7 @@ export function PromoCodeModal() {
                                 {discountType === DiscountTypeEnums.freeCards ? (
                                     <TextField
                                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                                        placeholder={'0'}
+                                        placeholder={'1'}
                                         size={'small'}
                                         sx={{ maxWidth: '120px', marginLeft: '3px' }}
                                         variant="outlined"

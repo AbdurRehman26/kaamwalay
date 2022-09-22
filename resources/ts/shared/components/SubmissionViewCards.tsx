@@ -123,8 +123,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
         async (action: RowOption, id: number) => {
             switch (action) {
                 case RowOption.EditLabel:
-                    dispatch(setEditLabelDialog(true));
                     dispatch(getCardsLabel({ id }));
+                    dispatch(setEditLabelDialog(true));
                     break;
             }
         },

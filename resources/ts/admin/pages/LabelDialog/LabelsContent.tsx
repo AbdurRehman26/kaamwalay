@@ -1,12 +1,19 @@
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
+import {
+    updateLabelField,
+    updateMultipleCardsLabel,
+    updatecardLabeId,
+} from '@shared/redux/slices/adminOrderLabelsSlice';
 
 const CardDiv = styled(Grid)({
     display: 'flex',
@@ -111,29 +118,55 @@ const CardDiv = styled(Grid)({
 
 interface props {
     labels: CardLabelEntity;
+    isSingleCard?: boolean;
+    isMultipleCards?: boolean;
 }
 
-export function LabelsContent({ labels }: props) {
-    const [lineOne, setLineOne] = useState(labels.lineOne);
-    const [lineTwo, setLineTwo] = useState(labels.lineTwo);
-    const [lineThree, setLineThree] = useState(labels.lineThree);
-    const [lineFour, setLineFour] = useState(labels.lineFour);
+export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) {
+    const [lineOne, setLineOne] = useState(labels?.lineOne);
+    const [lineTwo, setLineTwo] = useState(labels?.lineTwo);
+    const [lineThree, setLineThree] = useState(labels?.lineThree);
+    const [lineFour, setLineFour] = useState(labels?.lineFour);
     const [checked, setChecked] = useState(false);
-    const [labelData, setLabelData] = useState<any>([]);
-    const cardLabelId = labels.id;
+    const [cardLabelId, setCardLabelId] = useState(labels?.cardLabelId);
+    const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
+    const persistChanges = true;
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (checked) {
-            setLabelData(labelData.concat([{ cardLabelId, lineOne, lineTwo, lineThree, lineFour }]));
-            // setLabelData([...labelData, { cardLabelId, lineOne, lineTwo, lineThree, lineFour }]);
-        } else {
-            setLabelData([]);
+        if (checked && isSingleCard) {
+            dispatch(updateLabelField({ cardLabelId, lineOne, lineTwo, lineThree, lineFour }));
         }
-    }, [checked, cardLabelId, lineOne, lineTwo, lineThree, lineFour, labelData]);
+        if (checked && isMultipleCards) {
+            dispatch(
+                updateMultipleCardsLabel({
+                    cardLabelId,
+                    certificateNumber,
+                    lineOne,
+                    lineTwo,
+                    lineThree,
+                    lineFour,
+                    persistChanges,
+                }),
+            );
+        }
+        if (!checked && cardLabelId) {
+            dispatch(updatecardLabeId(cardLabelId));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [checked, dispatch]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
     };
+
+    if (JSON.stringify(labels) === '{}' && isSingleCard) {
+        return <CircularProgress />;
+    }
+
+    if (!labels && isMultipleCards) {
+        return <CircularProgress />;
+    }
 
     return (
         <CardDiv>
@@ -163,12 +196,13 @@ export function LabelsContent({ labels }: props) {
                             width: '100%',
                         }}
                         name={'lineOne'}
-                        value={lineOne}
+                        value={labels?.lineOne}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
                         onChange={(e) => {
                             setLineOne(e.target.value);
+                            setCardLabelId(cardLabelId);
                         }}
                     />
                 </div>
@@ -181,12 +215,13 @@ export function LabelsContent({ labels }: props) {
                             width: '100%',
                         }}
                         name={'lineTwo'}
-                        value={lineTwo}
+                        value={labels?.lineTwo}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
                         onChange={(e) => {
                             setLineTwo(e.target.value);
+                            setCertificateNumber(certificateNumber);
                         }}
                     />
                 </div>
@@ -199,7 +234,7 @@ export function LabelsContent({ labels }: props) {
                             width: '100%',
                         }}
                         name={'lineThree'}
-                        value={lineThree}
+                        value={labels?.lineThree}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -217,7 +252,7 @@ export function LabelsContent({ labels }: props) {
                             width: '100%',
                         }}
                         name={'lineFour'}
-                        value={lineFour}
+                        value={labels?.lineFour}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -241,9 +276,9 @@ export function LabelsContent({ labels }: props) {
                     <Typography className={'LabelText'}>{labels?.lineFour}</Typography>
                 </div>
                 <div className={'LabelImageRightText'}>
-                    <Typography className={'LabelText'}>{labels?.nickName}</Typography>
-                    <Typography className={'GradeText'}>{labels?.grade}</Typography>
-                    <Typography className={'LabelText'}>{labels?.certificateNumber}</Typography>
+                    <Typography className={'LabelText'}>{labels?.nickName ?? 'XX-XX'}</Typography>
+                    <Typography className={'GradeText'}>{labels?.grade ?? 'X.X'}</Typography>
+                    <Typography className={'LabelText'}>{labels?.certificateNumber ?? 'XXXXXXX'}</Typography>
                 </div>
                 <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
             </div>

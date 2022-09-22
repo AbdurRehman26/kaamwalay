@@ -132,8 +132,8 @@ export function CardsListPage() {
     };
 
     const handleLabel = (id: number) => {
-        dispatch(setEditLabelDialog(true));
         dispatch(getCardsLabel({ id }));
+        dispatch(setEditLabelDialog(true));
     };
 
     const handleEdit = async (cardId: number) => {

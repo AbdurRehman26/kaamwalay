@@ -9,8 +9,20 @@ export interface OpenLabelDialog {
     labelDialog: boolean;
 }
 
+export interface CardLabelId {
+    id: number;
+}
+
 export interface OrderLabels {
     labels: CardLabelEntity[];
+}
+
+export interface SingleLabelData {
+    labelData: OrderLabelsDto;
+}
+
+export interface MultipleLabelData {
+    labelData: OrderLabelsDto[];
 }
 
 export interface CardsLabel {
@@ -21,6 +33,9 @@ export interface AdminOrderLabelsSliceState {
     openLabelDialog: OpenLabelDialog;
     orderLabels: OrderLabels;
     cardsLabel: CardsLabel;
+    singleLabelData: SingleLabelData;
+    mutlipleLabelData: MultipleLabelData;
+    cardId: CardLabelId;
 }
 
 const initialState: AdminOrderLabelsSliceState = {
@@ -32,6 +47,15 @@ const initialState: AdminOrderLabelsSliceState = {
     },
     cardsLabel: {
         labels: {} as CardLabelEntity,
+    },
+    singleLabelData: {
+        labelData: {} as OrderLabelsDto,
+    },
+    mutlipleLabelData: {
+        labelData: [],
+    },
+    cardId: {
+        id: 0,
     },
 };
 
@@ -49,16 +73,23 @@ export const getCardsLabel = createAsyncThunk('orderLabels/getCardsLabel', async
     return cardsLabel.data;
 });
 
-export const updateCardsLabel = createAsyncThunk('orderLabels/updateCardsLabel', async (input: OrderLabelsDto) => {
-    try {
+export const updateMultipleLabels = createAsyncThunk(
+    'orderLabels/updateMultipleLabels',
+    async (input: { data: OrderLabelsDto[]; id: any }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/cards/labels/1`);
+        const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
         const orderLabels = await endpoint.put('', input);
         NotificationsService.success('Updated successfully!');
         return orderLabels.data;
-    } catch (e: any) {
-        NotificationsService.exception(e);
-    }
+    },
+);
+
+export const updateCardsLabel = createAsyncThunk('orderLabels/updateCardsLabel', async (input: OrderLabelsDto) => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/cards/labels/${input.cardLabelId}`);
+    const orderLabels = await endpoint.put('', input);
+    NotificationsService.success('Updated successfully!');
+    return orderLabels.data;
 });
 
 export const adminOrderLabelsSlice = createSlice({
@@ -68,10 +99,24 @@ export const adminOrderLabelsSlice = createSlice({
         setEditLabelDialog: (state, action: PayloadAction<boolean>) => {
             state.openLabelDialog.labelDialog = action.payload;
         },
-        updateLabelField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
-            // @ts-ignore
-            state.orderLabels[action.payload.fieldName] = action.payload.newValue;
-            console.log(action.payload.newValue);
+        updateLabelField: (state, action: PayloadAction<any>) => {
+            state.singleLabelData.labelData = action.payload;
+        },
+        updatecardLabeId: (state, action: PayloadAction<number>) => {
+            state.mutlipleLabelData.labelData = state.mutlipleLabelData.labelData.filter((index) => {
+                if (index.cardLabelId !== action.payload) {
+                    return index;
+                }
+                return null;
+            });
+        },
+        updateMultipleCardsLabel: (state, action: PayloadAction<any>) => {
+            const hasValue = state.mutlipleLabelData.labelData.find((index) => {
+                return index.cardLabelId === action.payload.cardLabelId ? true : false;
+            });
+            if (!hasValue) {
+                state.mutlipleLabelData.labelData.push(action.payload);
+            }
         },
     },
     extraReducers: {
@@ -86,4 +131,5 @@ export const adminOrderLabelsSlice = createSlice({
     },
 });
 
-export const { setEditLabelDialog, updateLabelField } = adminOrderLabelsSlice.actions;
+export const { setEditLabelDialog, updateLabelField, updateMultipleCardsLabel, updatecardLabeId } =
+    adminOrderLabelsSlice.actions;

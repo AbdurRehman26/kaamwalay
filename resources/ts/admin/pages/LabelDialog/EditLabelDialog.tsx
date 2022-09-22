@@ -8,7 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { useParams } from 'react-router-dom';
+import { setEditLabelDialog, updateCardsLabel, updateMultipleLabels } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
 import { LabelsContent } from './LabelsContent';
 
@@ -40,9 +41,25 @@ const LabelDialog = styled(Dialog)({
 
 export function EditLabelDialog() {
     const dispatch = useDispatch();
+    const { id } = useParams<'id'>();
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
     const cardLabels = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
+    const singleLabelData = useSelector((state: RootState) => state.adminOrderLabels.singleLabelData.labelData);
+    const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.mutlipleLabelData.labelData);
+
+    function updateLabel() {
+        if (multipleLabelData.length > 0) {
+            dispatch(
+                updateMultipleLabels({
+                    data: multipleLabelData,
+                    id: id,
+                }),
+            );
+        } else {
+            dispatch(updateCardsLabel(singleLabelData));
+        }
+    }
 
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
@@ -65,22 +82,18 @@ export function EditLabelDialog() {
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
-            {orderLabels.length !== 0 ? (
-                orderLabels.map((orderLabel) => (
-                    <DialogContent dividers>
-                        <LabelsContent labels={orderLabel} />
-                    </DialogContent>
-                ))
-            ) : (
-                <DialogContent dividers>
-                    <LabelsContent labels={cardLabels} />
-                </DialogContent>
-            )}
+            <DialogContent dividers>
+                {orderLabels.length !== 0 ? (
+                    orderLabels.map((orderLabel) => <LabelsContent labels={orderLabel} isMultipleCards={true} />)
+                ) : (
+                    <LabelsContent labels={cardLabels} isSingleCard={true} />
+                )}
+            </DialogContent>
             <DialogActions>
                 <Button className={'CancelButton'} onClick={handleModal}>
                     Cancel
                 </Button>
-                <Button className={'ExportButton'} type={'submit'}>
+                <Button className={'ExportButton'} onClick={updateLabel}>
                     Export
                 </Button>
             </DialogActions>

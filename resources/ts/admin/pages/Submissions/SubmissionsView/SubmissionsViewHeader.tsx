@@ -139,10 +139,10 @@ export function SubmissionsViewHeader({
     // }, [notifications, orderLabel, orderNumber]);
 
     const handleLabelDialog = useCallback(async () => {
-        dispatch(setEditLabelDialog(true));
         if (id) {
             await dispatch(getOrderLabels({ id }));
         }
+        dispatch(setEditLabelDialog(true));
     }, [dispatch, id]);
 
     const ExportCertificateIds = useCallback(async () => {

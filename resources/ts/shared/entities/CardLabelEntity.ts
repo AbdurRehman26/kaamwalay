@@ -1,17 +1,16 @@
 import { Type } from 'class-transformer';
 import { CardProductEntity } from './CardProductEntity';
-import { Entity } from './Entity';
 
-export class CardLabelEntity extends Entity {
+export class CardLabelEntity {
     public cardLabelId!: number;
     public lineOne!: string;
     public lineTwo!: string;
     public lineThree!: string;
     public lineFour!: string;
-    public nickName!: string;
-    public certificateNumber!: string;
-    public grade!: number;
+    public nickName?: string;
+    public certificateNumber?: string;
+    public grade?: number;
 
     @Type(() => CardProductEntity)
-    public cardProduct!: CardProductEntity;
+    public cardProduct?: CardProductEntity;
 }

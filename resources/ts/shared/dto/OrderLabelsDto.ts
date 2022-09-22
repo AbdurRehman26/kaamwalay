@@ -1,7 +1,10 @@
 export class OrderLabelsDto {
-    cardLabelId!: number;
+    data?: any;
+    cardLabelId?: number;
     lineOne!: string;
     lineTwo!: string;
     lineThree!: string;
     lineFour!: string;
+    persistChanges?: boolean;
+    certificateNumber?: string;
 }

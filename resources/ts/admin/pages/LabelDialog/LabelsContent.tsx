@@ -1,5 +1,4 @@
 import Checkbox from '@mui/material/Checkbox';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -10,9 +9,9 @@ import { useDispatch } from 'react-redux';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
 import {
-    updateLabelField,
+    removeCardLabels,
     updateMultipleCardsLabel,
-    updatecardLabeId,
+    updateSingleCardLabel,
 } from '@shared/redux/slices/adminOrderLabelsSlice';
 
 const CardDiv = styled(Grid)({
@@ -56,7 +55,6 @@ const CardDiv = styled(Grid)({
     '.InputTextDiv': {
         display: 'flex',
         alignItems: 'center',
-        margin: '10px 0px',
     },
     '.RightSideDiv': {
         width: '337px',
@@ -95,24 +93,28 @@ const CardDiv = styled(Grid)({
             color: '#20BFB8',
         },
     },
+    '.Imagecontent': {
+        display: 'flex',
+        position: 'relative',
+        justifyContent: 'space-around',
+        bottom: '95px',
+        alignItems: 'center',
+    },
     '.LabelImageLeftText': {
-        position: 'absolute',
-        marginTop: '115px',
-        marginLeft: '26px',
+        marginLeft: '12px',
     },
     '.LabelImageRightText': {
-        position: 'absolute',
-        right: '38px',
-        marginTop: '115px',
-        textAlign: 'end',
+        marginRight: '20px',
     },
     '.LabelText': {
-        fontSize: '10px',
-        fontWeight: 'bold',
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: '14px',
     },
     '.GradeText': {
-        fontSize: '20px',
-        fontWeight: 'bold',
+        fontSize: '28px',
+        lineHeight: '28px',
+        fontWeight: 400,
     },
 });
 
@@ -135,7 +137,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
 
     useEffect(() => {
         if (checked && isSingleCard) {
-            dispatch(updateLabelField({ cardLabelId, lineOne, lineTwo, lineThree, lineFour }));
+            dispatch(updateSingleCardLabel({ cardLabelId, lineOne, lineTwo, lineThree, lineFour }));
         }
         if (checked && isMultipleCards) {
             dispatch(
@@ -151,7 +153,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
             );
         }
         if (!checked && cardLabelId) {
-            dispatch(updatecardLabeId(cardLabelId));
+            dispatch(removeCardLabels(cardLabelId));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checked, dispatch]);
@@ -160,28 +162,20 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
         setChecked(event.target.checked);
     };
 
-    if (JSON.stringify(labels) === '{}' && isSingleCard) {
-        return <CircularProgress />;
-    }
-
-    if (!labels && isMultipleCards) {
-        return <CircularProgress />;
-    }
-
     return (
         <CardDiv>
             <div className={'LeftSideDiv'}>
                 <div className={'CardInfo'}>
                     <div className={'CardImageDiv'}>
                         <img
-                            src={labels.cardProduct?.imagePath}
-                            alt={labels.cardProduct?.name}
+                            src={labels?.cardProduct?.imagePath}
+                            alt={labels?.cardProduct?.name}
                             className={'CardImage'}
                         />
                     </div>
                     <div className={'CardTextDiv'}>
-                        <Typography className={'CardName'}>{labels.cardProduct?.name}</Typography>
-                        <Typography className={'CardLongName'}>{labels.cardProduct?.longName}</Typography>
+                        <Typography className={'CardName'}>{labels?.cardProduct?.name}</Typography>
+                        <Typography className={'CardLongName'}>{labels?.cardProduct?.longName}</Typography>
                     </div>
                 </div>
                 <div>
@@ -196,7 +190,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                             width: '100%',
                         }}
                         name={'lineOne'}
-                        value={labels?.lineOne}
+                        value={lineOne}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -215,7 +209,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                             width: '100%',
                         }}
                         name={'lineTwo'}
-                        value={labels?.lineTwo}
+                        value={lineTwo}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -234,7 +228,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                             width: '100%',
                         }}
                         name={'lineThree'}
-                        value={labels?.lineThree}
+                        value={lineThree}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -252,7 +246,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                             width: '100%',
                         }}
                         name={'lineFour'}
-                        value={labels?.lineFour}
+                        value={lineFour}
                         fullWidth
                         size={'small'}
                         variant={'outlined'}
@@ -269,18 +263,22 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
             </div>
             <div className={'RightSideDiv'}>
                 <Typography className={'LabelPreviewText'}>Label Preview</Typography>
-                <div className={'LabelImageLeftText'}>
-                    <Typography className={'LabelText'}>{labels?.lineOne}</Typography>
-                    <Typography className={'LabelText'}>{labels?.lineTwo}</Typography>
-                    <Typography className={'LabelText'}>{labels?.lineThree}</Typography>
-                    <Typography className={'LabelText'}>{labels?.lineFour}</Typography>
+                <div>
+                    <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
                 </div>
-                <div className={'LabelImageRightText'}>
-                    <Typography className={'LabelText'}>{labels?.nickName ?? 'XX-XX'}</Typography>
-                    <Typography className={'GradeText'}>{labels?.grade ?? 'X.X'}</Typography>
-                    <Typography className={'LabelText'}>{labels?.certificateNumber ?? 'XXXXXXX'}</Typography>
+                <div className={'Imagecontent'}>
+                    <div className={'LabelImageLeftText'}>
+                        <Typography className={'LabelText'}>{lineOne}</Typography>
+                        <Typography className={'LabelText'}>{lineTwo}</Typography>
+                        <Typography className={'LabelText'}>{lineThree}</Typography>
+                        <Typography className={'LabelText'}>{lineFour}</Typography>
+                    </div>
+                    <div className={'LabelImageRightText'}>
+                        <Typography className={'LabelText'}>{labels?.nickName ?? 'XX-XX'}</Typography>
+                        <Typography className={'GradeText'}>{labels?.grade ?? 'X.X'}</Typography>
+                        <Typography className={'LabelText'}>{labels?.certificateNumber ?? 'XXXXXXX'}</Typography>
+                    </div>
                 </div>
-                <img src={LabelLogo} alt={'Label'} className={'LableImage'} />
             </div>
         </CardDiv>
     );

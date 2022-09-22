@@ -14,7 +14,7 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
-import { getCardsLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { RolesEnum } from '../constants/RolesEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
@@ -123,7 +123,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
         async (action: RowOption, id: number) => {
             switch (action) {
                 case RowOption.EditLabel:
-                    dispatch(getCardsLabel({ id }));
+                    await dispatch(getCardLabel({ id }));
                     dispatch(setEditLabelDialog(true));
                     break;
             }

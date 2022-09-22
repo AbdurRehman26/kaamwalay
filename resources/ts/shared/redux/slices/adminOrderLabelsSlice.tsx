@@ -60,36 +60,52 @@ const initialState: AdminOrderLabelsSliceState = {
 };
 
 export const getOrderLabels = createAsyncThunk('orderLabels/getOrderLabels', async (input: { id: string }) => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
-    const orderLabels = await endpoint.get('');
-    return orderLabels.data;
+    try {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
+        const orderLabels = await endpoint.get('');
+        return orderLabels.data;
+    } catch (e: any) {
+        NotificationsService.exception(e);
+    }
 });
 
-export const getCardsLabel = createAsyncThunk('orderLabels/getCardsLabel', async (input: { id: number }) => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/cards/${input.id}/label`);
-    const cardsLabel = await endpoint.get('');
-    return cardsLabel.data;
+export const getCardLabel = createAsyncThunk('orderLabels/getCardLabel', async (input: { id: number }) => {
+    try {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/cards/${input.id}/label`);
+        const cardsLabel = await endpoint.get('');
+        return cardsLabel.data;
+    } catch (e: any) {
+        NotificationsService.exception(e);
+    }
 });
 
 export const updateMultipleLabels = createAsyncThunk(
     'orderLabels/updateMultipleLabels',
     async (input: { data: OrderLabelsDto[]; id: any }) => {
-        const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
-        const orderLabels = await endpoint.put('', input);
-        NotificationsService.success('Updated successfully!');
-        return orderLabels.data;
+        try {
+            const apiService = app(APIService);
+            const endpoint = apiService.createEndpoint(`admin/orders/${input.id}/labels`);
+            const orderLabels = await endpoint.put('', input);
+            NotificationsService.success('Updated successfully!');
+            return orderLabels.data;
+        } catch (e: any) {
+            NotificationsService.exception(e);
+        }
     },
 );
 
-export const updateCardsLabel = createAsyncThunk('orderLabels/updateCardsLabel', async (input: OrderLabelsDto) => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/cards/labels/${input.cardLabelId}`);
-    const orderLabels = await endpoint.put('', input);
-    NotificationsService.success('Updated successfully!');
-    return orderLabels.data;
+export const updateCardLabel = createAsyncThunk('orderLabels/updateCardLabel', async (input: OrderLabelsDto) => {
+    try {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/cards/labels/${input.cardLabelId}`);
+        const orderLabels = await endpoint.put('', input);
+        NotificationsService.success('Updated successfully!');
+        return orderLabels.data;
+    } catch (e: any) {
+        NotificationsService.exception(e);
+    }
 });
 
 export const adminOrderLabelsSlice = createSlice({
@@ -99,10 +115,10 @@ export const adminOrderLabelsSlice = createSlice({
         setEditLabelDialog: (state, action: PayloadAction<boolean>) => {
             state.openLabelDialog.labelDialog = action.payload;
         },
-        updateLabelField: (state, action: PayloadAction<any>) => {
+        updateSingleCardLabel: (state, action: PayloadAction<any>) => {
             state.singleLabelData.labelData = action.payload;
         },
-        updatecardLabeId: (state, action: PayloadAction<number>) => {
+        removeCardLabels: (state, action: PayloadAction<number>) => {
             state.mutlipleLabelData.labelData = state.mutlipleLabelData.labelData.filter((index) => {
                 if (index.cardLabelId !== action.payload) {
                     return index;
@@ -124,12 +140,12 @@ export const adminOrderLabelsSlice = createSlice({
             state.orderLabels.labels = action.payload;
             state.cardsLabel.labels = {} as CardLabelEntity;
         },
-        [getCardsLabel.fulfilled as any]: (state, action) => {
+        [getCardLabel.fulfilled as any]: (state, action) => {
             state.cardsLabel.labels = action.payload;
             state.orderLabels.labels = [];
         },
     },
 });
 
-export const { setEditLabelDialog, updateLabelField, updateMultipleCardsLabel, updatecardLabeId } =
+export const { setEditLabelDialog, updateSingleCardLabel, updateMultipleCardsLabel, removeCardLabels } =
     adminOrderLabelsSlice.actions;

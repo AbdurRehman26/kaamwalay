@@ -4,12 +4,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { setEditLabelDialog, updateCardsLabel, updateMultipleLabels } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { setEditLabelDialog, updateCardLabel, updateMultipleLabels } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
 import { LabelsContent } from './LabelsContent';
 
@@ -44,20 +45,23 @@ export function EditLabelDialog() {
     const { id } = useParams<'id'>();
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
-    const cardLabels = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
+    const cardLabel = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
     const singleLabelData = useSelector((state: RootState) => state.adminOrderLabels.singleLabelData.labelData);
     const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.mutlipleLabelData.labelData);
 
-    function updateLabel() {
+    async function updateLabels() {
         if (multipleLabelData.length > 0) {
-            dispatch(
+            await dispatch(
                 updateMultipleLabels({
                     data: multipleLabelData,
                     id: id,
                 }),
             );
-        } else {
-            dispatch(updateCardsLabel(singleLabelData));
+            dispatch(setEditLabelDialog(false));
+        }
+        if (JSON.stringify(cardLabel) !== '{}') {
+            await dispatch(updateCardLabel(singleLabelData));
+            dispatch(setEditLabelDialog(false));
         }
     }
 
@@ -84,17 +88,22 @@ export function EditLabelDialog() {
             </DialogTitle>
             <DialogContent dividers>
                 {orderLabels.length !== 0 ? (
-                    orderLabels.map((orderLabel) => <LabelsContent labels={orderLabel} isMultipleCards={true} />)
+                    orderLabels.map((orderLabel) => (
+                        <>
+                            <LabelsContent labels={orderLabel} isMultipleCards={true} />
+                            <Divider />
+                        </>
+                    ))
                 ) : (
-                    <LabelsContent labels={cardLabels} isSingleCard={true} />
+                    <LabelsContent labels={cardLabel} isSingleCard={true} />
                 )}
             </DialogContent>
             <DialogActions>
                 <Button className={'CancelButton'} onClick={handleModal}>
                     Cancel
                 </Button>
-                <Button className={'ExportButton'} onClick={updateLabel}>
-                    Export
+                <Button className={'ExportButton'} onClick={updateLabels}>
+                    {JSON.stringify(cardLabel) !== '{}' ? 'Save' : 'Export'}
                 </Button>
             </DialogActions>
         </LabelDialog>

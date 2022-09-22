@@ -1,9 +1,10 @@
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
@@ -89,6 +90,7 @@ export function SubmissionsViewHeader({
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const notifications = useNotifications();
     const { id } = useParams<'id'>();
@@ -129,18 +131,11 @@ export function SubmissionsViewHeader({
         [isVault, orderStatusHistory],
     );
 
-    // const DownloadOrderLabel = useCallback(async () => {
-    //     if (!orderLabel) {
-    //         notifications.error('Order Label is generating at the moment, try again in some minutes!');
-    //         return;
-    //     }
-
-    //     await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
-    // }, [notifications, orderLabel, orderNumber]);
-
     const handleLabelDialog = useCallback(async () => {
         if (id) {
+            setIsLoading(true);
             await dispatch(getOrderLabels({ id }));
+            setIsLoading(false);
         }
         dispatch(setEditLabelDialog(true));
     }, [dispatch, id]);
@@ -183,7 +178,7 @@ export function SubmissionsViewHeader({
                         <>
                             <Button
                                 {...sharedProps}
-                                startIcon={<Icon>printer</Icon>}
+                                startIcon={isLoading ? <CircularProgress /> : <Icon>printer</Icon>}
                                 onClick={handleLabelDialog}
                                 disabled={!orderLabel}
                             >

@@ -49,11 +49,11 @@ class CreateCardLabelService
         $this->categoryName = Str::upper($cardProduct->cardCategory->name);
     }
 
-    protected function createLabel(CardProduct $cardProduct): void
+    public function createLabel(CardProduct $cardProduct): CardLabel
     {
         $this->initializeValues($cardProduct);
 
-        CardLabel::create($this->getCardLabel($cardProduct));
+        return CardLabel::create($this->getCardLabel($cardProduct));
     }
 
     protected function getCardLabel(CardProduct $cardProduct): array
@@ -193,7 +193,8 @@ class CreateCardLabelService
 
         $label_line_two = [$card_name];
 
-        if (! empty($surface)) {
+        if (($this->category->name == 'Pokemon' || $this->category->name == 'MetaZoo')
+            && ! empty($surface)) {
             $label_line_two = [$card_name, '-', $this->cardProduct->getSurfaceAbbreviation()];
         }
 

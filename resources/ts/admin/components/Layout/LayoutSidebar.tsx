@@ -49,7 +49,7 @@ function LayoutSidebar() {
                     href={'/vault-storage'}
                     comingSoon
                 />
-                <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} comingSoon />
+                <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />
             </List>
         </Drawer>

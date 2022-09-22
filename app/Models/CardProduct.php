@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
@@ -14,6 +18,7 @@ class CardProduct extends Model
 {
     use HasFactory;
     use Searchable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -139,7 +144,7 @@ class CardProduct extends Model
         return 'Added Manually';
     }
 
-    public function getLongName(): string
+    public function getLongName(): ?string
     {
         if ($this->isCardInformationComplete()) {
             $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
@@ -155,15 +160,51 @@ class CardProduct extends Model
         return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
 
+    /**
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
+     */
+    public function scopeCardCategory(Builder $query, int $categoryId): Builder
+    {
+        return $query->whereHas(
+            'cardCategory',
+            fn (Builder $subQuery) => $subQuery->where('card_categories.id', $categoryId)
+        );
+    }
+
+    /**
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
+     */
+    public function scopeReleaseDate(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereHas(
+            'cardSet',
+            fn (Builder $subQuery) => (
+                $subQuery->whereBetween(
+                    'card_sets.release_date',
+                    [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]
+                )
+            )
+        );
+    }
+
+    /**
+     * @return HasMany<OrderItem>
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
     public function getCategoryAbbreviation(): string
     {
-        if (! in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])) {
+        if (! in_array(Str::lower($this->cardCategory->name), ['pokemon', 'metazoo'])) {
             return '';
         }
 
         $categoryList = [
-            'Pokemon' => 'P.M.',
-            'MetaZoo' => 'M.T.Z.',
+            'pokemon' => 'P.M.',
+            'metazoo' => 'M.T.Z.',
         ];
 
         return $categoryList[Str::lower($this->cardCategory->name)];
@@ -243,5 +284,17 @@ class CardProduct extends Model
     public function cardLabel(): HasOne
     {
         return $this->hasOne(CardLabel::class);
+    }
+
+    /**
+     * @return HasManyThrough<UserCard>
+     */
+    public function userCards(): HasManyThrough
+    {
+        return $this->hasManyThrough(UserCard::class, OrderItem::class)
+            ->whereHas(
+                'orderItem.order',
+                fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
+            );
     }
 }

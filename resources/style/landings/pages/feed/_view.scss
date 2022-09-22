@@ -404,7 +404,7 @@
             }
         }
 
-        &__copy-to-clipBoard {
+        &__share {
             align-items: center;
             justify-content: flex-end;
             margin-bottom: 35px;
@@ -512,8 +512,6 @@
     }
 
     &__card {
-        margin-top: 50px;
-
         .container {
             width: 546px;
         }
@@ -635,16 +633,21 @@
             border: 1px solid #e0e0e0;
             border-radius: 12px;
             width: 546px;
-            height: 560px;
+            height: 600px;
+            padding: 30px 0px;
+            display: flex;
+            align-items: center;
 
             @include breakpoints.down(768) {
                 width: 100% !important;
                 height: 100% !important;
+                display: block;
             }
 
             @include breakpoints.down(1024) {
                 width: 340px;
                 height: 450px;
+                display: block;
             }
         }
     }

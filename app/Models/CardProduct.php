@@ -198,13 +198,13 @@ class CardProduct extends Model
     }
     public function getCategoryAbbreviation(): string
     {
-        if (! in_array($this->cardCategory->name, ['Pokemon', 'MetaZoo'])) {
+        if (! in_array(Str::lower($this->cardCategory->name), ['pokemon', 'metazoo'])) {
             return '';
         }
 
         $categoryList = [
-            'Pokemon' => 'P.M.',
-            'MetaZoo' => 'M.T.Z.',
+            'pokemon' => 'P.M.',
+            'metazoo' => 'M.T.Z.',
         ];
 
         return $categoryList[Str::lower($this->cardCategory->name)];

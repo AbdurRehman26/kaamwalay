@@ -31,7 +31,7 @@ class CouponController extends Controller
         try {
             $couponParams = [
                 'couponables_id' => $order->payment_plan_id,
-                'items_count' => $request->input('items_count', 0),
+                'items_count' => $order->orderItems()->sum('quantity'),
             ];
 
             $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
@@ -42,7 +42,7 @@ class CouponController extends Controller
             );
         } catch (Exception $e) {
             return match (true) {
-                $e instanceof CouponHasInvalidMinThreshold => new $e,
+                $e instanceof CouponHasInvalidMinThreshold => throw $e,
                 default => new JsonResponse(
                     [
                         'error' => $e->getMessage(),

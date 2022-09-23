@@ -9,11 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
-import {
-    removeCardLabels,
-    updateMultipleCardsLabel,
-    updateSingleCardLabel,
-} from '@shared/redux/slices/adminOrderLabelsSlice';
+import { removeCardLabels, updateMultipleCardsLabel } from '@shared/redux/slices/adminOrderLabelsSlice';
 
 const CardDiv = styled(Grid)({
     display: 'flex',
@@ -131,11 +127,10 @@ const useStyles = makeStyles(() => ({
 
 interface props {
     labels: CardLabelEntity;
-    isSingleCard?: boolean;
     isMultipleCards?: boolean;
 }
 
-export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) {
+export function LabelsContent({ labels, isMultipleCards }: props) {
     const [lineOne, setLineOne] = useState(labels?.lineOne);
     const [lineTwo, setLineTwo] = useState(labels?.lineTwo);
     const [lineThree, setLineThree] = useState(labels?.lineThree);
@@ -148,9 +143,6 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
     const classes = useStyles({ checked: checked });
 
     useEffect(() => {
-        if (checked && isSingleCard) {
-            dispatch(updateSingleCardLabel({ cardLabelId, lineOne, lineTwo, lineThree, lineFour }));
-        }
         if (checked && isMultipleCards) {
             dispatch(
                 updateMultipleCardsLabel({
@@ -287,13 +279,13 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                     </div>
                     <div className={'LabelImageRightText'}>
                         <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>
-                            {labels?.nickName ?? 'XX-XX'}
+                            {labels?.nickName}
                         </Typography>
                         <Typography className={'GradeText'} sx={{ textAlign: 'end' }}>
-                            {labels?.grade ?? 'X.X'}
+                            {labels?.grade}
                         </Typography>
                         <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>
-                            {labels?.certificateNumber ?? 'XXXXXXX'}
+                            {labels?.certificateNumber}
                         </Typography>
                     </div>
                 </div>

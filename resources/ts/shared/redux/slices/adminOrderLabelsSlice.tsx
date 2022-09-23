@@ -17,10 +17,6 @@ export interface OrderLabels {
     labels: CardLabelEntity[];
 }
 
-export interface SingleLabelData {
-    labelData: OrderLabelsDto;
-}
-
 export interface MultipleLabelData {
     labelData: OrderLabelsDto[];
 }
@@ -37,7 +33,6 @@ export interface AdminOrderLabelsSliceState {
     openLabelDialog: OpenLabelDialog;
     orderLabels: OrderLabels;
     cardsLabel: CardsLabel;
-    singleLabelData: SingleLabelData;
     mutlipleLabelData: MultipleLabelData;
     cardId: CardLabelId;
     labelsUrl: CardsLabelFileUrl;
@@ -52,9 +47,6 @@ const initialState: AdminOrderLabelsSliceState = {
     },
     cardsLabel: {
         labels: {} as CardLabelEntity,
-    },
-    singleLabelData: {
-        labelData: {} as OrderLabelsDto,
     },
     mutlipleLabelData: {
         labelData: [],
@@ -123,9 +115,6 @@ export const adminOrderLabelsSlice = createSlice({
         setEditLabelDialog: (state, action: PayloadAction<boolean>) => {
             state.openLabelDialog.labelDialog = action.payload;
         },
-        updateSingleCardLabel: (state, action: PayloadAction<any>) => {
-            state.singleLabelData.labelData = action.payload;
-        },
         removeCardLabels: (state, action: PayloadAction<number>) => {
             state.mutlipleLabelData.labelData = state.mutlipleLabelData.labelData.filter((index) => {
                 if (index.cardLabelId !== action.payload) {
@@ -158,5 +147,4 @@ export const adminOrderLabelsSlice = createSlice({
     },
 });
 
-export const { setEditLabelDialog, updateSingleCardLabel, updateMultipleCardsLabel, removeCardLabels } =
-    adminOrderLabelsSlice.actions;
+export const { setEditLabelDialog, updateMultipleCardsLabel, removeCardLabels } = adminOrderLabelsSlice.actions;

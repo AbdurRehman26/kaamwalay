@@ -36,7 +36,7 @@ const LabelDialog = styled(Dialog)({
         background: '#20BFB8',
         borderRadius: '4px',
         color: '#fff',
-        padding: '10px 20px',
+        padding: '10px 30px',
         '&:hover': {
             background: '#20BFB8',
         },
@@ -71,14 +71,14 @@ export function EditLabelDialog({ orderNumber }: props) {
             await downloadFromUrl(cardsLabelFileData?.url, `${orderNumber}_label.xlsx`);
             setIsLoading(false);
             dispatch(setEditLabelDialog(false));
-        }
-        if (JSON.stringify(cardLabel) !== '{}') {
+        } else if (JSON.stringify(singleLabelData) !== '{}' || JSON.stringify(cardLabel) !== '{}') {
             setIsLoading(true);
-            await dispatch(updateCardLabel(singleLabelData));
+            JSON.stringify(singleLabelData) !== '{}'
+                ? await dispatch(updateCardLabel(singleLabelData))
+                : await dispatch(updateCardLabel(cardLabel));
             setIsLoading(false);
             dispatch(setEditLabelDialog(false));
-        }
-        if (multipleLabelData.length === 0) {
+        } else if (multipleLabelData.length === 0) {
             setIsLoading(true);
             orderLabels.map((orderLabel) => {
                 labels.push({

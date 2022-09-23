@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import LabelLogo from '@shared/assets/label.png';
@@ -101,10 +102,10 @@ const CardDiv = styled(Grid)({
         alignItems: 'center',
     },
     '.LabelImageLeftText': {
-        marginLeft: '12px',
+        marginLeft: '5px',
     },
     '.LabelImageRightText': {
-        marginRight: '20px',
+        marginRight: '10px',
     },
     '.LabelText': {
         fontSize: '14px',
@@ -117,6 +118,16 @@ const CardDiv = styled(Grid)({
         fontWeight: 400,
     },
 });
+const useStyles = makeStyles(() => ({
+    CheckboxLabel: {
+        '& .MuiFormControlLabel-label': {
+            fontSize: '14px!important',
+            lineHeight: '20px',
+            letterSpacing: '0.1px',
+            color: ({ checked }: any) => (checked === true ? '#20BFB8' : 'rgba(0, 0, 0, 0.87)'),
+        },
+    },
+}));
 
 interface props {
     labels: CardLabelEntity;
@@ -134,6 +145,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
     const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
     const persistChanges = true;
     const dispatch = useDispatch();
+    const classes = useStyles({ checked: checked });
 
     useEffect(() => {
         if (checked && isSingleCard) {
@@ -256,7 +268,7 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                     />
                 </div>
                 <FormControlLabel
-                    className={'CheckBoxLabel'}
+                    className={classes.CheckboxLabel}
                     control={<Checkbox onChange={handleChange} />}
                     label="Save changes to this card’s label"
                 />
@@ -274,9 +286,15 @@ export function LabelsContent({ labels, isSingleCard, isMultipleCards }: props) 
                         <Typography className={'LabelText'}>{lineFour}</Typography>
                     </div>
                     <div className={'LabelImageRightText'}>
-                        <Typography className={'LabelText'}>{labels?.nickName ?? 'XX-XX'}</Typography>
-                        <Typography className={'GradeText'}>{labels?.grade ?? 'X.X'}</Typography>
-                        <Typography className={'LabelText'}>{labels?.certificateNumber ?? 'XXXXXXX'}</Typography>
+                        <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>
+                            {labels?.nickName ?? 'XX-XX'}
+                        </Typography>
+                        <Typography className={'GradeText'} sx={{ textAlign: 'end' }}>
+                            {labels?.grade ?? 'X.X'}
+                        </Typography>
+                        <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>
+                            {labels?.certificateNumber ?? 'XXXXXXX'}
+                        </Typography>
                     </div>
                 </div>
             </div>

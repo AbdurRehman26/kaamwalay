@@ -34,10 +34,10 @@ class HubspotService
             $owners = explode(',', config('services.hubspot.owner_email'));
 
             if (count($owners) > 1) {
-                if (! Cache::has('hubspot:iteration')) {
+                if (!Cache::has('hubspot:iteration')) {
                     Cache::put('hubspot:iteration', 0);
                 }
-    
+
                 Cache::put('hubspot:owner', $owners[Cache::get('hubspot:iteration')]);
 
                 if (Cache::get('hubspot:iteration') < count($owners) - 1) {
@@ -118,30 +118,45 @@ class HubspotService
         }
     }
 
+    public function updateDealStageForPaidOrder(Order $order): void
+    {
+        $propertiesToUpdate = [
+            [
+                'value' => config('services.hubspot.pipline_stage_id_closed'),
+                'name' => 'dealstage',
+            ],
+        ];
+
+        $this->updateDealStage($order, $propertiesToUpdate);
+    }
+
     public function updateDealStageForOrderPlacedUser(Order $order): void
     {
-        $deal = HubspotDeal::where('user_email', $order->user->email)->first();
+        $propertiesToUpdate = [
+            [
+                'value' => config('services.hubspot.pipline_stage_id_new_customer'),
+                'name' => 'dealstage',
+            ],
+            [
+                'value' => $order->grand_total,
+                'name' => 'amount',
+            ],
+        ];
+        $this->updateDealStage($order, $propertiesToUpdate);
+    }
 
-        if (! $deal) {
+    protected function updateDealStage(Order $order, $propertiesToUpdate): void
+    {
+        $deal = HubspotDeal::where('user_email', $order->user->email)->first();
+        
+        if (!$deal) {
             Log::error('Hubspot deal not found', [
                 'user_email' => $order->user->email,
             ]);
 
             return;
         }
-
         try {
-            $propertiesToUpdate = [
-                [
-                    'value' => config('services.hubspot.pipline_stage_id_new_customer'),
-                    'name' => 'dealstage',
-                ],
-                [
-                    'value' => $order->grand_total,
-                    'name' => 'amount',
-                ],
-            ];
-
             (new Deals($this->getClient()))->update(intval($deal->deal_id), $propertiesToUpdate);
         } catch (RequestException $exception) {
             report($exception);

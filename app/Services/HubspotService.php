@@ -145,7 +145,7 @@ class HubspotService
         $this->updateDealStage($order, $propertiesToUpdate);
     }
 
-    protected function updateDealStage(Order $order, $propertiesToUpdate): void
+    protected function updateDealStage(Order $order, array $propertiesToUpdate): void
     {
         $deal = HubspotDeal::where('user_email', $order->user->email)->first();
         

@@ -8,6 +8,8 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {String} [submission_create] If "true" is passed it will only return payment methods for submission create feature. Initially only manual payment
+ *
  * @apiSuccess {Array} data payment methods
  *
  * @apiSuccessExample Success-Response:

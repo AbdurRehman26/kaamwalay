@@ -34,7 +34,7 @@ class HubspotService
             $owners = explode(',', config('services.hubspot.owner_email'));
 
             if (count($owners) > 1) {
-                if (!Cache::has('hubspot:iteration')) {
+                if (! Cache::has('hubspot:iteration')) {
                     Cache::put('hubspot:iteration', 0);
                 }
 
@@ -149,13 +149,14 @@ class HubspotService
     {
         $deal = HubspotDeal::where('user_email', $order->user->email)->first();
         
-        if (!$deal) {
+        if (! $deal) {
             Log::error('Hubspot deal not found', [
                 'user_email' => $order->user->email,
             ]);
 
             return;
         }
+
         try {
             (new Deals($this->getClient()))->update(intval($deal->deal_id), $propertiesToUpdate);
         } catch (RequestException $exception) {

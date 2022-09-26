@@ -2,6 +2,7 @@
 
 namespace App\Listeners\API\Order\V2;
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
@@ -95,6 +96,13 @@ class OrderStatusChangedListener implements ShouldQueue
                 'FIRST_NAME' => $event->order->user->first_name,
             ]
         );
+
+        if(empty($event->order->grand_total)){
+            $event->order->markAsPaid();
+
+            OrderPaid::dispatch($event->order);
+        }
+
     }
 
     protected function handleConfirmed(OrderStatusChangedEvent $event): void

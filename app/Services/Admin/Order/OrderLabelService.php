@@ -42,7 +42,7 @@ class OrderLabelService
         $this->saveCardLabel($order, $fileUrl);
     }
 
-    public function generateFileAndUploadToCloud(Order $order, array $response): string
+    protected function generateFileAndUploadToCloud(Order $order, array $response): string
     {
         $filePath = 'order-labels/' . $order->order_number . '_label_' . Str::uuid() . '.xlsx';
         Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
@@ -50,7 +50,7 @@ class OrderLabelService
         return Storage::disk('s3')->url($filePath);
     }
 
-    public function saveCardLabel(Order $order, string $fileUrl): void
+    protected function saveCardLabel(Order $order, string $fileUrl): void
     {
         OrderLabel::updateOrCreate(
             [
@@ -85,13 +85,14 @@ class OrderLabelService
 
     /**
      * @param  Order  $order
-     * @return Collection<int, UserCard>
+     * @param  array  $response
+     * @return string
      */
-    public function getOrderGradedCards(Order $order): Collection
+    public function generateFileUploadToCloudAndSaveLabel(Order $order, array $response): string
     {
-        return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
-            ->where('order_id', $order->id)
-            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-            ->select('user_cards.*')->get();
+        $fileUrl = $this->generateFileAndUploadToCloud($order, $response);
+        $this->saveCardLabel($order, $fileUrl);
+
+        return $fileUrl;
     }
 }

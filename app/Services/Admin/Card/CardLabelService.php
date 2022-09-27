@@ -7,6 +7,7 @@ use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderLabelService;
+use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,7 +16,8 @@ class CardLabelService
     public function __construct(
         protected AgsService $agsService,
         protected CreateCardLabelService $createCardLabelService,
-        protected OrderLabelService $orderLabelService
+        protected OrderLabelService $orderLabelService,
+        protected OrderService $orderService,
     ) {
     }
 
@@ -67,10 +69,7 @@ class CardLabelService
             ];
         }
 
-        $fileUrl = $this->orderLabelService->generateFileAndUploadToCloud($order, $exportLabels);
-        $this->orderLabelService->saveCardLabel($order, $fileUrl);
-
-        return $fileUrl;
+        return $this->orderLabelService->generateFileUploadToCloudAndSaveLabel($order, $exportLabels);
     }
 
     /**
@@ -79,7 +78,7 @@ class CardLabelService
      */
     public function getOrderLabels(Order $order): Collection
     {
-        $orderCards = $this->orderLabelService->getOrderGradedCards($order);
+        $orderCards = $this->orderService->getOrderGradedCards($order);
 
         $cardsWithoutLabel = $orderCards->filter(function ($card, $key) {
             return $card->orderItem->cardProduct->cardLabel()->doesntExist();

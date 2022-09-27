@@ -24,6 +24,7 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -191,4 +192,17 @@ class OrderService extends V1OrderService
             CreateSocialPreviewsForUserCard::dispatch($orderItem->userCard);
         });
     }
+
+    /**
+     * @param  Order  $order
+     * @return Collection<int, UserCard>
+     */
+    public function getOrderGradedCards(Order $order): Collection
+    {
+        return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
+            ->where('order_id', $order->id)
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->select('user_cards.*')->get();
+    }
+
 }

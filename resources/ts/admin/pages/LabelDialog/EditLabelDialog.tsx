@@ -15,7 +15,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import LabelLogo from '@shared/assets/label.png';
-import { OrderLabelsDto } from '@shared/dto/OrderLabelsDto';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import {
     removeCardLabels,
@@ -174,8 +173,6 @@ export function EditLabelDialog({ orderNumber }: props) {
     const [lineThree, setLineThree] = useState(cardLabel?.lineThree);
     const [lineFour, setLineFour] = useState(cardLabel?.lineFour);
     const [cardLabelId, setCardLabelId] = useState(cardLabel?.cardLabelId);
-    const labels: OrderLabelsDto[] = [];
-    console.log(multipleLabelData);
 
     useEffect(() => {
         if (labelDialog) {
@@ -190,6 +187,7 @@ export function EditLabelDialog({ orderNumber }: props) {
 
     async function updateLabels() {
         if (multipleLabelData.length > 0) {
+            console.log(multipleLabelData);
             setIsLoading(true);
             await dispatch(
                 updateMultipleLabels({
@@ -208,28 +206,6 @@ export function EditLabelDialog({ orderNumber }: props) {
         } else if (JSON.stringify(cardLabel) !== '{}') {
             setIsLoading(true);
             await dispatch(updateCardLabel({ cardLabelId, lineOne, lineTwo, lineThree, lineFour }));
-            setIsLoading(false);
-            dispatch(setEditLabelDialog(false));
-        } else if (multipleLabelData.length === 0) {
-            setIsLoading(true);
-            orderLabels.map((orderLabel) => {
-                labels.push({
-                    cardLabelId: orderLabel.cardLabelId,
-                    certificateNumber: orderLabel.certificateNumber,
-                    lineOne: orderLabel.lineOne,
-                    lineTwo: orderLabel.lineTwo,
-                    lineThree: orderLabel.lineThree,
-                    lineFour: orderLabel.lineFour,
-                    persistChanges: false,
-                });
-            });
-            await dispatch(
-                updateMultipleLabels({
-                    data: labels,
-                    id: id,
-                }),
-            );
-            await downloadFromUrl(cardsLabelFileData?.url, `${orderNumber}_label.xlsx`);
             setIsLoading(false);
             dispatch(setEditLabelDialog(false));
         }

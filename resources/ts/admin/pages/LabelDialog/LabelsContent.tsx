@@ -135,8 +135,8 @@ export function LabelsContent({ labels }: props) {
     const [lineThree, setLineThree] = useState(labels?.lineThree);
     const [lineFour, setLineFour] = useState(labels?.lineFour);
     const [checked, setChecked] = useState(true);
-    const [cardLabelId, setCardLabelId] = useState(labels?.cardLabelId);
-    const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
+    const cardLabelId = labels?.cardLabelId;
+    const certificateNumber = labels?.certificateNumber;
     const persistChanges = true;
     const dispatch = useDispatch();
     const classes = useStyles({ checked: checked });
@@ -209,7 +209,6 @@ export function LabelsContent({ labels }: props) {
                         variant={'outlined'}
                         onChange={(e) => {
                             setLineOne(e.target.value);
-                            setCardLabelId(cardLabelId);
                         }}
                     />
                 </div>
@@ -228,7 +227,6 @@ export function LabelsContent({ labels }: props) {
                         variant={'outlined'}
                         onChange={(e) => {
                             setLineTwo(e.target.value);
-                            setCertificateNumber(certificateNumber);
                         }}
                     />
                 </div>

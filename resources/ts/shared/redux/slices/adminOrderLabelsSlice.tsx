@@ -33,7 +33,7 @@ export interface AdminOrderLabelsSliceState {
     openLabelDialog: OpenLabelDialog;
     orderLabels: OrderLabels;
     cardsLabel: CardsLabel;
-    mutlipleLabelData: MultipleLabelData;
+    multipleLabelData: MultipleLabelData;
     cardId: CardLabelId;
     labelsUrl: CardsLabelFileUrl;
 }
@@ -48,7 +48,7 @@ const initialState: AdminOrderLabelsSliceState = {
     cardsLabel: {
         labels: {} as CardLabelEntity,
     },
-    mutlipleLabelData: {
+    multipleLabelData: {
         labelData: [],
     },
     cardId: {
@@ -116,7 +116,7 @@ export const adminOrderLabelsSlice = createSlice({
             state.openLabelDialog.labelDialog = action.payload;
         },
         removeCardLabels: (state, action: PayloadAction<number>) => {
-            state.mutlipleLabelData.labelData = state.mutlipleLabelData.labelData.filter((index) => {
+            state.multipleLabelData.labelData = state.multipleLabelData.labelData.filter((index) => {
                 if (index.cardLabelId !== action.payload) {
                     return index;
                 }
@@ -124,11 +124,19 @@ export const adminOrderLabelsSlice = createSlice({
             });
         },
         updateMultipleCardsLabel: (state, action: PayloadAction<any>) => {
-            const hasValue = state.mutlipleLabelData.labelData.find((index) => {
-                return index.cardLabelId === action.payload.cardLabelId ? true : false;
+            const hasValue = state.multipleLabelData.labelData.find((index) => {
+                return index.cardLabelId === action.payload.cardLabelId &&
+                    index.certificateNumber === action.payload.certificateNumber
+                    ? true
+                    : false;
             });
             if (!hasValue) {
-                state.mutlipleLabelData.labelData.push(action.payload);
+                state.multipleLabelData.labelData.push(action.payload);
+            } else {
+                const index = state.multipleLabelData.labelData.findIndex(
+                    (data) => data.cardLabelId === action.payload.cardLabelId,
+                );
+                state.multipleLabelData.labelData[index] = action.payload;
             }
         },
     },

@@ -167,7 +167,7 @@ export function EditLabelDialog({ orderNumber }: props) {
     const labelDialog = useSelector((state: RootState) => state.adminOrderLabels.openLabelDialog.labelDialog);
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
     const cardLabel = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
-    const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.mutlipleLabelData.labelData);
+    const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.multipleLabelData.labelData);
     const cardsLabelFileData = useSelector((state: RootState) => state.adminOrderLabels.labelsUrl.url);
     const [lineOne, setLineOne] = useState(cardLabel?.lineOne);
     const [lineTwo, setLineTwo] = useState(cardLabel?.lineTwo);
@@ -175,6 +175,7 @@ export function EditLabelDialog({ orderNumber }: props) {
     const [lineFour, setLineFour] = useState(cardLabel?.lineFour);
     const [cardLabelId, setCardLabelId] = useState(cardLabel?.cardLabelId);
     const labels: OrderLabelsDto[] = [];
+    console.log(multipleLabelData);
 
     useEffect(() => {
         if (labelDialog) {
@@ -259,7 +260,7 @@ export function EditLabelDialog({ orderNumber }: props) {
                 {orderLabels.length !== 0 ? (
                     orderLabels.map((orderLabel) => (
                         <>
-                            <LabelsContent labels={orderLabel} isMultipleCards={true} />
+                            <LabelsContent labels={orderLabel} />
                             <Divider />
                         </>
                     ))

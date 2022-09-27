@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import LabelLogo from '@shared/assets/label.png';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
-import { removeCardLabels, updateMultipleCardsLabel } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { updateMultipleCardsLabel } from '@shared/redux/slices/adminOrderLabelsSlice';
 
 const CardDiv = styled(Grid)({
     display: 'flex',
@@ -127,15 +127,14 @@ const useStyles = makeStyles(() => ({
 
 interface props {
     labels: CardLabelEntity;
-    isMultipleCards?: boolean;
 }
 
-export function LabelsContent({ labels, isMultipleCards }: props) {
+export function LabelsContent({ labels }: props) {
     const [lineOne, setLineOne] = useState(labels?.lineOne);
     const [lineTwo, setLineTwo] = useState(labels?.lineTwo);
     const [lineThree, setLineThree] = useState(labels?.lineThree);
     const [lineFour, setLineFour] = useState(labels?.lineFour);
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
     const [cardLabelId, setCardLabelId] = useState(labels?.cardLabelId);
     const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
     const persistChanges = true;
@@ -143,7 +142,7 @@ export function LabelsContent({ labels, isMultipleCards }: props) {
     const classes = useStyles({ checked: checked });
 
     useEffect(() => {
-        if (checked && isMultipleCards) {
+        if (checked) {
             dispatch(
                 updateMultipleCardsLabel({
                     cardLabelId,
@@ -156,11 +155,21 @@ export function LabelsContent({ labels, isMultipleCards }: props) {
                 }),
             );
         }
-        if (!checked && cardLabelId) {
-            dispatch(removeCardLabels(cardLabelId));
+        if (!checked) {
+            dispatch(
+                updateMultipleCardsLabel({
+                    cardLabelId,
+                    certificateNumber,
+                    lineOne,
+                    lineTwo,
+                    lineThree,
+                    lineFour,
+                    persistChanges: false,
+                }),
+            );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [checked, dispatch]);
+    }, [checked, dispatch, lineOne, lineTwo, lineThree, lineFour]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
@@ -261,7 +270,7 @@ export function LabelsContent({ labels, isMultipleCards }: props) {
                 </div>
                 <FormControlLabel
                     className={classes.CheckboxLabel}
-                    control={<Checkbox onChange={handleChange} />}
+                    control={<Checkbox onChange={handleChange} defaultChecked />}
                     label="Save changes to this card’s label"
                 />
             </div>

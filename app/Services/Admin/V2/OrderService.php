@@ -204,5 +204,4 @@ class OrderService extends V1OrderService
             ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
             ->select('user_cards.*')->get();
     }
-
 }

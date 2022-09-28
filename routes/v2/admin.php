@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardLabelController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
@@ -59,6 +60,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
+        Route::get('labels', [CardLabelController::class, 'getOrderLabels']);
+        Route::put('labels', [CardLabelController::class, 'updateAndExportOrderLabels']);
         Route::post('mark-paid', MarkOrderPaidController::class)->name('admin.orders.mark-paid');
 
         Route::post('generate-label', [OrderController::class, 'generateLabel']);
@@ -68,6 +71,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('categories', [CardCategoryController::class, 'index']);
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
+        Route::put('/labels/{label}', [CardLabelController::class, 'update']);
+        Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store'])->name('admin.card-products.store');
         Route::get('/', [CardProductController::class, 'index'])->name('admin.card-products.index');

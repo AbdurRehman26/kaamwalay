@@ -34,6 +34,7 @@ const CardDiv = styled(Grid)({
     '.CardInfo': {
         display: 'flex',
         alignItems: 'center',
+        marginBottom: '10px',
     },
 
     '.CardName': {
@@ -96,7 +97,7 @@ const CardDiv = styled(Grid)({
         lineHeight: '16px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
-        marginRight: '10px',
+        marginRight: '5px',
     },
     '.CheckBoxLabel': {
         '& .MuiFormControlLabel-label': {
@@ -109,9 +110,11 @@ const CardDiv = styled(Grid)({
     '.Imagecontent': {
         display: 'flex',
         position: 'relative',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         bottom: '95px',
         alignItems: 'center',
+        padding: '0px 25px',
+        width: '325px',
     },
     '.LabelImageLeftText': {
         marginLeft: '5px',
@@ -133,7 +136,7 @@ const CardDiv = styled(Grid)({
 
 const LabelDialog = styled(Dialog)({
     '& .MuiPaper-root': {
-        maxWidth: '675px',
+        maxWidth: '686px',
     },
     '& .MuiDialogContent-root': {
         padding: '0px 0px',
@@ -389,10 +392,10 @@ export function EditLabelDialog({ orderNumber }: props) {
                             </div>
                             <div className={'Imagecontent'}>
                                 <div className={'LabelImageLeftText'}>
-                                    <Typography className={'LabelText'}>{lineOne}</Typography>
-                                    <Typography className={'LabelText'}>{lineTwo}</Typography>
-                                    <Typography className={'LabelText'}>{lineThree}</Typography>
-                                    <Typography className={'LabelText'}>{lineFour}</Typography>
+                                    <Typography className={'LabelText'}>{lineOne.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineTwo.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineThree.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineFour.substring(0, 26)}</Typography>
                                 </div>
                                 <div className={'LabelImageRightText'}>
                                     <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>

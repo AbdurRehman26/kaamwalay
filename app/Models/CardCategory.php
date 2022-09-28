@@ -13,7 +13,7 @@ class CardCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'image_url', 'is_enabled', 'type', 'card_category_type_id',
+        'name', 'image_url', 'is_enabled', 'card_category_type_id',
     ];
 
     /**

@@ -197,11 +197,11 @@ class OrderService extends V1OrderService
      * @param  Order  $order
      * @return Collection<int, UserCard>
      */
-    public function getOrderGradedCards(Order $order): Collection
+    public function getCardsByStatus(Order $order, int $status): Collection
     {
         return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
             ->where('order_id', $order->id)
-            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->where('order_items.order_item_status_id', $status)
             ->select('user_cards.*')->get();
     }
 }

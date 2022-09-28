@@ -35,8 +35,7 @@ class OrderLabelService
             throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
         }
 
-        $fileUrl = $this->generateFileAndUploadToCloud($order, $response);
-        $this->saveCardLabel($order, $fileUrl);
+        $this->generateFileUploadToCloudAndSaveLabel($order, $response);
     }
 
     protected function generateFileAndUploadToCloud(Order $order, array $response): string
@@ -69,8 +68,6 @@ class OrderLabelService
             $cardLabel['label_line_three'] = $cardLabel['line_three'];
             $cardLabel['label_line_four'] = $cardLabel['line_four'];
             $cardLabel['card_number'] = $cardLabel['line_four'];
-            $cardLabel['order_id'] = $orderItem->order_id;
-            $cardLabel['card_reference_id'] = $orderItem->cardProduct->card_reference_id;
             $cardLabel['certificate_id'] = $orderItem->userCard->certificate_number;
             $cardLabel['final_grade'] = $orderItem->userCard->overall_grade;
             $cardLabel['grade_nickname'] = $orderItem->userCard->overall_grade_nickname;

@@ -142,6 +142,7 @@ export const adminOrderLabelsSlice = createSlice({
                     state.orderLabels.labels[Number(index)].lineTwo = action.payload.lineTwo;
                     state.orderLabels.labels[Number(index)].lineThree = action.payload.lineThree;
                     state.orderLabels.labels[Number(index)].lineFour = action.payload.lineFour;
+                    state.orderLabels.labels[Number(index)].persistChanges = action.payload.persistChanges;
                 });
 
                 const payloadIndexes = state.multipleLabelData.labelData

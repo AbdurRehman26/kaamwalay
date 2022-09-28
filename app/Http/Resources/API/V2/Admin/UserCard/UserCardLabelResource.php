@@ -35,6 +35,7 @@ class UserCardLabelResource extends BaseResource
             'line_three' => $cardProduct->cardLabel->line_three,
             'line_four' => $cardProduct->cardLabel->line_four,
             'card_product' => new CardProductResource($cardProduct),
+            'persist_changes' => true,
         ];
     }
 }

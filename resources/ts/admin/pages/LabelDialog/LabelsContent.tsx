@@ -137,15 +137,18 @@ export function LabelsContent({ labels }: props) {
     const [checked, setChecked] = useState(true);
     const [cardLabelId, setCardLabelId] = useState(labels?.cardLabelId);
     const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
-    const persistChanges = true;
+    const [persistChanges, setPersistChanges] = useState(labels?.persistChanges);
     const dispatch = useDispatch();
     const classes = useStyles({ checked: checked });
 
     useEffect(() => {
+        setCardLabelId(labels?.cardLabelId);
+        setCertificateNumber(labels?.certificateNumber);
         setLineOne(labels?.lineOne);
         setLineTwo(labels?.lineTwo);
         setLineThree(labels?.lineThree);
         setLineFour(labels?.lineFour);
+        setPersistChanges(labels?.persistChanges);
     }, [labels]);
 
     useEffect(() => {
@@ -171,7 +174,7 @@ export function LabelsContent({ labels }: props) {
                     lineTwo,
                     lineThree,
                     lineFour,
-                    persistChanges: false,
+                    persistChanges,
                 }),
             );
         }
@@ -179,6 +182,7 @@ export function LabelsContent({ labels }: props) {
     }, [checked, dispatch, lineOne, lineTwo, lineThree, lineFour]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPersistChanges(event.target.checked);
         setChecked(event.target.checked);
     };
 
@@ -277,7 +281,13 @@ export function LabelsContent({ labels }: props) {
                 </div>
                 <FormControlLabel
                     className={classes.CheckboxLabel}
-                    control={<Checkbox onChange={handleChange} defaultChecked />}
+                    control={
+                        persistChanges ? (
+                            <Checkbox onChange={handleChange} defaultChecked />
+                        ) : (
+                            <Checkbox onChange={handleChange} />
+                        )
+                    }
                     label="Save changes to this card’s label"
                 />
             </div>

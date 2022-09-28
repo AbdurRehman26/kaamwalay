@@ -133,10 +133,24 @@ export const adminOrderLabelsSlice = createSlice({
             if (!hasValue) {
                 state.multipleLabelData.labelData.push(action.payload);
             } else {
-                const index = state.multipleLabelData.labelData.findIndex(
-                    (data) => data.cardLabelId === action.payload.cardLabelId,
-                );
-                state.multipleLabelData.labelData[index] = action.payload;
+                const indexes = state.orderLabels.labels
+                    .map((data, idx) => (data.cardLabelId === action.payload.cardLabelId ? idx : ''))
+                    .filter(String);
+
+                indexes.forEach((index) => {
+                    state.orderLabels.labels[Number(index)].lineOne = action.payload.lineOne;
+                    state.orderLabels.labels[Number(index)].lineTwo = action.payload.lineTwo;
+                    state.orderLabels.labels[Number(index)].lineThree = action.payload.lineThree;
+                    state.orderLabels.labels[Number(index)].lineFour = action.payload.lineFour;
+                });
+
+                const payloadIndexes = state.multipleLabelData.labelData
+                    .map((data, idx) => (data.certificateNumber === action.payload.certificateNumber ? idx : ''))
+                    .filter(String);
+
+                payloadIndexes.forEach((index) => {
+                    state.multipleLabelData.labelData[Number(index)] = action.payload;
+                });
             }
         },
     },

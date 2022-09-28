@@ -142,6 +142,13 @@ export function LabelsContent({ labels }: props) {
     const classes = useStyles({ checked: checked });
 
     useEffect(() => {
+        setLineOne(labels?.lineOne);
+        setLineTwo(labels?.lineTwo);
+        setLineThree(labels?.lineThree);
+        setLineFour(labels?.lineFour);
+    }, [labels]);
+
+    useEffect(() => {
         if (checked) {
             dispatch(
                 updateMultipleCardsLabel({

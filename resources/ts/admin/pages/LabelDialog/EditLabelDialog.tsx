@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import TablePagination from '@mui/material/TablePagination';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -173,6 +174,9 @@ export function EditLabelDialog({ orderNumber }: props) {
     const [lineThree, setLineThree] = useState(cardLabel?.lineThree);
     const [lineFour, setLineFour] = useState(cardLabel?.lineFour);
     const [cardLabelId, setCardLabelId] = useState(cardLabel?.cardLabelId);
+    const [rowsPerPage, setRowsPerPage] = useState(1);
+    const [page, setPage] = useState(0);
+    console.log(multipleLabelData);
 
     useEffect(() => {
         if (labelDialog) {
@@ -211,6 +215,14 @@ export function EditLabelDialog({ orderNumber }: props) {
         }
     }
 
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
     }, [dispatch]);
@@ -234,7 +246,7 @@ export function EditLabelDialog({ orderNumber }: props) {
             </DialogTitle>
             <DialogContent dividers>
                 {orderLabels.length !== 0 ? (
-                    orderLabels.map((orderLabel) => (
+                    orderLabels.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((orderLabel) => (
                         <>
                             <LabelsContent labels={orderLabel} />
                             <Divider />
@@ -362,6 +374,17 @@ export function EditLabelDialog({ orderNumber }: props) {
                         </div>
                     </CardDiv>
                 )}
+                {orderLabels.length !== 0 ? (
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={orderLabels.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                ) : null}
             </DialogContent>
             <DialogActions>
                 <Button className={'CancelButton'} onClick={handleModal}>

@@ -10,6 +10,7 @@ export class CardLabelEntity {
     public nickName?: string;
     public certificateNumber?: string;
     public grade?: number;
+    public persistChanges?: boolean;
 
     @Type(() => CardProductEntity)
     public cardProduct?: CardProductEntity;

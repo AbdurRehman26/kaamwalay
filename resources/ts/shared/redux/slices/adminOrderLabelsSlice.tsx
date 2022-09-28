@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { OrderLabelsDto } from '@shared/dto/OrderLabelsDto';
 import { CardLabelEntity } from '@shared/entities/CardLabelEntity';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 import { NotificationsService } from '@shared/services/NotificationsService';
@@ -166,6 +167,7 @@ export const adminOrderLabelsSlice = createSlice({
         },
         [updateMultipleLabels.fulfilled as any]: (state, action) => {
             state.labelsUrl.url = action.payload;
+            downloadFromUrl(action.payload.url, `RG000034_label.xlsx`);
         },
     },
 });

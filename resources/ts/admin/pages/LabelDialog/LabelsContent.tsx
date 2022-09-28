@@ -139,7 +139,7 @@ export function LabelsContent({ labels }: props) {
     const [certificateNumber, setCertificateNumber] = useState(labels?.certificateNumber);
     const [persistChanges, setPersistChanges] = useState(labels?.persistChanges);
     const dispatch = useDispatch();
-    const classes = useStyles({ checked: checked });
+    const classes = useStyles({ checked: persistChanges });
 
     useEffect(() => {
         setCardLabelId(labels?.cardLabelId);
@@ -179,7 +179,7 @@ export function LabelsContent({ labels }: props) {
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [checked, dispatch, lineOne, lineTwo, lineThree, lineFour]);
+    }, [checked, dispatch, lineOne, lineTwo, lineThree, lineFour, persistChanges]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPersistChanges(event.target.checked);
@@ -281,9 +281,9 @@ export function LabelsContent({ labels }: props) {
                     className={classes.CheckboxLabel}
                     control={
                         persistChanges ? (
-                            <Checkbox onChange={handleChange} defaultChecked />
+                            <Checkbox onChange={handleChange} defaultChecked checked={persistChanges} />
                         ) : (
-                            <Checkbox onChange={handleChange} />
+                            <Checkbox onChange={handleChange} checked={persistChanges} />
                         )
                     }
                     label="Save changes to this card’s label"

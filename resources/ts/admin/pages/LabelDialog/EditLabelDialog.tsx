@@ -16,11 +16,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import LabelLogo from '@shared/assets/label.png';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import {
     removeCardLabels,
     setEditLabelDialog,
     updateCardLabel,
+    updateMultipleCardsLabel,
     updateMultipleLabels,
 } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { RootState } from '../../redux/store';
@@ -168,13 +168,12 @@ export function EditLabelDialog({ orderNumber }: props) {
     const orderLabels = useSelector((state: RootState) => state.adminOrderLabels.orderLabels.labels);
     const cardLabel = useSelector((state: RootState) => state.adminOrderLabels.cardsLabel.labels);
     const multipleLabelData = useSelector((state: RootState) => state.adminOrderLabels.multipleLabelData.labelData);
-    const cardsLabelFileData = useSelector((state: RootState) => state.adminOrderLabels.labelsUrl.url);
     const [lineOne, setLineOne] = useState(cardLabel?.lineOne);
     const [lineTwo, setLineTwo] = useState(cardLabel?.lineTwo);
     const [lineThree, setLineThree] = useState(cardLabel?.lineThree);
     const [lineFour, setLineFour] = useState(cardLabel?.lineFour);
     const [cardLabelId, setCardLabelId] = useState(cardLabel?.cardLabelId);
-    const [rowsPerPage, setRowsPerPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0);
     console.log(multipleLabelData);
 
@@ -185,6 +184,19 @@ export function EditLabelDialog({ orderNumber }: props) {
             setLineTwo(cardLabel?.lineTwo);
             setLineThree(cardLabel?.lineThree);
             setLineFour(cardLabel?.lineFour);
+            orderLabels.map((orderLabel) => {
+                dispatch(
+                    updateMultipleCardsLabel({
+                        cardLabelId: orderLabel.cardLabelId,
+                        certificateNumber: orderLabel.certificateNumber,
+                        lineOne: orderLabel.lineOne,
+                        lineTwo: orderLabel.lineTwo,
+                        lineThree: orderLabel.lineThree,
+                        lineFour: orderLabel.lineFour,
+                        persistChanges: orderLabel.persistChanges,
+                    }),
+                );
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [labelDialog, dispatch]);
@@ -204,7 +216,6 @@ export function EditLabelDialog({ orderNumber }: props) {
                     dispatch(removeCardLabels(labelData.cardLabelId));
                 }
             });
-            await downloadFromUrl(cardsLabelFileData?.url, `${orderNumber}_label.xlsx`);
             setIsLoading(false);
             dispatch(setEditLabelDialog(false));
         } else if (JSON.stringify(cardLabel) !== '{}') {

@@ -23,6 +23,12 @@ const CardDiv = styled(Grid)({
         height: '48px',
     },
 
+    '.TextField': {
+        borderRadius: '4px',
+        padding: '5px',
+        width: '100%',
+    },
+
     '.CardLongName': {
         fontWeight: 400,
         fontSize: '12px',

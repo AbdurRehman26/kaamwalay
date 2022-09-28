@@ -102,11 +102,7 @@ export function LabelsContent({ labels }: props) {
                 <div className={'InputTextDiv'}>
                     <Typography className={'TextBoxNumber'}>1:</Typography>
                     <TextField
-                        sx={{
-                            borderRadius: '4px',
-                            padding: '5px',
-                            width: '100%',
-                        }}
+                        className={'TextField'}
                         name={'lineOne'}
                         value={lineOne}
                         fullWidth
@@ -120,11 +116,7 @@ export function LabelsContent({ labels }: props) {
                 <div className={'InputTextDiv'}>
                     <Typography className={'TextBoxNumber'}>2:</Typography>
                     <TextField
-                        sx={{
-                            borderRadius: '4px',
-                            padding: '5px',
-                            width: '100%',
-                        }}
+                        className={'TextField'}
                         name={'lineTwo'}
                         value={lineTwo}
                         fullWidth
@@ -138,11 +130,7 @@ export function LabelsContent({ labels }: props) {
                 <div className={'InputTextDiv'}>
                     <Typography className={'TextBoxNumber'}>3:</Typography>
                     <TextField
-                        sx={{
-                            borderRadius: '4px',
-                            padding: '5px',
-                            width: '100%',
-                        }}
+                        className={'TextField'}
                         name={'lineThree'}
                         value={lineThree}
                         fullWidth
@@ -156,11 +144,7 @@ export function LabelsContent({ labels }: props) {
                 <div className={'InputTextDiv'}>
                     <Typography className={'TextBoxNumber'}>4:</Typography>
                     <TextField
-                        sx={{
-                            borderRadius: '4px',
-                            padding: '5px',
-                            width: '100%',
-                        }}
+                        className={'TextField'}
                         name={'lineFour'}
                         value={lineFour}
                         fullWidth

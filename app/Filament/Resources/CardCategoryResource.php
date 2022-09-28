@@ -44,6 +44,7 @@ class CardCategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
+                Tables\Columns\TextColumn::make('cardCategoryType.name')->label('Type')->sortable(),
                 Tables\Columns\BooleanColumn::make('is_enabled')->label('Enabled'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

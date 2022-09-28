@@ -175,7 +175,6 @@ export function EditLabelDialog({ orderNumber }: props) {
     const [cardLabelId, setCardLabelId] = useState(cardLabel?.cardLabelId);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0);
-    console.log(multipleLabelData);
 
     useEffect(() => {
         if (labelDialog) {
@@ -196,6 +195,14 @@ export function EditLabelDialog({ orderNumber }: props) {
                         persistChanges: orderLabel.persistChanges,
                     }),
                 );
+            });
+        }
+
+        if (multipleLabelData.length > 0 && !labelDialog) {
+            multipleLabelData.map((labelData) => {
+                if (labelData.cardLabelId) {
+                    dispatch(removeCardLabels(labelData.cardLabelId));
+                }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -387,7 +394,7 @@ export function EditLabelDialog({ orderNumber }: props) {
                 )}
                 {orderLabels.length !== 0 ? (
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[]}
                         component="div"
                         count={orderLabels.length}
                         rowsPerPage={rowsPerPage}

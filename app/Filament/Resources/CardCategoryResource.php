@@ -30,6 +30,9 @@ class CardCategoryResource extends Resource
                 Forms\Components\TextInput::make('image_url')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('card_category_type_id')
+                    ->relationship('cardCategoryType', 'name')
+                    ->searchable(),
                 Forms\Components\Checkbox::make('is_enabled')
                     ->label('Enabled'),
             ]);

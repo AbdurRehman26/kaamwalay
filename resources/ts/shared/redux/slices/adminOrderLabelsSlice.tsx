@@ -155,6 +155,15 @@ export const adminOrderLabelsSlice = createSlice({
                 });
             }
         },
+        updateCardLabelPayloadData: (state, action: PayloadAction<any>) => {
+            const payloadIndexes = state.multipleLabelData.labelData
+                .map((data, idx) => (data.certificateNumber === action.payload.certificateNumber ? idx : ''))
+                .filter(String);
+
+            payloadIndexes.forEach((index) => {
+                state.multipleLabelData.labelData[Number(index)] = action.payload;
+            });
+        },
     },
     extraReducers: {
         [getOrderLabels.fulfilled as any]: (state, action) => {
@@ -172,4 +181,5 @@ export const adminOrderLabelsSlice = createSlice({
     },
 });
 
-export const { setEditLabelDialog, updateMultipleCardsLabel, removeCardLabels } = adminOrderLabelsSlice.actions;
+export const { setEditLabelDialog, updateMultipleCardsLabel, updateCardLabelPayloadData, removeCardLabels } =
+    adminOrderLabelsSlice.actions;

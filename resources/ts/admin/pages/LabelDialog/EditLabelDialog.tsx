@@ -20,6 +20,7 @@ import {
     removeCardLabels,
     setEditLabelDialog,
     updateCardLabel,
+    updateCardLabelPayloadData,
     updateMultipleCardsLabel,
     updateMultipleLabels,
 } from '@shared/redux/slices/adminOrderLabelsSlice';
@@ -207,6 +208,22 @@ export function EditLabelDialog({ orderNumber }: props) {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [labelDialog, dispatch]);
+
+    useEffect(() => {
+        orderLabels.map((orderLabel) => {
+            dispatch(
+                updateCardLabelPayloadData({
+                    cardLabelId: orderLabel.cardLabelId,
+                    certificateNumber: orderLabel.certificateNumber,
+                    lineOne: orderLabel.lineOne,
+                    lineTwo: orderLabel.lineTwo,
+                    lineThree: orderLabel.lineThree,
+                    lineFour: orderLabel.lineFour,
+                    persistChanges: orderLabel.persistChanges,
+                }),
+            );
+        });
+    }, [orderLabels, dispatch]);
 
     async function updateLabels() {
         if (multipleLabelData.length > 0) {

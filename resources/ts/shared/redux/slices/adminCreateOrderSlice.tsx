@@ -1,5 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -35,6 +36,7 @@ export interface SubmissionService {
 export interface Step01Data {
     availableServiceLevels: SubmissionService[];
     selectedServiceLevel: SubmissionService;
+    selectedServiceLevelId: number;
     status: any;
 }
 
@@ -45,6 +47,14 @@ export interface CreditCard {
     brand: string;
     id: string;
 }
+
+export type User = {
+    fullName: string;
+    email: string;
+    id: number;
+    customerNumber: string;
+    imageUrl: string;
+};
 
 export type SearchResultItemCardProps = {
     image: string;
@@ -60,6 +70,7 @@ export type SearchResultItemCardProps = {
 
 export interface PaymentSubmissionState {
     paymentMethodId: number;
+    paymentMethod: { name: string; code: string; id: number };
     existingCreditCards?: CreditCard[];
     selectedCreditCard: CreditCard;
     saveForLater: boolean;
@@ -93,7 +104,19 @@ export interface ShippingSubmissionState {
 }
 
 export interface AdminNewOrderSliceState {
-    shippingMethod: ShippingMethodEntity | null;
+    shippingMethod: ShippingMethodEntity;
+    isNextDisabled: boolean;
+    createSubmission: boolean;
+    userId: number;
+    user: Partial<UserEntity>;
+    grandTotal: number;
+    refundTotal: number;
+    extraChargesTotal: number;
+    availableCredit: number;
+    appliedCredit: number;
+    previewTotal: number;
+    payNow: boolean;
+    manualPayment: boolean;
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
@@ -111,10 +134,29 @@ export interface AdminNewOrderSliceState {
             discountedAmount: number;
         };
     };
+    shippingAddress: any;
+    billingAddress: any;
 }
 
 const initialState: AdminNewOrderSliceState = {
-    shippingMethod: null,
+    userId: -1,
+    user: {
+        fullName: '',
+        email: '',
+        profileImage: '',
+        customerNumber: '',
+        id: -1,
+    },
+    grandTotal: 0,
+    refundTotal: 0,
+    extraChargesTotal: 0,
+    availableCredit: 0,
+    previewTotal: 0,
+    appliedCredit: 0,
+    payNow: true,
+    isNextDisabled: false,
+    createSubmission: false,
+    manualPayment: true,
     couponState: {
         isCouponValid: false,
         couponCode: '',
@@ -129,15 +171,8 @@ const initialState: AdminNewOrderSliceState = {
         },
     },
     step01Data: {
-        availableServiceLevels: [
-            {
-                id: 1,
-                type: 'card',
-                maxProtectionAmount: 500,
-                turnaround: '28-30 Day',
-                price: 20,
-            },
-        ],
+        availableServiceLevels: [],
+        selectedServiceLevelId: 0,
         selectedServiceLevel: {
             id: 1,
             type: 'card',
@@ -150,26 +185,7 @@ const initialState: AdminNewOrderSliceState = {
     step02Data: {
         searchValue: '',
         searchResults: [],
-        selectedCards: [
-            // {
-            //     image: 'https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png',
-            //     name: 'Test one',
-            //     longName: 'AD CVIL ',
-            //     id: 3,
-            //     shortName: 'QA IL',
-            //     qty: 4,
-            //     value: 6,
-            // },
-            // {
-            //     image: 'https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png',
-            //     name: 'Test one',
-            //     longName: 'AD POLK ',
-            //     id: 7,
-            //     shortName: 'QA IL',
-            //     qty: 2,
-            //     value: 3,
-            // }
-        ],
+        selectedCards: [],
         shippingFee: 0,
         cleaningFee: 0,
         requiresCleaning: false,
@@ -248,6 +264,7 @@ const initialState: AdminNewOrderSliceState = {
     },
     step04Data: {
         paymentMethodId: 0,
+        paymentMethod: { id: 0, name: '', code: '' },
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
@@ -296,12 +313,95 @@ export const getCountriesList = createAsyncThunk('adminCreateOrderSlice/getCount
     return countries.data;
 });
 
+export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder', async (_, { getState }: any) => {
+    const currentSubmission: AdminNewOrderSliceState = getState().adminCreateOrderSlice;
+    const finalShippingAddress =
+        currentSubmission.step03Data.existingAddresses.length !== 0 &&
+        !currentSubmission.step03Data.useCustomShippingAddress &&
+        currentSubmission.step03Data.selectedExistingAddress.id !== 0
+            ? currentSubmission.step03Data.selectedExistingAddress
+            : currentSubmission.step03Data.selectedAddress;
+    const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+    const existingAddressId = currentSubmission.step03Data.selectedExistingAddress.id;
+
+    const parsedName = parseName(existingAddressId, finalShippingAddress?.fullName);
+
+    const orderDTO = {
+        paymentPlan: {
+            id: currentSubmission.step01Data.selectedServiceLevel.id,
+        },
+        userId: currentSubmission.user.id,
+        payNow: currentSubmission.payNow,
+        items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
+            cardProduct: {
+                id: selectedCard.id,
+            },
+            quantity: selectedCard.qty,
+            declaredValuePerUnit: selectedCard.value,
+        })),
+        shippingAddress: {
+            firstName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? finalShippingAddress.firstName : parsedName?.lastName,
+            address: finalShippingAddress.address,
+            address2: finalShippingAddress.address2,
+            city: finalShippingAddress.city,
+            state: finalShippingAddress.state?.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country?.code,
+            zip: finalShippingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: finalShippingAddress.flat,
+            saveForLater:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? false
+                    : currentSubmission.step03Data.saveForLater,
+        },
+        billingAddress: {
+            firstName: existingAddressId !== -1 ? billingAddress.firstName : parsedName?.firstName,
+            lastName: existingAddressId !== -1 ? billingAddress.lastName : parsedName?.lastName,
+            address: billingAddress.address,
+            address2: billingAddress.address2,
+            city: billingAddress.city,
+            state: billingAddress.state.code || finalShippingAddress.stateName,
+            countryCode: finalShippingAddress.country.code,
+            zip: billingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: billingAddress.flat,
+            sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+        },
+        customerAddress: {
+            id:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? currentSubmission.step03Data.selectedExistingAddress.id
+                    : null,
+        },
+        shippingMethod: {
+            id: currentSubmission.shippingMethod?.id ?? 1,
+        },
+        coupon: currentSubmission.couponState.isCouponApplied
+            ? {
+                  code: currentSubmission?.couponState?.couponCode,
+                  id: currentSubmission?.couponState?.appliedCouponData.id,
+              }
+            : null,
+        paymentByWallet: currentSubmission.appliedCredit ?? 0,
+        requiresCleaning: currentSubmission.step02Data.requiresCleaning
+            ? currentSubmission.step02Data.requiresCleaning
+            : false,
+        paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : null,
+        paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : null,
+    };
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('admin/orders');
+    const newOrder = await endpoint.post('', orderDTO);
+    return newOrder.data;
+});
+
 export const getSavedAddresses = createAsyncThunk(
     'adminCreateOrderSlice/getSavedAddresses',
-    async (_, { getState }: any) => {
-        const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
+    async (customerId: number, { getState }: any) => {
+        const availableStatesList: any = getState().adminCreateOrderSlice.step03Data.availableStatesList;
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`customer/1/addresses`);
+        const endpoint = apiService.createEndpoint(`admin/customer/${customerId}/addresses`);
         const customerAddresses = await endpoint.get('');
         const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
             return {
@@ -330,7 +430,7 @@ export const getSavedAddresses = createAsyncThunk(
                 },
             };
         });
-        console.log('formattedAddresses ', formattedAddresses);
+
         return formattedAddresses;
     },
 );
@@ -339,10 +439,10 @@ export const getShippingFee = createAsyncThunk(
     'adminCreateOrderSlice/getShippingFee',
     async (selectedCards: SearchResultItemCardProps[], thunk) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
-        const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
-        const shippingAddress = (thunk.getState() as any).newSubmission.step03Data.selectedAddress;
-        const existingAddresses = (thunk.getState() as any).newSubmission.step03Data.selectedExistingAddress;
+        const endpoint = apiService.createEndpoint('admin/orders/shipping-fee');
+        const shippingMethod = (thunk.getState() as any).adminCreateOrderSlice.shippingMethod;
+        const shippingAddress = (thunk.getState() as any).adminCreateOrderSlice.step03Data.selectedAddress;
+        const existingAddresses = (thunk.getState() as any).adminCreateOrderSlice.step03Data.selectedExistingAddress;
 
         let state;
         let country;
@@ -383,6 +483,13 @@ export const getServiceLevels = createAsyncThunk('adminCreateOrderSlice/getServi
     return serviceLevels.data;
 });
 
+export const getPaymentMethod = createAsyncThunk('adminCreateOrderSlice/getPaymentMethod', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('admin/orders/payment-methods?submission_create=true');
+    const paymentMethod = await endpoint.get('');
+    return paymentMethod.data[0];
+});
+
 export const getStatesList = createAsyncThunk(
     'adminCreateOrderSlice/getStatesList',
     async (input?: { countryId: number }) => {
@@ -391,10 +498,33 @@ export const getStatesList = createAsyncThunk(
             `admin/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
         );
         const americanStates = await endpoint.get('');
-        console.log('states ', americanStates.data);
         return americanStates.data;
     },
 );
+
+export const getCustomer = createAsyncThunk('adminCreateOrderSlice/getCustomer', async (customerId: number) => {
+    const apiService = app(APIService);
+
+    const endpoint = apiService.createEndpoint(`admin/customers/${customerId}`);
+    const customer = await endpoint.get('');
+
+    return customer.data;
+});
+
+const parseName = (id: number, fullName: any) => {
+    if (id === -1) {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
+    }
+};
 
 export const adminCreateOrderSlice = createSlice({
     name: 'adminCreateOrderSlice',
@@ -408,9 +538,9 @@ export const adminCreateOrderSlice = createSlice({
                 state.shippingMethod = action.payload;
             }
         },
-        // setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
-        //     state.isNextDisabled = action.payload;
-        // },
+        setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
+            state.isNextDisabled = action.payload;
+        },
         resetSelectedExistingAddress: (state) => {
             state.step03Data.selectedExistingAddress = initialState.step03Data.selectedExistingAddress;
         },
@@ -422,6 +552,16 @@ export const adminCreateOrderSlice = createSlice({
                 ...state.step02Data.selectedCards,
                 { ...action.payload, qty: 1, value: 1 },
             ];
+        },
+        getValidation: (state) => {},
+        setPreviewTotal: (state, action: PayloadAction<number>) => {
+            state.previewTotal = action.payload;
+        },
+        resetSelectedCards: (state, action: PayloadAction<[]>) => {
+            state.step02Data.selectedCards = action.payload;
+        },
+        setBillingAddress: (state, action: PayloadAction<Address>) => {
+            state.step04Data.selectedBillingAddress = action.payload;
         },
         setDisableAllShippingInputs: (state, action: PayloadAction<boolean>) => {
             state.step03Data.disableAllShippingInputs = action.payload;
@@ -444,6 +584,12 @@ export const adminCreateOrderSlice = createSlice({
             // TODO: This will be replaced with search integration
             state.step02Data.searchResults = [];
         },
+        setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
+            state.step01Data.selectedServiceLevel = action.payload;
+        },
+        setPayNow: (state, action: PayloadAction<boolean>) => {
+            state.payNow = action.payload;
+        },
         markCardAsUnselected: (state, action: PayloadAction<Pick<SearchResultItemCardProps, 'id'>>) => {
             state.step02Data.selectedCards = state.step02Data.selectedCards.filter(
                 (cardItem) => cardItem.id !== action.payload.id,
@@ -465,7 +611,10 @@ export const adminCreateOrderSlice = createSlice({
             }
         },
         updatePaymentMethodId: (state, action: PayloadAction<number>) => {
-            // state.step04Data.paymentMethodId = action.payload;
+            state.step04Data.paymentMethodId = action.payload;
+        },
+        updatePaymentMethod: (state, action: PayloadAction<{ name: string; code: string; id: number }>) => {
+            state.step04Data.paymentMethod = action.payload;
         },
         setUseCustomShippingAddress: (state, action: PayloadAction<boolean>) => {
             state.step03Data.useCustomShippingAddress = action.payload;
@@ -497,17 +646,29 @@ export const adminCreateOrderSlice = createSlice({
         setCouponCode: (state, action: PayloadAction<string>) => {
             state.couponState.couponCode = action.payload;
         },
+        setUserId: (state, action: PayloadAction<number>) => {
+            state.userId = action.payload;
+        },
+        setUser: (state, action: PayloadAction<UserEntity>) => {
+            state.user = action.payload;
+        },
     },
     extraReducers: {
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
-            // if (!action.payload.length) {
-            //     state.step03Data.disableAllShippingInputs = false;
-            //     state.step03Data.useCustomShippingAddress = true;
-            // }
+            if (!action.payload.length) {
+                state.step03Data.disableAllShippingInputs = false;
+                state.step03Data.useCustomShippingAddress = true;
+            }
         },
         [getCountriesList.fulfilled as any]: (state, action) => {
             state.step03Data.availableCountriesList = action.payload;
+        },
+        [getPaymentMethod.fulfilled as any]: (state, action: any) => {
+            state.step04Data.paymentMethod = action.payload;
+        },
+        [getShippingFee.fulfilled as any]: (state, action) => {
+            state.step02Data.shippingFee = action.payload;
         },
         [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
@@ -529,6 +690,9 @@ export const adminCreateOrderSlice = createSlice({
         [getStatesList.rejected as any]: (state) => {
             state.step03Data.fetchingStatus = 'failed';
         },
+        [getCustomer.fulfilled as any]: (state, action) => {
+            state.user = action.payload;
+        },
     },
 });
 
@@ -541,6 +705,8 @@ export const {
     markCardAsUnselected,
     setCouponCode,
     updatePaymentMethodId,
+    updatePaymentMethod,
+    setIsNextDisabled,
     setIsCouponApplied,
     setIsCouponValid,
     setValidCouponId,
@@ -552,5 +718,13 @@ export const {
     resetSelectedExistingAddress,
     setDisableAllShippingInputs,
     setSelectedExistingAddress,
+    setServiceLevel,
+    setPayNow,
+    setUserId,
+    setUser,
+    setBillingAddress,
+    resetSelectedCards,
+    setPreviewTotal,
+    getValidation,
     setSaveShippingAddress,
 } = adminCreateOrderSlice.actions;

@@ -35,13 +35,6 @@ const useStyles = makeStyles((theme) => ({
         zIndex: 10,
         paddingBottom: '0.5em',
     },
-    searchContainerMobile: {
-        width: `calc(100% + 32px)`,
-        marginLeft: -16,
-    },
-    searchContainerShadow: {
-        boxShadow: theme.shadows[1],
-    },
     searchLabelContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -57,15 +50,6 @@ const useStyles = makeStyles((theme) => ({
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
-    mobileBackIcon: {
-        height: 20,
-        width: 20,
-        display: 'inline-flex',
-        alignItems: 'center',
-        marginTop: 20,
-        marginRight: 16,
-        marginLeft: 4,
-    },
 }));
 
 function AlogliaSearchWrapper(props: any) {
@@ -77,11 +61,14 @@ function AlogliaSearchWrapper(props: any) {
         props.refine(e.currentTarget.value);
     }
 
-    // function handleClick() {
-    //     if (searchValue === '' && isMobile) {
-    //         dispatch(setIsMobileSearchModalOpen(true));
-    //     }
-    // }
+    function handleClearSearch() {
+        dispatch(setCardsSearchValue(''));
+        props.refine('');
+    }
+
+    (window as any).globalThis.clearSearch = () => {
+        handleClearSearch();
+    };
 
     return (
         <div className={classes.container}>
@@ -91,7 +78,6 @@ function AlogliaSearchWrapper(props: any) {
                 value={props.currentRefinement}
                 placeholder={'Search for cards to add...'}
                 onChange={(e) => handleSearch(e)}
-                // onClick={handleClick}
                 variant="outlined"
                 InputProps={{
                     ...{
@@ -104,7 +90,7 @@ function AlogliaSearchWrapper(props: any) {
                     endAdornment:
                         props.currentRefinement !== '' ? (
                             <InputAdornment position="end">
-                                <IconButton aria-label="clear" size="large">
+                                <IconButton aria-label="clear" onClick={handleClearSearch} size="large">
                                     <CloseIcon />
                                 </IconButton>
                             </InputAdornment>

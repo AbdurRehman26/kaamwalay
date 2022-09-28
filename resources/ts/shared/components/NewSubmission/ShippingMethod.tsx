@@ -25,7 +25,11 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
     const handleClick = useCallback(() => onSelect(shippingMethod), [onSelect, shippingMethod]);
 
     return (
-        <Root onClick={handleClick} className={cx({ selected })}>
+        <Root
+            onClick={handleClick}
+            className={cx({ selected })}
+            style={{ border: selected ? '3px solid #20BFB8' : '1px solid #ddd' }}
+        >
             <Radio checked={selected} />
             {mappedIcons[shippingMethod.code] || <LocalShippingIcon />}
             <Typography ml={1} variant={'subtitle1'} fontWeight={500} color={selected ? 'primary' : 'textPrimary'}>

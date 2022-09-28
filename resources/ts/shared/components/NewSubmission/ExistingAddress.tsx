@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import {
     getShippingFee,
     setSelectedExistingAddress,
-    setUseCustomShippingAddress, // } from '@dashboard/redux/slices/newSubmissionSlice';
+    setUseCustomShippingAddress,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 
@@ -27,11 +27,11 @@ type ExistingAddressProps = {
 const useStyles = makeStyles(
     (theme) => ({
         container: {
-            width: '200px',
+            width: '400px',
             padding: '12px',
             paddingTop: '7px',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             borderStyle: 'solid',
             borderWidth: ({ isSelected }: any) => (isSelected ? '3px' : '1px'),
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
@@ -56,10 +56,9 @@ const useStyles = makeStyles(
         radioBtnContainer: {
             display: 'flex',
             flexDirection: 'row',
-            // Doing this (110%) because the radio btn has some kind of space on the right which doesn't allow me to push it all the way to the right side
-            width: '110%',
+            width: 'auto',
             height: '25px',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-start',
             [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
@@ -72,11 +71,11 @@ function ExistingAddress(props: ExistingAddressProps) {
     const selectedExistingAddressID = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress.id,
     );
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.selectedCards);
+    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
 
     const dispatch = useAppDispatch();
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
-    const { fullName, address, address2, flat, zip, city, state, country, id } = props;
+    const { fullName, address, address2, zip, city, state, country, id } = props;
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
     async function handleRadioPress() {
@@ -87,7 +86,9 @@ function ExistingAddress(props: ExistingAddressProps) {
         dispatch(setUseCustomShippingAddress(false));
         dispatch(setSelectedExistingAddress(id));
         setIsLoadingAddresses(true);
-        await dispatch(getShippingFee(selectedCards));
+        if (selectedCards.length > 0) {
+            await dispatch(getShippingFee(selectedCards));
+        }
         setIsLoadingAddresses(false);
     }
 
@@ -106,13 +107,14 @@ function ExistingAddress(props: ExistingAddressProps) {
                             checked={selectedExistingAddressID === id}
                         />
                     </div>
-                    <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
-                    <Typography className={classes.addressLineText}>{`${address} ${address2} ${
-                        flat ? `Apt: ${flat}` : ''
-                    }`}</Typography>
-                    <Typography
-                        className={classes.addressLineText}
-                    >{`${city}, ${state} ${zip}, ${country}`}</Typography>
+                    <div>
+                        <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
+                        <Typography className={classes.addressLineText}>{`${address} ${address2}`}</Typography>
+                        <Typography
+                            className={classes.addressLineText}
+                        >{`${city}, ${state} ${zip}, ${country}`}</Typography>
+                        <Typography className={classes.addressLineText}>{` ${zip}, ${country}`}</Typography>
+                    </div>
                 </Paper>
             )}
         </>

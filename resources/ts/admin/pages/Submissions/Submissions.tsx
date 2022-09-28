@@ -13,7 +13,7 @@ export function Submissions() {
             <Route path={'/:id/view'} element={<SubmissionsView />} />
             <Route path={'/:id/review'} element={<SubmissionsReview />} />
             <Route path={'/:id/grade'} element={<SubmissionsGrade />} />
-            <Route path={'/new'} element={<CreateSubmission />} />
+            <Route path={'/:customerId/new'} element={<CreateSubmission />} />
         </Routes>
     );
 }

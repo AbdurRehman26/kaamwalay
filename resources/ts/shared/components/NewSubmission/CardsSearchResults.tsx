@@ -21,12 +21,10 @@ import {
     setCardsSearchValue,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
-// import CustomPagination from '@dashboard/components/CustomPagination';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
+import CustomPagination from './CustomPagination';
 import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
-
-// import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -60,10 +58,10 @@ interface ResultsWrapperProps {
 
 function ResultWrapper({ hit }: ResultsWrapperProps) {
     const dispatch = useAppDispatch();
-    const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
+    // const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
     const item = useMemo(() => plainToInstance(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
-    const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
+    // const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
     const subtitle = result.longName.value;
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
@@ -92,7 +90,6 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         },
         [dispatch],
     );
-    console.log('Items ', items);
     const deselectCard = useCallback(
         (item: CardProductEntity) => {
             ReactGA.event({
@@ -104,7 +101,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         [dispatch],
     );
 
-    const handlePreview = useCallback(() => setActiveItem(item), [item]);
+    // const handlePreview = useCallback(() => setActiveItem(item), [item]);
     // const handleClose = useCallback(() => setActiveItem(null), []);
 
     const handleSelectCard = useCallback(() => {
@@ -120,41 +117,14 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         }, 500);
     }, [selectedCards, item, selectCard, deselectCard, dispatch]);
 
-    // const handleRemove = useCallback(
-    //     (cardProductEntity: CardProductEntity) => {
-    //         deselectCard(cardProductEntity);
-    //         handleClose();
-    //     },
-    //     [deselectCard, handleClose],
-    // );
-
-    // const handleAdd = useCallback(
-    //     (cardProductEntity: CardProductEntity) => {
-    //         selectCard(cardProductEntity);
-    //         handleClose();
-    //     },
-    //     [handleClose, selectCard],
-    // );
-
     return (
         <>
-            {/* <SubmissionReviewCardDialog
-                items={items}
-                itemsLength={items.length}
-                activeId={activeItem?.id}
-                exists={isCardSelected}
-                open={!!activeItem}
-                onAdd={handleAdd}
-                onRemove={handleRemove}
-                onClose={handleClose}
-            /> */}
             <SearchResultItemCard
                 image={item.imagePath}
                 name={item.getName()}
                 longName={subtitle}
                 shortName={shortname}
                 id={item.id}
-                onPreview={handlePreview}
                 onSelectCard={handleSelectCard}
             />
         </>
@@ -203,7 +173,7 @@ export function CardsSearchResults() {
             </Box>
             <ResultsWrapper className={classes.resultsContainer} variant={'outlined'}>
                 <Hits hitComponent={ResultWrapper} />
-                {/* <CustomPagination /> */}
+                <CustomPagination />
             </ResultsWrapper>
             <AuthDialog
                 {...authDialogProps}

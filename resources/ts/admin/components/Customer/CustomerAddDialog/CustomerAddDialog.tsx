@@ -131,6 +131,9 @@ export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...r
                     .then((customer: CustomerEntity) => {
                         handleClose({});
                         customerAdded?.(customer);
+                        if (fromSubmission) {
+                            window.location.href = `/admin/submissions/${customer.id}/new`;
+                        }
                     });
             } catch (e: any) {
                 notifications.exception(e);
@@ -139,7 +142,7 @@ export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...r
                 setLoading(false);
             }
         },
-        [customerAdded, dispatch, handleClose, notifications],
+        [customerAdded, dispatch, handleClose, notifications, fromSubmission],
     );
 
     return (

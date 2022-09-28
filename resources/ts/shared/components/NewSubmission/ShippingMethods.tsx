@@ -1,5 +1,6 @@
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
@@ -50,8 +51,8 @@ export function ShippingMethods() {
     }
 
     return (
-        <Stack m={2}>
-            <Grid container direction={'row'} alignItems={'center'} py={3}>
+        <Stack>
+            <Grid ml={2.5} container direction={'row'} alignItems={'center'} py={3}>
                 <Typography variant={'subtitle1'} fontWeight={500} mr={1}>
                     Insured Shipping or Vault Storage?
                 </Typography>
@@ -83,7 +84,7 @@ export function ShippingMethods() {
                     <InfoIcon />
                 </Tooltip>
             </Grid>
-            <Grid container spacing={3} mb={4}>
+            <Grid container spacing={3} mb={4} px={2}>
                 {shippingMethods.data?.map((method) =>
                     mappedContent[method.code] ? (
                         <Grid item xs={6} key={method.id}>
@@ -96,6 +97,7 @@ export function ShippingMethods() {
                     ) : null,
                 )}
             </Grid>
+            <Divider />
 
             {shippingMethod?.code && mappedContent[shippingMethod?.code] ? mappedContent[shippingMethod?.code] : null}
         </Stack>

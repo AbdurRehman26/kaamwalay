@@ -1,22 +1,11 @@
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
 import ButtonBase from '@mui/material/ButtonBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
-import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
+import React, { useMemo } from 'react';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';
-import { useAppDispatch, useAppSelector } from '../../../../dashboard/redux/hooks';
-import { markCardAsUnselected } from '../../../../dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -108,33 +97,8 @@ type SearchResultItemCardProps = {
 
 function SearchResultItemCard(props: SearchResultItemCardProps) {
     const classes = useStyles();
-    const dispatch = useAppDispatch();
-    const { image, name, longName, id, addedMode, reviewMode, onPreview, onSelectCard } = props;
-    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
+    const { image, name, addedMode, onSelectCard } = props;
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
-    const handlePreview = useCallback(
-        (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (onPreview) {
-                onPreview(id);
-            }
-        },
-        [id, onPreview],
-    );
-
-    function handleMobileDeselect() {
-        const state = { image, name, longName, id };
-
-        ReactGA.event({
-            category: EventCategories.Cards,
-            action: CardsSelectionEvents.removed,
-        });
-        dispatch(markCardAsUnselected(state));
-    }
 
     const RootComponent = addedMode ? 'div' : ButtonBase;
 
@@ -145,12 +109,6 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                 <div className={classes.leftSide}>
                     <div className={classes.pictureContainer}>
                         <img src={image} alt={name} className={classes.cardImage} />
-
-                        {onPreview ? (
-                            <ButtonBase component={'a'} onClick={handlePreview} className={classes.previewOverlay}>
-                                <VisibilityIcon color={'inherit'} fontSize={'small'} />
-                            </ButtonBase>
-                        ) : null}
                     </div>
                     <div className={classes.cardMetadataContainer}>
                         <Typography variant={'body2'} className={font.fontWeightBold} align={'left'}>
@@ -184,36 +142,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         />
                     </div>
                 </div>
-                {addedMode && isMobile && reviewMode ? (
-                    <div className={classes.rightSideMobile}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            onClick={handleMobileDeselect}
-                            aria-label="close"
-                            size="large"
-                            sx={{ padding: '0px 20px' }}
-                        >
-                            <DeleteOutlineOutlinedIcon fontSize="medium" />
-                        </IconButton>
-                    </div>
-                ) : null}
-
-                {!addedMode ? (
-                    <div className={classes.rightSide}>
-                        {isCardSelected ? (
-                            <Tooltip title="Remove">
-                                <CheckCircleIcon htmlColor={'#20BFB8'} />
-                            </Tooltip>
-                        ) : (
-                            <Tooltip title="Add">
-                                <AddCircleOutlineIcon htmlColor={'#20BFB8'} />
-                            </Tooltip>
-                        )}
-                    </div>
-                ) : null}
             </RootComponent>
-            {!addedMode ? <Divider light /> : null}
         </>
     );
 }

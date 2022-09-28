@@ -3,21 +3,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-// import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-// import { getShippingFee } from '../../redux/slices/newSubmissionSlice';
-
 export function VaultStorageMethod() {
-    // const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    // const dispatch = useAppDispatch();
-
-    // useEffect(() => {
-    //     dispatch(getShippingFee(selectedCards));
-    // }, [dispatch, selectedCards]);
-
     return (
         <>
             <Divider />
-            <Stack pt={4} maxWidth={520}>
+            <Stack p={4} maxWidth={520}>
                 <Typography variant={'body1'} fontWeight={700} mb={2}>
                     What is Vault Storage?
                 </Typography>

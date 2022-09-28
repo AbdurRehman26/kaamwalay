@@ -1,5 +1,6 @@
 import ClearAllOutlinedIcon from '@mui/icons-material/ClearAllOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -7,19 +8,25 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { plainToInstance } from 'class-transformer';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
+import NumberFormat from 'react-number-format';
 import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
-import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
-import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { CardsSelectionEvents, EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import {
     SearchResultItemCardProps,
     changeSelectedCardQty,
     changeSelectedCardValue,
-    markCardAsUnselected, // setCustomStep,
+    createOrder,
+    getShippingFee,
+    markCardAsUnselected,
+    resetSelectedCards,
+    setBillingAddress,
+    setPreviewTotal,
 } from '@shared/redux/slices/adminCreateOrderSlice';
-// import { SubmissionReviewCardDialog } from '@dashboard/components/SubmissionReviewCardDialog';
+import { NotificationsService } from '@shared/services/NotificationsService';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -69,10 +76,25 @@ const useStyles = makeStyles((theme) => ({
     table: {
         minWidth: '100%',
     },
-    row: {
+    lastrow: {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
+    },
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    rowLeftText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.87)',
     },
     editBtn: {
         fontFamily: 'Roboto',
@@ -107,6 +129,19 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         marginTop: '12px',
     },
+    rowRightBoldText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        textAlign: 'right',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
+    paymentContainer: {
+        padding: '20px',
+    },
     mobileViewCardActionContainer: {
         display: 'flex',
         flexDirection: 'column',
@@ -134,27 +169,60 @@ type AddedSubmissionCardsProps = {
 };
 
 export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
-    const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
     const [showQuantity, setShowQuantity] = useState<boolean>(true);
     const [onChangeValue, setOnChangeValue] = useState<number>(0);
-    const classes = useStyles();
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const [isCreateSubmission, setIsCreateSubmission] = useState<boolean>(false);
     const dispatch = useAppDispatch();
-
-    const selectedCardEntities = useMemo(
-        () =>
-            selectedCards.map((item) =>
-                plainToInstance(CardProductEntity, {
-                    id: item.id,
-                    name: item.name,
-                    imagePath: item.image,
-                    shortName: item.shortName,
-                    longName: item.longName,
-                }),
-            ),
-        [selectedCards],
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const classes = useStyles();
+    const useCustomShippingAddress = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step03Data.useCustomShippingAddress,
     );
-    console.log('Active item ', activeItem);
+    const existingAddresses = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.existingAddresses);
+    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const serviceLevelPrice = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
+    );
+    const selectedExistingAddress = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress,
+    );
+    const shippingAddress = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress);
+    const isNextDisabled = useAppSelector((state) => state.adminCreateOrderSlice.isNextDisabled);
+    const isCouponApplied = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponApplied);
+    const userId = useAppSelector((state) => state.adminCreateOrderSlice.user.id);
+    const appliedCredit = useAppSelector((state) => state.adminCreateOrderSlice.appliedCredit);
+    const shippingMethod = useAppSelector(
+        (state) => state.adminCreateOrderSlice.shippingMethod || DefaultShippingMethodEntity,
+        (a, b) => a?.id === b?.id && a?.code === b?.code,
+    );
+    const discountedValue = useAppSelector(
+        (state) => state.adminCreateOrderSlice.couponState.appliedCouponData.discountedAmount,
+    );
+    const shippingFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.shippingFee);
+    const cleaningFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.cleaningFee);
+
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
+
+    useEffect(() => {
+        if (userId !== -1 && selectedCards.length > 0 && (isNextDisabled || selectedExistingAddress.address !== '')) {
+            setIsCreateSubmission(true);
+            dispatch(getShippingFee(selectedCards));
+        } else {
+            setIsCreateSubmission(false);
+        }
+    }, [selectedCards, isNextDisabled, userId, isCreateSubmission, selectedExistingAddress, dispatch]);
+
+    const numberOfSelectedCards =
+        selectedCards.length !== 0
+            ? selectedCards.reduce(function (prev: number, cur: any) {
+                  // @ts-ignore
+                  return prev + cur?.qty;
+              }, 0)
+            : 0;
+
     const handleDeselectCard = useCallback(
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
@@ -184,34 +252,44 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         dispatch(changeSelectedCardValue({ card, newValue: finalValue }));
     }
 
-    const findCard = useCallback(
-        (id?: number): any => selectedCardEntities.find((cardItem) => cardItem.id === id) ?? null,
-        [selectedCardEntities],
-    );
+    const createSubmission = async () => {
+        try {
+            dispatch(setBillingAddress(finalShippingAddress));
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: PaymentMethodEvents.payLater,
+            });
+            setIsLoading(true);
+            const order = await dispatch(createOrder()).unwrap();
+            NotificationsService.success('Order Placed Successfully!');
+            setIsLoading(false);
+            window.location.href = `/admin/submissions/${order.id}/view`;
+        } catch (e: any) {
+            setIsLoading(false);
+            NotificationsService.exception(e);
+        }
+    };
 
-    const handlePreview = useCallback((id: number) => setActiveItem(findCard(id)), [findCard]);
-    // const handleClose = useCallback(() => setActiveItem(null), []);
+    const clearAllCards = () => {
+        dispatch(resetSelectedCards([]));
+    };
 
-    // const handleRemove = useCallback(
-    //     (cardProductEntity: CardProductEntity) => {
-    //         const currentIndex = selectedCardEntities.findIndex((item) => item.id === activeItem?.id);
-    //         const nextItem = selectedCardEntities[currentIndex + 1];
-
-    //         handleDeselectCard(cardProductEntity);
-    //         if (nextItem) {
-    //             handlePreview(nextItem.id);
-    //         } else {
-    //             handleClose();
-    //         }
-    //     },
-    //     [activeItem, handleClose, handleDeselectCard, handlePreview, selectedCardEntities],
-    // );
+    function getPreviewTotal() {
+        const previewTotal =
+            numberOfSelectedCards * serviceLevelPrice +
+            Number(cleaningFee) +
+            shippingFee -
+            Number(isCouponApplied ? discountedValue : 0) -
+            appliedCredit;
+        dispatch(setPreviewTotal(previewTotal));
+        return previewTotal;
+    }
 
     return (
         <div className={classes.addedCardsContainer}>
             <Grid sx={{ borderBottom: '1px solid #E0E0E0' }} container alignItems={'center'} p={2}>
                 <Typography sx={{ fontWeight: 500, fontSize: '20px' }}>Added Cards</Typography>
-                <IconButton sx={{ marginLeft: 'auto' }}>
+                <IconButton onClick={clearAllCards} sx={{ marginLeft: 'auto' }}>
                     <ClearAllOutlinedIcon />
                 </IconButton>
             </Grid>
@@ -219,12 +297,11 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                 .slice()
                 .reverse()
                 .map((row: SearchResultItemCardProps) => (
-                    <>
+                    <div key={row.id}>
                         <Grid p={1}>
                             <Grid item display={'flex'} flexDirection={'row'}>
                                 <Grid md={11}>
                                     <SearchResultItemCard
-                                        onPreview={handlePreview}
                                         key={row.id}
                                         id={row.id}
                                         image={row.image}
@@ -286,8 +363,74 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                             </Grid>
                         </Grid>
                         {selectedCards[selectedCards.length - 1].id === row.id ? <Divider /> : null}
-                    </>
+                    </div>
                 ))}
+            <div className={classes.paymentContainer}>
+                <div className={classes.row}>
+                    <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
+                    <Typography className={classes.rowRightBoldText}>
+                        <span style={{ fontWeight: 400, color: '#757575' }}>
+                            (
+                            <NumberFormat
+                                value={serviceLevelPrice}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                            &nbsp; x {numberOfSelectedCards}) =&nbsp;
+                        </span>
+                        <NumberFormat
+                            value={numberOfSelectedCards * serviceLevelPrice}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
+                    </Typography>
+                </div>
+                <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                    <Typography className={classes.rowLeftText}>
+                        {shippingMethod?.code === ShippingMethodType.InsuredShipping
+                            ? 'Insured Shipping: '
+                            : 'Storage Fee:'}
+                    </Typography>
+                    <NumberFormat
+                        value={shippingMethod?.code === ShippingMethodType.InsuredShipping ? shippingFee : 0}
+                        className={classes.rowRightBoldText}
+                        displayType={'text'}
+                        thousandSeparator
+                        decimalSeparator={'.'}
+                        prefix={'$'}
+                    />
+                </div>
+                <Divider />
+                <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                    <Typography className={classes.rowLeftText}>Total:</Typography>
+                    <Typography className={classes.rowRightBoldText}>
+                        &nbsp;
+                        <NumberFormat
+                            value={getPreviewTotal()}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
+                    </Typography>
+                </div>
+                <LoadingButton
+                    disabled={!isCreateSubmission}
+                    onClick={createSubmission}
+                    fullWidth
+                    loading={isLoading}
+                    variant={'contained'}
+                    color={'primary'}
+                    sx={{ borderRadius: '24px', padding: '10px 20px', marginLeft: '10px' }}
+                >
+                    Create Submission
+                </LoadingButton>
+            </div>
         </div>
     );
 }

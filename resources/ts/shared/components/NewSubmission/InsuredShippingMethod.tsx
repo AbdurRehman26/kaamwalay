@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
+import Radio from '@mui/material/Radio';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -19,7 +20,8 @@ import {
     getShippingFee,
     getStatesList,
     resetSelectedExistingAddress,
-    setDisableAllShippingInputs, // setIsNextDisabled,
+    setDisableAllShippingInputs,
+    setIsNextDisabled,
     setSaveShippingAddress,
     setSelectedExistingAddress,
     setUseCustomShippingAddress,
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '425px',
     },
     leftSideContainer: {
-        marginTop: '12px',
+        marginTop: '20px',
     },
     divider: {
         marginTop: '64px',
@@ -64,7 +66,8 @@ const useStyles = makeStyles((theme) => ({
         color: 'rgba(0, 0, 0, 0.87)',
     },
     shippingAddressContainer: {
-        marginTop: '32px',
+        marginTop: '20px',
+        margin: '20px',
     },
     shippingMethodItemContainer: {
         display: 'flex',
@@ -106,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
     },
     existingAddressesContainer: {
         display: 'flex',
+        margin: '20px',
         flexDirection: 'row',
         marginBottom: '32px',
         flexWrap: 'wrap',
@@ -153,14 +157,14 @@ export function InsuredShippingMethod() {
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
     const [isShippingFee, setIsShippingFee] = useState(false);
 
-    // const disableAllInputs = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.disableAllShippingInputs);
     const disableAllInputs = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.disableAllShippingInputs);
     const saveForLater = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.saveForLater);
 
     const selectedExistingAddressId = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress.id,
     );
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.selectedCards);
+    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+
     const useCustomShippingAddress = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.useCustomShippingAddress,
     );
@@ -175,6 +179,8 @@ export function InsuredShippingMethod() {
     const country = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.country);
     const phoneNumber = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.adminCreateOrderSlice.step03Data?.availableStatesList);
+    const customerId = useAppSelector((state) => state.adminCreateOrderSlice.user.id);
+
     const availableCountries = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data?.availableCountriesList,
     );
@@ -192,7 +198,7 @@ export function InsuredShippingMethod() {
 
     function handleUseCustomShippingAddress() {
         dispatch(setUseCustomShippingAddress(!useCustomShippingAddress));
-        dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
+        // dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
 
         // If the user is about to disable the checkbox, we'll select the first existing address on the list
         if (useCustomShippingAddress) {
@@ -222,7 +228,7 @@ export function InsuredShippingMethod() {
     }
 
     const handleShippingFee = async () => {
-        if (isShippingFee) {
+        if (isShippingFee && selectedCards.length > 0) {
             setIsLoadingAddresses(true);
             await dispatch(getShippingFee(selectedCards));
             setIsShippingFee(false);
@@ -265,7 +271,7 @@ export function InsuredShippingMethod() {
             dispatch(getStatesList({ countryId }));
         }
     }
-    console.log('existingAddresses ', existingAddresses);
+
     useEffect(
         () => {
             if (existingAddresses.length === 0 || useCustomShippingAddress) {
@@ -282,7 +288,7 @@ export function InsuredShippingMethod() {
                         phoneNumber,
                     })
                     .then((valid) => {
-                        // dispatch(setIsNextDisabled(!valid));
+                        dispatch(setIsNextDisabled(valid));
                         if (valid) {
                             setIsShippingFee(true);
                         }
@@ -290,7 +296,7 @@ export function InsuredShippingMethod() {
             }
 
             if (existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddressId !== -1) {
-                // dispatch(setIsNextDisabled(false));
+                dispatch(setIsNextDisabled(false));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -355,7 +361,7 @@ export function InsuredShippingMethod() {
                     await dispatch(getShippingFee(selectedCards));
                     await dispatch(getStatesList());
                     await dispatch(getCountriesList());
-                    await dispatch(getSavedAddresses());
+                    await dispatch(getSavedAddresses(Number(customerId)));
                 } finally {
                     setIsLoadingAddresses(false);
                 }
@@ -374,7 +380,9 @@ export function InsuredShippingMethod() {
             ) : null}
             {existingAddresses.length > 0 ? (
                 <>
-                    <Typography className={classes.sectionLabel}>Existing Addresses</Typography>
+                    <Typography ml={2.5} className={classes.sectionLabel}>
+                        Shipping Address
+                    </Typography>
                     <Box marginBottom={'16px'} />
                     <div className={classes.existingAddressesContainer}>
                         {existingAddresses?.map((address: any) => (
@@ -407,7 +415,7 @@ export function InsuredShippingMethod() {
                             {existingAddresses.length > 0 ? (
                                 <FormControlLabel
                                     control={
-                                        <Checkbox
+                                        <Radio
                                             checked={useCustomShippingAddress}
                                             onChange={handleUseCustomShippingAddress}
                                             name="checkedB"

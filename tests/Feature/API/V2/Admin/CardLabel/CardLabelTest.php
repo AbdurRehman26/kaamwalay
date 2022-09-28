@@ -136,7 +136,7 @@ test('an admin can get order labels details', function () {
                 'card_label_id',
                 'certificate_number',
                 'grade',
-                'nickname',
+                'nick_name',
                 'line_one',
                 'line_two',
                 'line_three',

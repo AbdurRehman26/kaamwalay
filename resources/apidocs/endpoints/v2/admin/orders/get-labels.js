@@ -20,11 +20,12 @@
  *                 "card_label_id": 1,
  *                 "certificate_number": "09000000",
  *                 "grade": 8.5,
- *                 "nickname": "NM-MT+",
+ *                 "nick_name": "NM-MT+",
  *                 "line_one": "2021 Pokemon SWSH 1",
  *                 "line_two": "SCATTERBUG",
  *                 "line_three": "Battle Styles",
  *                 "line_four": "#11",
+ *                 "persist_changes": "true"
  *                 "card_product": {
  *                     "id": 11,
  *                     "long_name": "2021 Pokemon Sword & Shield Series Battle Styles 11",

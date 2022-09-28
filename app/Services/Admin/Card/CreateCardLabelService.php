@@ -193,7 +193,7 @@ class CreateCardLabelService
 
         $label_line_two = [$card_name];
 
-        if (($this->category->name == 'Pokemon' || $this->category->name == 'MetaZoo')
+        if (($this->categoryName == 'POKEMON' || $this->categoryName == 'METAZOO')
             && ! empty($surface)) {
             $label_line_two = [$card_name, '-', $this->cardProduct->getSurfaceAbbreviation()];
         }

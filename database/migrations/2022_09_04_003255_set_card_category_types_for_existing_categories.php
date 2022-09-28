@@ -40,6 +40,7 @@ return new class extends Migration
             'Legions Of Will',
             'Ultimate Cards',
             'Gem Blenders',
+            'Mythix',
         ];
         $sportCategories = ['Basketball', 'Baseball', 'Football', 'Hockey', 'Soccer', 'UFC'];
 

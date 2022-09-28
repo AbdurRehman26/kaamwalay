@@ -5,8 +5,10 @@ namespace App\Services\Admin\Card;
 use App\Models\CardLabel;
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderItemStatus;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderLabelService;
+use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,7 +17,8 @@ class CardLabelService
     public function __construct(
         protected AgsService $agsService,
         protected CreateCardLabelService $createCardLabelService,
-        protected OrderLabelService $orderLabelService
+        protected OrderLabelService $orderLabelService,
+        protected OrderService $orderService,
     ) {
     }
 
@@ -59,18 +62,13 @@ class CardLabelService
                 'label_line_three' => $certificateData['line_three'],
                 'label_line_four' => $certificateData['line_four'],
                 'card_number' => $certificateData['line_four'],
-                'order_id' => $orderItem->order_id,
-                'card_reference_id' => $orderItem->cardProduct->card_reference_id,
                 'certificate_id' => $orderItem->userCard->certificate_number,
                 'final_grade' => $orderItem->userCard->overall_grade,
                 'grade_nickname' => $orderItem->userCard->overall_grade_nickname,
             ];
         }
 
-        $fileUrl = $this->orderLabelService->generateFileAndUploadToCloud($order, $exportLabels);
-        $this->orderLabelService->saveCardLabel($order, $fileUrl);
-
-        return $fileUrl;
+        return $this->orderLabelService->generateFileUploadToCloudAndSaveLabel($order, $exportLabels);
     }
 
     /**
@@ -79,7 +77,7 @@ class CardLabelService
      */
     public function getOrderLabels(Order $order): Collection
     {
-        $orderCards = $this->orderLabelService->getOrderGradedCards($order);
+        $orderCards = $this->orderService->getCardsByStatus($order, OrderItemStatus::GRADED);
 
         $cardsWithoutLabel = $orderCards->filter(function ($card, $key) {
             return $card->orderItem->cardProduct->cardLabel()->doesntExist();

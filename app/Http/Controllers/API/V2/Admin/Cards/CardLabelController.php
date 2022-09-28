@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Cards;
 
-use App\Exceptions\API\Admin\CardLabelsCanNotBeExportedForOrder;
+use App\Exceptions\API\Admin\Order\OrderLabelCanNotBeGenerated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\CardLabel\UpdateCardLabelRequest;
 use App\Http\Requests\API\V2\Admin\CardLabel\UpdateOrderLabelsRequest;
@@ -25,13 +25,13 @@ class CardLabelController extends Controller
     /**
      * @param  Order  $order
      * @return UserCardLabelCollection
-     * @throws CardLabelsCanNotBeExportedForOrder
+     * @throws OrderLabelCanNotBeGenerated
      */
     public function getOrderLabels(Order $order): UserCardLabelCollection
     {
         //throw error if order is not graded yet
         if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED])) {
-            throw new CardLabelsCanNotBeExportedForOrder;
+            throw new OrderLabelCanNotBeGenerated;
         }
 
         return new UserCardLabelCollection(
@@ -43,7 +43,7 @@ class CardLabelController extends Controller
     {
         //throw error if order is not graded yet
         if (! in_array($order->order_status_id, [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED])) {
-            throw new CardLabelsCanNotBeExportedForOrder;
+            throw new OrderLabelCanNotBeGenerated;
         }
 
         return new JsonResponse(

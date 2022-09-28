@@ -280,13 +280,7 @@ export function LabelsContent({ labels }: props) {
                 </div>
                 <FormControlLabel
                     className={classes.CheckboxLabel}
-                    control={
-                        persistChanges ? (
-                            <Checkbox onChange={handleChange} defaultChecked checked={persistChanges} />
-                        ) : (
-                            <Checkbox onChange={handleChange} checked={persistChanges} />
-                        )
-                    }
+                    control={<Checkbox onChange={handleChange} checked={persistChanges} />}
                     label="Save changes to this card’s label"
                 />
             </div>
@@ -297,10 +291,10 @@ export function LabelsContent({ labels }: props) {
                 </div>
                 <div className={'Imagecontent'}>
                     <div className={'LabelImageLeftText'}>
-                        <Typography className={'LabelText'}>{lineOne.substring(0, 26)}</Typography>
-                        <Typography className={'LabelText'}>{lineTwo.substring(0, 26)}</Typography>
-                        <Typography className={'LabelText'}>{lineThree.substring(0, 26)}</Typography>
-                        <Typography className={'LabelText'}>{lineFour.substring(0, 26)}</Typography>
+                        <Typography className={'LabelText'}>{lineOne?.substring(0, 26)}</Typography>
+                        <Typography className={'LabelText'}>{lineTwo?.substring(0, 26)}</Typography>
+                        <Typography className={'LabelText'}>{lineThree?.substring(0, 26)}</Typography>
+                        <Typography className={'LabelText'}>{lineFour?.substring(0, 26)}</Typography>
                     </div>
                     <div className={'LabelImageRightText'}>
                         <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>

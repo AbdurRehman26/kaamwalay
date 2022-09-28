@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import LabelLogo from '@shared/assets/label.png';
 import {
+    addOrderNumber,
     removeCardLabels,
     setEditLabelDialog,
     updateCardLabel,
@@ -182,6 +183,7 @@ export function EditLabelDialog({ orderNumber }: props) {
 
     useEffect(() => {
         if (labelDialog) {
+            dispatch(addOrderNumber(orderNumber));
             setCardLabelId(cardLabel?.cardLabelId);
             setLineOne(cardLabel?.lineOne);
             setLineTwo(cardLabel?.lineTwo);
@@ -308,9 +310,6 @@ export function EditLabelDialog({ orderNumber }: props) {
                                     </Typography>
                                 </div>
                             </div>
-                            <div>
-                                <Typography className={'LinesText'}>Lines 1 - 4</Typography>
-                            </div>
                             <div className={'InputTextDiv'}>
                                 <Typography className={'TextBoxNumber'}>1:</Typography>
                                 <TextField
@@ -392,10 +391,10 @@ export function EditLabelDialog({ orderNumber }: props) {
                             </div>
                             <div className={'Imagecontent'}>
                                 <div className={'LabelImageLeftText'}>
-                                    <Typography className={'LabelText'}>{lineOne.substring(0, 26)}</Typography>
-                                    <Typography className={'LabelText'}>{lineTwo.substring(0, 26)}</Typography>
-                                    <Typography className={'LabelText'}>{lineThree.substring(0, 26)}</Typography>
-                                    <Typography className={'LabelText'}>{lineFour.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineOne?.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineTwo?.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineThree?.substring(0, 26)}</Typography>
+                                    <Typography className={'LabelText'}>{lineFour?.substring(0, 26)}</Typography>
                                 </div>
                                 <div className={'LabelImageRightText'}>
                                     <Typography className={'LabelText'} sx={{ textAlign: 'end' }}>

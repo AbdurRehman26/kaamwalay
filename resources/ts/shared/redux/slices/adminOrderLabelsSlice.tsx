@@ -14,6 +14,10 @@ export interface CardLabelId {
     id: number;
 }
 
+export interface OrderNumber {
+    orderNumber: any;
+}
+
 export interface OrderLabels {
     labels: CardLabelEntity[];
 }
@@ -36,6 +40,7 @@ export interface AdminOrderLabelsSliceState {
     cardsLabel: CardsLabel;
     multipleLabelData: MultipleLabelData;
     cardId: CardLabelId;
+    orderNo: OrderNumber;
     labelsUrl: CardsLabelFileUrl;
 }
 
@@ -51,6 +56,9 @@ const initialState: AdminOrderLabelsSliceState = {
     },
     multipleLabelData: {
         labelData: [],
+    },
+    orderNo: {
+        orderNumber: 0,
     },
     cardId: {
         id: 0,
@@ -116,6 +124,9 @@ export const adminOrderLabelsSlice = createSlice({
         setEditLabelDialog: (state, action: PayloadAction<boolean>) => {
             state.openLabelDialog.labelDialog = action.payload;
         },
+        addOrderNumber: (state, action: PayloadAction<any>) => {
+            state.orderNo.orderNumber = action.payload;
+        },
         removeCardLabels: (state, action: PayloadAction<number>) => {
             state.multipleLabelData.labelData = state.multipleLabelData.labelData.filter((index) => {
                 if (index.cardLabelId !== action.payload) {
@@ -176,10 +187,15 @@ export const adminOrderLabelsSlice = createSlice({
         },
         [updateMultipleLabels.fulfilled as any]: (state, action) => {
             state.labelsUrl.url = action.payload;
-            downloadFromUrl(action.payload.url, `RG000034_label.xlsx`);
+            downloadFromUrl(action.payload.url, `${state.orderNo.orderNumber}_label.xlsx`);
         },
     },
 });
 
-export const { setEditLabelDialog, updateMultipleCardsLabel, updateCardLabelPayloadData, removeCardLabels } =
-    adminOrderLabelsSlice.actions;
+export const {
+    setEditLabelDialog,
+    updateMultipleCardsLabel,
+    updateCardLabelPayloadData,
+    removeCardLabels,
+    addOrderNumber,
+} = adminOrderLabelsSlice.actions;

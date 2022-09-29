@@ -118,6 +118,8 @@ class UserCardService
 
         $data = $this->agsService->getGradesByCertificateId($certificateId);
 
+        $generatedImages = $this->pepareScannedImagesForPublicCardPage($data);
+
         return [
             'grades_available' => true,
             'is_fake' => $userCard->is_fake,
@@ -139,7 +141,9 @@ class UserCardService
             'overall' => $this->prepareOverallGradesForPublicCardPage($userCard),
             'front_scan' => $this->prepareFrontScanGradesForPublicCardPage($userCard),
             'back_scan' => $this->prepareBackScanGradesForPublicCardPage($userCard),
-            'generated_images' => $this->pepareScannedImagesForPublicCardPage($data),
+            'generated_images' => $generatedImages,
+            'generated_images_front_available' => array_key_exists('front', $generatedImages),
+            'generated_images_back_available' => array_key_exists('back', $generatedImages),
             'slabbed_images' => $this->prepareSlabbedImagesForPublicCardPage($data, $userCard),
             'social_images' => $userCard->social_images,
             'page_url' => $this->getPageUrl($certificateId),
@@ -175,47 +179,58 @@ class UserCardService
      */
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
-        $imagesData = [
-            'front' => [
-                [
-                    'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Centering',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Surface',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Edges',
-                ],
-                [
-                    'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Corners',
-                ],
+        $front = [
+            [
+                'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Centering',
             ],
-            'back' => [
-                [
-                    'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Centering',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Surface',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Edges',
-                ],
-                [
-                    'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Corners',
-                ],
+            [
+                'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Surface',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Edges',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Corners',
+            ],
+        ];
+        $back = [
+            [
+                'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Centering',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Surface',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Edges',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Corners',
             ],
         ];
 
+        $newFront = array_filter($front, function (array $imageData) {
+            return $imageData['output_image'] !== null;
+        });
+
+        $newBack = array_filter($back, function (array $imageData) {
+            return $imageData['output_image'] !== null;
+        });
+
+        $imagesData = [
+            'front' => $newFront,
+            'back' => $newBack,
+        ];
+
         return array_filter($imagesData, function (array $imageData) {
-            return $imageData[0]['output_image'] !== null;
+            return count($imageData) > 0;
         });
     }
 

@@ -28,6 +28,7 @@ import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsT
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { cx } from '@shared/lib/utils/cx';
 import {
+    clearSubmissionState,
     getCustomer,
     getPaymentMethod,
     getSavedAddresses,
@@ -128,6 +129,7 @@ export function CreateSubmission() {
 
     const handleClose = () => {
         const { from } = state;
+        dispatch(clearSubmissionState());
         if (from === 'submission') {
             navigate('/submissions/all/list');
         } else {

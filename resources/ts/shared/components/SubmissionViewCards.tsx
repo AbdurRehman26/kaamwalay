@@ -10,8 +10,11 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
+import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { RolesEnum } from '../constants/RolesEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
@@ -20,6 +23,9 @@ import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
 import font from '../styles/font.module.css';
 
+enum RowOption {
+    EditLabel,
+}
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
     serviceLevelPrice: number;
@@ -108,9 +114,22 @@ export const useStyles = makeStyles(
 export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
+    const dispatch = useDispatch();
     // TODO: replace with a dedicated hook `useUser`
     const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
+
+    const handleOption = useCallback(
+        async (action: RowOption, id: number) => {
+            switch (action) {
+                case RowOption.EditLabel:
+                    await dispatch(getCardLabel({ id }));
+                    dispatch(setEditLabelDialog(true));
+                    break;
+            }
+        },
+        [dispatch],
+    );
 
     return (
         <Box px={3} className={classes.containerBox}>
@@ -128,6 +147,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </TableCell>
                                 </>
                             )}
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -328,6 +348,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                         </TableCell>
                                     </>
                                 )}
+                                <TableCell>
+                                    <OptionsMenu onClick={handleOption}>
+                                        <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
+                                            Edit Label Text
+                                        </OptionsMenuItem>
+                                    </OptionsMenu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

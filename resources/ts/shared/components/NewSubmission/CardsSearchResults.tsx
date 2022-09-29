@@ -58,17 +58,11 @@ interface ResultsWrapperProps {
 
 function ResultWrapper({ hit }: ResultsWrapperProps) {
     const dispatch = useAppDispatch();
-    // const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
     const item = useMemo(() => plainToInstance(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
-    // const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
     const subtitle = result.longName.value;
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
-    // const isCardSelected = useMemo(
-    //     () => !!selectedCards.find((card: Record<string, any>) => card.id === item.id),
-    //     [item.id, selectedCards],
-    // );
 
     function generateMarkCardDto(item: CardProductEntity) {
         return {
@@ -100,9 +94,6 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         },
         [dispatch],
     );
-
-    // const handlePreview = useCallback(() => setActiveItem(item), [item]);
-    // const handleClose = useCallback(() => setActiveItem(null), []);
 
     const handleSelectCard = useCallback(() => {
         const isSelected = !!selectedCards.find((card: Record<string, any>) => card.id === item.id);

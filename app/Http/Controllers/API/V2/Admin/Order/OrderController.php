@@ -133,7 +133,7 @@ class OrderController extends V1OrderController
     public function generateLabel(Order $order): OrderResource
     {
         throw_if(
-            $order->order_status_id >= OrderStatus::GRADED && $order->order_status_id !== OrderStatus::CANCELLED,
+            $order->order_status_id < OrderStatus::GRADED || $order->order_status_id === OrderStatus::CANCELLED,
             new OrderLabelCanNotBeGenerated
         );
 

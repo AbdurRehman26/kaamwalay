@@ -7,7 +7,12 @@ use App\Models\CustomerAddress;
 
 class AdminCustomerAddressValidator
 {
-    public static function validate(array $data)
+    /**
+     * @param  array  $data
+     * @return void
+     * @throws \Throwable
+     */
+    public static function validate(array $data): void
     {
         if (! empty($data['customer_address']['id'])) {
             throw_unless(

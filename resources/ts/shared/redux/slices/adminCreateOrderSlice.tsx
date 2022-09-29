@@ -637,6 +637,7 @@ export const adminCreateOrderSlice = createSlice({
         setIsCouponApplied: (state, action: PayloadAction<boolean>) => {
             state.couponState.isCouponApplied = action.payload;
         },
+        clearSubmissionState: () => initialState,
         setIsCouponValid: (state, action: PayloadAction<boolean>) => {
             state.couponState.isCouponValid = action.payload;
         },
@@ -726,5 +727,6 @@ export const {
     resetSelectedCards,
     setPreviewTotal,
     getValidation,
+    clearSubmissionState,
     setSaveShippingAddress,
 } = adminCreateOrderSlice.actions;

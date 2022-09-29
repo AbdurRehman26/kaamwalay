@@ -26,6 +26,7 @@ import {
     SearchResultItemCardProps,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    clearSubmissionState,
     createOrder,
     getShippingFee,
     markCardAsUnselected,
@@ -181,6 +182,15 @@ const useStyles = makeStyles((theme) => ({
     saveBtn: {
         marginLeft: '12px',
     },
+    parent: {
+        overflowY: 'scroll',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        ':-webkit-scrollbar': {
+            display: 'none',
+            window: '0px',
+        },
+    },
 }));
 
 type AddedSubmissionCardsProps = {
@@ -284,6 +294,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             const order = await dispatch(createOrder()).unwrap();
             NotificationsService.success('Order Placed Successfully!');
             setIsLoading(false);
+            dispatch(clearSubmissionState());
             window.location.href = `/admin/submissions/${order.id}/view`;
         } catch (e: any) {
             setIsLoading(false);
@@ -339,78 +350,80 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     <ClearAllOutlinedIcon />
                 </IconButton>
             </Grid>
-            {selectedCards
-                .slice()
-                .reverse()
-                .map((row: SearchResultItemCardProps) => (
-                    <div key={row.id}>
-                        <Grid p={1}>
-                            <Grid item display={'flex'} flexDirection={'row'}>
-                                <Grid md={11}>
-                                    <SearchResultItemCard
-                                        key={row.id}
-                                        id={row.id}
-                                        image={row.image}
-                                        longName={row.longName}
-                                        shortName={row.shortName}
-                                        name={row.name}
-                                        addedMode
-                                    />
+            <div className={classes.parent} style={{ height: selectedCards.length > 3 ? '100vh' : 'auto' }}>
+                {selectedCards
+                    .slice()
+                    .reverse()
+                    .map((row: SearchResultItemCardProps) => (
+                        <div key={row.id}>
+                            <Grid p={1}>
+                                <Grid item display={'flex'} flexDirection={'row'}>
+                                    <Grid md={11}>
+                                        <SearchResultItemCard
+                                            key={row.id}
+                                            id={row.id}
+                                            image={row.image}
+                                            longName={row.longName}
+                                            shortName={row.shortName}
+                                            name={row.name}
+                                            addedMode
+                                        />
+                                    </Grid>
+                                    <Grid md={1}>
+                                        <IconButton
+                                            sx={{ color: '#0000008A' }}
+                                            aria-label="delete"
+                                            onClick={() => handleDeselectCard(row)}
+                                            size="large"
+                                        >
+                                            <DeleteIcon fontSize="medium" />
+                                        </IconButton>
+                                    </Grid>
                                 </Grid>
-                                <Grid md={1}>
-                                    <IconButton
-                                        sx={{ color: '#0000008A' }}
-                                        aria-label="delete"
-                                        onClick={() => handleDeselectCard(row)}
-                                        size="large"
-                                    >
-                                        <DeleteIcon fontSize="medium" />
-                                    </IconButton>
+                                <Grid mt={1} ml={1} item display={'flex'} flexDirection={'row'} mb={3}>
+                                    <Grid item md={6}>
+                                        <Typography sx={{ fontSize: '12px', fontWeight: 500 }} mb={0.5}>
+                                            Qty
+                                        </Typography>
+                                        <TextField
+                                            onChange={(e) => handleChange(row, e.target.value)}
+                                            onBlur={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                            type="number"
+                                            size={'small'}
+                                            value={showQuantity ? row.qty : onChangeValue}
+                                            InputProps={{
+                                                inputProps: { min: 0 },
+                                            }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            className={classes.qtyField}
+                                            variant="outlined"
+                                        />
+                                    </Grid>
+                                    <Grid item md={6}>
+                                        <Typography sx={{ fontSize: '12px', fontWeight: 500 }} mb={0.5}>
+                                            Value <span className={classes.textColorSecondary}>(USD)</span>
+                                        </Typography>
+                                        <NumberFormatTextField
+                                            value={row.value}
+                                            onChange={(e) => handleChangeCardValue(row, e.target.value)}
+                                            name="numberformat"
+                                            size="small"
+                                            id="formatted-numberformat-input"
+                                            variant="outlined"
+                                            InputProps={{
+                                                inputProps: { min: 1 },
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid mt={1} ml={1} item display={'flex'} flexDirection={'row'} mb={3}>
-                                <Grid item md={6}>
-                                    <Typography sx={{ fontSize: '12px', fontWeight: 500 }} mb={0.5}>
-                                        Qty
-                                    </Typography>
-                                    <TextField
-                                        onChange={(e) => handleChange(row, e.target.value)}
-                                        onBlur={(e) => handleChangeCardQty(row, Number(e.target.value))}
-                                        type="number"
-                                        size={'small'}
-                                        value={showQuantity ? row.qty : onChangeValue}
-                                        InputProps={{
-                                            inputProps: { min: 0 },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        className={classes.qtyField}
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item md={6}>
-                                    <Typography sx={{ fontSize: '12px', fontWeight: 500 }} mb={0.5}>
-                                        Value <span className={classes.textColorSecondary}>(USD)</span>
-                                    </Typography>
-                                    <NumberFormatTextField
-                                        value={row.value}
-                                        onChange={(e) => handleChangeCardValue(row, e.target.value)}
-                                        name="numberformat"
-                                        size="small"
-                                        id="formatted-numberformat-input"
-                                        variant="outlined"
-                                        InputProps={{
-                                            inputProps: { min: 1 },
-                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Divider />
-                    </div>
-                ))}
+                            <Divider />
+                        </div>
+                    ))}
+            </div>
             <div className={classes.paymentContainer}>
                 <div className={classes.row}>
                     <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>

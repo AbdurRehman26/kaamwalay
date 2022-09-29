@@ -64,6 +64,16 @@ const useStyles = makeStyles(
             marginLeft: '20px',
             marginRight: '20px',
         },
+        parent: {
+            overflowY: 'scroll',
+            height: '100vh',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            ':-webkit-scrollbar': {
+                display: 'none',
+                window: '0px',
+            },
+        },
     }),
     { name: 'ExistingAddressComponent' },
 );
@@ -185,7 +195,7 @@ export function CreateSubmission() {
 
                     <Grid flexDirection={'row'} justifyContent={'center'} item container sx={{ background: '#FFFFFF' }}>
                         <Grid md={8}>
-                            <div>
+                            <div className={classes.parent}>
                                 <Grid item p={2} m={1}>
                                     <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                                         <CardSubmissionSearchField />
@@ -203,6 +213,7 @@ export function CreateSubmission() {
                                         )}
                                     </InstantSearch>
                                 </Grid>
+                                {selectedCards.length > 0 ? <Divider /> : null}
                                 <Grid container p={2} wrap={'nowrap'}>
                                     <Grid
                                         md={6}

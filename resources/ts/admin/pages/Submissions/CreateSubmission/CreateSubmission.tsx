@@ -26,7 +26,6 @@ import { CardsSearchResults } from '@shared/components/NewSubmission/CardsSearch
 import { ShippingMethods } from '@shared/components/NewSubmission/ShippingMethods';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
-import { cx } from '@shared/lib/utils/cx';
 import {
     clearSubmissionState,
     getCustomer,
@@ -325,7 +324,6 @@ export function CreateSubmission() {
                                         <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
                                             <Grid md={6} px={1}>
                                                 <Root
-                                                    className={cx({ payNow })}
                                                     onClick={() => handlePayNow(true)}
                                                     style={{
                                                         border: payNow ? '3px solid #20BFB8' : '1px solid #DDDDDD',
@@ -339,7 +337,6 @@ export function CreateSubmission() {
                                             </Grid>
                                             <Grid md={6} px={1}>
                                                 <Root
-                                                    className={cx({ payNow })}
                                                     onClick={() => handlePayNow(false)}
                                                     style={{
                                                         border: !payNow ? '3px solid #20BFB8' : '1px solid #DDDDDD',
@@ -370,7 +367,7 @@ export function CreateSubmission() {
                                                         <Typography mb={2} sx={{ fontSize: '16px', fontWeight: 500 }}>
                                                             Payment Method
                                                         </Typography>
-                                                        <Root className={cx({})}>
+                                                        <Root>
                                                             <Radio color="primary" checked={payNow} />
                                                             <AttachMoneyIcon sx={{ color: '#0000008A' }} />
                                                             <Typography ml={1} variant={'subtitle1'} fontWeight={500}>

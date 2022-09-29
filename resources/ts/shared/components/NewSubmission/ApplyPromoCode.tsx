@@ -72,7 +72,7 @@ export function ApplyPromoCode() {
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
+                `admin/coupons/verify/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -149,8 +149,8 @@ export function ApplyPromoCode() {
         };
         try {
             const endpointUrl = id
-                ? `customer/orders/${id}/coupons/calculate-discount`
-                : `customer/coupons/calculate-discount`;
+                ? `admin/orders/${id}/coupons/calculate-discount`
+                : `admin/coupons/calculate-discount`;
             const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
             const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));

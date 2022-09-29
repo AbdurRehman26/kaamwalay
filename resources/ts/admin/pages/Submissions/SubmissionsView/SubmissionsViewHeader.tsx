@@ -178,9 +178,15 @@ export function SubmissionsViewHeader({
                         <>
                             <Button
                                 {...sharedProps}
-                                startIcon={isLoading ? <CircularProgress /> : <Icon>printer</Icon>}
+                                startIcon={isLoading ? <CircularProgress size={22} /> : <Icon>printer</Icon>}
                                 onClick={handleLabelDialog}
-                                disabled={!orderLabel}
+                                disabled={
+                                    !orderStatus.isAny([
+                                        OrderStatusEnum.GRADED,
+                                        OrderStatusEnum.ASSEMBLED,
+                                        OrderStatusEnum.SHIPPED,
+                                    ])
+                                }
                             >
                                 Export Labels
                             </Button>

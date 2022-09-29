@@ -306,7 +306,7 @@ export function EditLabelDialog({ orderNumber }: props) {
                 </Button>
                 <Button className={'ExportButton'} onClick={updateLabels}>
                     {isLoading ? (
-                        <CircularProgress sx={{ color: '#fff' }} />
+                        <CircularProgress size={24} sx={{ color: '#fff' }} />
                     ) : JSON.stringify(cardLabel) !== '{}' ? (
                         'Save'
                     ) : (

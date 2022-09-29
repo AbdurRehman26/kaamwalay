@@ -23,6 +23,7 @@ use App\Services\CleaningFee\CleaningFeeService;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Order\Validators\AdminCustomerAddressValidator;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
@@ -31,7 +32,6 @@ use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use App\Services\Payment\V2\PaymentService;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -88,7 +88,11 @@ class CreateOrderService
     protected function validate(): void
     {
         ItemsDeclaredValueValidator::validate($this->data);
-        CustomerAddressValidator::validate($this->data);
+        if ($this->isCreatedByAdmin) {
+            AdminCustomerAddressValidator::validate($this->data);
+        } else {
+            CustomerAddressValidator::validate($this->data);
+        }
         CouponAppliedValidator::validate($this->data);
         WalletCreditAppliedValidator::validate($this->data);
     }
@@ -344,7 +348,6 @@ class CreateOrderService
                 $this->paymentService->charge($order, []);
 
                 $order->markAsPaid();
-
             }
         }
     }

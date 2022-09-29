@@ -117,7 +117,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('coupons.change-status');
     Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
     Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
-  
+    Route::prefix('coupons')->group(function () {
+        Route::get('verify/{coupon:code}', [CouponController::class, 'verify'])->name('admin.coupon.verify');
+        Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('admin.coupon.discount');
+    });
     
     // Customers
     Route::apiResource('customers', CustomerController::class)->only(['index', 'store', 'show'])

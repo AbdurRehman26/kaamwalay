@@ -7,6 +7,11 @@ use Illuminate\Support\Collection;
 
 class PaymentMethodService
 {
+    /**
+     * @return Collection<int, PaymentMethod>
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function getPaymentMethods(): Collection
     {
         if (request()->get('submission_create') === 'true') {

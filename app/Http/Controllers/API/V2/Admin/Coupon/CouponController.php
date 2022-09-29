@@ -16,9 +16,9 @@ use App\Http\Resources\API\V2\Admin\Coupon\VerifyCouponResource;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Services\Admin\Coupon\CouponService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Exception;
 
 class CouponController extends Controller
 {

@@ -176,9 +176,9 @@ const initialState: AdminNewOrderSliceState = {
         selectedServiceLevel: {
             id: 1,
             type: 'card',
-            maxProtectionAmount: 500,
-            turnaround: '28-30 Day',
-            price: 20,
+            maxProtectionAmount: 200,
+            turnaround: '20 Business Days',
+            price: 18,
         },
         status: 'success',
     },

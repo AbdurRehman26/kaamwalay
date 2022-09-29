@@ -490,20 +490,6 @@ it('dispatches job for creating folders on dropbox when an order is reviewed', f
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
 });
 
-it('dispatches job for creating files for order labels when order is marked as graded', function () {
-    Event::fake();
-    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
-    Bus::fake();
-
-    /** @var Order $order */
-    $order = Order::factory()->create();
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::GRADED,
-    ]);
-
-    Bus::assertDispatchedTimes(CreateOrderLabel::class);
-});
-
 test('order can not be shipped if its not paid', function () {
     /** @var Order $order */
     $order = Order::factory()->create();

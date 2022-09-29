@@ -81,6 +81,8 @@ class CardLabelService
 
         $cardsWithoutLabel = $orderCards->filter(function ($card, $key) {
             return $card->orderItem->cardProduct->cardLabel()->doesntExist();
+        })->unique(function ($item) {
+            return $item->orderItem->card_product_id;
         });
 
         foreach ($cardsWithoutLabel as $card) {

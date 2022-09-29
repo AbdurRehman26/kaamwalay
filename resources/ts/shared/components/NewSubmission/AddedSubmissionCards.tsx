@@ -1,6 +1,12 @@
 import ClearAllOutlinedIcon from '@mui/icons-material/ClearAllOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -8,6 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -62,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'rgba(0, 0, 0, 0.54)',
     },
     qtyField: {
-        width: '80px',
+        width: '95%',
         [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
@@ -161,6 +168,19 @@ const useStyles = makeStyles((theme) => ({
     textColorSecondary: {
         color: '#0000008A',
     },
+    dialogActions: {
+        marginBottom: '12px',
+        marginRight: '18px',
+    },
+    contentContainer: {
+        width: '457px',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
+    },
+    saveBtn: {
+        marginLeft: '12px',
+    },
 }));
 
 type AddedSubmissionCardsProps = {
@@ -171,6 +191,7 @@ type AddedSubmissionCardsProps = {
 export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const [showQuantity, setShowQuantity] = useState<boolean>(true);
     const [onChangeValue, setOnChangeValue] = useState<number>(0);
+    const [isClearCard, setIsClearCard] = useState<boolean>(false);
     const [isCreateSubmission, setIsCreateSubmission] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -287,9 +308,34 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
 
     return (
         <div className={classes.addedCardsContainer}>
+            <Dialog open={isClearCard} onClose={() => setIsClearCard(false)}>
+                <DialogTitle>Are you sure you want to clear all cards?</DialogTitle>
+                <Formik initialValues={{}} onSubmit={clearAllCards}>
+                    {({ isSubmitting }) => (
+                        <Form>
+                            <DialogContent className={classes.contentContainer}></DialogContent>
+                            <DialogActions className={classes.dialogActions}>
+                                <Button disabled={isSubmitting} onClick={() => setIsClearCard(false)}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type={'submit'}
+                                    color={'primary'}
+                                    variant={'contained'}
+                                    size={'medium'}
+                                    className={classes.saveBtn}
+                                    startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
+                                >
+                                    Clear
+                                </Button>
+                            </DialogActions>
+                        </Form>
+                    )}
+                </Formik>
+            </Dialog>
             <Grid sx={{ borderBottom: '1px solid #E0E0E0' }} container alignItems={'center'} p={2}>
                 <Typography sx={{ fontWeight: 500, fontSize: '20px' }}>Added Cards</Typography>
-                <IconButton onClick={clearAllCards} sx={{ marginLeft: 'auto' }}>
+                <IconButton onClick={() => setIsClearCard(true)} sx={{ marginLeft: 'auto' }}>
                     <ClearAllOutlinedIcon />
                 </IconButton>
             </Grid>
@@ -362,7 +408,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        {selectedCards[selectedCards.length - 1].id === row.id ? <Divider /> : null}
+                        <Divider />
                     </div>
                 ))}
             <div className={classes.paymentContainer}>
@@ -389,6 +435,19 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                         />
                     </Typography>
                 </div>
+                {isCouponApplied ? (
+                    <div className={classes.row} style={{ marginTop: '16px' }}>
+                        <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                        <NumberFormat
+                            value={discountedValue}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'-$'}
+                        />
+                    </div>
+                ) : null}
                 <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                     <Typography className={classes.rowLeftText}>
                         {shippingMethod?.code === ShippingMethodType.InsuredShipping

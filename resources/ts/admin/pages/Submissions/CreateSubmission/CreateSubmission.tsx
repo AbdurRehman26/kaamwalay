@@ -32,6 +32,7 @@ import {
     getPaymentMethod,
     getSavedAddresses,
     getServiceLevels,
+    setIsCouponApplied,
     setPayNow,
     setServiceLevel,
     updatePaymentMethod,
@@ -50,9 +51,6 @@ const Root = styled(ButtonBase)(({ theme }) => ({
     border: '1px solid #ddd',
     borderRadius: 2,
     padding: theme.spacing(1),
-    '.MuiSvgIcon-root': {
-        color: theme.palette.text.secondary,
-    },
     '&.selected': {
         '.MuiSvgIcon-root': {
             color: theme.palette.primary.main,
@@ -95,8 +93,7 @@ export function CreateSubmission() {
             await dispatch(getSavedAddresses(Number(customerId)));
             setIsLoading(false);
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [customerId, dispatch]);
 
     const handleServiceLevel = (serviceLevelId: number) => {
         const selectedServiceLevel = serviceLevels.filter((item) => item?.id === Number(serviceLevelId));
@@ -109,6 +106,7 @@ export function CreateSubmission() {
         };
 
         dispatch(setServiceLevel(level));
+        dispatch(setIsCouponApplied(false));
 
         ReactGA.event({
             category: EventCategories.ServiceLevels,
@@ -351,31 +349,35 @@ export function CreateSubmission() {
                                             <ApplyPromoCode />
                                         </Grid>
 
-                                        <Divider className={classes.borderMargin} />
-                                        <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
-                                            <Grid md={6} mb={2}>
-                                                <Typography mb={2} sx={{ fontSize: '16px', fontWeight: 500 }}>
-                                                    Payment Method
-                                                </Typography>
-                                                <Root className={cx({})}>
-                                                    <Radio color="primary" checked={payNow} />
-                                                    <AttachMoneyIcon sx={{ color: '#0000008A' }} />
-                                                    <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                        {payNow ? (
+                                            <>
+                                                <Divider className={classes.borderMargin} />
+                                                <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
+                                                    <Grid md={6} mb={2}>
+                                                        <Typography mb={2} sx={{ fontSize: '16px', fontWeight: 500 }}>
+                                                            Payment Method
+                                                        </Typography>
+                                                        <Root className={cx({})}>
+                                                            <Radio color="primary" checked={payNow} />
+                                                            <AttachMoneyIcon sx={{ color: '#0000008A' }} />
+                                                            <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                                                Manual Payment
+                                                            </Typography>
+                                                        </Root>
+                                                    </Grid>
+                                                </Grid>
+                                                <Divider className={classes.borderMargin} />
+                                                <Grid m={2.5}>
+                                                    <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
                                                         Manual Payment
                                                     </Typography>
-                                                </Root>
-                                            </Grid>
-                                        </Grid>
-                                        <Divider className={classes.borderMargin} />
-                                        <Grid m={2.5}>
-                                            <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
-                                                Manual Payment
-                                            </Typography>
-                                            <Typography mt={1.5} variant={'body2'}>
-                                                Use manual payment for submissions that have been paid in cash or on a
-                                                separate platform.
-                                            </Typography>
-                                        </Grid>
+                                                    <Typography mt={1.5} variant={'body2'}>
+                                                        Use manual payment for submissions that have been paid in cash
+                                                        or on a separate platform.
+                                                    </Typography>
+                                                </Grid>
+                                            </>
+                                        ) : null}
                                     </Grid>
                                 </Grid>
                             </div>

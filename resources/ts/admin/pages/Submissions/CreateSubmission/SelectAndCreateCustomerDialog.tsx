@@ -21,7 +21,7 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { useIsMounted } from '@shared/hooks/useIsMounted';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
-import { setUserId } from '@shared/redux/slices/adminCreateOrderSlice';
+import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -50,7 +50,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     });
 
     const createSubmission = (customer: UserEntity) => {
-        dispatch(setUserId(customer.id));
+        dispatch(setUser(customer));
         navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
         if (props.changeCustomer) {
             handleClose('escapeKeyDown');

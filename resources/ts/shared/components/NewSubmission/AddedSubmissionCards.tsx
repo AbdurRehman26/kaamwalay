@@ -186,7 +186,7 @@ const useStyles = makeStyles((theme) => ({
         overflowY: 'scroll',
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
-        ':-webkit-scrollbar': {
+        '&::-webkit-scrollbar': {
             display: 'none',
             window: '0px',
         },
@@ -350,7 +350,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     <ClearAllOutlinedIcon />
                 </IconButton>
             </Grid>
-            <div className={classes.parent} style={{ height: selectedCards.length > 3 ? '100vh' : 'auto' }}>
+            <div className={classes.parent} style={{ height: selectedCards.length > 3 ? '72vh' : 'auto' }}>
                 {selectedCards
                     .slice()
                     .reverse()

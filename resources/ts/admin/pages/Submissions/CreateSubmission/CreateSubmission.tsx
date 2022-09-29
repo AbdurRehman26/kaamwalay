@@ -69,9 +69,8 @@ const useStyles = makeStyles(
             height: '100vh',
             msOverflowStyle: 'none',
             scrollbarWidth: 'none',
-            ':-webkit-scrollbar': {
+            '&::-webkit-scrollbar': {
                 display: 'none',
-                window: '0px',
             },
         },
     }),

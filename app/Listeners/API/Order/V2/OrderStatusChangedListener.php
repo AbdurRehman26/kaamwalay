@@ -97,7 +97,7 @@ class OrderStatusChangedListener implements ShouldQueue
             ]
         );
 
-        if (empty($event->order->grand_total)) {
+        if ($event->order->grand_total === 0.00) {
             $event->order->markAsPaid();
 
             OrderPaid::dispatch($event->order);

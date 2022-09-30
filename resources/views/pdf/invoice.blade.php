@@ -347,7 +347,7 @@
                             (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif
                     @else
-                        @if(empty($order->grand_total))
+                        @if($order->grand_total === 0.00)
                             Order Paid with zero $ value
                         @else
                             Pay Later: Not charged yet

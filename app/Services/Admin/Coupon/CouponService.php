@@ -308,5 +308,4 @@ class CouponService
 
         return $couponApplication->calculateDiscount($coupon, $order);
     }
-
 }

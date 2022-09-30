@@ -15,11 +15,9 @@ beforeEach(function () {
         ->create();
 
     $this->actingAs($this->user);
-
 });
 
 test('an admin can get shipping fee', function () {
-
     $response = $this->postJson('/api/v2/admin/orders/shipping-fee/', [
         'items' => [
             [

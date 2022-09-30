@@ -172,7 +172,17 @@ class CardProductService
             throw new CardProductCanNotBeUpdated;
         }
 
-        $cardProduct->fill($data);
+        $cardProduct->fill([
+            'image_path' => $data['image_path'],
+            'name' => $data['name'],
+            'release_date' => $data['release_date'],
+            'card_number' => $data['card_number'],
+            'language' => $data['language'],
+            'rarity' => $data['rarity'],
+            'edition' => $data['edition'] ?? 'Unlimited',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+        ]);
         $cardProduct->save();
 
         $this->reindexUserCards($cardProduct);

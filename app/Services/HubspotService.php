@@ -114,7 +114,6 @@ class HubspotService
                 'owner_id' => $ownerResponse[0]['ownerId'],
             ]);
         } catch (BadRequest $exception) {
-            report($exception);
             Log::error($exception->getMessage());
         }
     }

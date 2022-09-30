@@ -1,7 +1,9 @@
 <x-layout>
+    @if($grades_available)
     <x-slot name="title">
         {{ $card['full_name'] }}
     </x-slot>
+    @endif
     <x-slot name="description">
         Join the grading revolution. Start a Robograding submission and get your cards graded with artificial intelligence.
     </x-slot>
@@ -205,8 +207,8 @@
                     <h1 class="feed-view__header__subheading">{{ $card['full_name'] }}</h1>
                 </div>
                 <div>
-                    <div class="feed-view__header__copy-to-clipBoard">
-                        <div class="feed-view__share__icon-mobile" data-atom="copy-to-clip-board" data-content="{{ $page_url }}" data-button-content="mobile">
+                    <div class="feed-view__header__share">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>

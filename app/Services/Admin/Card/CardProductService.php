@@ -7,6 +7,7 @@ use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
 use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
 use App\Exceptions\API\Admin\CardProductHasUserCardException;
+use App\Exceptions\API\Admin\InvalidCardReferenceIdException;
 use App\Http\Filters\AdminCardProductSearchFilter;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
@@ -148,7 +149,7 @@ class CardProductService
     {
         // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
-            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
+            ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
             ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
@@ -171,7 +172,17 @@ class CardProductService
             throw new CardProductCanNotBeUpdated;
         }
 
-        $cardProduct->fill($data);
+        $cardProduct->fill([
+            'image_path' => $data['image_path'],
+            'name' => $data['name'],
+            'release_date' => $data['release_date'],
+            'card_number' => $data['card_number'],
+            'language' => $data['language'],
+            'rarity' => $data['rarity'],
+            'edition' => $data['edition'] ?? 'Unlimited',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+        ]);
         $cardProduct->save();
 
         $this->reindexUserCards($cardProduct);
@@ -209,6 +220,7 @@ class CardProductService
     public function deleteCard(CardProduct $cardProduct): void
     {
         throw_if($cardProduct->userCards()->count() > 0, CardProductHasUserCardException::class);
+        throw_if(empty($cardProduct->card_reference_id), InvalidCardReferenceIdException::class);
 
         $agsResponse = $this->deleteCardProductFromAgs($cardProduct);
 

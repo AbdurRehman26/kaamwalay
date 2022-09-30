@@ -9,4 +9,8 @@ export class OrderStatusEntity extends Entity {
     is(status: OrderStatusEnum) {
         return this.id === status;
     }
+
+    isAny(status: OrderStatusEnum[]) {
+        return status.includes(this.id);
+    }
 }

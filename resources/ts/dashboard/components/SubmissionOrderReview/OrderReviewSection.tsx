@@ -83,7 +83,7 @@ function OrderReviewSection() {
                             finalShippingAddress.fullName || finalShippingAddress.firstName
                         } ${finalShippingAddress.lastName}`}</Typography>
                         <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
-                            finalShippingAddress.address2
+                            finalShippingAddress.address2 || ''
                         } ${finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''}`}</Typography>
                         <Typography className={classes.darkBodyText}>{`${finalShippingAddress.city}, ${
                             finalShippingAddress.state?.code || finalShippingAddress?.stateName

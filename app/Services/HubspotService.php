@@ -8,6 +8,7 @@ use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use SevenShores\Hubspot\Exceptions\BadRequest;
 use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
@@ -112,7 +113,7 @@ class HubspotService
                 'user_email' => $user->email,
                 'owner_id' => $ownerResponse[0]['ownerId'],
             ]);
-        } catch (RequestException $exception) {
+        } catch (BadRequest $exception) {
             report($exception);
             Log::error($exception->getMessage());
         }

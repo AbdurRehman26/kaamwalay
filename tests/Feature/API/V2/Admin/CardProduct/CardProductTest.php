@@ -188,12 +188,6 @@ test('admins can get a single card', function () {
     $response->assertSuccessful();
 });
 
-test('admins can get a list of cards', function () {
-    $response = $this->getJson(route('v2.admin.card-products.index'));
-
-    $response->assertSuccessful();
-});
-
 test('admins can not delete a card if it has graded items', function () {
     $orderItem = OrderItem::factory()->create([
         'card_product_id' => $this->card->id,

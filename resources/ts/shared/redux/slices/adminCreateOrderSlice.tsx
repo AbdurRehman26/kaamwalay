@@ -387,8 +387,8 @@ export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder',
         requiresCleaning: currentSubmission.step02Data.requiresCleaning
             ? currentSubmission.step02Data.requiresCleaning
             : false,
-        paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : null,
-        paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : null,
+        paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : {},
+        paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('admin/orders');
@@ -653,6 +653,9 @@ export const adminCreateOrderSlice = createSlice({
         setUser: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
         },
+        setShippingFee: (state, action: PayloadAction<number>) => {
+            state.step02Data.shippingFee = action.payload;
+        },
     },
     extraReducers: {
         [getSavedAddresses.fulfilled as any]: (state, action) => {
@@ -729,4 +732,5 @@ export const {
     getValidation,
     clearSubmissionState,
     setSaveShippingAddress,
+    setShippingFee,
 } = adminCreateOrderSlice.actions;

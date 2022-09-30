@@ -8,9 +8,14 @@ import Typography from '@mui/material/Typography';
 import { instanceToPlain } from 'class-transformer';
 import React, { ReactNode, useCallback } from 'react';
 import { useQuery } from 'react-query';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useRepository } from '@shared/hooks/useRepository';
-import { initializeShippingMethod, setShippingMethod } from '@shared/redux/slices/adminCreateOrderSlice';
+import {
+    initializeShippingMethod,
+    setShippingFee,
+    setShippingMethod,
+} from '@shared/redux/slices/adminCreateOrderSlice';
 import { ShippingMethodsRepository } from '@shared/repositories/ShippingMethodsRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
@@ -36,8 +41,10 @@ export function ShippingMethods() {
 
     const handleSelectMethod = useCallback(
         (method: ShippingMethodEntity) => {
-            // dispatch(setIsNextDisabled(false));
             dispatch(setShippingMethod(instanceToPlain(method) as ShippingMethodEntity));
+            if (method.code === ShippingMethodType.VaultStorage) {
+                dispatch(setShippingFee(0));
+            }
         },
         [dispatch],
     );

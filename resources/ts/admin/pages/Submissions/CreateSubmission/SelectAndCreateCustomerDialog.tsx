@@ -22,6 +22,7 @@ import { useIsMounted } from '@shared/hooks/useIsMounted';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
+import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -54,6 +55,8 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
         navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
         if (props.changeCustomer) {
             handleClose('escapeKeyDown');
+            dispatch(resetSelectedExistingAddress());
+            dispatch(setUseCustomShippingAddress(false));
         }
     };
 

@@ -238,13 +238,27 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             : shippingAddress;
 
     useEffect(() => {
-        if (userId !== -1 && selectedCards.length > 0 && (isNextDisabled || selectedExistingAddress.address !== '')) {
+        if (
+            userId !== -1 &&
+            selectedCards.length > 0 &&
+            (isNextDisabled ||
+                selectedExistingAddress.address !== '' ||
+                shippingMethod.code === ShippingMethodType.VaultStorage)
+        ) {
             setIsCreateSubmission(true);
             dispatch(getShippingFee(selectedCards));
         } else {
             setIsCreateSubmission(false);
         }
-    }, [selectedCards, isNextDisabled, userId, isCreateSubmission, selectedExistingAddress, dispatch]);
+    }, [
+        selectedCards,
+        isNextDisabled,
+        userId,
+        isCreateSubmission,
+        selectedExistingAddress,
+        dispatch,
+        shippingMethod.code,
+    ]);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0

@@ -35,7 +35,6 @@ import {
     setIsCouponApplied,
     setPayNow,
     setServiceLevel,
-    setUseCustomShippingAddress,
     updatePaymentMethod,
     updatePaymentMethodId,
 } from '@shared/redux/slices/adminCreateOrderSlice';
@@ -132,7 +131,6 @@ export function CreateSubmission() {
         if (from === 'submission') {
             navigate('/submissions/all/list');
         } else {
-            dispatch(setUseCustomShippingAddress(false));
             navigate(-1);
         }
     };

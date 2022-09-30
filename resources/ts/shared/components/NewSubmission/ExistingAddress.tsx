@@ -1,6 +1,5 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
@@ -27,15 +26,15 @@ type ExistingAddressProps = {
 const useStyles = makeStyles(
     (theme) => ({
         container: {
-            width: '400px',
+            width: '100%',
             padding: '12px',
             paddingTop: '7px',
+            borderRadius: '2px',
             display: 'flex',
             flexDirection: 'row',
             borderStyle: 'solid',
             borderWidth: ({ isSelected }: any) => (isSelected ? '3px' : '1px'),
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
-            marginRight: '12px',
             marginBottom: '12px',
             '&:hover': {
                 cursor: 'pointer',
@@ -99,23 +98,25 @@ function ExistingAddress(props: ExistingAddressProps) {
                     <CircularProgress />
                 </Grid>
             ) : (
-                <Paper variant={'outlined'} className={classes.container} onClick={handleRadioPress}>
-                    <div className={classes.radioBtnContainer}>
-                        <Radio
-                            color={'primary'}
-                            onClick={handleRadioPress}
-                            checked={selectedExistingAddressID === id}
-                        />
-                    </div>
-                    <div>
-                        <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
-                        <Typography className={classes.addressLineText}>{`${address} ${address2}`}</Typography>
-                        <Typography
-                            className={classes.addressLineText}
-                        >{`${city}, ${state} ${zip}, ${country}`}</Typography>
-                        <Typography className={classes.addressLineText}>{` ${zip}, ${country}`}</Typography>
-                    </div>
-                </Paper>
+                <Grid display={'flex'} md={6}>
+                    <Grid className={classes.container} ml={1.5} mr={1.5} onClick={handleRadioPress}>
+                        <div className={classes.radioBtnContainer}>
+                            <Radio
+                                color={'primary'}
+                                onClick={handleRadioPress}
+                                checked={selectedExistingAddressID === id}
+                            />
+                        </div>
+                        <div>
+                            <Typography className={classes.addressLineText}>{`${fullName}`}</Typography>
+                            <Typography className={classes.addressLineText}>{`${address} ${address2}`}</Typography>
+                            <Typography
+                                className={classes.addressLineText}
+                            >{`${city}, ${state} ${zip}, ${country}`}</Typography>
+                            <Typography className={classes.addressLineText}>{` ${zip}, ${country}`}</Typography>
+                        </div>
+                    </Grid>
+                </Grid>
             )}
         </>
     );

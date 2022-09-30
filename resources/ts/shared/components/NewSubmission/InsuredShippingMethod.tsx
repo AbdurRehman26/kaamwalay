@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     },
     existingAddressesContainer: {
         display: 'flex',
-        margin: '20px',
+        margin: '10px',
         flexDirection: 'row',
         marginBottom: '32px',
         flexWrap: 'wrap',

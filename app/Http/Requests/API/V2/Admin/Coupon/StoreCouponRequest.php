@@ -16,8 +16,6 @@ class StoreCouponRequest extends V1StoreCouponRequest
     {
         $rules = parent::rules();
 
-        $rules['type'] = ['required', 'in:fixed,percentage,flat,free_cards'];
-
         return array_merge($rules, [
             'has_minimum_cards_threshold' => ['sometimes', 'boolean'],
             'min_threshold_value' => [
@@ -25,6 +23,7 @@ class StoreCouponRequest extends V1StoreCouponRequest
                 'numeric',
                 Rule::when((bool) $this->input('has_minimum_cards_threshold') === true, ['min:2']),
             ],
+            'type' => ['required', 'in:fixed,percentage,flat,free_cards']
         ]);
     }
 }

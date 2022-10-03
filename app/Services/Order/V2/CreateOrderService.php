@@ -16,9 +16,7 @@ use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
-use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
-use App\Services\Admin\V2\OrderService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\CleaningFee\CleaningFeeService;
 use App\Services\Coupon\CouponService;
@@ -30,7 +28,6 @@ use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
-use App\Services\Payment\V2\PaymentService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -40,14 +37,11 @@ class CreateOrderService
 {
     protected Order $order;
     protected array $data;
-    protected User $orderUser;
 
     public function __construct(
         protected OrderItemService $orderItemService,
         protected CouponService $couponService,
-        protected OrderStatusHistoryService $orderStatusHistoryService,
-        protected PaymentService $paymentService,
-        protected OrderService $orderService
+        protected OrderStatusHistoryService $orderStatusHistoryService
     ) {
     }
 

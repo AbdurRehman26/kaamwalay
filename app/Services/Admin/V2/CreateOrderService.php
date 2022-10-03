@@ -5,6 +5,8 @@ namespace App\Services\Admin\V2;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Models\Country;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;
@@ -14,6 +16,7 @@ use App\Services\Order\Validators\AdminCustomerAddressValidator;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
+use App\Services\Payment\V2\PaymentService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -113,11 +116,14 @@ class CreateOrderService extends BaseCreateOrderService
 
     protected function processPayment(): void
     {
+        $orderService = resolve(OrderService::class);
+        $paymentService = resolve(PaymentService::class);
+
         if ($this->data['pay_now']) {
-            $this->orderService->createManualPayment($this->order, auth()->user());
+            $orderService->createManualPayment($this->order, auth()->user());
 
             $order = $this->order->refresh();
-            $this->paymentService->charge($order, []);
+            $paymentService->charge($order, []);
 
             $order->markAsPaid();
 

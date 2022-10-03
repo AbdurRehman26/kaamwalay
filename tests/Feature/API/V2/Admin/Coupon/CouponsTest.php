@@ -327,3 +327,17 @@ test('admin can not create coupon min card count constraint of less than 2', fun
     ])
         ->assertUnprocessable();
 });
+
+test('admin can create coupon with free cards', function () {
+    actingAs($this->user);
+    postJson(route('v2.coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'free_cards',
+        'discount_value' => 2,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'is_permanent' => true,
+        'usage_allowed_per_user' => null,
+    ])
+        ->assertCreated();
+});

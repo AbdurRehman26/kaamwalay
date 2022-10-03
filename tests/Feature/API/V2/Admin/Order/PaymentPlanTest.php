@@ -20,7 +20,7 @@ beforeEach(function () {
 test('an admin can see payment plans', function () {
     $response = $this->getJson('/api/v2/admin/orders/payment-plans/');
 
-    $response->assertJsonCount(6, 'data');
+    $response->assertJsonCount(7, 'data');
     $response->assertJsonStructure([
         'data' => [
             '*' => ['id', 'price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround'],

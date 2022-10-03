@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 it('can generate pdf', function () {
     $order = Order::factory()->create([
-        'payment_status' => OrderPaymentStatusEnum::PAID
+        'payment_status' => OrderPaymentStatusEnum::PAID,
     ]);
     $customer = $order->user;
     $shipping = $order->shippingAddress;

@@ -8,6 +8,7 @@ use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\V2\CreateOrderService as BaseCreateOrderService;
 use App\Services\Order\Validators\AdminCustomerAddressValidator;
 use App\Services\Order\Validators\CouponAppliedValidator;
@@ -87,6 +88,27 @@ class CreateOrderService extends BaseCreateOrderService
         $this->processPayment();
 
         DB::commit();
+    }
+
+    protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
+    {
+        if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
+            $shippingAddress['country_id'] = Country::whereCode($shippingAddress['country_code'] ?? 'US')->first()->id;
+            CustomerAddress::create(array_merge(
+                $shippingAddress,
+                [
+                    'user_id' => $this->orderUser->id,
+                ]
+            ));
+        }
+    }
+
+    protected function saveOrder(): void
+    {
+        $this->order->user()->associate($this->orderUser);
+        $this->order->save();
+        $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
+        $this->order->save();
     }
 
     protected function processPayment(): void

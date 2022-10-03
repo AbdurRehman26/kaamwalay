@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\PaymentMethod;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 

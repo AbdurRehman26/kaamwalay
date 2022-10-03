@@ -76,6 +76,10 @@ const useStyles = makeStyles(
     { name: 'ExistingAddressComponent' },
 );
 
+interface LocationState {
+    from: string;
+}
+
 export function CreateSubmission() {
     const dispatch = useAppDispatch();
     const [createSubmission, setCreateSubmission] = useState(false);
@@ -126,7 +130,7 @@ export function CreateSubmission() {
     };
 
     const handleClose = () => {
-        const { from } = state;
+        const { from } = state as LocationState;
         dispatch(clearSubmissionState());
         if (from === 'submission') {
             navigate('/submissions/all/list');

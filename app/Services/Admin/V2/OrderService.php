@@ -13,6 +13,7 @@ use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Jobs\Admin\CreateSocialPreviewsForUserCard;
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderShipment;
@@ -191,6 +192,21 @@ class OrderService extends V1OrderService
         $order->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->each(function (OrderItem $orderItem) {
             CreateSocialPreviewsForUserCard::dispatch($orderItem->userCard);
         });
+    }
+
+    public function updateBillingAddress(Order $order, array $data): Order
+    {
+        if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
+            $orderAddress = OrderAddress::create($data);
+            $order->billingAddress()->associate($orderAddress);
+            $order->save();
+
+            return $order;
+        }
+
+        $order->billingAddress->update($data);
+
+        return $order;
     }
 
     /**

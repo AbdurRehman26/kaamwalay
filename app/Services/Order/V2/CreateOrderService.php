@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
@@ -102,6 +103,8 @@ class CreateOrderService
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
+
+        $this->markOrderPaidIfTotalIsZero();
 
         DB::commit();
     }
@@ -309,6 +312,15 @@ class CreateOrderService
             $this->order->cleaning_fee = (new CleaningFeeService($this->order))->calculate();
             $this->order->requires_cleaning = (bool) $this->data['requires_cleaning'];
             $this->order->save();
+        }
+    }
+
+    protected function markOrderPaidIfTotalIsZero(): void
+    {
+        if ($this->order->grand_total === 0.00) {
+            $this->order->markAsPaid();
+
+            OrderPaid::dispatch($this->order);
         }
     }
 }

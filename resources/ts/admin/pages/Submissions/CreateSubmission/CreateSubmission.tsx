@@ -25,6 +25,7 @@ import { CardsSearchResults } from '@shared/components/NewSubmission/CardsSearch
 import { ShippingMethods } from '@shared/components/NewSubmission/ShippingMethods';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { nameInitials } from '@shared/lib/strings/initials';
 import {
     clearSubmissionState,
     getCustomer,
@@ -243,7 +244,12 @@ export function CreateSubmission() {
                                                     src={customer.profileImage ?? ''}
                                                     sx={{ height: '56px', width: '56px' }}
                                                 >
-                                                    {customer.getInitials?.()}
+                                                    {nameInitials(
+                                                        customer.fullName ??
+                                                            `${customer.firstName ?? ''} ${
+                                                                customer.lastName ?? ''
+                                                            }`.trim(),
+                                                    )}
                                                 </Avatar>
                                             </Grid>
                                             <Grid ml={1}>

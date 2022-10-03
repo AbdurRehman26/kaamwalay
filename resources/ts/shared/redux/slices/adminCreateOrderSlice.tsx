@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { DefaultShippingMethodEntity, ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
@@ -47,14 +47,6 @@ export interface CreditCard {
     brand: string;
     id: string;
 }
-
-export type User = {
-    fullName: string;
-    email: string;
-    id: number;
-    customerNumber: string;
-    imageUrl: string;
-};
 
 export type SearchResultItemCardProps = {
     image: string;
@@ -304,6 +296,9 @@ const initialState: AdminNewOrderSliceState = {
         existingBillingAddresses: [],
         fetchingStatus: null,
     },
+    shippingMethod: DefaultShippingMethodEntity,
+    shippingAddress: [],
+    billingAddress: [],
 };
 
 export const getCountriesList = createAsyncThunk('adminCreateOrderSlice/getCountriesList', async () => {

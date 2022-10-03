@@ -224,7 +224,7 @@ class CardProductService
 
         $agsResponse = $this->deleteCardProductFromAgs($cardProduct);
 
-        if (! $agsResponse || ! array_key_exists('app_message', $agsResponse)) {
+        if (! $agsResponse || ! array_key_exists('success', $agsResponse)) {
             throw new CardProductCanNotBeDeleted;
         }
 

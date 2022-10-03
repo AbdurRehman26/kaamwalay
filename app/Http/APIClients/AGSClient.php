@@ -269,7 +269,7 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->delete($this->getBaseUrl() . $route);
 
         if ($response->status() === SymfonyResponse::HTTP_NO_CONTENT) {
-            return $response->json();
+            return ['success' => true];
         }
 
         return $this->handleErrorResponse(response: $response, route: $route, payload: []);

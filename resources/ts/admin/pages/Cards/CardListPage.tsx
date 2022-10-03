@@ -26,6 +26,8 @@ import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCardQuery } from '@shared/redux/hooks/useCardsQuery';
 import { deleteCard, getCardCategories, getCardData } from '@shared/redux/slices/adminCardsSlice';
+import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
 import { CardPageHeader } from './CardPageHeader';
@@ -133,6 +135,13 @@ export function CardsListPage() {
         setDeleteId(cardId);
     };
 
+    const handleLabel = async (id: number) => {
+        setIsLoading(true);
+        await dispatch(getCardLabel({ id }));
+        dispatch(setEditLabelDialog(true));
+        setIsLoading(false);
+    };
+
     const handleEdit = async (cardId: number) => {
         setIsLoading(true);
         const cardData = await dispatch(getCardData(cardId));
@@ -220,6 +229,7 @@ export function CardsListPage() {
 
     return (
         <>
+            <EditLabelDialog />
             <Grid container>
                 <CardPageHeader searchField value={initialValues.search} title={'Cards'} onSearch={handleSearch} />
                 {cards.isLoading || isLoading ? (
@@ -391,6 +401,7 @@ export function CardsListPage() {
                                                 <MoreAction
                                                     handleEditAction={handleEdit}
                                                     handleDeleteAction={handleDelete}
+                                                    handleEditLabelAction={handleLabel}
                                                     id={card.id}
                                                 />
                                             </TableCell>

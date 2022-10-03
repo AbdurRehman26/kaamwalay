@@ -119,13 +119,18 @@ export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
         },
         [confirm, dispatch, handleCloseOptions, promoCode?.id],
     );
+
     return (
         <TableRow>
             <TableCell align={'left'} sx={{ fontWeight: 'bold' }}>
                 {promoCode?.code}
             </TableCell>
             <TableCell align={'left'}>
-                {promoCode?.type === 'percentage' ? `${promoCode?.discountValue}%` : `$${promoCode?.discountValue}`}
+                {promoCode?.type === 'free_cards'
+                    ? `${parseInt(promoCode?.discountValue)} Free Cards`
+                    : promoCode?.type === 'percentage'
+                    ? `${promoCode?.discountValue}%`
+                    : `$${promoCode?.discountValue}`}
             </TableCell>
             <TableCell align={'left'}>{promoCode?.couponApplicable.label}</TableCell>
             <TableCell align={'left'}>

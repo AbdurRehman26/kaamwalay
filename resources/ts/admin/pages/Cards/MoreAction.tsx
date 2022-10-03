@@ -8,6 +8,7 @@ interface MoreActionProps {
     id: number;
     handleEditAction(id: number): void;
     handleDeleteAction(id: number): void;
+    handleEditLabelAction(id: number): void;
 }
 
 function MoreAction(props: MoreActionProps) {
@@ -15,6 +16,11 @@ function MoreAction(props: MoreActionProps) {
 
     function handleEdit(id: number) {
         props.handleEditAction(id);
+        setAnchorEl(null);
+    }
+
+    function handleEditLabel(id: number) {
+        props.handleEditLabelAction(id);
         setAnchorEl(null);
     }
 
@@ -39,6 +45,7 @@ function MoreAction(props: MoreActionProps) {
             <Menu id="card-actions-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
                 <MenuItem onClick={() => handleEdit(props.id)}>Edit</MenuItem>
                 <MenuItem onClick={() => handleDelete(props.id)}>Delete</MenuItem>
+                <MenuItem onClick={() => handleEditLabel(props.id)}>Edit Label Text</MenuItem>
             </Menu>
         </>
     );

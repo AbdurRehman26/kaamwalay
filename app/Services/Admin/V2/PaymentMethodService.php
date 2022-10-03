@@ -14,10 +14,6 @@ class PaymentMethodService
      */
     public function getPaymentMethods(): Collection
     {
-        if (request()->get('submission_create') === 'true') {
-            return PaymentMethod::where('code', 'manual')->get();
-        }
-
-        return PaymentMethod::enabled()->visible()->get();
+        return PaymentMethod::where('code', 'manual')->get();
     }
 }

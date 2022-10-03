@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API\V2\Admin\Address;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\ListStatesRequest;
-use App\Http\Resources\API\V2\Customer\Address\State\StateCollection;
-use App\Http\Resources\API\V2\Customer\Address\State\StateResource;
+use App\Http\Resources\API\V2\Admin\State\StateCollection;
+use App\Http\Resources\API\V2\Admin\State\StateResource;
 use App\Models\State;
 use Illuminate\Support\Facades\Cache;
 

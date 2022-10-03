@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\API\V2\Admin\Order;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\ShippingMethod;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 
 class StoreOrderRequest extends FormRequest

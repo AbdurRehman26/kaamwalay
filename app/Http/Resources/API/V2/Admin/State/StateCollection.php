@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V1\Customer\Address\State;
+namespace App\Http\Resources\API\V2\Admin\State;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

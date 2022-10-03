@@ -2,12 +2,22 @@
 
 namespace App\Http\Requests\API\V2\Admin\Order;
 
-use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest as V1StoreOrderRequest;
 use App\Models\ShippingMethod;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 
-class StoreOrderRequest extends V1StoreOrderRequest
+class StoreOrderRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return $this->user()->isAdmin();
+    }
+
     public function rules(): array
     {
         $rules = [

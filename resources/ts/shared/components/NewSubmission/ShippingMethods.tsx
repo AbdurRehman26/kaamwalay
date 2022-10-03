@@ -88,7 +88,7 @@ export function ShippingMethods() {
                         </Stack>
                     }
                 >
-                    <InfoIcon />
+                    <InfoIcon sx={{ color: '#0000008A' }} />
                 </Tooltip>
             </Grid>
             <Grid container spacing={3} mb={4} px={2}>

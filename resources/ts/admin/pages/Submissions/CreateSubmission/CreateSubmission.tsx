@@ -19,7 +19,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Logo from '@shared/assets/logo2.svg';
 import { AddedSubmissionCards } from '@shared/components/NewSubmission/AddedSubmissionCards';
 import { ApplyPromoCode } from '@shared/components/NewSubmission/ApplyPromoCode';
 import { CardsSearchResults } from '@shared/components/NewSubmission/CardsSearchResults';
@@ -85,6 +84,7 @@ export function CreateSubmission() {
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
     const searchValue = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.searchValue);
     const serviceLevels = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.availableServiceLevels);
+    const selectedServiceLevel = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.selectedServiceLevel);
     const payNow = useAppSelector((state) => state.adminCreateOrderSlice.payNow);
     const { customerId } = useParams<'customerId'>();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
@@ -168,7 +168,6 @@ export function CreateSubmission() {
             ) : (
                 <>
                     <SelectAndCreateCustomerDialog
-                        sx={{ backgroundColor: '#949494' }}
                         changeCustomer={true}
                         onClose={() => setCreateSubmission(false)}
                         open={createSubmission}
@@ -181,8 +180,6 @@ export function CreateSubmission() {
                         justifyContent={'space-between'}
                         p={2}
                     >
-                        {' '}
-                        <img src={Logo} alt={'Robograding'} />{' '}
                         <Typography ml={2} fontWeight={500} variant={'h5'}>
                             Create Submission
                         </Typography>
@@ -269,7 +266,7 @@ export function CreateSubmission() {
                                             <Grid mt={2} width={'100%'}>
                                                 <Select
                                                     fullWidth
-                                                    defaultValue={serviceLevels[0]?.id}
+                                                    defaultValue={selectedServiceLevel?.id}
                                                     open={openDropDown}
                                                     onOpen={() => setOpenDropDown(true)}
                                                     onClose={() => setOpenDropDown(false)}
@@ -280,7 +277,10 @@ export function CreateSubmission() {
                                                     {serviceLevels.map((item) => (
                                                         <MenuItem key={item.id} value={item.id}>
                                                             <div style={{ display: 'flex', fontSize: '14px' }}>
-                                                                <span> {`$${item?.price} / Card`} &nbsp;</span>
+                                                                <span style={{ fontWeight: 500 }}>
+                                                                    {' '}
+                                                                    {`$${item?.price} / Card`} &nbsp;
+                                                                </span>
                                                                 <span style={{ color: '#0000008A' }}>
                                                                     {' '}
                                                                     {`(Up to $${getMaxProtectionAmount(

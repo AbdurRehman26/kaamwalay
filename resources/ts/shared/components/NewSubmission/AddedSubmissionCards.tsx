@@ -32,6 +32,7 @@ import {
     markCardAsUnselected,
     resetSelectedCards,
     setBillingAddress,
+    setIsCouponApplied,
     setPreviewTotal,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { NotificationsService } from '@shared/services/NotificationsService';
@@ -287,6 +288,9 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         setShowQuantity(true);
         const newValue = Math.min(Math.max(qty, 1), 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
+        if (isCouponApplied) {
+            dispatch(setIsCouponApplied(false));
+        }
     }
 
     function handleChangeCardValue(card: SearchResultItemCardProps, newValue: any) {
@@ -512,7 +516,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     loading={isLoading}
                     variant={'contained'}
                     color={'primary'}
-                    sx={{ borderRadius: '24px', padding: '10px 20px', marginLeft: '10px' }}
+                    sx={{ borderRadius: '24px', padding: '10px 20px' }}
                 >
                     Create Submission
                 </LoadingButton>

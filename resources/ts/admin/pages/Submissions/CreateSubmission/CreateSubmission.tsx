@@ -38,6 +38,7 @@ import {
     updatePaymentMethod,
     updatePaymentMethodId,
 } from '@shared/redux/slices/adminCreateOrderSlice';
+import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { SelectAndCreateCustomerDialog } from '../CreateSubmission/SelectAndCreateCustomerDialog';
 import { CardSubmissionSearchField } from './CardSubmissionSearchField';
@@ -92,6 +93,7 @@ export function CreateSubmission() {
     const paymentMethod = useAppSelector((state) => state.adminCreateOrderSlice.step04Data.paymentMethod);
     const navigate = useNavigate();
     const { state } = useLocation();
+    useSidebarHidden();
 
     useEffect(() => {
         (async () => {
@@ -194,9 +196,15 @@ export function CreateSubmission() {
                     </Grid>
 
                     <Grid flexDirection={'row'} justifyContent={'center'} item container sx={{ background: '#FFFFFF' }}>
-                        <Grid md={8}>
+                        <Grid md={selectedCards.length > 0 ? 8 : 12}>
                             <div className={classes.parent}>
-                                <Grid item p={2} m={1}>
+                                <Grid
+                                    item
+                                    py={3}
+                                    px={selectedCards.length > 0 ? 2 : 0}
+                                    m={selectedCards.length > 0 ? 1 : 'auto'}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                >
                                     <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                                         <CardSubmissionSearchField />
                                         {searchValue !== '' ? <CardsSearchResults /> : null}
@@ -213,11 +221,20 @@ export function CreateSubmission() {
                                         )}
                                     </InstantSearch>
                                 </Grid>
-                                {selectedCards.length > 0 ? <Divider /> : null}
-                                <Grid container p={2} wrap={'nowrap'}>
+                                <Divider />
+                                <Grid
+                                    container
+                                    pt={3}
+                                    px={selectedCards.length > 0 ? 2 : 0}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={'auto'}
+                                    wrap={'nowrap'}
+                                >
                                     <Grid
                                         md={6}
-                                        m={1}
+                                        mr={1}
+                                        ml={selectedCards.length > 0 ? 1 : 0}
+                                        my={1}
                                         p={2}
                                         border={'1px solid #E0E0E0'}
                                         sx={{ background: '#FFFFFF', borderRadius: '4px' }}
@@ -256,7 +273,9 @@ export function CreateSubmission() {
                                     <Grid
                                         md={6}
                                         p={2}
-                                        m={1}
+                                        mr={selectedCards.length > 0 ? 1 : 0}
+                                        ml={1}
+                                        my={1}
                                         border={'1px solid #E0E0E0'}
                                         sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                     >
@@ -296,7 +315,8 @@ export function CreateSubmission() {
                                     </Grid>
                                 </Grid>
                                 <Grid
-                                    m={3}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={selectedCards.length > 0 ? 3 : 'auto'}
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >
@@ -307,7 +327,8 @@ export function CreateSubmission() {
                                     <ShippingMethods />
                                 </Grid>
                                 <Grid
-                                    m={3}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={selectedCards.length > 0 ? 3 : 'auto'}
                                     mt={2}
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}

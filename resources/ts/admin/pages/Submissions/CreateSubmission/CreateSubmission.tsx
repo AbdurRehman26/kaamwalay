@@ -320,7 +320,7 @@ export function CreateSubmission() {
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >
-                                    <Typography ml={2.5} sx={{ fontSize: '20px', fontWeight: 500 }} m={2.5}>
+                                    <Typography m={2} ml={3} sx={{ fontSize: '20px', fontWeight: 500 }}>
                                         Shipping Details
                                     </Typography>
                                     <Divider />
@@ -333,16 +333,16 @@ export function CreateSubmission() {
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >
-                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }} m={2.5}>
+                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }} m={2} ml={3}>
                                         Payment Info
                                     </Typography>
                                     <Divider />
-                                    <Grid mt={3}>
+                                    <Grid mt={3.5}>
                                         <Typography ml={2.5} sx={{ fontSize: '16px', fontWeight: 500 }}>
                                             Pay Now or Later?
                                         </Typography>
-                                        <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
-                                            <Grid md={6} px={1}>
+                                        <Grid display={'flex'} wrap={'nowrap'} mx={1.5} mt={1.5} mb={4}>
+                                            <Grid md={6} pl={1} pr={1.25}>
                                                 <Root
                                                     onClick={() => handlePayNow(true)}
                                                     style={{
@@ -355,7 +355,7 @@ export function CreateSubmission() {
                                                     </Typography>
                                                 </Root>
                                             </Grid>
-                                            <Grid md={6} px={1}>
+                                            <Grid md={6} pl={1.25} pr={1}>
                                                 <Root
                                                     onClick={() => handlePayNow(false)}
                                                     style={{
@@ -371,8 +371,8 @@ export function CreateSubmission() {
                                         </Grid>
                                         <Divider className={classes.borderMargin} />
 
-                                        <Grid p={2}>
-                                            <Typography ml={1} sx={{ fontSize: '16px', fontWeight: 500 }}>
+                                        <Grid p={2} pt={3.5} pb={2.75}>
+                                            <Typography ml={1} sx={{ fontSize: '16px', fontWeight: 500 }} mb={1.5}>
                                                 {' '}
                                                 Add a Promo Code{' '}
                                             </Typography>
@@ -382,9 +382,12 @@ export function CreateSubmission() {
                                         {payNow ? (
                                             <>
                                                 <Divider className={classes.borderMargin} />
-                                                <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
+                                                <Grid display={'flex'} wrap={'nowrap'} m={2.5} mt={3.5}>
                                                     <Grid md={6} mb={2}>
-                                                        <Typography mb={2} sx={{ fontSize: '16px', fontWeight: 500 }}>
+                                                        <Typography
+                                                            mb={1.25}
+                                                            sx={{ fontSize: '16px', fontWeight: 500 }}
+                                                        >
                                                             Payment Method
                                                         </Typography>
                                                         <Root>
@@ -397,11 +400,11 @@ export function CreateSubmission() {
                                                     </Grid>
                                                 </Grid>
                                                 <Divider className={classes.borderMargin} />
-                                                <Grid m={2.5}>
+                                                <Grid m={2.5} mt={3.5} mb={4}>
                                                     <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
                                                         Manual Payment
                                                     </Typography>
-                                                    <Typography mt={1.5} variant={'body2'}>
+                                                    <Typography mt={1} variant={'body2'}>
                                                         Use manual payment for submissions that have been paid in cash
                                                         or on a separate platform.
                                                     </Typography>

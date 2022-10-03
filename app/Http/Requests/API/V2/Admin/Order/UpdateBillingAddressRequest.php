@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\V2\Admin\Order;
 
-use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBillingAddressRequest extends FormRequest

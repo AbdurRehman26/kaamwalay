@@ -28,7 +28,6 @@ beforeEach(function () {
         ))->create();
 
     $this->actingAs($this->user);
-
 });
 
 test('an admin can list states', function () {

@@ -10,7 +10,6 @@ use App\Models\User;
 
 class CustomerAddressController extends Controller
 {
-
     public function getCustomerAddresses(User $user): CustomerAddressCollection
     {
         $addresses = CustomerAddress::forUser($user)->get();

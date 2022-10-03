@@ -29,7 +29,6 @@ test('an admin can see payment plans', function () {
 });
 
 test('an admin can see specific payment plan', function () {
-
     PaymentPlan::factory()
         ->count(1)
         ->create();

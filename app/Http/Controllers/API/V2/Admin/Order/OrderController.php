@@ -149,7 +149,6 @@ class OrderController extends V1OrderController
 
     public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request): JsonResponse
     {
-
         /** @var OrderService $orderService */
         $orderService = resolve(OrderService::class);
         $orderService->updateBillingAddress($order, $request->validated());

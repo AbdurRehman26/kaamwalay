@@ -1,6 +1,7 @@
 import ClearAllOutlinedIcon from '@mui/icons-material/ClearAllOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
@@ -191,6 +192,9 @@ const useStyles = makeStyles((theme) => ({
             window: '0px',
         },
     },
+    valueAlert: {
+        marginTop: '16px',
+    },
 }));
 
 type AddedSubmissionCardsProps = {
@@ -213,6 +217,9 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
     const serviceLevelPrice = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
+    );
+    const protectionLimit = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
     const selectedExistingAddress = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress,
@@ -237,13 +244,26 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             ? selectedExistingAddress
             : shippingAddress;
 
+    const areSelectedCardsValuesValid = useCallback(() => {
+        if (selectedCards?.length > 0) {
+            // @ts-ignore
+            const cardsWithValueHigherThanProtection = selectedCards.filter(
+                (card: Record<string, any>) => card?.value > protectionLimit,
+            );
+
+            return cardsWithValueHigherThanProtection.length === 0;
+        }
+        return true;
+    }, [selectedCards, protectionLimit]);
+
     useEffect(() => {
         if (
             userId !== -1 &&
             selectedCards.length > 0 &&
             (isNextDisabled ||
                 selectedExistingAddress.address !== '' ||
-                shippingMethod.code === ShippingMethodType.VaultStorage)
+                shippingMethod.code === ShippingMethodType.VaultStorage) &&
+            areSelectedCardsValuesValid()
         ) {
             setIsCreateSubmission(true);
             dispatch(getShippingFee(selectedCards));
@@ -258,6 +278,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         selectedExistingAddress,
         dispatch,
         shippingMethod.code,
+        areSelectedCardsValuesValid,
     ]);
 
     const numberOfSelectedCards =
@@ -427,6 +448,7 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             id="formatted-numberformat-input"
                                             variant="outlined"
                                             InputProps={{
+                                                error: (row?.value ?? 0) > protectionLimit,
                                                 inputProps: { min: 1 },
                                                 startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                             }}
@@ -438,6 +460,13 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                         </div>
                     ))}
             </div>
+            {!areSelectedCardsValuesValid() ? (
+                <>
+                    <Alert severity="error" className={classes.valueAlert}>
+                        Card's value can't be higher than the protection level.
+                    </Alert>
+                </>
+            ) : null}
             <div className={classes.paymentContainer}>
                 <div className={classes.row}>
                     <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>

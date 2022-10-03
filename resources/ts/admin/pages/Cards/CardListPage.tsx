@@ -74,6 +74,7 @@ export function CardsListPage() {
             setIsLoading(true);
             await dispatch(deleteCard(deleteId));
             setIsLoading(false);
+            window.location.reload();
         } catch (e: any) {
             setIsLoading(false);
             notifications.exception(e);

@@ -104,7 +104,7 @@ class CreateOrderService
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
 
-        $this->markOrderPaidIfTotalIsZero();
+        $this->markPaidIfTotalIsZero();
 
         DB::commit();
     }
@@ -315,7 +315,7 @@ class CreateOrderService
         }
     }
 
-    protected function markOrderPaidIfTotalIsZero(): void
+    protected function markPaidIfTotalIsZero(): void
     {
         if ($this->order->grand_total === 0.00) {
             $this->order->markAsPaid();

@@ -390,9 +390,8 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 language: selectedLanguage || updateCard?.language,
                 rarity: selectedRarity?.name || updateCard?.rarity,
                 edition: selectedEdition !== 'none' ? selectedEdition : updateCard?.edition,
-                surface: selectedSurface?.name ?? updateCard?.surface,
-                variant: productVariant || updateCard?.variant,
-                id: isUpdate ? updateCard.id : '',
+                surface: selectedSurface?.name,
+                variant: productVariant,
             };
             if (isUpdate) {
                 await endpoint.put('', DTO);

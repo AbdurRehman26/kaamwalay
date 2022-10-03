@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
@@ -127,6 +128,8 @@ class CreateOrderService
 
         if ($this->isCreatedByAdmin) {
             $this->processPayment();
+        } else {
+            $this->markPaidIfTotalIsZero();
         }
         DB::commit();
     }
@@ -337,6 +340,15 @@ class CreateOrderService
         }
     }
 
+    protected function markPaidIfTotalIsZero(): void
+    {
+        if ($this->order->grand_total === 0.00) {
+            $this->order->markAsPaid();
+
+            OrderPaid::dispatch($this->order);
+        }
+    }
+
     protected function processPayment(): void
     {
         if ($this->data['pay_now'] && ! empty($this->data['payment_method'])) {
@@ -348,7 +360,11 @@ class CreateOrderService
                 $this->paymentService->charge($order, []);
 
                 $order->markAsPaid();
+
+                OrderPaid::dispatch($order);
             }
+        } else {
+            $this->markPaidIfTotalIsZero();
         }
     }
 }

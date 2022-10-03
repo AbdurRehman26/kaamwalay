@@ -213,5 +213,5 @@ test('admins can get get a list of card products', function () {
 
     $response = $this->getJson(route('v2.admin.card-products.index', ['per_page' => 100]));
 
-    $response->dump()->assertOk()->assertJsonCount(100, 'data');
+    $response->assertOk()->assertJsonCount(100, 'data');
 });

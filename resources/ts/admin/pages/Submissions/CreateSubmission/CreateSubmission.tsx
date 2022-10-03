@@ -38,6 +38,7 @@ import {
     updatePaymentMethod,
     updatePaymentMethodId,
 } from '@shared/redux/slices/adminCreateOrderSlice';
+import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { SelectAndCreateCustomerDialog } from '../CreateSubmission/SelectAndCreateCustomerDialog';
 import { CardSubmissionSearchField } from './CardSubmissionSearchField';
@@ -97,6 +98,7 @@ export function CreateSubmission() {
     const paymentMethod = useAppSelector((state) => state.adminCreateOrderSlice.step04Data.paymentMethod);
     const navigate = useNavigate();
     const { state } = useLocation();
+    useSidebarHidden();
 
     useEffect(() => {
         (async () => {
@@ -196,9 +198,15 @@ export function CreateSubmission() {
                     </Grid>
 
                     <Grid flexDirection={'row'} justifyContent={'center'} item container sx={{ background: '#FFFFFF' }}>
-                        <Grid md={8}>
+                        <Grid md={selectedCards.length > 0 ? 8 : 12}>
                             <div className={classes.parent}>
-                                <Grid item p={2} m={1}>
+                                <Grid
+                                    item
+                                    py={3}
+                                    px={selectedCards.length > 0 ? 2 : 0}
+                                    m={selectedCards.length > 0 ? 1 : 'auto'}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                >
                                     <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                                         <CardSubmissionSearchField />
                                         {searchValue !== '' ? <CardsSearchResults /> : null}
@@ -215,11 +223,20 @@ export function CreateSubmission() {
                                         )}
                                     </InstantSearch>
                                 </Grid>
-                                {selectedCards.length > 0 ? <Divider /> : null}
-                                <Grid container p={2} wrap={'nowrap'}>
+                                <Divider />
+                                <Grid
+                                    container
+                                    pt={3}
+                                    px={selectedCards.length > 0 ? 2 : 0}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={'auto'}
+                                    wrap={'nowrap'}
+                                >
                                     <Grid
                                         md={6}
-                                        m={1}
+                                        mr={1}
+                                        ml={selectedCards.length > 0 ? 1 : 0}
+                                        my={1}
                                         p={2}
                                         border={'1px solid #E0E0E0'}
                                         sx={{ background: '#FFFFFF', borderRadius: '4px' }}
@@ -263,7 +280,9 @@ export function CreateSubmission() {
                                     <Grid
                                         md={6}
                                         p={2}
-                                        m={1}
+                                        mr={selectedCards.length > 0 ? 1 : 0}
+                                        ml={1}
+                                        my={1}
                                         border={'1px solid #E0E0E0'}
                                         sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                     >
@@ -306,32 +325,34 @@ export function CreateSubmission() {
                                     </Grid>
                                 </Grid>
                                 <Grid
-                                    m={3}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={selectedCards.length > 0 ? 3 : 'auto'}
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >
-                                    <Typography ml={2.5} sx={{ fontSize: '20px', fontWeight: 500 }} m={2.5}>
+                                    <Typography m={2} ml={3} sx={{ fontSize: '20px', fontWeight: 500 }}>
                                         Shipping Details
                                     </Typography>
                                     <Divider />
                                     <ShippingMethods />
                                 </Grid>
                                 <Grid
-                                    m={3}
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={selectedCards.length > 0 ? 3 : 'auto'}
                                     mt={2}
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >
-                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }} m={2.5}>
+                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }} m={2} ml={3}>
                                         Payment Info
                                     </Typography>
                                     <Divider />
-                                    <Grid mt={3}>
+                                    <Grid mt={3.5}>
                                         <Typography ml={2.5} sx={{ fontSize: '16px', fontWeight: 500 }}>
                                             Pay Now or Later?
                                         </Typography>
-                                        <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
-                                            <Grid md={6} px={1}>
+                                        <Grid display={'flex'} wrap={'nowrap'} mx={1.5} mt={1.5} mb={4}>
+                                            <Grid md={6} pl={1} pr={1.25}>
                                                 <Root
                                                     onClick={() => handlePayNow(true)}
                                                     style={{
@@ -344,7 +365,7 @@ export function CreateSubmission() {
                                                     </Typography>
                                                 </Root>
                                             </Grid>
-                                            <Grid md={6} px={1}>
+                                            <Grid md={6} pl={1.25} pr={1}>
                                                 <Root
                                                     onClick={() => handlePayNow(false)}
                                                     style={{
@@ -360,8 +381,8 @@ export function CreateSubmission() {
                                         </Grid>
                                         <Divider className={classes.borderMargin} />
 
-                                        <Grid p={2}>
-                                            <Typography ml={1} sx={{ fontSize: '16px', fontWeight: 500 }}>
+                                        <Grid p={2} pt={3.5} pb={2.75}>
+                                            <Typography ml={1} sx={{ fontSize: '16px', fontWeight: 500 }} mb={1.5}>
                                                 {' '}
                                                 Add a Promo Code{' '}
                                             </Typography>
@@ -371,9 +392,12 @@ export function CreateSubmission() {
                                         {payNow ? (
                                             <>
                                                 <Divider className={classes.borderMargin} />
-                                                <Grid display={'flex'} wrap={'nowrap'} m={2.5}>
+                                                <Grid display={'flex'} wrap={'nowrap'} m={2.5} mt={3.5}>
                                                     <Grid md={6} mb={2}>
-                                                        <Typography mb={2} sx={{ fontSize: '16px', fontWeight: 500 }}>
+                                                        <Typography
+                                                            mb={1.25}
+                                                            sx={{ fontSize: '16px', fontWeight: 500 }}
+                                                        >
                                                             Payment Method
                                                         </Typography>
                                                         <Root>
@@ -386,11 +410,11 @@ export function CreateSubmission() {
                                                     </Grid>
                                                 </Grid>
                                                 <Divider className={classes.borderMargin} />
-                                                <Grid m={2.5}>
+                                                <Grid m={2.5} mt={3.5} mb={4}>
                                                     <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
                                                         Manual Payment
                                                     </Typography>
-                                                    <Typography mt={1.5} variant={'body2'}>
+                                                    <Typography mt={1} variant={'body2'}>
                                                         Use manual payment for submissions that have been paid in cash
                                                         or on a separate platform.
                                                     </Typography>

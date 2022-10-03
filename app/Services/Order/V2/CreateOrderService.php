@@ -42,7 +42,6 @@ class CreateOrderService
     protected Order $order;
     protected array $data;
     protected User $orderUser;
-    protected bool $isCreatedByAdmin;
 
     public function __construct(
         protected OrderItemService $orderItemService,
@@ -59,16 +58,6 @@ class CreateOrderService
     public function create(array $data): Order
     {
         $this->data = $data;
-
-        //If creation is being done by an admin and a user id is passed in attributes, order will be linked to that user
-        $authUser = auth()->user();
-        if ($authUser->isAdmin() && array_key_exists('user_id', $this->data)) {
-            $this->orderUser = User::find($this->data['user_id']);
-            $this->isCreatedByAdmin = true;
-        } else {
-            $this->orderUser = $authUser;
-            $this->isCreatedByAdmin = false;
-        }
 
         try {
             $this->validate();
@@ -89,11 +78,7 @@ class CreateOrderService
     protected function validate(): void
     {
         ItemsDeclaredValueValidator::validate($this->data);
-        if ($this->isCreatedByAdmin) {
-            AdminCustomerAddressValidator::validate($this->data);
-        } else {
-            CustomerAddressValidator::validate($this->data);
-        }
+        CustomerAddressValidator::validate($this->data);
         CouponAppliedValidator::validate($this->data);
         WalletCreditAppliedValidator::validate($this->data);
     }
@@ -126,11 +111,8 @@ class CreateOrderService
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
 
-        if ($this->isCreatedByAdmin) {
-            $this->processPayment();
-        } else {
-            $this->markPaidIfTotalIsZero();
-        }
+        $this->markPaidIfTotalIsZero();
+
         DB::commit();
     }
 
@@ -196,7 +178,7 @@ class CreateOrderService
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [
-                    'user_id' => $this->orderUser->id,
+                    'user_id' => auth()->user()->id,
                 ]
             ));
         }
@@ -204,7 +186,7 @@ class CreateOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->user()->associate($this->orderUser);
+        $this->order->user()->associate(auth()->user());
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
@@ -349,22 +331,4 @@ class CreateOrderService
         }
     }
 
-    protected function processPayment(): void
-    {
-        if ($this->data['pay_now'] && ! empty($this->data['payment_method'])) {
-            $paymentMethod = PaymentMethod::find($this->data['payment_method']['id']);
-            if ($paymentMethod->isManual()) {
-                $this->orderService->createManualPayment($this->order, auth()->user());
-
-                $order = $this->order->refresh();
-                $this->paymentService->charge($order, []);
-
-                $order->markAsPaid();
-
-                OrderPaid::dispatch($order);
-            }
-        } else {
-            $this->markPaidIfTotalIsZero();
-        }
-    }
 }

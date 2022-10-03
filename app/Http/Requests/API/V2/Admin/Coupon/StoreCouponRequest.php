@@ -23,6 +23,7 @@ class StoreCouponRequest extends V1StoreCouponRequest
                 'numeric',
                 Rule::when((bool) $this->input('has_minimum_cards_threshold') === true, ['min:2']),
             ],
+            'type' => ['required', 'in:fixed,percentage,flat,free_cards'],
         ]);
     }
 }

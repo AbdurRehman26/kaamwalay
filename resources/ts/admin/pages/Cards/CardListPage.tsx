@@ -74,9 +74,16 @@ export function CardsListPage() {
     const handleDeleteSubmit = async () => {
         try {
             setIsLoading(true);
-            await dispatch(deleteCard(deleteId));
+            const response = await dispatch(deleteCard(deleteId));
             setIsLoading(false);
-            window.location.reload();
+            if (response?.payload?.status === 204) {
+                notifications.success('Card Deleted Successfully!');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                notifications.error(response?.error?.message);
+            }
         } catch (e: any) {
             setIsLoading(false);
             notifications.exception(e);
@@ -336,9 +343,6 @@ export function CardsListPage() {
                                             No.
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                            Id
-                                        </TableCell>
-                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                             Category
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
@@ -387,7 +391,6 @@ export function CardsListPage() {
                                                 </Grid>
                                             </TableCell>
                                             <TableCell variant={'body'}>{card.cardNumber ?? '-'}</TableCell>
-                                            <TableCell variant={'body'}>{card.id ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSetName}</TableCell>

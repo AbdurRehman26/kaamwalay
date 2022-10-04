@@ -336,9 +336,6 @@ export function CardsListPage() {
                                             No.
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                            Id
-                                        </TableCell>
-                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                             Category
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
@@ -387,7 +384,6 @@ export function CardsListPage() {
                                                 </Grid>
                                             </TableCell>
                                             <TableCell variant={'body'}>{card.cardNumber ?? '-'}</TableCell>
-                                            <TableCell variant={'body'}>{card.id ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSetName}</TableCell>

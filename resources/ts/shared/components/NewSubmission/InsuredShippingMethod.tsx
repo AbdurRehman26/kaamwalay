@@ -205,7 +205,7 @@ export function InsuredShippingMethod() {
             dispatch(setSelectedExistingAddress(existingAddresses[0].id));
         } else {
             // If the user is enabling the checkbox, we set default country to the first one in list
-            dispatch(updateShippingCountry(country.id ? country.id : availableCountries[0].id));
+            updateShippingCountry(country.id ? country.id : availableCountries[0].id);
         }
     }
 

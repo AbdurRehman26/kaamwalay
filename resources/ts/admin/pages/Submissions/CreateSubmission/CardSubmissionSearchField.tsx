@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AlogliaSearchWrapper(props: any) {
+function AlgoliaSearchWrapper(props: any) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
 
@@ -100,7 +100,7 @@ function AlogliaSearchWrapper(props: any) {
         </div>
     );
 }
-const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
+const CustomSearchBox = connectSearchBox(AlgoliaSearchWrapper);
 
 export function CardSubmissionSearchField() {
     const classes = useStyles();

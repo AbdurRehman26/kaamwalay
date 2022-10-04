@@ -548,7 +548,6 @@ export const adminCreateOrderSlice = createSlice({
                 { ...action.payload, qty: 1, value: 1 },
             ];
         },
-        getValidation: (state) => {},
         setPreviewTotal: (state, action: PayloadAction<number>) => {
             state.previewTotal = action.payload;
         },
@@ -719,12 +718,10 @@ export const {
     setSelectedExistingAddress,
     setServiceLevel,
     setPayNow,
-    setUserId,
     setUser,
     setBillingAddress,
     resetSelectedCards,
     setPreviewTotal,
-    getValidation,
     clearSubmissionState,
     setSaveShippingAddress,
     setShippingFee,

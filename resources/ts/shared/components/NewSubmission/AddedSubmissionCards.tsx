@@ -198,12 +198,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type AddedSubmissionCardsProps = {
-    reviewMode?: boolean;
-    mobileMode?: boolean;
-};
-
-export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
+export function AddedSubmissionCards() {
     const [showQuantity, setShowQuantity] = useState<boolean>(true);
     const [onChangeValue, setOnChangeValue] = useState<number>(0);
     const [isClearCard, setIsClearCard] = useState<boolean>(false);
@@ -553,5 +548,3 @@ export function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         </div>
     );
 }
-
-export default AddedSubmissionCards;

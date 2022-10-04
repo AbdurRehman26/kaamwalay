@@ -3,7 +3,6 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { app } from '@shared/lib/app';
 import { CardsRepository } from '@shared/repositories/Admin/CardsRepository';
 import { APIService } from '@shared/services/APIService';
-import { NotificationsService } from '@shared/services/NotificationsService';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -33,14 +32,8 @@ export const getCardSeries = createAsyncThunk('newCard/getCardSeries', async () 
 
 export const deleteCard = createAsyncThunk('newCard/deleteCard', async (cardId: number) => {
     const apiService = app(APIService);
-    try {
-        const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
-        const cardSets = await endpoint.delete('');
-        NotificationsService.success('Card Deleted Successfully!');
-        return cardSets.data;
-    } catch (e: any) {
-        NotificationsService.exception(e);
-    }
+    const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
+    return await endpoint.delete('');
 });
 
 export const getCardData = createAsyncThunk('newCard/getCardData', async (cardId: number) => {

@@ -74,11 +74,16 @@ export function CardsListPage() {
     const handleDeleteSubmit = async () => {
         try {
             setIsLoading(true);
-            await dispatch(deleteCard(deleteId));
+            const response = await dispatch(deleteCard(deleteId));
             setIsLoading(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000);
+            if (response?.payload?.status === 204) {
+                notifications.success('Card Deleted Successfully!');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                notifications.error(response?.error?.message);
+            }
         } catch (e: any) {
             setIsLoading(false);
             notifications.exception(e);

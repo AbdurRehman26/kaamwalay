@@ -34,7 +34,7 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
-    $user = User::factory()->withRole(config('permission.roles.admin'))->create();
+    $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
         ['order_status_id' => OrderStatus::PLACED, 'created_at' => '2022-01-01 00:00:00'],
@@ -86,7 +86,7 @@ beforeEach(function () {
     $this->sampleAgsResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
     ), associative: true);
-    $this->actingAs($user);
+    $this->actingAs($this->user);
 });
 
 uses()->group('admin', 'admin_orders');
@@ -672,8 +672,12 @@ test('an admin can place order for an user', function () {
             'service_fee',
             'shipping_fee',
             'grand_total',
+            'user',
+            'created_by',
         ],
     ]);
+    $response->assertJsonPath('data.user.id', $customer->id);
+    $response->assertJsonPath('data.created_by.id', $this->user->id);
 });
 
 test('an admin can place order for an user and mark it paid immediately', function () {

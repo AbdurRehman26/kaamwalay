@@ -22,10 +22,12 @@ class Coupon extends Model
     const TYPE_FIXED = 1;
     const TYPE_PERCENTAGE = 2;
     const TYPE_FLAT = 3;
+    const TYPE_FREE_CARDS = 4;
     const COUPON_TYPE_MAPPING = [
         'fixed' => self::TYPE_FIXED,
         'percentage' => self::TYPE_PERCENTAGE,
         'flat' => self::TYPE_FLAT,
+        'free_cards' => self::TYPE_FREE_CARDS,
     ];
 
     protected $fillable = [

@@ -33,8 +33,7 @@ export const getCardSeries = createAsyncThunk('newCard/getCardSeries', async () 
 export const deleteCard = createAsyncThunk('newCard/deleteCard', async (cardId: number) => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
-    const cardSets = await endpoint.delete('');
-    return cardSets.data;
+    return await endpoint.delete('');
 });
 
 export const getCardData = createAsyncThunk('newCard/getCardData', async (cardId: number) => {

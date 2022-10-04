@@ -35,6 +35,17 @@ beforeEach(function () {
             ]
         );
 
+    $this->freeCardCoupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponApplicable->id,
+                'coupon_status_id' => 2,
+                'type' => 'free_cards',
+                'code' => 'FREE_CARDS',
+                'discount_value' => 2,
+            ]
+        );
+
     $this->limitedUsageCoupon = Coupon::factory()
         ->create(
             [
@@ -180,4 +191,52 @@ it('can not calculate coupon discount if usage limit is reached', function () {
             ],
         ]
     )->assertStatus(422);
+});
+
+it('calculates coupon discount for free cards', function () {
+    actingAs($this->user);
+    $paymentPlan = PaymentPlan::factory()->create([
+        'price' => 20,
+        'max_protection_amount' => 300,
+    ]);
+
+    postJson(
+        route('v2.coupon.discount'),
+        [
+            'coupon' => [
+                'id' => $this->freeCardCoupon->id,
+                'code' => $this->freeCardCoupon->code,
+            ],
+            'couponables_type' => $this->couponable->code,
+
+            'payment_plan' => [
+                'id' => $paymentPlan->id,
+            ],
+            'items' => [
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 5,
+                    'declared_value_per_unit' => 20,
+                ],
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 5,
+                    'declared_value_per_unit' => 20,
+                ],
+            ],
+        ]
+    )
+        ->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ])->assertJsonFragment([
+            'discounted_amount' => 40,
+        ]);
 });

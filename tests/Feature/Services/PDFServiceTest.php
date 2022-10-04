@@ -1,12 +1,15 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\PDFService;
 use Carbon\Carbon;
 
 it('can generate pdf', function () {
-    $order = Order::factory()->create();
+    $order = Order::factory()->create([
+        'payment_status' => OrderPaymentStatusEnum::PAID,
+    ]);
     $customer = $order->user;
     $shipping = $order->shippingAddress;
     $billing = $order->billingAddress;

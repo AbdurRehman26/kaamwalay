@@ -25,7 +25,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCardQuery } from '@shared/redux/hooks/useCardsQuery';
-import { deleteCard, getAllCards, getCardCategories, getCardData } from '@shared/redux/slices/adminCardsSlice';
+import { deleteCard, getCardCategories, getCardData } from '@shared/redux/slices/adminCardsSlice';
 import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -58,7 +58,7 @@ const getFilters = (values: InitialValues) => ({
 });
 
 export function CardsListPage() {
-    const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: '' });
+    const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: 0 });
     const [addCardDialog, setAddCardDialog] = useState(false);
     const [updateCardData, setUpdateCardData] = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -74,10 +74,16 @@ export function CardsListPage() {
     const handleDeleteSubmit = async () => {
         try {
             setIsLoading(true);
-            await dispatch(deleteCard(deleteId));
-            notifications.success('Card Deleted Successfully!');
-            await dispatch(getAllCards);
+            const response = await dispatch(deleteCard(deleteId));
             setIsLoading(false);
+            if (response?.payload?.status === 204) {
+                notifications.success('Card Deleted Successfully!');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                notifications.error(response?.error?.message);
+            }
         } catch (e: any) {
             setIsLoading(false);
             notifications.exception(e);
@@ -88,7 +94,7 @@ export function CardsListPage() {
         try {
             setIsLoading(true);
             setAddCardDialog(false);
-            await dispatch(getAllCards);
+            window.location.reload();
             setIsLoading(false);
         } catch (e: any) {
             setIsLoading(false);
@@ -115,6 +121,11 @@ export function CardsListPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [sortFilter],
     );
+    useEffect(() => {
+        const category = availableCategories?.filter((item) => item.id === Number(query.cardCategory));
+        setCategoryName({ categoryId: category[0]?.id, categoryName: category[0]?.name });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [availableCategories]);
 
     const cards = useAdminCardQuery({
         params: {
@@ -149,7 +160,7 @@ export function CardsListPage() {
     const handleClearCategory = useCallback(async () => {
         formikRef.current?.setFieldValue('cardCategory', '');
         delQuery('cardCategory');
-        setCategoryName({ categoryId: '', categoryName: '' });
+        setCategoryName({ categoryId: 0, categoryName: '' });
         await cards.search(
             getFilters({
                 ...formikRef.current!.values,
@@ -172,7 +183,7 @@ export function CardsListPage() {
 
         await cards.search(
             getFilters({
-                ...formikRef.current!.values,
+                ...formikRef.current!?.values,
                 releasedDateStart: '',
                 releasedDateEnd: '',
             }),
@@ -190,7 +201,7 @@ export function CardsListPage() {
             formikRef.current?.setFieldValue('search', search);
             await cards.search(
                 getFilters({
-                    ...formikRef.current!.values,
+                    ...formikRef.current!?.values,
                     search,
                 }),
             );
@@ -227,7 +238,7 @@ export function CardsListPage() {
         <>
             <EditLabelDialog />
             <Grid container>
-                <CardPageHeader searchField title={'Cards'} onSearch={handleSearch} />
+                <CardPageHeader searchField value={initialValues.search} title={'Cards'} onSearch={handleSearch} />
                 {cards.isLoading || isLoading ? (
                     <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                         <CircularProgress />
@@ -259,7 +270,7 @@ export function CardsListPage() {
                                             >
                                                 {availableCategories?.map((item: any) => {
                                                     return (
-                                                        <Grid>
+                                                        <Grid key={item.id}>
                                                             <MenuItem
                                                                 onClick={() => handleCategory(values, item)}
                                                                 key={item.id}
@@ -329,10 +340,7 @@ export function CardsListPage() {
                                             Card
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                            No
-                                        </TableCell>
-                                        <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                            Id
+                                            No.
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                             Category
@@ -346,9 +354,9 @@ export function CardsListPage() {
                                         <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                             Release Date
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: '12px' }} align="center" variant={'head'}>
+                                        <TableCell sx={{ fontSize: '12px' }} align="right" variant={'head'}>
                                             <TableSortLabel
-                                                sx={{ float: 'right', marginRight: '40%', color: '#0000008A' }}
+                                                sx={{ float: 'right', marginRight: 'auto', color: '#0000008A' }}
                                                 onClick={() => handleSort(!sortFilter)}
                                                 direction={!sortFilter ? 'desc' : 'asc'}
                                                 active={true}
@@ -377,13 +385,12 @@ export function CardsListPage() {
                                                         pl={2}
                                                     >
                                                         <Typography variant={'body1'} sx={{ fontSize: '14px' }}>
-                                                            {card.cardCategoryName}
+                                                            {card.name}
                                                         </Typography>
                                                     </Grid>
                                                 </Grid>
                                             </TableCell>
                                             <TableCell variant={'body'}>{card.cardNumber ?? '-'}</TableCell>
-                                            <TableCell variant={'body'}>{card.id ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardCategoryName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSeriesName ?? '-'}</TableCell>
                                             <TableCell variant={'body'}>{card.cardSetName}</TableCell>

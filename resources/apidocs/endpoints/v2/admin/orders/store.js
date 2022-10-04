@@ -190,7 +190,13 @@
  *            "service_fee": 2556,
  *            "shipping_fee": 43,
  *            "grand_total": 263,
- *            "amount_paid_from_wallet": 10.00
+ *            "amount_paid_from_wallet": 10.00,
+ *            "created_by": {
+ *                 "id": 1,
+ *                 "first_name": "Carlos",
+ *                 "last_name": "Morales",
+ *                 "full_name": "Carlos Morales"
+ *             }
  *        }
  *    }
  */

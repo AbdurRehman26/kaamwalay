@@ -52,6 +52,12 @@
  *                        }
  *                    ]
  *                },
+ *                "created_by": {
+ *                    "id": 1,
+ *                    "first_name": "Carlos",
+ *                    "last_name": "Morales",
+ *                    "full_name": "Carlos Morales"
+ *                },
  *                "shipping_method": {
  *                    "id": 1,
  *                    "code": "insured_shipping",

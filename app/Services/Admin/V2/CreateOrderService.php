@@ -109,6 +109,7 @@ class CreateOrderService extends BaseCreateOrderService
     protected function saveOrder(): void
     {
         $this->order->user()->associate($this->orderUser);
+        $this->order->createdBy()->associate(auth()->user());
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();

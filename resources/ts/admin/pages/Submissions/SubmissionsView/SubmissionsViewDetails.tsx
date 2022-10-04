@@ -91,8 +91,9 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
+            'Created By:': admin ? `Admin (${admin})` : customerName,
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee, admin, customerName],
     );
 
     const customerInfo = useMemo(

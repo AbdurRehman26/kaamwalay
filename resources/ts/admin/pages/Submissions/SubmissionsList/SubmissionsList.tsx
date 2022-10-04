@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Header from '@shared/components/Customers/Header';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { SelectAndCreateCustomerDialog } from '../CreateSubmission/SelectAndCreateCustomerDialog';
 import { SubmissionsTable } from './SubmissionsTable';
 
 const TabContent = styled(TabPanel)(
@@ -25,6 +26,7 @@ const TabContent = styled(TabPanel)(
 export function SubmissionsList() {
     const { tab } = useParams<{ tab: string }>();
     const [search, setSearch] = useState('');
+    const [createSubmission, setCreateSubmission] = useState(false);
 
     const tabs = (
         <TabList indicatorColor={'primary'} textColor={'primary'}>
@@ -39,7 +41,7 @@ export function SubmissionsList() {
     );
 
     const headerActions = (
-        <Grid container item xs justifyContent={'flex-end'}>
+        <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
             <Tooltip title={'Coming Soon'}>
                 <span>
                     <Button
@@ -53,6 +55,14 @@ export function SubmissionsList() {
                     </Button>
                 </span>
             </Tooltip>
+            <Button
+                variant={'contained'}
+                color={'primary'}
+                sx={{ borderRadius: '24px', padding: '10px 20px', marginLeft: '10px' }}
+                onClick={() => setCreateSubmission(true)}
+            >
+                CREATE SUBMISSION
+            </Button>
         </Grid>
     );
 
@@ -60,7 +70,7 @@ export function SubmissionsList() {
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
                 <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
-
+                <SelectAndCreateCustomerDialog onClose={() => setCreateSubmission(false)} open={createSubmission} />
                 <Divider />
                 <TabContent value={'all'}>
                     <SubmissionsTable search={search} all />

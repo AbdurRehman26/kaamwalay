@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
@@ -73,10 +73,15 @@ export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
     }, []);
+
+    const createCustomerSubmission = () => {
+        navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
+    };
 
     const customer$ = useAdminCustomerQuery({
         resourceId: Number(id),
@@ -138,7 +143,7 @@ export function CustomerView() {
                         variant={'contained'}
                         color={'primary'}
                         sx={{ borderRadius: '24px', padding: '10px 20px' }}
-                        disabled
+                        onClick={createCustomerSubmission}
                     >
                         CREATE SUBMISSION
                     </Button>

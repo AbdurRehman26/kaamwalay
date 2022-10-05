@@ -1,5 +1,5 @@
 import ClearAllOutlinedIcon from '@mui/icons-material/ClearAllOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -100,8 +100,8 @@ const useStyles = makeStyles((theme) => ({
     rowLeftText: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '14px',
+        fontWeight: '400',
+        fontSize: '16px',
         lineHeight: '20px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.87)',
@@ -143,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 500,
-        fontSize: '14px',
+        fontSize: '16px',
         lineHeight: '20px',
         textAlign: 'right',
         letterSpacing: '0.2px',
@@ -410,11 +410,11 @@ export function AddedSubmissionCards() {
                                             onClick={() => handleDeselectCard(row)}
                                             size="large"
                                         >
-                                            <DeleteIcon fontSize="medium" />
+                                            <DeleteOutline sx={{ color: '#0000008A' }} fontSize="medium" />
                                         </IconButton>
                                     </Grid>
                                 </Grid>
-                                <Grid mt={1} ml={1} item display={'flex'} flexDirection={'row'} mb={3}>
+                                <Grid mt={1} mx={1} item display={'flex'} flexDirection={'row'} mb={3}>
                                     <Grid item md={6}>
                                         <Typography sx={{ fontSize: '12px', fontWeight: 500 }} mb={0.5}>
                                             Qty
@@ -440,6 +440,7 @@ export function AddedSubmissionCards() {
                                             Value <span className={classes.textColorSecondary}>(USD)</span>
                                         </Typography>
                                         <NumberFormatTextField
+                                            sx={{ width: '100%' }}
                                             value={row.value}
                                             onChange={(e) => handleChangeCardValue(row, e.target.value)}
                                             name="numberformat"

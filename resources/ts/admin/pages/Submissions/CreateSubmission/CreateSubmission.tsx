@@ -197,7 +197,14 @@ export function CreateSubmission() {
                         </Grid>
                     </Grid>
 
-                    <Grid flexDirection={'row'} justifyContent={'center'} item container sx={{ background: '#FFFFFF' }}>
+                    <Grid
+                        flexDirection={'row'}
+                        justifyContent={'center'}
+                        item
+                        container
+                        sx={{ background: '#FFFFFF' }}
+                        mb={3}
+                    >
                         <Grid md={selectedCards.length > 0 ? 8 : 12}>
                             <div className={classes.parent}>
                                 <Grid

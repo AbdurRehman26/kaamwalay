@@ -343,7 +343,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
                 'orderItems' => fn (Builder $query) => (
                     $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)
                 ),
-            ], 'quantity');
+            ], 'quantity')
+            ->with('wallet:id,user_id,balance');
     }
 
     public function exportHeadings(): array

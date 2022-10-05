@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
@@ -210,6 +211,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * @return HasMany<Order>
+     */
+    public function paidOrders(): HasMany
+    {
+        return $this->hasMany(Order::class)->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -241,9 +250,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     */
     public function cardsCount(): int
     {
-        return Order::paid()
+        return $this->paidOrders()
             ->join('order_items', 'order_id', '=', 'orders.id')
-            ->where('user_id', '=', $this->id)
             ->sum('order_items.quantity');
     }
 
@@ -329,7 +337,13 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      */
     public function exportQuery(): Builder
     {
-        return self::query();
+        return self::query()
+            ->withCount('paidOrders')
+            ->withSum([
+                'orderItems' => fn (Builder $query) => (
+                    $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)
+                ),
+            ], 'quantity');
     }
 
     public function exportHeadings(): array
@@ -359,8 +373,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->email,
             $row->phone,
             $row->created_at,
-            $row->orders()->paid()->count(),
-            $row->cardsCount(),
+            $row->paid_orders_count,
+            $row->order_items_sum_quantity,
             $row->wallet?->balance,
         ];
     }

@@ -185,7 +185,7 @@ export function CreateSubmission() {
                         display={'flex'}
                         alignItems={'center'}
                         justifyContent={'space-between'}
-                        p={2}
+                        p={1}
                     >
                         <Typography ml={2} fontWeight={500} variant={'h5'}>
                             Create Submission
@@ -270,9 +270,11 @@ export function CreateSubmission() {
                                                 </Avatar>
                                             </Grid>
                                             <Grid ml={1}>
-                                                <Typography sx={{ fontSize: '14px' }}>{customer.fullName}</Typography>
+                                                <Typography sx={{ fontSize: '14px', fontWeight: 500 }}>
+                                                    {customer.fullName}
+                                                </Typography>
                                                 <Typography color={'#0000008A'} sx={{ fontSize: '14px' }}>
-                                                    {customer.customerNumber}
+                                                    Customer ID: {customer.customerNumber}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -327,6 +329,7 @@ export function CreateSubmission() {
                                 <Grid
                                     md={selectedCards.length > 0 ? 12 : 8}
                                     m={selectedCards.length > 0 ? 3 : 'auto'}
+                                    mt={2}
                                     border={'1px solid #E0E0E0'}
                                     sx={{ background: '#FFFFFF', borderRadius: '4px' }}
                                 >

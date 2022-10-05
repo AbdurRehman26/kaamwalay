@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\V2;
 
-use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Country;

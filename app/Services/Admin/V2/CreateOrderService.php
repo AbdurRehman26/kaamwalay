@@ -127,8 +127,6 @@ class CreateOrderService extends BaseCreateOrderService
             $paymentService->charge($order, []);
 
             $order->markAsPaid();
-
-            OrderPaid::dispatch($order);
         } else {
             //In case Pay later is selected, we should still check if the order total is 0, and if so, mark as paid
             $this->markPaidIfTotalIsZero();

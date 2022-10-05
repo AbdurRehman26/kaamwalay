@@ -37,6 +37,10 @@ use TaylorNetwork\UsernameGenerator\FindSimilarUsernames;
 use TaylorNetwork\UsernameGenerator\Generator;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property-read int $paid_orders_count
+ * @property-read int $order_items_sum_quantity
+ */
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;

@@ -118,7 +118,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/{cardProduct}', [CardProductController::class, 'show'])->name('admin.card-products.show');
         Route::put('/{cardProduct}', [CardProductController::class, 'update'])->name('admin.card-products.update');
         Route::delete('/{cardProduct}', [CardProductController::class, 'destroy'])->name('admin.card-products.destroy');
-        Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'update', 'delete']);
+        Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'update']);
     });
 
     Route::prefix('certificates')->group(function () {

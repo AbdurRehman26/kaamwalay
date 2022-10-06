@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\API\V2\Admin\Cards;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V2\Admin\Card\StoreCardRarityRequest;
+use App\Http\Requests\API\V2\Admin\Card\UpdateCardRarityRequest;
 use App\Http\Resources\API\V2\Admin\CardRarity\CardRarityCollection;
 use App\Http\Resources\API\V2\Admin\CardRarity\CardRarityResource;
+use App\Models\CardRarity;
 use App\Services\Admin\Card\CardRarityService;
 
 class CardRarityController extends Controller
@@ -15,31 +18,19 @@ class CardRarityController extends Controller
 
     public function index(): CardRarityCollection
     {
+        dd(1);
         return new CardRarityCollection($this->cardRarityService->getCardRarities());
     }
 
     public function store(StoreCardRarityRequest $request): CardRarityResource
     {
-        $coupon = $this->couponService->storeCoupon($request->validated(), $request->user());
-
-        return new CouponResource($coupon);
+        return new CardRarityResource(CardRarity::create($request->validated()));
     }
 
-    public function update(AddExtraCardRequest $request, Order $order): CardRarityResource
+    public function update(UpdateCardRarityRequest $request, CardRarity $cardRarity): CardRarityResource
     {
-        $this->authorize('review', $order);
-
-        try {
-            $result = $orderService->editCard($order, $orderItem, $request->card_id, $request->value);
-
-            return new OrderItemResource($result);
-        } catch (OrderItemDoesNotBelongToOrder $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
+        return new CardRarityResource($cardRarity->update([
+            'name' => $request->name
+        ]));
     }
 }

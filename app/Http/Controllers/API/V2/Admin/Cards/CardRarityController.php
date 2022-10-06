@@ -18,7 +18,6 @@ class CardRarityController extends Controller
 
     public function index(): CardRarityCollection
     {
-        dd(1);
         return new CardRarityCollection($this->cardRarityService->getCardRarities());
     }
 

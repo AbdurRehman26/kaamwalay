@@ -13,13 +13,6 @@ class CardRarityService
     public function getCardRarities(): LengthAwarePaginator
     {
         return QueryBuilder::for(CardRarity::class)
-            ->allowedFilters([
-            ])
-            ->allowedSorts([
-            ])
-            ->allowedIncludes([
-
-            ])
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::LIST_CARD_RARITY_PER_PAGE));
     }

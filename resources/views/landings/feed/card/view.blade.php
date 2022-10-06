@@ -226,7 +226,7 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    <div class="container" data-atom="card-image-slider" data-content="{{ $page_url }}">
+                    <div class="container" data-atom="card-image-slider" data-url="{{ $page_url }}" data-images="{{json_encode($slabbed_images)}}">
                     </div>
                 </div>
             </div>

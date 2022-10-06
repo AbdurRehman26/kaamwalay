@@ -26,12 +26,15 @@ const CardImageDiv = styled(Grid)({
 });
 
 interface CardImageSliderProp {
-    array: any;
+    url: string;
+    images: any;
 }
 
-export function CardImageSlider({ array }: CardImageSliderProp) {
+export function CardImageSlider({ url, images }: CardImageSliderProp) {
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
     const dispatch = useDispatch();
+
+    const imagesJson = JSON.parse(images);
 
     const handleDialog = useCallback(async () => {
         dispatch(setEditLabelDialog(true));
@@ -48,12 +51,13 @@ export function CardImageSlider({ array }: CardImageSliderProp) {
                 modules={[FreeMode, Thumbs]}
                 className={'mySwiper2'}
             >
-                <SwiperSlide onClick={handleDialog}>
-                    <img src="https://pokemon-statics.s3.amazonaws.com/media/front_slab/000119_AGozHp1.jpg" alt={''} />
-                </SwiperSlide>
-                <SwiperSlide onClick={handleDialog}>
-                    <img src="https://pokemon-statics.s3.amazonaws.com/media/back_slab/000120_0wgmQF1.jpg" alt={''} />
-                </SwiperSlide>
+                {Object.keys(imagesJson).map((key) => {
+                    return (
+                        <SwiperSlide onClick={handleDialog}>
+                            <img src={imagesJson[key]} alt={''} />
+                        </SwiperSlide>
+                    );
+                })}
             </Swiper>
             <Swiper
                 onSwiper={setThumbsSwiper}
@@ -65,12 +69,13 @@ export function CardImageSlider({ array }: CardImageSliderProp) {
                 modules={[FreeMode, Thumbs]}
                 className={'mySwiper'}
             >
-                <SwiperSlide>
-                    <img src="https://pokemon-statics.s3.amazonaws.com/media/front_slab/000119_AGozHp1.jpg" alt={''} />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="https://pokemon-statics.s3.amazonaws.com/media/back_slab/000120_0wgmQF1.jpg" alt={''} />
-                </SwiperSlide>
+                {Object.keys(imagesJson).map((key) => {
+                    return (
+                        <SwiperSlide onClick={handleDialog}>
+                            <img src={imagesJson[key]} alt={''} />
+                        </SwiperSlide>
+                    );
+                })}
             </Swiper>
         </CardImageDiv>
     );

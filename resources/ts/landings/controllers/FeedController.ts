@@ -1,3 +1,5 @@
+import { CardImageModal } from '../atoms/CardImageModalAtom';
+import { CardImageSlider } from '../atoms/CardImageSliderAtom';
 import { CardPageShareModal } from '../atoms/CardPageShareModalAtom';
 import { CopyToClipBoardAtom } from '../atoms/CopyToClipBoardAtom';
 import { FeedSearchAtom } from '../atoms/FeedSearchAtom';
@@ -28,6 +30,8 @@ class FeedController extends Controller implements CanSetup<FeedController> {
             }),
             CopyToClipBoardAtom,
             CardPageShareModal,
+            CardImageModal,
+            CardImageSlider,
         );
     }
 }

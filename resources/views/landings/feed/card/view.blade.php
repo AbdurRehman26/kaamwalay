@@ -226,7 +226,8 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    @include('landings.feed.card.cards-image-slider')
+                    <div class="container" data-atom="card-image-slider" data-content="{{ $page_url }}">
+                    </div>
                 </div>
             </div>
             <div class="feed-view__details">

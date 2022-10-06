@@ -15,6 +15,10 @@
         font-weight: bold;
     }
 
+    &__table-div {
+        width: 320px;
+    }
+
     &__conclusion {
         @include breakpoints.down(768) {
             background: #f4f4fb;
@@ -228,7 +232,8 @@
     }
 
     &__right-side {
-        margin-left: 15px;
+        display: flex;
+        justify-content: space-between;
 
         @include breakpoints.down(768) {
             margin-left: 0px;
@@ -236,6 +241,9 @@
     }
 
     &__left-side {
+        display: flex;
+        justify-content: space-between;
+
         @include breakpoints.down(768) {
             display: none;
         }
@@ -668,9 +676,6 @@
         }
 
         &-col {
-            display: inline-flex;
-            align-items: flex-start;
-
             @include breakpoints.down(768) {
                 padding: 0;
                 max-width: 100%;

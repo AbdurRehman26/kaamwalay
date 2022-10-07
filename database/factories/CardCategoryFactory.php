@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\CardCategoryType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CardCategoryFactory extends Factory
@@ -17,6 +18,7 @@ class CardCategoryFactory extends Factory
             'name' => $this->faker->firstName(),
             'image_url' => $this->faker->url(),
             'is_enabled' => $this->faker->boolean(),
+            'card_category_type_id' => CardCategoryType::factory(),
         ];
     }
 }

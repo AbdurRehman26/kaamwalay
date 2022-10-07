@@ -9,6 +9,7 @@ import KeyValueTable from '@shared/components/KeyValueTable';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
@@ -42,6 +43,7 @@ interface SubmissionsViewDetailsProps {
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     admin?: string;
+    createdBy?: AdminUserEntity;
 }
 
 const useStyles = makeStyles(
@@ -81,6 +83,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         walletPayment,
         paymentStatus,
         admin,
+        createdBy,
     } = props;
 
     const classes = useStyles();
@@ -91,8 +94,9 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
+            'Created By:': createdBy?.id !== customerId ? `Admin (${createdBy?.fullName})` : customerName,
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee, customerName, createdBy, customerId],
     );
 
     const customerInfo = useMemo(

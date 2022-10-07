@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { CreateSubmission } from './CreateSubmission';
 import { SubmissionsGrade } from './SubmissionsGrade';
 import { SubmissionsList } from './SubmissionsList';
 import { SubmissionsReview } from './SubmissionsReview';
@@ -12,6 +13,7 @@ export function Submissions() {
             <Route path={'/:id/view'} element={<SubmissionsView />} />
             <Route path={'/:id/review'} element={<SubmissionsReview />} />
             <Route path={'/:id/grade'} element={<SubmissionsGrade />} />
+            <Route path={'/:customerId/new'} element={<CreateSubmission />} />
         </Routes>
     );
 }

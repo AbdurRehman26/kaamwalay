@@ -92,6 +92,7 @@ export function SubmissionsView() {
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
                 admin={data?.orderPayment?.user?.fullName}
+                createdBy={data?.createdBy}
             />
             <Divider />
             <RefundsAndExtraCharges

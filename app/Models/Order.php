@@ -73,6 +73,7 @@ class Order extends Model implements Exportable
         'cleaning_fee',
         'estimated_delivery_start_at',
         'estimated_delivery_end_at',
+        'created_by',
     ];
 
     /**
@@ -114,6 +115,7 @@ class Order extends Model implements Exportable
         'cleaning_fee' => 'float',
         'estimated_delivery_start_at' => 'datetime',
         'estimated_delivery_end_at' => 'datetime',
+        'created_by' => 'integer',
     ];
 
     protected $appends = [
@@ -282,6 +284,14 @@ class Order extends Model implements Exportable
     public function gradedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'graded_by_id');
+    }
+
+    /**
+     * @return BelongsTo<User, Order>
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function scopeForUser(Builder $query, User $user): Builder

@@ -8,6 +8,7 @@ use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
@@ -23,6 +24,7 @@ use Illuminate\Http\Request;
  * @property mixed $gradedBy
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
+ * @property mixed $createdBy
  * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice
@@ -84,6 +86,7 @@ class OrderResource extends V1OrderResource
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
+            'created_by' => new UserResource($this->createdBy),
 
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),

@@ -7,6 +7,7 @@ use App\Http\Resources\API\V2\Admin\Customer\CustomerResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Admin\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
 use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -36,6 +37,7 @@ class OrderCreateResource extends JsonResource
             'order_step' => $this->order_step,
             'requires_cleaning' => $this->requires_cleaning,
             'cleaning_fee' => $this->cleaning_fee,
+            'created_by' => new UserResource($this->createdBy),
         ];
     }
 }

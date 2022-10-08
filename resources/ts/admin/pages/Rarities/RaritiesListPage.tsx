@@ -1,7 +1,4 @@
-import MoreIcon from '@mui/icons-material/MoreVert';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Formik, FormikProps } from 'formik';
-import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
@@ -19,6 +16,7 @@ import { useAdminRaritiesQuery } from '@shared/redux/hooks/useRaritiesQuery';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { AddRaritiesDialog } from './AddRaritiesDialog';
+import MoreAction from './MoreAction';
 import { RaritiesPageHeader } from './RaritiesPageHeader';
 
 type InitialValues = {
@@ -26,15 +24,10 @@ type InitialValues = {
     search: string;
 };
 
-enum RowOption {
-    Edit,
-}
-
 export function RaritiesListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: 0 });
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
     const dispatch = useAppDispatch();
@@ -86,29 +79,6 @@ export function RaritiesListPage() {
         })();
     }, [dispatch]);
 
-    const handleClickOptions = useCallback<MouseEventHandler>(
-        (e) => {
-            e.stopPropagation();
-            setAnchorEl(e.target as Element);
-        },
-        [setAnchorEl],
-    );
-
-    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
-
-    const handleOption = useCallback(
-        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
-            e.stopPropagation();
-            handleCloseOptions();
-            switch (option) {
-                case RowOption.Edit:
-                    setAddRaritiesDialog(true);
-                    break;
-            }
-        },
-        [handleCloseOptions],
-    );
-
     const handleSearch = useCallback(
         async (search: string) => {
             if (search) {
@@ -128,6 +98,15 @@ export function RaritiesListPage() {
         [addQuery, rarities, delQuery],
     );
 
+    const handleAddSubmit = async () => {
+        setAddRaritiesDialog(false);
+        window.location.reload();
+    };
+
+    const handleEdit = async () => {
+        setAddRaritiesDialog(true);
+    };
+
     const handleClearCategory = useCallback(async () => {
         formikRef.current?.setFieldValue('cardCategory', '');
         delQuery('cardCategory');
@@ -140,17 +119,16 @@ export function RaritiesListPage() {
         );
     }, [rarities, delQuery]);
 
-    console.log('Rarities ', rarities);
-
     return (
         <>
             <AddRaritiesDialog
+                title={'Update Rarity'}
                 open={addRaritiesDialog}
                 onClose={() => setAddRaritiesDialog(false)}
-                onSubmit={() => {}}
+                onSubmit={handleAddSubmit}
                 isUpdate={true}
             />
-            <RaritiesPageHeader searchField title="Add Rarities" onSearch={handleSearch} />
+            <RaritiesPageHeader searchField title="Rarities" onSearch={handleSearch} />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'subtitle1'}>
@@ -199,12 +177,7 @@ export function RaritiesListPage() {
                                 <TableCell>{rarity.name}</TableCell>
                                 <TableCell>{rarity.name}</TableCell>
                                 <TableCell variant={'body'} align={'right'}>
-                                    <IconButton onClick={handleClickOptions} size="large">
-                                        <MoreIcon />
-                                    </IconButton>
-                                    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                        <MenuItem onClick={handleOption(RowOption.Edit)}>Edit</MenuItem>
-                                    </Menu>
+                                    <MoreAction id={rarity.id} handleEditAction={handleEdit} />
                                 </TableCell>
                             </TableRow>
                         ))}

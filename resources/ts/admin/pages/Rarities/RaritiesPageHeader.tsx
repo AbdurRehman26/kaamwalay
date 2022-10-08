@@ -97,6 +97,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
             ) : (
                 <>
                     <AddRaritiesDialog
+                        title={'Add Rarity'}
                         onSubmit={handleAddSubmit}
                         open={addRaritiesDialog}
                         onClose={() => setAddRaritiesDialog(false)}
@@ -129,7 +130,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                                 color={'primary'}
                                 className={classes.newCustomerBtn}
                             >
-                                Create Rarities
+                                Create Rarity
                             </Button>
                         </Grid>
                     </Grid>

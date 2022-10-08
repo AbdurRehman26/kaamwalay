@@ -15,8 +15,25 @@
         font-weight: bold;
     }
 
-    &__table-div {
+    &__table-div-left {
         width: 320px;
+        display: table-row;
+        @include breakpoints.down(768) {
+            display: none;
+        }
+
+        @include breakpoints.down(1024) {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__table-div-right {
+        width: 320px;
+        @include breakpoints.down(1024) {
+            width: 100%;
+            height: 100%;
+        }
     }
 
     &__conclusion {
@@ -243,7 +260,9 @@
     &__left-side {
         display: flex;
         justify-content: space-between;
+    }
 
+    &__share {
         @include breakpoints.down(768) {
             display: none;
         }
@@ -680,10 +699,6 @@
                 padding: 0;
                 max-width: 100%;
                 display: block !important;
-            }
-
-            @include breakpoints.down(1024) {
-                display: flex;
             }
 
             &:first-child {

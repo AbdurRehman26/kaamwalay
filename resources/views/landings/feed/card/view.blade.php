@@ -254,7 +254,7 @@
                         @endif
                     </div>
                     <div class="feed-view__right-side">
-                        <div class="feed-view__table-div">
+                        <div class="feed-view__table-div-left">
                             <table class="feed-view__table">
                                 <tbody>
                                     <tr>
@@ -278,7 +278,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="feed-view__table-div">
+                        <div class="feed-view__table-div-right">
                             <table class="feed-view__table">
                                 <tbody>
                                     <tr class="feed-view__table__mobile-content">

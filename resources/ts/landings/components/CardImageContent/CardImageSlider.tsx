@@ -3,6 +3,10 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FreeMode, Thumbs } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { setEditLabelDialog } from '../../redux/slices/modalSlice';
 import CardImageModal from './CardImageModal';
@@ -26,14 +30,12 @@ const CardImageDiv = styled(Grid)({
 });
 
 interface CardImageSliderProp {
-    url: string;
     images: any;
 }
 
-export function CardImageSlider({ url, images }: CardImageSliderProp) {
+export function CardImageSlider({ images }: CardImageSliderProp) {
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
     const dispatch = useDispatch();
-
     const imagesJson = JSON.parse(images);
 
     const handleDialog = useCallback(async () => {
@@ -71,7 +73,7 @@ export function CardImageSlider({ url, images }: CardImageSliderProp) {
             >
                 {Object.keys(imagesJson).map((key) => {
                     return (
-                        <SwiperSlide onClick={handleDialog}>
+                        <SwiperSlide>
                             <img src={imagesJson[key]} alt={''} />
                         </SwiperSlide>
                     );

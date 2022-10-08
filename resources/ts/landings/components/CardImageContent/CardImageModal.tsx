@@ -16,18 +16,36 @@ import { RootState } from '../../redux/store';
 const CardImageDiv = styled(Grid)({
     display: 'flex',
     '.mySwiper2': {
-        height: '80%',
-        width: '50%',
+        width: '100%',
+        background: '#000',
+        '.swiper-wrapper': {
+            '.swiper-slide': {
+                display: 'flex',
+                justifyContent: 'center',
+            },
+        },
         '.swiper-button-prev': {
             display: 'none',
         },
         '.swiper-button-next': {
             display: 'none',
         },
+        img: {
+            width: '305px',
+            height: '515px',
+        },
     },
     '.mySwiper': {
         '.swiper-wrapper': {
-            justifyContent: 'center',
+            flexWrap: 'wrap',
+            '.swiper-slide': {
+                width: '191px!important',
+                height: '200px!important',
+                img: {
+                    width: '117px!important',
+                    height: '200px!important',
+                },
+            },
         },
     },
 });
@@ -47,7 +65,7 @@ const LabelDialog = styled(Dialog)({
 
 export function CardImageModal() {
     const labelDialog = useSelector((state: RootState) => state.modal.openLabelDialog.labelDialog);
-    const [thumbsSwiper] = useState<any>(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
     const dispatch = useDispatch();
 
     const handleModal = useCallback(() => {
@@ -73,6 +91,7 @@ export function CardImageModal() {
             <DialogContent dividers sx={{ padding: '20px' }}>
                 <CardImageDiv>
                     <Swiper
+                        onSwiper={setThumbsSwiper}
                         loop={false}
                         spaceBetween={10}
                         slidesPerView={2}

@@ -18,13 +18,11 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         @if($grades_available)
         <script defer>
@@ -54,25 +52,6 @@
                 frontButton[0].style.color = "rgba(0, 0, 0, 0.54)";
                 front[0].style.display = "none";
             }
-
-            var swiper = new Swiper(".mySwiper", {
-                loop: false,
-                spaceBetween: 10,
-                slidesPerView: 4,
-                freeMode: true,
-                watchSlidesProgress: true
-            });
-            var swiper2 = new Swiper(".mySwiper2", {
-                loop: false,
-                spaceBetween: 10,
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev"
-                },
-                thumbs: {
-                    swiper: swiper
-                }
-            });
 
             imagebox.options({
                 info: false,
@@ -226,7 +205,7 @@
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
                 <div class="feed-view__card">
-                    <div class="container" data-atom="card-image-slider" data-url="{{ $page_url }}" data-images="{{json_encode($slabbed_images)}}">
+                    <div class="container" data-atom="card-image-slider" data-images="{{json_encode($slabbed_images)}}">
                     </div>
                 </div>
             </div>

@@ -15,7 +15,9 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useCallback, useEffect, useState } from 'react';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
+import { APIService } from '@shared/services/APIService';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 export interface AddRaritiesDialogProps extends Omit<DialogProps, 'onSubmit'> {
@@ -30,9 +32,19 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [cardCategory, setCardCategory] = useState<number | undefined | null>(null);
     const [rarityName, setRarityName] = useState<string>('');
+    const apiService = useInjectable(APIService);
 
     const handleCardCategoryChange = (categoryId: number) => {
         setCardCategory(categoryId);
+    };
+
+    const handleAddRarity = async () => {
+        const endpoint = apiService.createEndpoint('/admin/cards/rarities');
+        const rarityDto = {
+            name: rarityName,
+            cardCategoryId: cardCategory,
+        };
+        await endpoint.post('', rarityDto);
     };
 
     useEffect(() => {
@@ -49,7 +61,7 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
     }, [onClose]);
 
     return (
-        <Dialog {...rest}>
+        <Dialog {...rest} fullWidth maxWidth={'sm'}>
             <DialogTitle>
                 {' '}
                 {isUpdate ? 'Update' : 'Add'} Rarity
@@ -66,15 +78,15 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <Grid container direction={'row'} spacing={2} padding={'16px'}>
-                    <FormControl sx={{ minWidth: '97%' }}>
+                <Grid container direction={'row'} padding={'16px'}>
+                    <FormControl sx={{ minWidth: '100%' }}>
                         <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
                             Category
                         </FormHelperText>
                         <Select
-                            value={cardCategory}
+                            key={availableCategories.length > 0 ? availableCategories[0].id : ''}
                             onChange={(e: any) => handleCardCategoryChange(e.target.value)}
-                            defaultValue={cardCategory}
+                            defaultValue={availableCategories.length > 0 ? availableCategories[0].id : ''}
                         >
                             {availableCategories?.map((item) => {
                                 return (
@@ -86,8 +98,8 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid container direction={'row'} spacing={2} padding={'16px'}>
-                    <FormControl>
+                <Grid container direction={'row'} padding={'16px'}>
+                    <FormControl sx={{ minWidth: '100%' }}>
                         <FormHelperText
                             sx={{
                                 fontWeight: 'bold',
@@ -113,7 +125,7 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
                             Cancel
                         </Button>
 
-                        <Button variant="contained" color={'primary'}>
+                        <Button variant="contained" color={'primary'} onClick={handleAddRarity}>
                             Add <CircularProgress color={'primary'} />
                         </Button>
                     </Box>

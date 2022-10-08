@@ -38,6 +38,7 @@ export function RaritiesListPage() {
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
     const dispatch = useAppDispatch();
+    // const [updateRarity, setUpdateRarity] = useState();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -138,6 +139,8 @@ export function RaritiesListPage() {
             }),
         );
     }, [rarities, delQuery]);
+
+    console.log('Rarities ', rarities);
 
     return (
         <>

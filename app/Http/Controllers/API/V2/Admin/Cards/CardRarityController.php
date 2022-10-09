@@ -28,8 +28,9 @@ class CardRarityController extends Controller
 
     public function update(UpdateCardRarityRequest $request, CardRarity $cardRarity): CardRarityResource
     {
-        return new CardRarityResource($cardRarity->update([
+        $cardRarity->update([
             'name' => $request->name
-        ]));
+        ]);
+        return new CardRarityResource($cardRarity->refresh());
     }
 }

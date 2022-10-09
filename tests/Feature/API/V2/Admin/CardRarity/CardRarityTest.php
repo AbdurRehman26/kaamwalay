@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CardRarity;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardRaritiesSeeder;
@@ -8,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);
 
@@ -40,4 +42,18 @@ test('admins can create card rarities', function () {
             'name' => 'Lorem Ipsum',
             'card_category_id' => 1,
     ]);
+});
+
+test('admins can update card rarities', function () {
+    $cardRarity = CardRarity::first();
+
+    putJson(
+        route('v2.rarities.update', ['rarity' => $cardRarity->id]),
+        ['name' => 'Updated Name']
+    )->assertSuccessful()
+        ->dump()
+        ->assertJsonFragment([
+            'name' => 'Lorem Ipsum',
+            'card_category_id' => 1,
+        ]);
 });

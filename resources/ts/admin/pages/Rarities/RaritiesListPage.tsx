@@ -4,6 +4,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
@@ -11,8 +12,11 @@ import Typography from '@mui/material/Typography';
 import { Formik, FormikProps } from 'formik';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
+import { TablePagination } from '@shared/components/TablePagination';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
+import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminRaritiesQuery } from '@shared/redux/hooks/useRaritiesQuery';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -33,7 +37,7 @@ export function RaritiesListPage() {
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
     const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
-    // const [updateRarity, setUpdateRarity] = useState();
+    const [updateRarity, setUpdateRarity] = useState<CardRarityEntity>();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -42,6 +46,22 @@ export function RaritiesListPage() {
         }),
         [query.search, query.cardCategory],
     );
+
+    useEffect(
+        () => {
+            if (!rarities.isLoading) {
+                rarities.sort({ sort: sortFilter ? 'name' : '-name' });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sortFilter],
+    );
+
+    useEffect(() => {
+        const category = availableCategories?.filter((item) => item.id === Number(query.cardCategory));
+        setCategoryName({ categoryId: category[0]?.id, categoryName: category[0]?.name });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [availableCategories]);
 
     const getFilters = (values: InitialValues) => ({
         search: values.search,
@@ -62,8 +82,10 @@ export function RaritiesListPage() {
     const rarities = useAdminRaritiesQuery({
         params: {
             filter: getFilters(query),
+            sort: sortFilter ? 'name' : '-name',
             perPage: 48,
         },
+        ...bracketParams(),
     });
 
     const handleSubmit = useCallback(
@@ -106,10 +128,11 @@ export function RaritiesListPage() {
 
     const handleAddSubmit = async () => {
         setAddRaritiesDialog(false);
-        window.location.reload();
+        // window.location.reload();
     };
 
-    const handleEdit = async () => {
+    const handleEdit = async (rarity: CardRarityEntity) => {
+        setUpdateRarity(rarity);
         setAddRaritiesDialog(true);
     };
 
@@ -133,14 +156,12 @@ export function RaritiesListPage() {
                 onClose={() => setAddRaritiesDialog(false)}
                 onSubmit={handleAddSubmit}
                 isUpdate={true}
+                updateRarity={updateRarity}
             />
             <RaritiesPageHeader searchField title="Rarities" onSearch={handleSearch} />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>
-                    <Typography variant={'subtitle1'}>
-                        {rarities.pagination.meta.total}
-                        Result(s)
-                    </Typography>
+                    <Typography variant={'subtitle1'}>{rarities.pagination.meta.total} Result(s)</Typography>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
                         {({ values }) => (
                             <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
@@ -189,13 +210,18 @@ export function RaritiesListPage() {
                         {rarities.data.map((rarity) => (
                             <TableRow key={rarity.id}>
                                 <TableCell>{rarity.name}</TableCell>
-                                <TableCell>{rarity.name}</TableCell>
+                                <TableCell>{rarity.cardCategoryName}</TableCell>
                                 <TableCell variant={'body'} align={'right'}>
-                                    <MoreAction id={rarity.id} handleEditAction={handleEdit} />
+                                    <MoreAction rarity={rarity} handleEditAction={handleEdit} />
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination {...rarities.paginationProps} />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
         </>

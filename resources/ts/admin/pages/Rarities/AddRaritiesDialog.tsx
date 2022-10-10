@@ -16,6 +16,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useCallback, useEffect, useState } from 'react';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
+import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
@@ -26,15 +27,16 @@ export interface AddRaritiesDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit(): Promise<void> | void;
     isUpdate?: boolean;
     title: string;
+    updateRarity?: CardRarityEntity | null;
 }
 
 export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
-    const { onClose, isUpdate, title, onSubmit, ...rest } = props;
+    const { onClose, isUpdate, updateRarity, title, onSubmit, ...rest } = props;
     const dispatch = useAppDispatch();
 
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
-    const [cardCategory, setCardCategory] = useState<number>(1);
-    const [rarityName, setRarityName] = useState<string>('');
+    const [cardCategory, setCardCategory] = useState<number | undefined>(1);
+    const [rarityName, setRarityName] = useState<string | undefined>('');
     const [isLoading, setIsLoading] = useState(false);
     const apiService = useInjectable(APIService);
     const notifications = useNotifications();
@@ -45,13 +47,21 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
 
     const handleAddRarity = async () => {
         setIsLoading(true);
-        const endpoint = apiService.createEndpoint('/admin/cards/rarities');
+        const endpoint = apiService.createEndpoint(
+            isUpdate ? `admin/cards/rarities/${updateRarity?.id}` : `admin/cards/rarities`,
+        );
         try {
             const rarityDto = {
                 name: rarityName,
                 cardCategoryId: cardCategory,
             };
-            await endpoint.post('', rarityDto);
+            if (isUpdate) {
+                await endpoint.put('', rarityDto);
+                notifications.success('Rarity Updated Successfully!');
+            } else {
+                await endpoint.post('', rarityDto);
+                notifications.success('Rarity Added Successfully!');
+            }
             setIsLoading(false);
             await onSubmit();
         } catch (e: any) {
@@ -66,6 +76,11 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
             setAvailableCategories(result.payload);
         })();
     }, [dispatch]);
+
+    useEffect(() => {
+        setCardCategory(updateRarity?.cardCategoryId);
+        setRarityName(updateRarity?.name);
+    }, [isUpdate, updateRarity]);
 
     const handleClose = useCallback(() => {
         if (onClose) {
@@ -101,9 +116,21 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
                                     Category
                                 </FormHelperText>
                                 <Select
-                                    key={availableCategories.length > 0 ? availableCategories[0].id : ''}
+                                    key={
+                                        !isUpdate
+                                            ? availableCategories.length > 0
+                                                ? availableCategories[0].id
+                                                : ''
+                                            : cardCategory
+                                    }
                                     onChange={(e: any) => handleCardCategoryChange(e.target.value)}
-                                    defaultValue={availableCategories.length > 0 ? availableCategories[0].id : ''}
+                                    defaultValue={
+                                        !isUpdate
+                                            ? availableCategories.length > 0
+                                                ? availableCategories[0].id
+                                                : ''
+                                            : cardCategory
+                                    }
                                 >
                                     {availableCategories?.map((item) => {
                                         return (

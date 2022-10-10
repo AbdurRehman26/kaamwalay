@@ -3,17 +3,18 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useState } from 'react';
+import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 
 interface MoreActionProps {
-    id: number;
-    handleEditAction(id: number): void;
+    rarity: CardRarityEntity;
+    handleEditAction(rarity: CardRarityEntity): void;
 }
 
 function MoreAction(props: MoreActionProps) {
     const [anchorEl, setAnchorEl] = useState(null);
 
-    function handleEdit(id: number) {
-        props.handleEditAction(id);
+    function handleEdit(rarity: CardRarityEntity) {
+        props.handleEditAction(rarity);
         setAnchorEl(null);
     }
 
@@ -31,7 +32,7 @@ function MoreAction(props: MoreActionProps) {
                 <MoreIcon />
             </IconButton>
             <Menu id="card-actions-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={() => handleEdit(props.id)}>Edit</MenuItem>
+                <MenuItem onClick={() => handleEdit(props.rarity)}>Edit</MenuItem>
             </Menu>
         </>
     );

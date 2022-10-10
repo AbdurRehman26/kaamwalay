@@ -7,6 +7,7 @@ use Database\Seeders\CardRaritiesSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
@@ -32,6 +33,14 @@ test('admins can get list of card rarities', function () {
     getJson(route('v2.rarities.index'))->assertOk()->assertJsonCount(5, 'data');
 });
 
+test('admins can get list of card rarities filter by name', function () {
+    getJson(route('v2.rarities.index', [
+        'filters' => [
+            'search' => '1asdasd123123'
+        ]
+    ]))->assertOk()->assertJsonCount(5, 'data');
+});
+
 test('admins can create card rarities', function () {
     postJson(route('v2.rarities.store'), [
         'name' => 'Lorem Ipsum',
@@ -50,10 +59,11 @@ test('admins can update card rarities', function () {
     putJson(
         route('v2.rarities.update', ['rarity' => $cardRarity->id]),
         ['name' => 'Updated Name']
-    )->assertSuccessful()
-        ->dump()
-        ->assertJsonFragment([
-            'name' => 'Lorem Ipsum',
-            'card_category_id' => 1,
-        ]);
+    )->assertSuccessful();
+
+    assertDatabaseHas('card_rarities', [
+        'name' => 'Updated Name',
+        'id' => $cardRarity->id
+    ]);
+
 });

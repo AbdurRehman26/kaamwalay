@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { AddRaritiesDialog } from './AddRaritiesDialog';
+import { RaritiesAddDialog } from './RaritiesAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -98,7 +98,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                 </Box>
             ) : (
                 <>
-                    <AddRaritiesDialog
+                    <RaritiesAddDialog
                         title={'Add Rarity'}
                         onSubmit={handleAddSubmit}
                         open={addRaritiesDialog}

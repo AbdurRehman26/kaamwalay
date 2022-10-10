@@ -9,7 +9,7 @@ import React, { ElementType, useMemo } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 
 type SidebarMenuItemProps = {
-    icon: ElementType;
+    icon?: ElementType;
     title: string;
     href: string;
     exact?: boolean;
@@ -82,7 +82,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     return (
         <ListItemButton selected={isActive} {...(rest as any)} classes={itemClasses}>
             <ListItemIcon className={classes.iconHolder}>
-                <Icon className={classes.icon} />
+                {Icon ? <Icon className={classes.icon} /> : null}
             </ListItemIcon>
             <ListItemText primary={title} className={classes.title} />
             {comingSoon ? (

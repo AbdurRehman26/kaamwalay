@@ -1,3 +1,5 @@
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
@@ -20,8 +22,8 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminRaritiesQuery } from '@shared/redux/hooks/useRaritiesQuery';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
-import { AddRaritiesDialog } from './AddRaritiesDialog';
 import MoreAction from './MoreAction';
+import { RaritiesAddDialog } from './RaritiesAddDialog';
 import { RaritiesPageHeader } from './RaritiesPageHeader';
 
 type InitialValues = {
@@ -150,7 +152,7 @@ export function RaritiesListPage() {
 
     return (
         <>
-            <AddRaritiesDialog
+            <RaritiesAddDialog
                 title={'Update Rarity'}
                 open={addRaritiesDialog}
                 onClose={() => setAddRaritiesDialog(false)}
@@ -158,72 +160,80 @@ export function RaritiesListPage() {
                 isUpdate={true}
                 updateRarity={updateRarity}
             />
-            <RaritiesPageHeader searchField title="Rarities" onSearch={handleSearch} />
-            <Grid container p={2.5} alignItems={'center'}>
-                <Grid item xs container alignItems={'center'}>
-                    <Typography variant={'subtitle1'}>{rarities.pagination.meta.total} Result(s)</Typography>
-                    <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
-                        {({ values }) => (
-                            <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
-                                <PageSelector
-                                    label={'Categories'}
-                                    value={categoryName.categoryName}
-                                    onClear={handleClearCategory}
-                                >
-                                    {availableCategories?.map((item: any) => {
-                                        return (
-                                            <Grid key={item.id}>
-                                                <MenuItem
-                                                    onClick={() => handleCategory(values, item)}
-                                                    key={item.id}
-                                                    value={item.id}
-                                                >
-                                                    {item.name}
-                                                </MenuItem>
-                                            </Grid>
-                                        );
-                                    })}
-                                </PageSelector>
-                            </Grid>
-                        )}
-                    </Formik>
-                </Grid>
-            </Grid>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
-                                <TableSortLabel
-                                    sx={{ float: 'right', marginRight: '90%', color: '#0000008A' }}
-                                    onClick={() => handleSort(!sortFilter)}
-                                    direction={!sortFilter ? 'desc' : 'asc'}
-                                    active={true}
-                                ></TableSortLabel>{' '}
-                                Name
-                            </TableCell>
-                            <TableCell>Category</TableCell>
-                            <TableCell variant={'head'}></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rarities.data.map((rarity) => (
-                            <TableRow key={rarity.id}>
-                                <TableCell>{rarity.name}</TableCell>
-                                <TableCell>{rarity.cardCategoryName}</TableCell>
-                                <TableCell variant={'body'} align={'right'}>
-                                    <MoreAction rarity={rarity} handleEditAction={handleEdit} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination {...rarities.paginationProps} />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+            {rarities.isLoading ? (
+                <Box width={'100%'} padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
+                    <RaritiesPageHeader searchField title="Rarities" onSearch={handleSearch} />
+                    <Grid container p={2.5} alignItems={'center'}>
+                        <Grid item xs container alignItems={'center'}>
+                            <Typography variant={'subtitle1'}>{rarities.pagination.meta.total} Result(s)</Typography>
+                            <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
+                                {({ values }) => (
+                                    <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
+                                        <PageSelector
+                                            label={'Categories'}
+                                            value={categoryName.categoryName}
+                                            onClear={handleClearCategory}
+                                        >
+                                            {availableCategories?.map((item: any) => {
+                                                return (
+                                                    <Grid key={item.id}>
+                                                        <MenuItem
+                                                            onClick={() => handleCategory(values, item)}
+                                                            key={item.id}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </MenuItem>
+                                                    </Grid>
+                                                );
+                                            })}
+                                        </PageSelector>
+                                    </Grid>
+                                )}
+                            </Formik>
+                        </Grid>
+                    </Grid>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
+                                        <TableSortLabel
+                                            sx={{ float: 'right', marginRight: '90%', color: '#0000008A' }}
+                                            onClick={() => handleSort(!sortFilter)}
+                                            direction={!sortFilter ? 'desc' : 'asc'}
+                                            active={true}
+                                        ></TableSortLabel>{' '}
+                                        Name
+                                    </TableCell>
+                                    <TableCell>Category</TableCell>
+                                    <TableCell variant={'head'}></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rarities.data.map((rarity) => (
+                                    <TableRow key={rarity.id}>
+                                        <TableCell>{rarity.name}</TableCell>
+                                        <TableCell>{rarity.cardCategoryName}</TableCell>
+                                        <TableCell variant={'body'} align={'right'}>
+                                            <MoreAction rarity={rarity} handleEditAction={handleEdit} />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination {...rarities.paginationProps} />
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    </TableContainer>
+                </>
+            )}
         </>
     );
 }

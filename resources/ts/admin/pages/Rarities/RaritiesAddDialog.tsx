@@ -23,14 +23,14 @@ import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch } from '@admin/redux/hooks';
 
-export interface AddRaritiesDialogProps extends Omit<DialogProps, 'onSubmit'> {
+export interface RaritiesAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit(): Promise<void> | void;
     isUpdate?: boolean;
     title: string;
     updateRarity?: CardRarityEntity | null;
 }
 
-export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
+export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
     const { onClose, isUpdate, updateRarity, title, onSubmit, ...rest } = props;
     const dispatch = useAppDispatch();
 

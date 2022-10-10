@@ -33,7 +33,7 @@ export function AddRaritiesDialog(props: AddRaritiesDialogProps) {
     const dispatch = useAppDispatch();
 
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
-    const [cardCategory, setCardCategory] = useState<number | undefined | null>(1);
+    const [cardCategory, setCardCategory] = useState<number>(1);
     const [rarityName, setRarityName] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const apiService = useInjectable(APIService);

@@ -1,15 +1,16 @@
 import SearchIcon from '@mui/icons-material/Search';
+import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid, { GridProps } from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { debounce } from 'lodash';
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { AddRaritiesDialog } from './AddRaritiesDialog';
 
@@ -60,20 +61,21 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
     const [isLoading, setIsLoading] = useState(false);
     const notifications = useNotifications();
 
-    const debouncedFunc = debounce((func: any) => {
-        func();
-    }, 300);
+    const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
-    const handleSearch = useCallback(
-        (e) => {
-            setSearch(e.target.value);
+    const handleSearch = useCallback(() => {
+        setTimeout(() => {
             if (onSearch) {
-                debouncedFunc(() => {
-                    onSearch(e.target.value);
-                });
+                onSearch(search);
             }
+        }, 300);
+    }, [onSearch, search]);
+
+    const handleKeyDown = useCallback(
+        (e: KeyboardEvent<HTMLInputElement>) => {
+            e.key === 'Enter' && handleSearch();
         },
-        [setSearch, onSearch, debouncedFunc],
+        [handleSearch],
     );
 
     const handleAddSubmit = async () => {
@@ -111,7 +113,8 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                                 <TextField
                                     className={'ListPageHeader-search'}
                                     value={search}
-                                    onChange={handleSearch}
+                                    onChange={handleSearchValue}
+                                    onKeyDown={handleKeyDown}
                                     placeholder={'Search...'}
                                     InputProps={{
                                         startAdornment: (
@@ -119,6 +122,14 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                                                 <SearchIcon />
                                             </InputAdornment>
                                         ),
+                                        endAdornment:
+                                            search || search === '' ? (
+                                                <InputAdornment position={'end'}>
+                                                    <IconButton onClick={handleSearch}>
+                                                        <SendIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ) : null,
                                     }}
                                 />
                             )}

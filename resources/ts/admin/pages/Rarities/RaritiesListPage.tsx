@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Formik, FormikProps } from 'formik';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -30,6 +31,7 @@ export function RaritiesListPage() {
     const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: 0 });
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
+    const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
     // const [updateRarity, setUpdateRarity] = useState();
 
@@ -45,6 +47,10 @@ export function RaritiesListPage() {
         search: values.search,
         cardCategory: values.cardCategory,
     });
+
+    const handleSort = (value: boolean) => {
+        setSortFilter(value);
+    };
 
     const handleCategory = useCallback(async (values, category) => {
         values = { ...values, cardCategory: category.id };
@@ -166,14 +172,22 @@ export function RaritiesListPage() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
+                            <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
+                                <TableSortLabel
+                                    sx={{ float: 'right', marginRight: '90%', color: '#0000008A' }}
+                                    onClick={() => handleSort(!sortFilter)}
+                                    direction={!sortFilter ? 'desc' : 'asc'}
+                                    active={true}
+                                ></TableSortLabel>{' '}
+                                Name
+                            </TableCell>
                             <TableCell>Category</TableCell>
                             <TableCell variant={'head'}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rarities.data.map((rarity) => (
-                            <TableRow>
+                            <TableRow key={rarity.id}>
                                 <TableCell>{rarity.name}</TableCell>
                                 <TableCell>{rarity.name}</TableCell>
                                 <TableCell variant={'body'} align={'right'}>

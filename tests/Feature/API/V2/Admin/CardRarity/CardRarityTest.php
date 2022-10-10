@@ -18,7 +18,7 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
         CardCategoriesSeeder::class,
-        CardRaritiesSeeder::class
+        CardRaritiesSeeder::class,
     ]);
 
     $this->user = User::factory()
@@ -34,11 +34,10 @@ test('admins can get list of card rarities', function () {
 });
 
 test('admins can get list of card rarities filter by name', function () {
-
     getJson(route('v2.rarities.index', [
         'filter' => [
-            'search' => CardRarity::first()->name
-        ]
+            'search' => CardRarity::first()->name,
+        ],
     ]))->assertOk()->assertJsonCount(1, 'data')->assertJsonFragment([
         'name' => CardRarity::first()->name,
     ]);
@@ -75,7 +74,6 @@ test('admins can update card rarities', function () {
 
     assertDatabaseHas('card_rarities', [
         'name' => 'Updated Name',
-        'id' => $cardRarity->id
+        'id' => $cardRarity->id,
     ]);
-
 });

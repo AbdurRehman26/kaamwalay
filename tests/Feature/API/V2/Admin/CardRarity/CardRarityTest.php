@@ -34,11 +34,23 @@ test('admins can get list of card rarities', function () {
 });
 
 test('admins can get list of card rarities filter by name', function () {
+
     getJson(route('v2.rarities.index', [
-        'filters' => [
-            'search' => '1asdasd123123'
+        'filter' => [
+            'search' => CardRarity::first()->name
         ]
-    ]))->assertOk()->assertJsonCount(5, 'data');
+    ]))->assertOk()->assertJsonCount(1, 'data')->assertJsonFragment([
+        'name' => CardRarity::first()->name,
+    ]);
+});
+
+test('admins can get list of card rarities sort by name', function () {
+    $response = getJson(route('v2.rarities.index', ['sort' => '-name']))->assertOk();
+
+    $this->assertEquals(
+        CardRarity::orderBy('name', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
 });
 
 test('admins can create card rarities', function () {

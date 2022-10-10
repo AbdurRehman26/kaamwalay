@@ -21,7 +21,7 @@ class UpdateCardRarityRequest extends FormRequest
                 Rule::unique('card_rarities', 'name')->where(function ($query) {
                     return $query->where('card_category_id', $this->card_category_id)
                         ->where('id', '!=', $this->route('rarity'));
-                })
+                }),
             ],
         ];
     }

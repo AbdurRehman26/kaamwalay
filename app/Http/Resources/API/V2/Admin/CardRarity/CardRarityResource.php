@@ -3,8 +3,10 @@
 namespace App\Http\Resources\API\V2\Admin\CardRarity;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\CardRarity;
 use Illuminate\Http\Request;
 
+/** @mixin CardRarity */
 class CardRarityResource extends BaseResource
 {
     /**

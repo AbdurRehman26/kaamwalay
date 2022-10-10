@@ -27,7 +27,7 @@ class CardRarityController extends Controller
         return new CardRarityResource(CardRarity::create($request->validated()));
     }
 
-    public function update(UpdateCardRarityRequest $request, $cardRarityId): JsonResponse
+    public function update(UpdateCardRarityRequest $request, int $cardRarityId): JsonResponse
     {
         CardRarity::where('id', $cardRarityId)->update([
             'name' => $request->name

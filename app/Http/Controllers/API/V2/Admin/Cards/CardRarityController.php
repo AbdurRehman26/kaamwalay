@@ -30,7 +30,7 @@ class CardRarityController extends Controller
     public function update(UpdateCardRarityRequest $request, int $cardRarityId): JsonResponse
     {
         CardRarity::where('id', $cardRarityId)->update([
-            'name' => $request->name
+            'name' => $request->name,
         ]);
 
         return response()->json([

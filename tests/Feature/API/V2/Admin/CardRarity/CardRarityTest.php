@@ -69,12 +69,12 @@ test('admins cannot create card rarity with existing name in same category.', fu
 test('admins can create card rarities', function () {
     postJson(route('v2.rarities.store'), [
         'name' => 'Lorem Ipsum',
-        'card_category_id' => 1,
+        'card_category_id' => $this->categories[0]->id,
     ])
         ->assertSuccessful()
         ->assertJsonFragment([
             'name' => 'Lorem Ipsum',
-            'card_category_id' => 1,
+            'card_category_id' => $this->categories[0]->id,
     ]);
 });
 

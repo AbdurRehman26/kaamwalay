@@ -86,25 +86,25 @@
                 series: [{
                     name: '',
                     data: [
-                        JSON.parse("{{ $pop_data['PR'] }}"),
-                        JSON.parse("{{ $pop_data['FR'] }}"),
-                        JSON.parse("{{ $pop_data['GOOD'] }}"),
-                        JSON.parse("{{ $pop_data['GOOD+'] }}"),
-                        JSON.parse("{{ $pop_data['VG'] }}"),
-                        JSON.parse("{{ $pop_data['VG+'] }}"),
-                        JSON.parse("{{ $pop_data['VG-EX'] }}"),
-                        JSON.parse("{{ $pop_data['VG-EX+'] }}"),
-                        JSON.parse("{{ $pop_data['EX'] }}"),
-                        JSON.parse("{{ $pop_data['EX+'] }}"),
-                        JSON.parse("{{ $pop_data['EX-MT'] }}"),
-                        JSON.parse("{{ $pop_data['EX-MT+'] }}"),
-                        JSON.parse("{{ $pop_data['NM'] }}"),
-                        JSON.parse("{{ $pop_data['NM+'] }}"),
-                        JSON.parse("{{ $pop_data['NM-MT'] }}"),
-                        JSON.parse("{{ $pop_data['NM-MT+'] }}"),
-                        JSON.parse("{{ $pop_data['MINT'] }}"),
-                        JSON.parse("{{ $pop_data['MINT+'] }}"),
-                        JSON.parse("{{ $pop_data['GEM-MT'] }}"),
+                        JSON.parse("{{ $pop_data['PR'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['FR'] ?? '' }}"),
+                        JSON.parse("{{ $pop_data['GOOD'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['GOOD+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['VG'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['VG+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['VG-EX'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['VG-EX+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['EX'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['EX+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['EX-MT'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['EX-MT+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['NM'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['NM+'] ?? '' }}"),
+                        JSON.parse("{{ $pop_data['NM-MT'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['NM-MT+'] ?? '' }}"),
+                        JSON.parse("{{ $pop_data['MINT'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['MINT+'] ?? ''}}"),
+                        JSON.parse("{{ $pop_data['GEM-MT'] ?? ''}}"),
                     ]
                 }],
                 chart: {
@@ -238,34 +238,11 @@
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>
-                        <table class="feed-view__table">
-                            <tbody>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['type'] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['series'] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['set'] }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="feed-view__right-side">
+                        @if($pop_data)
                         <div class="feed-view__ags-population">
                             <div>
                                 <p class="feed-view__ags-population__title">AGS POPULATION</p>
-                                <p class="feed-view__ags-population__count">{{ $pop_data['totalPopForCurrentCard'] }}</p>
+                                <p class="feed-view__ags-population__count">{{ $pop_data['totalPopForCurrentCard'] ?? 0 }}</p>
                             </div>
                             <div class="feed-view__ags-population__icon">
                                 <div><span class="material-icons">analytics</span></div>
@@ -274,46 +251,75 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="feed-view__table">
-                            <tbody>
-                                <tr class="feed-view__table__mobile-content">
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['type'] }}
-                                    </td>
-                                </tr>
-                                <tr class="feed-view__table__mobile-content">
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['series'] }}
-                                    </td>
-                                </tr>
-                                <tr class="feed-view__table__mobile-content">
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['set'] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['release_date'] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $card['number'] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
-                                    <td class="feed-view__table-cell">
-                                        {{ $owner }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @endif
+                    </div>
+                    <div class="feed-view__right-side">
+                        <div class="feed-view__table-div-left">
+                            <table class="feed-view__table">
+                                <tbody>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['type'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['series'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['set'] }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="feed-view__table-div-right">
+                            <table class="feed-view__table">
+                                <tbody>
+                                    <tr class="feed-view__table__mobile-content">
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card Type:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['type'] }}
+                                        </td>
+                                    </tr>
+                                    <tr class="feed-view__table__mobile-content">
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Series:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['series'] }}
+                                        </td>
+                                    </tr>
+                                    <tr class="feed-view__table__mobile-content">
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Set:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['set'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Release Date:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['release_date'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Card:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $card['number'] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feed-view__table-cell feed-view__table-cell--heading">Owner:</td>
+                                        <td class="feed-view__table-cell">
+                                            {{ $owner }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="feed-view__breakdown__scores-holder">

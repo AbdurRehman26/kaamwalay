@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\CardRarity;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\CardCategory\CardCategoryResource;
 use App\Models\CardRarity;
 use Illuminate\Http\Request;
 
@@ -22,8 +23,7 @@ class CardRarityResource extends BaseResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'card_category_name' => $this->cardCategory?->name,
-            'card_category_id' => $this->card_category_id,
+            'card_category' => new CardCategoryResource($this->cardCategory),
         ];
     }
 }

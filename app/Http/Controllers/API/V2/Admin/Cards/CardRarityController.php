@@ -31,6 +31,7 @@ class CardRarityController extends Controller
     {
         CardRarity::where('id', $cardRarityId)->update([
             'name' => $request->name,
+            'card_category_id' => $request->card_category_id,
         ]);
 
         return response()->json([

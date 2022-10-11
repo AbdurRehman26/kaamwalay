@@ -44,7 +44,7 @@ class MandrillClient
                 'global_merge_vars' => $this->prepareTemplateContent($templateContent),
                 'merge_language' => 'handlebars',
                 'header' => [
-                    'reply-to' => 'hey@agscard.com'
+                    'reply-to' => 'hey@agscard.com',
                 ],
             ],
         ]);

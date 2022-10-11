@@ -250,14 +250,10 @@ class UserCardService
             ];
         }
 
-//        return [
-//            'image_path' => $userCard->orderItem->cardProduct->image_path ?? null,
-//        ];
-
         return [
-            'front_slab_image' => 'https://pokemon-statics.s3.amazonaws.com/media/front_slab/000119_AGozHp1.jpg',
-            'back_slab_image' => 'https://pokemon-statics.s3.amazonaws.com/media/back_slab/000120_0wgmQF1.jpg',
+            'image_path' => $userCard->orderItem->cardProduct->image_path ?? null,
         ];
+
     }
 
      /**

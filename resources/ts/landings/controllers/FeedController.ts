@@ -1,4 +1,5 @@
 import { CardImageModal } from '../atoms/CardImageModalAtom';
+import { CardImageModalMobile } from '../atoms/CardImageModalMobileAtom';
 import { CardImageSlider } from '../atoms/CardImageSliderAtom';
 import { CardPageShareModal } from '../atoms/CardPageShareModalAtom';
 import { CopyToClipBoardAtom } from '../atoms/CopyToClipBoardAtom';
@@ -32,6 +33,7 @@ class FeedController extends Controller implements CanSetup<FeedController> {
             CardPageShareModal,
             CardImageModal,
             CardImageSlider,
+            CardImageModalMobile,
         );
     }
 }

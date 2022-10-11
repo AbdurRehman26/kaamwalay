@@ -1,15 +1,14 @@
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FreeMode, Thumbs } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { setEditLabelDialog } from '../../redux/slices/modalSlice';
 import CardImageModal from './CardImageModal';
+import CardImageModalMobile from './CardImageModalMobile';
 
 const CardImageDiv = styled(Grid)({
     '.mySwiper2': {
@@ -35,6 +34,7 @@ interface CardImageSliderProp {
 
 export function CardImageSlider({ images }: CardImageSliderProp) {
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const dispatch = useDispatch();
     const imagesJson = JSON.parse(images);
 
@@ -44,7 +44,7 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
 
     return (
         <CardImageDiv>
-            <CardImageModal />
+            {isMobile ? <CardImageModalMobile imagesJson={imagesJson} /> : <CardImageModal imagesJson={imagesJson} />}
             <Swiper
                 loop={false}
                 spaceBetween={10}

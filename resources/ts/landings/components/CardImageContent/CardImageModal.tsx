@@ -5,7 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { FreeMode, Thumbs } from 'swiper';
@@ -16,7 +16,7 @@ import { RootState } from '../../redux/store';
 const CardImageDiv = styled(Grid)({
     display: 'flex',
     '.mySwiper2': {
-        width: '100%',
+        width: '635px',
         background: '#000',
         '.swiper-wrapper': {
             '.swiper-slide': {
@@ -33,14 +33,21 @@ const CardImageDiv = styled(Grid)({
         img: {
             width: '305px',
             height: '515px',
+            margin: '30px',
         },
     },
     '.mySwiper': {
+        width: '200px',
         '.swiper-wrapper': {
             flexWrap: 'wrap',
+            height: '0px',
             '.swiper-slide': {
-                width: '191px!important',
+                width: '160px!important',
                 height: '200px!important',
+                marginRight: '0px!important',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '20px',
                 img: {
                     width: '117px!important',
                     height: '200px!important',
@@ -63,7 +70,11 @@ const LabelDialog = styled(Dialog)({
     },
 });
 
-export function CardImageModal() {
+interface props {
+    imagesJson: any;
+}
+
+export function CardImageModal({ imagesJson }: props) {
     const labelDialog = useSelector((state: RootState) => state.modal.openLabelDialog.labelDialog);
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
     const dispatch = useDispatch();
@@ -71,6 +82,12 @@ export function CardImageModal() {
     const handleModal = useCallback(() => {
         dispatch(setEditLabelDialog(false));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (!labelDialog) {
+            setThumbsSwiper(null);
+        }
+    }, [labelDialog]);
 
     return (
         <LabelDialog onClose={handleModal} open={labelDialog} fullWidth>
@@ -100,18 +117,13 @@ export function CardImageModal() {
                         modules={[FreeMode, Thumbs]}
                         className={'mySwiper'}
                     >
-                        <SwiperSlide>
-                            <img
-                                src="https://pokemon-statics.s3.amazonaws.com/media/front_slab/000119_AGozHp1.jpg"
-                                alt={''}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://pokemon-statics.s3.amazonaws.com/media/back_slab/000120_0wgmQF1.jpg"
-                                alt={''}
-                            />
-                        </SwiperSlide>
+                        {Object.keys(imagesJson).map((key) => {
+                            return (
+                                <SwiperSlide>
+                                    <img src={imagesJson[key]} alt={''} />
+                                </SwiperSlide>
+                            );
+                        })}
                     </Swiper>
                     <Swiper
                         loop={false}
@@ -121,26 +133,17 @@ export function CardImageModal() {
                         modules={[FreeMode, Thumbs]}
                         className={'mySwiper2'}
                     >
-                        <SwiperSlide>
-                            <TransformWrapper>
-                                <TransformComponent>
-                                    <img
-                                        src="https://pokemon-statics.s3.amazonaws.com/media/front_slab/000119_AGozHp1.jpg"
-                                        alt={''}
-                                    />
-                                </TransformComponent>
-                            </TransformWrapper>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <TransformWrapper>
-                                <TransformComponent>
-                                    <img
-                                        src="https://pokemon-statics.s3.amazonaws.com/media/back_slab/000120_0wgmQF1.jpg"
-                                        alt={''}
-                                    />
-                                </TransformComponent>
-                            </TransformWrapper>
-                        </SwiperSlide>
+                        {Object.keys(imagesJson).map((key) => {
+                            return (
+                                <SwiperSlide>
+                                    <TransformWrapper>
+                                        <TransformComponent>
+                                            <img src={imagesJson[key]} alt={''} />
+                                        </TransformComponent>
+                                    </TransformWrapper>
+                                </SwiperSlide>
+                            );
+                        })}
                     </Swiper>
                 </CardImageDiv>
             </DialogContent>

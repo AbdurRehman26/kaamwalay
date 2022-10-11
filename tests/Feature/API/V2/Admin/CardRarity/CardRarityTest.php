@@ -85,7 +85,7 @@ test('admins can update card rarities', function () {
         route('v2.rarities.update', ['rarity' => $cardRarity]),
         [
             'name' => 'Updated Name',
-            'card_category_id' => $cardRarity->card_category_id
+            'card_category_id' => $cardRarity->card_category_id,
         ]
     )->assertSuccessful();
 

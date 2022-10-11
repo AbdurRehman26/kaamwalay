@@ -9,6 +9,7 @@ use App\Http\Resources\API\V2\Admin\CardRarity\CardRarityCollection;
 use App\Http\Resources\API\V2\Admin\CardRarity\CardRarityResource;
 use App\Models\CardRarity;
 use App\Services\Admin\Card\CardRarityService;
+use Illuminate\Http\JsonResponse;
 
 class CardRarityController extends Controller
 {
@@ -26,11 +27,15 @@ class CardRarityController extends Controller
         return new CardRarityResource(CardRarity::create($request->validated()));
     }
 
-    public function update(UpdateCardRarityRequest $request, CardRarity $cardRarity): CardRarityResource
+    public function update(int $cardRarityId, UpdateCardRarityRequest $request): JsonResponse
     {
-        $cardRarity->update([
-            'name' => $request->name
+        CardRarity::where('id', $cardRarityId)->update([
+            'name' => $request->name,
         ]);
-        return new CardRarityResource($cardRarity->refresh());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Card Rarity Updated successfully.',
+        ]);
     }
 }

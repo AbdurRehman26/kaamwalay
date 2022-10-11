@@ -7,6 +7,7 @@ use Database\Seeders\CardRaritiesSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
@@ -17,7 +18,7 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
         CardCategoriesSeeder::class,
-        CardRaritiesSeeder::class
+        CardRaritiesSeeder::class,
     ]);
 
     $this->user = User::factory()
@@ -30,6 +31,25 @@ beforeEach(function () {
 
 test('admins can get list of card rarities', function () {
     getJson(route('v2.rarities.index'))->assertOk()->assertJsonCount(5, 'data');
+});
+
+test('admins can get list of card rarities filter by name', function () {
+    getJson(route('v2.rarities.index', [
+        'filter' => [
+            'search' => CardRarity::first()->name,
+        ],
+    ]))->assertOk()->assertJsonCount(1, 'data')->assertJsonFragment([
+        'name' => CardRarity::first()->name,
+    ]);
+});
+
+test('admins can get list of card rarities sort by name', function () {
+    $response = getJson(route('v2.rarities.index', ['sort' => '-name']))->assertOk();
+
+    $this->assertEquals(
+        CardRarity::orderBy('name', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
 });
 
 test('admins can create card rarities', function () {
@@ -50,10 +70,10 @@ test('admins can update card rarities', function () {
     putJson(
         route('v2.rarities.update', ['rarity' => $cardRarity->id]),
         ['name' => 'Updated Name']
-    )->assertSuccessful()
-        ->dump()
-        ->assertJsonFragment([
-            'name' => 'Lorem Ipsum',
-            'card_category_id' => 1,
-        ]);
+    )->assertSuccessful();
+
+    assertDatabaseHas('card_rarities', [
+        'name' => 'Updated Name',
+        'id' => $cardRarity->id,
+    ]);
 });

@@ -19,7 +19,7 @@ class StoreCardRarityRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                Rule::unique('card_series', 'name')->where(function ($query) {
+                Rule::unique('card_rarities', 'name')->where(function ($query) {
                     return $query->where('card_category_id', $this->card_category_id);
                 }),
             ],

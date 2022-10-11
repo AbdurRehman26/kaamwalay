@@ -23,6 +23,7 @@ class UpdateCardRarityRequest extends FormRequest
                         ->where('id', '!=', $this->route('rarity'));
                 }),
             ],
+            'card_category_id' => ['required', 'integer', 'exists:card_categories,id'],
         ];
     }
 }

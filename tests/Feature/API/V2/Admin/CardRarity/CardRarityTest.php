@@ -1,9 +1,8 @@
 <?php
 
+use App\Models\CardCategory;
 use App\Models\CardRarity;
 use App\Models\User;
-use Database\Seeders\CardCategoriesSeeder;
-use Database\Seeders\CardRaritiesSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -17,8 +16,12 @@ uses(WithFaker::class);
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
-        CardCategoriesSeeder::class,
-        CardRaritiesSeeder::class,
+    ]);
+
+    $this->categories = CardCategory::factory()->count(2)->create();
+
+    CardRarity::factory()->count(5)->create([
+        'card_category_id' => $this->categories[0]->id,
     ]);
 
     $this->user = User::factory()
@@ -52,6 +55,17 @@ test('admins can get list of card rarities sort by name', function () {
     );
 });
 
+test('admins can get single card rarity', function () {
+    getJson(route('v2.rarities.show', ['rarity' => cardRarity::first()]))->assertSuccessful();
+});
+
+test('admins cannot create card rarity with existing name in same category.', function () {
+    postJson(route('v2.rarities.store'), [
+        'name' => CardRarity::first()->name,
+        'card_category_id' => 1,
+    ])->assertUnprocessable();
+});
+
 test('admins can create card rarities', function () {
     postJson(route('v2.rarities.store'), [
         'name' => 'Lorem Ipsum',
@@ -68,8 +82,11 @@ test('admins can update card rarities', function () {
     $cardRarity = CardRarity::first();
 
     putJson(
-        route('v2.rarities.update', ['rarity' => $cardRarity->id]),
-        ['name' => 'Updated Name']
+        route('v2.rarities.update', ['rarity' => $cardRarity]),
+        [
+            'name' => 'Updated Name',
+            'card_category_id' => $cardRarity->card_category_id
+        ]
     )->assertSuccessful();
 
     assertDatabaseHas('card_rarities', [

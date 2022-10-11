@@ -253,7 +253,6 @@ class UserCardService
         return [
             'image_path' => $userCard->orderItem->cardProduct->image_path ?? null,
         ];
-
     }
 
      /**

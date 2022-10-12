@@ -59,7 +59,7 @@ export function ShippingMethods() {
 
     return (
         <Stack>
-            <Grid ml={2.5} container direction={'row'} alignItems={'center'} py={3}>
+            <Grid ml={2.5} container direction={'row'} alignItems={'center'} pt={3} pb={1.5}>
                 <Typography variant={'subtitle1'} fontWeight={500} mr={1}>
                     Insured Shipping or Vault Storage?
                 </Typography>
@@ -91,7 +91,7 @@ export function ShippingMethods() {
                     <InfoIcon sx={{ color: '#0000008A' }} />
                 </Tooltip>
             </Grid>
-            <Grid container spacing={3} mb={4} px={2}>
+            <Grid container spacing={2} mb={4} px={2.5}>
                 {shippingMethods.data?.map((method) =>
                     mappedContent[method.code] ? (
                         <Grid item xs={6} key={method.id}>

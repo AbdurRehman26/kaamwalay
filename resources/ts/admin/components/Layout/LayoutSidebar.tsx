@@ -69,8 +69,8 @@ function LayoutSidebar() {
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div">
-                        <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} />
-                        <LayoutSidebarItem icon={StyleIcon} title={'Rarities'} href={'/rarities'} />
+                        <LayoutSidebarItem title={'Cards'} href={'/cards'} />
+                        <LayoutSidebarItem title={'Rarities'} href={'/rarities'} />
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />

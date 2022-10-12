@@ -6,5 +6,5 @@ export class CardRarityEntity extends Entity {
     public name!: string;
 
     @Type(() => CardCategoryEntity)
-    public coupon!: CardCategoryEntity;
+    public cardCategory!: CardCategoryEntity;
 }

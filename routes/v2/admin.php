@@ -5,6 +5,7 @@ use App\Http\Controllers\API\V2\Admin\Address\StateController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardLabelController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardRarityController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponableEntityController;
@@ -45,9 +46,18 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', LoginController::class)->middleware('guest');
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix('orders')->group(function () {
-        Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
-        Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
-        Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
+        Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show'])->names([
+            'index' => 'admin.payment-methods.index',
+            'show' => 'admin.payment-methods.show',
+        ]);
+        Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show'])->names([
+            'index' => 'admin.payment-plans.index',
+            'show' => 'admin.payment-plans.show',
+        ]);
+        Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show'])->names([
+            'index' => 'admin.shipping-methods.index',
+            'show' => 'admin.shipping-methods.show',
+        ]);
         Route::post('shipping-fee', ShippingFeeController::class);
 
         Route::prefix('{order}')->group(function () {
@@ -86,8 +96,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
 
     Route::prefix('addresses')->group(function () {
-        Route::apiResource('countries', CountryController::class)->only(['index']);
-        Route::apiResource('states', StateController::class)->only(['index']);
+        Route::apiResource('countries', CountryController::class)->only(['index'])->names([
+            'index' => 'admin.countries.index',
+        ]);
+        Route::apiResource('states', StateController::class)->only(['index'])->names([
+            'index' => 'admin.states.index',
+        ]);
     });
 
     Route::get('customer/{user}/addresses', [CustomerAddressController::class, 'getCustomerAddresses']);
@@ -96,6 +110,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('categories', [CardCategoryController::class, 'index']);
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
+        Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'show', 'update']);
         Route::put('/labels/{label}', [CardLabelController::class, 'update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);

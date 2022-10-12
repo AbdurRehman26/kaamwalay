@@ -24,6 +24,10 @@ const CardImageDiv = styled(Grid)({
                 justifyContent: 'center',
             },
         },
+        '.react-transform-wrapper': {
+            width: '100%',
+            height: '100%',
+        },
         '.swiper-button-prev': {
             display: 'none',
         },
@@ -32,25 +36,23 @@ const CardImageDiv = styled(Grid)({
         },
         img: {
             width: '305px',
-            height: '515px',
             margin: '30px',
         },
     },
     '.mySwiper': {
-        width: '200px',
+        width: '160px',
         '.swiper-wrapper': {
             flexWrap: 'wrap',
-            height: '0px',
+            height: '80%',
             '.swiper-slide': {
                 width: '160px!important',
                 height: '200px!important',
                 marginRight: '0px!important',
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'center',
                 marginTop: '20px',
                 img: {
-                    width: '117px!important',
-                    height: '200px!important',
+                    borderRadius: '4px',
                 },
             },
         },
@@ -66,7 +68,7 @@ const LabelDialog = styled(Dialog)({
         padding: '0px 0px',
     },
     '& .MuiTypography-root': {
-        padding: '24px 24px',
+        padding: '30px 24px',
     },
 });
 
@@ -136,7 +138,7 @@ export function CardImageModal({ imagesJson }: props) {
                         {Object.keys(imagesJson).map((key) => {
                             return (
                                 <SwiperSlide>
-                                    <TransformWrapper>
+                                    <TransformWrapper centerOnInit={true}>
                                         <TransformComponent>
                                             <img src={imagesJson[key]} alt={''} />
                                         </TransformComponent>

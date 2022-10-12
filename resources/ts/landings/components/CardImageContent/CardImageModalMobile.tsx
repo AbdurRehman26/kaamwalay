@@ -19,6 +19,9 @@ const CardImageDiv = styled(Grid)({
             display: 'flex',
             justifyContent: 'center',
         },
+        '.react-transform-wrapper': {
+            width: '100%',
+        },
         '.swiper-button-prev': {
             display: 'none',
         },
@@ -109,7 +112,7 @@ export function CardImageModalMobile({ imagesJson }: props) {
                         {Object.keys(imagesJson).map((key) => {
                             return (
                                 <SwiperSlide>
-                                    <TransformWrapper>
+                                    <TransformWrapper centerOnInit={true}>
                                         <TransformComponent>
                                             <img src={imagesJson[key]} alt={''} />
                                         </TransformComponent>

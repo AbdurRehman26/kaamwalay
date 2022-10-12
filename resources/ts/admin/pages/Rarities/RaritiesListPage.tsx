@@ -18,6 +18,7 @@ import { TablePagination } from '@shared/components/TablePagination';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminRaritiesQuery } from '@shared/redux/hooks/useRaritiesQuery';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
@@ -40,6 +41,7 @@ export function RaritiesListPage() {
     const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
     const [updateRarity, setUpdateRarity] = useState<CardRarityEntity>();
+    const notifications = useNotifications();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -129,8 +131,12 @@ export function RaritiesListPage() {
     );
 
     const handleAddSubmit = async () => {
-        setAddRaritiesDialog(false);
-        // window.location.reload();
+        try {
+            setAddRaritiesDialog(false);
+            window.location.reload();
+        } catch (e: any) {
+            notifications.exception(e);
+        }
     };
 
     const handleEdit = async (rarity: CardRarityEntity) => {
@@ -166,7 +172,12 @@ export function RaritiesListPage() {
                 </Box>
             ) : (
                 <>
-                    <RaritiesPageHeader searchField title="Rarities" onSearch={handleSearch} />
+                    <RaritiesPageHeader
+                        searchField
+                        value={initialValues.search}
+                        title="Rarities"
+                        onSearch={handleSearch}
+                    />
                     <Grid container p={2.5} alignItems={'center'}>
                         <Grid item xs container alignItems={'center'}>
                             <Typography variant={'subtitle1'}>{rarities.pagination.meta.total} Result(s)</Typography>
@@ -203,7 +214,7 @@ export function RaritiesListPage() {
                                 <TableRow>
                                     <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
                                         <TableSortLabel
-                                            sx={{ float: 'right', marginRight: '90%', color: '#0000008A' }}
+                                            sx={{ float: 'right', marginRight: '93%', color: '#0000008A' }}
                                             onClick={() => handleSort(!sortFilter)}
                                             direction={!sortFilter ? 'desc' : 'asc'}
                                             active={true}

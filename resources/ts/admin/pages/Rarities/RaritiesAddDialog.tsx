@@ -57,10 +57,8 @@ export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
             };
             if (isUpdate) {
                 await endpoint.put('', rarityDto);
-                notifications.success('Rarity Updated Successfully!');
             } else {
                 await endpoint.post('', rarityDto);
-                notifications.success('Rarity Added Successfully!');
             }
             setIsLoading(false);
             await onSubmit();

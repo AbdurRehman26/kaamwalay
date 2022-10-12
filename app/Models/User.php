@@ -215,14 +215,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasMany(Order::class);
     }
 
-    /**
-     * @return HasMany<Order>
-     */
-    public function paidOrders(): HasMany
-    {
-        return $this->hasMany(Order::class)->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
-    }
-
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -254,7 +246,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     */
     public function cardsCount(): int
     {
-        return $this->paidOrders()
+        return $this->orders()->paid()
             ->join('order_items', 'order_id', '=', 'orders.id')
             ->sum('order_items.quantity');
     }
@@ -342,7 +334,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function exportQuery(): Builder
     {
         return self::query()
-            ->withCount('paidOrders')
+            ->withCount(['orders as paid_orders_count' => fn (Builder $query) => ($query->paid())])
             ->withSum([
                 'orderItems' => fn (Builder $query) => (
                     $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)

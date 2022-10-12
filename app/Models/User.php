@@ -334,7 +334,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function exportQuery(): Builder
     {
         return self::query()
-            ->withCount(['orders as paid_orders_count' => fn (Builder $query) => ($query->paid())])
+            ->withCount(['orders as paid_orders_count' => fn ($query) => ($query->paid())])
             ->withSum([
                 'orderItems' => fn (Builder $query) => (
                     $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)

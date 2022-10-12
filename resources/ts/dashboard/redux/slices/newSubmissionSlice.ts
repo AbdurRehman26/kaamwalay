@@ -107,6 +107,7 @@ export interface NewSubmissionSliceState {
     previewTotal: number;
     availableCredit: number;
     appliedCredit: number;
+    amountPaidFromWallet: number;
     step01Status: any;
     orderID: number;
     grandTotal: number;
@@ -148,6 +149,7 @@ const initialState: NewSubmissionSliceState = {
     availableCredit: 0,
     previewTotal: 0,
     appliedCredit: 0,
+    amountPaidFromWallet: 0,
     orderNumber: '',
     paymentMethodDiscountedAmount: 0,
     isNextDisabled: false,
@@ -885,6 +887,7 @@ export const newSubmissionSlice = createSlice({
                 },
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;
+            state.amountPaidFromWallet = +action.payload.amountPaidFromWallet;
             state.paymentStatus = action.payload.paymentStatus;
         },
         setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
@@ -993,6 +996,7 @@ export const newSubmissionSlice = createSlice({
                 : '';
             state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
             state.appliedCredit = action.payload.amountPaidFromWallet;
+            state.amountPaidFromWallet = action.payload.amountPaidFromWallet;
         },
     },
 });

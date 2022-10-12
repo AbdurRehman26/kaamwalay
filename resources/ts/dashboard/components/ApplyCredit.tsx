@@ -16,6 +16,7 @@ export function ApplyCredit() {
     const [invalidStateType, setInvalidStateType] = useState<InvalidStateTypes | null>(null);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+    const amountPaidFromWallet = useAppSelector((state) => state.newSubmission.amountPaidFromWallet);
     const [localAppliedCredit, setLocalAppliedCredit] = useState(appliedCredit);
     const previewTotal = useAppSelector((state) => state.newSubmission.previewTotal);
 
@@ -66,6 +67,20 @@ export function ApplyCredit() {
     }, [dispatch]);
 
     useEffect(() => {
+        // After adding amountPaidFromWallet (which is appliedCredit as registered in DB) in slice,
+        // availableCredit can be fetched after initial useEffect runs.
+        // Because of this, we need to hear for possible changes on availableCredit to properly assign the input initial value.
+        // This can be modified to assign the amountPaidFromWallet value instead of checking for available credit so we could show alert message.
+        if (amountPaidFromWallet > 0 && availableCredit > 0) {
+            if (amountPaidFromWallet < availableCredit) {
+                setLocalAppliedCredit(amountPaidFromWallet);
+            } else {
+                setLocalAppliedCredit(availableCredit);
+            }
+        }
+    }, [availableCredit, amountPaidFromWallet]);
+
+    useEffect(() => {
         if (localAppliedCredit > availableCredit) {
             setInvalidStateType(InvalidStateTypes.exceedsAvailableCredit);
             dispatch(setAppliedCredit(0));
@@ -82,7 +97,7 @@ export function ApplyCredit() {
         dispatch(setAppliedCredit(localAppliedCredit));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [appliedCredit, localAppliedCredit]);
+    }, [appliedCredit, localAppliedCredit, availableCredit]);
 
     return (
         <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} width={'50%'} marginBottom={'6px'}>

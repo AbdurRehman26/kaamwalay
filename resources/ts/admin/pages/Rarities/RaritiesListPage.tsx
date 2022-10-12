@@ -218,7 +218,7 @@ export function RaritiesListPage() {
                                 {rarities.data.map((rarity) => (
                                     <TableRow key={rarity.id}>
                                         <TableCell>{rarity.name}</TableCell>
-                                        <TableCell>{rarity.cardCategoryName}</TableCell>
+                                        <TableCell>{rarity?.cardCategory?.name}</TableCell>
                                         <TableCell variant={'body'} align={'right'}>
                                             <MoreAction rarity={rarity} handleEditAction={handleEdit} />
                                         </TableCell>

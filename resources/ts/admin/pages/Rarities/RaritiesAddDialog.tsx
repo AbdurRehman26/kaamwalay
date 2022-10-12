@@ -78,7 +78,7 @@ export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
     }, [dispatch]);
 
     useEffect(() => {
-        setCardCategory(updateRarity?.cardCategoryId);
+        setCardCategory(updateRarity?.cardCategory?.id);
         setRarityName(updateRarity?.name);
     }, [isUpdate, updateRarity]);
 

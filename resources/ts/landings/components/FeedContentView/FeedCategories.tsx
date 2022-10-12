@@ -149,9 +149,9 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
             <FeeCategoryBox>
                 <Grid className={'FilterBar'}>
                     {category ? (
-                        <CustomRefinementList attribute={'card_category'} defaultRefinement={[category]} />
+                        <CustomRefinementList attribute={'card_category'} defaultRefinement={[category]} limit={100} />
                     ) : (
-                        <CustomRefinementList attribute={'card_category'} />
+                        <CustomRefinementList attribute={'card_category'} limit={100} />
                     )}
                     <FeedGrade />
                 </Grid>

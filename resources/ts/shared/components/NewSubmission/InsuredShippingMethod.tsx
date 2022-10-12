@@ -66,8 +66,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'rgba(0, 0, 0, 0.87)',
     },
     shippingAddressContainer: {
-        marginTop: '20px',
-        margin: '20px',
+        margin: '12px 20px 12px 20px',
     },
     shippingMethodItemContainer: {
         display: 'flex',
@@ -111,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         margin: '10px',
         flexDirection: 'row',
-        marginBottom: '32px',
         flexWrap: 'wrap',
     },
     newAddressCheckbox: {},
@@ -198,7 +196,6 @@ export function InsuredShippingMethod() {
 
     function handleUseCustomShippingAddress() {
         dispatch(setUseCustomShippingAddress(!useCustomShippingAddress));
-        // dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
 
         // If the user is about to disable the checkbox, we'll select the first existing address on the list
         if (useCustomShippingAddress) {
@@ -318,7 +315,6 @@ export function InsuredShippingMethod() {
 
     useEffect(
         () => {
-            // dispatch(getStatesList());
             // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
             // we'll check the first address in the list
             if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {
@@ -383,7 +379,7 @@ export function InsuredShippingMethod() {
                     <Typography ml={2.5} className={classes.sectionLabel}>
                         Shipping Address
                     </Typography>
-                    <Box marginBottom={'16px'} />
+                    <Box marginBottom={'12px'} />
                     <div className={classes.existingAddressesContainer}>
                         {existingAddresses?.map((address: any) => (
                             <ExistingAddress
@@ -400,7 +396,7 @@ export function InsuredShippingMethod() {
                             />
                         ))}
                     </div>
-                    <Divider light />
+                    <Divider sx={{ marginLeft: '20px', marginRight: '20px' }} />
                 </>
             ) : null}
 
@@ -411,42 +407,43 @@ export function InsuredShippingMethod() {
             ) : (
                 <div className={classes.shippingAddressContainer}>
                     <div className={classes.shippingAddressSectionHeader}>
-                        <Box>
+                        <Box width={'100%'}>
                             {existingAddresses.length > 0 ? (
-                                <FormControlLabel
-                                    control={
-                                        <Radio
-                                            checked={useCustomShippingAddress}
-                                            onChange={handleUseCustomShippingAddress}
-                                            name="checkedB"
-                                            color="primary"
+                                <>
+                                    <FormControlLabel
+                                        sx={{ width: '50%' }}
+                                        control={
+                                            <Radio
+                                                checked={useCustomShippingAddress}
+                                                onChange={handleUseCustomShippingAddress}
+                                                name="checkedB"
+                                                color="primary"
+                                            />
+                                        }
+                                        className={classes.newAddressCheckbox}
+                                        label="Use a new address"
+                                    />
+                                    {useCustomShippingAddress ? (
+                                        <FormControlLabel
+                                            sx={{ float: 'right' }}
+                                            control={
+                                                <Checkbox
+                                                    color={'primary'}
+                                                    checked={saveForLater}
+                                                    disabled={disableAllInputs}
+                                                    onChange={onSaveForLater}
+                                                />
+                                            }
+                                            label="Save for later"
                                         />
-                                    }
-                                    className={classes.newAddressCheckbox}
-                                    label="Use a new address"
-                                />
+                                    ) : null}
+                                </>
                             ) : null}
                         </Box>
                     </div>
 
                     {useCustomShippingAddress ? (
                         <div className={classes.allInputsContainer}>
-                            <div className={classes.shippingAddressSectionHeader}>
-                                <Typography className={classes.sectionLabel}>
-                                    {existingAddresses.length > 0 ? 'New Shipping Address' : 'Shipping Address'}
-                                </Typography>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            color={'primary'}
-                                            checked={saveForLater}
-                                            disabled={disableAllInputs}
-                                            onChange={onSaveForLater}
-                                        />
-                                    }
-                                    label="Save for later"
-                                />
-                            </div>
                             <div className={classes.inputsRow01}>
                                 <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                     <Typography className={classes.methodDescription}>Country</Typography>

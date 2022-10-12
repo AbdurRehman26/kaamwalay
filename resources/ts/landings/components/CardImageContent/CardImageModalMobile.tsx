@@ -30,7 +30,6 @@ const CardImageDiv = styled(Grid)({
         },
         img: {
             width: '319px',
-            height: '539px',
         },
     },
 });

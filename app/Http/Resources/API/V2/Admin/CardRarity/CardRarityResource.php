@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\CardRarity;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V1\Admin\CardCategory\CardCategoryResource;
+use App\Http\Resources\API\V2\Admin\CardCategory\CardCategoryResource;
 use App\Models\CardRarity;
 use Illuminate\Http\Request;
 

@@ -48,7 +48,7 @@ class CustomerProfileService
     {
         $response = $this->agsService->deleteProfile($user);
 
-        if (! isset($response['app_status']) || ! $response['app_status']) {
+        if (! is_array($response)) {
             throw new UserAccountCannotBeDeletedException();
         }
 

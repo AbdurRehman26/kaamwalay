@@ -298,6 +298,10 @@ class CardProduct extends Model
             );
     }
 
+    /**
+     * @param  Builder<CardProduct> $query
+     * @return Builder<CardProduct>
+     */
     public function scopeExcludeAddedManually(Builder $query): Builder
     {
         return $query->where('is_added_manually', 0)

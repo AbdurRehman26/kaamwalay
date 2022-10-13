@@ -35,7 +35,7 @@ export function RaritiesListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: 0 });
-    const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
+    const [query, { setQuery, delQuery }] = useLocationQuery<InitialValues>();
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
     const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
@@ -53,7 +53,13 @@ export function RaritiesListPage() {
     useEffect(
         () => {
             if (!rarities.isLoading) {
-                rarities.sort({ sort: sortFilter ? 'name' : '-name' });
+                rarities.searchSortedWithPagination(
+                    { sort: sortFilter ? 'name' : '-name' },
+                    getFilters({
+                        ...formikRef.current!.values,
+                        cardCategory: '',
+                    }),
+                );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +119,7 @@ export function RaritiesListPage() {
     const handleSearch = useCallback(
         async (search: string) => {
             if (search) {
-                addQuery({ search });
+                setQuery({ ...query, search });
             } else {
                 delQuery('search');
             }
@@ -128,7 +134,7 @@ export function RaritiesListPage() {
                 1,
             );
         },
-        [addQuery, rarities, delQuery, sortFilter],
+        [rarities, delQuery, sortFilter, setQuery, query],
     );
 
     const handleAddSubmit = async () => {

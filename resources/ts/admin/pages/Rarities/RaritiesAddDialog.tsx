@@ -16,10 +16,11 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useCallback, useEffect, useState } from 'react';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
-import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { app } from '@shared/lib/app';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
+import { RaritiesRepositary } from '@shared/repositories/Admin/RaritiesRepositary';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -27,11 +28,11 @@ export interface RaritiesAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit(): Promise<void> | void;
     isUpdate?: boolean;
     title: string;
-    updateRarity?: CardRarityEntity | null;
+    rarityId?: number | null;
 }
 
 export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
-    const { onClose, isUpdate, updateRarity, title, onSubmit, ...rest } = props;
+    const { onClose, isUpdate, rarityId, title, onSubmit, ...rest } = props;
     const dispatch = useAppDispatch();
 
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
@@ -48,12 +49,12 @@ export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
     const handleAddRarity = async () => {
         setIsLoading(true);
         const endpoint = apiService.createEndpoint(
-            isUpdate ? `admin/cards/rarities/${updateRarity?.id}` : `admin/cards/rarities`,
+            isUpdate ? `admin/cards/rarities/${rarityId}` : `admin/cards/rarities`,
         );
         try {
             const rarityDto = {
                 name: rarityName,
-                cardCategoryId: cardCategory,
+                cardCategoryId: cardCategory || 1,
             };
             if (isUpdate) {
                 await endpoint.put('', rarityDto);
@@ -76,9 +77,15 @@ export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
     }, [dispatch]);
 
     useEffect(() => {
-        setCardCategory(updateRarity?.cardCategory?.id);
-        setRarityName(updateRarity?.name);
-    }, [isUpdate, updateRarity]);
+        (async () => {
+            const raritiesRepositary = app(RaritiesRepositary);
+            if (rarityId) {
+                const result = await raritiesRepositary.getRarity(rarityId);
+                await setCardCategory(result.cardCategory.id);
+                await setRarityName(result.name);
+            }
+        })();
+    }, [isUpdate, rarityId]);
 
     const handleClose = useCallback(() => {
         if (onClose) {
@@ -166,7 +173,12 @@ export function RaritiesAddDialog(props: RaritiesAddDialogProps) {
                                 <Button variant="text" sx={{ color: '#000' }} onClick={handleClose}>
                                     Cancel
                                 </Button>
-                                <LoadingButton loading={isLoading} variant={'contained'} onClick={handleAddRarity}>
+                                <LoadingButton
+                                    disabled={rarityName === ''}
+                                    loading={isLoading}
+                                    variant={'contained'}
+                                    onClick={handleAddRarity}
+                                >
                                     {title}
                                 </LoadingButton>
                             </Box>

@@ -25,7 +25,7 @@ const Root = styled(Grid)(() => ({
     backgroundColor: '#f9f9f9',
     width: '100%',
     borderBottom: '1px solid #e0e0e0',
-    '.ListPageHeader-search': {
+    '.RaritiesPageHeader-search': {
         '.MuiOutlinedInput-root': {
             backgroundColor: '#fff',
             borderRadius: 24,
@@ -40,7 +40,7 @@ const Root = styled(Grid)(() => ({
 
 const useStyles = makeStyles(
     (theme) => ({
-        newCustomerBtn: {
+        newRarityBtn: {
             borderRadius: 24,
             padding: '12px 24px',
             [theme.breakpoints.down('sm')]: {
@@ -111,7 +111,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                             </Typography>
                             {searchField && (
                                 <TextField
-                                    className={'ListPageHeader-search'}
+                                    className={'RaritiesPageHeader-search'}
                                     value={search}
                                     onChange={handleSearchValue}
                                     onKeyDown={handleKeyDown}
@@ -139,7 +139,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                                 onClick={() => setAddRaritiesDialog(true)}
                                 variant={'contained'}
                                 color={'primary'}
-                                className={classes.newCustomerBtn}
+                                className={classes.newRarityBtn}
                             >
                                 Create Rarity
                             </Button>

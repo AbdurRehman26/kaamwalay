@@ -16,7 +16,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PageSelector } from '@shared/components/PageSelector';
 import { TablePagination } from '@shared/components/TablePagination';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
-import { CardRarityEntity } from '@shared/entities/CardRarityEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -40,13 +39,13 @@ export function RaritiesListPage() {
     const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
     const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
-    const [updateRarity, setUpdateRarity] = useState<CardRarityEntity>();
+    const [rarityId, setRarityId] = useState<number>();
     const notifications = useNotifications();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
-            cardCategory: query.cardCategory ?? '',
             search: query.search ?? '',
+            cardCategory: query.cardCategory ?? '',
         }),
         [query.search, query.cardCategory],
     );
@@ -97,11 +96,11 @@ export function RaritiesListPage() {
             setQuery({
                 ...values,
             });
-            await rarities.search(getFilters(values));
+            await rarities.searchSortedWithPagination({ sort: sortFilter ? 'name' : '-name' }, getFilters(values), 1);
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [rarities, setQuery],
+        [rarities, setQuery, sortFilter],
     );
 
     useEffect(() => {
@@ -120,14 +119,16 @@ export function RaritiesListPage() {
             }
 
             formikRef.current?.setFieldValue('search', search);
-            await rarities.search(
+            await rarities.searchSortedWithPagination(
+                { sort: sortFilter ? 'name' : '-name' },
                 getFilters({
-                    ...formikRef.current!?.values,
+                    ...formikRef.current!.values,
                     search,
                 }),
+                1,
             );
         },
-        [addQuery, rarities, delQuery],
+        [addQuery, rarities, delQuery, sortFilter],
     );
 
     const handleAddSubmit = async () => {
@@ -139,8 +140,8 @@ export function RaritiesListPage() {
         }
     };
 
-    const handleEdit = async (rarity: CardRarityEntity) => {
-        setUpdateRarity(rarity);
+    const handleEdit = (id: number) => {
+        setRarityId(id);
         setAddRaritiesDialog(true);
     };
 
@@ -148,13 +149,15 @@ export function RaritiesListPage() {
         formikRef.current?.setFieldValue('cardCategory', '');
         delQuery('cardCategory');
         setCategoryName({ categoryId: 0, categoryName: '' });
-        await rarities.search(
+        await rarities.searchSortedWithPagination(
+            { sort: sortFilter ? 'name' : '-name' },
             getFilters({
                 ...formikRef.current!.values,
                 cardCategory: '',
             }),
+            1,
         );
-    }, [rarities, delQuery]);
+    }, [rarities, delQuery, sortFilter]);
 
     return (
         <>
@@ -164,7 +167,7 @@ export function RaritiesListPage() {
                 onClose={() => setAddRaritiesDialog(false)}
                 onSubmit={handleAddSubmit}
                 isUpdate={true}
-                updateRarity={updateRarity}
+                rarityId={rarityId}
             />
             {rarities.isLoading ? (
                 <Box width={'100%'} padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -214,7 +217,12 @@ export function RaritiesListPage() {
                                 <TableRow>
                                     <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
                                         <TableSortLabel
-                                            sx={{ float: 'right', marginRight: '93%', color: '#0000008A' }}
+                                            sx={{
+                                                position: 'absolute',
+                                                left: '15%',
+                                                marginTop: '2px',
+                                                color: '#0000008A',
+                                            }}
                                             onClick={() => handleSort(!sortFilter)}
                                             direction={!sortFilter ? 'desc' : 'asc'}
                                             active={true}
@@ -231,7 +239,7 @@ export function RaritiesListPage() {
                                         <TableCell>{rarity.name}</TableCell>
                                         <TableCell>{rarity?.cardCategory?.name}</TableCell>
                                         <TableCell variant={'body'} align={'right'}>
-                                            <MoreAction rarity={rarity} handleEditAction={handleEdit} />
+                                            <MoreAction id={rarity.id} handleEditAction={handleEdit} />
                                         </TableCell>
                                     </TableRow>
                                 ))}

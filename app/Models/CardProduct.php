@@ -297,4 +297,12 @@ class CardProduct extends Model
                 fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
             );
     }
+
+    public function scopeExcludeAddedManually(Builder $query): Builder
+    {
+        return $query->where('is_added_manually', 0)
+            ->whereNotNull('card_category_id')
+            ->whereNotNull('card_set_id')
+            ->whereNotNull('card_number_order');
+    }
 }

@@ -27,7 +27,7 @@ const useStyles = makeStyles(
     (theme) => ({
         container: {
             width: '100%',
-            padding: '12px',
+            padding: '12px 12px 12px 6px',
             paddingTop: '7px',
             borderRadius: '2px',
             display: 'flex',

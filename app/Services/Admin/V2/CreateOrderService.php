@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\V2;
 
-use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Country;
@@ -127,8 +126,6 @@ class CreateOrderService extends BaseCreateOrderService
             $paymentService->charge($order, []);
 
             $order->markAsPaid();
-
-            OrderPaid::dispatch($order);
         } else {
             //In case Pay later is selected, we should still check if the order total is 0, and if so, mark as paid
             $this->markPaidIfTotalIsZero();

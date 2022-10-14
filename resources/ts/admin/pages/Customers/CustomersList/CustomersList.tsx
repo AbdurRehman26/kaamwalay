@@ -1,3 +1,4 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -148,6 +149,7 @@ export function CustomersList() {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
+    const [isExporting, setIsExporting] = useState(false);
 
     const navigate = useNavigate();
 
@@ -263,6 +265,7 @@ export function CustomersList() {
 
     const handleExportData = useCallback(async () => {
         try {
+            setIsExporting(true);
             const exportData = await dataExportRepository.export({
                 model: ExportableModelsEnum.User,
                 sort: { sort: sortFilter },
@@ -272,8 +275,10 @@ export function CustomersList() {
             });
 
             await downloadFromUrl(exportData.fileUrl, `robograding-customers.xlsx`);
+            setIsExporting(false);
         } catch (e: any) {
             notifications.exception(e);
+            setIsExporting(false);
         }
     }, [dataExportRepository, notifications, sortFilter]);
 
@@ -395,14 +400,16 @@ export function CustomersList() {
                     </Formik>
                 </Grid>
                 <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                    <Button
+                    <LoadingButton
                         variant={'outlined'}
                         color={'primary'}
                         sx={{ borderRadius: 20, padding: '7px 24px' }}
                         onClick={handleExportData}
+                        loading={isExporting}
+                        disabled={isExporting}
                     >
                         Export List
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
             <TableContainer>

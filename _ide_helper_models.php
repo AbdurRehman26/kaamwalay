@@ -1643,6 +1643,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read \App\Models\Wallet|null $wallet
+ * @property-read int|null $order_items_sum_quantity
+ * @property-read int|null $paid_orders_count
  * @method static \Illuminate\Database\Eloquent\Builder|User admin()
  * @method static \Illuminate\Database\Eloquent\Builder|User customer()
  * @method static \Database\Factories\UserFactory factory(...$parameters)

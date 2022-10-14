@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +14,24 @@ import { setEditLabelDialog } from '../../redux/slices/modalSlice';
 import { RootState } from '../../redux/store';
 
 const CardImageDiv = styled(Grid)({
+    '.SwiperToolTip': {
+        background: '#000',
+        borderRadius: '4px',
+        textAlign: 'center',
+        padding: '15px 15px',
+        margin: 'auto',
+        width: '50%',
+        color: '#fff',
+        fontStyle: 'normal',
+        fontWeight: '500',
+        fontSize: '12px',
+        lineHeight: '16px',
+        marginTop: '50px',
+    },
+    '.SwiperToolTipHide': {
+        display: 'none',
+    },
     '.mySwiper2': {
-        marginBottom: '70px',
         '.swiper-slide': {
             display: 'flex',
             justifyContent: 'center',
@@ -62,7 +79,7 @@ const styles = {
         alignItems: 'stretch',
         borderBottom: '1px solid #E0E0E0',
         padding: '15px 15px',
-        marginBottom: '70px',
+        marginBottom: '40px',
     },
     Box: {
         width: '100%',
@@ -79,6 +96,7 @@ interface props {
 export function CardImageModalMobile({ imagesJson }: props) {
     const labelDialog = useSelector((state: RootState) => state.modal.openLabelDialog.labelDialog);
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+    const [toolTipClass, setToolTipClass] = useState('SwiperToolTip');
     const dispatch = useDispatch();
 
     const handleModal = useCallback(() => {
@@ -88,6 +106,7 @@ export function CardImageModalMobile({ imagesJson }: props) {
     useEffect(() => {
         if (!labelDialog) {
             setThumbsSwiper(null);
+            setToolTipClass('SwiperToolTip');
         }
     }, [labelDialog]);
 
@@ -111,7 +130,10 @@ export function CardImageModalMobile({ imagesJson }: props) {
                         {Object.keys(imagesJson).map((key) => {
                             return (
                                 <SwiperSlide>
-                                    <TransformWrapper centerOnInit={true}>
+                                    <TransformWrapper
+                                        centerOnInit={true}
+                                        onZoomStart={() => setToolTipClass('SwiperToolTipHide')}
+                                    >
                                         <TransformComponent>
                                             <img src={imagesJson[key]} alt={''} />
                                         </TransformComponent>
@@ -120,6 +142,7 @@ export function CardImageModalMobile({ imagesJson }: props) {
                             );
                         })}
                     </Swiper>
+                    <Typography className={toolTipClass}>Pinch/Scroll to Zoom</Typography>
                 </CardImageDiv>
                 <ModalFooter>
                     <Swiper

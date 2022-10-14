@@ -75,7 +75,7 @@ class RevenueStatsService
             round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)
         ) {
             Log::info("Discrepancy found in the revenue stats");
-            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue'] . ",  Revenue: " . $revenue['total_cards']);
+            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue'] . ",  Total Cards: " . $revenue['total_cards']);
             Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue'] . ",  Total Cards: " . $revenueData['total_cards']);
             Log::info("Updating Revenue Stats");
 

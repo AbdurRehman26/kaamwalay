@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pop_reports_cards', function (Blueprint $table) {
-            $table->string('population')
+            $table->integer('population')
                 ->storedAs("(`total` + `total_plus`)")
                 ->index();
         });

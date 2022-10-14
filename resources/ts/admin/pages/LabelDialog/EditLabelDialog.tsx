@@ -125,7 +125,6 @@ export function EditLabelDialog({ orderNumber }: props) {
 
     async function updateLabels() {
         if (multipleLabelData.length > 0) {
-            console.log(multipleLabelData);
             setIsLoading(true);
             await dispatch(
                 updateMultipleLabels({

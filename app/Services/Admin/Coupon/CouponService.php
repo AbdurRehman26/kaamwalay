@@ -2,17 +2,24 @@
 
 namespace App\Services\Admin\Coupon;
 
+use App\Enums\Coupon\CouponMinThresholdTypeEnum;
 use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
+use App\Exceptions\API\Admin\Coupon\CouponExpiredOrInvalid;
+use App\Exceptions\API\Admin\Coupon\CouponHasInvalidMinThreshold;
+use App\Exceptions\API\Admin\Coupon\CouponUsageLimitReachedException;
 use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
 use App\Models\CouponApplicable;
 use App\Models\CouponStat;
 use App\Models\CouponStatus;
+use App\Models\Order;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
+use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;
+use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
 use Countable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,6 +35,11 @@ class CouponService
 {
     protected const COUPONABLES_REQUEST_KEY = 'couponables';
     protected const LIST_COUPONS_PER_PAGE = 15;
+
+    protected array $couponApplicables = [
+        'service_level' => ServiceLevelCoupon::class,
+        'service_fee' => ServiceFeeCoupon::class,
+    ];
 
     public function __construct(
         protected CouponCodeService $couponCodeService,
@@ -72,6 +84,10 @@ class CouponService
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
         $coupon->created_by = $user->id;
         $coupon->usage_allowed_per_user = $data['usage_allowed_per_user'];
+
+        if (! empty($data['has_minimum_cards_threshold'])) {
+            $this->addCouponMinThreshold($data, $coupon);
+        }
 
         $coupon->save();
 
@@ -265,5 +281,31 @@ class CouponService
         return $couponableManager->entity(
             CouponApplicable::ENTITIES_MAPPING[$couponApplicableId]
         );
+    }
+
+    protected function addCouponMinThreshold(array $data, Coupon &$coupon): void
+    {
+        $coupon->min_threshold_type = CouponMinThresholdTypeEnum::CARD_COUNT;
+        $coupon->min_threshold_value = $data['min_threshold_value'];
+    }
+
+    public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
+    {
+        $coupon = Coupon::whereCode($couponCode)->isActive()->validOnCouponable($couponParams)->select('coupons.*');
+
+        throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
+        throw_if($coupon->validForUserLimit($couponCode, auth()->user())->doesntExist(), CouponUsageLimitReachedException::class);
+
+        $coupon = $coupon->first();
+        throw_if($coupon->hasInvalidMinThreshold($couponParams['items_count'] ?? 0), CouponHasInvalidMinThreshold::class, $coupon->min_threshold_value);
+
+        return $coupon;
+    }
+
+    public function calculateDiscount(Coupon $coupon, array|Order $order): float
+    {
+        $couponApplication = resolve($this->couponApplicables[$coupon->couponApplicable->code]);
+
+        return $couponApplication->calculateDiscount($coupon, $order);
     }
 }

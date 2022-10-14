@@ -65,6 +65,12 @@ export class OrdersRepository extends Repository<OrderEntity> {
         return plainToInstance(OrderRefundEntity, data);
     }
 
+    async markOrderAsPaid(input: { orderId: number }) {
+        const { orderId } = input;
+        const { data } = await this.endpoint.post(`${orderId}/mark-paid`);
+        return plainToInstance(OrderEntity, data);
+    }
+
     async editTransactionNotes(input: EditTransactionNotesDto) {
         const { orderId, transactionId, notes } = input;
         const body = toApiPropertiesObject({ notes });
@@ -94,6 +100,12 @@ export class OrdersRepository extends Repository<OrderEntity> {
     async cancelOrder(input: { orderId: number }) {
         const { orderId } = input;
         const { data } = await this.endpoint.delete(`/${orderId}`);
+        return plainToInstance(OrderEntity, data);
+    }
+
+    async generateOrderLabel(input: { orderId: number }) {
+        const { orderId } = input;
+        const { data } = await this.endpoint.post(`/${orderId}/generate-label`);
         return plainToInstance(OrderEntity, data);
     }
 }

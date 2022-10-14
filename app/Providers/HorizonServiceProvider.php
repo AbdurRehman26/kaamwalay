@@ -27,12 +27,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     protected function authorization()
     {
         Horizon::auth(function ($request) {
-            return app()->environment('local') || in_array(auth('web')->user()->email, [
-                'carlos@wooter.com',
-                'nabeel@wooter.com',
-                'alinus@wooter.com',
-                'luis@wooter.com',
-            ]);
+            return app()->environment('local') || auth('web')->user()->isSuperAdmin();
         });
     }
 

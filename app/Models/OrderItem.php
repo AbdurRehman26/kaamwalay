@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -91,13 +90,18 @@ class OrderItem extends Model
         return $this->hasOne(UserCard::class);
     }
 
-    public function scopeForOrder(Builder $query, Order $order): Builder
-    {
-        return $query->where('order_id', $order->id);
-    }
-
     public function isValidForGrading(): bool
     {
         return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
+    }
+
+    public function isGraded(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::GRADED;
+    }
+
+    public function canCreateLabel(): bool
+    {
+        return $this->cardProduct->cardLabel()->doesntExist() && $this->isGraded();
     }
 }

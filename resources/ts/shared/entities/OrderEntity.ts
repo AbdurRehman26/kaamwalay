@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
@@ -54,6 +55,9 @@ export class OrderEntity extends Entity {
     @Type(() => UserEntity)
     public customer!: UserEntity;
 
+    @Type(() => AdminUserEntity)
+    public createdBy!: AdminUserEntity;
+
     @Type(() => PaymentPlanEntity)
     public paymentPlan!: PaymentPlanEntity;
 
@@ -101,6 +105,9 @@ export class OrderEntity extends Entity {
 
     @Type(() => OrderLabelEntity)
     public orderLabel!: OrderLabelEntity | null;
+
+    @Type(() => OrderLabelEntity)
+    public orderCertificate!: OrderLabelEntity | null;
 
     public get status() {
         return this.orderStatus?.code;

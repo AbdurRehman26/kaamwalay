@@ -11,7 +11,11 @@ use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Jobs\Admin\CreateSocialPreviewsForUserCard;
 use App\Models\Order;
+use App\Models\OrderAddress;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
@@ -21,6 +25,7 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -165,5 +170,54 @@ class OrderService extends V1OrderService
         /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
         $orderStatusHistoryService->addStatusToOrder(OrderStatus::CANCELLED, $order, $user, 'Order cancelled by admin');
+    }
+
+    public function createManualPayment(Order $order, User $user): Order
+    {
+        $manualPaymentMethodId = PaymentMethod::whereCode('manual')->value('id');
+
+        $order->payment_method_id = $manualPaymentMethodId;
+        $order->save();
+
+        $order->orderPayments()->create([
+            'payment_method_id' => $manualPaymentMethodId,
+            'user_id' => $user->id,
+        ]);
+
+        return $order;
+    }
+
+    public function generateSocialPreviewsForCards(Order $order): void
+    {
+        $order->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->each(function (OrderItem $orderItem) {
+            CreateSocialPreviewsForUserCard::dispatch($orderItem->userCard);
+        });
+    }
+
+    public function updateBillingAddress(Order $order, array $data): Order
+    {
+        if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
+            $orderAddress = OrderAddress::create($data);
+            $order->billingAddress()->associate($orderAddress);
+            $order->save();
+
+            return $order;
+        }
+
+        $order->billingAddress->update($data);
+
+        return $order;
+    }
+
+    /**
+     * @param  Order  $order
+     * @return Collection<int, UserCard>
+     */
+    public function getCardsByStatus(Order $order, int $status): Collection
+    {
+        return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
+            ->where('order_id', $order->id)
+            ->where('order_items.order_item_status_id', $status)
+            ->select('user_cards.*')->get();
     }
 }

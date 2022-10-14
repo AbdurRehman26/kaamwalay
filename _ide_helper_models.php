@@ -267,7 +267,10 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Enums\Coupon\CouponMinThresholdTypeEnum;
+
+    /**
  * App\Models\Coupon
  *
  * @property int $id
@@ -282,6 +285,8 @@ namespace App\Models{
  * @property string $discount_value
  * @property bool $is_capped
  * @property float|null $capped_amount
+ * @property CouponMinThresholdTypeEnum $min_threshold_type
+ * @property int $min_threshold_value
  * @property $available_from
  * @property |null $available_till if its null then the coupon is permanent
  * @property int $coupon_applicable_id
@@ -300,7 +305,6 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
  * @method static \Database\Factories\CouponFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
@@ -641,6 +645,8 @@ namespace App\Models{
  * @property bool $requires_cleaning Refers to card cleaning service
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
+ * @property \Illuminate\Support\Carbon|null $estimated_delivery_start_at
+ * @property \Illuminate\Support\Carbon|null $estimated_delivery_end_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $notes
@@ -706,6 +712,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscountedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereEstimatedDeliveryEndAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereEstimatedDeliveryStartAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereExtraChargeTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedById($value)
@@ -1129,6 +1137,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OrderState $orderState
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistories
+ * @property-read int|null $order_status_histories_count
  * @method static \Database\Factories\OrderStatusFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newQuery()
@@ -1215,6 +1225,8 @@ namespace App\Models{
  * @property string|null $discount_percentage
  * @property float $max_protection_amount
  * @property string $turnaround
+ * @property int|null $estimated_delivery_days_min
+ * @property int|null $estimated_delivery_days_max
  * @property int $display_position
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -1230,6 +1242,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDiscountPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDisplayPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereEstimatedDeliveryDaysMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereEstimatedDeliveryDaysMin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereMaxProtectionAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan wherePrice($value)
@@ -1600,15 +1614,18 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property mixed|null $ags_access_token
  * @property int|null $salesman_id
+ * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $last_login_at
  * @property string|null $stripe_id
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $customer_number
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
  * @property-read int|null $coupons_count
+ * @property-read User|null $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CustomerAddress[] $customerAddresses
  * @property-read int|null $customer_addresses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserDevice[] $devices
@@ -1640,6 +1657,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User submissions(string $minSubmissionCount, string $maxSubmissionCount)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAgsAccessToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCustomerNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
@@ -1647,6 +1665,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLoginAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
@@ -1682,6 +1701,7 @@ namespace App\Models{
  * @property array|null $generated_images
  * @property \App\Enums\UserCard\UserCardShippingStatus|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
  * @property bool|null $is_fake
+ * @property mixed|null $social_images
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta
@@ -1710,6 +1730,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereRoboGradeValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereShippingStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereSocialImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUserId($value)
  */

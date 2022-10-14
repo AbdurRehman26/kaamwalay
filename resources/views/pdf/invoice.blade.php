@@ -309,7 +309,7 @@
                     @if(!empty($shippingAddress))
                         {{$shippingAddress->getFullName()}}
                         <br/>
-                        {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
+                        {{$shippingAddress->address}} {{$shippingAddress->address_2}} @if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
                         <br/>
                         {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
                         <br/>
@@ -339,14 +339,21 @@
                             <br/>
                             {{$orderPayment->transaction->hash}}
                             <br/>
+                        @elseif(property_exists($orderPayment,'manual'))
+                            Manual Payment
+                            <br/>
                         @endif
                         @if($order->amount_paid_from_wallet > 0)
                             (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif
                     @else
-                        Pay Later: Not charged yet
-                        @if($order->amount_paid_from_wallet > 0)
-                            (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
+                        @if($order->isPaid() && $order->grand_total === 0.00)
+                            Paid
+                        @else
+                            Pay Later: Not charged yet
+                            @if($order->amount_paid_from_wallet > 0)
+                                (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
+                            @endif
                         @endif
                     @endif
                 </div>

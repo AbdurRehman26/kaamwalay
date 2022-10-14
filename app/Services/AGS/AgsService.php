@@ -2,10 +2,13 @@
 
 namespace App\Services\AGS;
 
+use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
+use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
 use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class AgsService
 {
@@ -88,25 +91,7 @@ class AgsService
         ]);
     }
 
-    public function getScannedImagesByCertificateId(string $certificateId): array
-    {
-        $data = $this->getGradesByCertificateId($certificateId);
-
-        if (
-            empty($data) ||
-            $data['count'] === 0 ||
-            (
-                empty($data['results'][0]['laser_front_scan']) &&
-                empty($data['results'][0]['laser_back_scan']) &&
-                empty($data['results'][0]['front_scan']) &&
-                empty($data['results'][0]['back_scan'])
-            )
-        ) {
-            return [];
-        }
-
-        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
-    }
+    
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
@@ -144,7 +129,6 @@ class AgsService
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
             'back_scan' => $this->prepareBackScanGradesForPublicPage($data),
-            'generated_images' => $this->prepareGeneratedImagesForPublicPage($data),
         ];
     }
 
@@ -277,84 +261,6 @@ class AgsService
         ];
     }
 
-    /**
-     * @param  array  $data
-     * @return array
-     */
-    protected function prepareGeneratedImagesForPublicPage(array $data): array
-    {
-        $imagesData = [
-            [
-                'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Front Centering',
-            ],
-            [
-                'output_image' => $data['front_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Front Surface',
-            ],
-            [
-                'output_image' => $data['front_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Front Edges',
-            ],
-            [
-                'output_image' => $data['front_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Front Corners',
-            ],
-            [
-                'output_image' => $data['back_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Back Centering',
-            ],
-            [
-                'output_image' => $data['back_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Back Surface',
-            ],
-            [
-                'output_image' => $data['back_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Back Edges',
-            ],
-            [
-                'output_image' => $data['back_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Back Corners',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Laser Front Centering',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Laser Front Surface',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Laser Front Edges',
-            ],
-            [
-                'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Laser Front Corners',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
-                'name' => 'Laser Back Centering',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
-                'name' => 'Laser Back Surface',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
-                'name' => 'Laser Back Edges',
-            ],
-            [
-                'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
-                'name' => 'Laser Back Corners',
-            ],
-        ];
-
-        return array_filter($imagesData, function (array $imageData) {
-            return $imageData['output_image'] !== null;
-        });
-    }
-
     public function getCardSeries(array $data): array
     {
         return $this->client->getCardSeries($data);
@@ -401,5 +307,36 @@ class AgsService
         }
 
         return null;
+    }
+
+    protected function findCard(string $cardReference): array
+    {
+        return $this->client->findCard($cardReference);
+    }
+
+    /**
+     * @throws CardProductCanNotBeUpdated
+     */
+    public function updateCard(array $data): array
+    {
+        $cardDataFromAgs = $this->findCard($data['card_reference_id']);
+        if (array_key_exists('id', $cardDataFromAgs)) {
+            return $this->client->updateCard(Arr::except($data, 'card_reference_id'), $cardDataFromAgs['id']);
+        }
+
+        throw new CardProductCanNotBeUpdated;
+    }
+
+    /**
+     * @throws CardProductCanNotBeDeleted
+     */
+    public function deleteCard(string $cardReferenceId): array
+    {
+        $cardDataFromAgs = $this->findCard($cardReferenceId);
+        if (array_key_exists('id', $cardDataFromAgs)) {
+            return $this->client->deleteCard($cardDataFromAgs['id']);
+        }
+
+        throw new CardProductCanNotBeDeleted;
     }
 }

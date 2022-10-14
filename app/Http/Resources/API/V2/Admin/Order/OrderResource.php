@@ -5,8 +5,10 @@ namespace App\Http\Resources\API\V2\Admin\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\V1\Admin\Order\OrderResource as V1OrderResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
@@ -22,6 +24,7 @@ use Illuminate\Http\Request;
  * @property mixed $gradedBy
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
+ * @property mixed $createdBy
  * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice
@@ -83,6 +86,7 @@ class OrderResource extends V1OrderResource
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
+            'created_by' => new UserResource($this->createdBy),
 
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
@@ -95,6 +99,7 @@ class OrderResource extends V1OrderResource
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
+            'order_certificate' => $this->whenLoaded('orderCertificate', OrderCertificateResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),

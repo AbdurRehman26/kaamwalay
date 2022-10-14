@@ -47,14 +47,18 @@ class CardSetService
         return $set;
     }
 
-    protected function getSeriesFromAgs(string $seriesName): int | null
+    protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
-        return $this->agsService->getCardSeries(['name' => $seriesName])['results'][0]['id'];
+        return $this->agsService->getCardSeries([
+            'name' => $seriesName,
+            'category_name' => $categoryName,
+        ])['results'][0]['id'];
     }
 
     protected function createSetOnAgs(int $seriesId, string $setName, string $setImage, array $data): void
     {
-        $agsSeriesId = $this->getSeriesFromAgs(CardSeries::find($seriesId)->name);
+        $cardSeries = CardSeries::find($seriesId);
+        $agsSeriesId = $this->getSeriesFromAgs($cardSeries->name, $cardSeries->cardCategory->name);
 
         //Check if set already exists in AGS DB
         $setResponse = $this->agsService->getCardSet([

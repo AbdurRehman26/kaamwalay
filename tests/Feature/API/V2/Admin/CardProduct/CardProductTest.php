@@ -3,7 +3,10 @@
 use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSurface;
+use App\Models\OrderItem;
+use App\Models\PopReportsCard;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
@@ -25,6 +28,7 @@ beforeEach(function () {
         'language' => 'English',
         'rarity' => 'Common',
         'surface' => '',
+        'card_reference_id' => Str::random(),
     ]);
 
     $this->user = User::factory()
@@ -64,7 +68,7 @@ test('admins can create cards manually', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/v1/admin/cards', [
+    $response = $this->postJson('/api/v2/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -107,7 +111,7 @@ it('fails on repeated card number and params', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/v1/admin/cards', [
+    $response = $this->postJson(route('v2.admin.card-products.store', ['cardProduct' => $this->card]), [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -127,4 +131,87 @@ it('fails on repeated card number and params', function () {
     $response->assertJsonFragment([
         'card_number' => ['This card number already exists in this set'],
     ]);
+});
+
+test('admins can update cards manually', function () {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+    ]);
+
+    $response = $this->put(route('v2.admin.card-products.update', ['cardProduct' => $this->card]), [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'category' => 1,
+        'release_date' => '2021-03-19',
+        'series_id' => 1,
+        'set_id' => 1,
+        'card_number' => '002',
+        'language' => 'Japanese',
+        'rarity' => 'Rare Holo',
+        'edition' => 'Shadowless',
+        'surface' => 'Holo',
+        'variant' => 'Lorem',
+    ]);
+
+    $response->assertSuccessful();
+    $response->assertJsonFragment([
+        'language' => "Japanese",
+        'variant' => "Lorem",
+        'surface' => "Holo",
+        'edition' => "Shadowless",
+    ]);
+});
+
+test('admins can delete a card', function () {
+    Http::fake([
+        '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+        '*/cards/*' => Http::response([
+                "app_status" => 1,
+                "app_message" => [
+                    "Removed successfully",
+                ],
+            ], 204),
+    ]);
+
+    $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
+
+    $response->assertNoContent();
+});
+
+test('admins can get a single card', function () {
+    $response = $this->getJson(route('v2.admin.card-products.show', ['cardProduct' => $this->card]));
+
+    $response->assertSuccessful();
+});
+
+test('admins can not delete a card if it has graded items', function () {
+    $orderItem = OrderItem::factory()->create([
+        'card_product_id' => $this->card->id,
+    ]);
+
+    UserCard::factory()->create([
+        'order_item_id' => $orderItem->id,
+    ]);
+
+    $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
+
+    $response->assertForbidden();
+});
+
+test('admins can get get a list of card products', function () {
+    $cardProducts = CardProduct::factory()->count(100)->create();
+
+    $cardProducts->take(10)->each(fn (CardProduct $cardProduct) => (
+        PopReportsCard::factory()->create([
+            'card_product_id' => $cardProduct->id,
+        ])
+    ));
+
+    $response = $this->getJson(route('v2.admin.card-products.index', ['per_page' => 100]));
+
+    $response->assertOk()->assertJsonCount(100, 'data');
 });

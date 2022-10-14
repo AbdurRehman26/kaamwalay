@@ -1,9 +1,12 @@
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
@@ -15,8 +18,10 @@ import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { getOrderLabels, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
 import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
@@ -27,8 +32,10 @@ interface SubmissionViewHeaderProps {
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
     orderLabel?: OrderLabelEntity | null;
+    orderCertificate?: OrderLabelEntity | null;
     customer: UserEntity | null;
     isVault?: boolean;
+    paymentStatus?: number;
 }
 
 const useStyles = makeStyles(
@@ -77,11 +84,16 @@ export function SubmissionsViewHeader({
     orderShipment,
     customer,
     orderLabel,
+    orderCertificate,
     isVault,
+    paymentStatus,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
     const notifications = useNotifications();
+    const { id } = useParams<'id'>();
 
     const sharedProps: any = useMemo(
         () => ({
@@ -119,17 +131,27 @@ export function SubmissionsViewHeader({
         [isVault, orderStatusHistory],
     );
 
-    const DownloadOrderLabel = useCallback(async () => {
-        if (!orderLabel) {
+    const handleLabelDialog = useCallback(async () => {
+        if (id) {
+            setIsLoading(true);
+            await dispatch(getOrderLabels({ id }));
+            setIsLoading(false);
+        }
+        dispatch(setEditLabelDialog(true));
+    }, [dispatch, id]);
+
+    const ExportCertificateIds = useCallback(async () => {
+        if (!orderCertificate) {
             notifications.error('Order Label is generating at the moment, try again in some minutes!');
             return;
         }
 
-        await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
-    }, [notifications, orderLabel, orderNumber]);
+        await downloadFromUrl(orderCertificate.path, `${orderNumber}_certificate.xlsx`);
+    }, [notifications, orderCertificate, orderNumber]);
 
     return (
         <Grid container className={classes.root}>
+            <EditLabelDialog orderNumber={orderNumber} />
             <Grid container className={classes.header}>
                 <Grid container item xs alignItems={'center'}>
                     <Typography variant={'h6'} className={classes.heading}>
@@ -149,17 +171,34 @@ export function SubmissionsViewHeader({
                     ) : null}
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {orderStatus.is(OrderStatusEnum.GRADED) ||
+                    {orderStatus.is(OrderStatusEnum.CONFIRMED) ||
+                    orderStatus.is(OrderStatusEnum.GRADED) ||
                     orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
                     orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <Button
-                            {...sharedProps}
-                            startIcon={<Icon>printer</Icon>}
-                            onClick={DownloadOrderLabel}
-                            disabled={!orderLabel}
-                        >
-                            Print Stickers
-                        </Button>
+                        <>
+                            <Button
+                                {...sharedProps}
+                                startIcon={isLoading ? <CircularProgress size={22} /> : <Icon>printer</Icon>}
+                                onClick={handleLabelDialog}
+                                disabled={
+                                    !orderStatus.isAny([
+                                        OrderStatusEnum.GRADED,
+                                        OrderStatusEnum.ASSEMBLED,
+                                        OrderStatusEnum.SHIPPED,
+                                    ])
+                                }
+                            >
+                                Export Labels
+                            </Button>
+                            <Button
+                                {...sharedProps}
+                                startIcon={<Icon>qr_code</Icon>}
+                                onClick={ExportCertificateIds}
+                                disabled={!orderCertificate}
+                            >
+                                Export Cert ID's
+                            </Button>
+                        </>
                     ) : null}
                     <SubmissionActionButton
                         orderId={orderId}
@@ -168,7 +207,12 @@ export function SubmissionsViewHeader({
                         shippingProvider={orderShipment?.shippingProvider}
                         inVault={isVault}
                     />
-                    <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} customer={customer} />
+                    <SubmissionHeaderMoreButton
+                        paymentStatus={paymentStatus}
+                        orderId={orderId}
+                        orderStatus={orderStatus}
+                        customer={customer}
+                    />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

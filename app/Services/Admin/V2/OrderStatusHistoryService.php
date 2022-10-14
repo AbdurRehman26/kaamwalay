@@ -8,8 +8,8 @@ use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsAssembled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
+use App\Jobs\Admin\Order\CreateOrderCertificateExport;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
-use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -70,10 +70,10 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
             CreateOrderFoldersOnDropbox::dispatch($order);
+            CreateOrderCertificateExport::dispatch($order);
         }
 
         if ($orderStatusId === OrderStatus::GRADED) {
-            CreateOrderLabel::dispatch($order);
             if (! $order->isPaid()) {
                 $order->payment_status = OrderPaymentStatusEnum::DUE;
                 $order->save();

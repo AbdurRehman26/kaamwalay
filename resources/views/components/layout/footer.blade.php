@@ -32,8 +32,8 @@
                 <img src="{{ asset('assets/images/landings/twitterIcon.svg') }}" alt="" class="Footer-socialLinkImage">
             </a>
 
-            <a href="https://t.me/collectorcoinofficial" class="Footer-socialLink">
-                <img src="{{ asset('assets/images/landings/telegramIcon.svg') }}" alt="" class="Footer-socialLinkImage">
+            <a href="https://discord.gg/robograding" class="Footer-socialLink">
+                <img src="{{ asset('assets/images/landings/discordIcon.svg') }}" alt="" class="Footer-socialLinkImage">
             </a>
         </div>
     </div>

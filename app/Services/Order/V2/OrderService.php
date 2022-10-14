@@ -13,6 +13,7 @@ use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class OrderService extends V1OrderService
 {
@@ -100,9 +101,25 @@ class OrderService extends V1OrderService
         float $walletAmount = 0.0,
         float $discountedAmount = 0.0,
     ): float {
+        Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
+            'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
+            'orderTotal' => $order->grand_total_before_discount,
+            'ccDiscount' => $this->getCollectorCoinDiscount($order),
+            'walletAmount' => $walletAmount,
+            'discountedAmount' => $discountedAmount,
+            'refund' => $order->refund_total,
+            'extraCharge' => $order->extra_charge_total,
+            'usdPrice' => $order->grand_total_before_discount -
+                $this->getCollectorCoinDiscount($order) -
+                $walletAmount -
+                $discountedAmount -
+                $order->refund_total +
+                $order->extra_charge_total,
+        ]);
+
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
-            $order->grand_total -
+            $order->grand_total_before_discount -
             $this->getCollectorCoinDiscount($order) -
             $walletAmount -
             $discountedAmount -

@@ -2,11 +2,11 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
+use App\Services\Admin\Card\CreateCardLabelService;
 use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Support\Facades\Storage;
@@ -17,35 +17,25 @@ class OrderLabelService
 {
     public function __construct(
         protected AgsService $agsService,
-        protected OrderService $orderService
+        protected OrderService $orderService,
+        protected CreateCardLabelService $createCardLabelService
     ) {
     }
 
     /**
-     * @throws AgsServiceIsDisabled
      * @throws OrderLabelCouldNotBeGeneratedException
      */
     public function generateLabel(Order $order): void
     {
-        if (! $this->agsService->isEnabled()) {
-            logger('Skipping AgsService as it is disabled.');
+        $this->createCardLabelService->createLabelsForOrder($order);
 
-            throw new AgsServiceIsDisabled;
-        }
+        $response = $this->getCardLabels($order);
 
-        $certList = $this->orderService->getOrderCertificates($order);
-
-        $response = $this->agsService->createCardLabel([
-            'order_id' => $order->order_number,
-            'certificate_list' => $certList,
-        ]);
-
-        if (empty($response) || (isset($response['app_status']) && $response['app_status'] === 2)) {
+        if (empty($response)) {
             throw new OrderLabelCouldNotBeGeneratedException(json_encode($response));
         }
 
-        $fileUrl = $this->generateFileAndUploadToCloud($order, $response);
-        $this->saveCardLabel($order, $fileUrl);
+        $this->generateFileUploadToCloudAndSaveLabel($order, $response);
     }
 
     protected function generateFileAndUploadToCloud(Order $order, array $response): string
@@ -66,5 +56,37 @@ class OrderLabelService
                 'path' => $fileUrl,
             ]
         );
+    }
+
+    public function getCardLabels(Order $order): array
+    {
+        $labels = [];
+        foreach ($order->gradedOrderItems as $orderItem) {
+            $cardLabel = $orderItem->cardProduct->cardLabel->toArray();
+            $cardLabel['label_line_one'] = $cardLabel['line_one'];
+            $cardLabel['label_line_two'] = $cardLabel['line_two'];
+            $cardLabel['label_line_three'] = $cardLabel['line_three'];
+            $cardLabel['label_line_four'] = $cardLabel['line_four'];
+            $cardLabel['card_number'] = $cardLabel['line_four'];
+            $cardLabel['certificate_id'] = $orderItem->userCard->certificate_number;
+            $cardLabel['final_grade'] = $orderItem->userCard->overall_grade;
+            $cardLabel['grade_nickname'] = $orderItem->userCard->overall_grade_nickname;
+            $labels[] = $cardLabel;
+        }
+
+        return $labels;
+    }
+
+    /**
+     * @param  Order  $order
+     * @param  array  $response
+     * @return string
+     */
+    public function generateFileUploadToCloudAndSaveLabel(Order $order, array $response): string
+    {
+        $fileUrl = $this->generateFileAndUploadToCloud($order, $response);
+        $this->saveCardLabel($order, $fileUrl);
+
+        return $fileUrl;
     }
 }

@@ -264,6 +264,30 @@ export const cancelOrder = createAsyncThunk('cancelOrder', async (orderId: numbe
     }
 });
 
+export const generateOrderLabel = createAsyncThunk('cancelOrder', async (orderId: number, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        await ordersRepository.generateOrderLabel({ orderId });
+        NotificationsService.success('Order label created successfully!');
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const markOrderAsPaid = createAsyncThunk('markOrderAsPaid', async (orderId: number, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        await ordersRepository.markOrderAsPaid({ orderId });
+        NotificationsService.success('Order marked as Paid!');
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {

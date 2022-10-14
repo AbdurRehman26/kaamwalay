@@ -41,6 +41,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
                 firstName: input.address.getFirstName() ?? input.address.firstName,
                 lastName: input.address.getLastName() ?? input.address.lastName,
                 address: input.address.address,
+                address2: input.address.address2,
                 city: input.address.city,
                 state: input.address.state,
                 zip: input.address.zip,

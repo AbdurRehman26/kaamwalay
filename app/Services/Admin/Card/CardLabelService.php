@@ -33,9 +33,8 @@ class CardLabelService
 
     public function updateCardLabel(CardLabel $cardLabel, array $data): CardLabel
     {
-        if(empty($data['line_three']))
-        {
-            $data['line_three'] = ''; 
+        if (empty($data['line_three'])) {
+            $data['line_three'] = '';
         }
         $cardLabel->update($data);
 

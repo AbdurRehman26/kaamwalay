@@ -305,8 +305,10 @@ class CardProduct extends Model
     public function scopeExcludeAddedManually(Builder $query): Builder
     {
         return $query->where('added_manually', 0)
-            ->whereNotNull('card_products.card_category_id')
-            ->whereNotNull('card_products.card_set_id')
-            ->whereNotNull('card_products.card_number_order');
+            ->orWhere(fn ($query) => (
+                $query->whereNotNull('card_products.card_category_id')
+                    ->whereNotNull('card_products.card_set_id')
+                    ->whereNotNull('card_products.card_number_order')
+            ));
     }
 }

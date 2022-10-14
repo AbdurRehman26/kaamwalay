@@ -30,13 +30,16 @@ const CardImageDiv = styled(Grid)({
             borderRadius: '4px',
             textAlign: 'center',
             padding: '10px 10px',
-            width: '160px',
-            margin: '30px 80px',
+            width: '120px',
+            margin: '30px 110px',
             color: '#000',
             fontStyle: 'normal',
             fontWeight: 500,
             fontSize: '12px',
             lineHeight: '16px',
+        },
+        '.SwiperToolTipHide': {
+            display: 'none',
         },
         '.react-transform-wrapper': {
             width: '100%',
@@ -93,6 +96,7 @@ interface props {
 export function CardImageModal({ imagesJson }: props) {
     const labelDialog = useSelector((state: RootState) => state.modal.openLabelDialog.labelDialog);
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+    const [toolTipClass, setToolTipClass] = useState('SwiperToolTip');
     const dispatch = useDispatch();
 
     const handleModal = useCallback(() => {
@@ -102,6 +106,7 @@ export function CardImageModal({ imagesJson }: props) {
     useEffect(() => {
         if (!labelDialog) {
             setThumbsSwiper(null);
+            setToolTipClass('SwiperToolTip');
         }
     }, [labelDialog]);
 
@@ -152,13 +157,14 @@ export function CardImageModal({ imagesJson }: props) {
                         {Object.keys(imagesJson).map((key) => {
                             return (
                                 <SwiperSlide>
-                                    <TransformWrapper centerOnInit={true}>
+                                    <TransformWrapper
+                                        centerOnInit={true}
+                                        onZoomStart={() => setToolTipClass('SwiperToolTipHide')}
+                                    >
                                         <TransformComponent>
                                             <div>
                                                 <img src={imagesJson[key]} alt={''} />
-                                                <Typography className={'SwiperToolTip'}>
-                                                    Pinch/Scroll to Zoom
-                                                </Typography>
+                                                <Typography className={toolTipClass}>Pinch/Scroll to Zoom</Typography>
                                             </div>
                                         </TransformComponent>
                                     </TransformWrapper>

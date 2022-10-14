@@ -4,6 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +24,19 @@ const CardImageDiv = styled(Grid)({
                 display: 'flex',
                 justifyContent: 'center',
             },
+        },
+        '.SwiperToolTip': {
+            background: '#D9D9D9',
+            borderRadius: '4px',
+            textAlign: 'center',
+            padding: '10px 10px',
+            width: '160px',
+            margin: '30px 80px',
+            color: '#000',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '12px',
+            lineHeight: '16px',
         },
         '.react-transform-wrapper': {
             width: '100%',
@@ -140,7 +154,12 @@ export function CardImageModal({ imagesJson }: props) {
                                 <SwiperSlide>
                                     <TransformWrapper centerOnInit={true}>
                                         <TransformComponent>
-                                            <img src={imagesJson[key]} alt={''} />
+                                            <div>
+                                                <img src={imagesJson[key]} alt={''} />
+                                                <Typography className={'SwiperToolTip'}>
+                                                    Pinch/Scroll to Zoom
+                                                </Typography>
+                                            </div>
                                         </TransformComponent>
                                     </TransformWrapper>
                                 </SwiperSlide>

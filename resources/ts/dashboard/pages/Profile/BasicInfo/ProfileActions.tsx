@@ -31,12 +31,22 @@ export function ProfileActions() {
             if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
                 setShowAskForPasswordDialog(true);
                 setPasswordConfirmCallback(() => async () => {
-                    await action;
-                    logout();
+                    try {
+                        const isDeleted = await dispatchProfileAction(dispatch(deleteProfile()));
+                        if (isDeleted) {
+                            logout();
+                        }
+                    } catch (e) {
+                        notifications.exception(e as Error);
+                    }
                 });
+
+                return false;
             }
+
+            return true;
         },
-        [logout],
+        [logout, notifications, dispatch],
     );
 
     const handleDeleteClick = useCallback(async () => {

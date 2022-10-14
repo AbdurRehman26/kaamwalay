@@ -3,10 +3,11 @@
 use App\Jobs\ProcessImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
-
 use function Pest\Laravel\getJson;
+
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
+use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -122,7 +123,7 @@ test('a customer can delete their account', function () {
             "app_message" => [
                 "Removed successfully",
             ],
-        ]),
+        ], Response::HTTP_NO_CONTENT),
     ]);
 
     $this->actingAs($this->user);

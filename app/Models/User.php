@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
@@ -36,6 +37,10 @@ use TaylorNetwork\UsernameGenerator\FindSimilarUsernames;
 use TaylorNetwork\UsernameGenerator\Generator;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property-read int $paid_orders_count
+ * @property-read int $order_items_sum_quantity
+ */
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;
@@ -241,9 +246,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     */
     public function cardsCount(): int
     {
-        return Order::paid()
+        return $this->orders()->paid()
             ->join('order_items', 'order_id', '=', 'orders.id')
-            ->where('user_id', '=', $this->id)
             ->sum('order_items.quantity');
     }
 
@@ -329,7 +333,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      */
     public function exportQuery(): Builder
     {
-        return self::query();
+        return self::query()
+            ->withCount(['orders as paid_orders_count' => fn ($query) => ($query->paid())])
+            ->withSum([
+                'orderItems' => fn (Builder $query) => (
+                    $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)
+                ),
+            ], 'quantity')
+            ->with('wallet:id,user_id,balance');
     }
 
     public function exportHeadings(): array
@@ -359,8 +370,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->email,
             $row->phone,
             $row->created_at,
-            $row->orders()->paid()->count(),
-            $row->cardsCount(),
+            $row->paid_orders_count,
+            $row->order_items_sum_quantity,
             $row->wallet?->balance,
         ];
     }

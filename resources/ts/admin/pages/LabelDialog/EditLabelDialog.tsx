@@ -161,7 +161,7 @@ export function EditLabelDialog({ orderNumber }: props) {
     }, [dispatch]);
 
     return (
-        <LabelDialog onClose={handleModal} open={labelDialog} fullWidth>
+        <LabelDialog open={labelDialog} fullWidth>
             <DialogTitle>
                 Edit Label Text
                 <IconButton

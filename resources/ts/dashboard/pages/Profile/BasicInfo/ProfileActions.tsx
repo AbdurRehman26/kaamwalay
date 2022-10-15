@@ -26,14 +26,14 @@ export function ProfileActions() {
     }, []);
 
     const dispatchProfileAction = useCallback(
-        async (action: any) => {
+        async (action: any, callback: any) => {
             const data: any = await action;
             if (data?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
                 setShowAskForPasswordDialog(true);
                 setPasswordConfirmCallback(() => async () => {
                     try {
-                        const isDeleted = await dispatchProfileAction(dispatch(deleteProfile()));
-                        if (isDeleted) {
+                        const success: boolean = await dispatchProfileAction(dispatch(callback()), callback);
+                        if (success) {
                             logout();
                         }
                     } catch (e) {
@@ -67,7 +67,7 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                await dispatchProfileAction(dispatch(deleteProfile()));
+                await dispatchProfileAction(dispatch(deleteProfile()), deleteProfile);
             }
         } catch (e) {
             notifications.exception(e as Error);
@@ -93,7 +93,7 @@ export function ProfileActions() {
 
         try {
             if (result) {
-                await dispatchProfileAction(dispatch(deactivateProfile()));
+                await dispatchProfileAction(dispatch(deactivateProfile()), deactivateProfile);
             }
         } catch (e) {
             notifications.exception(e as Error);

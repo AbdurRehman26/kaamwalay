@@ -55,7 +55,7 @@ class CustomerProfileService
         UserAccountDeletedEvent::dispatch($user->id);
 
         $this->update($user, [
-            'email' => '',
+            'email' => null,
             'email_verified_at' => null,
             'first_name' => null,
             'last_name' => null,

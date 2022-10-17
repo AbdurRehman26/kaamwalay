@@ -1,4 +1,4 @@
-name: 'Code style'
+name: 'Frontend: Continuous Integration'
 
 on: pull_request
 jobs:

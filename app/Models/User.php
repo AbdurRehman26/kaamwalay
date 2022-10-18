@@ -117,6 +117,24 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $user;
     }
 
+    public static function createSalesman(array $data): self
+    {
+        $data['username'] = self::generateUserName();
+        if (! isset($data['is_active'])) {
+            $data['is_active'] = true;
+        }
+
+        /* @var User $user */
+        $user = self::create($data);
+
+        $user->assignCustomerRole();
+        $user->assignCustomerNumber();
+
+        (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
+
+        return $user;
+    }
+
     public static function getAllowedAdminFilters(): array
     {
         return [
@@ -127,6 +145,28 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     public static function getAllowedAdminSorts(): array
+    {
+        return [
+            AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
+            AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
+            AllowedSort::custom('wallet', new AdminCustomerWalletSort),
+            AllowedSort::custom('cards', new AdminCustomerCardsSort),
+            'email',
+            'customer_number',
+            'created_at',
+        ];
+    }
+
+    public static function getAllowedAdminSalesmanFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminCustomerSearchFilter),
+            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('submissions'),
+        ];
+    }
+
+    public static function getAllowedAdminSalesmanSorts(): array
     {
         return [
             AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),

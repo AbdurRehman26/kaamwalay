@@ -25,6 +25,7 @@ use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V2\Admin\SalesmanController;
 use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
@@ -145,6 +146,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'customers.show',
         ]);
     Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
+
+    // Salesmen
+    Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])
+        ->names([
+            'index' => 'salesmen.index',
+            'store' => 'salesmen.store',
+            'show' => 'salesmen.show',
+        ]);
 
     // wallet
     Route::prefix('wallets')->group(function () {

@@ -7,6 +7,24 @@
             <h4 class="Home-sectionContentCaption text-center">Service Levels</h4>
             <h3 class="Home-sectionContentHeadline text-center">Unbeatable Prices and Turnaround Times</h3>
         </div>
+        
+        <div class="Home-priceRange">
+            <div class="Home-priceRangeDiv">
+                <span class="Home-priceText">1-20 Cards</span>
+            </div>
+            <div class="Home-priceRangeDiv">
+                <span class="Home-priceText">21-50 Cards</span>
+            </div>
+            <div class="Home-priceRangeDiv">
+                <span class="Home-priceText">51-100 Cards</span>
+            </div>
+            <div class="Home-priceRangeDiv">
+                <span class="Home-priceText">101-200 Cards</span>
+            </div>
+            <div class="Home-priceRangeDivSelected">
+                <span class="Home-priceTextSelected">200+ Cards</span>
+            </div>
+        </div>
 
         <div class="Home-pricesHolder">
             <div class="Home-prices Home-prices--js" data-aos="fade-up">

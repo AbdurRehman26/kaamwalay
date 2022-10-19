@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentPlan extends Model
@@ -34,4 +35,12 @@ class PaymentPlan extends Model
         'estimated_delivery_days_min' => 'integer',
         'estimated_delivery_days_max' => 'integer',
     ];
+
+    /**
+     * @return HasMany<PaymentPlanRange, PaymentPlan>
+     */
+    public function paymentPlanRanges(): HasMany
+    {
+        return $this->hasMany(PaymentPlanRange::class);
+    }
 }

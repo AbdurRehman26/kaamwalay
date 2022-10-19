@@ -150,7 +150,8 @@ class CardProductService
         // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
             ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
-            ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
+            ->addSelect(DB::raw('card_products.*, pop_reports_cards.population'))
+            ->excludeAddedManually()
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
                 AllowedFilter::scope('release_date'),

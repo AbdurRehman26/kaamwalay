@@ -5,6 +5,7 @@ use App\Http\Controllers\API\V2\Admin\Address\StateController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardLabelController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardRarityController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponableEntityController;
@@ -109,6 +110,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('categories', [CardCategoryController::class, 'index']);
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
+        Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'show', 'update']);
         Route::put('/labels/{label}', [CardLabelController::class, 'update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);

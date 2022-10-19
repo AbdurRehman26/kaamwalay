@@ -323,6 +323,7 @@ export function Payment() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const amountPaidFromWallet = useAppSelector((state) => state.newSubmission.amountPaidFromWallet);
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
@@ -546,7 +547,7 @@ export function Payment() {
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={7}>
                         <div className={classes.leftSideContainer}>
-                            {availableCredit > 0 ? (
+                            {availableCredit > 0 || amountPaidFromWallet > 0 ? (
                                 <div className={classes.shippingMethodContainer}>
                                     <Typography className={classes.sectionLabel} style={{ marginBottom: '3px' }}>
                                         Apply Credit

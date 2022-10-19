@@ -17,3 +17,4 @@ export { countrySlice as countries } from './countrySlice';
 export { adminCreateOrderSlice } from './adminCreateOrderSlice';
 export { adminOrderLabelsSlice as adminOrderLabels } from './adminOrderLabelsSlice';
 export { adminCardsSlice as adminCards } from './adminCardsSlice';
+export { adminRaritiesSlice as adminRarities } from './adminRaritiesSlice';

@@ -203,7 +203,9 @@ test('admins can not delete a card if it has graded items', function () {
 });
 
 test('admins can get get a list of card products', function () {
-    $cardProducts = CardProduct::factory()->count(100)->create();
+    $cardProducts = CardProduct::factory()->count(100)->create([
+        'added_manually' => 0,
+    ]);
 
     $cardProducts->take(10)->each(fn (CardProduct $cardProduct) => (
         PopReportsCard::factory()->create([

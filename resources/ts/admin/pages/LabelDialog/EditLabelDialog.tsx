@@ -125,7 +125,6 @@ export function EditLabelDialog({ orderNumber }: props) {
 
     async function updateLabels() {
         if (multipleLabelData.length > 0) {
-            console.log(multipleLabelData);
             setIsLoading(true);
             await dispatch(
                 updateMultipleLabels({
@@ -161,7 +160,7 @@ export function EditLabelDialog({ orderNumber }: props) {
     }, [dispatch]);
 
     return (
-        <LabelDialog onClose={handleModal} open={labelDialog} fullWidth>
+        <LabelDialog open={labelDialog} fullWidth>
             <DialogTitle>
                 Edit Label Text
                 <IconButton

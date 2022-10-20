@@ -37,7 +37,7 @@ class PaymentPlan extends Model
     ];
 
     /**
-     * @return HasMany<PaymentPlanRange, PaymentPlan>
+     * @return HasMany<PaymentPlanRange>
      */
     public function paymentPlanRanges(): HasMany
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'index' => 'payment-plans.index',
             'show' => 'payment-plans.show',
         ]);
+
+        Route::post('/', [OrderController::class, 'store'])->name('orders.store');
     });
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V2\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V2\Admin\Salesman\StoreSalesmanRequest;
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanCollection;
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanResource;
 use App\Models\User;

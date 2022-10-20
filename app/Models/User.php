@@ -7,6 +7,7 @@ use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Filters\AdminSalesmanSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -119,11 +121,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public static function createSalesman(array $data): self
     {
+        $data['password'] = Str::random(8);
+        $data['created_by'] = auth()->user()->id;
         $data['username'] = self::generateUserName();
-        if (! isset($data['is_active'])) {
-            $data['is_active'] = true;
-        }
-
+        dd($data);
         /* @var User $user */
         $user = self::create($data);
 
@@ -160,22 +161,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public static function getAllowedAdminSalesmanFilters(): array
     {
         return [
-            AllowedFilter::custom('search', new AdminCustomerSearchFilter),
+            AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
             AllowedFilter::scope('signed_up_between'),
-            AllowedFilter::scope('submissions'),
-        ];
-    }
-
-    public static function getAllowedAdminSalesmanSorts(): array
-    {
-        return [
-            AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
-            AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
-            AllowedSort::custom('wallet', new AdminCustomerWalletSort),
-            AllowedSort::custom('cards', new AdminCustomerCardsSort),
-            'email',
-            'customer_number',
-            'created_at',
+            AllowedFilter::scope('status'),
         ];
     }
 
@@ -330,6 +318,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         // @phpstan-ignore-next-line
         return $query->role(Role::findByName(config('permission.roles.customer')));
+    }
+
+    public function scopeSalesmen(Builder $query): Builder
+    {
+        return $query->role(Role::findByName(config('permission.roles.salesman')));
     }
 
     /**

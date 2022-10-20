@@ -26,16 +26,13 @@ class SalesmanResource extends BaseResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'full_name' => $this->getFullName(),
-            'customer_number' => $this->customer_number,
             'email' => $this->email,
-            'phone' => $this->phone,
-            'submissions' => $this->orders()->paid()->count(),
-            'cards_count' => $this->cardsCount(),
-            'wallet' => $this->wallet,
-            'created_by' => new UserResource($this->createdBy),
-            'created_at' => $this->formatDate($this->created_at),
-            'updated_at' => $this->formatDate($this->updated_at),
-            'last_login_at' => $this->formatDate($this->last_login_at),
+            'customers' => $this->totalCustomersCount,
+            'orders' => $this->totalOrdersCount,
+            'commission_earned' => $this->commissionEarned,
+            'commission_paid' => $this->commissionPaid,
+            'status' => $this->status,
+            'sales' => $this->totalSales,
         ];
     }
 }

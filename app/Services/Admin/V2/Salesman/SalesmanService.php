@@ -20,23 +20,19 @@ class SalesmanService
 
     public function getSalesmen(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::customer())
+        return QueryBuilder::for(User::salesmen())
             ->allowedFilters(User::getAllowedAdminSalesmanFilters())
-            ->allowedSorts(User::getAllowedAdminSalesmanSorts())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));
     }
 
     public function createSalesman(array $data): User
     {
-        $data['password'] = Str::random(8);
-        $data['created_by'] = auth()->user()->id;
+        $salesman = User::createSalesman($data);
+        dd($salesman);
+        $this->sendAccessEmailToCreatedUser($salesman);
 
-        $user = User::createSalesman($data);
-
-        $this->sendAccessEmailToCreatedUser($user);
-
-        return $user;
+        return $salesman;
     }
 
     public function sendAccessEmailToCreatedUser(User $user): void

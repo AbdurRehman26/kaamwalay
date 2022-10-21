@@ -6,5 +6,4 @@ use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest as V2StoreOrderReq
 
 class StoreOrderRequest extends V2StoreOrderRequest
 {
-
 }

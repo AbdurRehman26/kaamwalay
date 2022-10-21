@@ -1,14 +1,21 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const HomePriceRange = styled(Grid)({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // @include breakpoints.down(768) {
-    //     flex-wrap: wrap;
-    // }
+    '.HomePriceRangeMobile': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
+    '.HomePriceRange': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     '.HomePriceRangeDiv': {
         border: '1px solid rgba(255, 255, 255, 0.7)',
         borderRadius: '24px',
@@ -16,10 +23,15 @@ const HomePriceRange = styled(Grid)({
         justifyContent: 'center',
         alignContent: 'center',
         marginRight: '20px',
-        // @include breakpoints.down(768) {
-        //     margin-right: '0px',
-        //     margin: '6px',
-        // }
+    },
+    '.HomePriceRangeDivMobile': {
+        border: '1px solid rgba(255, 255, 255, 0.7)',
+        borderRadius: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+        marginRight: '0px',
+        margin: '6px',
     },
     '.HomePriceText': {
         fontFamily: 'Roboto',
@@ -53,22 +65,26 @@ const HomePriceRange = styled(Grid)({
 });
 
 export default function QuantityDependentPricingChips() {
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
     return (
         <HomePriceRange>
-            <div className={'HomePriceRangeDiv'}>
-                <Button className={'HomePriceText'}>1-20 Cards</Button>
-            </div>
-            <div className={'HomePriceRangeDiv'}>
-                <Button className={'HomePriceText'}>21-50 Cards</Button>
-            </div>
-            <div className={'HomePriceRangeDiv'}>
-                <Button className={'HomePriceText'}>51-100 Cards</Button>
-            </div>
-            <div className={'HomePriceRangeDiv'}>
-                <Button className={'HomePriceText'}>101-200 Cards</Button>
-            </div>
-            <div className={'HomePriceRangeDivSelected'}>
-                <Button className={'HomePriceTextSelected'}>200+ Cards</Button>
+            <div className={isMobile ? 'HomePriceRangeMobile' : 'HomePriceRange'}>
+                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <Button className={'HomePriceText'}>1-20 Cards</Button>
+                </div>
+                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <Button className={'HomePriceText'}>21-50 Cards</Button>
+                </div>
+                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <Button className={'HomePriceText'}>51-100 Cards</Button>
+                </div>
+                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <Button className={'HomePriceText'}>101-200 Cards</Button>
+                </div>
+                <div className={'HomePriceRangeDivSelected'}>
+                    <Button className={'HomePriceTextSelected'}>200+ Cards</Button>
+                </div>
             </div>
         </HomePriceRange>
     );

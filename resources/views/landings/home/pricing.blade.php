@@ -8,6 +8,10 @@
             <h3 class="Home-sectionContentHeadline text-center">Unbeatable Prices and Turnaround Times</h3>
         </div>
 
+        <div class="Home-priceRange" data-atom="quantity-dependent-pricing-chips" >
+            {{-- JS runtime actions --}}
+        </div>
+
         <div class="Home-pricesHolder">
             <div class="Home-prices Home-prices--js" data-aos="fade-up">
                 @foreach($services as $service)

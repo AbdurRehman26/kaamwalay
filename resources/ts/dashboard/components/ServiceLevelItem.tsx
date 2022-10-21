@@ -8,6 +8,7 @@ import NumberFormat from 'react-number-format';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { SubmissionService, setServiceLevel } from '../redux/slices/newSubmissionSlice';
+import { QuantityDependentPricing } from './QuantityDependentPricing';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -19,14 +20,15 @@ const useStyles = makeStyles(
             justifyContent: 'space-between',
             height: '80px',
             border: '2px solid #DDDDDD',
-            marginBottom: '12px',
-            borderRadius: '2px',
+            marginBottom: ({ currentSelectedLevelId, id }: any) => (currentSelectedLevelId === id ? '0px' : '12px'),
+            borderTopLeftRadius: '2px',
+            borderTopRightRadius: '2px',
             padding: '10px 8px 10px 6px',
             '&:hover': {
                 cursor: 'pointer',
             },
             background: ({ currentSelectedLevelId, id }: any) =>
-                currentSelectedLevelId === id ? '#F2FBFA' : '#FFFFFF',
+                currentSelectedLevelId === id ? '#20BFB8' : '#FFFFFF',
             borderColor: ({ currentSelectedLevelId, id }: any) =>
                 currentSelectedLevelId === id ? '#20BFB8' : '#DDDDDD',
             borderWidth: ({ currentSelectedLevelId, id }: any) => (currentSelectedLevelId === id ? '2px' : '1px'),
@@ -62,7 +64,8 @@ const useStyles = makeStyles(
             fontSize: '16px',
             lineHeight: '24px',
             letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.87)',
+            color: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#fff' : 'rgba(0, 0, 0, 0.87)',
             [theme.breakpoints.down('sm')]: {
                 fontSize: '14px',
             },
@@ -75,6 +78,8 @@ const useStyles = makeStyles(
             lineHeight: '20px',
             textAlign: 'right',
             letterSpacing: '0.2px',
+            color: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#fff' : 'rgba(0, 0, 0, 0.87)',
         },
         price: {
             fontFamily: 'Roboto',
@@ -94,7 +99,8 @@ const useStyles = makeStyles(
             lineHeight: '16px',
             textAlign: 'right',
             letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.54)',
+            color: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#fff' : 'rgba(0, 0, 0, 0.87)',
         },
         priceBeforeDiscount: {
             textDecorationLine: 'line-through',
@@ -112,6 +118,15 @@ const useStyles = makeStyles(
             flexDirection: 'row',
         },
         cardText: { fontWeight: 400 },
+        quantity: {
+            fontStyle: 'normal',
+            fontWeight: 400,
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#fff' : 'rgba(0, 0, 0, 0.87)',
+        },
     }),
     { name: 'ServiceLevelItemStyle' },
 );
@@ -139,60 +154,64 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
     }
 
     return (
-        <ButtonBase onClick={handleSetServiceLevel} className={classes.root}>
-            <div className={classes.leftSide}>
-                <div className={classes.rightSide}>
-                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
-                        {priceBeforeDiscount ? (
-                            <NumberFormat
-                                value={priceBeforeDiscount}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                                className={classes.priceBeforeDiscount}
-                            />
-                        ) : null}
-                        <Typography variant={'subtitle2'} className={classes.levelTitle}>
-                            <NumberFormat
-                                value={price}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
-                            &nbsp;<span className={classes.cardText}> / Card </span>
-                        </Typography>
-                        {priceBeforeDiscount ? (
-                            <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
-                        ) : null}
-                    </Box>
+        <>
+            <ButtonBase onClick={handleSetServiceLevel} className={classes.root}>
+                <div className={classes.leftSide}>
+                    <div className={classes.rightSide}>
+                        <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
+                            {priceBeforeDiscount ? (
+                                <NumberFormat
+                                    value={priceBeforeDiscount}
+                                    displayType={'text'}
+                                    thousandSeparator
+                                    decimalSeparator={'.'}
+                                    prefix={'$'}
+                                    className={classes.priceBeforeDiscount}
+                                />
+                            ) : null}
+                            <Typography variant={'subtitle2'} className={classes.levelTitle}>
+                                <NumberFormat
+                                    value={price}
+                                    displayType={'text'}
+                                    thousandSeparator
+                                    decimalSeparator={'.'}
+                                    prefix={'$'}
+                                />
+                                &nbsp;<span className={classes.cardText}> / Card </span>
+                            </Typography>
+                            <Typography className={classes.quantity}>Depending on qty.</Typography>
+                            {priceBeforeDiscount ? (
+                                <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
+                            ) : null}
+                        </Box>
+                    </div>
                 </div>
-            </div>
 
-            <div className={classes.maxValueContainer}>
-                <div className={classes.protectionTextContainer}>
-                    <Typography className={classes.protectionText}>
-                        Protection up to&nbsp;
-                        <span>
-                            <NumberFormat
-                                value={getMaxProtectionAmount()}
-                                isNumericString
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                                className={classes.protectionText}
-                            />
-                        </span>
-                    </Typography>
+                <div className={classes.maxValueContainer}>
+                    <div className={classes.protectionTextContainer}>
+                        <Typography className={classes.protectionText}>
+                            Protection up to&nbsp;
+                            <span>
+                                <NumberFormat
+                                    value={getMaxProtectionAmount()}
+                                    isNumericString
+                                    displayType={'text'}
+                                    thousandSeparator
+                                    decimalSeparator={'.'}
+                                    prefix={'$'}
+                                    className={classes.protectionText}
+                                />
+                            </span>
+                        </Typography>
+                    </div>
+                    <Typography
+                        variant={'subtitle2'}
+                        className={classes.turnaround}
+                    >{`${turnaround} Turnaround`}</Typography>
                 </div>
-                <Typography
-                    variant={'subtitle2'}
-                    className={classes.turnaround}
-                >{`${turnaround} Turnaround`}</Typography>
-            </div>
-        </ButtonBase>
+            </ButtonBase>
+            {currentSelectedLevel?.id === id ? <QuantityDependentPricing /> : null}
+        </>
     );
 }
 

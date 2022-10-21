@@ -1,3 +1,5 @@
+@use '../../../shared/breakpoints';
+
 .Home-pricing {
     background-color: #261d39;
     padding-top: 108px;
@@ -60,6 +62,15 @@
 
 .Home-pricesHolder {
     max-width: 100%;
+}
+
+.Home-priceRange {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include breakpoints.down(768) {
+        flex-wrap: wrap;
+    }
 }
 
 .Home-prices {

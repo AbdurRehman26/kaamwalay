@@ -1,6 +1,7 @@
 import scanningVideo from '@shared/assets/heroVideos/scanning.mp4';
 import poweredByAgs from '@shared/assets/poweredByAGS.svg';
 import { LayoutAtom } from '../atoms/LayoutAtom';
+import { QuantityDependentPricingChipsAtom } from '../atoms/QuantityDependentPricingChipsAtom';
 import { SubmissionButtonAtom } from '../atoms/SubmissionButtonAtom';
 import { Controller } from '../classes/Controller';
 import { CanSetup } from '../interfaces/CanSetup';
@@ -18,6 +19,7 @@ export class HomeController extends Controller implements CanSetup<HomeControlle
                     replaceParent: true,
                 },
             }),
+            QuantityDependentPricingChipsAtom,
         );
     }
 

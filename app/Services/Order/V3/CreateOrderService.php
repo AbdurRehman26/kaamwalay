@@ -15,6 +15,7 @@ class CreateOrderService extends BaseCreateOrderService
         $paymentPlan = PaymentPlan::find($paymentPlan['id']);
         $priceRanges = $paymentPlan->paymentPlanRanges;
 
+        // @phpstan-ignore-next-line
         $totalItems = collect($this->data['items'])->sum('quantity');
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {

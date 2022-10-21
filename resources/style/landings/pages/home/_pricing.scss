@@ -71,50 +71,6 @@
     @include breakpoints.down(768) {
         flex-wrap: wrap;
     }
-    .Home-priceRangeDiv {
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        border-radius: 24px;
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        margin-right: 20px;
-        @include breakpoints.down(768) {
-            margin-right: 0px;
-            margin: 6px;
-        }
-    }
-
-    .Home-priceText {
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: 0.35px;
-        color: rgba(255, 255, 255, 0.7);
-        text-align: center;
-        padding: 10px 15px;
-    }
-
-    .Home-priceRangeDivSelected {
-        border: 2px solid #42e8e0;
-        border-radius: 24px;
-        display: flex;
-        justify-content: center;
-        align-content: center;
-    }
-
-    .Home-priceTextSelected {
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: 0.35px;
-        color: #42e8e0;
-        text-align: center;
-        padding: 10px 15px;
-    }
 }
 
 .Home-prices {

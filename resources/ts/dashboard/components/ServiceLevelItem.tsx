@@ -124,7 +124,8 @@ const useStyles = makeStyles(
             fontSize: '12px',
             lineHeight: '16px',
             letterSpacing: '0.2px',
-            color: '#FFFFFF',
+            color: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#fff' : 'rgba(0, 0, 0, 0.87)',
         },
     }),
     { name: 'ServiceLevelItemStyle' },
@@ -177,9 +178,8 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                                     prefix={'$'}
                                 />
                                 &nbsp;<span className={classes.cardText}> / Card </span>
-                                <br></br>
-                                <span className={classes.quantity}>Depending on qty.</span>
                             </Typography>
+                            <Typography className={classes.quantity}>Depending on qty.</Typography>
                             {priceBeforeDiscount ? (
                                 <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
                             ) : null}

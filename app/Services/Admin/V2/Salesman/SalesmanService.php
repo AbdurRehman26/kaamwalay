@@ -5,7 +5,6 @@ namespace App\Services\Admin\V2\Salesman;
 use App\Models\User;
 use App\Services\EmailService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Password;
 
@@ -29,7 +28,6 @@ class SalesmanService
     public function createSalesman(array $data): User
     {
         $salesman = User::createSalesman($data);
-        dd($salesman);
         $this->sendAccessEmailToCreatedUser($salesman);
 
         return $salesman;

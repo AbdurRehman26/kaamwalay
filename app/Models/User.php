@@ -124,14 +124,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         $data['password'] = Str::random(8);
         $data['created_by'] = auth()->user()->id;
         $data['username'] = self::generateUserName();
-        dd($data);
+
         /* @var User $user */
         $user = self::create($data);
 
-        $user->assignCustomerRole();
-        $user->assignCustomerNumber();
-
-        (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
+        $user->assignSalesmanRole();
 
         return $user;
     }
@@ -230,9 +227,20 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->getFullName();
     }
 
+    public function assignSalesmanRole(): void
+    {
+        $this->assignRole(Role::findByName(config('permission.roles.salesman')));
+    }
+
     public function assignCustomerRole(): void
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
+    }
+
+    public function assignSalesman(User $salesman): bool
+    {
+        $this->salesman_id = $salesman->id;
+        return $this->save();
     }
 
     /**

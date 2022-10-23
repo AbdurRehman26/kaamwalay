@@ -146,6 +146,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'customers.show',
         ]);
     Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
+    Route::post('customers/{user}/assign-salesman/{salesman}', [CustomerController::class, 'assignSalesman'])->name('customers.assign-salesman');
 
     // Salesmen
     Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])

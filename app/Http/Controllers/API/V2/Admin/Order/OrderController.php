@@ -2,33 +2,45 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeCancelled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
 use App\Exceptions\API\Admin\Order\OrderLabelCanNotBeGenerated;
+use App\Exceptions\API\Admin\Order\ShipmentNotUpdated;
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exceptions\Services\AGS\OrderLabelCouldNotBeGeneratedException;
-use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateBillingAddressRequest;
+use App\Http\Requests\API\V2\Admin\Order\UpdateNotesRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
+use App\Http\Resources\API\V2\Admin\Order\UserCardCollection;
+use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderLabelService;
+use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V2\CreateOrderService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class OrderController extends V1OrderController
+class OrderController extends Controller
 {
+    public function __construct(protected OrderService $orderService)
+    {
+    }
+
     /**
      * @throws Throwable
      */
@@ -65,14 +77,14 @@ class OrderController extends V1OrderController
 
     public function index(): OrderListCollection
     {
-        $orders = $this->ordersService->getOrders();
+        $orders = $this->orderService->getOrders();
 
         return new OrderListCollection($orders);
     }
 
     public function show(int $orderId): OrderResource
     {
-        $order = $this->ordersService->getOrder($orderId);
+        $order = $this->orderService->getOrder($orderId);
 
         return new OrderResource($order);
     }
@@ -157,5 +169,45 @@ class OrderController extends V1OrderController
             'success' => true,
             'message' => 'Billing Address Updated successfully.',
         ]);
+    }
+
+    public function updateShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderShipmentResource | JsonResponse
+    {
+        try {
+            $result = $shipmentService->updateShipment($order, $request->shipping_provider, $request->tracking_number);
+        } catch (ShipmentNotUpdated $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return new OrderShipmentResource($result);
+    }
+
+    public function updateNotes(UpdateNotesRequest $request, Order $order): OrderResource
+    {
+        return new OrderResource($this->orderService->updateNotes($order, $request->notes));
+    }
+
+    public function getGrades(Request $request, Order $order): UserCardCollection | JsonResponse
+    {
+        $this->authorize('review', $order);
+
+        try {
+            GetCardGradesFromAgs::dispatchIf($order->canBeGraded(), $order);
+            $userCards = $this->orderService->getCardsForGrading($order);
+        } catch (IncorrectOrderStatus $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+
+        return new UserCardCollection($userCards);
     }
 }

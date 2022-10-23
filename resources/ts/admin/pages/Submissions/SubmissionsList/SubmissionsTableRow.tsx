@@ -170,6 +170,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                         </TableCell>
                     </>
                 ) : null}
+                <TableCell color={'primary'}>{'Owner Name'}</TableCell>
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

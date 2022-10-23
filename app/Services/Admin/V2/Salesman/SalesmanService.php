@@ -29,7 +29,7 @@ class SalesmanService
     public function createSalesman(array $data): User
     {
         $salesman = User::createSalesman($data);
-        dd($salesman);
+        // dd($salesman);
         $this->sendAccessEmailToCreatedUser($salesman);
 
         return $salesman;

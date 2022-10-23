@@ -1,9 +1,11 @@
+import DoneIcon from '@mui/icons-material/Done';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
@@ -21,6 +23,11 @@ interface props {
 enum RowOption {
     CreditCustomer,
 }
+
+const CustomerType = [
+    { label: 'Retail', value: 0 },
+    { label: 'Wholesale', value: 1 },
+];
 
 const styles = {
     TableRow: {
@@ -83,14 +90,54 @@ export function CustomerTableRow({ customer }: props) {
                         </Grid>
                     </Grid>
                 </TableCell>
-                <TableCell variant={'body'}>{customer.email ?? '-'}</TableCell>
-                <TableCell variant={'body'}>{customer.phone ?? '-'}</TableCell>
+                <TableCell variant={'body'}>
+                    <Grid item xs container direction={'column'}>
+                        <Typography variant={'body2'}>{customer.email}</Typography>
+                        <Typography variant={'caption'} color={'textSecondary'}>
+                            {customer.phone}
+                        </Typography>
+                    </Grid>
+                </TableCell>
                 <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     {customer.submissions ?? 0}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     {customer.cardsCount}
+                </TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    <Select autoWidth defaultValue={'Unassigned'}>
+                        <MenuItem value="none">Select Owner</MenuItem>
+                        {CustomerType.map((item: any) => {
+                            return (
+                                <Grid
+                                    sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
+                                    display={'flex'}
+                                    p={1}
+                                    alignItems={'center'}
+                                >
+                                    <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
+                                    <MenuItem
+                                        key={item.value}
+                                        value={item.value}
+                                        sx={{ ':hover': { backgroundColor: 'transparent' } }}
+                                    >
+                                        {item?.label}
+                                    </MenuItem>
+                                    <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
+                                </Grid>
+                            );
+                        })}
+                    </Select>
+                </TableCell>
+                <TableCell variant={'body'} align={'right'}>
+                    <Select autoWidth key={CustomerType[0].value} defaultValue={CustomerType[0].value}>
+                        {CustomerType.map((item: any) => (
+                            <MenuItem key={item.value} value={item.value}>
+                                {item?.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     {formatCurrency(customer.wallet?.balance ?? 0)}

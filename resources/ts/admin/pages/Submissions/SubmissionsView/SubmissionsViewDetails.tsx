@@ -94,7 +94,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            'Created By:': createdBy?.id !== customerId ? `Admin (${createdBy?.fullName})` : customerName,
+            'Owner:': createdBy?.id !== customerId ? `Admin (${createdBy?.fullName})` : customerName,
+            'Commission:': '$5',
         }),
         [declaredValue, numberOfCards, placedAt, serviceLevelFee, customerName, createdBy, customerId],
     );

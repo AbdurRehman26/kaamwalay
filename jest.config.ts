@@ -25,6 +25,7 @@ export default {
     moduleNameMapper: {
         '@auth/(.*)$': '<rootDir>/resources/ts/auth/$1',
         '@admin/(.*)$': '<rootDir>/resources/ts/admin/$1',
+        '@salesrep/(.*)$': '<rootDir>/resources/ts/salesrep/$1',
         '@dashboard/(.*)$': '<rootDir>/resources/ts/dashboard/$1',
         '@landings/(.*)$': '<rootDir>/resources/ts/landings/$1',
         '@shared/(.*)$': '<rootDir>/resources/ts/shared/$1',

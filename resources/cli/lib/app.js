@@ -14,4 +14,4 @@ const runApp = () => (app) => app.argv;
 
 module.exports.createApp = createApp;
 module.exports.runApp = runApp;
-module.exports.availableApps = ['admin', 'salesrep', 'auth', 'dashboard', 'landings'];
+module.exports.availableApps = ['admin', 'salesrep', 'auth', 'dashboard', 'landings', 'salesrep'];

@@ -15,7 +15,7 @@ class PaymentPlanController extends Controller
         $paymentPlans = Cache::remember(
             'v3.payment_plans',
             now()->addMonth(),
-            fn () => PaymentPlan::orderBy('display_position')->get()
+            fn () => PaymentPlan::orderBy('display_position')->with('paymentPlanRanges')->get()
         );
 
         return new PaymentPlanCollection($paymentPlans);

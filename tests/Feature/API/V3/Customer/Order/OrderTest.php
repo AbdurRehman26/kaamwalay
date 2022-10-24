@@ -18,10 +18,12 @@ beforeEach(function () {
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
-    $this->paymentPlanRanges = PaymentPlanRange::factory()->count(3)->state(new Sequence(
+    $this->paymentPlanRanges = PaymentPlanRange::factory()->count(5)->state(new Sequence(
         ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 1, 'max_cards' => 20],
         ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 21, 'max_cards' => 50],
         ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 51, 'max_cards' => 100],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 101, 'max_cards' => 200],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 201, 'max_cards' => null],
     ))->create();
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->insured()->create();
@@ -128,7 +130,7 @@ test('a guest cannot place order', function () {
     $response->assertUnauthorized();
 });
 
-test('correct service level price is assigned according to price ranges', function () {
+test('correct service level price is assigned according to price ranges', function (int $numberOfCards, $priceRangeIndex) {
     $this->actingAs($this->user);
     Event::fake();
 
@@ -141,14 +143,7 @@ test('correct service level price is assigned according to price ranges', functi
                 'card_product' => [
                     'id' => $this->cardProduct->id,
                 ],
-                'quantity' => 21,
-                'declared_value_per_unit' => 500,
-            ],
-            [
-                'card_product' => [
-                    'id' => $this->cardProduct->id,
-                ],
-                'quantity' => 1,
+                'quantity' => $numberOfCards,
                 'declared_value_per_unit' => 500,
             ],
         ],
@@ -182,5 +177,12 @@ test('correct service level price is assigned according to price ranges', functi
         ],
     ]);
     $response->assertSuccessful();
-    $response->assertJsonPath('data.payment_plan.price', intval($this->paymentPlanRanges[1]->price));
-});
+    $response->assertJsonPath('data.payment_plan.price', intval($this->paymentPlanRanges[$priceRangeIndex]->price));
+})
+    ->with([
+        [11, 0],
+        [21, 1],
+        [61, 2],
+        [121, 3],
+        [211, 4],
+    ]);

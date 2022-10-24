@@ -61,6 +61,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        DB::table('payment_plan_ranges')->truncate();
     }
 };

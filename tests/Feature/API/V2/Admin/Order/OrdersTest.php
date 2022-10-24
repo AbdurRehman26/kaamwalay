@@ -21,9 +21,9 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Bus;
 
 use function Pest\Laravel\deleteJson;
 

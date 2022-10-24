@@ -4,8 +4,8 @@ use App\Jobs\Admin\Order\UpdateHumanGradesInAgs;
 use App\Models\User;
 use App\Models\UserCardCertificate;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     $this->userCardCertificate = UserCardCertificate::factory()->create();

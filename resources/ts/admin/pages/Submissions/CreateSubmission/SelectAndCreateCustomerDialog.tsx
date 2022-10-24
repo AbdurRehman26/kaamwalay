@@ -34,6 +34,8 @@ const useStyles = makeStyles({
 });
 interface SelectAndCreateCustomerDialogProps extends Omit<DialogProps, 'onSubmit'> {
     changeCustomer?: boolean;
+    fromSalesReps?: boolean;
+    btnText: string;
 }
 const debouncedFunc = debounce((func: () => void) => func(), 300);
 
@@ -57,6 +59,8 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
             handleClose('escapeKeyDown');
             dispatch(resetSelectedExistingAddress());
             dispatch(setUseCustomShippingAddress(false));
+        } else {
+            console.log('From Sales Reps!! ');
         }
     };
 
@@ -217,7 +221,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                                     variant={'contained'}
                                     color={'primary'}
                                 >
-                                    Create a new Customer
+                                    {props.btnText}
                                 </Button>
                             </Grid>
                         ) : null}

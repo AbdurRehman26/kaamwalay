@@ -175,6 +175,7 @@ export function CreateSubmission() {
             ) : (
                 <>
                     <SelectAndCreateCustomerDialog
+                        btnText={'Create a new Customer'}
                         changeCustomer={true}
                         onClose={() => setCreateSubmission(false)}
                         open={createSubmission}

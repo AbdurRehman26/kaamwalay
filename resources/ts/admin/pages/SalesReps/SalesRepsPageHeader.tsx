@@ -13,6 +13,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 // import { useNotifications } from '@shared/hooks/useNotifications';
 import { SelectAndCreateCustomerDialog } from '../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
+import { SalesRepAddDialog } from './SalesRepAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -99,7 +100,13 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                 </Box>
             ) : (
                 <>
-                    <SelectAndCreateCustomerDialog open={createSubmission} />
+                    <SalesRepAddDialog open={true} />
+                    <SelectAndCreateCustomerDialog
+                        btnText={'Create New User'}
+                        fromSalesReps
+                        onClose={() => setCreateSubmission(false)}
+                        open={createSubmission}
+                    />
                     <Grid container justifyContent={'space-between'}>
                         <Grid display={'flex'} alignItems={'center'} item>
                             <Typography variant={'h4'} fontWeight={500} mr={3}>

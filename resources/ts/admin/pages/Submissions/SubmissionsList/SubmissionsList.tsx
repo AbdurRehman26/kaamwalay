@@ -70,7 +70,11 @@ export function SubmissionsList() {
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
                 <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
-                <SelectAndCreateCustomerDialog onClose={() => setCreateSubmission(false)} open={createSubmission} />
+                <SelectAndCreateCustomerDialog
+                    btnText={'Create a new Customer'}
+                    onClose={() => setCreateSubmission(false)}
+                    open={createSubmission}
+                />
                 <Divider />
                 <TabContent value={'all'}>
                     <SubmissionsTable search={search} all />

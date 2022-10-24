@@ -53,7 +53,12 @@ const CardDiv = styled(Grid)({
     },
 });
 
-export const QuantityDependentPricing = () => {
+interface props {
+    priceRanges: any;
+}
+
+export const QuantityDependentPricing = ({ priceRanges }: props) => {
+    console.log(priceRanges);
     return (
         <CardDiv>
             <Grid className={'QuantityPricingHeadings'}>
@@ -66,18 +71,18 @@ export const QuantityDependentPricing = () => {
             </Grid>
             <Grid className={'QuantityAndPricing'}>
                 <div className={'QuantityDiv'}>
-                    <Typography className={'Quantity'}>1-20</Typography>
-                    <Typography className={'Quantity'}>21-50</Typography>
-                    <Typography className={'Quantity'}>51-100</Typography>
-                    <Typography className={'Quantity'}>101-200</Typography>
-                    <Typography className={'Quantity'}>200+</Typography>
+                    {priceRanges?.map((item: any) => (
+                        <Typography className={'Quantity'}>
+                            {item?.minCards === 201 ? '200+' : item?.minCards}
+                            {item?.minCards !== 201 ? '-' : ''}
+                            {item?.maxCards}
+                        </Typography>
+                    ))}
                 </div>
                 <div className={'PricingDiv'}>
-                    <Typography className={'Pricing'}>$18</Typography>
-                    <Typography className={'Pricing'}>$17</Typography>
-                    <Typography className={'Pricing'}>$16</Typography>
-                    <Typography className={'Pricing'}>$15</Typography>
-                    <Typography className={'Pricing'}>$14</Typography>
+                    {priceRanges?.map((item: any) => (
+                        <Typography className={'Pricing'}>${item?.price}</Typography>
+                    ))}
                 </div>
             </Grid>
         </CardDiv>

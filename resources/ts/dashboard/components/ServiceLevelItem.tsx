@@ -135,17 +135,18 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
     const currentSelectedLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
     const classes = useStyles({ id: props.id, currentSelectedLevelId: currentSelectedLevel?.id });
     const dispatch = useAppDispatch();
-    const { id, price, turnaround, type, maxProtectionAmount, priceBeforeDiscount, discountPercentage } = props;
+    const { id, price, turnaround, type, maxProtectionAmount, priceBeforeDiscount, discountPercentage, priceRanges } =
+        props;
 
     const handleSetServiceLevel = useCallback(() => {
-        dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
+        dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges }));
         ReactGA.event({
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
             dimension1: 'Level',
             metric1: id,
         });
-    }, [dispatch, id, maxProtectionAmount, price, turnaround, type]);
+    }, [dispatch, id, maxProtectionAmount, price, turnaround, type, priceRanges]);
 
     function getMaxProtectionAmount() {
         return maxProtectionAmount >= 1000000
@@ -169,16 +170,28 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                                     className={classes.priceBeforeDiscount}
                                 />
                             ) : null}
-                            <Typography variant={'subtitle2'} className={classes.levelTitle}>
-                                <NumberFormat
-                                    value={price}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
-                                />
-                                &nbsp;<span className={classes.cardText}> / Card </span>
-                            </Typography>
+                            {priceRanges ? (
+                                <Typography variant={'subtitle2'} className={classes.levelTitle}>
+                                    <NumberFormat
+                                        value={priceRanges?.slice(-1)[0]?.price}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                    &nbsp;
+                                    <span>-</span>
+                                    &nbsp;
+                                    <NumberFormat
+                                        value={priceRanges[0]?.price}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                    &nbsp;<span className={classes.cardText}> / Card </span>
+                                </Typography>
+                            ) : null}
                             <Typography className={classes.quantity}>Depending on qty.</Typography>
                             {priceBeforeDiscount ? (
                                 <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
@@ -210,7 +223,7 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                     >{`${turnaround} Turnaround`}</Typography>
                 </div>
             </ButtonBase>
-            {currentSelectedLevel?.id === id ? <QuantityDependentPricing /> : null}
+            {currentSelectedLevel?.id === id ? <QuantityDependentPricing priceRanges={priceRanges} /> : null}
         </>
     );
 }

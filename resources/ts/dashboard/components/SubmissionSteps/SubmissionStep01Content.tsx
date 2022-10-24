@@ -34,8 +34,8 @@ export function SubmissionStep01Content() {
     useEffect(() => {
         if (plan && serviceLevels.length > 1) {
             const selectedService: any = serviceLevels.find((service) => service.id === parseInt(plan));
-            const { id, price, turnaround, type, maxProtectionAmount } = selectedService;
-            dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
+            const { id, price, turnaround, type, maxProtectionAmount, priceRanges } = selectedService;
+            dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges }));
             dispatch(setCustomStep(1));
         }
     }, [serviceLevels, dispatch, plan]);

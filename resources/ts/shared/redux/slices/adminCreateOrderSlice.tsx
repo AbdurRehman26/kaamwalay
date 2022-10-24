@@ -472,7 +472,7 @@ export const getShippingFee = createAsyncThunk(
 
 export const getServiceLevels = createAsyncThunk('adminCreateOrderSlice/getServiceLevels', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('admin/orders/payment-plans');
+    const endpoint = apiService.createEndpoint('admin/orders/payment-plans', { version: 'v3' });
     const serviceLevels = await endpoint.get('');
 
     return serviceLevels.data;

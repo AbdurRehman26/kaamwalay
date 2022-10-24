@@ -14,6 +14,7 @@ export interface SubmissionService {
     price: number;
     priceBeforeDiscount?: string;
     discountPercentage?: string;
+    priceRanges?: any;
 }
 
 export interface Step01Data {
@@ -178,6 +179,7 @@ const initialState: NewSubmissionSliceState = {
                 maxProtectionAmount: 200,
                 turnaround: '20 Business Days',
                 price: 18,
+                priceRanges: [],
             },
         ],
         selectedServiceLevel: {
@@ -186,6 +188,7 @@ const initialState: NewSubmissionSliceState = {
             maxProtectionAmount: 200,
             turnaround: '20 Business Days',
             price: 18,
+            priceRanges: [],
         },
         status: 'success',
     },
@@ -318,7 +321,7 @@ const initialState: NewSubmissionSliceState = {
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/', { version: 'v3' });
     const serviceLevels = await endpoint.get('');
     return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
@@ -328,6 +331,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
         price: serviceLevel.price,
         priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
         discountPercentage: serviceLevel.discountPercentage,
+        priceRanges: serviceLevel.priceRanges,
     }));
 });
 

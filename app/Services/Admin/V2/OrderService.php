@@ -239,6 +239,7 @@ class OrderService extends V1OrderService
 
     /**
      * @throws IncorrectOrderStatus
+     * @return Collection<int, UserCard>
      */
     public function getCardsForGrading(Order $order): Collection
     {

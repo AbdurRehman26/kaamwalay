@@ -1,12 +1,13 @@
-import Grid from '@mui/material/Grid';
 import React from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { SalesRepDashboard } from './SalesRepDashboard';
 
 export function SalesRep() {
     return (
-        <Grid container>
-            <SalesRepDashboard />
-        </Grid>
+        <Routes>
+            <Route path={''} element={<Navigate to={'/dashboard'} replace />} />
+            <Route path={'/dashboard'} element={<SalesRepDashboard />} />
+        </Routes>
     );
 }
 

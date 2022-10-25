@@ -6,9 +6,12 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Radio from '@mui/material/Radio';
+import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -18,14 +21,14 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import ImageUploader from '@shared/components/ImageUploader';
-import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
+import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
 import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 
-interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
+interface SalesRepAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
     customerAdded?(customer: CustomerEntity): void;
     fromSubmission?: boolean;
 }
@@ -52,9 +55,12 @@ const RadioContainer = styled(ButtonBase)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-start !important',
     width: '100%',
+    height: '72px',
     backgroundColor: '#fff',
     border: '1px solid #ddd',
     borderRadius: 2,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
     '&.selected': {
         '.MuiSvgIcon-root': {
@@ -103,6 +109,8 @@ const useStyles = makeStyles(
                 fontWeight: 400,
                 fontSize: 12,
                 lineHeight: '16px',
+                marginBottom: '2px',
+                marginTop: '28px',
             },
             phoneNumberText: {
                 '.MuiInput-root': {
@@ -114,19 +122,22 @@ const useStyles = makeStyles(
     { name: '' },
 );
 
-export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: CustomerAddDialogProps) {
+export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: SalesRepAddDialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
     const { data } = useCountriesListsQuery();
 
-    const customerInput = useMemo<AddCustomerRequestDto>(
+    const salesRepInput = useMemo<AddSalesRepRequestDto>(
         () => ({
             firstName: '',
             lastName: '',
             email: '',
             phone: '',
+            fixedCommission: '',
+            percentCommission: '',
+            listActive: true,
         }),
         [],
     );
@@ -141,10 +152,10 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
     );
 
     const handleSubmit = useCallback(
-        async (customerInput: AddCustomerRequestDto) => {
+        async (salesRepInput: AddSalesRepRequestDto) => {
             try {
                 setLoading(true);
-                await dispatch(storeCustomer(customerInput))
+                await dispatch(storeCustomer(salesRepInput))
                     .unwrap()
                     .then((customer: CustomerEntity) => {
                         handleClose({});
@@ -184,9 +195,9 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
             </Grid>
             <Divider />
             <Formik
-                initialValues={customerInput}
+                initialValues={salesRepInput}
                 onSubmit={handleSubmit}
-                validationSchema={CustomerAddValidationRules}
+                validationSchema={SalesRepAddValidationRules}
                 validateOnChange
             >
                 {({
@@ -202,8 +213,15 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                 }) => (
                     <Form className={classes.root}>
                         <DialogContent>
-                            <Grid container display={'flex'} justifyContent={'space-between'} mt={2} spacing={1}>
-                                <Grid md={4}>
+                            <Grid
+                                container
+                                item
+                                display={'flex'}
+                                justifyContent={'space-between'}
+                                flexWrap={'nowrap'}
+                                my={2}
+                            >
+                                <Grid md={4} m={1}>
                                     <Typography variant={'subtitle1'} className={classes.label}>
                                         Profile Picture
                                     </Typography>
@@ -211,13 +229,14 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                         // imageUrl={selectedCardPhoto}
 
                                         // onDelete={() => setSelectedCardPhoto(null)}
-
+                                        maxHeight="230px"
+                                        maxWidth="213px"
                                         onChange={() => {}}
                                     />
                                 </Grid>
-                                <Grid md={8}>
-                                    <Grid display={'flex'}>
-                                        <Grid md={6}>
+                                <Grid md={8} m={1}>
+                                    <Grid display={'flex'} flexWrap={'nowrap'}>
+                                        <Grid md={6} mr={0.5}>
                                             <Typography variant={'subtitle1'} className={classes.label}>
                                                 First Name*
                                             </Typography>
@@ -233,7 +252,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                                 error={touched.firstName && !!errors.firstName}
                                             />
                                         </Grid>
-                                        <Grid md={6}>
+                                        <Grid md={6} ml={0.5}>
                                             <Typography variant={'subtitle1'} className={classes.label}>
                                                 Last Name*
                                             </Typography>
@@ -255,6 +274,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                             Email
                                         </Typography>
                                         <TextField
+                                            fullWidth
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             name={'email'}
@@ -279,20 +299,54 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                         />
                                     </Grid>
                                 </Grid>
-                                <Divider></Divider>
-                                <Grid mt={2}>
-                                    <Typography variant={'h5'}>Sales Commission Structure</Typography>
-                                    <RadioContainer>
-                                        <Radio checked={true} />
-                                        <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
-                                            Fixed Amount Per Card
-                                        </Typography>
-                                        <TextField></TextField>
-                                        <Typography>/ Card</Typography>
-                                    </RadioContainer>
-                                </Grid>
+                            </Grid>
+                            <Divider></Divider>
+                            <Grid mt={2} container>
+                                <Typography variant={'body1'} fontWeight={500}>
+                                    Sales Commission Structure
+                                </Typography>
+                                <RadioContainer>
+                                    <Radio checked={true} />
+                                    <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                        Fixed Amount Per Card
+                                    </Typography>
+                                    <TextField
+                                        value={values.fixedCommission}
+                                        // onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                        name="numberformat"
+                                        size="small"
+                                        id="formatted-numberformat-input"
+                                        variant="outlined"
+                                        InputProps={{
+                                            inputProps: { min: 1 },
+                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        }}
+                                        sx={{ width: '80px', marginLeft: 'auto', marginRight: '5px' }}
+                                    />
+                                    <Typography>/ Card</Typography>
+                                </RadioContainer>
+                                <RadioContainer>
+                                    <Radio checked={true} />
+                                    <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                        Percent of Order Total
+                                    </Typography>
+                                </RadioContainer>
+                                <FormControlLabel
+                                    sx={{ marginLeft: 'auto', marginTop: '8px' }}
+                                    labelPlacement={'start'}
+                                    control={
+                                        <Switch
+                                            value={values.listActive}
+                                            checked={false}
+                                            onChange={handleChange}
+                                            name="antoine"
+                                        />
+                                    }
+                                    label="List as Active"
+                                />
                             </Grid>
                         </DialogContent>
+                        <Divider></Divider>
                         <DialogActions>
                             <Button disabled={isSubmitting} onClick={handleClose} color={'inherit'}>
                                 Cancel
@@ -315,8 +369,9 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
 
 const RequiredMessage = 'Required field!';
 
-export const CustomerAddValidationRules = yup.object().shape({
+export const SalesRepAddValidationRules = yup.object().shape({
     email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
     firstName: yup.string().trim().required(RequiredMessage),
     lastName: yup.string().trim().required(RequiredMessage),
+    phone: yup.string().trim().required(RequiredMessage),
 });

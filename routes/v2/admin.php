@@ -27,6 +27,7 @@ use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanController;
+use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
 use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
@@ -156,8 +157,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
         ]);
-    Route::get('salesman/stats/{type}', [SalesmanController::class, 'getStats'])
-        ->name('salesman.stats');
+    Route::post('salesman/dashboard/sales', [SalesmanDashboardController::class, 'getSales'])
+        ->name('salesman.dashboard.sales');
+    Route::post('salesman/dashboard/commission-earned', [SalesmanDashboardController::class, 'getCommissionsEarned'])
+        ->name('salesman.dashboard.commission-earned');
 
     // wallet
     Route::prefix('wallets')->group(function () {

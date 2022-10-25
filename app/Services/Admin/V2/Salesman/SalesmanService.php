@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\V2\Salesman;
 
+use App\Models\Order;
 use App\Models\Salesman;
 use App\Models\User;
 use App\Services\EmailService;
@@ -78,5 +79,19 @@ class SalesmanService
                 'commission_type_value' => $data['commission_type_value']
             ]
         );
+    }
+
+    public function getSales(array $data): int
+    {
+        return Order::forSalesman(User::find($data['salesman_id']))
+            ->betweenDates($data['from_date'], $data['to_date'])
+            ->sum('grand_total');
+    }
+
+    public function getCommissionsEarned(array $data): int
+    {
+        return Order::forSalesman(User::find($data['salesman_id']))
+            ->betweenDates($data['from_date'], $data['to_date'])
+            ->sum('commission_earned');
     }
 }

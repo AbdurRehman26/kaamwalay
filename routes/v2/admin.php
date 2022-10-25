@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\API\V2\Admin\Address\CountryController;
 use App\Http\Controllers\API\V2\Admin\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Admin\Address\StateController;
@@ -25,7 +26,7 @@ use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
-use App\Http\Controllers\API\V2\Admin\SalesmanController;
+use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanController;
 use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
@@ -155,6 +156,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
         ]);
+    Route::get('salesman/stats/{type}', [SalesmanController::class, 'getStats'])
+        ->name('salesman.stats');
 
     // wallet
     Route::prefix('wallets')->group(function () {

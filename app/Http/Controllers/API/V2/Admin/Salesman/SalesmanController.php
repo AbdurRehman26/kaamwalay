@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V2\Admin;
+namespace App\Http\Controllers\API\V2\Admin\Salesman;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Salesman\StoreSalesmanRequest;
@@ -30,5 +30,4 @@ class SalesmanController extends Controller
     {
         return new SalesmanResource($this->salesmanService->createSalesman($request->validated()));
     }
-
 }

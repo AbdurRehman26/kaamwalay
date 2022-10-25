@@ -130,6 +130,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
         $user->assignSalesmanRole();
 
+
         return $user;
     }
 

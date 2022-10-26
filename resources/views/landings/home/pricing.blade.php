@@ -8,60 +8,9 @@
             <h3 class="Home-sectionContentHeadline text-center">Unbeatable Prices and Turnaround Times</h3>
         </div>
 
-        <div class="Home-priceRange" data-atom="quantity-dependent-pricing-chips" >
+        <div class="Home-priceRange" data-atom="quantity-dependent-pricing-chips" data-content="{{json_encode($paymentPlanRanges)}}">
             {{-- JS runtime actions --}}
         </div>
-
-        <div class="Home-pricesHolder">
-            <div class="Home-prices Home-prices--js" data-aos="fade-up">
-                @foreach($services as $service)
-                    <div class="slide-holder">
-                        <div class="Home-priceColumn">
-                            <h4 class="Home-priceHeadline">${{ $service->price }} <small>/Card</small></h4>
-                            <ul class="Home-priceFeatures">
-                                <li class="Home-priceFeature">
-                                    <p class="Home-priceFeatureText">
-                                        <img src="{{asset('assets/images/landings/home/carIcon.svg')}}" alt=""
-                                             class="Home-priceFeatureIcon" />
-                                        <b>{{ $service->turnaround }}</b> Turnaround
-                                    </p>
-                                </li>
-                                <li class="Home-priceFeature">
-                                    <p class="Home-priceFeatureText">
-                                        <img src="{{asset('assets/images/landings/home/moneyIcon.svg')}}" alt=""
-                                             class="Home-priceFeatureIcon" />
-                                        Up to <b>${{ $service->max_protection_amount }}</b> Insurance
-                                    </p>
-                                </li>
-                                <li class="Home-priceFeature">
-                                    <p class="Home-priceFeatureText">
-                                        <img src="{{asset('assets/images/landings/home/verifiedIcon.svg')}}" alt=""
-                                             class="Home-priceFeatureIcon" />
-                                        Grade Certificate
-                                    </p>
-                                </li>
-                                <li class="Home-priceFeature">
-                                    <p class="Home-priceFeatureText">
-                                        <img src="{{asset('assets/images/landings/home/detailedIcon.svg')}}" alt=""
-                                             class="Home-priceFeatureIcon" />
-                                        Detailed Grade Breakdown
-                                    </p>
-                                </li>
-                                <li class="Home-priceFeature">
-                                    <p class="Home-priceFeatureText">
-                                        <img src="{{asset('assets/images/landings/home/slabIcon.svg')}}" alt=""
-                                             class="Home-priceFeatureIcon" />
-                                        AGS Slab
-                                    </p>
-                                </li>
-                            </ul>                            
-                            <div class="Home-submissionCtaContainer" data-atom="submit-button" data-plan="{{$service->id}}" data-text-color="white" data-button-content="Select & start submission">
-                                {{-- JS runtime actions --}}
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+        
     </div>
 </section>

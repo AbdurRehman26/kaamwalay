@@ -386,7 +386,7 @@ export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder',
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('admin/orders');
+    const endpoint = apiService.createEndpoint('admin/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });

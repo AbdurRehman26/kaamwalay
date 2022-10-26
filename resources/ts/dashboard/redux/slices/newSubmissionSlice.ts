@@ -572,7 +572,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             : false,
     };
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders');
+    const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });

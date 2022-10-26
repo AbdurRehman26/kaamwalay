@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useEffect, useState } from 'react';
+import { PriceCard } from './PriceCard';
 
 const HomePriceRange = styled(Grid)({
     '.HomePriceRangeMobile': {
@@ -64,28 +66,68 @@ const HomePriceRange = styled(Grid)({
     },
 });
 
-export default function QuantityDependentPricingChips() {
+interface props {
+    content: any;
+}
+
+export default function QuantityDependentPricingChips({ content }: props) {
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const [data, setData] = useState<[]>([]);
+    const object = JSON.parse(content);
+
+    function findPrice(min: any, max: any) {
+        setData(
+            object?.filter((item: any) => {
+                if (item.min_cards === min && item.max_cards === max) {
+                    return item;
+                }
+            }),
+        );
+    }
+
+    useEffect(() => {
+        setData(
+            object?.filter((item: any) => {
+                if (item.min_cards === 201 && item.max_cards === null) {
+                    return item;
+                }
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <HomePriceRange>
-            <div className={isMobile ? 'HomePriceRangeMobile' : 'HomePriceRange'}>
-                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
-                    <Button className={'HomePriceText'}>1-20 Cards</Button>
+        <>
+            <HomePriceRange>
+                <div className={isMobile ? 'HomePriceRangeMobile' : 'HomePriceRange'}>
+                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                        <Button className={'HomePriceText'} onClick={() => findPrice(1, 20)}>
+                            1-20 Cards
+                        </Button>
+                    </div>
+                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                        <Button className={'HomePriceText'} onClick={() => findPrice(21, 50)}>
+                            21-50 Cards
+                        </Button>
+                    </div>
+                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                        <Button className={'HomePriceText'} onClick={() => findPrice(51, 100)}>
+                            51-100 Cards
+                        </Button>
+                    </div>
+                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                        <Button className={'HomePriceText'} onClick={() => findPrice(101, 200)}>
+                            101-200 Cards
+                        </Button>
+                    </div>
+                    <div className={'HomePriceRangeDivSelected'}>
+                        <Button className={'HomePriceTextSelected'} onClick={() => findPrice(201, null)}>
+                            200+ Cards
+                        </Button>
+                    </div>
                 </div>
-                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
-                    <Button className={'HomePriceText'}>21-50 Cards</Button>
-                </div>
-                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
-                    <Button className={'HomePriceText'}>51-100 Cards</Button>
-                </div>
-                <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
-                    <Button className={'HomePriceText'}>101-200 Cards</Button>
-                </div>
-                <div className={'HomePriceRangeDivSelected'}>
-                    <Button className={'HomePriceTextSelected'}>200+ Cards</Button>
-                </div>
-            </div>
-        </HomePriceRange>
+            </HomePriceRange>
+            <PriceCard data={data} />
+        </>
     );
 }

@@ -7,13 +7,13 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
+import { useLayoutHeaderStyles } from '@salesrep/components/Layout/styles';
+import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
+import { drawerVisibility } from '@salesrep/redux/slices/pageSlice';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@shared/assets/logo.svg';
 import { useAuth } from '@shared/hooks/useAuth';
-import { useLayoutHeaderStyles } from '@admin/components/Layout/styles';
-import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { drawerVisibility } from '@admin/redux/slices/pageSlice';
 
 function LayoutHeader() {
     const [userMenuAnchor, setUserMenuAnchor] = useState<HTMLElement | null>(null);

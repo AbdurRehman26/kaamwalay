@@ -7,7 +7,7 @@ export function SalesRep() {
     return (
         <Layout>
             <Routes>
-                <Route path={''} element={<Navigate to={'/salesrep'} replace />} />
+                <Route path={'/'} element={<Navigate to={'/salesrep'} replace />} />
                 <Route path={'/salesrep/*'} element={<SalesRepDashboard />} />
             </Routes>
         </Layout>

@@ -4,8 +4,8 @@ import SellIcon from '@mui/icons-material/Sell';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import makeStyles from '@mui/styles/makeStyles';
+import { useAppSelector } from '@salesrep/redux/hooks';
 import { transparentize } from 'polished';
-import { useAppSelector } from '@admin/redux/hooks';
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(

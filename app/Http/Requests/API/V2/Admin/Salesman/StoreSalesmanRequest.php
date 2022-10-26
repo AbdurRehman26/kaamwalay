@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V2\Admin\Salesman;
 
+use App\Models\CommissionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -20,7 +21,8 @@ class StoreSalesmanRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max: 255'],
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['nullable', 'string'],
-            'role_ids' => ['required', 'array', Rule::in(DB::table('roles')->pluck('id'))]
+            'commission_type_id' => ['required', Rule::in(CommissionType::pluck('id'))],
+            'commission_type_value' => ['required', 'numeric', 'min:1']
         ];
     }
 }

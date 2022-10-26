@@ -299,6 +299,11 @@ class Order extends Model implements Exportable
         return $query->where('orders.user_id', $user->id);
     }
 
+    public function scopeForSalesman(Builder $query, User $user): Builder
+    {
+        return $query->where('orders.salesman_id', $user->id);
+    }
+
     public function isPayable(string $version = 'v1'): bool
     {
         if ($version === 'v1') {
@@ -580,7 +585,7 @@ class Order extends Model implements Exportable
      * @param  Builder <Order> $query
      * @return Builder <Order>
      */
-    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
+        public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
     {
         return $query->whereBetween('created_at', [$fromDate, $toDate]);
     }

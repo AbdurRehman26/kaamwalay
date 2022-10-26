@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\API\V2\Admin\Address\CountryController;
 use App\Http\Controllers\API\V2\Admin\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Admin\Address\StateController;
@@ -25,7 +26,8 @@ use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
-use App\Http\Controllers\API\V2\Admin\SalesmanController;
+use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanController;
+use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
 use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
@@ -146,6 +148,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'customers.show',
         ]);
     Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
+    Route::post('customers/{user}/assign-salesman/{salesman}', [CustomerController::class, 'assignSalesman'])->name('customers.assign-salesman');
 
     // Salesmen
     Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])
@@ -154,6 +157,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
         ]);
+    Route::post('salesman/dashboard/sales', [SalesmanDashboardController::class, 'getSales'])
+        ->name('salesman.dashboard.sales');
+    Route::post('salesman/dashboard/commission-earned', [SalesmanDashboardController::class, 'getCommissionsEarned'])
+        ->name('salesman.dashboard.commission-earned');
 
     // wallet
     Route::prefix('wallets')->group(function () {

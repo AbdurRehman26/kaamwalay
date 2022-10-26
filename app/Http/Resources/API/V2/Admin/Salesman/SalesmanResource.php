@@ -27,6 +27,8 @@ class SalesmanResource extends BaseResource
             'last_name' => $this->last_name,
             'full_name' => $this->getFullName(),
             'email' => $this->email,
+            'commission_type_id' => $this->salesman->commission_type_id,
+            'commission_type_value' => $this->salesman->commission_type_value,
             'customers' => $this->totalCustomersCount,
             'orders' => $this->totalOrdersCount,
             'commission_earned' => $this->commissionEarned,

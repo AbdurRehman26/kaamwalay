@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CommissionType;
 use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -16,6 +17,7 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
     ]);
+    Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->salesman = User::factory()->withRole(config('permission.roles.salesman'))->create();
@@ -61,7 +63,8 @@ test('an admin can create a salesman', function () {
         'last_name' => 'Doe',
         'email' => 'luis@wooter.com',
         'phone' => '+1234567890',
-        'role_ids' => DB::table('roles')->where('name', '=', config('permission.roles.salesman'))->pluck('id')
+        'commission_type_id' => CommissionType::whereType(1)->first()->id,
+        'commission_type_value' => 2
     ])
         ->assertSuccessful()
         ->assertJsonStructure([

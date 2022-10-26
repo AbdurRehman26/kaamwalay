@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 // import TablePagination from '@mui/material/TablePagination';
 
-export function SalesRepDashboard() {
+export function Dashboard() {
     return (
         <>
             <Grid sx={{ backgroundColor: '#f9f9f9', borderBottom: '1px solid #E0E0E0' }} width={'100%'}>
@@ -103,4 +103,4 @@ export function SalesRepDashboard() {
     );
 }
 
-export default SalesRepDashboard;
+export default Dashboard;

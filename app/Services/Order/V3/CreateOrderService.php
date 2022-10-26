@@ -10,11 +10,13 @@ class CreateOrderService extends BaseCreateOrderService
 {
     protected function storePaymentPlan(array $paymentPlan): void
     {
+        // This payment_plan_id is linked to originalPaymentPlan relationship
         $this->order->payment_plan_id = $paymentPlan['id'];
 
         $paymentPlan = PaymentPlan::find($paymentPlan['id']);
         $priceRanges = $paymentPlan->paymentPlanRanges;
 
+        // @phpstan-ignore-next-line
         $totalItems = collect($this->data['items'])->sum('quantity');
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {
@@ -28,6 +30,7 @@ class CreateOrderService extends BaseCreateOrderService
             'turnaround' => $paymentPlan->turnaround,
         ]);
 
+        // Column for paymentPlan relationship is order_payment_plan_id
         $this->order->paymentPlan()->associate($orderPaymentPlan);
     }
 }

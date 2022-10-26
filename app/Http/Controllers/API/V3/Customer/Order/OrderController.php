@@ -33,5 +33,4 @@ class OrderController extends Controller
 
         return new OrderCreateResource($order);
     }
-
 }

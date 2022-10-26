@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\PopReports;
 
+use App\Models\CardProduct;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
@@ -12,7 +13,7 @@ class UpdateCardReportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'pop-reports:update-cards-report';
+    protected $signature = 'pop-reports:update-cards-report {ids?*}';
 
     /**
      * The console command description.
@@ -23,8 +24,24 @@ class UpdateCardReportCommand extends Command
 
     public function handle(PopReportService $popReportService): int
     {
-        $popReportService->updateAllCardProductsReport();
+        $cardsIds = $this->argument('ids');
+
+        if (empty($cardsIds)) {
+            $popReportService->updateAllCardProductsReport();
+        } else {
+            foreach ($cardsIds as $id) {
+                $this->info("Updating values for card product: ". $id);
+                $this->updatePopReports($popReportService, CardProduct::find($id));
+            }
+        }
 
         return 0;
+    }
+
+    protected function updatePopReports(PopReportService $popReportService, CardProduct $cardProduct): void
+    {
+        $popReportService->updateCardProductsReport($cardProduct);
+        $popReportService->updateSetsReport($cardProduct->cardSet);
+        $popReportService->updateSeriesReport($cardProduct->cardSet->cardSeries);
     }
 }

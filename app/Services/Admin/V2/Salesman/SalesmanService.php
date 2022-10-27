@@ -41,7 +41,7 @@ class SalesmanService
             DB::beginTransaction();
 
             $salesman = User::createSalesman($data);
-            $this->storeCommissionStructure($salesman, $data);
+            $this->storeSalesmanProfile($salesman, $data);
             $this->sendAccessEmailToCreatedUser($salesman);
 
             DB::commit();
@@ -68,15 +68,16 @@ class SalesmanService
         );
     }
 
-    protected function storeCommissionStructure(User $user, $data): Salesman
+    protected function storeSalesmanProfile(User $user, $data): Salesman
     {
         return Salesman::updateOrCreate(
             [
                 'user_id' => $user->id
             ],
             [
-                'commission_type_id' => $data['commission_type_id'],
-                'commission_type_value' => $data['commission_type_value']
+                'is_active' => $data['is_active'],
+                'commission_type' => $data['commission_type'],
+                'commission_value' => $data['commission_value']
             ]
         );
     }

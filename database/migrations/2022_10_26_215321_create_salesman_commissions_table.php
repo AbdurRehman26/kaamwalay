@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +14,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('commission_types', function (Blueprint $table) {
+        Schema::create('salesman_commissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedTinyInteger('type')
-                ->comment('0 => percentage, 1 => fixed');
+            $table->foreignIdFor(User::class, 'salesman_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->date('event_at');
+            $table->decimal('commission', 10, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commission_types');
+        Schema::dropIfExists('salesman_commissions');
     }
 };

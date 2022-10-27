@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\CommissionType;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -21,11 +22,10 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(CommissionType::class)
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->unsignedDecimal('commission_type_value', 10);
+            $table->tinyInteger('commission_type')->default(0)
+                ->comment('0 => percentage, 1 => fixed');
+            $table->unsignedDecimal('commission_value', 10);
+            $table->boolean('is_active')->nullable()->default(true);
             $table->timestamps();
         });
     }

@@ -88,7 +88,7 @@ test('a customer cannot create salesmen', function () {
         'email' => 'luis@wooter.com',
         'phone' => '+1234567890',
     ])
-    ->assertStatus(403);
+        ->assertStatus(403);
 });
 
 test('a guest cannot create salesmen', function () {

@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V2\Admin\Salesman;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
+use App\Models\Salesman;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -27,11 +28,12 @@ class SalesmanResource extends BaseResource
             'last_name' => $this->last_name,
             'full_name' => $this->getFullName(),
             'email' => $this->email,
+            'commission_type' => $this->salesmanProfile->commission_type,
+            'commission_value' => $this->salesmanProfile->commission_value,
             'customers' => $this->totalCustomersCount,
             'orders' => $this->totalOrdersCount,
             'commission_earned' => $this->commissionEarned,
-            'commission_paid' => $this->commissionPaid,
-            'status' => $this->status,
+            'status' => $this->salesmanProfile->is_active,
             'sales' => $this->totalSales,
         ];
     }

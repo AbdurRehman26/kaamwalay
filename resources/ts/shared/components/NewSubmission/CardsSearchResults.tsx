@@ -125,23 +125,23 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
 
 export function CardsSearchResults() {
     const classes = useStyles();
-    const [addCardDialog, setAddCardDialog] = useState(false);
+    const [showAddCardDialog, setShowAddCardDialog] = useState(false);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const ResultsWrapper = isSm ? 'div' : Paper;
     const { authenticated, authDialogProps, openAuthDialog } = useAuth();
     const notifications = useNotifications();
 
     const toggleAddCardDialog = useCallback(() => {
-        if (!addCardDialog && !authenticated) {
+        if (!showAddCardDialog && !authenticated) {
             openAuthDialog();
             return;
         }
-        setAddCardDialog(!addCardDialog);
-    }, [setAddCardDialog, authenticated, openAuthDialog, addCardDialog]);
+        setShowAddCardDialog(!showAddCardDialog);
+    }, [setShowAddCardDialog, authenticated, openAuthDialog, showAddCardDialog]);
 
     const handleAddSubmit = async () => {
         try {
-            setAddCardDialog(false);
+            setShowAddCardDialog(false);
             window.location.reload();
         } catch (e: any) {
             notifications.exception(e);
@@ -150,7 +150,7 @@ export function CardsSearchResults() {
 
     return (
         <div className={classes.container}>
-            <CardAddDialog onSubmit={handleAddSubmit} open={addCardDialog} onClose={() => setAddCardDialog(false)} />
+            <CardAddDialog onSubmit={handleAddSubmit} open={showAddCardDialog} onClose={toggleAddCardDialog} />
             <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography variant={'caption'} className={font.fontWeightMedium}>
                     <Stats

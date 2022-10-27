@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 test('an admin can see payment plans', function () {
-    $response = $this->getJson('/api/v3/admin/orders/payment-plans/');
+    $response = $this->getJson(route('v3.admin.payment-plans.index'));
 
     $response->assertJsonCount(7, 'data');
     $response->assertJsonStructure([
@@ -31,6 +31,8 @@ test('an admin can see payment plans', function () {
                 'max_protection_amount',
                 'turnaround',
                 'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+                'min_price',
+                'max_price',
             ],
         ],
     ]);
@@ -40,10 +42,10 @@ test('an admin can see specific payment plan', function () {
     PaymentPlan::factory()
         ->count(1)
         ->create();
-    $response = $this->getJson('/api/v3/admin/orders/payment-plans/1');
+    $response = $this->getJson(route('v3.admin.payment-plans.show', 1));
 
-    $response->assertJsonCount(7, 'data');
-    $response->assertJsonStructure([
+    $response->assertSuccessful()
+        ->assertJsonStructure([
         'data' => [
             'id',
             'price',
@@ -52,6 +54,8 @@ test('an admin can see specific payment plan', function () {
             'max_protection_amount',
             'turnaround',
             'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+            'min_price',
+            'max_price',
         ],
     ]);
 });

@@ -17,6 +17,8 @@ class PaymentPlanResource extends JsonResource
      */
     public function toArray($request)
     {
+        $ranges = $this->paymentPlanRanges;
+
         return [
             'id' => $this->id,
             'price' => $this->price,
@@ -24,7 +26,9 @@ class PaymentPlanResource extends JsonResource
             'discount_percentage' => $this->discount_percentage,
             'max_protection_amount' => $this->max_protection_amount,
             'turnaround' => $this->turnaround,
-            'price_ranges' => new PaymentPlanRangeCollection($this->paymentPlanRanges),
+            'price_ranges' => new PaymentPlanRangeCollection($ranges),
+            'min_price' => $ranges->last()?->price,
+            'max_price' => $ranges->first()?->price,
         ];
     }
 }

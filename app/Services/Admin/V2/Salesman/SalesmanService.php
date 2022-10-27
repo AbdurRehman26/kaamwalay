@@ -56,16 +56,28 @@ class SalesmanService
         }
     }
 
-    public function sendAccessEmailToCreatedUser(User $user): void
+    /**
+     * @throws Throwable
+     */
+    public function assignSalesmanRoleToUser(User $user, array $data): User
     {
-        $token = Password::broker()->createToken($user);
+        try{
 
-        $this->emailService->sendEmail(
-            [[$user->email => $user->first_name ?? '']],
-            EmailService::SUBJECT[EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT],
-            EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
-            ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
-        );
+            DB::beginTransaction();
+
+            $this->updateUserInfo($user, $data);
+            $this->storeSalesmanProfile($user, $data);
+
+            DB::commit();
+
+            return $user->refresh();
+        } catch (Exception $e) {
+
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
     }
 
     protected function storeSalesmanProfile(User $user, $data): Salesman
@@ -82,6 +94,27 @@ class SalesmanService
         );
     }
 
+    private function updateUserInfo(User $user, $data): void
+    {
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->phone = $data['phone'];
+        $user->profile_image = $data['profile_image'];
+        $user->save();
+    }
+
+    public function sendAccessEmailToCreatedUser(User $user): void
+    {
+        $token = Password::broker()->createToken($user);
+
+        $this->emailService->sendEmail(
+            [[$user->email => $user->first_name ?? '']],
+            EmailService::SUBJECT[EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT],
+            EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
+            ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
+        );
+    }
+
     public function getSales(array $data): int
     {
         return Order::forSalesman(User::find($data['salesman_id']))
@@ -93,6 +126,6 @@ class SalesmanService
     {
         return Order::forSalesman(User::find($data['salesman_id']))
             ->betweenDates($data['from_date'], $data['to_date'])
-            ->sum('commission_earned');
+            ->sum('salesman_commission');
     }
 }

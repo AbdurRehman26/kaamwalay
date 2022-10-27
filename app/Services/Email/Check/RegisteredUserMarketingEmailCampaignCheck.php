@@ -19,6 +19,6 @@ class RegisteredUserMarketingEmailCampaignCheck implements ShouldStillSendCheckI
             return false;
         }
 
-        return User::find($extraData['user_id'])->orders()->placed()->count() === 0;
+        return $user->orders()->placed()->count() === 0;
     }
 }

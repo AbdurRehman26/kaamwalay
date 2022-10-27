@@ -25,6 +25,7 @@ import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
+import { SalesRepAddDialog } from '@admin/pages/SalesReps/SalesRepAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 const useStyles = makeStyles({
@@ -43,6 +44,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     const { onClose, ...rest } = props;
     const [search, setSearch] = useState('');
     const [showAddCustomer, setShowAddCustomer] = useState(false);
+    const [showAddSalesRep, setShowAddSalesRep] = useState(false);
     const isMounted = useIsMounted();
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -54,13 +56,13 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     const createSubmission = (customer: UserEntity) => {
         dispatch(setUser(customer));
-        navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
         if (props.changeCustomer) {
+            navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
             handleClose('escapeKeyDown');
             dispatch(resetSelectedExistingAddress());
             dispatch(setUseCustomShippingAddress(false));
         } else {
-            console.log('From Sales Reps!! ');
+            setShowAddSalesRep(true);
         }
     };
 
@@ -94,11 +96,12 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     return (
         <>
+            <SalesRepAddDialog open={showAddSalesRep} onClose={() => setShowAddSalesRep(false)} />
             <CustomerAddDialog onClose={() => setShowAddCustomer(false)} open={showAddCustomer} fromSubmission={true} />
             {!showAddCustomer ? (
                 <Dialog {...rest} fullWidth onClose={handleClose}>
                     <DialogTitle>
-                        Select or Create a Customer
+                        {props.fromSalesReps ? 'Search User or Create a New User' : 'Select or Create a Customer'}
                         <IconButton
                             sx={{
                                 position: 'absolute',
@@ -215,7 +218,11 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                         {!props.changeCustomer ? (
                             <Grid position={'sticky'} sx={{ bottom: '0' }} mt={3}>
                                 <Button
-                                    onClick={() => setShowAddCustomer(true)}
+                                    onClick={
+                                        props.fromSalesReps
+                                            ? () => setShowAddSalesRep(true)
+                                            : () => setShowAddCustomer(true)
+                                    }
                                     sx={{ height: '48px' }}
                                     fullWidth
                                     variant={'contained'}

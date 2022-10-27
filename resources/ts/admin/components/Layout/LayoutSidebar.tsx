@@ -1,5 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import Face from '@mui/icons-material/Face';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SellIcon from '@mui/icons-material/Sell';
 import StyleIcon from '@mui/icons-material/Style';
@@ -74,7 +75,7 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
-                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Sales Reps'} href={'/salesreps'} />
+                <LayoutSidebarItem icon={Face} title={'Sales Reps'} href={'/salesreps'} />
                 <LayoutSidebarItem
                     icon={SafeSquareOutline}
                     title={'Vault Storage'}

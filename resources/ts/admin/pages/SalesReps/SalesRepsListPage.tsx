@@ -16,10 +16,15 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
+import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { useRepository } from '@shared/hooks/useRepository';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminSalesMenQuery } from '@shared/redux/hooks/useAdminSalesMenQuery';
+import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
 type InitialValues = {
@@ -45,6 +50,9 @@ export function SalesRepsListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery }] = useLocationQuery<InitialValues>();
     const [sortFilter, setSortFilter] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const dataExportRepository = useRepository(DataExportRepository);
+    const notifications = useNotifications();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -116,6 +124,25 @@ export function SalesRepsListPage() {
     const handleSort = (value: boolean) => {
         setSortFilter(value);
     };
+
+    const handleExportData = useCallback(async () => {
+        try {
+            setIsExporting(true);
+            const exportData = await dataExportRepository.export({
+                model: ExportableModelsEnum.SalesRep,
+                sort: { sort: sortFilter },
+                filter: getFilters({
+                    ...formikRef.current!.values,
+                }),
+            });
+
+            await downloadFromUrl(exportData.fileUrl, `robograding-salereps.xlsx`);
+            setIsExporting(false);
+        } catch (e: any) {
+            notifications.exception(e);
+            setIsExporting(false);
+        }
+    }, [dataExportRepository, sortFilter, notifications]);
 
     const handleClearStatus = useCallback(async () => {
         formikRef.current?.setFieldValue('status', '');
@@ -208,9 +235,9 @@ export function SalesRepsListPage() {
                         variant={'outlined'}
                         color={'primary'}
                         sx={{ borderRadius: 20, padding: '7px 24px' }}
-                        // onClick={handleExportData}
-                        // loading={isExporting}
-                        // disabled={isExporting}
+                        onClick={handleExportData}
+                        loading={isExporting}
+                        disabled={isExporting}
                     >
                         Export List
                     </LoadingButton>

@@ -100,10 +100,10 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                 </Box>
             ) : (
                 <>
-                    <SalesRepAddDialog open={true} />
+                    <SalesRepAddDialog open={false} />
                     <SelectAndCreateCustomerDialog
                         btnText={'Create New User'}
-                        fromSalesReps
+                        fromSalesReps={true}
                         onClose={() => setCreateSubmission(false)}
                         open={createSubmission}
                     />

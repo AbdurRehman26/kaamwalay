@@ -1,3 +1,4 @@
+import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -42,6 +43,9 @@ function LayoutHeader() {
                     <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
                 </Link>
                 <Box flexGrow={1} />
+                <IconButton size="large">
+                    <LocalPoliceOutlinedIcon />
+                </IconButton>
                 <Avatar component={ButtonBase} onClick={handleUserMenuOpen}>
                     {user.getInitials()}
                 </Avatar>

@@ -854,7 +854,7 @@ export const newSubmissionSlice = createSlice({
 
             state.step01Data.selectedServiceLevel = {
                 type: 'card',
-                ...action.payload.originalPaymentPlan,
+                ...action.payload.paymentPlan,
             };
             state.step02Data = {
                 cleaningFee: action.payload.cleaningFee,

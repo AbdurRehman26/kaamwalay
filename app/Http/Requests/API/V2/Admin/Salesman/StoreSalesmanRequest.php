@@ -21,8 +21,9 @@ class StoreSalesmanRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max: 255'],
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['nullable', 'string'],
-            'commission_type_id' => ['required', Rule::in(CommissionType::pluck('id'))],
-            'commission_type_value' => ['required', 'numeric', 'min:1']
+            'is_active' => ['required', Rule::in(false, true)],
+            'commission_type' => ['required', Rule::in(0, 1)],
+            'commission_value' => ['required', 'numeric', 'min:1']
         ];
     }
 }

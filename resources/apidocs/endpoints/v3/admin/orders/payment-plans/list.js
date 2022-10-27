@@ -50,7 +50,9 @@
  *                          "max_cards": null,
  *                          "price": 14
  *                      }
- *                  ]
+ *                  ],
+ *                  "min_price": 14,
+ *                  "max_price": 18
  *              },
  *              {
  *                  "id": 2,
@@ -88,7 +90,9 @@
  *                          "max_cards": null,
  *                          "price": 26
  *                      }
- *                  ]
+ *                  ],
+ *                  "min_price": 26,
+ *                  "max_price": 30
  *              },
  *              {
  *                  "id": 3,
@@ -126,7 +130,9 @@
  *                          "max_cards": null,
  *                          "price": 46
  *                      }
- *                  ]
+ *                  ],
+ *                  "min_price": 46,
+ *                  "max_price": 50
  *              }
  *          ]
  *      }

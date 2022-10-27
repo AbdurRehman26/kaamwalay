@@ -9,7 +9,7 @@ beforeEach(function () {
 
 test('a user can see payment plans', function () {
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/v3/customer/orders/payment-plans/');
+    $response = $this->getJson(route('v3.payment-plans.index'));
 
     $response->assertJsonCount(7, 'data');
     $response->assertJsonStructure([
@@ -22,6 +22,8 @@ test('a user can see payment plans', function () {
                 'max_protection_amount',
                 'turnaround',
                 'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+                'min_price',
+                'max_price',
             ],
         ],
     ]);
@@ -33,10 +35,10 @@ test('a user can see specific payment plan', function () {
     PaymentPlan::factory()
         ->count(1)
         ->create();
-    $response = $this->getJson('/api/v3/customer/orders/payment-plans/1');
+    $response = $this->getJson(route('v3.payment-plans.show', 1));
 
-    $response->assertJsonCount(7, 'data');
-    $response->assertJsonStructure([
+    $response->assertSuccessful()
+        ->assertJsonStructure([
         'data' => [
             'id',
             'price',
@@ -45,12 +47,14 @@ test('a user can see specific payment plan', function () {
             'max_protection_amount',
             'turnaround',
             'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+            'min_price',
+            'max_price',
         ],
     ]);
 });
 
 test('a guest can get payment plans', function () {
-    $response = $this->getJson('/api/v3/customer/orders/payment-plans');
+    $response = $this->getJson(route('v3.payment-plans.index'));
 
     $response->assertOk();
 });

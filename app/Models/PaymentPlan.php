@@ -41,6 +41,6 @@ class PaymentPlan extends Model
      */
     public function paymentPlanRanges(): HasMany
     {
-        return $this->hasMany(PaymentPlanRange::class);
+        return $this->hasMany(PaymentPlanRange::class)->orderBy('price', 'DESC');
     }
 }

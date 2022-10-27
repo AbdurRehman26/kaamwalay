@@ -56,7 +56,9 @@
  *                      "max_cards": null,
  *                      "price": 14
  *                  }
- *              ]
+ *              ],
+ *              "min_price": 14,
+ *              "max_price": 18
  *         }
  *      }
  */

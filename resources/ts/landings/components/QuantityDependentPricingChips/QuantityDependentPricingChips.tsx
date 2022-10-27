@@ -44,6 +44,11 @@ const HomePriceRange = styled(Grid)({
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center',
+        marginRight: '20px',
+        [theme.breakpoints.down('sm')]: {
+            marginRight: '0px',
+            margin: '6px',
+        },
     },
     '.HomePriceTextSelected': {
         fontFamily: 'Roboto',
@@ -64,6 +69,7 @@ interface props {
 
 export default function QuantityDependentPricingChips({ content }: props) {
     const [data, setData] = useState<[]>([]);
+    const [selected, setSelected] = useState('200');
     const object = JSON.parse(content);
 
     function findPrice(min: any, max: any) {
@@ -91,28 +97,58 @@ export default function QuantityDependentPricingChips({ content }: props) {
         <>
             <HomePriceRange>
                 <div className={'HomePriceRange'}>
-                    <div className={'HomePriceRangeDiv'}>
-                        <Button className={'HomePriceText'} onClick={() => findPrice(1, 20)}>
+                    <div className={selected === '1' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                        <Button
+                            className={selected === '1' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            onClick={() => {
+                                findPrice(1, 20);
+                                setSelected('1');
+                            }}
+                        >
                             1-20 Cards
                         </Button>
                     </div>
-                    <div className={'HomePriceRangeDiv'}>
-                        <Button className={'HomePriceText'} onClick={() => findPrice(21, 50)}>
+                    <div className={selected === '21' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                        <Button
+                            className={selected === '21' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            onClick={() => {
+                                findPrice(21, 50);
+                                setSelected('21');
+                            }}
+                        >
                             21-50 Cards
                         </Button>
                     </div>
-                    <div className={'HomePriceRangeDiv'}>
-                        <Button className={'HomePriceText'} onClick={() => findPrice(51, 100)}>
+                    <div className={selected === '51' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                        <Button
+                            className={selected === '51' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            onClick={() => {
+                                findPrice(51, 100);
+                                setSelected('51');
+                            }}
+                        >
                             51-100 Cards
                         </Button>
                     </div>
-                    <div className={'HomePriceRangeDiv'}>
-                        <Button className={'HomePriceText'} onClick={() => findPrice(101, 200)}>
+                    <div className={selected === '101' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                        <Button
+                            className={selected === '101' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            onClick={() => {
+                                findPrice(101, 200);
+                                setSelected('101');
+                            }}
+                        >
                             101-200 Cards
                         </Button>
                     </div>
-                    <div className={'HomePriceRangeDivSelected'}>
-                        <Button className={'HomePriceTextSelected'} onClick={() => findPrice(201, null)}>
+                    <div className={selected === '200' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                        <Button
+                            className={selected === '200' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            onClick={() => {
+                                findPrice(201, null);
+                                setSelected('200');
+                            }}
+                        >
                             200+ Cards
                         </Button>
                     </div>

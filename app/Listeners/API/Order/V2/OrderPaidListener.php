@@ -27,6 +27,11 @@ class OrderPaidListener implements ShouldQueue
      */
     public function handle(OrderPaid $event): void
     {
+        $this->processEmails($event);
+    }
+
+    protected function processEmails(OrderPaid $event): void
+    {
         $this->emailService->sendEmail(
             [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID),

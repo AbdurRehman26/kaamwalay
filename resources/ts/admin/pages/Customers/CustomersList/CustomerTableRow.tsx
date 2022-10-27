@@ -9,12 +9,14 @@ import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface props {
     customer: CustomerEntity;
@@ -42,7 +44,9 @@ export function CustomerTableRow({ customer }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const navigate = useNavigate();
-
+    const dispatch = useAppDispatch();
+    const [salesReps, setSalesRep] = useState([]);
+    console.log('salesreps', salesReps);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -53,6 +57,13 @@ export function CustomerTableRow({ customer }: props) {
         },
         [setAnchorEl],
     );
+
+    useEffect(() => {
+        (async () => {
+            const data = await dispatch(getSalesRep());
+            setSalesRep(data);
+        })();
+    }, [dispatch]);
 
     const handleOption = useCallback(
         (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {

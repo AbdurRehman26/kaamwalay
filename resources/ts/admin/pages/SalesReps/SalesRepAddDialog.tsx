@@ -6,26 +6,30 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
+// import MuiLink from '@mui/material/Link';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Radio from '@mui/material/Radio';
+import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { Form, Formik } from 'formik';
 import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
-import * as yup from 'yup';
 import ImageUploader from '@shared/components/ImageUploader';
-import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
+import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { useRepository } from '@shared/hooks/useRepository';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
-import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
-import { useAppDispatch } from '@admin/redux/hooks';
+import { storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
+import { FilesRepository } from '@shared/repositories/FilesRepository';
+import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 
-interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
+interface SalesRepAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
     customerAdded?(customer: CustomerEntity): void;
     fromSubmission?: boolean;
 }
@@ -52,9 +56,12 @@ const RadioContainer = styled(ButtonBase)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-start !important',
     width: '100%',
+    height: '72px',
     backgroundColor: '#fff',
     border: '1px solid #ddd',
     borderRadius: 2,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
     '&.selected': {
         '.MuiSvgIcon-root': {
@@ -103,6 +110,8 @@ const useStyles = makeStyles(
                 fontWeight: 400,
                 fontSize: 12,
                 lineHeight: '16px',
+                marginBottom: '2px',
+                marginTop: '28px',
             },
             phoneNumberText: {
                 '.MuiInput-root': {
@@ -114,23 +123,23 @@ const useStyles = makeStyles(
     { name: '' },
 );
 
-export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: CustomerAddDialogProps) {
+export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: SalesRepAddDialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
+    const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [commissionType, setCommissionType] = useState(false);
+    const [commissionValue, setCommissionValue] = useState(1);
+    const [listActive, setListActive] = useState(true);
+    const filesRepository = useRepository(FilesRepository);
     const { data } = useCountriesListsQuery();
-
-    const customerInput = useMemo<AddCustomerRequestDto>(
-        () => ({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-        }),
-        [],
-    );
-
+    const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
+    console.log('User 22 ', customer);
     const handleClose = useCallback(
         (event: {}) => {
             if (onClose) {
@@ -140,28 +149,33 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
         [onClose],
     );
 
-    const handleSubmit = useCallback(
-        async (customerInput: AddCustomerRequestDto) => {
-            try {
-                setLoading(true);
-                await dispatch(storeCustomer(customerInput))
-                    .unwrap()
-                    .then((customer: CustomerEntity) => {
-                        handleClose({});
-                        customerAdded?.(customer);
-                        if (fromSubmission) {
-                            window.location.href = `/admin/submissions/${customer.id}/new`;
-                        }
-                    });
-            } catch (e: any) {
-                notifications.exception(e);
-                return;
-            } finally {
-                setLoading(false);
-            }
-        },
-        [customerAdded, dispatch, handleClose, notifications, fromSubmission],
-    );
+    const handleAddSalesRep = async () => {
+        const profileImage = await filesRepository.uploadFile(uploadedImage);
+        console.log('profileImage', profileImage);
+        const salesRepInput: AddSalesRepRequestDto = {
+            // profileImage: profileImage,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phone,
+            commissionType: commissionType ? 1 : 0,
+            commissionValue: commissionValue,
+            isActive: listActive,
+        };
+        try {
+            setLoading(true);
+            await dispatch(storeSalesRep(salesRepInput));
+        } catch (e: any) {
+            notifications.exception(e);
+            return;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const isValid = useMemo(() => {
+        return !!(firstName && lastName && email && commissionType !== null && commissionValue && listActive !== null);
+    }, [firstName, lastName, email, commissionType, commissionValue, listActive]);
 
     return (
         <Root onClose={handleClose} {...rest}>
@@ -183,140 +197,168 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                 </Grid>
             </Grid>
             <Divider />
-            <Formik
-                initialValues={customerInput}
-                onSubmit={handleSubmit}
-                validationSchema={CustomerAddValidationRules}
-                validateOnChange
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    isValid,
-                    dirty,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                    setFieldValue,
-                }) => (
-                    <Form className={classes.root}>
-                        <DialogContent>
-                            <Grid container display={'flex'} justifyContent={'space-between'} mt={2} spacing={1}>
-                                <Grid md={4}>
-                                    <Typography variant={'subtitle1'} className={classes.label}>
-                                        Profile Picture
-                                    </Typography>
-                                    <ImageUploader
-                                        // imageUrl={selectedCardPhoto}
-
-                                        // onDelete={() => setSelectedCardPhoto(null)}
-
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid md={8}>
-                                    <Grid display={'flex'}>
-                                        <Grid md={6}>
-                                            <Typography variant={'subtitle1'} className={classes.label}>
-                                                First Name*
-                                            </Typography>
-                                            <TextField
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                name={'firstName'}
-                                                className={classes.textField}
-                                                placeholder={'Enter First Name'}
-                                                size={'small'}
-                                                variant="outlined"
-                                                value={values.firstName}
-                                                error={touched.firstName && !!errors.firstName}
-                                            />
-                                        </Grid>
-                                        <Grid md={6}>
-                                            <Typography variant={'subtitle1'} className={classes.label}>
-                                                Last Name*
-                                            </Typography>
-                                            <TextField
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                name={'lastName'}
-                                                className={classes.textField}
-                                                placeholder={'Enter Last Name'}
-                                                size={'small'}
-                                                variant="outlined"
-                                                value={values.lastName}
-                                                error={touched.lastName && !!errors.lastName}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid>
-                                        <Typography variant={'subtitle1'} className={classes.label}>
-                                            Email
-                                        </Typography>
-                                        <TextField
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            name={'email'}
-                                            className={classes.textField}
-                                            placeholder={'Enter Email'}
-                                            size={'small'}
-                                            variant="outlined"
-                                            value={values.email}
-                                            error={touched.email && !!errors.email}
-                                        />
-                                    </Grid>
-                                    <Grid>
-                                        <Typography variant={'subtitle1'} className={classes.label}>
-                                            Phone Number
-                                        </Typography>
-                                        <StyledPhoneNumber
-                                            countryCodeEditable={false}
-                                            defaultCountry="us"
-                                            disableAreaCodes
-                                            onlyCountries={data.map((country) => country.code.toLowerCase())}
-                                            onChange={(e) => setFieldValue('phone', e)}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Divider></Divider>
-                                <Grid mt={2}>
-                                    <Typography variant={'h5'}>Sales Commission Structure</Typography>
-                                    <RadioContainer>
-                                        <Radio checked={true} />
-                                        <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
-                                            Fixed Amount Per Card
-                                        </Typography>
-                                        <TextField></TextField>
-                                        <Typography>/ Card</Typography>
-                                    </RadioContainer>
-                                </Grid>
+            <DialogContent>
+                <Grid container item display={'flex'} justifyContent={'space-between'} flexWrap={'nowrap'} my={2}>
+                    <Grid md={4} m={1}>
+                        <Typography variant={'subtitle1'} className={classes.label}>
+                            Profile Picture
+                        </Typography>
+                        <ImageUploader
+                            maxHeight="230px"
+                            maxWidth="213px"
+                            onChange={(img) => setUploadedImage(img)}
+                            // onChange={handleProfileImage}
+                        />
+                    </Grid>
+                    <Grid md={8} m={1}>
+                        <Grid display={'flex'} flexWrap={'nowrap'}>
+                            <Grid md={6} mr={0.5}>
+                                <Typography variant={'subtitle1'} className={classes.label}>
+                                    First Name*
+                                </Typography>
+                                <TextField
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    name={'firstName'}
+                                    className={classes.textField}
+                                    placeholder={'Enter First Name'}
+                                    size={'small'}
+                                    variant="outlined"
+                                    value={firstName || customer.firstName}
+                                />
                             </Grid>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button disabled={isSubmitting} onClick={handleClose} color={'inherit'}>
-                                Cancel
-                            </Button>
-                            <LoadingButton
-                                type={'submit'}
-                                disabled={!dirty || !isValid || isSubmitting}
-                                loading={loading}
-                                variant={'contained'}
-                            >
-                                {'Add Sales Rep'}
-                            </LoadingButton>
-                        </DialogActions>
-                    </Form>
-                )}
-            </Formik>
+                            <Grid md={6} ml={0.5}>
+                                <Typography variant={'subtitle1'} className={classes.label}>
+                                    Last Name*
+                                </Typography>
+                                <TextField
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    name={'lastName'}
+                                    className={classes.textField}
+                                    placeholder={'Enter Last Name'}
+                                    size={'small'}
+                                    variant="outlined"
+                                    value={lastName || customer.lastName}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid>
+                            <Typography variant={'subtitle1'} className={classes.label}>
+                                Email
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                onChange={(e) => setEmail(e.target.value)}
+                                name={'email'}
+                                // disabled={customer !== null}
+                                className={classes.textField}
+                                placeholder={'Enter Email'}
+                                size={'small'}
+                                variant="outlined"
+                                value={email}
+                            />
+                            {/* <Typography display={'inline'} sx={{ fontSize: '12px', fontWeight: 500, color: '#B00020' }}>This email is already in use</Typography> <MuiLink underline='always' sx={{ fontSize: '12px', fontWeight: 500 }}>Add Existing User</MuiLink> */}
+                        </Grid>
+                        <Grid>
+                            <Typography variant={'subtitle1'} className={classes.label}>
+                                Phone Number
+                            </Typography>
+                            <StyledPhoneNumber
+                                countryCodeEditable={false}
+                                defaultCountry="us"
+                                disableAreaCodes
+                                value={phone || customer.phone}
+                                onlyCountries={data.map((country) => country.code.toLowerCase())}
+                                onChange={(e) => setPhone(e.toString())}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Divider></Divider>
+                <Grid mt={2} container>
+                    <Typography variant={'body1'} fontWeight={500}>
+                        Sales Commission Structure
+                    </Typography>
+                    <RadioContainer>
+                        <div
+                            style={{ display: 'flex', alignItems: 'center', width: '80%' }}
+                            onClick={() => setCommissionType(!commissionType)}
+                            aria-hidden={true}
+                        >
+                            <Radio checked={commissionType} />
+                            <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                Fixed Amount Per Card
+                            </Typography>
+                        </div>
+                        {commissionType ? (
+                            <>
+                                <TextField
+                                    onChange={(e) => setCommissionValue(Number(e.target.value))}
+                                    name="numberformat"
+                                    size="small"
+                                    id="formatted-numberformat-input"
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: { min: 1 },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    }}
+                                    sx={{ width: '80px', marginLeft: 'auto', marginRight: '5px' }}
+                                />
+                                <Typography>/ Card</Typography>
+                            </>
+                        ) : null}
+                    </RadioContainer>
+                    <RadioContainer>
+                        <div
+                            style={{ display: 'flex', alignItems: 'center', width: '80%' }}
+                            onClick={() => setCommissionType(!commissionType)}
+                            aria-hidden={true}
+                        >
+                            <Radio checked={!commissionType} />
+                            <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
+                                Percent of Order Total
+                            </Typography>
+                        </div>
+                        {!commissionType ? (
+                            <>
+                                <TextField
+                                    onChange={(e) => setCommissionValue(Number(e.target.value))}
+                                    name="numberformat"
+                                    size="small"
+                                    id="formatted-numberformat-input"
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: { min: 1 },
+                                        startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                    }}
+                                    sx={{ width: '80px', marginLeft: 'auto', marginRight: '5px' }}
+                                />
+                                <Typography>/ Card</Typography>{' '}
+                            </>
+                        ) : null}
+                    </RadioContainer>
+                    <FormControlLabel
+                        sx={{ marginLeft: 'auto', marginTop: '8px' }}
+                        labelPlacement={'start'}
+                        control={<Switch onChange={() => setListActive(!listActive)} name="isActive" />}
+                        label="List as Active"
+                    />
+                </Grid>
+            </DialogContent>
+            <Divider></Divider>
+            <DialogActions>
+                <Button onClick={handleClose} color={'inherit'}>
+                    Cancel
+                </Button>
+                <LoadingButton
+                    type={'submit'}
+                    onClick={handleAddSalesRep}
+                    loading={loading}
+                    disabled={!isValid}
+                    variant={'contained'}
+                >
+                    {'Add Sales Rep'}
+                </LoadingButton>
+            </DialogActions>
         </Root>
     );
 }
-
-const RequiredMessage = 'Required field!';
-
-export const CustomerAddValidationRules = yup.object().shape({
-    email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
-    firstName: yup.string().trim().required(RequiredMessage),
-    lastName: yup.string().trim().required(RequiredMessage),
-});

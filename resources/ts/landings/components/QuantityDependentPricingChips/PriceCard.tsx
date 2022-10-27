@@ -45,7 +45,7 @@ const SliderHolder = styled(Grid)({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '24px',
+        padding: '24px 24px 15px 24px',
         flexDirection: 'column',
     },
     '.HomePriceFeature': {
@@ -67,7 +67,7 @@ const SliderHolder = styled(Grid)({
         justifyContent: 'center',
         whiteSpace: 'nowrap',
         '.Bold': {
-            fontWeight: 500,
+            fontWeight: 'bold',
             margin: '0 4px',
         },
     },
@@ -76,7 +76,10 @@ const SliderHolder = styled(Grid)({
         borderRadius: '28px',
         color: 'white',
         margin: '15px 24px',
-        padding: '15px 24px',
+        padding: '15px 15px',
+    },
+    '.HomePriceFeatureIcon': {
+        marginRight: '8px',
     },
 });
 
@@ -91,18 +94,15 @@ export const PriceCard = ({ data }: props) => {
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true,
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
                 },
             },
             {
                 breakpoint: 600,
                 settings: {
                     slidesToShow: 2,
-                    slidesToScroll: 2,
-                    initialSlide: 2,
+                    slidesToScroll: 1,
                 },
             },
             {
@@ -116,7 +116,7 @@ export const PriceCard = ({ data }: props) => {
     };
 
     return (
-        <Grid sx={{ margin: '50px' }}>
+        <Grid sx={{ margin: '64px 30px 0' }}>
             <Slider {...settings}>
                 {data?.map((item: any) => (
                     <SliderHolder>
@@ -127,31 +127,31 @@ export const PriceCard = ({ data }: props) => {
                             <ul className={'HomePriceFeatures'}>
                                 <li className={'HomePriceFeature'}>
                                     <p className={'HomePriceFeatureText'}>
-                                        <img src={CarIcon} alt="" className={'Home-priceFeatureIcon'} />
-                                        <span className={'Bold'}>{}</span> Turnaround
+                                        <img src={CarIcon} alt="" className={'HomePriceFeatureIcon'} />
+                                        <span className={'Bold'}>{item?.turnaround}</span> Turnaround
                                     </p>
                                 </li>
                                 <li className={'HomePriceFeature'}>
                                     <p className={'HomePriceFeatureText'}>
-                                        <img src={MoneyIcon} alt="" className={'Home-priceFeatureIcon'} />
-                                        Up to <span className={'Bold'}>${}</span> Insurance
+                                        <img src={MoneyIcon} alt="" className={'HomePriceFeatureIcon'} />
+                                        Up to <span className={'Bold'}>${item?.max_protection_amount}</span> Insurance
                                     </p>
                                 </li>
                                 <li className={'HomePriceFeature'}>
                                     <p className={'HomePriceFeatureText'}>
-                                        <img src={VerifiedIcon} alt="" className={'Home-priceFeatureIcon'} />
+                                        <img src={VerifiedIcon} alt="" className={'HomePriceFeatureIcon'} />
                                         Grade Certificate
                                     </p>
                                 </li>
                                 <li className={'HomePriceFeature'}>
                                     <p className={'HomePriceFeatureText'}>
-                                        <img src={DetailedIcon} alt="" className={'Home-priceFeatureIcon'} />
+                                        <img src={DetailedIcon} alt="" className={'HomePriceFeatureIcon'} />
                                         Detailed Grade Breakdown
                                     </p>
                                 </li>
                                 <li className={'HomePriceFeature'}>
                                     <p className={'HomePriceFeatureText'}>
-                                        <img src={SlabIcon} alt="" className={'Home-priceFeatureIcon'} />
+                                        <img src={SlabIcon} alt="" className={'HomePriceFeatureIcon'} />
                                         AGS Slab
                                     </p>
                                 </li>
@@ -160,6 +160,7 @@ export const PriceCard = ({ data }: props) => {
                                 className={'SubmitButton'}
                                 textColor={'white'}
                                 buttonContent={'Select & start submission'}
+                                plan={item?.payment_plan_id}
                             />
                         </div>
                     </SliderHolder>

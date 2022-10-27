@@ -18,6 +18,8 @@ function OrderReviewSection() {
     const serviceLevelPricePerCard = useAppSelector(
         (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
     );
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const priceRanges = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.priceRanges);
     const maxProtectionAmount = useAppSelector(
         (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
     );
@@ -39,6 +41,21 @@ function OrderReviewSection() {
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
+    const numberOfSelectedCards =
+        selectedCards.length !== 0
+            ? selectedCards.reduce(function (prev: number, cur: any) {
+                  // @ts-ignore
+                  return prev + cur?.qty;
+              }, 0)
+            : 0;
+    let finalPrice =
+        priceRanges?.filter((item: any) => {
+            if (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) {
+                return item;
+            }
+        }) ?? null;
+
+    finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPricePerCard;
 
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
@@ -46,7 +63,7 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Service Level'} editStep={0}>
                     <Typography className={classes.darkBodyText}>
                         <NumberFormat
-                            value={serviceLevelPricePerCard}
+                            value={finalPrice}
                             displayType={'text'}
                             thousandSeparator
                             decimalSeparator={'.'}

@@ -1,22 +1,19 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useState } from 'react';
+import theme from '@shared/styles/theme';
 import { PriceCard } from './PriceCard';
 
 const HomePriceRange = styled(Grid)({
-    '.HomePriceRangeMobile': {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-    },
     '.HomePriceRange': {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            padding: '15px 5px',
+            flexWrap: 'wrap',
+        },
     },
     '.HomePriceRangeDiv': {
         border: '1px solid rgba(255, 255, 255, 0.7)',
@@ -25,15 +22,10 @@ const HomePriceRange = styled(Grid)({
         justifyContent: 'center',
         alignContent: 'center',
         marginRight: '20px',
-    },
-    '.HomePriceRangeDivMobile': {
-        border: '1px solid rgba(255, 255, 255, 0.7)',
-        borderRadius: '24px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignContent: 'center',
-        marginRight: '0px',
-        margin: '6px',
+        [theme.breakpoints.down('sm')]: {
+            marginRight: '0px',
+            margin: '6px',
+        },
     },
     '.HomePriceText': {
         fontFamily: 'Roboto',
@@ -71,7 +63,6 @@ interface props {
 }
 
 export default function QuantityDependentPricingChips({ content }: props) {
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const [data, setData] = useState<[]>([]);
     const object = JSON.parse(content);
 
@@ -99,23 +90,23 @@ export default function QuantityDependentPricingChips({ content }: props) {
     return (
         <>
             <HomePriceRange>
-                <div className={isMobile ? 'HomePriceRangeMobile' : 'HomePriceRange'}>
-                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                <div className={'HomePriceRange'}>
+                    <div className={'HomePriceRangeDiv'}>
                         <Button className={'HomePriceText'} onClick={() => findPrice(1, 20)}>
                             1-20 Cards
                         </Button>
                     </div>
-                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <div className={'HomePriceRangeDiv'}>
                         <Button className={'HomePriceText'} onClick={() => findPrice(21, 50)}>
                             21-50 Cards
                         </Button>
                     </div>
-                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <div className={'HomePriceRangeDiv'}>
                         <Button className={'HomePriceText'} onClick={() => findPrice(51, 100)}>
                             51-100 Cards
                         </Button>
                     </div>
-                    <div className={isMobile ? 'HomePriceRangeDivMobile' : 'HomePriceRangeDiv'}>
+                    <div className={'HomePriceRangeDiv'}>
                         <Button className={'HomePriceText'} onClick={() => findPrice(101, 200)}>
                             101-200 Cards
                         </Button>

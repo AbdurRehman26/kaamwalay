@@ -58,7 +58,6 @@ interface props {
 }
 
 export const QuantityDependentPricing = ({ priceRanges }: props) => {
-    console.log(priceRanges);
     return (
         <CardDiv>
             <Grid className={'QuantityPricingHeadings'}>

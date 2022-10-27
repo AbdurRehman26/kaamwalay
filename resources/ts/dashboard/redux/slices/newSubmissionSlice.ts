@@ -179,7 +179,14 @@ const initialState: NewSubmissionSliceState = {
                 maxProtectionAmount: 200,
                 turnaround: '20 Business Days',
                 price: 18,
-                priceRanges: [],
+                priceRanges: [
+                    {
+                        id: 1,
+                        minCards: 1,
+                        maxCards: 20,
+                        price: 18,
+                    },
+                ],
             },
         ],
         selectedServiceLevel: {
@@ -188,7 +195,14 @@ const initialState: NewSubmissionSliceState = {
             maxProtectionAmount: 200,
             turnaround: '20 Business Days',
             price: 18,
-            priceRanges: [],
+            priceRanges: [
+                {
+                    id: 1,
+                    minCards: 1,
+                    maxCards: 20,
+                    price: 18,
+                },
+            ],
         },
         status: 'success',
     },

@@ -92,7 +92,7 @@ export default function QuantityDependentPricingChips({ content }: props) {
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log(object);
+
     return (
         <>
             <HomePriceRange>

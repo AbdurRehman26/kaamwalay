@@ -64,7 +64,7 @@ const HomePriceRange = styled(Grid)({
 });
 
 interface props {
-    content: any;
+    content: string;
 }
 
 export default function QuantityDependentPricingChips({ content }: props) {
@@ -85,14 +85,14 @@ export default function QuantityDependentPricingChips({ content }: props) {
     useEffect(() => {
         setData(
             object?.filter((item: any) => {
-                if (item.min_cards === 201 && item.max_cards === null) {
+                if (item.max_cards === null) {
                     return item;
                 }
             }),
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    console.log(object);
     return (
         <>
             <HomePriceRange>

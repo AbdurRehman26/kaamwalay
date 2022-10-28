@@ -15,6 +15,8 @@ export interface SubmissionService {
     priceBeforeDiscount?: string;
     discountPercentage?: string;
     priceRanges?: any;
+    maxPrice?: number;
+    minPrice?: number;
 }
 
 export interface Step01Data {
@@ -187,6 +189,8 @@ const initialState: NewSubmissionSliceState = {
                         price: 18,
                     },
                 ],
+                maxPrice: 18,
+                minPrice: 14,
             },
         ],
         selectedServiceLevel: {
@@ -203,6 +207,8 @@ const initialState: NewSubmissionSliceState = {
                     price: 18,
                 },
             ],
+            maxPrice: 18,
+            minPrice: 14,
         },
         status: 'success',
     },

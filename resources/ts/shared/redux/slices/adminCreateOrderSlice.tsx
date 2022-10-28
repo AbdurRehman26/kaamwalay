@@ -31,6 +31,9 @@ export interface SubmissionService {
     price: number;
     priceBeforeDiscount?: string;
     discountPercentage?: string;
+    priceRanges?: any;
+    maxPrice?: number;
+    minPrice?: number;
 }
 
 export interface Step01Data {
@@ -171,6 +174,9 @@ const initialState: AdminNewOrderSliceState = {
             maxProtectionAmount: 200,
             turnaround: '20 Business Days',
             price: 18,
+            priceRanges: [],
+            maxPrice: 18,
+            minPrice: 14,
         },
         status: 'success',
     },

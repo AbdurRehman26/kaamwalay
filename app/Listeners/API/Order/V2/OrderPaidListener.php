@@ -5,6 +5,7 @@ namespace App\Listeners\API\Order\V2;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
+use App\Services\SalesmanCommission\OrderCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderPaidListener implements ShouldQueue
@@ -27,11 +28,24 @@ class OrderPaidListener implements ShouldQueue
      */
     public function handle(OrderPaid $event): void
     {
+        $this->processEmails($event);
+        $this->processSalesmanCommission($event);
+    }
+
+    protected function processEmails(OrderPaid $event): void
+    {
         $this->emailService->sendEmail(
             [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID),
             EmailService::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID,
             $this->orderService->getDataForCustomerOrderPaid($event->order)
         );
+    }
+
+    protected function processSalesmanCommission(OrderPaid $event): void
+    {
+        if($event->order->salesman()->exists()){
+            OrderCommissionService::onCreateOrder($event->order);
+        }
     }
 }

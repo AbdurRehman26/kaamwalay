@@ -188,6 +188,30 @@ const initialState: NewSubmissionSliceState = {
                         maxCards: 20,
                         price: 18,
                     },
+                    {
+                        id: 2,
+                        minCards: 21,
+                        maxCards: 50,
+                        price: 17,
+                    },
+                    {
+                        id: 3,
+                        minCards: 51,
+                        maxCards: 100,
+                        price: 16,
+                    },
+                    {
+                        id: 4,
+                        minCards: 101,
+                        maxCards: 200,
+                        price: 15,
+                    },
+                    {
+                        id: 5,
+                        minCards: 201,
+                        maxCards: null,
+                        price: 14,
+                    },
                 ],
                 maxPrice: 18,
                 minPrice: 14,
@@ -205,6 +229,30 @@ const initialState: NewSubmissionSliceState = {
                     minCards: 1,
                     maxCards: 20,
                     price: 18,
+                },
+                {
+                    id: 2,
+                    minCards: 21,
+                    maxCards: 50,
+                    price: 17,
+                },
+                {
+                    id: 3,
+                    minCards: 51,
+                    maxCards: 100,
+                    price: 16,
+                },
+                {
+                    id: 4,
+                    minCards: 101,
+                    maxCards: 200,
+                    price: 15,
+                },
+                {
+                    id: 5,
+                    minCards: 201,
+                    maxCards: null,
+                    price: 14,
                 },
             ],
             maxPrice: 18,
@@ -352,6 +400,8 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
         priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
         discountPercentage: serviceLevel.discountPercentage,
         priceRanges: serviceLevel.priceRanges,
+        minPrice: serviceLevel.minPrice,
+        maxPrice: serviceLevel.maxPrice,
     }));
 });
 

@@ -146,7 +146,8 @@ function SubmissionSummary() {
 
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const priceRanges = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.priceRanges);
-
+    const maxPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxPrice);
+    const minPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.minPrice);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
@@ -250,7 +251,7 @@ function SubmissionSummary() {
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={finalPrice ?? 0}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -259,7 +260,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * finalPrice ?? 0}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -339,7 +340,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowLeftText}>Service Level</Typography>
                                 <Typography className={classes.rowRightBoldText}>
                                     <NumberFormat
-                                        value={priceRanges?.slice(-1)[0]?.price}
+                                        value={minPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -349,7 +350,7 @@ function SubmissionSummary() {
                                     <span>-</span>
                                     &nbsp;
                                     <NumberFormat
-                                        value={priceRanges[0]?.price}
+                                        value={maxPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -407,7 +408,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Price / Card:</Typography>
                                 <NumberFormat
-                                    value={finalPrice ?? 0}
+                                    value={finalPrice}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -430,7 +431,7 @@ function SubmissionSummary() {
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={finalPrice ?? 0}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -439,7 +440,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * finalPrice ?? 0}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -544,7 +545,7 @@ function SubmissionSummary() {
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={finalPrice ?? 0}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -553,7 +554,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * finalPrice ?? 0}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}

@@ -121,6 +121,7 @@ export function CreateSubmission() {
             maxProtectionAmount: selectedServiceLevel[0].maxProtectionAmount,
             minPrice: selectedServiceLevel[0].minPrice,
             maxPrice: selectedServiceLevel[0].maxPrice,
+            priceRanges: selectedServiceLevel[0].priceRanges,
         };
 
         dispatch(setServiceLevel(level));

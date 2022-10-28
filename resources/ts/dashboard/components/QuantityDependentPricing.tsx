@@ -54,7 +54,7 @@ const CardDiv = styled(Grid)({
 });
 
 interface props {
-    priceRanges: any;
+    priceRanges: Array<{}>;
 }
 
 export const QuantityDependentPricing = ({ priceRanges }: props) => {
@@ -72,8 +72,8 @@ export const QuantityDependentPricing = ({ priceRanges }: props) => {
                 <div className={'QuantityDiv'}>
                     {priceRanges?.map((item: any) => (
                         <Typography className={'Quantity'}>
-                            {item?.minCards === 201 ? '200+' : item?.minCards}
-                            {item?.minCards !== 201 ? '-' : ''}
+                            {item?.maxCards === null ? `${item?.minCards - 1}+` : item?.minCards}
+                            {item?.maxCards !== null ? '-' : ''}
                             {item?.maxCards}
                         </Typography>
                     ))}

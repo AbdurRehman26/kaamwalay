@@ -114,6 +114,14 @@ class CardProduct extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
+    /**
+     * @return HasOne<PopReportsCard>
+     */
+    public function popReportsCard(): HasOne
+    {
+        return $this->hasOne(PopReportsCard::class);
+    }
+
     public function isCardInformationComplete(): bool
     {
         return $this->card_category_id && $this->card_set_id && ! is_null($this->card_number_order);

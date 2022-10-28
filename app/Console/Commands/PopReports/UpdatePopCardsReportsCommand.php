@@ -7,14 +7,14 @@ use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
-class UpdateCardReportCommand extends Command
+class UpdatePopCardsReportsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pop-reports:update-cards-report {--only-missing}';
+    protected $signature = 'pop-reports:update-cards-report-array {ids*}';
 
     /**
      * The console command description.
@@ -25,17 +25,11 @@ class UpdateCardReportCommand extends Command
 
     public function handle(PopReportService $popReportService): int
     {
-        $onlyMissing = $this->option('only-missing');
+        $cardsIds = $this->argument('ids');
 
-        if ($onlyMissing) {
-            $cards = $this->searchCardsWithMissingPopReports($popReportService);
-
-            foreach ($cards as $card) {
-                $this->info("Updating values for card product: ". $card->id);
-                $this->updatePopReports($popReportService, $card);
-            }
-        } else {
-            $popReportService->updateAllCardProductsReport();
+        foreach ($cardsIds as $id) {
+            $this->info("Updating values for card product: ". $id);
+            $this->updatePopReports($popReportService, CardProduct::find($id));
         }
 
         return 0;
@@ -48,12 +42,4 @@ class UpdateCardReportCommand extends Command
         $popReportService->updateSeriesReport($cardProduct->cardSet->cardSeries);
     }
 
-    /**
-     * @param  PopReportService  $popReportService
-     * @return Collection<int, CardProduct>
-     */
-    protected function searchCardsWithMissingPopReports(PopReportService $popReportService): Collection
-    {
-        return $popReportService->searchCardsWithMissingPopReports();
-    }
 }

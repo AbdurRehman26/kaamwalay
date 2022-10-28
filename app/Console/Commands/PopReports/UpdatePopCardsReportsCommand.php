@@ -5,7 +5,6 @@ namespace App\Console\Commands\PopReports;
 use App\Models\CardProduct;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class UpdatePopCardsReportsCommand extends Command
 {
@@ -41,5 +40,4 @@ class UpdatePopCardsReportsCommand extends Command
         $popReportService->updateSetsReport($cardProduct->cardSet);
         $popReportService->updateSeriesReport($cardProduct->cardSet->cardSeries);
     }
-
 }

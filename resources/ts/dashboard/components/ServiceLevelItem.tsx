@@ -46,7 +46,7 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             alignItems: 'center',
             [theme.breakpoints.down('sm')]: {
-                minWidth: '106px',
+                minWidth: '110px',
             },
         },
         maxValueContainer: {

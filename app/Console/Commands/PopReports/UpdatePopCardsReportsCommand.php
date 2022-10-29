@@ -3,6 +3,7 @@
 namespace App\Console\Commands\PopReports;
 
 use App\Models\CardProduct;
+use App\Services\Card\Validators\CardProductsIdsExistValidator;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
@@ -25,6 +26,8 @@ class UpdatePopCardsReportsCommand extends Command
     public function handle(PopReportService $popReportService): int
     {
         $cardsIds = $this->argument('ids');
+
+        CardProductsIdsExistValidator::validate($cardsIds);
 
         foreach ($cardsIds as $id) {
             $this->info("Updating values for card product: ". $id);

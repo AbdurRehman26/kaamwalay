@@ -92,7 +92,7 @@ function SubmissionStep02Content() {
             if (currentStep === 1) {
                 cardsWithValueHigherThanProtection.length !== 0
                     ? dispatch(setIsNextDisabled(true))
-                    : selectedCards.filter((card: Record<string, any>) => card.qty > 0).length === 0
+                    : selectedCards.filter((card: Record<string, any>) => card.qty === 0).length > 0
                     ? dispatch(setIsNextDisabled(true))
                     : dispatch(setIsNextDisabled(false));
             }

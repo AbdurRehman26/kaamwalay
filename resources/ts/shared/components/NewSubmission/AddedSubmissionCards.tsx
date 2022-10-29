@@ -257,7 +257,8 @@ export function AddedSubmissionCards() {
             (isNextDisabled ||
                 selectedExistingAddress.address !== '' ||
                 shippingMethod.code === ShippingMethodType.VaultStorage) &&
-            areSelectedCardsValuesValid()
+            areSelectedCardsValuesValid() &&
+            selectedCards.filter((card: Record<string, any>) => card.qty === 0).length === 0
         ) {
             setIsCreateSubmission(true);
             dispatch(getShippingFee(selectedCards));

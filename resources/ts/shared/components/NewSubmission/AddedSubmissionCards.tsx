@@ -214,6 +214,9 @@ export function AddedSubmissionCards() {
     const serviceLevelPrice = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
     );
+    const priceRanges = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.priceRanges,
+    );
     const protectionLimit = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
@@ -285,6 +288,18 @@ export function AddedSubmissionCards() {
               }, 0)
             : 0;
 
+    let finalPrice =
+        priceRanges?.filter((item: any) => {
+            if (
+                (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) ||
+                (numberOfSelectedCards >= item.minCards && item.maxCards === null)
+            ) {
+                return item;
+            }
+        }) ?? null;
+
+    finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPrice;
+
     const handleDeselectCard = useCallback(
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
@@ -342,7 +357,7 @@ export function AddedSubmissionCards() {
 
     function getPreviewTotal() {
         const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice +
+            numberOfSelectedCards * finalPrice +
             Number(cleaningFee) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
@@ -474,7 +489,7 @@ export function AddedSubmissionCards() {
                         <span style={{ fontWeight: 400, color: '#757575' }}>
                             (
                             <NumberFormat
-                                value={serviceLevelPrice}
+                                value={finalPrice}
                                 displayType={'text'}
                                 thousandSeparator
                                 decimalSeparator={'.'}
@@ -483,7 +498,7 @@ export function AddedSubmissionCards() {
                             &nbsp; x {numberOfSelectedCards}) =&nbsp;
                         </span>
                         <NumberFormat
-                            value={numberOfSelectedCards * serviceLevelPrice}
+                            value={numberOfSelectedCards * finalPrice}
                             displayType={'text'}
                             thousandSeparator
                             decimalSeparator={'.'}

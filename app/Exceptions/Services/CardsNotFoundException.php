@@ -7,12 +7,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SomeCardsDontExistException extends Exception
+class CardsNotFoundException extends Exception
 {
     /**
      * @var string
      */
-    protected $message = 'Some card ids introduced don\'t exist in the system.';
+    protected $message = 'Some cards introduced were not found in the system.';
 
     /**
      * @var int

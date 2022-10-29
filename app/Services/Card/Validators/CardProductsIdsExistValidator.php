@@ -2,7 +2,7 @@
 
 namespace App\Services\Card\Validators;
 
-use App\Exceptions\Services\SomeCardsDontExistException;
+use App\Exceptions\Services\CardsNotFoundException;
 use App\Models\CardProduct;
 
 use function throw_if;
@@ -13,7 +13,7 @@ class CardProductsIdsExistValidator
     {
         throw_if(
             CardProduct::whereIn('id', $ids)->count() < count($ids),
-            new SomeCardsDontExistException()
+            new CardsNotFoundException()
         );
     }
 }

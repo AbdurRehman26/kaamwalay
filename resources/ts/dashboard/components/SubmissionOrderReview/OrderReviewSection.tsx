@@ -50,7 +50,10 @@ function OrderReviewSection() {
             : 0;
     let finalPrice =
         priceRanges?.filter((item: any) => {
-            if (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) {
+            if (
+                (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) ||
+                (numberOfSelectedCards >= item.minCards && item.maxCards === null)
+            ) {
                 return item;
             }
         }) ?? null;

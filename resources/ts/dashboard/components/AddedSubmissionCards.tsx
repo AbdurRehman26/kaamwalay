@@ -166,7 +166,9 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     );
 
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {
-        const newValue = Math.min(qty, 100);
+        const receivedValue = String(qty).replace(/[^\d]/, '');
+        const valueAsInt = parseInt(receivedValue);
+        const newValue = Math.min(valueAsInt, 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
     }
 

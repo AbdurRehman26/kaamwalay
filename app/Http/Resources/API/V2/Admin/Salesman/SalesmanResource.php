@@ -3,8 +3,6 @@
 namespace App\Http\Resources\API\V2\Admin\Salesman;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Customer\User\UserResource;
-use App\Models\Salesman;
 use App\Models\User;
 use Illuminate\Http\Request;
 

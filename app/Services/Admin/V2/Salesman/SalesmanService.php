@@ -80,7 +80,7 @@ class SalesmanService
         }
     }
 
-    protected function storeSalesmanProfile(User $user, $data): Salesman
+    protected function storeSalesmanProfile(User $user, array $data): Salesman
     {
         return Salesman::updateOrCreate(
             [
@@ -94,7 +94,7 @@ class SalesmanService
         );
     }
 
-    private function updateUserInfo(User $user, $data): void
+    private function updateUserInfo(User $user, array $data): void
     {
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];

@@ -33,7 +33,7 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
         $this->processSalesmanCommission($event);
     }
 
-    protected function processEmails(ExtraChargeSuccessful $event)
+    protected function processEmails(ExtraChargeSuccessful $event): void
     {
         $orderPayment = new OrderPaymentResource($event->order->lastOrderPayment);
         $order = $event->order;
@@ -59,7 +59,7 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
         );
     }
 
-    protected function processSalesmanCommission(ExtraChargeSuccessful $event)
+    protected function processSalesmanCommission(ExtraChargeSuccessful $event): void
     {
         if($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()){
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_EXTRA_CHARGE);

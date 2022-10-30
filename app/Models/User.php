@@ -329,6 +329,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $query->role(Role::findByName(config('permission.roles.customer')));
     }
 
+    /**
+     * @return HasOne<Salesman>
+     */
     public function salesmanProfile(): HasOne
     {
         return $this->hasOne(Salesman::class, 'user_id', 'id');

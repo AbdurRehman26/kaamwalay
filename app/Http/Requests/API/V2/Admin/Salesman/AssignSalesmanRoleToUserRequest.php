@@ -19,8 +19,8 @@ class AssignSalesmanRoleToUserRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max: 255'],
             'phone' => ['nullable', 'string'],
             'profile_image' => ['string', 'nullable'],
-            'is_active' => ['required', Rule::in(false, true)],
-            'commission_type' => ['required', Rule::in(0, 1)],
+            'is_active' => ['required', Rule::in([false, true])],
+            'commission_type' => ['required', Rule::in([0, 1])],
             'commission_value' => ['required', 'numeric', 'min:1']
         ];
     }

@@ -14,6 +14,7 @@ import { AuthDialog } from '@shared/components/AuthDialog';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useAuth } from '@shared/hooks/useAuth';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObject';
 import {
     markCardAsSelected,
@@ -21,9 +22,9 @@ import {
     setCardsSearchValue,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
+import CardAddDialog from '@admin/pages/Cards/CardAddDialog';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import CustomPagination from './CustomPagination';
-import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -124,10 +125,11 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
 
 export function CardsSearchResults() {
     const classes = useStyles();
-    const [showAddCardDialog, setShowAddCardDialog] = useState<boolean | null>(null);
+    const [showAddCardDialog, setShowAddCardDialog] = useState(false);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const ResultsWrapper = isSm ? 'div' : Paper;
     const { authenticated, authDialogProps, openAuthDialog } = useAuth();
+    const notifications = useNotifications();
 
     const toggleAddCardDialog = useCallback(() => {
         if (!showAddCardDialog && !authenticated) {
@@ -135,11 +137,20 @@ export function CardsSearchResults() {
             return;
         }
         setShowAddCardDialog(!showAddCardDialog);
-    }, [showAddCardDialog, authenticated, openAuthDialog]);
+    }, [setShowAddCardDialog, authenticated, openAuthDialog, showAddCardDialog]);
+
+    const handleAddSubmit = async () => {
+        try {
+            setShowAddCardDialog(false);
+            window.location.reload();
+        } catch (e: any) {
+            notifications.exception(e);
+        }
+    };
 
     return (
         <div className={classes.container}>
-            <CustomerAddCardDialog showDialog={showAddCardDialog} onClose={toggleAddCardDialog} />
+            <CardAddDialog onSubmit={handleAddSubmit} open={showAddCardDialog} onClose={toggleAddCardDialog} />
             <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography variant={'caption'} className={font.fontWeightMedium}>
                     <Stats

@@ -17,12 +17,13 @@ class HomeController extends Controller
             fn () => CardCategory::enabled()->get()
         );
 
-        $services = Cache::remember(
+        $paymentPlans = Cache::remember(
             'homepage:payment_plans',
             now()->addMonth(),
-            fn () => PaymentPlan::orderBy('display_position')->get()
+            fn () => PaymentPlan::join('payment_plan_ranges', 'payment_plan_ranges.payment_plan_id', '=', 'payment_plans.id')
+            ->orderBy('payment_plans.display_position')->get()
         );
 
-        return view('landings.home.view', compact('categories', 'services'));
+        return view('landings.home.view', compact('categories', 'paymentPlans'));
     }
 }

@@ -342,7 +342,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalToBePaidAttribute(): float
     {
-        return $this->grand_total - $this->amount_paid_from_wallet;
+        return (float) bcsub((string) $this->grand_total, (string) $this->amount_paid_from_wallet, 2);
     }
 
     public function getTotalGradedItems(): int

@@ -48,7 +48,7 @@ const useStyles = makeStyles({
         fontWeight: 'normal',
         fontSize: '14px',
         lineHeight: '20px',
-        textAlign: 'center',
+        textAlign: 'left',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
     },
@@ -91,6 +91,8 @@ function SubmissionStep02Content() {
             );
             if (currentStep === 1) {
                 cardsWithValueHigherThanProtection.length !== 0
+                    ? dispatch(setIsNextDisabled(true))
+                    : selectedCards.filter((card: Record<string, any>) => card.qty === 0).length > 0
                     ? dispatch(setIsNextDisabled(true))
                     : dispatch(setIsNextDisabled(false));
             }
@@ -152,6 +154,8 @@ function SubmissionStep02Content() {
                 <Box display={'flex'} alignItems={'center'}>
                     <Typography>Card Cleaning Service</Typography>
                     <Tooltip
+                        enterTouchDelay={0}
+                        leaveTouchDelay={5000}
                         title={
                             <Box>
                                 <Typography display={'block'} variant={'caption'}>
@@ -194,11 +198,11 @@ function SubmissionStep02Content() {
                     </Typography>
                 </Box>
                 <FormControlLabel
-                    sx={{ marginTop: '10px' }}
+                    sx={{ marginTop: '10px', alignItems: isMobile ? 'start' : 'center' }}
                     control={<Checkbox color={'primary'} onChange={setShippingFee} checked={requiresCleaning} />}
                     label={
                         <Box display={'flex'} alignItems={'center'}>
-                            <Typography>
+                            <Typography sx={{ marginTop: isMobile ? '6px' : '0px' }}>
                                 Yes, clean my cards for an additional {formatCurrency(featureOrderCleaningFeePerCard)}{' '}
                                 per card.
                                 <span className={classes.cleaningText}>

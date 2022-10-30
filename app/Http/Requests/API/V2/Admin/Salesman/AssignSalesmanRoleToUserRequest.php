@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests\API\V2\Admin\Salesman;
 
-use App\Models\CommissionType;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class StoreSalesmanRequest extends FormRequest
+class AssignSalesmanRoleToUserRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,7 +17,6 @@ class StoreSalesmanRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max: 255'],
             'last_name' => ['nullable', 'string', 'max: 255'],
-            'email' => ['required', 'email', 'unique:users'],
             'phone' => ['nullable', 'string'],
             'profile_image' => ['string', 'nullable'],
             'is_active' => ['required', Rule::in(false, true)],

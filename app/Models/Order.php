@@ -585,7 +585,7 @@ class Order extends Model implements Exportable
      * @param  Builder <Order> $query
      * @return Builder <Order>
      */
-        public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
+    public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
     {
         return $query->whereBetween('created_at', [$fromDate, $toDate]);
     }

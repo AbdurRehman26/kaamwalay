@@ -173,7 +173,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     /**
      * @return BelongsTo<User, User>
      */
-    public function salesman()
+    public function salesmen()
     {
         return $this->belongsTo(User::class, 'salesman_id');
     }

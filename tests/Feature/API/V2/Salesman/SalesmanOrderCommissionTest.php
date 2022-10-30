@@ -5,10 +5,14 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\SalesmanCommission;
+use App\Models\SalesmanEarnedCommission;
 use App\Models\User;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\assertEquals;
 
 beforeEach(function () {
     Event::fake();
@@ -28,13 +32,30 @@ beforeEach(function () {
         'salesman_id' => User::factory()->withSalesman()
     ]);
 
+    OrderPayment::factory()->for($this->order)->count(5);
+
     $this->actingAs($this->user);
 
 });
 
 it('adds commission to salesman when order is created', function () {
 
+    $order = $this->order;
     SalesmanCommissionService::onOrderCreate($this->order);
+
+    $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
+        'fixed' => $order->salesman->salesmanProfile->commission_value * $order->orderItems()->count(),
+        default => $order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total),
+    };
+
+    $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
+
+    $salesCommission = SalesmanCommission::whereId($this->order->user_id)->first();
+
+    assertEquals($this->order->refresh()->salesman_commission, $commission);
+    assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);
+    assertEquals($this->order->refresh()->salesman_commission, $salesCommission->commission);
+
 });
 
 it('recalculates commission of salesman when order is refunded', function () {

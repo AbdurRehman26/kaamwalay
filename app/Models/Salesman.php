@@ -25,4 +25,14 @@ class Salesman extends Model
     protected $casts = [
         'commission_type' => CommissionTypeEnum::class,
     ];
+
+    public function hasCommissionTypePercentage(): bool
+    {
+        return $this->hasCommissionType(CommissionTypeEnum::PERCENTAGE);
+    }
+
+    private function hasCommissionType($type): bool
+    {
+        return $this->commission_type === $type;
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Listeners\API\Order\V2;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
-use App\Services\SalesmanCommission\OrderCommissionService;
+use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderPaidListener implements ShouldQueue
@@ -45,7 +45,7 @@ class OrderPaidListener implements ShouldQueue
     protected function processSalesmanCommission(OrderPaid $event): void
     {
         if($event->order->salesman()->exists()){
-            OrderCommissionService::onCreateOrder($event->order);
+            SalesmanCommissionService::onOrderCreate($event->order);
         }
     }
 }

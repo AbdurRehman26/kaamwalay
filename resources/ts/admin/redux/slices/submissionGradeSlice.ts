@@ -6,10 +6,12 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (id: number | string) => {
+    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${id}/grades`);
-        const cardsResponse = await endpoint.get('');
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const cardsResponse = await endpoint.get('', {
+            data: { fromAgs: DTO.fromAgs ?? true },
+        });
         return cardsResponse.data;
     },
 );
@@ -55,6 +57,15 @@ export const markRemoteCardAsGraded = createAsyncThunk(
         return await endpoint.post('', {
             status: DTO.status,
         });
+    },
+);
+
+export const getCardGrades = createAsyncThunk(
+    'submissionGrades/getCardGrades',
+    async (DTO: { certificateNumber: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/orders/grades/${DTO.certificateNumber}`);
+        return await endpoint.get('');
     },
 );
 

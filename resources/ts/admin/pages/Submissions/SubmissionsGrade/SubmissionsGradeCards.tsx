@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { useInterval } from '@shared/hooks/useInterval';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -57,10 +58,16 @@ export function SubmissionsGradeCards() {
     }
 
     const loadGrades = useCallback(() => {
-        dispatch(getAllSubmissions(Number(id)))
+        dispatch(getAllSubmissions({ fromAgs: true, id: Number(id) }))
             .unwrap()
             .then(() => dispatch(matchExistingOrderItemsToViewModes()));
     }, [dispatch, id]);
+
+    useInterval(() => {
+        dispatch(getAllSubmissions({ fromAgs: false, id: Number(id) }))
+            .unwrap()
+            .then(() => dispatch(matchExistingOrderItemsToViewModes()));
+    }, 10000);
 
     const handleOnEditCard = useCallback(
         async (data) => {

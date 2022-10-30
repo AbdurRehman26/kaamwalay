@@ -197,7 +197,10 @@ class OrderController extends Controller
         $this->authorize('review', $order);
 
         try {
-            GetCardGradesFromAgs::dispatchIf($order->canBeGraded(), $order);
+            GetCardGradesFromAgs::dispatchIf(
+                $order->canBeGraded() && $request->boolean('from_ags', true),
+                $order
+            );
             $userCards = $this->orderService->getCardsForGrading($order);
         } catch (IncorrectOrderStatus $e) {
             return new JsonResponse(

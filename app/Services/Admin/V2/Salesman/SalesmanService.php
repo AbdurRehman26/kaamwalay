@@ -25,7 +25,7 @@ class SalesmanService
 
     public function getSalesmen(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::salesman())
+        return QueryBuilder::for(User::salesmen())
             ->allowedFilters(User::getAllowedAdminSalesmanFilters())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));

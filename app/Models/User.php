@@ -173,7 +173,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     /**
      * @return BelongsTo<User, User>
      */
-    public function salesmen()
+    public function salesman()
     {
         return $this->belongsTo(User::class, 'salesman_id');
     }
@@ -341,7 +341,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      * @param  Builder <User> $query
      * @return Builder <User>
      */
-    public function scopeSalesman(Builder $query): Builder
+    public function scopeSalesmen(Builder $query): Builder
     {
         return $query->role(Role::findByName(config('permission.roles.salesman'), 'api'));
     }

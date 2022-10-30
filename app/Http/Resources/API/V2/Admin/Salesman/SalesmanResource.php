@@ -28,11 +28,12 @@ class SalesmanResource extends BaseResource
             'email' => $this->email,
             'commission_type' => $this->salesmanProfile?->commission_type,
             'commission_value' => $this->salesmanProfile?->commission_value,
-            'customers' => $this->totalCustomersCount,
-            'orders' => $this->totalOrdersCount,
-            'commission_earned' => $this->commissionEarned,
             'status' => $this->salesmanProfile?->is_active,
-            'sales' => $this->totalSales,
+//            TODO
+            'commission_earned' => 0,
+            'orders' => 0,
+            'customers' => 0,
+            'sales' => 0,
         ];
     }
 }

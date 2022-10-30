@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,13 +15,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('salesman_commissions', function (Blueprint $table) {
+        Schema::create('salesman_earned_commissions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'salesman_id')
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->date('event_at');
+            $table->foreignIdFor(Order::class, 'order_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->tinyInteger('type')->default(1)->comment('1 => Order Created, 2 => Order Refunded');
             $table->decimal('commission', 10)->default(0);
             $table->timestamps();
         });
@@ -33,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salesman_commissions');
+        Schema::dropIfExists('salesman_earned_commissions');
     }
 };

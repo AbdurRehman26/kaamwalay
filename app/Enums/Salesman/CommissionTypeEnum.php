@@ -10,8 +10,8 @@ enum CommissionTypeEnum: string
     public function toString(): string
     {
         return match ($this) {
-            self::PERCENTAGE => '0',
-            self::FIXED => '1',
+            self::PERCENTAGE => 'percentage',
+            self::FIXED => 'fixed',
         };
     }
 }

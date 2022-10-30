@@ -6,6 +6,7 @@ use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\EmailService;
+use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 
@@ -27,7 +28,13 @@ class RefundSuccessfulListener implements ShouldQueue
      * @param  RefundSuccessful  $event
      * @return void
      */
-    public function handle(RefundSuccessful $event)
+    public function handle(RefundSuccessful $event): void
+    {
+        $this->processEmails($event);
+        $this->processSalesmanCommission($event);
+    }
+
+    protected function processEmails(RefundSuccessful $event): void
     {
         $user = $event->order->user;
         $order = $event->order;
@@ -74,4 +81,12 @@ class RefundSuccessfulListener implements ShouldQueue
     {
         return Arr::has($data, 'card');
     }
+
+    protected function processSalesmanCommission(RefundSuccessful $event): void
+    {
+        if($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()){
+            SalesmanCommissionService::onOrderRefund($event->order);
+        }
+    }
+
 }

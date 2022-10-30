@@ -2,10 +2,10 @@
 
 namespace App\Enums\Salesman;
 
-enum CommissionEarnedEnum: string
+enum CommissionEarnedEnum: int
 {
-    case ORDER_CREATED = '1';
-    case ORDER_REFUNDED = '2';
+    case ORDER_CREATED = 1;
+    case ORDER_REFUNDED = 2;
 
     public function toString(): string
     {

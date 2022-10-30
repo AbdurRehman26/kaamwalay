@@ -17,10 +17,8 @@ return new class extends Migration
     {
         Schema::create('salesman_earned_commissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'salesman_id')
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->unsignedBigInteger('salesman_id');
+            $table->foreign('salesman_id')->references('id')->on('users');
             $table->foreignIdFor(Order::class, 'order_id')
                 ->nullable()
                 ->constrained()

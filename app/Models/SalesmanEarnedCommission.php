@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SalesmanEarnedCommission extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'salesman_id',
+        'order_id',
+        'type',
+        'commission'
+    ];
 }

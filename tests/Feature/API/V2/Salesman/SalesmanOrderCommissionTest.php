@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\Order;
 use App\Models\OrderPayment;
@@ -38,15 +39,12 @@ beforeEach(function () {
 
 });
 
-it('adds commission to salesman when order is created', function () {
+it('salesman commissions on different order lines', function ($orderLine) {
 
     $order = $this->order;
-    SalesmanCommissionService::onOrderCreate($this->order);
+    SalesmanCommissionService::onOrderLine($this->order, $orderLine['commission_type']);
 
-    $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
-        'fixed' => $order->salesman->salesmanProfile->commission_value * $order->orderItems()->count(),
-        default => $order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total),
-    };
+    $commission = $orderLine['commission'];
 
     $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
 
@@ -56,35 +54,71 @@ it('adds commission to salesman when order is created', function () {
     assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);
     assertEquals($this->order->refresh()->salesman_commission, $salesCommission->commission);
 
-});
+})->with('orderLine');
 
-it('recalculates commission of salesman when order is refunded', function () {
+dataset('orderLine', function () {
+    yield function () {
 
-    $order = $this->order;
+        $order = $this->order;
 
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => $this->paymentMethod->id,
-        'response' => json_encode(['id' => Str::random(25)]),
-        'payment_provider_reference_id' => Str::random(25),
-        'amount' => 10.00,
-        'type' => OrderPayment::TYPE_REFUND,
-        'created_at' => now()->addMinute(),
-    ]);
+        $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
+            'fixed' => $order->salesman->salesmanProfile->commission_value * $order->orderItems()->count(),
+            default => $order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total),
+        };
 
-    $this->order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
-    $this->order->salesman->salesmanProfile->save();
+        return [
+            'commission_type' => CommissionEarnedEnum::ORDER_CREATED,
+            'commission' => $commission
+        ];
+    };
 
-    SalesmanCommissionService::onOrderRefund($this->order);
+    yield function () {
 
-    $commission = $order->salesman->salesmanProfile->commission_value *  ( $order->refunds()->latest()->first()->amount );
+        $order = $this->order;
 
-    $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
+        $order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
+        $order->salesman->salesmanProfile->save();
 
-    $salesCommission = SalesmanCommission::whereId($this->order->user_id)->first();
+        OrderPayment::factory()->create([
+            'order_id' => $order->id,
+            'payment_method_id' => $this->paymentMethod->id,
+            'response' => json_encode(['id' => Str::random(25)]),
+            'payment_provider_reference_id' => Str::random(25),
+            'amount' => 10.00,
+            'type' => OrderPayment::TYPE_REFUND,
+            'created_at' => now()->addMinute(),
+        ]);
 
-    assertEquals($this->order->refresh()->salesman_commission, -$commission);
-    assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);
-    assertEquals($this->order->refresh()->salesman_commission, $salesCommission->commission);
+        $commission = - ($order->salesman->salesmanProfile->commission_value *  ( $order->refunds()->latest()->first()->amount ));
 
+        return [
+            'commission_type' => CommissionEarnedEnum::ORDER_REFUNDED,
+            'commission' => $commission
+        ];
+    };
+
+    yield function () {
+
+        $order = $this->order;
+
+        $order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
+        $order->salesman->salesmanProfile->save();
+
+        OrderPayment::factory()->create([
+            'order_id' => $order->id,
+            'payment_method_id' => $this->paymentMethod->id,
+            'response' => json_encode(['id' => Str::random(25)]),
+            'payment_provider_reference_id' => Str::random(25),
+            'amount' => 10.00,
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
+            'created_at' => now()->addMinute(),
+        ]);
+
+        $commission = ($order->salesman->salesmanProfile->commission_value *  ( $order->extraCharges()->latest()->first()->amount ));
+
+        return [
+            'commission_type' => CommissionEarnedEnum::ORDER_EXTRA_CHARGE,
+            'commission' => $commission
+        ];
+    };
 });

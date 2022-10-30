@@ -157,6 +157,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
         ]);
+    Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
     Route::post('salesman/dashboard/sales', [SalesmanDashboardController::class, 'getSales'])
         ->name('salesman.dashboard.sales');
     Route::post('salesman/dashboard/commission-earned', [SalesmanDashboardController::class, 'getCommissionsEarned'])

@@ -20,7 +20,7 @@ class SalesmanCommissionService
             'event_at' => now()->toDateString(),
         ]);
 
-        $salesmanCommission->increment($commission);
+        $salesmanCommission->increment('commission', $commission);
     }
 
     protected static function storeSalesmanEarnedCommission(Order $order, float $commission, int $type): void
@@ -40,7 +40,7 @@ class SalesmanCommissionService
 
         $order->salesman_commission =  OrderCreateCommissionService::calculateCommission($order);
         $order->save();
-        self::storeSalesmanEarnedCommission($order->salesman, $order->salesman_commission, CommissionEarnedEnum::ORDER_CREATED->toString());
+        self::storeSalesmanEarnedCommission($order, $order->salesman_commission, CommissionEarnedEnum::ORDER_CREATED->value);
         self::storeSalesmanCommission($order->salesman, $order->salesman_commission);
 
         DB::commit();
@@ -53,7 +53,7 @@ class SalesmanCommissionService
         $commission = OrderRefundCommissionService::calculateCommission($order);
         $order->salesman_commission -= $commission;
         $order->save();
-        self::storeSalesmanEarnedCommission($order->salesman, -$commission, CommissionEarnedEnum::ORDER_REFUNDED->toString());
+        self::storeSalesmanEarnedCommission($order, -$commission, CommissionEarnedEnum::ORDER_REFUNDED->value);
         self::storeSalesmanCommission($order->salesman, -$commission);
 
         DB::commit();

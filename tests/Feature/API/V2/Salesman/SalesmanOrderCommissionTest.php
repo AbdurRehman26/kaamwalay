@@ -1,16 +1,11 @@
 <?php
 
-use App\Events\API\Admin\Order\RefundSuccessful;
-use App\Events\API\Customer\Order\OrderPaid;
-use App\Listeners\API\Admin\Order\RefundSuccessfulListener;
-use App\Listeners\API\Order\V2\OrderPaidListener;
+use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\User;
-use App\Services\EmailService;
-use App\Services\Order\V2\OrderService;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -39,9 +34,7 @@ beforeEach(function () {
 
 it('adds commission to salesman when order is created', function () {
 
-    $listener = new OrderPaidListener(new EmailService(), new OrderService());
-    $listener->handle(new OrderPaid(Order::find($this->order->id)));
-
+    SalesmanCommissionService::onOrderCreate($this->order);
 });
 
 it('recalculates commission of salesman when order is refunded', function () {
@@ -56,6 +49,9 @@ it('recalculates commission of salesman when order is refunded', function () {
         'created_at' => now()->addMinute(),
     ]);
 
-    SalesmanCommissionService::onRefundOrder($this->order);
+    $this->order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
+    $this->order->salesman->salesmanProfile->save();
+
+    SalesmanCommissionService::onOrderRefund($this->order);
 
 });

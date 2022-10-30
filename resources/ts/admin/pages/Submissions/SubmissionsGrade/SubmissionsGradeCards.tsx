@@ -35,6 +35,7 @@ export function SubmissionsGradeCards() {
     const navigate = useNavigate();
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
+    const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -57,16 +58,21 @@ export function SubmissionsGradeCards() {
         navigate(`/submissions/${id}/view`);
     }
 
-    const loadGrades = useCallback(() => {
-        dispatch(getAllSubmissions({ fromAgs: true, id: Number(id) }))
-            .unwrap()
-            .then(() => dispatch(matchExistingOrderItemsToViewModes()));
-    }, [dispatch, id]);
+    const loadGrades = useCallback(
+        (fromAgs = true) => {
+            dispatch(getAllSubmissions({ fromAgs: fromAgs, id: Number(id) }))
+                .unwrap()
+                .then(() => dispatch(matchExistingOrderItemsToViewModes()));
+        },
+        [dispatch, id],
+    );
+
+    const loadDataOnRecursively = useCallback(() => {
+        if (!hasLoadedAllRobogrades) loadGrades(false);
+    }, [hasLoadedAllRobogrades, loadGrades]);
 
     useInterval(() => {
-        dispatch(getAllSubmissions({ fromAgs: false, id: Number(id) }))
-            .unwrap()
-            .then(() => dispatch(matchExistingOrderItemsToViewModes()));
+        loadDataOnRecursively();
     }, 10000);
 
     const handleOnEditCard = useCallback(

@@ -60,15 +60,6 @@ export const markRemoteCardAsGraded = createAsyncThunk(
     },
 );
 
-export const getCardGrades = createAsyncThunk(
-    'submissionGrades/getCardGrades',
-    async (DTO: { certificateNumber: string }) => {
-        const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/grades/${DTO.certificateNumber}`);
-        return await endpoint.get('');
-    },
-);
-
 export const updateGeneralOrderNotes = createAsyncThunk(
     'submissionGrades/rejectCard',
     async (DTO: { orderID?: number; notes?: string }) => {
@@ -82,6 +73,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
         itemIndex: number;
@@ -99,6 +91,7 @@ export interface SubmissionsGrades {
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
     viewModes: [],
+    hasLoadedAllRobogrades: false,
 };
 
 export const submissionGradesSlice = createSlice({
@@ -231,6 +224,11 @@ export const submissionGradesSlice = createSlice({
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
             state.allSubmissions = action.payload;
+            state.hasLoadedAllRobogrades =
+                action.payload.filter(
+                    (card: Record<string, any>) =>
+                        card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
+                ).length === action.payload.length;
         },
     },
 });

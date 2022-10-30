@@ -87,7 +87,7 @@ export function SubmissionsGradeCards() {
                         value: declaredValue,
                     }),
                 );
-                await loadGrades();
+                await loadGrades(false);
             }
         },
         [dispatch, loadGrades, id],

@@ -60,6 +60,8 @@ it('adds commission to salesman when order is created', function () {
 
 it('recalculates commission of salesman when order is refunded', function () {
 
+    $order = $this->order;
+
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
         'payment_method_id' => $this->paymentMethod->id,
@@ -74,5 +76,15 @@ it('recalculates commission of salesman when order is refunded', function () {
     $this->order->salesman->salesmanProfile->save();
 
     SalesmanCommissionService::onOrderRefund($this->order);
+
+    $commission = $order->salesman->salesmanProfile->commission_value *  ( $order->refunds()->latest()->first()->amount );
+
+    $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
+
+    $salesCommission = SalesmanCommission::whereId($this->order->user_id)->first();
+
+    assertEquals($this->order->refresh()->salesman_commission, -$commission);
+    assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);
+    assertEquals($this->order->refresh()->salesman_commission, $salesCommission->commission);
 
 });

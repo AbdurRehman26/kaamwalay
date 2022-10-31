@@ -7,8 +7,7 @@ use App\Models\Order;
 use App\Models\SalesmanCommission;
 use App\Models\SalesmanEarnedCommission;
 use App\Models\User;
-use App\Services\SalesmanCommission\OrderCommission\OrderCreateCommissionService;
-use App\Services\SalesmanCommission\OrderCommission\OrderRefundCommissionService;
+use App\Services\SalesmanCommission\OrderExtraChargeCommission\OrderCommissionService;
 use Illuminate\Support\Facades\DB;
 
 class SalesmanCommissionService
@@ -34,27 +33,17 @@ class SalesmanCommissionService
 
     }
 
-    public static function onOrderCreate(Order $order): void
+    public static function onOrderLine(Order $order, CommissionEarnedEnum $orderCommissionType): void
     {
         DB::beginTransaction();
 
-        $order->salesman_commission =  OrderCreateCommissionService::calculateCommission($order);
+        $orderCommission = new OrderCommissionService();
+        $commission = $orderCommission->getCommission($order, $orderCommissionType);
+        $order->salesman_commission = $commission;
         $order->save();
-        self::storeSalesmanEarnedCommission($order, $order->salesman_commission, CommissionEarnedEnum::ORDER_CREATED->value);
-        self::storeSalesmanCommission($order->salesman, $order->salesman_commission);
 
-        DB::commit();
-    }
-
-    public static function onOrderRefund(Order $order): void
-    {
-        DB::beginTransaction();
-
-        $commission = OrderRefundCommissionService::calculateCommission($order);
-        $order->salesman_commission -= $commission;
-        $order->save();
-        self::storeSalesmanEarnedCommission($order, -$commission, CommissionEarnedEnum::ORDER_REFUNDED->value);
-        self::storeSalesmanCommission($order->salesman, -$commission);
+        self::storeSalesmanEarnedCommission($order, $commission, $orderCommissionType->value);
+        self::storeSalesmanCommission($order->salesman, $commission);
 
         DB::commit();
     }

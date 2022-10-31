@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\V2\Salesman;
 
-use App\Models\Order;
 use App\Models\Salesman;
 use App\Models\User;
 use App\Services\EmailService;
@@ -25,7 +24,7 @@ class SalesmanService
 
     public function getSalesmen(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::salesman())
+        return QueryBuilder::for(User::salesmen())
             ->allowedFilters(User::getAllowedAdminSalesmanFilters())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));
@@ -80,7 +79,7 @@ class SalesmanService
         }
     }
 
-    protected function storeSalesmanProfile(User $user, $data): Salesman
+    protected function storeSalesmanProfile(User $user, array $data): Salesman
     {
         return Salesman::updateOrCreate(
             [
@@ -94,7 +93,7 @@ class SalesmanService
         );
     }
 
-    private function updateUserInfo(User $user, $data): void
+    private function updateUserInfo(User $user, array $data): void
     {
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
@@ -113,19 +112,5 @@ class SalesmanService
             EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
             ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
         );
-    }
-
-    public function getSales(array $data): int
-    {
-        return Order::forSalesman(User::find($data['salesman_id']))
-            ->betweenDates($data['from_date'], $data['to_date'])
-            ->sum('grand_total');
-    }
-
-    public function getCommissionsEarned(array $data): int
-    {
-        return Order::forSalesman(User::find($data['salesman_id']))
-            ->betweenDates($data['from_date'], $data['to_date'])
-            ->sum('salesman_commission');
     }
 }

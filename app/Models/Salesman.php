@@ -31,7 +31,7 @@ class Salesman extends Model
         return $this->hasCommissionType(CommissionTypeEnum::PERCENTAGE);
     }
 
-    private function hasCommissionType($type): bool
+    private function hasCommissionType(CommissionTypeEnum $type): bool
     {
         return $this->commission_type === $type;
     }

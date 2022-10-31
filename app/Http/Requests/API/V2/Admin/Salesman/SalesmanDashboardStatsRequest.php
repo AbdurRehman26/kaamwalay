@@ -14,9 +14,8 @@ class SalesmanDashboardStatsRequest extends FormRequest
     public function rules()
     {
         return [
-            'salesman_id' => ['required', 'integer', 'exists:users,id'],
-            'from_date' => ['sometimes'],
-            'to_date' => ['sometimes']
+            'filter.from_date' => ['sometimes'],
+            'filter.to_date' => ['sometimes']
         ];
     }
 }

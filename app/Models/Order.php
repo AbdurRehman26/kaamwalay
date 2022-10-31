@@ -299,6 +299,10 @@ class Order extends Model implements Exportable
         return $query->where('orders.user_id', $user->id);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
     public function scopeForSalesman(Builder $query, User $user): Builder
     {
         return $query->where('orders.salesman_id', $user->id);
@@ -338,7 +342,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalToBePaidAttribute(): float
     {
-        return $this->grand_total - $this->amount_paid_from_wallet;
+        return (float) bcsub((string) $this->grand_total, (string) $this->amount_paid_from_wallet, 2);
     }
 
     public function getTotalGradedItems(): int

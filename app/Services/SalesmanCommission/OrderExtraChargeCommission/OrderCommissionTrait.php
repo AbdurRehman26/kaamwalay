@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Services\SalesmanCommission\OrderCommission;
+namespace App\Services\SalesmanCommission\OrderExtraChargeCommission;
 
 use App\Models\Order;
-use App\Services\SalesmanCommission\OrderCommission\Contracts\OrderFixedCommissionInterface;
-use App\Services\SalesmanCommission\OrderCommission\Contracts\OrderPercentageCommissionInterface;
 
-class OrderCreateCommissionService implements OrderPercentageCommissionInterface, OrderFixedCommissionInterface
+trait OrderCommissionTrait
 {
-    use OrderCommissionTrait;
+    public static function calculateCommission(Order $order): float
+    {
+        return match ($order->salesman->salesmanProfile->commission_type->toString()) {
+            'percentage' => self::getPercentageCommission($order),
+            default => self::getFixedCommission($order),
+        };
+    }
 
     public static function getPercentageCommission(Order $order): float
     {

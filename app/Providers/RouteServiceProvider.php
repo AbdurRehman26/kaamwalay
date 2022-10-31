@@ -40,6 +40,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->as('v2.')
                 ->group(base_path('routes/v2/api.php'));
 
+            Route::prefix('api/v3')
+                ->middleware('api')
+                ->as('v3.')
+                ->group(base_path('routes/v3/api.php'));
+
             Route::prefix('api/v1/admin')
                 ->middleware('api')
                 ->as('v1.')
@@ -49,6 +54,16 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->as('v2.')
                 ->group(base_path('routes/v2/admin.php'));
+
+            Route::prefix('api/v2/salesman')
+                ->middleware('api')
+                ->as('v2.')
+                ->group(base_path('routes/v2/salesman.php'));
+
+            Route::prefix('api/v3/admin')
+                ->middleware('api')
+                ->as('v3.admin.')
+                ->group(base_path('routes/v3/admin.php'));
 
             Route::prefix('webhooks')
                 ->group(base_path('routes/webhooks.php'));

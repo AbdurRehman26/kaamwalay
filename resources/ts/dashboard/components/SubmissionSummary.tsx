@@ -145,6 +145,9 @@ function SubmissionSummary() {
     const classes = useStyles();
 
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
+    const priceRanges = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.priceRanges);
+    const maxPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxPrice);
+    const minPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.minPrice);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
@@ -175,6 +178,19 @@ function SubmissionSummary() {
             : 0;
 
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+
+    let finalPrice =
+        priceRanges?.filter((item: any) => {
+            if (
+                (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) ||
+                (numberOfSelectedCards >= item.minCards && item.maxCards === null)
+            ) {
+                return item;
+            }
+        }) ?? null;
+
+    finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPrice;
+
     function onLevelEditPress() {
         dispatch(setCustomStep(0));
     }
@@ -196,7 +212,7 @@ function SubmissionSummary() {
 
     function getPreviewTotal() {
         const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice +
+            numberOfSelectedCards * finalPrice +
             Number(cleaningFee) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
@@ -231,12 +247,11 @@ function SubmissionSummary() {
                             </div>
                             <div className={classes.row}>
                                 <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
-
                                 <Typography className={classes.rowRightBoldText}>
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={serviceLevelPrice}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -245,7 +260,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -324,15 +339,23 @@ function SubmissionSummary() {
                             <div className={classes.row}>
                                 <Typography className={classes.rowLeftText}>Service Level</Typography>
                                 <Typography className={classes.rowRightBoldText}>
-                                    <span>
-                                        <NumberFormat
-                                            value={serviceLevelPrice}
-                                            displayType={'text'}
-                                            thousandSeparator
-                                            decimalSeparator={'.'}
-                                            prefix={'$'}
-                                        />
-                                    </span>
+                                    <NumberFormat
+                                        value={minPrice}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                    &nbsp;
+                                    <span>-</span>
+                                    &nbsp;
+                                    <NumberFormat
+                                        value={maxPrice}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
                                     &nbsp; / Card
                                 </Typography>
                             </div>
@@ -385,7 +408,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Price / Card:</Typography>
                                 <NumberFormat
-                                    value={serviceLevelPrice}
+                                    value={finalPrice}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -408,7 +431,7 @@ function SubmissionSummary() {
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={serviceLevelPrice}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -417,7 +440,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -522,7 +545,7 @@ function SubmissionSummary() {
                                     <span style={{ fontWeight: 400, color: '#757575' }}>
                                         (
                                         <NumberFormat
-                                            value={serviceLevelPrice}
+                                            value={finalPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
@@ -531,7 +554,7 @@ function SubmissionSummary() {
                                         &nbsp; x {numberOfSelectedCards}) =&nbsp;
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice}
+                                        value={numberOfSelectedCards * finalPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}

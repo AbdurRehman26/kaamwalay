@@ -2,6 +2,7 @@
 
 namespace App\Listeners\API\Admin\Order;
 
+use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
@@ -85,7 +86,7 @@ class RefundSuccessfulListener implements ShouldQueue
     protected function processSalesmanCommission(RefundSuccessful $event): void
     {
         if($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()){
-            SalesmanCommissionService::onOrderRefund($event->order);
+            SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_REFUNDED);
         }
     }
 

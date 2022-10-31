@@ -3,9 +3,9 @@
 namespace App\Console\Commands\Hubspot;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Models\Order;
 use App\Services\HubspotService;
 use Illuminate\Console\Command;
-use App\Models\Order;
 
 class CloseOldDeals extends Command
 {
@@ -31,10 +31,10 @@ class CloseOldDeals extends Command
     public function handle(HubspotService $hubspotService)
     {
         $orders = Order::where('payment_status', OrderPaymentStatusEnum::PAID)->get();
-        foreach($orders as $order)
-        {
+        foreach ($orders as $order) {
             $hubspotService->updateDealStageForPaidOrder($order);
         }
+
         return Command::SUCCESS;
     }
 }

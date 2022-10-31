@@ -46,7 +46,7 @@ it('salesman commissions on different order lines', function ($orderLine) {
 
     $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
 
-    $salesCommission = SalesmanCommission::whereId($this->order->user_id)->first();
+    $salesCommission = SalesmanCommission::where('salesman_id', $this->order->salesman_id)->first();
 
     assertEquals($this->order->refresh()->salesman_commission, $commission);
     assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);

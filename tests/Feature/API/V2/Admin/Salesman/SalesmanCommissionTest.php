@@ -31,7 +31,6 @@ it('returns salesmen list for admin', function () {
                     'customers',
                     'orders',
                     'commission_earned',
-                    'commission_paid',
                     'status',
                     'sales',
                 ],

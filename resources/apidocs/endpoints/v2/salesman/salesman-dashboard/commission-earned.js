@@ -1,6 +1,6 @@
 /**
- * @api {post} /v2/salesman/dashboard/sales Salesman Dashboard Sales count
- * @apiName Salesman Dashboard Sales count
+ * @api {post} /v2/salesman/dashboard/commission-earned Salesman Dashboard Earned Commission count
+ * @apiName Salesman Dashboard Earned Commission count
  * @apiGroup Salesman Dashboard
  *
  * @apiVersion 2.0.0

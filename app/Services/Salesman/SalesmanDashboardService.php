@@ -11,12 +11,12 @@ class SalesmanDashboardService
     {
         $orderSalesQuery = Order::forSalesman($salesman);
 
-        if($orderSalesQuery->exists()){
-            if(!empty($data['filter']['from_date'])){
+        if ($orderSalesQuery->exists()) {
+            if (! empty($data['filter']['from_date'])) {
                 $orderSalesQuery->where('created_at', '>=', $data['filter']['from_date']);
             }
 
-            if(!empty($data['filter']['to_date'])){
+            if (! empty($data['filter']['to_date'])) {
                 $orderSalesQuery->where('created_at', '<=', $data['filter']['to_date']);
             }
         }
@@ -28,12 +28,12 @@ class SalesmanDashboardService
     {
         $orderCommissionQuery = Order::forSalesman($salesman);
 
-        if($orderCommissionQuery->exists()){
-            if(!empty($data['filter']['from_date'])){
+        if ($orderCommissionQuery->exists()) {
+            if (! empty($data['filter']['from_date'])) {
                 $orderCommissionQuery->where('created_at', '>=', $data['filter']['from_date']);
             }
 
-            if(!empty($data['filter']['to_date'])){
+            if (! empty($data['filter']['to_date'])) {
                 $orderCommissionQuery->where('created_at', '<=', $data['filter']['to_date']);
             }
         }

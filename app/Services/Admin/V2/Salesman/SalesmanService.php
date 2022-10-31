@@ -9,8 +9,8 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Password;
+use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
 class SalesmanService
@@ -35,8 +35,7 @@ class SalesmanService
      */
     public function createSalesman(array $data): User
     {
-        try{
-
+        try {
             DB::beginTransaction();
 
             $salesman = User::createSalesman($data);
@@ -47,7 +46,6 @@ class SalesmanService
 
             return $salesman;
         } catch (Exception $e) {
-
             DB::rollBack();
             Log::error($e->getMessage());
 
@@ -60,8 +58,7 @@ class SalesmanService
      */
     public function assignSalesmanRoleToUser(User $user, array $data): User
     {
-        try{
-
+        try {
             DB::beginTransaction();
 
             $this->updateUserInfo($user, $data);
@@ -71,7 +68,6 @@ class SalesmanService
 
             return $user->refresh();
         } catch (Exception $e) {
-
             DB::rollBack();
             Log::error($e->getMessage());
 
@@ -83,12 +79,12 @@ class SalesmanService
     {
         return Salesman::updateOrCreate(
             [
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ],
             [
                 'is_active' => $data['is_active'],
                 'commission_type' => $data['commission_type'],
-                'commission_value' => $data['commission_value']
+                'commission_value' => $data['commission_value'],
             ]
         );
     }

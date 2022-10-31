@@ -18,14 +18,14 @@ class SalesmanDashboardController
     public function getSales(SalesmanDashboardStatsRequest $request): JsonResponse
     {
         return response()->json([
-            'data' => $this->salesmanDashboardService->getSales($request->user(), $request->validated())
+            'data' => $this->salesmanDashboardService->getSales($request->user(), $request->validated()),
         ]);
     }
 
     public function getCommissionsEarned(SalesmanDashboardStatsRequest $request): JsonResponse
     {
         return response()->json([
-            'data' => $this->salesmanDashboardService->getCommissionsEarned($request->user(), $request->validated())
+            'data' => $this->salesmanDashboardService->getCommissionsEarned($request->user(), $request->validated()),
         ]);
     }
 }

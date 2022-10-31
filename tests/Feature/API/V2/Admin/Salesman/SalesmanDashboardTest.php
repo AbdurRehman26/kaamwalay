@@ -19,12 +19,11 @@ beforeEach(function () {
     Order::factory()->count(15)->create([
         'salesman_id' => $this->salesman->id,
         'salesman_commission' => rand(0, 1000),
-        'created_at' => now()->subDays(10)
+        'created_at' => now()->subDays(10),
     ]);
 });
 
 it('returns salesmen sales for the given dates', function () {
-
     actingAs($this->salesman);
     $response = getJson(route('v2.salesman.dashboard.sales', [
             'filter[from_date]' => now()->subDays(15)->toDateString(),
@@ -33,11 +32,9 @@ it('returns salesmen sales for the given dates', function () {
         ->assertOk();
 
     assertEquals($response['data'], Order::sum('grand_total'));
-
 });
 
 it('returns salesman`s commissions for the given dates', function () {
-
     actingAs($this->salesman);
     $response = getJson(route('v2.salesman.dashboard.commission-earned', [
         'filter[from_date]' => now()->subDays(15)->toDateString(),
@@ -45,5 +42,4 @@ it('returns salesman`s commissions for the given dates', function () {
     ]))->assertOk();
 
     assertEquals($response['data'], Order::sum('salesman_commission'));
-
 });

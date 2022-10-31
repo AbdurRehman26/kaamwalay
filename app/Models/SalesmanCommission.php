@@ -9,6 +9,6 @@ class SalesmanCommission extends Model
     protected $fillable = [
         'salesman_id',
         'event_at',
-        'commission'
+        'commission',
     ];
 }

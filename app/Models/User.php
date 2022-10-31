@@ -241,6 +241,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function assignSalesman(User $salesman): bool
     {
         $this->salesman_id = $salesman->id;
+
         return $this->save();
     }
 

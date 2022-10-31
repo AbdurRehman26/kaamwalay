@@ -45,7 +45,7 @@ class OrderPaidListener implements ShouldQueue
 
     protected function processSalesmanCommission(OrderPaid $event): void
     {
-        if($event->order->salesman()->exists()){
+        if ($event->order->salesman()->exists()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_CREATED);
         }
     }

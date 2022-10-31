@@ -15,7 +15,7 @@ beforeEach(function () {
     Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
-    $this->salesmen = User::factory()->count(15)->withRole(config('permission.roles.salesman'))->create();
+    $this->salesman = User::factory()->count(15)->withRole(config('permission.roles.salesman'))->create();
 });
 
 it('returns salesmen list for admin', function () {
@@ -31,7 +31,6 @@ it('returns salesmen list for admin', function () {
                     'customers',
                     'orders',
                     'commission_earned',
-                    'commission_paid',
                     'status',
                     'sales',
                 ],
@@ -103,7 +102,7 @@ test('a guest cannot create salesmen', function () {
 
 it('returns single salesman details for admin', function () {
     actingAs($this->user);
-    getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
+    getJson(route('v2.salesmen.show', ['salesman' => $this->salesman->first()]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -120,7 +119,7 @@ it('returns single salesman details for admin', function () {
 });
 
 test('a guest can not get single salesman details', function () {
-    getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
+    getJson(route('v2.salesmen.show', ['salesman' => $this->salesman->first()]))
         ->assertStatus(Response::HTTP_UNAUTHORIZED);
 });
 

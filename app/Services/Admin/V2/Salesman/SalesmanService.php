@@ -115,17 +115,37 @@ class SalesmanService
         );
     }
 
-    public function getSales(array $data): int
+    public function getSales(User $salesman, array $data): float
     {
-        return Order::forSalesman(User::find($data['salesman_id']))
-            ->betweenDates($data['from_date'], $data['to_date'])
-            ->sum('grand_total');
+        $orderSalesQuery = Order::forSalesman($salesman);
+
+        if($orderSalesQuery->exists()){
+            if(!empty($data['filter']['from_date'])){
+                $orderSalesQuery->where('created_at', '>=', $data['filter']['from_date']);
+            }
+
+            if(!empty($data['filter']['to_date'])){
+                $orderSalesQuery->where('created_at', '<=', $data['filter']['to_date']);
+            }
+        }
+
+        return $orderSalesQuery->sum('grand_total');
     }
 
-    public function getCommissionsEarned(array $data): int
+    public function getCommissionsEarned(User $salesman, array $data): int
     {
-        return Order::forSalesman(User::find($data['salesman_id']))
-            ->betweenDates($data['from_date'], $data['to_date'])
-            ->sum('salesman_commission');
+        $orderCommissionQuery = Order::forSalesman($salesman);
+
+        if($orderCommissionQuery->exists()){
+            if(!empty($data['filter']['from_date'])){
+                $orderCommissionQuery->where('created_at', '>=', $data['filter']['from_date']);
+            }
+
+            if(!empty($data['filter']['to_date'])){
+                $orderCommissionQuery->where('created_at', '<=', $data['filter']['to_date']);
+            }
+        }
+
+        return $orderCommissionQuery->sum('salesman_commission');
     }
 }

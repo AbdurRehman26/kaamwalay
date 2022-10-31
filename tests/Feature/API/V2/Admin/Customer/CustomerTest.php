@@ -185,13 +185,12 @@ it('can assign a salesman to customer', function () {
 
     postJson(route('v2.customers.assign-salesman', [
             'salesman' => $salesman,
-            'user' => $customer
+            'user' => $customer,
         ]))
         ->assertSuccessful();
 });
 
 it('a guest cannot assign a salesman to customer', function () {
-
     $salesman = User::factory()
         ->withRole(config('permission.roles.salesman'))
         ->create();
@@ -202,12 +201,11 @@ it('a guest cannot assign a salesman to customer', function () {
 
     postJson(route('v2.customers.assign-salesman', [
         'salesman' => $salesman,
-        'user' => $customer
+        'user' => $customer,
     ]))->assertUnauthorized();
 });
 
 it('a customer cannot assign a salesman to customer', function () {
-
     $salesman = User::factory()
         ->withRole(config('permission.roles.salesman'))
         ->create();
@@ -220,12 +218,11 @@ it('a customer cannot assign a salesman to customer', function () {
 
     postJson(route('v2.customers.assign-salesman', [
         'salesman' => $salesman,
-        'user' => $customer
+        'user' => $customer,
     ]))->assertForbidden();
 });
 
 test('user with customer role cannot be assigned as a salesman to customer', function () {
-
     actingAs($this->user);
 
     $customer1 = User::factory()
@@ -238,6 +235,6 @@ test('user with customer role cannot be assigned as a salesman to customer', fun
 
     postJson(route('v2.customers.assign-salesman', [
         'salesman' => $customer1,
-        'user' => $customer
+        'user' => $customer,
     ]))->assertUnprocessable();
 });

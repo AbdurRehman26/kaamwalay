@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SalesmanEarnedCommission extends Model
@@ -11,6 +10,6 @@ class SalesmanEarnedCommission extends Model
         'salesman_id',
         'order_id',
         'type',
-        'commission'
+        'commission',
     ];
 }

@@ -15,7 +15,7 @@ class SalesmanDashboardStatsRequest extends FormRequest
     {
         return [
             'filter.from_date' => ['sometimes'],
-            'filter.to_date' => ['sometimes']
+            'filter.to_date' => ['sometimes'],
         ];
     }
 }

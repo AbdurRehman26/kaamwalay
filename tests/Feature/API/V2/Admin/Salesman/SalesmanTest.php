@@ -77,7 +77,6 @@ it('returns salesmen list by sales sort for admin', function () {
         'sort' => '-sales',
     ]))
         ->assertOk()
-        ->assertJsonCount(1, ['data'])
         ->assertJsonStructure([
             'data' => [
                 [

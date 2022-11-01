@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'customer_number' => Str::random(10),
             'last_login_at' => now(),
             'is_active' => true,
+            'salesman_id' => null
         ];
     }
 
@@ -62,7 +63,7 @@ class UserFactory extends Factory
      * @param string $role
      * @return  $this
      */
-    public function withSalesman(): static
+    public function withSalesmanRole(): static
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Role::where('name', config('permission.roles.salesman'))->first());

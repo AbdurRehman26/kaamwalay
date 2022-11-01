@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Salesman\CommissionTypeEnum;
+use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\actingAs;
@@ -15,7 +16,21 @@ beforeEach(function () {
     Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
-    $this->salesmen = User::factory()->count(15)->withSalesman()->create();
+    $this->salesmen = User::factory()->count(15)->withSalesmanRole()->create();
+
+    $users = $this->users = User::factory()->count(15)->withRole(config('permission.roles.customer'))->create([
+        'salesman_id' => $this->salesmen->random()->id
+    ]);
+
+    $orders = Order::factory()->count(15)->create();
+
+    $orders->map(function(Order $order) use ($users){
+        $user = $users->random();
+        $order->salesman_id = $user->salesman_id;
+        $order->user_id = $user->id;
+        $order->save();
+    });
+
 });
 
 it('returns salesmen list for admin', function () {
@@ -91,6 +106,12 @@ it('returns salesmen list by sales sort for admin', function () {
                 ],
             ],
         ]);
+
+    $this->assertEquals(
+        User::salesmen()->withSum('orders', 'grand_total')->orderBy('orders_sum_grand_total', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+
 });
 
 test('a guest can not get salesmen list', function () {

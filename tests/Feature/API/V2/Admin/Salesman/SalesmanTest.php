@@ -73,7 +73,7 @@ it('returns salesmen list by status filter for admin', function () {
 it('returns salesmen list by sales sort for admin', function () {
     actingAs($this->user);
 
-    getJson(route('v2.salesmen.index', [
+    $response = getJson(route('v2.salesmen.index', [
         'sort' => '-sales',
     ]))
         ->assertOk()

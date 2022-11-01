@@ -7,7 +7,7 @@ export type SubmissionStatusChipColor = keyof typeof SalesRapStatusColorsMap;
 type SalesRepStatusChipProps = Omit<ChipProps, 'color'> & { color: SalesRapStatusEnum };
 
 export const SalesRepStatusChip = styled(({ color, ...rest }: SalesRepStatusChipProps) => <Chip {...rest} />)(
-    ({ theme, color = SalesRapStatusEnum.INACTIVE }) => {
+    ({ theme, color = SalesRapStatusEnum.ACTIVE }) => {
         return {
             backgroundColor: SalesRapStatusColorsMap[color].secondary,
             color: SalesRapStatusColorsMap[color].primary,

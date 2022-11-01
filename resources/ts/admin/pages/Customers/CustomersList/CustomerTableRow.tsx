@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { UserEntity } from '@shared/entities/UserEntity';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
@@ -88,6 +88,10 @@ export function CustomerTableRow({ customer }: props) {
         [navigate, customer.id],
     );
 
+    function assignSalesRef(salesRepId: any) {
+        console.log('salesRepId ', salesRepId);
+    }
+
     return (
         <>
             <TableRow key={customer.id} onClick={handleRowClick} sx={styles.TableRow}>
@@ -118,9 +122,16 @@ export function CustomerTableRow({ customer }: props) {
                     {customer.cardsCount}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
-                    <Select autoWidth defaultValue={'Unassigned'}>
-                        <MenuItem value="none">Select Owner</MenuItem>
-                        {salesReps?.map((customer: UserEntity) => {
+                    <Select
+                        onClick={(e: any) => e.stopPropagation()}
+                        onChange={(e: any) => {
+                            assignSalesRef(e.nativeEvent.target.value);
+                        }}
+                        autoWidth
+                        key={customer?.createdBy?.id || 'Unassigned'}
+                        defaultValue={customer?.createdBy?.id ? customer.createdBy.fullName : 'Unassigned'}
+                    >
+                        {salesReps?.map((saleRep: SalesRepEntity) => {
                             return (
                                 <Grid
                                     sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
@@ -128,22 +139,31 @@ export function CustomerTableRow({ customer }: props) {
                                     p={1}
                                     alignItems={'center'}
                                 >
-                                    <Avatar src={customer?.profileImage ?? ''}>{customer?.getInitials?.()}</Avatar>
+                                    <Avatar src={saleRep?.profileImage}>{saleRep?.getInitials?.()}</Avatar>
                                     <MenuItem
-                                        key={customer?.id}
-                                        value={customer?.fullName}
+                                        key={saleRep?.id}
+                                        value={saleRep?.fullName}
                                         sx={{ ':hover': { backgroundColor: 'transparent' } }}
                                     >
-                                        {customer?.fullName}
+                                        {saleRep?.fullName}
                                     </MenuItem>
-                                    <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
+                                    {customer?.createdBy?.id ? (
+                                        <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
+                                    ) : null}
                                 </Grid>
                             );
                         })}
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
-                    <Select autoWidth key={CustomerType[0].value} defaultValue={CustomerType[0].value}>
+                    <Select
+                        autoWidth
+                        key={CustomerType[0].value}
+                        defaultValue={CustomerType[0].value}
+                        onChange={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
                         {CustomerType.map((item: any) => (
                             <MenuItem key={item.value} value={item.value}>
                                 {item?.label}

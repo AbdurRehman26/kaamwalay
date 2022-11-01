@@ -6,11 +6,11 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Divider from '@mui/material/Divider';
-// import MuiLink from '@mui/material/Link';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import MuiLink from '@mui/material/Link';
 import Radio from '@mui/material/Radio';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
@@ -21,7 +21,6 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageUploader from '@shared/components/ImageUploader';
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
-import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
@@ -29,8 +28,10 @@ import { storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 
-interface SalesRepAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
-    customerAdded?(customer: CustomerEntity): void;
+// import { emptyUser } from '@shared/redux/slices/adminCreateOrderSlice';
+
+interface SalesRepAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
+    onSubmit?(): Promise<void> | void;
     fromSubmission?: boolean;
 }
 
@@ -109,7 +110,7 @@ const useStyles = makeStyles(
     { name: '' },
 );
 
-export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...rest }: SalesRepAddDialogProps) {
+export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }: SalesRepAddDialogProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -120,7 +121,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [commissionType, setCommissionType] = useState(true);
-    // const [emailExist, setEmailExist] = useState(false);
+    const [emailExist, setEmailExist] = useState(false);
     const [commissionValue, setCommissionValue] = useState(0);
     const [listActive, setListActive] = useState(true);
     const filesRepository = useRepository(FilesRepository);
@@ -149,7 +150,13 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
         };
         try {
             setLoading(true);
-            await dispatch(storeSalesRep(salesRepInput));
+            const data = await dispatch(storeSalesRep(salesRepInput));
+            console.log('data ', data.payload);
+            if (!data?.error) {
+                onSubmit?.();
+            } else {
+                setEmailExist(true);
+            }
         } catch (e: any) {
             notifications.exception(e);
             return;
@@ -214,12 +221,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                         <Typography variant={'subtitle1'} className={classes.label}>
                             Profile Picture
                         </Typography>
-                        <ImageUploader
-                            maxHeight="230px"
-                            maxWidth="213px"
-                            onChange={(img) => setUploadedImage(img)}
-                            // onChange={handleProfileImage}
-                        />
+                        <ImageUploader maxHeight="230px" maxWidth="213px" onChange={(img) => setUploadedImage(img)} />
                     </Grid>
                     <Grid md={8} m={1}>
                         <Grid display={'flex'} flexWrap={'nowrap'}>
@@ -265,9 +267,26 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                 value={email}
                             />
                         </Grid>
-                        {/* <div style={{ marginTop: '4px' }}>
-                            { emailExist ? <> <Typography display={'inline'} sx={{ fontSize: '12px', fontWeight: 500, color: '#B00020'}}>This email is already in use</Typography> <MuiLink underline='always' sx={{ fontSize: '12px', fontWeight: 500 }}>Add Existing User</MuiLink>  </>: null }
-                        </div> */}
+                        <div style={{ marginTop: '4px' }}>
+                            {emailExist ? (
+                                <>
+                                    {' '}
+                                    <Typography
+                                        display={'inline'}
+                                        sx={{ fontSize: '12px', fontWeight: 500, color: '#B00020' }}
+                                    >
+                                        This email is already in use
+                                    </Typography>{' '}
+                                    <MuiLink
+                                        onClick={() => {}}
+                                        underline="always"
+                                        sx={{ fontSize: '12px', fontWeight: 500 }}
+                                    >
+                                        Add Existing User
+                                    </MuiLink>{' '}
+                                </>
+                            ) : null}
+                        </div>
                         <Grid>
                             <Typography
                                 variant={'subtitle1'}
@@ -353,7 +372,9 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                     <FormControlLabel
                         sx={{ marginLeft: 'auto', marginTop: '8px' }}
                         labelPlacement={'start'}
-                        control={<Switch onChange={() => setListActive(!listActive)} name="isActive" />}
+                        control={
+                            <Switch checked={listActive} onChange={() => setListActive(!listActive)} name="isActive" />
+                        }
                         label="List as Active"
                     />
                 </Grid>

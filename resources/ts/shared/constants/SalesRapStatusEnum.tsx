@@ -15,5 +15,5 @@ export const SalesRapStatusMap = {
 
 export const SalesRapStatusColorsMap: { [key in SalesRapStatusEnum]: StatusColorProps } = {
     [SalesRapStatusEnum.INACTIVE]: { primary: '#0000008A', secondary: 'rgba(221, 221, 221, 1)' },
-    [SalesRapStatusEnum.ACTIVE]: { primary: '#388E3C', secondary: 'background: rgba(215, 232, 216, 1)' },
+    [SalesRapStatusEnum.ACTIVE]: { primary: '#388E3C', secondary: 'rgba(215, 232, 216, 1)' },
 };

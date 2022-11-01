@@ -53,6 +53,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     });
 
     const createSubmission = (customer: UserEntity) => {
+        console.log('here clicked ');
         dispatch(setUser(customer));
         if (props.changeCustomer) {
             navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
@@ -60,7 +61,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
             dispatch(resetSelectedExistingAddress());
             dispatch(setUseCustomShippingAddress(false));
         } else {
-            setShowAddSalesRep(true);
+            setShowAddCustomer(true);
         }
     };
 
@@ -107,7 +108,13 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     return (
         <>
-            <SalesRepAddDialog open={showAddSalesRep} onClose={() => setShowAddSalesRep(false)} />
+            <SalesRepAddDialog
+                onSubmit={() => {
+                    window.location.reload();
+                }}
+                open={showAddSalesRep}
+                onClose={() => setShowAddSalesRep(false)}
+            />
             <CustomerAddDialog onClose={() => setShowAddCustomer(false)} open={showAddCustomer} fromSubmission={true} />
             {!showAddCustomer ? (
                 <Dialog {...rest} fullWidth onClose={handleClose}>
@@ -165,7 +172,9 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                                     return (
                                         <Grid
                                             key={customer.id}
-                                            onClick={() => createSubmission(customer)}
+                                            onClick={
+                                                props.fromSalesReps ? setShowSalesRep : () => createSubmission(customer)
+                                            }
                                             container
                                             flexDirection={'row'}
                                             justifyContent={'space-between'}
@@ -230,6 +239,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                             <Grid position={'sticky'} sx={{ bottom: '0' }} mt={3}>
                                 <Button
                                     onClick={props.fromSalesReps ? setShowSalesRep : () => setShowAddCustomer(true)}
+                                    // onClick={handleAddDialog}
                                     sx={{ height: '48px' }}
                                     fullWidth
                                     variant={'contained'}

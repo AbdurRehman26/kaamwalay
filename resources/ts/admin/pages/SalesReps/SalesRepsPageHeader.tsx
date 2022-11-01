@@ -11,9 +11,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
-// import { useNotifications } from '@shared/hooks/useNotifications';
 import { SelectAndCreateCustomerDialog } from '../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
-import { SalesRepAddDialog } from './SalesRepAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -59,9 +57,6 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
     const [createSubmission, setCreateSubmission] = useState(false);
-    // const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
-    // const [isLoading, setIsLoading] = useState(false);
-    // const notifications = useNotifications();
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -80,18 +75,6 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
         [handleSearch],
     );
 
-    // const handleAddSubmit = async () => {
-    //     try {
-    //         setIsLoading(true);
-    //         setAddRaritiesDialog(false);
-    //         window.location.reload();
-    //         setIsLoading(false);
-    //     } catch (e: any) {
-    //         setIsLoading(false);
-    //         notifications.exception(e);
-    //     }
-    // };
-
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
             {false ? (
@@ -100,7 +83,6 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                 </Box>
             ) : (
                 <>
-                    <SalesRepAddDialog open={false} />
                     <SelectAndCreateCustomerDialog
                         btnText={'Create New User'}
                         fromSalesReps={true}

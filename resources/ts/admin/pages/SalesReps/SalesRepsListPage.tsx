@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
+import moment from 'moment';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
 import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
@@ -24,6 +25,7 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -34,8 +36,8 @@ import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 type InitialValues = {
     status: number;
     search: string;
-    dateRangeStart: DateLike;
-    dateRangeEnd: DateLike;
+    signedUpStart: DateLike;
+    signedUpEnd: DateLike;
 };
 
 const SalesMenStatus = [
@@ -45,7 +47,7 @@ const SalesMenStatus = [
 
 export function SalesRepsListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
-    const [query, { setQuery, delQuery }] = useLocationQuery<InitialValues>();
+    const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
     const [sortFilter, setSortFilter] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
     const [status, setStatus] = useState({ label: '', value: 0 });
@@ -56,32 +58,11 @@ export function SalesRepsListPage() {
         () => ({
             search: query.search ?? '',
             status: query.status ?? '',
-            dateRangeStart: query.dateRangeStart ?? '',
-            dateRangeEnd: query.dateRangeEnd ?? '',
+            signedUpStart: query.signedUpStart ? moment(query.signedUpStart) : '',
+            signedUpEnd: query.signedUpEnd ? moment(query.signedUpEnd) : '',
         }),
-        [query.search, query.status, query.dateRangeStart, query.dateRangeEnd],
+        [query.search, query.status, query.signedUpStart, query.signedUpEnd],
     );
-
-    const getFilters = (values: InitialValues) => ({
-        search: values.search,
-        status: values.status,
-        dateRangeStart: values.dateRangeStart,
-        dateRangeEnd: values.dateRangeEnd,
-    });
-
-    const salesReps = useAdminSalesMenQuery({
-        params: {
-            filter: getFilters(query),
-            sort: sortFilter ? 'name' : '-name',
-            perPage: 48,
-        },
-    });
-    const handleStatus = useCallback(async (values, status) => {
-        values = { ...values, status: status.value };
-        setStatus({ value: status.value, label: status.label });
-        handleSubmit(values);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const joinFilterValues = (values: any[], separator = ',') =>
         values
@@ -92,21 +73,43 @@ export function SalesRepsListPage() {
     const dateRangeFilter = (start: DateLike, end: DateLike, separator = ',', format = 'YYYY-MM-DD') =>
         joinFilterValues([formatDate(start, format), formatDate(end, format)], separator);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const getFilters = (values: InitialValues) => ({
+        search: values.search,
+        status: values.status,
+        signedUpBetween: dateRangeFilter(values.signedUpStart, values.signedUpEnd),
+    });
+
+    const salesReps = useAdminSalesMenQuery({
+        params: {
+            filter: getFilters(query),
+            sort: sortFilter ? 'name' : '-name',
+            perPage: 48,
+        },
+        ...bracketParams(),
+    });
+    const handleStatus = useCallback(async (values, status) => {
+        values = { ...values, status: status.value };
+        setStatus({ value: status.value, label: status.label });
+        handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleClearDateRange = useCallback(async () => {
-        formikRef.current?.setFieldValue('dateRangeStart', '');
-        formikRef.current?.setFieldValue('dateRangeEnd', '');
-        delQuery('dateRangeStart', 'dateRangeEnd');
+        formikRef.current?.setFieldValue('signedUpStart', '');
+        formikRef.current?.setFieldValue('signedUpEnd', '');
+        delQuery('signedUpStart', 'signedUpEnd');
 
         await salesReps.searchSortedWithPagination(
             { sort: sortFilter ? 'name' : '-name' },
             getFilters({
                 ...formikRef.current!.values,
-                dateRangeStart: '',
-                dateRangeEnd: '',
+                signedUpStart: '',
+                signedUpEnd: '',
             }),
             1,
         );
-    }, [delQuery, sortFilter, salesReps]);
+    }, [delQuery, sortFilter, salesReps, getFilters]);
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -120,7 +123,7 @@ export function SalesRepsListPage() {
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [setQuery, sortFilter, salesReps],
+        [setQuery, sortFilter, salesReps, getFilters],
     );
 
     const handleSort = (value: boolean) => {
@@ -130,7 +133,7 @@ export function SalesRepsListPage() {
     const handleSearch = useCallback(
         async (search: string) => {
             if (search) {
-                setQuery({ search });
+                addQuery({ search });
             } else {
                 delQuery('search');
             }
@@ -143,14 +146,32 @@ export function SalesRepsListPage() {
                 }),
             );
         },
-        [salesReps, delQuery, setQuery],
+        [addQuery, salesReps, delQuery, getFilters],
     );
+    // const handleSearch = useCallback(
+    //     async (search: string) => {
+    //         if (search) {
+    //             setQuery({ search });
+    //         } else {
+    //             delQuery('search');
+    //         }
+
+    //         formikRef.current?.setFieldValue('search', search);
+    //         await salesReps.search(
+    //             getFilters({
+    //                 ...formikRef.current!?.values,
+    //                 search,
+    //             }),
+    //         );
+    //     },
+    //     [salesReps, delQuery, setQuery],
+    // );
 
     const handleExportData = useCallback(async () => {
         try {
             setIsExporting(true);
             const exportData = await dataExportRepository.export({
-                model: ExportableModelsEnum.SalesRep,
+                model: ExportableModelsEnum.Salesman,
                 sort: { sort: sortFilter },
                 filter: getFilters({
                     ...formikRef.current!.values,
@@ -163,7 +184,7 @@ export function SalesRepsListPage() {
             notifications.exception(e);
             setIsExporting(false);
         }
-    }, [dataExportRepository, sortFilter, notifications]);
+    }, [dataExportRepository, sortFilter, notifications, getFilters]);
 
     const handleClearStatus = useCallback(async () => {
         formikRef.current?.setFieldValue('status', '');
@@ -177,7 +198,7 @@ export function SalesRepsListPage() {
             }),
             1,
         );
-    }, [delQuery, sortFilter, salesReps]);
+    }, [delQuery, sortFilter, salesReps, getFilters]);
 
     return (
         <>
@@ -190,19 +211,14 @@ export function SalesRepsListPage() {
                             <Grid item xs ml={2}>
                                 <PageSelector
                                     label={'Date Range'}
-                                    value={dateRangeFilter(
-                                        values.dateRangeStart,
-                                        values.dateRangeEnd,
-                                        ' - ',
-                                        'MM/DD/YY',
-                                    )}
+                                    value={dateRangeFilter(values.signedUpStart, values.signedUpEnd, ' - ', 'MM/DD/YY')}
                                     onClear={handleClearDateRange}
                                 >
                                     <Grid container component={Form} direction={'column'}>
                                         <Grid container alignItems={'center'}>
                                             <Grid item xs>
                                                 <FormikDesktopDatePicker
-                                                    name={'dateRangeStart'}
+                                                    name={'signedUpStart'}
                                                     label={'Start Date'}
                                                     fullWidth
                                                 />
@@ -218,9 +234,9 @@ export function SalesRepsListPage() {
                                             </Grid>
                                             <Grid item xs>
                                                 <FormikDesktopDatePicker
-                                                    name={'dateRangeEnd'}
+                                                    name={'signedUpEnd'}
                                                     label={'End Date'}
-                                                    minDate={values.dateRangeStart}
+                                                    minDate={values.signedUpStart}
                                                     fullWidth
                                                 />
                                             </Grid>

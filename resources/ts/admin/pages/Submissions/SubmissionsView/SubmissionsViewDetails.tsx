@@ -44,6 +44,7 @@ interface SubmissionsViewDetailsProps {
     walletPayment: string;
     admin?: string;
     createdBy?: AdminUserEntity;
+    salesmanCommission?: number;
 }
 
 const useStyles = makeStyles(
@@ -84,6 +85,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         paymentStatus,
         admin,
         createdBy,
+        salesmanCommission,
     } = props;
 
     const classes = useStyles();
@@ -94,10 +96,16 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            'Owner:': createdBy?.id !== customerId ? `Admin (${createdBy?.fullName})` : customerName,
-            'Commission:': '$5',
+            'Owner:': [
+                <>
+                    <MuiLink component={Link} to={''}>
+                        {createdBy?.fullName}
+                    </MuiLink>
+                </>,
+            ],
+            ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, customerName, createdBy, customerId],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee, createdBy, salesmanCommission],
     );
 
     const customerInfo = useMemo(

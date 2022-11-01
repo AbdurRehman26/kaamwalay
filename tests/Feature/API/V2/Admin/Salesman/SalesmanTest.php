@@ -19,18 +19,17 @@ beforeEach(function () {
     $this->salesmen = User::factory()->count(15)->withSalesmanRole()->create();
 
     $users = $this->users = User::factory()->count(15)->withRole(config('permission.roles.customer'))->create([
-        'salesman_id' => $this->salesmen->random()->id
+        'salesman_id' => $this->salesmen->random()->id,
     ]);
 
     $orders = Order::factory()->count(15)->create();
 
-    $orders->map(function(Order $order) use ($users){
+    $orders->map(function (Order $order) use ($users) {
         $user = $users->random();
         $order->salesman_id = $user->salesman_id;
         $order->user_id = $user->id;
         $order->save();
     });
-
 });
 
 it('returns salesmen list for admin', function () {
@@ -111,7 +110,6 @@ it('returns salesmen list by sales sort for admin', function () {
         User::salesmen()->withSum('orders', 'grand_total')->orderBy('orders_sum_grand_total', 'DESC')->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
-
 });
 
 test('a guest can not get salesmen list', function () {

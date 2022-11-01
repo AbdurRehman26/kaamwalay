@@ -21,4 +21,3 @@ class AdminSalesmanSalesSort implements Sort
         $query->withSum('order', 'grand_total')->orderBy('order_sum_grand_total', $direction);
     }
 }
-

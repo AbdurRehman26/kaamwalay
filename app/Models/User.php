@@ -12,6 +12,7 @@ use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
 use App\Http\Sorts\AdminCustomerWalletSort;
+use App\Http\Sorts\AdminSalesmanSalesSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
@@ -162,6 +163,13 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
             AllowedFilter::scope('signed_up_between'),
             AllowedFilter::exact('salesmanProfile.is_active'),
+        ];
+    }
+
+    public static function getAllowedAdminSalesmanSorts(): array
+    {
+        return [
+            AllowedSort::custom('sales', new AdminSalesmanSalesSort),
         ];
     }
 

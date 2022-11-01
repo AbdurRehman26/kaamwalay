@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import MaterialUiPhoneNumber from 'material-ui-phone-number';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageUploader from '@shared/components/ImageUploader';
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
@@ -72,7 +72,7 @@ const RadioContainer = styled(ButtonBase)(({ theme }) => ({
 
 const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
     '&': {
-        padding: '0px 14px !important',
+        padding: '8px 14px !important',
         width: '100%',
         border: '1px solid lightgray',
         fontWeight: 400,
@@ -94,13 +94,6 @@ const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
 const useStyles = makeStyles(
     () => {
         return {
-            root: {
-                backgroundColor: '#fff',
-            },
-            inputWithLabelContainer: {
-                marginTop: '27px',
-                flexDirection: 'column',
-            },
             textField: {
                 height: 48,
                 radius: 4,
@@ -110,13 +103,6 @@ const useStyles = makeStyles(
                 fontWeight: 400,
                 fontSize: 12,
                 lineHeight: '16px',
-                marginBottom: '2px',
-                marginTop: '28px',
-            },
-            phoneNumberText: {
-                '.MuiInput-root': {
-                    padding: '8.5px 14px !important',
-                },
             },
         };
     },
@@ -133,13 +119,13 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [commissionType, setCommissionType] = useState(false);
-    const [commissionValue, setCommissionValue] = useState(1);
+    const [commissionType, setCommissionType] = useState(true);
+    // const [emailExist, setEmailExist] = useState(false);
+    const [commissionValue, setCommissionValue] = useState(0);
     const [listActive, setListActive] = useState(true);
     const filesRepository = useRepository(FilesRepository);
     const { data } = useCountriesListsQuery();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
-    console.log('User 22 ', customer);
     const handleClose = useCallback(
         (event: {}) => {
             if (onClose) {
@@ -151,9 +137,8 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
 
     const handleAddSalesRep = async () => {
         const profileImage = await filesRepository.uploadFile(uploadedImage);
-        console.log('profileImage', profileImage);
         const salesRepInput: AddSalesRepRequestDto = {
-            // profileImage: profileImage,
+            profileImage: profileImage,
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -173,6 +158,33 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
         }
     };
 
+    useEffect(() => {
+        const parsedName = parseName(customer?.fullName);
+        if (customer.email) {
+            setEmail(customer?.email);
+            setFirstName(parsedName?.firstName);
+            setLastName(parsedName?.lastName);
+        }
+    }, [customer]);
+
+    const handleCommissionType = () => {
+        setCommissionType(!commissionType);
+        setCommissionValue(0);
+    };
+
+    const parseName = (fullName: any) => {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
+    };
+
     const isValid = useMemo(() => {
         return !!(firstName && lastName && email && commissionType !== null && commissionValue && listActive !== null);
     }, [firstName, lastName, email, commissionType, commissionValue, listActive]);
@@ -184,8 +196,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                     <Typography variant={'h6'} fontWeight={400}>
                         Add Sales Rep{' '}
                         <Typography fontSize={'20px'} variant={'caption'} color={'textSecondary'}>
-                            {' '}
-                            (Existing User){' '}
+                            {customer.email !== '' ? `(Existing User)` : `(New User)`}
                         </Typography>
                     </Typography>
                 </Grid>
@@ -221,9 +232,8 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                     name={'firstName'}
                                     className={classes.textField}
                                     placeholder={'Enter First Name'}
-                                    size={'small'}
                                     variant="outlined"
-                                    value={firstName || customer.firstName}
+                                    value={firstName}
                                 />
                             </Grid>
                             <Grid md={6} ml={0.5}>
@@ -235,38 +245,42 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                     name={'lastName'}
                                     className={classes.textField}
                                     placeholder={'Enter Last Name'}
-                                    size={'small'}
                                     variant="outlined"
-                                    value={lastName || customer.lastName}
+                                    value={lastName}
                                 />
                             </Grid>
                         </Grid>
                         <Grid>
-                            <Typography variant={'subtitle1'} className={classes.label}>
-                                Email
+                            <Typography variant={'subtitle1'} className={classes.label} sx={{ marginTop: '22px' }}>
+                                Email*
                             </Typography>
                             <TextField
                                 fullWidth
                                 onChange={(e) => setEmail(e.target.value)}
                                 name={'email'}
-                                // disabled={customer !== null}
+                                disabled={customer.email !== ''}
                                 className={classes.textField}
                                 placeholder={'Enter Email'}
-                                size={'small'}
                                 variant="outlined"
                                 value={email}
                             />
-                            {/* <Typography display={'inline'} sx={{ fontSize: '12px', fontWeight: 500, color: '#B00020' }}>This email is already in use</Typography> <MuiLink underline='always' sx={{ fontSize: '12px', fontWeight: 500 }}>Add Existing User</MuiLink> */}
                         </Grid>
+                        {/* <div style={{ marginTop: '4px' }}>
+                            { emailExist ? <> <Typography display={'inline'} sx={{ fontSize: '12px', fontWeight: 500, color: '#B00020'}}>This email is already in use</Typography> <MuiLink underline='always' sx={{ fontSize: '12px', fontWeight: 500 }}>Add Existing User</MuiLink>  </>: null }
+                        </div> */}
                         <Grid>
-                            <Typography variant={'subtitle1'} className={classes.label}>
+                            <Typography
+                                variant={'subtitle1'}
+                                className={classes.label}
+                                sx={{ marginTop: emailExist ? '0' : '22px' }}
+                            >
                                 Phone Number
                             </Typography>
                             <StyledPhoneNumber
                                 countryCodeEditable={false}
                                 defaultCountry="us"
                                 disableAreaCodes
-                                value={phone || customer.phone}
+                                value={phone}
                                 onlyCountries={data.map((country) => country.code.toLowerCase())}
                                 onChange={(e) => setPhone(e.toString())}
                             />
@@ -281,7 +295,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                     <RadioContainer>
                         <div
                             style={{ display: 'flex', alignItems: 'center', width: '80%' }}
-                            onClick={() => setCommissionType(!commissionType)}
+                            onClick={handleCommissionType}
                             aria-hidden={true}
                         >
                             <Radio checked={commissionType} />
@@ -293,8 +307,8 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                             <>
                                 <TextField
                                     onChange={(e) => setCommissionValue(Number(e.target.value))}
-                                    name="numberformat"
                                     size="small"
+                                    type={'number'}
                                     id="formatted-numberformat-input"
                                     variant="outlined"
                                     InputProps={{
@@ -310,7 +324,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                     <RadioContainer>
                         <div
                             style={{ display: 'flex', alignItems: 'center', width: '80%' }}
-                            onClick={() => setCommissionType(!commissionType)}
+                            onClick={handleCommissionType}
                             aria-hidden={true}
                         >
                             <Radio checked={!commissionType} />
@@ -322,7 +336,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, customerAdded, ...r
                             <>
                                 <TextField
                                     onChange={(e) => setCommissionValue(Number(e.target.value))}
-                                    name="numberformat"
+                                    type={'number'}
                                     size="small"
                                     id="formatted-numberformat-input"
                                     variant="outlined"

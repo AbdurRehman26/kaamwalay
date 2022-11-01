@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
@@ -46,7 +47,6 @@ export function CustomerTableRow({ customer }: props) {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState([]);
-    console.log('salesreps', salesReps);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -61,9 +61,10 @@ export function CustomerTableRow({ customer }: props) {
     useEffect(() => {
         (async () => {
             const data = await dispatch(getSalesRep());
-            setSalesRep(data);
+            setSalesRep(data.payload.data);
         })();
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOption = useCallback(
         (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
@@ -119,7 +120,7 @@ export function CustomerTableRow({ customer }: props) {
                 <TableCell variant={'body'} align={'right'}>
                     <Select autoWidth defaultValue={'Unassigned'}>
                         <MenuItem value="none">Select Owner</MenuItem>
-                        {CustomerType.map((item: any) => {
+                        {salesReps?.map((customer: UserEntity) => {
                             return (
                                 <Grid
                                     sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
@@ -127,13 +128,13 @@ export function CustomerTableRow({ customer }: props) {
                                     p={1}
                                     alignItems={'center'}
                                 >
-                                    <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
+                                    <Avatar src={customer?.profileImage ?? ''}>{customer?.getInitials?.()}</Avatar>
                                     <MenuItem
-                                        key={item.value}
-                                        value={item.value}
+                                        key={customer?.id}
+                                        value={customer?.fullName}
                                         sx={{ ':hover': { backgroundColor: 'transparent' } }}
                                     >
-                                        {item?.label}
+                                        {customer?.fullName}
                                     </MenuItem>
                                     <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
                                 </Grid>

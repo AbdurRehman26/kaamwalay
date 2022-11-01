@@ -1,5 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import SellIcon from '@mui/icons-material/Sell';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -55,7 +56,7 @@ function LayoutSidebar() {
             classes={{ paper: classes.drawerPaper }}
         >
             <List>
-                <LayoutSidebarItem icon={AllInboxIcon} title={'Dashboard'} href={'/'} />
+                <LayoutSidebarItem icon={DashboardIcon} title={'Dashboard'} href={'/dashboard'} exact />
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} comingSoon />
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} comingSoon />
                 <LayoutSidebarItem

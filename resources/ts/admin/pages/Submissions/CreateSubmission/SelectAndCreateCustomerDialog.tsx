@@ -15,13 +15,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserEntity } from '@shared/entities/UserEntity';
-import { useIsMounted } from '@shared/hooks/useIsMounted';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
-import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
+import { emptyUser, setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
@@ -45,7 +44,6 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     const [search, setSearch] = useState('');
     const [showAddCustomer, setShowAddCustomer] = useState(false);
     const [showAddSalesRep, setShowAddSalesRep] = useState(false);
-    const isMounted = useIsMounted();
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -76,22 +74,35 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
         [setSearch, search, customers],
     );
 
+    const setShowSalesRep = useCallback(() => {
+        setShowAddSalesRep(true);
+        dispatch(
+            emptyUser({
+                fullName: '',
+                email: '',
+                profileImage: '',
+                customerNumber: '',
+                id: -1,
+            }),
+        );
+    }, [dispatch]);
+
     const handleClose = useCallback(
         (event: {}) => {
+            dispatch(
+                emptyUser({
+                    fullName: '',
+                    email: '',
+                    profileImage: '',
+                    customerNumber: '',
+                    id: -1,
+                }),
+            );
             if (onClose) {
                 onClose(event, 'escapeKeyDown');
             }
         },
-        [onClose],
-    );
-
-    useEffect(
-        () => {
-            if (isMounted()) {
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
+        [onClose, dispatch],
     );
 
     return (
@@ -218,11 +229,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                         {!props.changeCustomer ? (
                             <Grid position={'sticky'} sx={{ bottom: '0' }} mt={3}>
                                 <Button
-                                    onClick={
-                                        props.fromSalesReps
-                                            ? () => setShowAddSalesRep(true)
-                                            : () => setShowAddCustomer(true)
-                                    }
+                                    onClick={props.fromSalesReps ? setShowSalesRep : () => setShowAddCustomer(true)}
                                     sx={{ height: '48px' }}
                                     fullWidth
                                     variant={'contained'}

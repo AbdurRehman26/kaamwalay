@@ -7,6 +7,7 @@ use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Filters\AdminSalesmanIsActiveFilter;
 use App\Http\Filters\AdminSalesmanSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
@@ -162,7 +163,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return [
             AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
             AllowedFilter::scope('signed_up_between'),
-            AllowedFilter::exact('salesmanProfile.is_active'),
+            AllowedFilter::custom('is_active', new AdminSalesmanIsActiveFilter),
         ];
     }
 

@@ -65,7 +65,7 @@ it('returns salesmen list by status filter for admin', function () {
     $this->salesmen->first()->salesmanProfile->save();
 
     getJson(route('v2.salesmen.index', [
-        'filter[salesmanProfile.is_active]' => true,
+        'filter[is_active]' => true,
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])

@@ -123,7 +123,8 @@ export function CustomerTableRow({ customer }: props) {
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
-                        onClick={(e: any) => e.stopPropagation()}
+                        aria-hidden={'false'}
+                        // onClick={(e: any) => e.stopPropagation()}
                         onChange={(e: any) => {
                             assignSalesRef(e.nativeEvent.target.value);
                         }}

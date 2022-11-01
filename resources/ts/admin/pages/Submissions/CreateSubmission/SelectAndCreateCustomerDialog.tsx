@@ -53,7 +53,6 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     });
 
     const createSubmission = (customer: UserEntity) => {
-        console.log('here clicked ');
         dispatch(setUser(customer));
         if (props.changeCustomer) {
             navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });

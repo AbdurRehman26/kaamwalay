@@ -28,7 +28,7 @@ import { storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 
-// import { emptyUser } from '@shared/redux/slices/adminCreateOrderSlice';
+// import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 
 interface SalesRepAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit?(): Promise<void> | void;
@@ -151,7 +151,6 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
         try {
             setLoading(true);
             const data = await dispatch(storeSalesRep(salesRepInput));
-            console.log('data ', data.payload);
             if (!data?.error) {
                 onSubmit?.();
             } else {
@@ -278,7 +277,15 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
                                         This email is already in use
                                     </Typography>{' '}
                                     <MuiLink
-                                        onClick={() => {}}
+                                        //     onClick={() => { setUser({
+                                        //         email: email,
+                                        //         firstName: firstName,
+                                        //         lastName: lastName,
+                                        //         phone: phone
+                                        //     })
+                                        //     setEmailExist(false);
+                                        //  }}
+
                                         underline="always"
                                         sx={{ fontSize: '12px', fontWeight: 500 }}
                                     >

@@ -14,7 +14,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
 import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
 import { FormikButton } from '@shared/components/fields/FormikButton';
@@ -83,7 +83,7 @@ export function SalesRepsListPage() {
     const salesReps = useAdminSalesMenQuery({
         params: {
             filter: getFilters(query),
-            sort: sortFilter ? 'sale' : '-sale',
+            sort: sortFilter ? 'sales' : '-sales',
             perPage: 48,
         },
         ...bracketParams(),
@@ -101,7 +101,7 @@ export function SalesRepsListPage() {
         delQuery('signedUpStart', 'signedUpEnd');
 
         await salesReps.searchSortedWithPagination(
-            { sort: sortFilter ? 'sale' : '-sale' },
+            { sort: sortFilter ? 'sales' : '-sales' },
             getFilters({
                 ...formikRef.current!.values,
                 signedUpStart: '',
@@ -110,6 +110,16 @@ export function SalesRepsListPage() {
             1,
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
+
+    useEffect(
+        () => {
+            if (!salesReps.isLoading) {
+                salesReps.sort({ sort: sortFilter ? 'sales' : '-sales' });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sortFilter],
+    );
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -173,7 +183,7 @@ export function SalesRepsListPage() {
         delQuery('status');
         setStatus({ value: 0, label: '' });
         await salesReps.searchSortedWithPagination(
-            { sort: sortFilter ? 'sale' : '-sale' },
+            { sort: sortFilter ? 'sales' : '-sales' },
             getFilters({
                 ...formikRef.current!.values,
                 status: 0,

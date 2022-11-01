@@ -52,6 +52,7 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
  * @property mixed $requires_cleaning
+ * @property mixed $salesman_commission
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
  * @method orderStatusHistory()
@@ -113,6 +114,7 @@ class OrderResource extends V1OrderResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
+            'salesman_commission' => $this->salesman_commission,
         ];
     }
 }

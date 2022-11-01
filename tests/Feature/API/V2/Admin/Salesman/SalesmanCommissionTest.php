@@ -31,7 +31,6 @@ it('returns salesmen list for admin', function () {
                     'customers',
                     'orders',
                     'commission_earned',
-                    'commission_paid',
                     'status',
                     'sales',
                 ],
@@ -60,7 +59,7 @@ test('an admin can create a salesman', function () {
         'phone' => '+1234567890',
         'commission_type' => CommissionTypeEnum::FIXED,
         'commission_value' => 2,
-        'is_active' => true
+        'is_active' => true,
     ])
         ->assertSuccessful()
         ->assertJsonStructure([

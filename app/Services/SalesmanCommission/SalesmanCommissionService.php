@@ -28,9 +28,8 @@ class SalesmanCommissionService
             'salesman_id' => $order->salesman->id,
             'order_id' => $order->id,
             'type' => $type,
-            'commission' => $commission
+            'commission' => $commission,
         ]);
-
     }
 
     public static function onOrderLine(Order $order, CommissionEarnedEnum $orderCommissionType): void

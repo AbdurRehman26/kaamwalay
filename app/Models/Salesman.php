@@ -14,7 +14,7 @@ class Salesman extends Model
         'user_id',
         'commission_type',
         'commission_value',
-        'is_active'
+        'is_active',
     ];
 
     /**

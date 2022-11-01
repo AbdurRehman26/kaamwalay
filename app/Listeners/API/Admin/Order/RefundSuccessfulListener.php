@@ -85,9 +85,8 @@ class RefundSuccessfulListener implements ShouldQueue
 
     protected function processSalesmanCommission(RefundSuccessful $event): void
     {
-        if($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()){
+        if ($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_REFUNDED);
         }
     }
-
 }

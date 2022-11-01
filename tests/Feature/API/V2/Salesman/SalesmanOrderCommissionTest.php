@@ -30,17 +30,15 @@ beforeEach(function () {
         'coupon_id' => null,
         'payment_method_id' => $this->paymentMethod->id,
         'order_status_id' => OrderStatus::PLACED,
-        'salesman_id' => User::factory()->withSalesman()
+        'salesman_id' => User::factory()->withSalesman(),
     ]);
 
     OrderPayment::factory()->for($this->order)->count(5);
 
     $this->actingAs($this->user);
-
 });
 
 it('salesman commissions on different order lines', function ($orderLine) {
-
     $order = $this->order;
     SalesmanCommissionService::onOrderLine($this->order, $orderLine['commission_type']);
 
@@ -48,17 +46,15 @@ it('salesman commissions on different order lines', function ($orderLine) {
 
     $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
 
-    $salesCommission = SalesmanCommission::whereId($this->order->user_id)->first();
+    $salesCommission = SalesmanCommission::where('salesman_id', $this->order->salesman_id)->first();
 
     assertEquals($this->order->refresh()->salesman_commission, $commission);
     assertEquals($this->order->refresh()->salesman_commission, $earnedCommission->commission);
     assertEquals($this->order->refresh()->salesman_commission, $salesCommission->commission);
-
 })->with('orderLine');
 
 dataset('orderLine', function () {
     yield function () {
-
         $order = $this->order;
 
         $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
@@ -68,12 +64,11 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_CREATED,
-            'commission' => $commission
+            'commission' => $commission,
         ];
     };
 
     yield function () {
-
         $order = $this->order;
 
         $order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
@@ -89,16 +84,15 @@ dataset('orderLine', function () {
             'created_at' => now()->addMinute(),
         ]);
 
-        $commission = - ($order->salesman->salesmanProfile->commission_value *  ( $order->refunds()->latest()->first()->amount ));
+        $commission = -($order->salesman->salesmanProfile->commission_value * ($order->refunds()->latest()->first()->amount));
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_REFUNDED,
-            'commission' => $commission
+            'commission' => $commission,
         ];
     };
 
     yield function () {
-
         $order = $this->order;
 
         $order->salesman->salesmanProfile->commission_type = CommissionTypeEnum::PERCENTAGE;
@@ -114,11 +108,11 @@ dataset('orderLine', function () {
             'created_at' => now()->addMinute(),
         ]);
 
-        $commission = ($order->salesman->salesmanProfile->commission_value *  ( $order->extraCharges()->latest()->first()->amount ));
+        $commission = ($order->salesman->salesmanProfile->commission_value * ($order->extraCharges()->latest()->first()->amount));
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_EXTRA_CHARGE,
-            'commission' => $commission
+            'commission' => $commission,
         ];
     };
 });

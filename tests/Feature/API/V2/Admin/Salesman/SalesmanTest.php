@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Salesman\CommissionTypeEnum;
-use App\Models\Salesman;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\actingAs;
@@ -17,7 +16,6 @@ beforeEach(function () {
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->salesmen = User::factory()->count(15)->withSalesman()->create();
-
 });
 
 it('returns salesmen list for admin', function () {
@@ -43,16 +41,16 @@ it('returns salesmen list for admin', function () {
 it('returns salesmen list by status filter for admin', function () {
     actingAs($this->user);
 
-    $this->salesmen->map(function(User $user){
-       $user->salesmanProfile->is_active = 0;
-       $user->salesmanProfile->save();
+    $this->salesmen->map(function (User $user) {
+        $user->salesmanProfile->is_active = 0;
+        $user->salesmanProfile->save();
     });
 
     $this->salesmen->first()->salesmanProfile->is_active = 1;
     $this->salesmen->first()->salesmanProfile->save();
 
     getJson(route('v2.salesmen.index', [
-        'filter[salesmanProfile.is_active]' => true
+        'filter[salesmanProfile.is_active]' => true,
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])

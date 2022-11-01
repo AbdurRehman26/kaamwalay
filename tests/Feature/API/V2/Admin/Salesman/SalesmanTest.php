@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Salesman\CommissionTypeEnum;
+use App\Models\Salesman;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\actingAs;
@@ -15,7 +16,8 @@ beforeEach(function () {
     Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
-    $this->salesman = User::factory()->count(15)->withRole(config('permission.roles.salesman'))->create();
+    $this->salesmen = User::factory()->count(15)->withSalesman()->create();
+
 });
 
 it('returns salesmen list for admin', function () {
@@ -37,6 +39,39 @@ it('returns salesmen list for admin', function () {
             ],
         ]);
 });
+
+it('returns salesmen list by status filter for admin', function () {
+    actingAs($this->user);
+
+    $this->salesmen->map(function(User $user){
+       $user->salesmanProfile->is_active = 0;
+       $user->salesmanProfile->save();
+    });
+
+    $this->salesmen->first()->salesmanProfile->is_active = 1;
+    $this->salesmen->first()->salesmanProfile->save();
+
+    getJson(route('v2.salesmen.index', [
+        'filter[salesmanProfile.is_active]' => true
+    ]))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonStructure([
+            'data' => [
+                [
+                    'profile_image',
+                    'full_name',
+                    'email',
+                    'customers',
+                    'orders',
+                    'commission_earned',
+                    'status',
+                    'sales',
+                ],
+            ],
+        ]);
+});
+
 
 test('a guest can not get salesmen list', function () {
     getJson(route('v2.salesmen.index'))
@@ -102,7 +137,7 @@ test('a guest cannot create salesmen', function () {
 
 it('returns single salesman details for admin', function () {
     actingAs($this->user);
-    getJson(route('v2.salesmen.show', ['salesman' => $this->salesman->first()]))
+    getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -119,13 +154,13 @@ it('returns single salesman details for admin', function () {
 });
 
 test('a guest can not get single salesman details', function () {
-    getJson(route('v2.salesmen.show', ['salesman' => $this->salesman->first()]))
+    getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
         ->assertStatus(Response::HTTP_UNAUTHORIZED);
 });
 
 test('a salesman can not get single salesman detail', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
     actingAs($user);
-    getJson(route('v2.salesmen.show', ['salesman' => $this->salesman->first()]))
+    getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
         ->assertStatus(403);
 });

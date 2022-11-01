@@ -83,7 +83,7 @@ export function SalesRepsListPage() {
     const salesReps = useAdminSalesMenQuery({
         params: {
             filter: getFilters(query),
-            sort: sortFilter ? 'name' : '-name',
+            sort: sortFilter ? 'sale' : '-sale',
             perPage: 48,
         },
         ...bracketParams(),
@@ -101,7 +101,7 @@ export function SalesRepsListPage() {
         delQuery('signedUpStart', 'signedUpEnd');
 
         await salesReps.searchSortedWithPagination(
-            { sort: sortFilter ? 'name' : '-name' },
+            { sort: sortFilter ? 'sale' : '-sale' },
             getFilters({
                 ...formikRef.current!.values,
                 signedUpStart: '',
@@ -148,24 +148,6 @@ export function SalesRepsListPage() {
         },
         [addQuery, salesReps, delQuery, getFilters],
     );
-    // const handleSearch = useCallback(
-    //     async (search: string) => {
-    //         if (search) {
-    //             setQuery({ search });
-    //         } else {
-    //             delQuery('search');
-    //         }
-
-    //         formikRef.current?.setFieldValue('search', search);
-    //         await salesReps.search(
-    //             getFilters({
-    //                 ...formikRef.current!?.values,
-    //                 search,
-    //             }),
-    //         );
-    //     },
-    //     [salesReps, delQuery, setQuery],
-    // );
 
     const handleExportData = useCallback(async () => {
         try {
@@ -191,7 +173,7 @@ export function SalesRepsListPage() {
         delQuery('status');
         setStatus({ value: 0, label: '' });
         await salesReps.searchSortedWithPagination(
-            { sort: sortFilter ? 'name' : '-name' },
+            { sort: sortFilter ? 'sale' : '-sale' },
             getFilters({
                 ...formikRef.current!.values,
                 status: 0,

@@ -161,7 +161,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return [
             AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
             AllowedFilter::scope('signed_up_between'),
-            AllowedFilter::scope('status'),
+            AllowedFilter::exact('salesmanProfile.is_active'),
         ];
     }
 

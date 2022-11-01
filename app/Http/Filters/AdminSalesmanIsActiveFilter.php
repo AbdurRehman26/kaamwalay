@@ -12,7 +12,7 @@ class AdminSalesmanIsActiveFilter implements Filter
      */
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $query->whereHas('salesmanProfile', function ($subQuery) use ($value){
+        $query->whereHas('salesmanProfile', function ($subQuery) use ($value) {
             $subQuery->where('is_active',  $value);
         });
     }

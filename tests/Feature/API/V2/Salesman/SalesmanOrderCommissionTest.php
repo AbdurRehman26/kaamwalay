@@ -30,7 +30,7 @@ beforeEach(function () {
         'coupon_id' => null,
         'payment_method_id' => $this->paymentMethod->id,
         'order_status_id' => OrderStatus::PLACED,
-        'salesman_id' => User::factory()->withSalesman(),
+        'salesman_id' => User::factory()->withSalesmanRole(),
     ]);
 
     OrderPayment::factory()->for($this->order)->count(5);

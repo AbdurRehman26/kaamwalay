@@ -26,6 +26,7 @@ class SalesmanService
     {
         return QueryBuilder::for(User::salesmen())
             ->allowedFilters(User::getAllowedAdminSalesmanFilters())
+            ->allowedSorts(User::getAllowedAdminSalesmanSorts())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));
     }

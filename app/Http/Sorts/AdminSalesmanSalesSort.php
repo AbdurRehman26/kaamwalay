@@ -18,7 +18,7 @@ class AdminSalesmanSalesSort implements Sort
     {
         $direction = $descending ? 'DESC' : 'ASC';
 
-        $query->withSum('order', 'grand_total')->orderBy('order_sum_grand_total', $direction);
+        $query->withSum('orders', 'grand_total')->orderBy('order_sum_grand_total', $direction);
     }
 }
 

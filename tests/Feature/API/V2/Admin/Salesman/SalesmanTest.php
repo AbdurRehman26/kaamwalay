@@ -70,6 +70,29 @@ it('returns salesmen list by status filter for admin', function () {
         ]);
 });
 
+it('returns salesmen list by sales sort for admin', function () {
+    actingAs($this->user);
+
+    getJson(route('v2.salesmen.index', [
+        'sort' => '-sales',
+    ]))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonStructure([
+            'data' => [
+                [
+                    'profile_image',
+                    'full_name',
+                    'email',
+                    'customers',
+                    'orders',
+                    'commission_earned',
+                    'status',
+                    'sales',
+                ],
+            ],
+        ]);
+});
 
 test('a guest can not get salesmen list', function () {
     getJson(route('v2.salesmen.index'))

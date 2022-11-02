@@ -4,6 +4,7 @@ import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { app } from '@shared/lib/app';
 import { SalesRepRepository } from '@shared/repositories/Admin/SalesRepRepository';
+import { APIService } from '@shared/services/APIService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
@@ -11,7 +12,7 @@ import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 interface StateType extends APIState<SalesRepEntity> {}
 const adminSalesMenThunk = createRepositoryThunk('adminSalesMen', SalesRepRepository);
 
-export const storeSalesRep = createAsyncThunk('storeCustomer', async (input: AddSalesRepRequestDto, thunkAPI) => {
+export const storeSalesRep = createAsyncThunk('storeSalesRep', async (input: AddSalesRepRequestDto, thunkAPI) => {
     const salesRepRepository = app(SalesRepRepository);
     try {
         const salesRep: SalesRepEntity = await salesRepRepository.storeSalesRep(input);
@@ -32,6 +33,16 @@ export const getSalesRep = createAsyncThunk('getSalesRep', async () => {
         NotificationsService.exception(e);
     }
 });
+
+export const addExistingUserAsSalesRep = createAsyncThunk(
+    'addExistingUserAsSalesRep',
+    async (input: { userId: number; salesRep: AddSalesRepRequestDto }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/salesman/${input.userId}/assign-salesman-role`);
+        const response = await endpoint.post('', input.salesRep);
+        return response.data;
+    },
+);
 
 export const adminSalesMenSlice = createSlice({
     name: adminSalesMenThunk.name,

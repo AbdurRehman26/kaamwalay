@@ -9,18 +9,19 @@ import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { MouseEvent, MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
+import { assignSalesMan } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface props {
     customer: CustomerEntity;
+    salesReps: any;
 }
 
 enum RowOption {
@@ -41,14 +42,13 @@ const styles = {
     },
 };
 
-export function CustomerTableRow({ customer }: props) {
+export function CustomerTableRow({ customer, salesReps }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const [salesReps, setSalesRep] = useState([]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
         (e) => {
@@ -57,14 +57,6 @@ export function CustomerTableRow({ customer }: props) {
         },
         [setAnchorEl],
     );
-
-    useEffect(() => {
-        (async () => {
-            const data = await dispatch(getSalesRep());
-            setSalesRep(data.payload.data);
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const handleOption = useCallback(
         (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
@@ -88,8 +80,8 @@ export function CustomerTableRow({ customer }: props) {
         [navigate, customer.id],
     );
 
-    function assignSalesRef(salesRepId: any) {
-        console.log('salesRepId ', salesRepId);
+    function assignSalesRef(event: any) {
+        dispatch(assignSalesMan({ userId: customer.id, salemanId: event.target.value }));
     }
 
     return (
@@ -123,41 +115,51 @@ export function CustomerTableRow({ customer }: props) {
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
+                        sx={{ height: '40px !important' }}
                         aria-hidden={'false'}
-                        // onClick={(e: any) => e.stopPropagation()}
+                        onClick={(e: any) => e.stopPropagation()}
                         onChange={(e: any) => {
-                            assignSalesRef(e.nativeEvent.target.value);
+                            assignSalesRef(e);
                         }}
-                        autoWidth
-                        key={customer?.createdBy?.id || 'Unassigned'}
-                        defaultValue={customer?.createdBy?.id ? customer.createdBy.fullName : 'Unassigned'}
+                        fullWidth
+                        displayEmpty
+                        key={'Unassigned'}
+                        defaultValue={'Unassigned'}
                     >
                         {salesReps?.map((saleRep: SalesRepEntity) => {
                             return (
-                                <Grid
-                                    sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
-                                    display={'flex'}
-                                    p={1}
-                                    alignItems={'center'}
+                                <MenuItem
+                                    key={saleRep?.id}
+                                    value={saleRep?.id}
+                                    sx={{ ':hover': { backgroundColor: 'transparent' } }}
                                 >
-                                    <Avatar src={saleRep?.profileImage}>{saleRep?.getInitials?.()}</Avatar>
-                                    <MenuItem
-                                        key={saleRep?.id}
-                                        value={saleRep?.fullName}
-                                        sx={{ ':hover': { backgroundColor: 'transparent' } }}
+                                    <Grid
+                                        width={'100%'}
+                                        sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
+                                        display={'flex'}
+                                        justifyContent={'flex-start'}
+                                        p={1}
+                                        alignItems={'center'}
                                     >
-                                        {saleRep?.fullName}
-                                    </MenuItem>
-                                    {customer?.createdBy?.id ? (
-                                        <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
-                                    ) : null}
-                                </Grid>
+                                        <Avatar
+                                            sx={{ marginRight: '5px', height: '20px', width: '20px' }}
+                                            src={saleRep?.profileImage}
+                                        >
+                                            {saleRep?.getInitials?.()}
+                                        </Avatar>
+                                        <Typography>{saleRep?.fullName}</Typography>
+                                        {customer?.createdBy?.id ? (
+                                            <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
+                                        ) : null}
+                                    </Grid>
+                                </MenuItem>
                             );
                         })}
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
+                        sx={{ height: '40px !important' }}
                         autoWidth
                         key={CustomerType[0].value}
                         defaultValue={CustomerType[0].value}

@@ -95,7 +95,7 @@ class SalesmanService
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->phone = $data['phone'];
-        $user->profile_image = $data['profile_image'];
+        $user->profile_image = $data['profile_image'] ?? '';
         $user->save();
     }
 

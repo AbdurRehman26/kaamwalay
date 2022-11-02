@@ -29,8 +29,10 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerTableRow } from './CustomerTableRow';
 
@@ -158,8 +160,18 @@ export function CustomersList() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
     const [isExporting, setIsExporting] = useState(false);
+    const dispatch = useAppDispatch();
+    const [salesReps, setSalesRep] = useState([]);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        (async () => {
+            const data = await dispatch(getSalesRep());
+            setSalesRep(data.payload.data);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
@@ -431,7 +443,7 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} />
+                            <CustomerTableRow customer={customer} salesReps={salesReps} />
                         ))}
                     </TableBody>
                     <TableFooter>

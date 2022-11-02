@@ -34,7 +34,7 @@ import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepos
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
 type InitialValues = {
-    status: number;
+    isActive: number;
     search: string;
     signedUpStart: DateLike;
     signedUpEnd: DateLike;
@@ -57,11 +57,11 @@ export function SalesRepsListPage() {
     const initialValues = useMemo<InitialValues>(
         () => ({
             search: query.search ?? '',
-            status: query.status ?? '',
+            isActive: query.isActive ?? '',
             signedUpStart: query.signedUpStart ? moment(query.signedUpStart) : '',
             signedUpEnd: query.signedUpEnd ? moment(query.signedUpEnd) : '',
         }),
-        [query.search, query.status, query.signedUpStart, query.signedUpEnd],
+        [query.search, query.isActive, query.signedUpStart, query.signedUpEnd],
     );
 
     const joinFilterValues = (values: any[], separator = ',') =>
@@ -76,7 +76,7 @@ export function SalesRepsListPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getFilters = (values: InitialValues) => ({
         search: values.search,
-        status: values.status,
+        isActive: values.isActive,
         signedUpBetween: dateRangeFilter(values.signedUpStart, values.signedUpEnd),
     });
 
@@ -88,9 +88,9 @@ export function SalesRepsListPage() {
         },
         ...bracketParams(),
     });
-    const handleStatus = useCallback(async (values, status) => {
-        values = { ...values, status: status.value };
-        setStatus({ value: status.value, label: status.label });
+    const handleStatus = useCallback(async (values, isActive) => {
+        values = { ...values, isActive: status.value };
+        setStatus({ value: isActive.value, label: isActive.label });
         handleSubmit(values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -129,7 +129,11 @@ export function SalesRepsListPage() {
                 signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
             });
 
-            await salesReps.searchSortedWithPagination({ sort: sortFilter }, getFilters(values), 1);
+            await salesReps.searchSortedWithPagination(
+                { sort: sortFilter ? 'sales' : '-sales' },
+                getFilters(values),
+                1,
+            );
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
@@ -179,14 +183,13 @@ export function SalesRepsListPage() {
     }, [dataExportRepository, sortFilter, notifications, getFilters]);
 
     const handleClearStatus = useCallback(async () => {
-        formikRef.current?.setFieldValue('status', '');
-        delQuery('status');
+        formikRef.current?.setFieldValue('isActive', '');
+        delQuery('is_active');
         setStatus({ value: 0, label: '' });
         await salesReps.searchSortedWithPagination(
             { sort: sortFilter ? 'sales' : '-sales' },
             getFilters({
                 ...formikRef.current!.values,
-                status: 0,
             }),
             1,
         );
@@ -266,7 +269,7 @@ export function SalesRepsListPage() {
                         sx={{ borderRadius: 20, padding: '7px 24px' }}
                         onClick={handleExportData}
                         loading={isExporting}
-                        disabled={isExporting}
+                        disabled={true}
                     >
                         Export List
                     </LoadingButton>

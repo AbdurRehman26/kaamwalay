@@ -59,8 +59,11 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
             handleClose('escapeKeyDown');
             dispatch(resetSelectedExistingAddress());
             dispatch(setUseCustomShippingAddress(false));
+        } else if (props.fromSalesReps) {
+            setShowAddSalesRep(true);
         } else {
-            setShowAddCustomer(true);
+            navigate(`/submissions/${customer.id}/new`, { state: { from: 'submission' } });
+            handleClose('escapeKeyDown');
         }
     };
 
@@ -171,9 +174,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
                                     return (
                                         <Grid
                                             key={customer.id}
-                                            onClick={
-                                                props.fromSalesReps ? setShowSalesRep : () => createSubmission(customer)
-                                            }
+                                            onClick={() => createSubmission(customer)}
                                             container
                                             flexDirection={'row'}
                                             justifyContent={'space-between'}

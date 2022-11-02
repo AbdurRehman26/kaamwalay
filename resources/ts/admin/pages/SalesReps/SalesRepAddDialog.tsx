@@ -21,14 +21,13 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageUploader from '@shared/components/ImageUploader';
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
-import { storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
+import { addExistingUserAsSalesRep, storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-
-// import { setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 
 interface SalesRepAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit?(): Promise<void> | void;
@@ -122,10 +121,12 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
     const [phone, setPhone] = useState('');
     const [commissionType, setCommissionType] = useState(true);
     const [emailExist, setEmailExist] = useState(false);
+    const [userExist, setUserExist] = useState(false);
     const [commissionValue, setCommissionValue] = useState(0);
     const [listActive, setListActive] = useState(true);
     const filesRepository = useRepository(FilesRepository);
     const { data } = useCountriesListsQuery();
+    const { user } = useAuth();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
     const handleClose = useCallback(
         (event: {}) => {
@@ -150,7 +151,12 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
         };
         try {
             setLoading(true);
-            const data = await dispatch(storeSalesRep(salesRepInput));
+            let data;
+            if (userExist || customer.email !== '') {
+                data = await dispatch(addExistingUserAsSalesRep({ userId: user.id, salesRep: salesRepInput }));
+            } else {
+                data = await dispatch(storeSalesRep(salesRepInput));
+            }
             if (!data?.error) {
                 onSubmit?.();
             } else {
@@ -259,7 +265,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
                                 fullWidth
                                 onChange={(e) => setEmail(e.target.value)}
                                 name={'email'}
-                                disabled={customer.email !== ''}
+                                disabled={customer.email !== '' || userExist}
                                 className={classes.textField}
                                 placeholder={'Enter Email'}
                                 variant="outlined"
@@ -277,15 +283,10 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
                                         This email is already in use
                                     </Typography>{' '}
                                     <MuiLink
-                                        //     onClick={() => { setUser({
-                                        //         email: email,
-                                        //         firstName: firstName,
-                                        //         lastName: lastName,
-                                        //         phone: phone
-                                        //     })
-                                        //     setEmailExist(false);
-                                        //  }}
-
+                                        onClick={() => {
+                                            setUserExist(true);
+                                            setEmailExist(false);
+                                        }}
                                         underline="always"
                                         sx={{ fontSize: '12px', fontWeight: 500 }}
                                     >

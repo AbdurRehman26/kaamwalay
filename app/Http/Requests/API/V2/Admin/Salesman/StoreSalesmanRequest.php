@@ -20,7 +20,7 @@ class StoreSalesmanRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['nullable', 'string'],
             'profile_image' => ['string', 'nullable'],
-            'is_active' => ['required', Rule::in([false, true])],
+            'is_active' => ['required', 'boolean'],
             'commission_type' => ['required', Rule::in([0, 1])],
             'commission_value' => ['required', 'numeric', 'min:1'],
         ];

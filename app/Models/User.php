@@ -163,8 +163,20 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return [
             AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
             AllowedFilter::scope('signed_up_between'),
-            AllowedFilter::custom('is_active', new AdminSalesmanIsActiveFilter),
+            AllowedFilter::scope('is_active', 'isActiveSalesman'),
         ];
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeIsActiveSalesman(Builder $query, bool $value): Builder
+    {
+        return $query->whereHas('salesmanProfile', function ($subQuery) use ($value) {
+            $subQuery->where('is_active',  $value);
+        });
+
     }
 
     public static function getAllowedAdminSalesmanSorts(): array

@@ -33,12 +33,10 @@ class CloseOldDeals extends Command
     public function handle(HubspotService $hubspotService)
     {
         $deals = HubspotDeal::get();
-        foreach($deals as $deal)
-        {
+        foreach ($deals as $deal) {
             $user = User::where('email', $deal->user_email)->first();
             $order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first();
-            if($order)
-            {
+            if ($order) {
                 $hubspotService->updateDealStageForPaidOrder($order);
             }
         }

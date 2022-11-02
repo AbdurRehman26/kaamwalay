@@ -29,9 +29,9 @@ class SalesmanResource extends BaseResource
             'full_name' => $this->getFullName(),
             'email' => $this->email,
             'created_by' => new UserResource($this->createdBy),
-            'commission_type' => $this->salesmanProfile?->commission_type,
-            'commission_value' => $this->salesmanProfile?->commission_value,
-            'status' => $this->salesmanProfile?->is_active,
+            'commission_type' => $this->salesmanProfile->commission_type,
+            'commission_value' => $this->salesmanProfile->commission_value,
+            'status' => $this->salesmanProfile->is_active,
             'sales' => Order::where('salesman_id', $this->id)->sum('grand_total'),
 //            TODO
             'commission_earned' => 0,

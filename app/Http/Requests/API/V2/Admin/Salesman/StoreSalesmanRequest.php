@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V2\Admin\Salesman;
 
+use App\Enums\Salesman\CommissionTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,8 +21,8 @@ class StoreSalesmanRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['nullable', 'string'],
             'profile_image' => ['string', 'nullable'],
-            'is_active' => ['required', Rule::in([false, true])],
-            'commission_type' => ['required', Rule::in([0, 1])],
+            'is_active' => ['required', 'boolean'],
+            'commission_type' => ['required', Rule::in(CommissionTypeEnum::values())],
             'commission_value' => ['required', 'numeric', 'min:1'],
         ];
     }

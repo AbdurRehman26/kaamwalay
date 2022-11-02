@@ -8,7 +8,9 @@ use App\Models\SalesmanCommission;
 use App\Models\SalesmanEarnedCommission;
 use App\Models\User;
 use App\Services\SalesmanCommission\OrderExtraChargeCommission\OrderCommissionService;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SalesmanCommissionService
 {
@@ -34,16 +36,23 @@ class SalesmanCommissionService
 
     public static function onOrderLine(Order $order, CommissionEarnedEnum $orderCommissionType): void
     {
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        $orderCommission = new OrderCommissionService();
-        $commission = $orderCommission->getCommission($order, $orderCommissionType);
-        $order->salesman_commission = $commission;
-        $order->save();
+            $orderCommission = new OrderCommissionService();
+            $commission = $orderCommission->getCommission($order, $orderCommissionType);
+            $order->salesman_commission = $commission;
+            $order->save();
 
-        self::storeSalesmanEarnedCommission($order, $commission, $orderCommissionType->value);
-        self::storeSalesmanCommission($order->salesman, $commission);
+            self::storeSalesmanEarnedCommission($order, $commission, $orderCommissionType->value);
+            self::storeSalesmanCommission($order->salesman, $commission);
 
-        DB::commit();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
     }
 }

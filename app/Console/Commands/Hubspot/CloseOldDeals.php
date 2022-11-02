@@ -3,7 +3,9 @@
 namespace App\Console\Commands\Hubspot;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Models\HubspotDeal;
 use App\Models\Order;
+use App\Models\User;
 use App\Services\HubspotService;
 use Illuminate\Console\Command;
 
@@ -30,9 +32,15 @@ class CloseOldDeals extends Command
      */
     public function handle(HubspotService $hubspotService)
     {
-        $orders = Order::where('payment_status', OrderPaymentStatusEnum::PAID)->get();
-        foreach ($orders as $order) {
-            $hubspotService->updateDealStageForPaidOrder($order);
+        $deals = HubspotDeal::get();
+        foreach($deals as $deal)
+        {
+            $user = User::where('email', $deal->user_email)->first();
+            $order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first();
+            if($order)
+            {
+                $hubspotService->updateDealStageForPaidOrder($order);
+            }
         }
 
         return Command::SUCCESS;

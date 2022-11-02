@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Face from '@mui/icons-material/Face';
 import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import StyleIcon from '@mui/icons-material/Style';
@@ -27,6 +28,7 @@ export function UserDropdown() {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const isAdmin = user?.hasRole(RolesEnum.Admin);
+    const isSaleRep = user?.hasRole(RolesEnum.SalesRep);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -43,6 +45,9 @@ export function UserDropdown() {
                     break;
                 case '/admin':
                     window.location.href = '/admin';
+                    break;
+                case '/salesrep':
+                    window.location.href = '/salesrep';
                     break;
                 default:
                     navigate(href);
@@ -84,6 +89,14 @@ export function UserDropdown() {
                     </ListItemIcon>
                     Your Cards
                 </StyledMenuItem>
+                {isSaleRep ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/salesrep')}>
+                        <ListItemIcon>
+                            <Face />
+                        </ListItemIcon>
+                        SalesRep
+                    </StyledMenuItem>
+                ) : null}
                 {isAdmin ? (
                     <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
                         <ListItemIcon>

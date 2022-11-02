@@ -7,7 +7,6 @@ use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
-use App\Http\Filters\AdminSalesmanIsActiveFilter;
 use App\Http\Filters\AdminSalesmanSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
@@ -176,7 +175,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $query->whereHas('salesmanProfile', function ($subQuery) use ($value) {
             $subQuery->where('is_active',  $value);
         });
-
     }
 
     public static function getAllowedAdminSalesmanSorts(): array

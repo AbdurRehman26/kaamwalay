@@ -37,7 +37,6 @@ class SalesmanCommissionService
     public static function onOrderLine(Order $order, CommissionEarnedEnum $orderCommissionType): void
     {
         try {
-
             DB::beginTransaction();
 
             $orderCommission = new OrderCommissionService();
@@ -49,9 +48,7 @@ class SalesmanCommissionService
             self::storeSalesmanCommission($order->salesman, $commission);
 
             DB::commit();
-
-        }catch (Exception $e){
-
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
 

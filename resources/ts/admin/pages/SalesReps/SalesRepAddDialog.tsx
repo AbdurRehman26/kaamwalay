@@ -138,7 +138,10 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
     );
 
     const handleAddSalesRep = async () => {
-        const profileImage = await filesRepository.uploadFile(uploadedImage);
+        let profileImage = '';
+        if (uploadedImage) {
+            profileImage = await filesRepository.uploadFile(uploadedImage);
+        }
         const salesRepInput: AddSalesRepRequestDto = {
             profileImage: profileImage,
             firstName: firstName,

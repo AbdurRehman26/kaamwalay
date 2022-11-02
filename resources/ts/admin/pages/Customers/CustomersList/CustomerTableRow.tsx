@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
+import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { assignSalesMan } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
@@ -123,8 +124,8 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                         }}
                         fullWidth
                         displayEmpty
-                        key={'Unassigned'}
-                        defaultValue={'Unassigned'}
+                        key={customer?.createdBy?.id || 'Unassigned'}
+                        defaultValue={customer?.createdBy?.fullName || 'Unassigned'}
                     >
                         {salesReps?.map((saleRep: SalesRepEntity) => {
                             return (
@@ -142,10 +143,18 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                                         alignItems={'center'}
                                     >
                                         <Avatar
-                                            sx={{ marginRight: '5px', height: '20px', width: '20px' }}
+                                            sx={{
+                                                marginRight: '5px',
+                                                padding: '2px',
+                                                height: '25px',
+                                                width: '25px',
+                                                fontSize: '12px',
+                                            }}
                                             src={saleRep?.profileImage}
                                         >
-                                            {saleRep?.getInitials?.()}
+                                            {nameInitials(
+                                                `${saleRep.firstName ?? ''} ${saleRep.lastName ?? ''}`.trim(),
+                                            )}
                                         </Avatar>
                                         <Typography>{saleRep?.fullName}</Typography>
                                         {customer?.createdBy?.id ? (

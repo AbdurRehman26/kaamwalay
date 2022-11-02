@@ -15,6 +15,8 @@ class CustomerController extends V1CustomerController
 {
     public function show(User $customer): CustomerResource
     {
+        $customer->load('salesman');
+
         return new CustomerResource($customer);
     }
 

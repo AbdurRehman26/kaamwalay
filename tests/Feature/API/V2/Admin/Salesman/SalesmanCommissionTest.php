@@ -15,7 +15,7 @@ beforeEach(function () {
     Bus::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
-    $this->salesman = User::factory()->withRole(config('permission.roles.salesman'))->create();
+    $this->salesman = User::factory()->withSalesmanRole()->create();
 });
 
 it('returns salesmen list for admin', function () {

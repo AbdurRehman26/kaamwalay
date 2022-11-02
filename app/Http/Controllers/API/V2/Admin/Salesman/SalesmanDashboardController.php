@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Salesman;
 
-use App\Http\Requests\API\V2\Admin\Salesman\SalesmanDashboardStatsRequest;
 use App\Services\Salesman\SalesmanDashboardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

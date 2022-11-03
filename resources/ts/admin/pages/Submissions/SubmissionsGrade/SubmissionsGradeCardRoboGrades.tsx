@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -51,6 +52,9 @@ const useStyles = makeStyles(
             marginLeft: theme.spacing(1),
             fontWeight: 500,
         },
+        alert: {
+            marginBottom: theme.spacing(2),
+        },
     }),
     { name: 'SubmissionsGradeCardRoboGrades' },
 );
@@ -66,6 +70,11 @@ export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: Sub
 
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
+            {roboGradesFront === null ? (
+                <Alert severity="info" className={classes.alert}>
+                    Robogrades are being loaded in the background and will be populated as soon as they are available.
+                </Alert>
+            ) : null}
             <Grid container spacing={2}>
                 <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
                     <Typography className={classes.heading}>Front of Card</Typography>

@@ -117,7 +117,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
-                        sx={{ height: '40px !important' }}
+                        sx={{ height: '40px !important', width: '170px !important' }}
                         aria-hidden={'false'}
                         onClick={(e: any) => e.stopPropagation()}
                         onChange={(e: any) => {
@@ -160,7 +160,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                                             )}
                                         </Avatar>
                                         <Typography>{saleRep?.fullName}</Typography>
-                                        {customer?.salesman?.fullName ? (
+                                        {customer?.salesman?.id === saleRep.id ? (
                                             <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
                                         ) : null}
                                     </Grid>

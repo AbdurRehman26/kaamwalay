@@ -628,4 +628,20 @@ class Order extends Model implements Exportable
     {
         return $this->hasOne(OrderCertificate::class);
     }
+
+    public function canBeGraded(): bool
+    {
+        return in_array(
+            $this->order_status_id,
+            [OrderStatus::CONFIRMED, OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
+        );
+    }
+
+    public function isGradedOrShipped(): bool
+    {
+        return in_array(
+            $this->order_status_id,
+            [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
+        );
+    }
 }

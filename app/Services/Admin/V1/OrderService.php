@@ -33,8 +33,8 @@ use Throwable;
 class OrderService
 {
     public function __construct(
-        private OrderItemService $orderItemService,
-        private AgsService $agsService
+        protected OrderItemService $orderItemService,
+        protected AgsService $agsService
     ) {
     }
 

@@ -83,7 +83,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
     );
 
     function assignSalesRef(event: any) {
-        dispatch(assignSalesRep({ userId: customer.id, salemanId: event.target.value }));
+        dispatch(assignSalesRep({ userId: customer.id, salesmanId: event.target.value }));
     }
 
     return (

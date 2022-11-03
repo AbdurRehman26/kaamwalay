@@ -63,6 +63,7 @@ class SalesmanService
             DB::beginTransaction();
 
             $this->updateUserInfo($user, $data);
+            $user->assignSalesmanRole();
             $this->storeSalesmanProfile($user, $data);
 
             DB::commit();

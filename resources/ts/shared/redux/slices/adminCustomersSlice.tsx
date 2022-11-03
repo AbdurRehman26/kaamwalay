@@ -28,11 +28,11 @@ export const storeCustomer = createAsyncThunk('storeCustomer', async (input: Add
 
 export const assignSalesRep = createAsyncThunk(
     'assignSalesRep',
-    async (input: { userId: number; salemanId: number }, thunkAPI) => {
+    async (input: { userId: number; salesmanId: number }, thunkAPI) => {
         const customersRepository = app(CustomersRepository);
 
         try {
-            const customer: SalesRepEntity = await customersRepository.assignSalesRep(input.userId, input.salemanId);
+            const customer: SalesRepEntity = await customersRepository.assignSalesRep(input.userId, input.salesmanId);
             NotificationsService.success('Salesrep assigned successfully!');
             return instanceToPlain(customer);
         } catch (e: any) {

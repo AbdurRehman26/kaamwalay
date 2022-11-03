@@ -161,7 +161,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         return [
             AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
-            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('signed_up_between', 'salesmanSignedUpBetween'),
             AllowedFilter::scope('is_active', 'isActiveSalesman'),
         ];
     }
@@ -321,6 +321,17 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public static function generateUserName(): string
     {
         return (new Generator())->generate();
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeSalesmanSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereHas('salesmanProfile', function ($subQuery) use ($startDate, $endDate) {
+            $subQuery->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]);
+        });
     }
 
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder

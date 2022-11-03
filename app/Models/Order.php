@@ -627,4 +627,12 @@ class Order extends Model implements Exportable
             [OrderStatus::CONFIRMED, OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
         );
     }
+
+    public function isGradedOrShipped(): bool
+    {
+        return in_array(
+            $this->order_status_id,
+            [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
+        );
+    }
 }

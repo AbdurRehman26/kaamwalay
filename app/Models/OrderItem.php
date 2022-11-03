@@ -104,12 +104,4 @@ class OrderItem extends Model
     {
         return $this->cardProduct->cardLabel()->doesntExist() && $this->isGraded();
     }
-
-    public function hasOrderGradedOrShipped(): bool
-    {
-        return in_array(
-            $this->order->order_status_id,
-            [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
-        );
-    }
 }

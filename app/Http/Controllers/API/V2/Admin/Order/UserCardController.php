@@ -70,7 +70,7 @@ class UserCardController extends Controller
         );
 
         UserCardGradeRevisedEvent::dispatchIf(
-            $card->orderItem->isGraded() && $card->orderItem->hasOrderGradedOrShipped(),
+            $card->orderItem->isGraded() && $card->orderItem->order->isGradedOrShipped(),
             $card
         );
 

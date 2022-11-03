@@ -73,7 +73,7 @@ export function SubmissionsGradeCards() {
 
     useInterval(() => {
         loadDataOnRecursively();
-    }, 10000);
+    }, 5000);
 
     const handleOnEditCard = useCallback(
         async (data) => {

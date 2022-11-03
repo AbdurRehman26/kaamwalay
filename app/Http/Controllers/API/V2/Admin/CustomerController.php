@@ -4,15 +4,27 @@ namespace App\Http\Controllers\API\V2\Admin;
 
 use App\Exceptions\API\Admin\Customer\AccessEmailCanNotBeSent;
 use App\Exceptions\API\Admin\Customer\SalesmanCanNotBeAssigned;
-use App\Http\Controllers\API\V1\Admin\CustomerController as V1CustomerController;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V2\Admin\Customer\ListCustomerRequest;
 use App\Http\Requests\API\V2\Admin\Customer\StoreCustomerRequest;
+use App\Http\Resources\API\V2\Admin\Customer\CustomerCollection;
 use App\Http\Resources\API\V2\Admin\Customer\CustomerResource;
 use App\Models\User;
+use App\Services\Admin\CustomerService;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class CustomerController extends V1CustomerController
+class CustomerController extends Controller
 {
+    public function __construct(protected CustomerService $customerService)
+    {
+    }
+
+    public function index(ListCustomerRequest $request): CustomerCollection
+    {
+        return new CustomerCollection($this->customerService->getCustomers());
+    }
+
     public function show(User $customer): CustomerResource
     {
         $customer->load('salesman');

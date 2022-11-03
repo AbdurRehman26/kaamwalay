@@ -33,7 +33,7 @@ class SalesmanResource extends BaseResource
             'commission_value' => $this->salesmanProfile->commission_value,
             'status' => $this->salesmanProfile->is_active,
             'sales' => Order::where('salesman_id', $this->id)->sum('grand_total'),
-//            TODO
+//            @TODO
             'commission_earned' => 0,
             'orders' => 0,
             'customers' => 0,

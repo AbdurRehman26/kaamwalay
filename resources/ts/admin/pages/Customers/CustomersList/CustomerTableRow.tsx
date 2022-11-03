@@ -104,7 +104,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     <Grid item xs container direction={'column'}>
                         <Typography variant={'body2'}>{customer.email}</Typography>
                         <Typography variant={'caption'} color={'textSecondary'}>
-                            {customer.phone}
+                            {customer.phone ?? '-'}
                         </Typography>
                     </Grid>
                 </TableCell>

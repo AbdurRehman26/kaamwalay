@@ -6,5 +6,4 @@ use App\Http\Requests\API\V1\Admin\Customer\ListCustomerRequest as V1ListCustome
 
 class ListCustomerRequest extends V1ListCustomerRequest
 {
-
 }

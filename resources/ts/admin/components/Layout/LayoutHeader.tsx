@@ -34,8 +34,7 @@ function LayoutHeader() {
                 <Box flexGrow={1} />
                 <Box>
                     <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color={'black'}>
-                        {' '}
-                        {user.roles[0].name.charAt(0).toUpperCase() + user.roles[0].name.slice(1)}{' '}
+                        {user.capitalizeFirstLetter(user.roles[0].name)}
                     </Typography>
                 </Box>
                 <IconButton sx={{ color: '#000000DE' }} size="large">

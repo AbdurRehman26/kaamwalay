@@ -13,7 +13,7 @@ export class SalesRepRepository extends Repository<SalesRepEntity> {
         return this.toEntity(data);
     }
 
-    public async getSalesRep() {
+    public async getSalesReps() {
         const { data } = await this.endpoint.get('');
         return this.toEntity(data);
     }

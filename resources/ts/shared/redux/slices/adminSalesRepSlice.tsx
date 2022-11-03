@@ -10,7 +10,7 @@ import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<SalesRepEntity> {}
-const adminSalesMenThunk = createRepositoryThunk('adminSalesMen', SalesRepRepository);
+const adminSalesRepThunk = createRepositoryThunk('adminSalesRep', SalesRepRepository);
 
 export const storeSalesRep = createAsyncThunk('storeSalesRep', async (input: AddSalesRepRequestDto, thunkAPI) => {
     const salesRepRepository = app(SalesRepRepository);
@@ -24,10 +24,10 @@ export const storeSalesRep = createAsyncThunk('storeSalesRep', async (input: Add
     }
 });
 
-export const getSalesRep = createAsyncThunk('getSalesRep', async () => {
+export const getSalesReps = createAsyncThunk('getSalesRep', async () => {
     const salesRepRepository = app(SalesRepRepository);
     try {
-        const salesReps: SalesRepEntity = await salesRepRepository.getSalesRep();
+        const salesReps: SalesRepEntity = await salesRepRepository.getSalesReps();
         return instanceToPlain(salesReps);
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -44,15 +44,15 @@ export const addExistingUserAsSalesRep = createAsyncThunk(
     },
 );
 
-export const adminSalesMenSlice = createSlice({
-    name: adminSalesMenThunk.name,
+export const adminSalesRepSlice = createSlice({
+    name: adminSalesRepThunk.name,
     initialState: {
-        ...adminSalesMenThunk.initialState,
+        ...adminSalesRepThunk.initialState,
     } as StateType,
     reducers: {},
     extraReducers(builder) {
-        adminSalesMenThunk.buildReducers(builder);
+        adminSalesRepThunk.buildReducers(builder);
     },
 });
 
-export const { listAction: listAdminSalesMenAction, showAction: showAdminSalesMenAction } = adminSalesMenThunk;
+export const { listAction: listAdminSalesRepAction, showAction: showAdminSalesRepAction } = adminSalesRepThunk;

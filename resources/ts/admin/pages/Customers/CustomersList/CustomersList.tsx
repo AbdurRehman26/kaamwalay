@@ -21,6 +21,7 @@ import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -29,7 +30,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
-import { getSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
+import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -161,13 +162,13 @@ export function CustomersList() {
     const [sortFilter, setSortFilter] = useState('-created_at');
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
-    const [salesReps, setSalesRep] = useState([]);
+    const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
-            const data = await dispatch(getSalesRep());
+            const data = await dispatch(getSalesReps());
             setSalesRep(data.payload.data);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,6 +197,7 @@ export function CustomersList() {
 
     const customers = useAdminCustomersQuery({
         params: {
+            include: ['salesman'],
             sort: sortFilter,
             filter: getFilters(query),
         },

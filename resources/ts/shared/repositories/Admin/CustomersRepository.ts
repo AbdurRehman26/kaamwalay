@@ -13,7 +13,7 @@ export class CustomersRepository extends Repository<CustomerEntity> {
         return this.toEntity(data);
     }
 
-    public async assignSalesMan(userId: number, salesmanId: number) {
+    public async assignSalesRep(userId: number, salesmanId: number) {
         const { data } = await this.endpoint.post(`${userId}/assign-salesman/${salesmanId}`);
         return data;
     }

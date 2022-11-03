@@ -18,4 +18,4 @@ export { adminCreateOrderSlice } from './adminCreateOrderSlice';
 export { adminOrderLabelsSlice as adminOrderLabels } from './adminOrderLabelsSlice';
 export { adminCardsSlice as adminCards } from './adminCardsSlice';
 export { adminRaritiesSlice as adminRarities } from './adminRaritiesSlice';
-export { adminSalesMenSlice as adminSalesMen } from './adminSalesmenSlice';
+export { adminSalesRepSlice as adminSalesRep } from './adminSalesRepSlice';

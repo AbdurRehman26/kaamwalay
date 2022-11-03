@@ -29,7 +29,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminSalesMenQuery } from '@shared/redux/hooks/useAdminSalesMenQuery';
+import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
@@ -80,7 +80,7 @@ export function SalesRepsListPage() {
         signedUpBetween: dateRangeFilter(values.signedUpStart, values.signedUpEnd),
     });
 
-    const salesReps = useAdminSalesMenQuery({
+    const salesReps = useAdminSalesRepQuery({
         params: {
             filter: getFilters(query),
             sort: sortFilter ? 'sales' : '-sales',
@@ -89,7 +89,7 @@ export function SalesRepsListPage() {
         ...bracketParams(),
     });
     const handleStatus = useCallback(async (values, isActive) => {
-        values = { ...values, isActive: status.value };
+        values = { ...values, isActive: isActive.value };
         setStatus({ value: isActive.value, label: isActive.label });
         handleSubmit(values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,7 +184,7 @@ export function SalesRepsListPage() {
 
     const handleClearStatus = useCallback(async () => {
         formikRef.current?.setFieldValue('isActive', '');
-        delQuery('is_active');
+        delQuery('isActive');
         setStatus({ value: 0, label: '' });
         await salesReps.searchSortedWithPagination(
             { sort: sortFilter ? 'sales' : '-sales' },

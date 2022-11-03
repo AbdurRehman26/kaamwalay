@@ -25,7 +25,7 @@ import { useAuth } from '@shared/hooks/useAuth';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
-import { addExistingUserAsSalesRep, storeSalesRep } from '@shared/redux/slices/adminSalesmenSlice';
+import { addExistingUserAsSalesRep, storeSalesRep } from '@shared/redux/slices/adminSalesRepSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 

@@ -16,13 +16,13 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { assignSalesMan } from '@shared/redux/slices/adminCustomersSlice';
+import { assignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface props {
     customer: CustomerEntity;
-    salesReps: any;
+    salesReps: SalesRepEntity[];
 }
 
 enum RowOption {
@@ -46,6 +46,7 @@ const styles = {
 export function CustomerTableRow({ customer, salesReps }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
@@ -82,7 +83,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
     );
 
     function assignSalesRef(event: any) {
-        dispatch(assignSalesMan({ userId: customer.id, salemanId: event.target.value }));
+        dispatch(assignSalesRep({ userId: customer.id, salemanId: event.target.value }));
     }
 
     return (
@@ -124,9 +125,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                         }}
                         fullWidth
                         displayEmpty
-                        key={customer?.createdBy?.id || 'Unassigned'}
-                        defaultValue={customer?.createdBy?.fullName || 'Unassigned'}
+                        onOpen={() => setDefaultValue('No Owner')}
+                        onClose={() => setDefaultValue('Unassigned')}
+                        value={customer?.salesman?.id || 'none'}
                     >
+                        <MenuItem value="none">{defaultValue}</MenuItem>
                         {salesReps?.map((saleRep: SalesRepEntity) => {
                             return (
                                 <MenuItem
@@ -157,7 +160,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                                             )}
                                         </Avatar>
                                         <Typography>{saleRep?.fullName}</Typography>
-                                        {customer?.createdBy?.id ? (
+                                        {customer?.salesman?.fullName ? (
                                             <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
                                         ) : null}
                                     </Grid>

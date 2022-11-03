@@ -37,4 +37,8 @@ export class UserEntity extends Entity {
     public getInitials() {
         return nameInitials(this.getFullName());
     }
+
+    public capitalizeFirstLetter(data: string) {
+        return data.charAt(0).toUpperCase() + data.slice(1);
+    }
 }

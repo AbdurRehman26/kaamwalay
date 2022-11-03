@@ -171,3 +171,70 @@ test('a customer can not get single customer detail', function () {
     getJson(route('v2.customers.show', ['customer' => $this->customer]))
         ->assertStatus(403);
 });
+
+it('can assign a salesman to customer', function () {
+    actingAs($this->user);
+
+    $salesman = User::factory()
+        ->withRole(config('permission.roles.salesman'))
+        ->create();
+
+    $customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    postJson(route('v2.customers.assign-salesman', [
+            'salesman' => $salesman,
+            'user' => $customer,
+        ]))
+        ->assertSuccessful();
+});
+
+it('a guest cannot assign a salesman to customer', function () {
+    $salesman = User::factory()
+        ->withRole(config('permission.roles.salesman'))
+        ->create();
+
+    $customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    postJson(route('v2.customers.assign-salesman', [
+        'salesman' => $salesman,
+        'user' => $customer,
+    ]))->assertUnauthorized();
+});
+
+it('a customer cannot assign a salesman to customer', function () {
+    $salesman = User::factory()
+        ->withRole(config('permission.roles.salesman'))
+        ->create();
+
+    $customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    actingAs($customer);
+
+    postJson(route('v2.customers.assign-salesman', [
+        'salesman' => $salesman,
+        'user' => $customer,
+    ]))->assertForbidden();
+});
+
+test('user with customer role cannot be assigned as a salesman to customer', function () {
+    actingAs($this->user);
+
+    $customer1 = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    $customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    postJson(route('v2.customers.assign-salesman', [
+        'salesman' => $customer1,
+        'user' => $customer,
+    ]))->assertUnprocessable();
+});

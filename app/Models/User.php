@@ -7,10 +7,12 @@ use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Filters\AdminSalesmanSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
 use App\Http\Sorts\AdminCustomerWalletSort;
+use App\Http\Sorts\AdminSalesmanSalesSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
@@ -28,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -52,7 +55,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'salesman_id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -117,6 +120,21 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $user;
     }
 
+    public static function createSalesman(array $data): self
+    {
+        $data['password'] = Str::random(8);
+        $data['created_by'] = auth()->user()->id;
+        $data['username'] = self::generateUserName();
+
+        /* @var User $user */
+        $user = self::create($data);
+
+        $user->assignSalesmanRole();
+
+
+        return $user;
+    }
+
     public static function getAllowedAdminFilters(): array
     {
         return [
@@ -136,6 +154,33 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             'email',
             'customer_number',
             'created_at',
+        ];
+    }
+
+    public static function getAllowedAdminSalesmanFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
+            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('is_active', 'isActiveSalesman'),
+        ];
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeIsActiveSalesman(Builder $query, bool $value): Builder
+    {
+        return $query->whereHas('salesmanProfile', function ($subQuery) use ($value) {
+            $subQuery->where('is_active',  $value);
+        });
+    }
+
+    public static function getAllowedAdminSalesmanSorts(): array
+    {
+        return [
+            AllowedSort::custom('sales', new AdminSalesmanSalesSort),
         ];
     }
 
@@ -202,9 +247,21 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->getFullName();
     }
 
+    public function assignSalesmanRole(): void
+    {
+        $this->assignRole(Role::findByName(config('permission.roles.salesman')));
+    }
+
     public function assignCustomerRole(): void
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
+    }
+
+    public function assignSalesman(User $salesman): bool
+    {
+        $this->salesman_id = $salesman->id;
+
+        return $this->save();
     }
 
     /**
@@ -293,10 +350,18 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     /**
+     * @return HasOne<Salesman>
+     */
+    public function salesmanProfile(): HasOne
+    {
+        return $this->hasOne(Salesman::class, 'user_id', 'id');
+    }
+
+    /**
      * @param  Builder <User> $query
      * @return Builder <User>
      */
-    public function scopeSalesman(Builder $query): Builder
+    public function scopeSalesmen(Builder $query): Builder
     {
         return $query->role(Role::findByName(config('permission.roles.salesman'), 'api'));
     }

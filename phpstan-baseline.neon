@@ -221,6 +221,11 @@ parameters:
 			path: app/Http/Filters/AdminOrderSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminSalesmanSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminSalesmanSearchFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\UserCardSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/UserCardSearchFilter.php

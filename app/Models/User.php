@@ -385,7 +385,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasMany(Order::class, 'salesman_id', 'id');
     }
 
-    public function totalUsersOfSalesman(): int
+    public function salesmanCustomersCount(): int
     {
         return $this->hasMany(User::class, 'salesman_id', 'id')->count();
     }

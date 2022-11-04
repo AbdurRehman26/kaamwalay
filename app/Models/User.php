@@ -377,6 +377,19 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $query->role(Role::findByName(config('permission.roles.salesman'), 'api'));
     }
 
+    /**
+     * @return HasMany<Order>
+     */
+    public function salesmanOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'salesman_id', 'id');
+    }
+
+    public function totalUsersOfSalesman(): int
+    {
+        return $this->hasMany(User::class, 'salesman_id', 'id')->count();
+    }
+
     public function sendPasswordResetNotification($token)
     {
         /* @var EmailService $emailService */

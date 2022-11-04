@@ -32,11 +32,10 @@ class SalesmanResource extends BaseResource
             'commission_type' => $this->salesmanProfile->commission_type,
             'commission_value' => $this->salesmanProfile->commission_value,
             'status' => $this->salesmanProfile->is_active,
-            'sales' => Order::where('salesman_id', $this->id)->sum('grand_total'),
-//            @TODO
-            'commission_earned' => 0,
-            'orders' => 0,
-            'customers' => 0,
+            'commission_earned' => $this->salesmanProfile->earnedCommission(),
+            'sales' => $this->salesmanOrders()->sum('grand_total'),
+            'customers' => $this->totalUsersOfSalesman(),
+            'orders' => $this->salesmanOrders()->count(),
         ];
     }
 }

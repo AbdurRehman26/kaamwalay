@@ -35,4 +35,9 @@ class Salesman extends Model
     {
         return $this->commission_type === $type;
     }
+
+    public function earnedCommission(): float
+    {
+        return $this->hasMany(SalesmanEarnedCommission::class, 'salesman_id', 'user_id')->sum('commission');
+    }
 }

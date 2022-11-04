@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\V2\Admin\Salesman;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
-use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 

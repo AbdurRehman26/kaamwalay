@@ -61,7 +61,7 @@ class CustomerController extends Controller
      */
     public function assignSalesman(User $user, User $salesman): JsonResponse
     {
-        throw_unless($salesman->isSalesman() && $user->assignSalesman($salesman), SalesmanCanNotBeAssigned::class);
+        throw_unless($salesman->id !== $user->id && $salesman->isSalesman() && $user->assignSalesman($salesman), SalesmanCanNotBeAssigned::class);
 
         return new JsonResponse(
             [

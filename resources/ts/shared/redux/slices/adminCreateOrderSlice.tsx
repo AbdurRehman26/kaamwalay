@@ -684,6 +684,9 @@ export const adminCreateOrderSlice = createSlice({
         setUser: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
         },
+        emptyUser: (state, action: PayloadAction<{}>) => {
+            state.user = action.payload;
+        },
         setShippingFee: (state, action: PayloadAction<number>) => {
             state.step02Data.shippingFee = action.payload;
         },
@@ -756,6 +759,7 @@ export const {
     setServiceLevel,
     setPayNow,
     setUser,
+    emptyUser,
     setBillingAddress,
     resetSelectedCards,
     setPreviewTotal,

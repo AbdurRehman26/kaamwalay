@@ -101,6 +101,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
+            id: 'owner',
+            numeric: false,
+            disablePadding: false,
+            label: 'Owner',
+            align: 'left',
+            sortable: true,
+        },
+        {
             id: 'cards',
             numeric: true,
             disablePadding: false,

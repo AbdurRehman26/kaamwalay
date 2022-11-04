@@ -93,6 +93,7 @@ export function SubmissionsView() {
                 walletPayment={data?.amountPaidFromWallet}
                 admin={data?.orderPayment?.user?.fullName}
                 createdBy={data?.createdBy}
+                salesmanCommission={data?.salesmanCommission}
             />
             <Divider />
             <RefundsAndExtraCharges

@@ -1,7 +1,6 @@
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
@@ -18,6 +17,7 @@ import { RootState } from '../../redux/store';
 
 const FeedGradeDropdown = styled(Box)(
     {
+        marginLeft: '20px',
         '.Select': {
             width: '100%',
             height: '40px',
@@ -85,7 +85,6 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
 
     return !isMobile ? (
         <>
-            <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
             <FeedGradeDropdown>
                 {!currentRefinement ? (
                     <Select

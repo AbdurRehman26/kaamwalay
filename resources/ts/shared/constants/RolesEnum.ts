@@ -1,5 +1,5 @@
 export enum RolesEnum {
     None,
     Admin,
-    SalesRep,
+    Salesman = 4,
 }

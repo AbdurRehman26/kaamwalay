@@ -1,5 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import Face from '@mui/icons-material/Face';
 import LocalPoliceOutlined from '@mui/icons-material/LocalPoliceOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
@@ -20,6 +21,7 @@ export function UserDropdown() {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const isAdmin = user?.hasRole(RolesEnum.Admin);
+    const isSaleRep = user?.roles.find((item) => item.name === 'salesman');
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -36,6 +38,9 @@ export function UserDropdown() {
                     break;
                 case '/admin':
                     window.location.href = '/admin';
+                    break;
+                case '/salesrep':
+                    window.location.href = '/salesrep';
                     break;
                 case '/dashboard':
                     window.location.href = '/dashboard';
@@ -74,6 +79,14 @@ export function UserDropdown() {
                     </ListItemIcon>
                     Customer Account
                 </StyledMenuItem>
+                {isSaleRep ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/salesrep')}>
+                        <ListItemIcon>
+                            <Face />
+                        </ListItemIcon>
+                        SalesRep
+                    </StyledMenuItem>
+                ) : null}
                 {isAdmin ? (
                     <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
                         <ListItemIcon>

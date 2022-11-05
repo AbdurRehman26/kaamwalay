@@ -1,5 +1,7 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
@@ -195,6 +197,14 @@ export function SalesRepsListPage() {
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
 
+    if (salesReps.isLoading) {
+        return (
+            <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
     return (
         <>
             <SalesRepsPageHeader title="Sales Reps" value={initialValues.search} searchField onSearch={handleSearch} />
@@ -283,12 +293,20 @@ export function SalesRepsListPage() {
                                 <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="left">
                                     Sales Rep
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>Customers</TableCell>
-                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>Orders</TableCell>
-                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>Commission Earned</TableCell>
-                                {/* <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>Commission Paid</TableCell> */}
-                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>Status</TableCell>
-                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }}>
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
+                                    Customers
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
+                                    Orders
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
+                                    Commission Earned
+                                </TableCell>
+                                {/* <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center" >Commission Paid</TableCell> */}
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
+                                    Status
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
                                     <TableSortLabel
                                         sx={{
                                             color: '#0000008A',
@@ -315,9 +333,15 @@ export function SalesRepsListPage() {
                                             </Grid>
                                         </Grid>
                                     </TableCell>
-                                    <TableCell variant={'body'}>{salesRep.customers ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{salesRep.orders ?? '-'}</TableCell>
-                                    <TableCell variant={'body'}>{salesRep.commissionEarned ?? '-'}</TableCell>
+                                    <TableCell align="center" variant={'body'}>
+                                        {salesRep.customers ?? '-'}
+                                    </TableCell>
+                                    <TableCell align="center" variant={'body'}>
+                                        {salesRep.orders ?? '-'}
+                                    </TableCell>
+                                    <TableCell align="center" variant={'body'}>
+                                        {salesRep.commissionEarned ?? '-'}
+                                    </TableCell>
                                     {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}
                                     <TableCell variant={'body'}>
                                         {salesRep.status !== null ? (

@@ -46,6 +46,7 @@ const styles = {
 export function CustomerTableRow({ customer, salesReps }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -82,8 +83,9 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [navigate, customer.id],
     );
 
-    function assignSalesRef(event: any) {
-        dispatch(assignSalesRep({ userId: customer.id, salesmanId: event.target.value }));
+    async function assignSalesRef(event: any) {
+        await dispatch(assignSalesRep({ userId: customer.id, salesmanId: event.target.value }));
+        window.location.reload();
     }
 
     return (
@@ -109,13 +111,13 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Grid>
                 </TableCell>
                 <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
-                <TableCell variant={'body'} align={'right'}>
+                <TableCell variant={'body'} align={'center'}>
                     {customer.submissions ?? 0}
                 </TableCell>
-                <TableCell variant={'body'} align={'right'}>
+                <TableCell variant={'body'} align={'center'}>
                     {customer.cardsCount}
                 </TableCell>
-                <TableCell variant={'body'} align={'right'}>
+                <TableCell variant={'body'} align={'left'}>
                     <Select
                         sx={{ height: '40px !important', width: '170px !important' }}
                         aria-hidden={'false'}
@@ -125,8 +127,14 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                         }}
                         fullWidth
                         displayEmpty
-                        onOpen={() => setDefaultValue('No Owner')}
-                        onClose={() => setDefaultValue('Unassigned')}
+                        onOpen={() => {
+                            setDefaultValue('No Owner');
+                            setIsOpen(true);
+                        }}
+                        onClose={() => {
+                            setDefaultValue('Unassigned');
+                            setIsOpen(false);
+                        }}
                         value={customer?.salesman?.id || 'none'}
                     >
                         <MenuItem value="none">{defaultValue}</MenuItem>
@@ -139,11 +147,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                                 >
                                     <Grid
                                         width={'100%'}
-                                        sx={{ ':hover': { backgroundColor: '#20BFB814' } }}
+                                        sx={{ ':hover': { backgroundColor: '#20BFB814' }, paddingLeft: '0px' }}
                                         display={'flex'}
                                         justifyContent={'flex-start'}
                                         p={1}
-                                        alignItems={'center'}
+                                        alignItems={'left'}
                                     >
                                         <Avatar
                                             sx={{
@@ -159,8 +167,12 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                                                 `${saleRep.firstName ?? ''} ${saleRep.lastName ?? ''}`.trim(),
                                             )}
                                         </Avatar>
-                                        <Typography>{saleRep?.fullName}</Typography>
-                                        {customer?.salesman?.id === saleRep.id ? (
+                                        <Typography>
+                                            {!isOpen ? saleRep?.fullName.substring(0, 10) + '...' : saleRep.fullName}
+                                        </Typography>
+                                        {customer?.salesman?.id === saleRep.id &&
+                                        saleRep?.fullName.length > 10 &&
+                                        isOpen ? (
                                             <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
                                         ) : null}
                                     </Grid>

@@ -29,7 +29,8 @@ import { font } from '@shared/styles/utils';
 import { LayoutHeader } from '@auth/components/LayoutHeader';
 
 export function CreatePassword() {
-    const [{ token, email, name }] = useLocationQuery<{ token: string; email: string; name: string }>();
+    const [{ token, email, name, salesrep }] =
+        useLocationQuery<{ token: string; email: string; name: string; salesrep: boolean }>();
     const notifications = useNotifications();
     const authenticationRepository = useInjectable(AuthenticationRepository);
     const authenticationService = useInjectable(AuthenticationService);
@@ -67,11 +68,22 @@ export function CreatePassword() {
                 googleTagManager({ event: 'google-ads-authenticated' });
                 NotificationsService.success('Login successfully!');
                 dispatch(authenticateCheckAction());
-
-                window.location.href = '/dashboard/';
+                if (salesrep) {
+                    window.location.href = '/salesrep/';
+                } else {
+                    window.location.href = '/dashboard/';
+                }
             }
         },
-        [authenticationRepository, authenticationService, dispatch, eventService, notifications, resetPassword],
+        [
+            authenticationRepository,
+            authenticationService,
+            dispatch,
+            eventService,
+            notifications,
+            resetPassword,
+            salesrep,
+        ],
     );
 
     if (!email || !token || !name) {

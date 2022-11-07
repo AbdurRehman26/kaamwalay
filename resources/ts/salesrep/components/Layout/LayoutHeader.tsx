@@ -1,4 +1,4 @@
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Face from '@mui/icons-material/Face';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,11 +12,9 @@ import { drawerVisibility } from '@salesrep/redux/slices/pageSlice';
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@shared/assets/logo.svg';
-import { useAuth } from '@shared/hooks/useAuth';
 
 function LayoutHeader() {
     const classes = useLayoutHeaderStyles();
-    const { user } = useAuth();
     const dispatch = useAppDispatch();
 
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
@@ -34,11 +32,11 @@ function LayoutHeader() {
                 <Box flexGrow={1} />
                 <Box>
                     <Typography sx={{ fontSize: '14px', fontWeight: 500 }} color={'black'}>
-                        {user.capitalizeFirstLetter(user.roles[0].name)}
+                        {'Sales'}
                     </Typography>
                 </Box>
                 <IconButton size="large">
-                    <AccountCircleOutlinedIcon />
+                    <Face />
                 </IconButton>
                 <Box className={classes.hiddenOnMobile}>
                     <UserDropdown />

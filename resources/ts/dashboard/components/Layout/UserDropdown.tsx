@@ -28,7 +28,7 @@ export function UserDropdown() {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const isAdmin = user?.hasRole(RolesEnum.Admin);
-    const isSaleRep = user?.hasRole(RolesEnum.SalesRep);
+    const isSaleRep = user?.roles.find((item) => item.name === 'salesman');
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),

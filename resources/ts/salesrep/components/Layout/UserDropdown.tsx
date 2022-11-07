@@ -20,6 +20,7 @@ export function UserDropdown() {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const isAdmin = user?.hasRole(RolesEnum.Admin);
+    const isCustomer = user?.hasRole(RolesEnum.Customer);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -68,12 +69,14 @@ export function UserDropdown() {
                     sx: MenuStyle,
                 }}
             >
-                <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
-                    <ListItemIcon>
-                        <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
-                    </ListItemIcon>
-                    Customer Account
-                </StyledMenuItem>
+                {isCustomer ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
+                        <ListItemIcon>
+                            <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
+                        </ListItemIcon>
+                        Customer Account
+                    </StyledMenuItem>
+                ) : null}
                 {isAdmin ? (
                     <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
                         <ListItemIcon>

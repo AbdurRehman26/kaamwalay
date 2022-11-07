@@ -6,6 +6,7 @@ import { Customers } from './pages/Customers';
 import { PromoCodes } from './pages/PromoCodes';
 import { Rarities } from './pages/Rarities';
 import { Submissions } from './pages/Submissions';
+import { Surfaces } from './pages/Surfaces';
 import { VaultShipment } from './pages/VaultShipment';
 
 export function Admin() {
@@ -19,6 +20,7 @@ export function Admin() {
                 <Route path={'/vault-storage/*'} element={<VaultShipment />} />
                 <Route path={'/cards/*'} element={<Cards />} />
                 <Route path={'/rarities/*'} element={<Rarities />} />
+                <Route path={'/surfaces/*'} element={<Surfaces />} />
             </Routes>
         </Layout>
     );

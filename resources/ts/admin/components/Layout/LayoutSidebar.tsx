@@ -90,6 +90,7 @@ function LayoutSidebar() {
                     <List component="div">
                         <LayoutSidebarItem title={'Cards'} href={'/cards'} />
                         <LayoutSidebarItem title={'Rarities'} href={'/rarities'} />
+                        <LayoutSidebarItem title={'Surfaces'} href={'/surfaces'} />
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />

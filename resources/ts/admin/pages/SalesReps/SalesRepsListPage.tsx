@@ -343,7 +343,7 @@ export function SalesRepsListPage() {
                                         {salesRep.commissionEarned ?? '-'}
                                     </TableCell>
                                     {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}
-                                    <TableCell variant={'body'}>
+                                    <TableCell variant={'body'} align={'center'}>
                                         {salesRep.status !== null ? (
                                             <SalesRepStatusChip
                                                 color={salesRep.status}

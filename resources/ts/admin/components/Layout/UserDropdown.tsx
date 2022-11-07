@@ -1,7 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import Face from '@mui/icons-material/Face';
-import LocalPoliceOutlined from '@mui/icons-material/LocalPoliceOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -20,7 +19,7 @@ export function UserDropdown() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const isAdmin = user?.hasRole(RolesEnum.Admin);
+    const isCustomer = user?.hasRole(RolesEnum.Customer);
     const isSaleRep = user?.roles.find((item) => item.name === 'salesman');
 
     const handleUserProfileOpen = useCallback(
@@ -35,9 +34,6 @@ export function UserDropdown() {
             switch (href) {
                 case '/logout':
                     logout();
-                    break;
-                case '/admin':
-                    window.location.href = '/admin';
                     break;
                 case '/salesrep':
                     window.location.href = '/salesrep';
@@ -73,26 +69,20 @@ export function UserDropdown() {
                     sx: MenuStyle,
                 }}
             >
-                <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
-                    <ListItemIcon>
-                        <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
-                    </ListItemIcon>
-                    Customer Account
-                </StyledMenuItem>
+                {isCustomer ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
+                        <ListItemIcon>
+                            <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
+                        </ListItemIcon>
+                        Customer Account
+                    </StyledMenuItem>
+                ) : null}
                 {isSaleRep ? (
                     <StyledMenuItem onClick={handleUserProfileClick('/salesrep')}>
                         <ListItemIcon>
                             <Face />
                         </ListItemIcon>
                         SalesRep
-                    </StyledMenuItem>
-                ) : null}
-                {isAdmin ? (
-                    <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
-                        <ListItemIcon>
-                            <LocalPoliceOutlined sx={{ color: 'black' }} />
-                        </ListItemIcon>
-                        Admin Account
                     </StyledMenuItem>
                 ) : null}
                 <Divider />

@@ -2,9 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Http\Filters\AdminCardRaritySearchFilter;
 use App\Http\Filters\AdminCardSurfaceSearchFilter;
-use App\Models\CardRarity;
 use App\Models\CardSurface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;

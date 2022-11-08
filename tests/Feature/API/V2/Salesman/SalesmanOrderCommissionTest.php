@@ -59,7 +59,7 @@ dataset('orderLine', function () {
 
         $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
             'fixed' => $order->salesman->salesmanProfile->commission_value * $order->orderItems()->count(),
-            default => $order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total),
+            default => ($order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total) / 100),
         };
 
         return [
@@ -84,7 +84,7 @@ dataset('orderLine', function () {
             'created_at' => now()->addMinute(),
         ]);
 
-        $commission = -($order->salesman->salesmanProfile->commission_value * ($order->refunds()->latest()->first()->amount));
+        $commission = -($order->salesman->salesmanProfile->commission_value * $order->refunds()->latest()->first()->amount / 100);
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_REFUNDED,
@@ -108,7 +108,7 @@ dataset('orderLine', function () {
             'created_at' => now()->addMinute(),
         ]);
 
-        $commission = ($order->salesman->salesmanProfile->commission_value * ($order->extraCharges()->latest()->first()->amount));
+        $commission = ($order->salesman->salesmanProfile->commission_value * ($order->extraCharges()->latest()->first()->amount) / 100);
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_EXTRA_CHARGE,

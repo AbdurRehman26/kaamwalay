@@ -12,7 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectMenu } from 'react-instantsearch-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilterIncrement, setGradeTeal, setGradeValue } from '../../redux/slices/feedSlice';
+import { setFilterDecrement, setFilterIncrement, setGradeValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 
 const FeedGradeDropdown = styled(Box)(
@@ -82,6 +82,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const grades = items.sort((a, b) => getGrade(b) - getGrade(a));
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const dispatch = useDispatch();
+    const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
     return !isMobile ? (
         <>
@@ -130,25 +131,24 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
             </FeedGradeDropdown>
         </>
     ) : (
-        <ul>
-            <RadioGroup>
-                {grades.map((item: any) => (
-                    <FormControlLabel
-                        key={item.value}
-                        value={item.value}
-                        control={<Radio checked={item.isRefined} />}
-                        label={item.label}
-                        onClick={(event) => {
-                            event.preventDefault();
-                            refine(item.value);
-                            dispatch(setGradeValue(item.value));
-                            dispatch(setFilterIncrement());
-                            dispatch(setGradeTeal(true));
-                        }}
-                    />
-                ))}
-            </RadioGroup>
-        </ul>
+        <RadioGroup>
+            {grades.map((item: any) => (
+                <FormControlLabel
+                    key={item.value}
+                    value={item.value}
+                    control={<Radio checked={item.isRefined ? true : false} />}
+                    label={item.label}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        refine(item.value);
+                        !item.isRefined ? dispatch(setGradeValue(item.label)) : dispatch(setGradeValue(''));
+                        !grade && item.label !== grade
+                            ? dispatch(setFilterIncrement())
+                            : dispatch(setFilterDecrement());
+                    }}
+                />
+            ))}
+        </RadioGroup>
     );
 });
 

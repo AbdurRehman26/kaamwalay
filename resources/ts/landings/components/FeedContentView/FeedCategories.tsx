@@ -11,11 +11,11 @@ import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import theme from '@shared/styles/theme';
+import { removeCategoryValue, setCategoryValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 import FeedClearCategories from './FeedClearCategories';
-import FeedCurrentFilter from './FeedCurrentFilter';
 import FeedCurrentFilters from './FeedCurrentFilters';
 import { FeedGrade } from './FeedGrade';
 import { FeedGridView } from './FeedGridView';
@@ -179,6 +179,7 @@ const MenuProps = {
 
 const CustomRefinementList = connectRefinementList(({ items, refine }) => {
     const [className, changeClassName] = useState('Select');
+    const dispatch = useDispatch();
 
     return (
         <ul className={'GradeList'}>
@@ -209,6 +210,9 @@ const CustomRefinementList = connectRefinementList(({ items, refine }) => {
                             onClick={(event) => {
                                 refine(item.value);
                                 event.preventDefault();
+                                !item.isRefined
+                                    ? dispatch(setCategoryValue(item.label))
+                                    : dispatch(removeCategoryValue(item.label));
                             }}
                         >
                             <Typography sx={item.isRefined ? styles.SelectedText : styles.NotSelectedText}>
@@ -226,17 +230,13 @@ const CustomRefinementList = connectRefinementList(({ items, refine }) => {
 export function FeedCategories({ query, setBackground }: { query: any; setBackground: any }) {
     const [toggleView, setToggleView] = useState(true);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const category = useSelector((state: RootState) => state.feed.categoryValue.category);
+    const category: Array<string> = useSelector((state: RootState) => state.feed.categoryValue.category);
 
     return (
         <>
             <FeeCategoryBox>
                 <Grid className={'FilterBar'}>
-                    {category ? (
-                        <CustomRefinementList attribute={'card_category'} defaultRefinement={[category]} limit={100} />
-                    ) : (
-                        <CustomRefinementList attribute={'card_category'} limit={100} />
-                    )}
+                    <CustomRefinementList attribute={'card_category'} defaultRefinement={category} limit={100} />
                     <FeedGrade />
                     <FeedClearCategories />
                 </Grid>
@@ -263,14 +263,14 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                     </Grid>
                 </Grid>
             </FeeCategoryBox>
-            {!isSm ? <FeedCurrentFilters /> : null}
+            {!isSm && category.length > 0 ? <FeedCurrentFilters /> : null}
             <Grid sx={styles.MobileDiv}>
                 <FeedResultCount query={query} />
                 {isSm ? <FeedMobileView /> : ''}
             </Grid>
             {isSm ? (
                 <Grid sx={{ borderBottom: '1px solid #E0E0E0' }}>
-                    <FeedCurrentFilter />
+                    <FeedCurrentFilters />
                 </Grid>
             ) : null}
             {toggleView ? <FeedGridView /> : <FeedListView />}

@@ -5,19 +5,11 @@ export interface SortState {
 }
 
 export interface CategoryValue {
-    category: string;
+    category: Array<string>;
 }
 
 export interface GradeValue {
     grade: string;
-}
-
-export interface GradeTeal {
-    teal: boolean;
-}
-
-export interface CategoryTeal {
-    teal: boolean;
 }
 
 export interface FilterCount {
@@ -37,8 +29,6 @@ export interface FeedSliceState {
     categoryValue: CategoryValue;
     gradeValue: GradeValue;
     filterCount: FilterCount;
-    categoryTeal: CategoryTeal;
-    gradeTeal: GradeTeal;
     filterResults: FilterResults;
     totalItemsPerPage: TotalItemsPerPage;
 }
@@ -48,19 +38,13 @@ const initialState: FeedSliceState = {
         sort: '',
     },
     categoryValue: {
-        category: '',
+        category: [],
     },
     gradeValue: {
         grade: '',
     },
     filterCount: {
         count: 0,
-    },
-    categoryTeal: {
-        teal: false,
-    },
-    gradeTeal: {
-        teal: false,
     },
     filterResults: {
         results: 0,
@@ -78,22 +62,31 @@ export const feedSlice = createSlice({
             state.sortState.sort = action.payload;
         },
         setCategoryValue: (state, action: PayloadAction<string>) => {
-            state.categoryValue.category = action.payload;
+            state.categoryValue.category.push(action.payload);
+        },
+        removeCategoryValue: (state, action: PayloadAction<string>) => {
+            const categories = state.categoryValue.category;
+            for (let i = 0; i < categories.length; i++) {
+                if (categories[i] === action.payload) {
+                    categories.splice(i, 1);
+                }
+            }
+            state.categoryValue.category = categories;
+        },
+        clearAllCategories: (state) => {
+            state.categoryValue.category = [];
         },
         setGradeValue: (state, action: PayloadAction<string>) => {
             state.gradeValue.grade = action.payload;
+        },
+        clearCount: (state) => {
+            state.filterCount.count = 0;
         },
         setFilterIncrement: (state) => {
             state.filterCount.count += 1;
         },
         setFilterDecrement: (state) => {
             state.filterCount.count -= 1;
-        },
-        setGradeTeal: (state, action: PayloadAction<boolean>) => {
-            state.gradeTeal.teal = action.payload;
-        },
-        setCategoryTeal: (state, action: PayloadAction<boolean>) => {
-            state.categoryTeal.teal = action.payload;
         },
         setFilterResults: (state, action: PayloadAction<number>) => {
             state.filterResults.results = action.payload;
@@ -107,11 +100,12 @@ export const feedSlice = createSlice({
 export const {
     setSortByValue,
     setCategoryValue,
+    removeCategoryValue,
     setGradeValue,
     setFilterIncrement,
     setFilterDecrement,
-    setGradeTeal,
-    setCategoryTeal,
     setFilterResults,
     setItemsPerPage,
+    clearAllCategories,
+    clearCount,
 } = feedSlice.actions;

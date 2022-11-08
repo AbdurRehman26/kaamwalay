@@ -25,7 +25,7 @@ const Root = styled(Grid)(() => ({
     backgroundColor: '#f9f9f9',
     width: '100%',
     borderBottom: '1px solid #e0e0e0',
-    '.RaritiesPageHeader-search': {
+    '.SurfacesPageHeader-search': {
         '.MuiOutlinedInput-root': {
             backgroundColor: '#fff',
             borderRadius: 24,
@@ -40,7 +40,7 @@ const Root = styled(Grid)(() => ({
 
 const useStyles = makeStyles(
     (theme) => ({
-        newRarityBtn: {
+        newSurfaceBtn: {
             borderRadius: 24,
             padding: '12px 24px',
             [theme.breakpoints.down('sm')]: {
@@ -50,14 +50,14 @@ const useStyles = makeStyles(
         },
     }),
     {
-        name: 'RaritiesPageHeader',
+        name: 'SurfacesPageHeader',
     },
 );
 
-export function RaritiesPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
+export function SurfacesPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
-    const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
+    const [addSurfacesDialog, setAddSurfacesDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const notifications = useNotifications();
 
@@ -81,7 +81,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
     const handleAddSubmit = async () => {
         try {
             setIsLoading(true);
-            setAddRaritiesDialog(false);
+            setAddSurfacesDialog(false);
             window.location.reload();
             setIsLoading(false);
         } catch (e: any) {
@@ -101,8 +101,8 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                     <SurfacesAddDialog
                         title={'Add Surface'}
                         onSubmit={handleAddSubmit}
-                        open={addRaritiesDialog}
-                        onClose={() => setAddRaritiesDialog(false)}
+                        open={addSurfacesDialog}
+                        onClose={() => setAddSurfacesDialog(false)}
                     />
                     <Grid container justifyContent={'space-between'}>
                         <Grid display={'flex'} alignItems={'center'} item>
@@ -111,7 +111,7 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                             </Typography>
                             {searchField && (
                                 <TextField
-                                    className={'RaritiesPageHeader-search'}
+                                    className={'SurfacesPageHeader-search'}
                                     value={search}
                                     onChange={handleSearchValue}
                                     onKeyDown={handleKeyDown}
@@ -136,12 +136,12 @@ export function RaritiesPageHeader({ title, searchField, value, onSearch, childr
                         </Grid>
                         <Grid item>
                             <Button
-                                onClick={() => setAddRaritiesDialog(true)}
+                                onClick={() => setAddSurfacesDialog(true)}
                                 variant={'contained'}
                                 color={'primary'}
-                                className={classes.newRarityBtn}
+                                className={classes.newSurfaceBtn}
                             >
-                                Create Rarity
+                                Create Surface
                             </Button>
                         </Grid>
                     </Grid>

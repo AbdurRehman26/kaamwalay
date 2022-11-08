@@ -8,6 +8,7 @@ use App\Http\Resources\API\V2\Admin\CardSurface\CardSurfaceCollection;
 use App\Http\Resources\API\V2\Admin\CardSurface\CardSurfaceResource;
 use App\Models\CardSurface;
 use App\Services\Admin\Card\CardSurfaceService;
+use Illuminate\Http\JsonResponse;
 
 class CardSurfaceController extends Controller
 {
@@ -15,12 +16,12 @@ class CardSurfaceController extends Controller
     {
     }
     
-    public function index()
+    public function index(): CardSurfaceCollection
     {
         return new CardSurfaceCollection($this->cardSurfaceService->getCardSurfaces());
     }
 
-    public function store(StoreCardSurfaceRequest $request)
+    public function store(StoreCardSurfaceRequest $request): CardSurfaceResource
     {
         return new CardSurfaceResource(CardSurface::create($request->validated()));
     }
@@ -30,7 +31,7 @@ class CardSurfaceController extends Controller
         return new CardSurfaceResource($surface);
     }
 
-    public function update(int $cardSurfaceId, StoreCardSurfaceRequest $request)
+    public function update(int $cardSurfaceId, StoreCardSurfaceRequest $request): JsonResponse
     {
         CardSurface::where('id', $cardSurfaceId)->update($request->validated());
 

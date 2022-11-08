@@ -23,8 +23,8 @@ import { useAdminSurfacesQuery } from '@shared/redux/hooks/useSurfacesQuery';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import MoreAction from './MoreAction';
-import { RaritiesPageHeader } from './RaritiesPageHeader';
 import { SurfacesAddDialog } from './SurfacesAddDialog';
+import { SurfacesPageHeader } from './SurfacesPageHeader';
 
 type InitialValues = {
     cardCategory: string;
@@ -36,10 +36,10 @@ export function SurfacesListPage() {
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [categoryName, setCategoryName] = useState({ categoryName: '', categoryId: 0 });
     const [query, { setQuery, delQuery }] = useLocationQuery<InitialValues>();
-    const [addRaritiesDialog, setAddRaritiesDialog] = useState(false);
+    const [addSurfacesDialog, setAddSurfacesDialog] = useState(false);
     const [sortFilter, setSortFilter] = useState(false);
     const dispatch = useAppDispatch();
-    const [rarityId, setRarityId] = useState<number>();
+    const [surfaceId, setSurfaceId] = useState<number>();
     const notifications = useNotifications();
 
     const initialValues = useMemo<InitialValues>(
@@ -52,8 +52,8 @@ export function SurfacesListPage() {
 
     useEffect(
         () => {
-            if (!rarities.isLoading) {
-                rarities.searchSortedWithPagination(
+            if (!surfaces.isLoading) {
+                surfaces.searchSortedWithPagination(
                     { sort: sortFilter ? 'name' : '-name' },
                     getFilters({
                         ...formikRef.current!.values,
@@ -88,7 +88,7 @@ export function SurfacesListPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const rarities = useAdminSurfacesQuery({
+    const surfaces = useAdminSurfacesQuery({
         params: {
             filter: getFilters(query),
             sort: sortFilter ? 'name' : '-name',
@@ -102,11 +102,11 @@ export function SurfacesListPage() {
             setQuery({
                 ...values,
             });
-            await rarities.searchSortedWithPagination({ sort: sortFilter ? 'name' : '-name' }, getFilters(values), 1);
+            await surfaces.searchSortedWithPagination({ sort: sortFilter ? 'name' : '-name' }, getFilters(values), 1);
 
             document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [rarities, setQuery, sortFilter],
+        [surfaces, setQuery, sortFilter],
     );
 
     useEffect(() => {
@@ -125,7 +125,7 @@ export function SurfacesListPage() {
             }
 
             formikRef.current?.setFieldValue('search', search);
-            await rarities.searchSortedWithPagination(
+            await surfaces.searchSortedWithPagination(
                 { sort: sortFilter ? 'name' : '-name' },
                 getFilters({
                     ...formikRef.current!.values,
@@ -134,12 +134,12 @@ export function SurfacesListPage() {
                 1,
             );
         },
-        [rarities, delQuery, sortFilter, setQuery, query],
+        [surfaces, delQuery, sortFilter, setQuery, query],
     );
 
     const handleAddSubmit = async () => {
         try {
-            setAddRaritiesDialog(false);
+            setAddSurfacesDialog(false);
             window.location.reload();
         } catch (e: any) {
             notifications.exception(e);
@@ -147,15 +147,15 @@ export function SurfacesListPage() {
     };
 
     const handleEdit = (id: number) => {
-        setRarityId(id);
-        setAddRaritiesDialog(true);
+        setSurfaceId(id);
+        setAddSurfacesDialog(true);
     };
 
     const handleClearCategory = useCallback(async () => {
         formikRef.current?.setFieldValue('cardCategory', '');
         delQuery('cardCategory');
         setCategoryName({ categoryId: 0, categoryName: '' });
-        await rarities.searchSortedWithPagination(
+        await surfaces.searchSortedWithPagination(
             { sort: sortFilter ? 'name' : '-name' },
             getFilters({
                 ...formikRef.current!.values,
@@ -163,25 +163,25 @@ export function SurfacesListPage() {
             }),
             1,
         );
-    }, [rarities, delQuery, sortFilter]);
+    }, [surfaces, delQuery, sortFilter]);
 
     return (
         <>
             <SurfacesAddDialog
                 title={'Update Surface'}
-                open={addRaritiesDialog}
-                onClose={() => setAddRaritiesDialog(false)}
+                open={addSurfacesDialog}
+                onClose={() => setAddSurfacesDialog(false)}
                 onSubmit={handleAddSubmit}
                 isUpdate={true}
-                rarityId={rarityId}
+                surfaceId={surfaceId}
             />
-            {rarities.isLoading ? (
+            {surfaces.isLoading ? (
                 <Box width={'100%'} padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                     <CircularProgress />
                 </Box>
             ) : (
                 <>
-                    <RaritiesPageHeader
+                    <SurfacesPageHeader
                         searchField
                         value={initialValues.search}
                         title="Surfaces"
@@ -189,7 +189,7 @@ export function SurfacesListPage() {
                     />
                     <Grid container p={2.5} alignItems={'center'}>
                         <Grid item xs container alignItems={'center'}>
-                            <Typography variant={'subtitle1'}>{rarities.pagination.meta.total} Result(s)</Typography>
+                            <Typography variant={'subtitle1'}>{surfaces.pagination.meta.total} Result(s)</Typography>
                             <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
                                 {({ values }) => (
                                     <Grid item xs ml={2} display={'flex'} alignItems={'center'}>
@@ -240,19 +240,19 @@ export function SurfacesListPage() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rarities.data.map((rarity) => (
-                                    <TableRow key={rarity.id}>
-                                        <TableCell>{rarity.name}</TableCell>
-                                        <TableCell>{rarity?.cardCategory?.name}</TableCell>
+                                {surfaces.data.map((surface) => (
+                                    <TableRow key={surface.id}>
+                                        <TableCell>{surface.name}</TableCell>
+                                        <TableCell>{surface?.cardCategory?.name}</TableCell>
                                         <TableCell variant={'body'} align={'right'}>
-                                            <MoreAction id={rarity.id} handleEditAction={handleEdit} />
+                                            <MoreAction id={surface.id} handleEditAction={handleEdit} />
                                         </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                             <TableFooter>
                                 <TableRow>
-                                    <TablePagination {...rarities.paginationProps} />
+                                    <TablePagination {...surfaces.paginationProps} />
                                 </TableRow>
                             </TableFooter>
                         </Table>

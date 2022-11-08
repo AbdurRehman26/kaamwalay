@@ -20,7 +20,7 @@ import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { app } from '@shared/lib/app';
 import { getCardCategories } from '@shared/redux/slices/adminCardsSlice';
-import { RaritiesRepositary } from '@shared/repositories/Admin/RaritiesRepositary';
+import { SurfacesRepositary } from '@shared/repositories/Admin/SurfacesRepositary';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -28,16 +28,16 @@ export interface SurfacesAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit(): Promise<void> | void;
     isUpdate?: boolean;
     title: string;
-    rarityId?: number | null;
+    surfaceId?: number | null;
 }
 
 export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
-    const { onClose, isUpdate, rarityId, title, onSubmit, ...rest } = props;
+    const { onClose, isUpdate, surfaceId, title, onSubmit, ...rest } = props;
     const dispatch = useAppDispatch();
 
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [cardCategory, setCardCategory] = useState<number | undefined>(1);
-    const [rarityName, setRarityName] = useState<string | undefined>('');
+    const [surfaceName, setSurfaceName] = useState<string | undefined>('');
     const [isLoading, setIsLoading] = useState(false);
     const apiService = useInjectable(APIService);
     const notifications = useNotifications();
@@ -49,11 +49,11 @@ export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
     const handleAddRarity = async () => {
         setIsLoading(true);
         const endpoint = apiService.createEndpoint(
-            isUpdate ? `admin/cards/rarities/${rarityId}` : `admin/cards/rarities`,
+            isUpdate ? `admin/cards/surfaces/${surfaceId}` : `admin/cards/surfaces`,
         );
         try {
             const rarityDto = {
-                name: rarityName,
+                name: surfaceName,
                 cardCategoryId: cardCategory || 1,
             };
             if (isUpdate) {
@@ -78,14 +78,14 @@ export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
 
     useEffect(() => {
         (async () => {
-            const raritiesRepositary = app(RaritiesRepositary);
-            if (rarityId) {
-                const result = await raritiesRepositary.getRarity(rarityId);
+            const surfacesRepositary = app(SurfacesRepositary);
+            if (surfaceId) {
+                const result = await surfacesRepositary.getSurface(surfaceId);
                 await setCardCategory(result.cardCategory.id);
-                await setRarityName(result.name);
+                await setSurfaceName(result.name);
             }
         })();
-    }, [isUpdate, rarityId]);
+    }, [isUpdate, surfaceId]);
 
     const handleClose = useCallback(() => {
         if (onClose) {
@@ -156,13 +156,13 @@ export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
                                         marginLeft: 0,
                                     }}
                                 >
-                                    Rarity Name
+                                    Surface Name
                                 </FormHelperText>
                                 <TextField
                                     variant="outlined"
-                                    value={rarityName}
-                                    onChange={(e) => setRarityName(e.target.value)}
-                                    placeholder={'Enter rarity name'}
+                                    value={surfaceName}
+                                    onChange={(e) => setSurfaceName(e.target.value)}
+                                    placeholder={'Enter surface name'}
                                 />
                             </FormControl>
                         </Grid>
@@ -174,7 +174,7 @@ export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
                                     Cancel
                                 </Button>
                                 <LoadingButton
-                                    disabled={rarityName === ''}
+                                    disabled={surfaceName === ''}
                                     loading={isLoading}
                                     variant={'contained'}
                                     onClick={handleAddRarity}

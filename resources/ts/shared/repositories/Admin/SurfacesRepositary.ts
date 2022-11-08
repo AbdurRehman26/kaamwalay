@@ -8,7 +8,7 @@ export class SurfacesRepositary extends Repository<CardSurfaceEntity> {
     readonly endpointPath: string = 'admin/cards/surfaces';
     readonly model = CardSurfaceEntity;
 
-    async getRarity(surfaceId: any): Promise<CardSurfaceEntity> {
+    async getSurface(surfaceId: any): Promise<CardSurfaceEntity> {
         const { data } = await this.endpoint.get<CardSurfaceEntity>(`${surfaceId}`);
         return plainToInstance(CardSurfaceEntity, data);
     }

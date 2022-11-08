@@ -25,6 +25,10 @@ class CardSurface extends Model
         return $this->belongsTo(CardCategory::class);
     }
 
+    /**
+     * @param  Builder <CardSurface> $query
+     * @return Builder <CardSurface>
+     */
     public function scopeCardCategory(Builder $query, int $categoryId): Builder
     {
         return $query->whereHas(

@@ -9,12 +9,9 @@ use Spatie\QueryBuilder\Filters\Filter;
 class AdminCardSurfaceSearchFilter implements Filter
 {
     /**
-     * @param  Builder<CardSurface>  $query
-     * @param  string $value
-     * @param  string  $property
      * @return void
      */
-    public function __invoke(Builder $query, $value, string $property)
+    public function __invoke(Builder $query, $value, string $property): void
     {
         $query->whereLike(
             [

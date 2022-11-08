@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\SalesmanCommission\OrderExtraChargeCommission;
+namespace App\Services\SalesmanCommission\OrderSalesmanCommission;
 
 use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Models\Order;

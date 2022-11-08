@@ -40,5 +40,11 @@ export const salesRepSlice = createSlice({
         [getAllSalesRep.fulfilled as any]: (state, action) => {
             state.salesReps = action.payload;
         },
+        [getSales.fulfilled as any]: (state, action) => {
+            state.sales = action.payload;
+        },
+        [getCommissionsEarned.fulfilled as any]: (state, action) => {
+            state.commission = action.payload;
+        },
     },
 });

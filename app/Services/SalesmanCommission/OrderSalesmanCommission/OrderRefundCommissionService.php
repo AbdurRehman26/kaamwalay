@@ -11,6 +11,6 @@ class OrderRefundCommissionService implements OrderPercentageCommissionInterface
 
     public static function getPercentageCommission(Order $order): float
     {
-        return -( ( $order->salesman->salesmanProfile->commission_value % ($order->refunds()->latest()->first()->amount)));
+        return -(($order->salesman->salesmanProfile->commission_value % ($order->refunds()->latest()->first()->amount)));
     }
 }

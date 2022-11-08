@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
-import { SelectAndCreateCustomerDialog } from '../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
+import { SelectAndCreateCustomerDialog } from '../../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
 
 interface Props extends GridProps {
     title: string;

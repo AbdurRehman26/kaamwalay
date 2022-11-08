@@ -1,8 +1,8 @@
-import { AxiosRequestConfig } from 'axios';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
-import { useListQuery } from '@shared/hooks/useListQuery';
-import { listAdminSalesRepAction } from '../slices/adminSalesRepSlice';
+import { useShowQuery } from '../../hooks/useShowQuery';
+import { ThunkShowActionArg } from '../../types/ThunkShowActionArg';
+import { showAdminSalesRepAction } from '../slices/adminSalesRepSlice';
 
-export function useAdminSalesRepQuery(config: AxiosRequestConfig) {
-    return useListQuery(listAdminSalesRepAction, SalesRepEntity, (state) => state.adminSalesRep, config);
+export function useAdminSalesRepQuery(options: ThunkShowActionArg) {
+    return useShowQuery(showAdminSalesRepAction, SalesRepEntity, (state) => state.adminSalesRep, options);
 }

@@ -29,7 +29,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
+import { useAdminSalesRepsQuery } from '@shared/redux/hooks/useAdminSalesRepsQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
@@ -80,7 +80,7 @@ export function SalesRepsListPage() {
         signedUpBetween: dateRangeFilter(values.signedUpStart, values.signedUpEnd),
     });
 
-    const salesReps = useAdminSalesRepQuery({
+    const salesReps = useAdminSalesRepsQuery({
         params: {
             filter: getFilters(query),
             sort: sortFilter ? 'sales' : '-sales',

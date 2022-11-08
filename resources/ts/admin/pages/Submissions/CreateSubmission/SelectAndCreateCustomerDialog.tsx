@@ -24,7 +24,7 @@ import { emptyUser, setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
-import { SalesRepAddDialog } from '@admin/pages/SalesReps/SalesRepAddDialog';
+import { SalesRepAddDialog } from '@admin/pages/SalesReps/SalesRepsList/SalesRepAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 const useStyles = makeStyles({

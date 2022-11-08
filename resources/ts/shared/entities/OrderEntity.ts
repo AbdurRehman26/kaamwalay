@@ -59,6 +59,9 @@ export class OrderEntity extends Entity {
     @Type(() => AdminUserEntity)
     public createdBy!: AdminUserEntity;
 
+    @Type(() => AdminUserEntity)
+    public owner!: AdminUserEntity;
+
     @Type(() => PaymentPlanEntity)
     public paymentPlan!: PaymentPlanEntity;
 

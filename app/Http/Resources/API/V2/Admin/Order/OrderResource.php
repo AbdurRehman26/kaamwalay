@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
  * @property mixed $createdBy
+ * @property mixed $owner
  * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice
@@ -88,7 +89,7 @@ class OrderResource extends V1OrderResource
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
             'created_by' => new UserResource($this->createdBy),
-
+            'owner' => new UserResource($this->salesman),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),

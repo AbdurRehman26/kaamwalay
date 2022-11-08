@@ -8,6 +8,7 @@ use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use Illuminate\Http\Request;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
 
 /**
  * @property mixed $id
@@ -36,6 +37,7 @@ class OrderListResource extends BaseResource
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
+            'owner' => new UserResource($this->salesman),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'payment_status' => $this->payment_status,
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),

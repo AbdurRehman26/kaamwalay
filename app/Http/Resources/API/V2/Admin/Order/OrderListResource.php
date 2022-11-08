@@ -14,6 +14,7 @@ use App\Http\Resources\API\V2\Admin\User\UserResource;
  * @property mixed $id
  * @property mixed $order_number
  * @property mixed $grand_total
+ * @property mixed $salesman
  * @property mixed $amount_paid_from_wallet
  * @property mixed $arrived_at
  * @property mixed $created_at

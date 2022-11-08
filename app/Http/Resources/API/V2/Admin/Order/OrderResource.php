@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
  * @property mixed $createdBy
- * @property mixed $owner
+ * @property mixed $salesman
  * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice

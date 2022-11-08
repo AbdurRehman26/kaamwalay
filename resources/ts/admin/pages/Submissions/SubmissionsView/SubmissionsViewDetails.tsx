@@ -12,6 +12,7 @@ import { AddressEntity } from '@shared/entities/AddressEntity';
 import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -44,7 +45,7 @@ interface SubmissionsViewDetailsProps {
     walletPayment: string;
     admin?: string;
     createdBy?: AdminUserEntity;
-    owner?: AdminUserEntity;
+    owner?: SalesRepEntity;
     salesmanCommission?: number;
 }
 

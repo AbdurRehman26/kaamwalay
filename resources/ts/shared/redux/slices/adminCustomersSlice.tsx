@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { app } from '@shared/lib/app';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { CustomerEntity } from '../../entities/CustomerEntity';
@@ -24,6 +25,22 @@ export const storeCustomer = createAsyncThunk('storeCustomer', async (input: Add
         return thunkAPI.rejectWithValue(e);
     }
 });
+
+export const assignSalesRep = createAsyncThunk(
+    'assignSalesRep',
+    async (input: { userId: number; salesmanId: number }, thunkAPI) => {
+        const customersRepository = app(CustomersRepository);
+
+        try {
+            const customer: SalesRepEntity = await customersRepository.assignSalesRep(input.userId, input.salesmanId);
+            NotificationsService.success('Salesrep assigned successfully!');
+            return instanceToPlain(customer);
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
 
 export const adminCustomersSlice = createSlice({
     name: adminCustomersThunk.name,

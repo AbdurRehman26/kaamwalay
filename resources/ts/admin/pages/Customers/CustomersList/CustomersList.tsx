@@ -21,6 +21,7 @@ import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -29,8 +30,10 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerTableRow } from './CustomerTableRow';
 
@@ -55,17 +58,9 @@ const headings: EnhancedTableHeadCell[] = [
         id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'Email',
+        label: 'Email/Phone',
         align: 'left',
         sortable: true,
-    },
-    {
-        id: 'phone',
-        numeric: false,
-        disablePadding: false,
-        label: 'Phone',
-        align: 'left',
-        sortable: false,
     },
     {
         id: 'created_at',
@@ -80,7 +75,7 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Submissions',
-        align: 'right',
+        align: 'center',
         sortable: true,
     },
     {
@@ -88,8 +83,24 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Cards',
-        align: 'right',
+        align: 'center',
         sortable: true,
+    },
+    {
+        id: 'owners',
+        numeric: true,
+        disablePadding: false,
+        label: 'Owners',
+        align: 'left',
+        sortable: false,
+    },
+    {
+        id: 'customer_type',
+        numeric: true,
+        disablePadding: false,
+        label: 'Customer Type',
+        align: 'right',
+        sortable: false,
     },
     {
         id: 'wallet',
@@ -150,8 +161,18 @@ export function CustomersList() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
     const [isExporting, setIsExporting] = useState(false);
+    const dispatch = useAppDispatch();
+    const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        (async () => {
+            const data = await dispatch(getSalesReps());
+            setSalesRep(data.payload.data);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
@@ -176,6 +197,7 @@ export function CustomersList() {
 
     const customers = useAdminCustomersQuery({
         params: {
+            include: ['salesman'],
             sort: sortFilter,
             filter: getFilters(query),
         },
@@ -423,7 +445,7 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} />
+                            <CustomerTableRow customer={customer} salesReps={salesReps} />
                         ))}
                     </TableBody>
                     <TableFooter>

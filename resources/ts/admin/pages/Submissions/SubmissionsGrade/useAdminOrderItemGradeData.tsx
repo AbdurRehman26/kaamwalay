@@ -207,7 +207,7 @@ export function useAdminOrderItemGradeData(
             ).unwrap();
             dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
         } catch (error: any) {
-            dispatch(getAllSubmissions(orderID));
+            dispatch(getAllSubmissions({ id: orderID, fromAgs: false }));
             notifications.exception(error);
         }
     }

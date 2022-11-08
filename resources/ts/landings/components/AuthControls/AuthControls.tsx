@@ -7,6 +7,7 @@ import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { AuthDialog } from '@shared/components/AuthDialog';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionButton from '../SubmissionButton/SubmissionButton';
@@ -50,7 +51,7 @@ const useStyles = makeStyles(
 );
 
 export function AuthControls() {
-    const { checking, authenticated, openAuthDialog, authDialogProps } = useAuth();
+    const { checking, authenticated, openAuthDialog, authDialogProps, user } = useAuth();
     const classes = useStyles();
 
     if (checking) {
@@ -68,7 +69,15 @@ export function AuthControls() {
                 <span className={'AuthControls-buttonLabel'}>Submit</span>
             </SubmissionButton>
             {authenticated ? (
-                <ButtonBase href={'/dashboard'}>
+                <ButtonBase
+                    href={
+                        user.hasRole(RolesEnum.Admin)
+                            ? '/admin'
+                            : user.hasRole(RolesEnum.Salesman)
+                            ? '/salesrep'
+                            : '/dashboard'
+                    }
+                >
                     <Avatar src={dummyLargeAvatar} />
                 </ButtonBase>
             ) : (

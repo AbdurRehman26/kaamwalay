@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
+use App\Http\Controllers\SalesRepController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'getView'])->name('home');
 Route::get('/admin{path}', [AdminController::class, 'getView'])->where(['path' => '.*'])->name('admin.main');
 Route::get('/dashboard{path}', [DashboardController::class, 'getView'])->where(['path' => '.*'])->name('dashboard.main');
+Route::get('/salesrep{path}', [SalesRepController::class, 'getView'])->where(['path' => '.*'])->name('salesrep.main');
 
 Route::prefix('auth')->group(function () {
     Route::get('/password/reset', [AuthController::class, 'getView'])->where(['path' => '.*'])->name('password.reset');

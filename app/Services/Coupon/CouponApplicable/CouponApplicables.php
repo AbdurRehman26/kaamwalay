@@ -5,6 +5,7 @@ namespace App\Services\Coupon\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentPlan;
+use App\Models\PaymentPlanRange;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Support\Facades\Cache;
 
@@ -24,13 +25,28 @@ trait CouponApplicables
         }
     }
 
-    public function getPaymentPlan(array|Order $order): PaymentPlan
+    public function getPaymentPlan(array|Order $order): PaymentPlanRange
     {
         if (! empty($order['payment_plan']['id'])) {
-            return PaymentPlan::find($order['payment_plan']['id']);
+            $paymentPlan = PaymentPlan::find($order['payment_plan']['id']);
+        } else {
+            $paymentPlan = PaymentPlan::find($order->payment_plan_id);
+        }
+        $priceRanges = $paymentPlan->paymentPlanRanges;
+
+        if ($order instanceof Order) {
+            $totalItems = $order->orderItems()->sum('quantity');
+        } else {
+            // @phpstan-ignore-next-line
+            $totalItems = collect($order['items'])->sum('quantity');
         }
 
-        return PaymentPlan::find($order->payment_plan_id);
+        $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {
+            return ($item->min_cards <= $totalItems && $item->max_cards >= $totalItems) ||
+                ($item->min_cards <= $totalItems && ! $item->max_cards);
+        });
+
+        return $priceRange;
     }
 
     public function getOrderItems(array|Order $order): array

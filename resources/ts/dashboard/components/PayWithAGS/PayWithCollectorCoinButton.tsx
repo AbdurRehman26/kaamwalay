@@ -24,7 +24,8 @@ export function PayWithCollectorCoinButton() {
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
+    const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
+    const isCouponValid = useAppSelector((state) => state.newSubmission?.couponState.isCouponValid);
 
     const wallets = {
         // Prod eth mainnet wallet
@@ -98,7 +99,7 @@ export function PayWithCollectorCoinButton() {
                                 },
                                 ...(couponCode && {
                                     coupon: couponCode,
-                                    paymentPlan: serviceLevelId,
+                                    paymentPlan: originalPaymentPlanId,
                                 }),
                             }),
                         ).unwrap();
@@ -148,7 +149,7 @@ export function PayWithCollectorCoinButton() {
     }, [dispatch, orderID, appliedCredit, discountedValue, isCouponApplied, fetchTotalInAGS]);
 
     return (
-        <Button variant={'contained'} disabled={isLoading} onClick={handleClick} sx={{ height: 48 }}>
+        <Button variant={'contained'} disabled={isLoading || !isCouponValid} onClick={handleClick} sx={{ height: 48 }}>
             {isLoading ? 'Processing Payment...' : 'Pay With Collector Coin'}
         </Button>
     );

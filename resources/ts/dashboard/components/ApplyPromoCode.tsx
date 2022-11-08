@@ -56,7 +56,7 @@ export function ApplyPromoCode() {
     );
     const validCouponId = useAppSelector((state) => state.newSubmission.couponState.validCouponId);
     const apiService = useInjectable(APIService);
-    const selectedServiceLevelID = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel.id);
+    const originalServiceLevelId = useAppSelector((state) => state.newSubmission.step01Data.originalServiceLevel.id);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const selectedPaymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
@@ -67,7 +67,7 @@ export function ApplyPromoCode() {
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}&items_count=${totalCardItems}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${originalServiceLevelId}&items_count=${totalCardItems}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -83,9 +83,10 @@ export function ApplyPromoCode() {
                 dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));
                 dispatch(setValidCouponId(-1));
+                setShowInvalidState(true);
             }
         },
-        [apiService, dispatch, selectedServiceLevelID, showInvalidState, totalCardItems],
+        [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems],
     );
 
     const debounceCheckCoupon = useMemo(
@@ -104,6 +105,11 @@ export function ApplyPromoCode() {
         [debounceCheckCoupon, dispatch],
     );
 
+    const handleCouponDismiss = useCallback(() => {
+        dispatch(setIsCouponApplied(false));
+        dispatch(setIsCouponValid(true));
+    }, [dispatch]);
+
     useEffect(() => {
         handleChange({ target: { value: couponCode } });
     }, [couponCode, handleChange, isCouponValid, showInvalidState]);
@@ -119,7 +125,7 @@ export function ApplyPromoCode() {
     const handleApplyCoupon = async () => {
         const DTO = {
             paymentPlan: {
-                id: selectedServiceLevelID,
+                id: originalServiceLevelId,
             },
             items: selectedCards.map((selectedCard: any) => ({
                 cardProduct: {
@@ -173,9 +179,12 @@ export function ApplyPromoCode() {
                     <Typography variant={'caption'} sx={{ marginTop: '3px' }}>
                         {discountStatement}
                     </Typography>
+                    <Typography variant={'caption'} color={'red'} sx={{ marginTop: '3px' }}>
+                        {couponInvalidMessage}
+                    </Typography>
                 </Box>
                 <Box>
-                    <IconButton onClick={() => dispatch(setIsCouponApplied(false))}>
+                    <IconButton onClick={handleCouponDismiss}>
                         <CloseIcon />
                     </IconButton>
                 </Box>
@@ -200,7 +209,7 @@ export function ApplyPromoCode() {
                         <InputAdornment position="end">
                             {showInvalidState ? (
                                 <ErrorOutlineIcon />
-                            ) : isCouponValid ? (
+                            ) : isCouponValid && couponCode !== '' ? (
                                 <Button variant="text" onClick={handleApplyCoupon}>
                                     Apply Coupon
                                 </Button>

@@ -12,8 +12,8 @@ export const getAllSalesRep = createAsyncThunk('salesRep/getAllSalesRep', async 
 export const getSales = createAsyncThunk('salesRep/getSales', async (input: { salesmanId: number }) => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`salesman/dashboard/sales`);
-    const salesRef = await endpoint.get('');
-    return salesRef.data;
+    const sales = await endpoint.get('');
+    return sales.data.data ?? sales.data;
 });
 
 export const getCommissionsEarned = createAsyncThunk(
@@ -21,8 +21,8 @@ export const getCommissionsEarned = createAsyncThunk(
     async (input: { salesmanId: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`salesman/dashboard/commission-earned`);
-        const salesRef = await endpoint.get('');
-        return salesRef.data;
+        const commission = await endpoint.get('');
+        return commission.data.data ?? commission.data;
     },
 );
 

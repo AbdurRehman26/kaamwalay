@@ -59,7 +59,7 @@ dataset('orderLine', function () {
 
         $commission = match ($order->salesman->salesmanProfile->commission_type->toString()) {
             'fixed' => $order->salesman->salesmanProfile->commission_value * $order->orderItems()->count(),
-            default => ( $order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total) / 100),
+            default => ($order->salesman->salesmanProfile->commission_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total) / 100),
         };
 
         return [

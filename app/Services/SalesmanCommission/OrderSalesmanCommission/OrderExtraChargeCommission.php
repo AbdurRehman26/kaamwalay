@@ -11,6 +11,6 @@ class OrderExtraChargeCommission implements OrderPercentageCommissionInterface
 
     public static function getPercentageCommission(Order $order): float
     {
-        return ( $order->salesman->salesmanProfile->commission_value % ($order->extraCharges()->latest()->first()->amount) );
+        return ( $order->salesman->salesmanProfile->commission_value * ($order->extraCharges()->latest()->first()->amount) / 100);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
+use App\Models\PaymentPlanRange;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;

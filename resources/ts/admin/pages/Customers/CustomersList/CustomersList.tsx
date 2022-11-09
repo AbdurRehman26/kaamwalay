@@ -75,7 +75,7 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Submissions',
-        align: 'right',
+        align: 'center',
         sortable: true,
     },
     {
@@ -83,7 +83,7 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Cards',
-        align: 'right',
+        align: 'center',
         sortable: true,
     },
     {
@@ -91,7 +91,7 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Owners',
-        align: 'right',
+        align: 'left',
         sortable: false,
     },
     {

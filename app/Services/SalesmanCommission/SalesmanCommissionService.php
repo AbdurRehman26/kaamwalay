@@ -7,7 +7,7 @@ use App\Models\Order;
 use App\Models\SalesmanCommission;
 use App\Models\SalesmanEarnedCommission;
 use App\Models\User;
-use App\Services\SalesmanCommission\OrderExtraChargeCommission\OrderCommissionService;
+use App\Services\SalesmanCommission\OrderSalesmanCommission\OrderCommissionService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

@@ -10,29 +10,19 @@ export const getAllSalesRep = createAsyncThunk('salesRep/getAllSalesRep', async 
 });
 
 export const getSales = createAsyncThunk('salesRep/getSales', async (input: { salesmanId: number }) => {
-    const data = {
-        salesmanId: input.salesmanId,
-        // fromDate: '',
-        // toDate: ''
-    };
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/salesman/dashboard/sales`);
-    const salesRef = await endpoint.post('', data);
-    return salesRef.data;
+    const endpoint = apiService.createEndpoint(`salesman/dashboard/sales`);
+    const sales = await endpoint.get('');
+    return sales.data.data ?? sales.data;
 });
 
 export const getCommissionsEarned = createAsyncThunk(
     'salesRep/getCommissionsEarned',
     async (input: { salesmanId: number }) => {
-        const data = {
-            salesmanId: input.salesmanId,
-            // fromDate: '',
-            // toDate: ''
-        };
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/salesman/dashboard/commission-earned`);
-        const salesRef = await endpoint.post('', data);
-        return salesRef.data;
+        const endpoint = apiService.createEndpoint(`salesman/dashboard/commission-earned`);
+        const commission = await endpoint.get('');
+        return commission.data.data ?? commission.data;
     },
 );
 
@@ -49,6 +39,12 @@ export const salesRepSlice = createSlice({
     extraReducers: {
         [getAllSalesRep.fulfilled as any]: (state, action) => {
             state.salesReps = action.payload;
+        },
+        [getSales.fulfilled as any]: (state, action) => {
+            state.sales = action.payload;
+        },
+        [getCommissionsEarned.fulfilled as any]: (state, action) => {
+            state.commission = action.payload;
         },
     },
 });

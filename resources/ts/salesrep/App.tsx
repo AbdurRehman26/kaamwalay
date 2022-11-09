@@ -8,7 +8,7 @@ function App() {
     return (
         <BrowserRouter basename={'/salesrep'}>
             <Routes>
-                <Route path={'/*'} element={ProtectedRoute(SalesRep, { roles: RolesEnum.Admin })} />
+                <Route path={'/*'} element={ProtectedRoute(SalesRep, { roles: RolesEnum.Salesman })} />
             </Routes>
         </BrowserRouter>
     );

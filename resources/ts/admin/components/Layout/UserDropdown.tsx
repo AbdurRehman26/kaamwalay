@@ -1,6 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import LocalPoliceOutlined from '@mui/icons-material/LocalPoliceOutlined';
+import Face from '@mui/icons-material/Face';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -19,7 +19,8 @@ export function UserDropdown() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const isAdmin = user?.hasRole(RolesEnum.Admin);
+    const isCustomer = user?.hasRole(RolesEnum.Customer);
+    const isSaleRep = user?.roles.find((item) => item.name === 'salesman');
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -34,8 +35,8 @@ export function UserDropdown() {
                 case '/logout':
                     logout();
                     break;
-                case '/admin':
-                    window.location.href = '/admin';
+                case '/salesrep':
+                    window.location.href = '/salesrep';
                     break;
                 case '/dashboard':
                     window.location.href = '/dashboard';
@@ -68,18 +69,20 @@ export function UserDropdown() {
                     sx: MenuStyle,
                 }}
             >
-                <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
-                    <ListItemIcon>
-                        <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
-                    </ListItemIcon>
-                    Customer Account
-                </StyledMenuItem>
-                {isAdmin ? (
-                    <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
+                {isCustomer ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/dashboard')}>
                         <ListItemIcon>
-                            <LocalPoliceOutlined sx={{ color: 'black' }} />
+                            <AccountCircleOutlinedIcon sx={{ color: 'black' }} />
                         </ListItemIcon>
-                        Admin Account
+                        Customer Account
+                    </StyledMenuItem>
+                ) : null}
+                {isSaleRep ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/salesrep')}>
+                        <ListItemIcon>
+                            <Face />
+                        </ListItemIcon>
+                        SalesRep
                     </StyledMenuItem>
                 ) : null}
                 <Divider />

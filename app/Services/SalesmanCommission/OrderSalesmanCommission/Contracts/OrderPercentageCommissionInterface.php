@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\SalesmanCommission\OrderExtraChargeCommission\Contracts;
+namespace App\Services\SalesmanCommission\OrderSalesmanCommission\Contracts;
 
 use App\Models\Order;
 

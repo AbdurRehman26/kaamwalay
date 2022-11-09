@@ -28,7 +28,7 @@ class CardSurfaceController extends Controller
     }
 
     public function show(CardSurface $surface): CardSurfaceResource
-    {   
+    {
         return new CardSurfaceResource($surface);
     }
 
@@ -41,5 +41,4 @@ class CardSurfaceController extends Controller
             'message' => 'Card Surface Updated successfully.',
         ]);
     }
-
 }

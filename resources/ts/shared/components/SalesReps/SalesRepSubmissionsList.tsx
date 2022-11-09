@@ -50,8 +50,8 @@ export function SalesRepSubmissionsList({
                         <TableCell variant={'head'}>Submission #</TableCell>
                         <TableCell variant={'head'}>Date Created</TableCell>
                         <TableCell variant={'head'}>Cards</TableCell>
-                        <TableCell variant={'head'}>Payment</TableCell>
                         <TableCell variant={'head'}>Status</TableCell>
+                        <TableCell variant={'head'}>Payment</TableCell>
                         <TableCell variant={'head'}>Declared Value</TableCell>
                         <TableCell variant={'head'}>Total</TableCell>
                         <TableCell variant={'head'}>Commission</TableCell>
@@ -66,7 +66,7 @@ export function SalesRepSubmissionsList({
                             order={order}
                             key={order.id}
                             isCustomerDetailPage={false}
-                            isSalesRepDetailPage={false}
+                            isSalesRepDetailPage={isSalesRepDetailPage}
                         />
                     ))
                 ) : (

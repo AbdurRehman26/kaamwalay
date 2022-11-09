@@ -201,16 +201,20 @@ export function SubmissionsTableRow({
                 <TableCell>
                     {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
                 </TableCell>
-                <TableCell align={'right'}>
-                    <SubmissionActionButton
-                        orderId={order.id}
-                        orderStatus={order.orderStatus}
-                        size={'small'}
-                        buttonOnly
-                        trackingNumber={order.orderShipment?.trackingNumber}
-                        shippingProvider={order.orderShipment?.shippingProvider}
-                    />
-                </TableCell>
+                {isSalesRepDetailPage ? (
+                    <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
+                ) : (
+                    <TableCell align={'right'}>
+                        <SubmissionActionButton
+                            orderId={order.id}
+                            orderStatus={order.orderStatus}
+                            size={'small'}
+                            buttonOnly
+                            trackingNumber={order.orderShipment?.trackingNumber}
+                            shippingProvider={order.orderShipment?.shippingProvider}
+                        />
+                    </TableCell>
+                )}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}

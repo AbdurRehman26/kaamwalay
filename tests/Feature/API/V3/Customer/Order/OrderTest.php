@@ -2,10 +2,8 @@
 
 use App\Models\CardProduct;
 use App\Models\PaymentPlan;
-use App\Models\PaymentPlanRange;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);

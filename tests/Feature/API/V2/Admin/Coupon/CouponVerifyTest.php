@@ -8,8 +8,11 @@ use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentPlan;
+use App\Models\PaymentPlanRange;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
@@ -20,8 +23,9 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
-
+    $this->paymentPlan = PaymentPlan::factory()
+        ->withPaymentPlanRanges()
+        ->create(['max_protection_amount' => 300]);
     CouponStatus::factory()->count(2)->create();
 
     $couponApplicable = CouponApplicable::factory()

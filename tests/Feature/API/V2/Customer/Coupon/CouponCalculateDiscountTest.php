@@ -8,12 +8,17 @@ use App\Models\CouponLog;
 use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\PaymentPlan;
+use App\Models\PaymentPlanRange;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()
+        ->withPaymentPlanRanges()
+        ->create(['max_protection_amount' => 300]);
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();
@@ -195,7 +200,7 @@ it('can not calculate coupon discount if usage limit is reached', function () {
 
 it('calculates coupon discount for free cards', function () {
     actingAs($this->user);
-    $paymentPlan = PaymentPlan::factory()->create([
+    $paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges(20)->create([
         'price' => 20,
         'max_protection_amount' => 300,
     ]);

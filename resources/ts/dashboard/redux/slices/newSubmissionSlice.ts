@@ -22,6 +22,7 @@ export interface SubmissionService {
 export interface Step01Data {
     availableServiceLevels: SubmissionService[];
     selectedServiceLevel: SubmissionService;
+    originalServiceLevel: SubmissionService;
     status: any;
 }
 
@@ -259,6 +260,47 @@ const initialState: NewSubmissionSliceState = {
             minPrice: 14,
         },
         status: 'success',
+        originalServiceLevel: {
+            id: 1,
+            type: 'card',
+            maxProtectionAmount: 200,
+            turnaround: '20 Business Days',
+            price: 18,
+            priceRanges: [
+                {
+                    id: 1,
+                    minCards: 1,
+                    maxCards: 20,
+                    price: 18,
+                },
+                {
+                    id: 2,
+                    minCards: 21,
+                    maxCards: 50,
+                    price: 17,
+                },
+                {
+                    id: 3,
+                    minCards: 51,
+                    maxCards: 100,
+                    price: 16,
+                },
+                {
+                    id: 4,
+                    minCards: 101,
+                    maxCards: 200,
+                    price: 15,
+                },
+                {
+                    id: 5,
+                    minCards: 201,
+                    maxCards: null,
+                    price: 14,
+                },
+            ],
+            maxPrice: 18,
+            minPrice: 14,
+        },
     },
     step02Data: {
         searchValue: '',
@@ -911,6 +953,10 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = {
                 type: 'card',
                 ...action.payload.paymentPlan,
+            };
+            state.step01Data.originalServiceLevel = {
+                type: 'card',
+                ...action.payload.originalPaymentPlan,
             };
             state.step02Data = {
                 cleaningFee: action.payload.cleaningFee,

@@ -9,12 +9,15 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentPlan;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()
+        ->withPaymentPlanRanges()
+        ->create(['max_protection_amount' => 300]);
 
     CouponStatus::factory()->count(2)->create();
 
@@ -150,7 +153,9 @@ test('customer checks for valid coupon code having more or equal required cards 
             ]
         );
 
-    $order = Order::factory()->create();
+    $order = Order::factory()->create([
+        'payment_plan_id' => $this->paymentPlan->id,
+    ]);
 
     OrderItem::factory()->count(30)->create([
         'order_id' => $order->id,

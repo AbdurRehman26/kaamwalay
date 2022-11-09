@@ -42,7 +42,7 @@ it('salesman commissions on different order lines', function ($orderLine) {
     $order = $this->order;
     SalesmanCommissionService::onOrderLine($this->order, $orderLine['commission_type']);
 
-    $commission = $orderLine['commission'];
+    $commission = number_format($orderLine['commission'], 2);
 
     $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
 

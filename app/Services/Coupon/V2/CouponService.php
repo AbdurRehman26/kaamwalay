@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Coupon;
+namespace App\Services\Coupon\V2;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Exceptions\API\Customer\Coupon\CouponHasInvalidMinThreshold;
@@ -9,8 +9,8 @@ use App\Models\Coupon;
 use App\Models\CouponLog;
 use App\Models\CouponStat;
 use App\Models\Order;
-use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;
-use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
+use App\Services\Coupon\V2\CouponApplicable\ServiceFeeCoupon;
+use App\Services\Coupon\V2\CouponApplicable\ServiceLevelCoupon;
 
 class CouponService
 {

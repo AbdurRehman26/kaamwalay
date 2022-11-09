@@ -175,15 +175,17 @@ export function SubmissionsTableRow({
                         </TableCell>
                     </>
                 ) : null}
-                <TableCell>
-                    {order?.createdBy?.fullName ? (
-                        <MuiLink component={Link} color={'primary'} to={''} className={font.fontWeightMedium}>
-                            {order.createdBy.fullName}
-                        </MuiLink>
-                    ) : (
-                        '-'
-                    )}
-                </TableCell>
+                {isCustomerDetailPage ? (
+                    <TableCell>
+                        {order?.owner?.fullName ? (
+                            <MuiLink component={Link} color={'primary'} to={''} className={font.fontWeightMedium}>
+                                {order.owner.fullName}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}{' '}
+                    </TableCell>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

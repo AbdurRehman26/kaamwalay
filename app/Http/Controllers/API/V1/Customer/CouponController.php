@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\V1\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\V1\Customer\Coupon\CouponResource;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V1\CouponService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 

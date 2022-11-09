@@ -83,7 +83,6 @@ export function ApplyPromoCode() {
                 dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));
                 dispatch(setValidCouponId(-1));
-                setShowInvalidState(true);
             }
         },
         [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems],
@@ -104,11 +103,6 @@ export function ApplyPromoCode() {
         },
         [debounceCheckCoupon, dispatch],
     );
-
-    const handleCouponDismiss = useCallback(() => {
-        dispatch(setIsCouponApplied(false));
-        dispatch(setIsCouponValid(true));
-    }, [dispatch]);
 
     useEffect(() => {
         handleChange({ target: { value: couponCode } });
@@ -179,12 +173,9 @@ export function ApplyPromoCode() {
                     <Typography variant={'caption'} sx={{ marginTop: '3px' }}>
                         {discountStatement}
                     </Typography>
-                    <Typography variant={'caption'} color={'red'} sx={{ marginTop: '3px' }}>
-                        {couponInvalidMessage}
-                    </Typography>
                 </Box>
                 <Box>
-                    <IconButton onClick={handleCouponDismiss}>
+                    <IconButton onClick={() => dispatch(setIsCouponApplied(false))}>
                         <CloseIcon />
                     </IconButton>
                 </Box>
@@ -209,7 +200,7 @@ export function ApplyPromoCode() {
                         <InputAdornment position="end">
                             {showInvalidState ? (
                                 <ErrorOutlineIcon />
-                            ) : isCouponValid && couponCode !== '' ? (
+                            ) : isCouponValid ? (
                                 <Button variant="text" onClick={handleApplyCoupon}>
                                     Apply Coupon
                                 </Button>

@@ -197,7 +197,6 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
     const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
-    const isCouponValid = useAppSelector((state) => state.newSubmission?.couponState.isCouponValid);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -359,7 +358,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                disabled={isStripePaymentLoading || !isCouponValid}
+                                disabled={isStripePaymentLoading}
                                 onClick={handleConfirmStripePayment}
                                 sx={{ height: 48 }}
                             >

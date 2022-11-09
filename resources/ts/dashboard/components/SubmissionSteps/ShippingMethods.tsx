@@ -86,7 +86,7 @@ export function ShippingMethods() {
             <Grid container spacing={3} mb={4}>
                 {shippingMethods.data?.map((method) =>
                     mappedContent[method.code] ? (
-                        <Grid item xs={6} key={method.id}>
+                        <Grid item md={6} xs={12} key={method.id}>
                             <ShippingMethod
                                 selected={method.id === shippingMethod?.id}
                                 shippingMethod={method}

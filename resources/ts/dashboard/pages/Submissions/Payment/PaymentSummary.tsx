@@ -196,8 +196,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
-
+    const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -284,7 +283,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         code: couponCode,
                     },
                     paymentPlan: {
-                        id: serviceLevelId,
+                        id: originalPaymentPlanId,
                     },
                 }),
             });

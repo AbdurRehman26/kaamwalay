@@ -6,6 +6,7 @@ use App\Models\Couponable;
 use App\Models\CouponApplicable;
 use App\Models\CouponStatus;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -16,7 +17,7 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
     
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges()->create(['max_protection_amount' => 300]);
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();
@@ -51,6 +52,8 @@ beforeEach(function () {
     $this->order = Order::factory()->create([
         'payment_plan_id' => $this->paymentPlan->id,
     ]);
+
+    OrderItem::factory()->for($this->order)->create();
 
     $this->user = User::factory()
         ->withRole(config('permission.roles.admin'))

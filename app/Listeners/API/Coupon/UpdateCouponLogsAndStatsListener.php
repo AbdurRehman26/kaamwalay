@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Coupon;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Services\Coupon\CouponApplicable;
+namespace App\Services\Coupon\V2\CouponApplicable;
 
 use App\Exceptions\API\Customer\Coupon\CouponFlatValueDiscountGreaterThanOrder;
 use App\Models\Coupon;
 use App\Models\Order;
 
-class ServiceFeeCoupon implements CouponApplicableInterface
+class ServiceLevelCoupon implements CouponApplicableInterface
 {
     use CouponApplicables;
 
     public function getFixedDiscount(Coupon $coupon, Order|array $order): float
     {
-        return $coupon->discount_value;
+        return ($coupon->discount_value) * array_sum(array_column($this->getOrderItems($order), 'quantity'));
     }
-    
+
     public function getFlatDiscount(Coupon $coupon, Order|array $order): float
     {
         $insuredShipping = $this->getShippingFee($order);

@@ -19,7 +19,7 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges()->create(['max_protection_amount' => 300]);
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();

@@ -20,8 +20,9 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
-
+    $this->paymentPlan = PaymentPlan::factory()
+        ->withPaymentPlanRanges()
+        ->create(['max_protection_amount' => 300]);
     CouponStatus::factory()->count(2)->create();
 
     $couponApplicable = CouponApplicable::factory()
@@ -156,7 +157,9 @@ test('admin checks for valid coupon code having more or equal required cards cou
             ]
         );
 
-    $order = Order::factory()->create();
+    $order = Order::factory()->create([
+        'payment_plan_id' => $this->paymentPlan->id,
+    ]);
 
     OrderItem::factory()->count(30)->create([
         'order_id' => $order->id,

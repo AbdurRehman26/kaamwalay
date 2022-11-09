@@ -10,7 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSurfaceService
 {
-    protected const LIST_CARD_RARITY_PER_PAGE = 15;
+    protected const LIST_CARD_SURFACE_PER_PAGE = 15;
 
     public function getCardSurfaces(): LengthAwarePaginator
     {
@@ -21,6 +21,6 @@ class CardSurfaceService
             ])
             ->defaultSort('-created_at')
             ->allowedSorts(['name'])
-            ->paginate(request('per_page', self::LIST_CARD_RARITY_PER_PAGE));
+            ->paginate(request('per_page', self::LIST_CARD_SURFACE_PER_PAGE));
     }
 }

@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -142,7 +143,11 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                     key={item.value}
                     value={item.value}
                     control={<Radio checked={item.isRefined ? true : false} />}
-                    label={item.label}
+                    label={
+                        <Typography sx={{ fontSize: '14px', fontWeight: item.isRefined ? 500 : 400 }}>
+                            {item.label}
+                        </Typography>
+                    }
                     onClick={(event) => {
                         event.preventDefault();
                         refine(item.value);

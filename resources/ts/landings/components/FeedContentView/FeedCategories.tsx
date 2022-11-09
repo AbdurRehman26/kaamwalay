@@ -238,7 +238,7 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                 <Grid className={'FilterBar'}>
                     <CustomRefinementList attribute={'card_category'} defaultRefinement={category} limit={100} />
                     <FeedGrade />
-                    <FeedClearCategories />
+                    {category.length > 0 ? <FeedClearCategories /> : null}
                 </Grid>
                 <Grid className={'FilterBar'}>
                     <Grid className={'ViewOptionContainer'}>

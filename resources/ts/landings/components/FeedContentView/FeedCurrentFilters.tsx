@@ -16,6 +16,13 @@ const CurrentRefinementBox = styled(Box)({
         display: 'inline-flex',
         flexWrap: 'wrap',
     },
+    '.FilterList': {
+        display: 'inline-flex',
+        flexWrap: 'wrap',
+        [theme.breakpoints.down('sm')]: {
+            flexWrap: 'nowrap',
+        },
+    },
     '.Chip': {
         width: '100%',
         height: '40px',
@@ -57,7 +64,7 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
                 {items.map((item) => (
                     <li key={item.label}>
                         {item.items ? (
-                            <ul className={'CurrentFilterList'}>
+                            <ul className={'FilterList'}>
                                 {item.items.map((nested) => (
                                     <li key={nested.label} className={'List'}>
                                         <Chip

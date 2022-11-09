@@ -1,6 +1,7 @@
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import Typography from '@mui/material/Typography';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import { useDispatch } from 'react-redux';
 import {
@@ -17,10 +18,15 @@ const CustomRefinementListMobile = connectRefinementList(({ items, refine }) => 
         <FormGroup>
             {items.map((item: any) => (
                 <FormControlLabel
+                    sx={{ fontWeight: 'bold' }}
                     key={item.value}
                     value={item.value}
                     control={<Checkbox checked={item.isRefined ? true : false} />}
-                    label={item.label}
+                    label={
+                        <Typography sx={{ fontSize: '14px', fontWeight: item.isRefined ? 500 : 400 }}>
+                            {item.label}
+                        </Typography>
+                    }
                     onClick={(event) => {
                         event.preventDefault();
                         refine(item.value);

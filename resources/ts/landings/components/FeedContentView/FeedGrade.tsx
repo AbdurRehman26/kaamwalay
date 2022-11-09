@@ -84,6 +84,11 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const dispatch = useDispatch();
     const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
+    function IncrementDecrement() {
+        dispatch(setFilterDecrement());
+        dispatch(setFilterIncrement());
+    }
+
     return !isMobile ? (
         <>
             <FeedGradeDropdown>
@@ -142,9 +147,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                         event.preventDefault();
                         refine(item.value);
                         !item.isRefined ? dispatch(setGradeValue(item.label)) : dispatch(setGradeValue(''));
-                        !grade && item.label !== grade
-                            ? dispatch(setFilterIncrement())
-                            : dispatch(setFilterDecrement());
+                        !grade && item.label !== grade ? dispatch(setFilterIncrement()) : IncrementDecrement();
                     }}
                 />
             ))}

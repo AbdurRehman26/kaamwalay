@@ -5,7 +5,6 @@ namespace App\Services\Coupon\V1\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentPlan;
-use App\Models\PaymentPlanRange;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Support\Facades\Cache;
 

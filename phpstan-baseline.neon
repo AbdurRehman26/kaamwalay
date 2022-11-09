@@ -249,7 +249,7 @@ parameters:
 			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\CardRarity\\>\\) of method App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php
-		
+
 		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardSurfaceSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1

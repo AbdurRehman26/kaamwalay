@@ -158,7 +158,9 @@ test('admin checks for valid coupon code having more or equal required cards cou
             ]
         );
 
-    $order = Order::factory()->create();
+    $order = Order::factory()->create([
+        'payment_plan_id' => $this->paymentPlan->id,
+    ]);
 
     OrderItem::factory()->count(30)->create([
         'order_id' => $order->id,

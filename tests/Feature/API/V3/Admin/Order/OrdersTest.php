@@ -71,9 +71,14 @@ beforeEach(function () {
         ]
     ))->create();
 
-    $this->paymentPlan = PaymentPlan::factory()
-        ->withPaymentPlanRanges()
-        ->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
+    $this->paymentPlanRanges = PaymentPlanRange::factory()->count(5)->state(new Sequence(
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 1, 'max_cards' => 20],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 21, 'max_cards' => 50],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 51, 'max_cards' => 100],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 101, 'max_cards' => 200],
+        ['payment_plan_id' => $this->paymentPlan->id, 'min_cards' => 201, 'max_cards' => null],
+    ))->create();
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->insured()->create();
     $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);

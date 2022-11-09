@@ -3,7 +3,7 @@
 namespace App\Services\Order\Validators;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 
 class CouponAppliedValidator
 {

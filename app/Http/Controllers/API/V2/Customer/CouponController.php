@@ -9,7 +9,7 @@ use App\Http\Requests\API\V2\Customer\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\V2\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\V2\Customer\Coupon\CouponResource;
 use App\Models\Order;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 

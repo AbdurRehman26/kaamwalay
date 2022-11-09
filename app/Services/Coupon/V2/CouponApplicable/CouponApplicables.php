@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Coupon\CouponApplicable;
+namespace App\Services\Coupon\V2\CouponApplicable;
 
 use App\Models\Coupon;
 use App\Models\Order;
@@ -29,17 +29,13 @@ trait CouponApplicables
     {
         if (! empty($order['payment_plan']['id'])) {
             $paymentPlan = PaymentPlan::find($order['payment_plan']['id']);
-        } else {
-            $paymentPlan = PaymentPlan::find($order->payment_plan_id);
-        }
-        $priceRanges = $paymentPlan->paymentPlanRanges;
-
-        if ($order instanceof Order) {
-            $totalItems = $order->orderItems()->sum('quantity');
-        } else {
             // @phpstan-ignore-next-line
             $totalItems = collect($order['items'])->sum('quantity');
+        } else {
+            $paymentPlan = PaymentPlan::find($order->payment_plan_id);
+            $totalItems = $order->orderItems()->sum('quantity');
         }
+        $priceRanges = $paymentPlan->paymentPlanRanges;
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {
             return ($item->min_cards <= $totalItems && $item->max_cards >= $totalItems) ||

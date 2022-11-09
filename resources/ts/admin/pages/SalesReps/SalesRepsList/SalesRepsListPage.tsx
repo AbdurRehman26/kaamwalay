@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageSelector } from '@shared/components/PageSelector';
 import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
 import { FormikButton } from '@shared/components/fields/FormikButton';
@@ -55,6 +56,7 @@ export function SalesRepsListPage() {
     const [status, setStatus] = useState({ label: '', value: 0 });
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+    const navigate = useNavigate();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -197,6 +199,15 @@ export function SalesRepsListPage() {
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
 
+    const handleRowClick = useCallback(
+        (e, id: number) => {
+            if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
+                navigate(`/salesreps/${id}/view/overview`);
+            }
+        },
+        [navigate],
+    );
+
     if (salesReps.isLoading) {
         return (
             <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -321,7 +332,7 @@ export function SalesRepsListPage() {
                         </TableHead>
                         <TableBody>
                             {salesReps.data.map((salesRep: SalesRepEntity) => (
-                                <TableRow key={salesRep.id}>
+                                <TableRow key={salesRep.id} onClick={(e) => handleRowClick(e, salesRep.id)}>
                                     <TableCell variant={'body'}>
                                         <Grid container>
                                             <Avatar src={salesRep.profileImage ?? ''}>{salesRep.getInitials()}</Avatar>

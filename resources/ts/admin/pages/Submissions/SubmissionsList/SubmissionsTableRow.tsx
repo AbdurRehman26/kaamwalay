@@ -32,6 +32,7 @@ import MarkAsPaidDialog from '../SubmissionsView/MarkAsPaidDialog';
 interface SubmissionsTableRowProps {
     order: OrderEntity;
     isCustomerDetailPage: boolean;
+    isSalesRepDetailPage?: boolean;
 }
 
 enum Options {
@@ -59,7 +60,11 @@ const useStyles = makeStyles(
  * @date: 15.09.2021
  * @time: 04:42
  */
-export function SubmissionsTableRow({ order, isCustomerDetailPage }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({
+    order,
+    isCustomerDetailPage,
+    isSalesRepDetailPage = false,
+}: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);

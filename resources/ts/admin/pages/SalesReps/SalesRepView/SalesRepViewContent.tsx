@@ -9,6 +9,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import SalesRepViewContentHeader from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContentHeader';
 import { SalesRepViewOverviewTab } from '@admin/pages/SalesReps/SalesRepView/SalesRepViewOverviewTab';
+import SalesRepViewSubmissionsTab from '@admin/pages/SalesReps/SalesRepView/SalesRepViewSubmissionsTab';
 
 const TabContent = styled(TabPanel)(
     {
@@ -38,8 +39,7 @@ export function SalesRepViewContent({ salesrep }) {
                     <SalesRepViewOverviewTab salesrep={salesrep} />
                 </TabContent>
                 <TabContent value={'submissions'}>
-                    Submissions
-                    {/* <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.active} />*/}
+                    <SalesRepViewSubmissionsTab />
                 </TabContent>
                 <TabContent value={'customers'}>
                     Customers

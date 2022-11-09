@@ -8,11 +8,9 @@ use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentPlan;
-use App\Models\PaymentPlanRange;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;

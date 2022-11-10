@@ -12,12 +12,12 @@ use App\Models\OrderItem;
 use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 use App\Models\User;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
 
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges(20)->create(['max_protection_amount' => 300, 'price' => 20]);
     $this->orderPaymentPlan = OrderPaymentPlan::factory()->create([
         'id' => $this->paymentPlan->id,
         'price' => $this->paymentPlan->price,
@@ -64,7 +64,7 @@ beforeEach(function () {
             'payment_plan_id' => $this->paymentPlan->id,
         ]);
 
-    OrderItem::factory()->for($this->order)->count(2)->create();
+    OrderItem::factory()->for($this->order)->count(2)->create(['quantity' => 1]);
 
 
     $this->actingAs($this->user);

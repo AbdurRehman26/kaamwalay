@@ -14,7 +14,7 @@ export class SalesRepRepository extends Repository<SalesRepEntity> {
     }
 
     public async getSalesReps() {
-        const { data } = await this.endpoint.get('');
+        const { data } = await this.endpoint.get('/?filter[is_active]=1');
         return this.toEntity(data);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Coupon\CouponApplicable;
+namespace App\Services\Coupon\V1\CouponApplicable;
 
 use App\Models\Coupon;
 use App\Models\Order;

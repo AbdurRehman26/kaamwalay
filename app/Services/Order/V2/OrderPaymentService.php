@@ -6,13 +6,12 @@ use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
-use Faker\Provider\Payment;
 use Throwable;
 
 class OrderPaymentService

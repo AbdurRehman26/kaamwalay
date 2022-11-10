@@ -24,7 +24,7 @@ export function PayWithCollectorCoinButton() {
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
+    const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
 
     const wallets = {
         // Prod eth mainnet wallet
@@ -98,7 +98,7 @@ export function PayWithCollectorCoinButton() {
                                 },
                                 ...(couponCode && {
                                     coupon: couponCode,
-                                    paymentPlan: serviceLevelId,
+                                    paymentPlan: originalPaymentPlanId,
                                 }),
                             }),
                         ).unwrap();

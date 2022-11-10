@@ -37,7 +37,7 @@ function PaypalBtn() {
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const user$ = useAuth().user;
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
+    const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
 
     const notifications = useNotifications();
     const dispatch = useDispatch();
@@ -83,7 +83,7 @@ function PaypalBtn() {
                                     code: couponCode,
                                 },
                                 paymentPlan: {
-                                    id: serviceLevelId,
+                                    id: originalPaymentPlanId,
                                 },
                             }),
                         });

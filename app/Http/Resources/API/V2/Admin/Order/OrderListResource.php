@@ -5,6 +5,7 @@ namespace App\Http\Resources\API\V2\Admin\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
  * @property mixed $id
  * @property mixed $order_number
  * @property mixed $grand_total
+ * @property mixed $salesman
  * @property mixed $amount_paid_from_wallet
  * @property mixed $arrived_at
  * @property mixed $created_at
@@ -36,6 +38,7 @@ class OrderListResource extends BaseResource
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
+            'owner' => new UserResource($this->salesman),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'payment_status' => $this->payment_status,
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),

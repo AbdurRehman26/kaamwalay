@@ -63,7 +63,7 @@ const useStyles = makeStyles(
 export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: SubmissionsGradeCardRoboGradesProps) {
     const classes = useStyles();
     const [robogradesMessage, setRobogradesMessage] = useState(
-        'Robogrades are being loaded in the background and will be populated as soon as they are available.'
+        'Robogrades are being loaded in the background and will be populated as soon as they are available.',
     );
 
     const roboGradesFront = useAppSelector(

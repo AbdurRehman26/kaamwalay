@@ -75,12 +75,12 @@ test('admins can get single card surface', function () {
 test('a customer can not get single card surface', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
     actingAs($user);
-    getJson(route('v2.surfaces.show'))
+    getJson(route('v2.surfaces.show', ['surface' => CardSurface::first()]))
         ->assertStatus(403);
 });
 
 test('a guest can not get single card surface', function () {
-    getJson(route('v2.surfaces.show'))
+    getJson(route('v2.surfaces.show', ['surface' => CardSurface::first()]))
         ->assertStatus(401);
 });
 
@@ -121,7 +121,7 @@ test('a customer cannot create card surface', function () {
 test('a guest cannot create card surface', function () {
     postJson(route('v2.surfaces.store'), [
         'name' => CardSurface::first()->name,
-        'card_category_id' => 1,
+        'card_category_id' => $this->categories[0]->id,
     ])->assertStatus(401);
 });
 

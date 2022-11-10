@@ -16,7 +16,7 @@ function App() {
             <GoogleAnalyticsSetup />
             <Layout routeOptions={RoutesOptions}>
                 <Routes>
-                    <Route path={'/*'} element={Dashboard} />
+                    <Route path={'/*'} element={<Dashboard />} />
                 </Routes>
             </Layout>
         </BrowserRouter>

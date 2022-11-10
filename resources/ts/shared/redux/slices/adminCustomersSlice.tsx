@@ -42,6 +42,19 @@ export const assignSalesRep = createAsyncThunk(
     },
 );
 
+export const unAssignSalesRep = createAsyncThunk('unAssignSalesRep', async (input: { userId: number }, thunkAPI) => {
+    const customersRepository = app(CustomersRepository);
+
+    try {
+        const customer: SalesRepEntity = await customersRepository.unAssignSalesRep(input.userId);
+        NotificationsService.success('Salesrep unassigned successfully!');
+        return instanceToPlain(customer);
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const adminCustomersSlice = createSlice({
     name: adminCustomersThunk.name,
     initialState: {

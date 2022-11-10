@@ -190,6 +190,26 @@ it('can assign a salesman to customer', function () {
         ->assertSuccessful();
 });
 
+it('can un assign a salesman from customer', function () {
+    actingAs($this->user);
+
+    $salesman = User::factory()
+        ->withRole(config('permission.roles.salesman'))
+        ->create();
+
+    $customer = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create([
+            'salesman_id' => $salesman->id
+        ]);
+
+    postJson(route('v2.customers.un-assign-salesman', [
+        'user' => $customer,
+    ]))->assertSuccessful();
+
+    expect($customer->refresh()->salesman)->toBe(null);
+});
+
 it('a guest cannot assign a salesman to customer', function () {
     $salesman = User::factory()
         ->withRole(config('permission.roles.salesman'))

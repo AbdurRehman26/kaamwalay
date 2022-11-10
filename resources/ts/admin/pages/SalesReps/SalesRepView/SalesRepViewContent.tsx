@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import SalesRepViewContentHeader from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContentHeader';
+import SalesRepViewCustomersTab from '@admin/pages/SalesReps/SalesRepView/SalesRepViewCustomersTab';
 import { SalesRepViewOverviewTab } from '@admin/pages/SalesReps/SalesRepView/SalesRepViewOverviewTab';
 import SalesRepViewSubmissionsTab from '@admin/pages/SalesReps/SalesRepView/SalesRepViewSubmissionsTab';
 
@@ -42,8 +43,7 @@ export function SalesRepViewContent({ salesrep }) {
                     <SalesRepViewSubmissionsTab />
                 </TabContent>
                 <TabContent value={'customers'}>
-                    Customers
-                    {/* <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.inactive} />*/}
+                    <SalesRepViewCustomersTab />
                 </TabContent>
             </Grid>
         </TabContext>

@@ -31,6 +31,9 @@ export interface SubmissionService {
     price: number;
     priceBeforeDiscount?: string;
     discountPercentage?: string;
+    priceRanges?: any;
+    maxPrice?: number;
+    minPrice?: number;
 }
 
 export interface Step01Data {
@@ -171,6 +174,40 @@ const initialState: AdminNewOrderSliceState = {
             maxProtectionAmount: 200,
             turnaround: '20 Business Days',
             price: 18,
+            priceRanges: [
+                {
+                    id: 1,
+                    minCards: 1,
+                    maxCards: 20,
+                    price: 18,
+                },
+                {
+                    id: 2,
+                    minCards: 21,
+                    maxCards: 50,
+                    price: 17,
+                },
+                {
+                    id: 3,
+                    minCards: 51,
+                    maxCards: 100,
+                    price: 16,
+                },
+                {
+                    id: 4,
+                    minCards: 101,
+                    maxCards: 200,
+                    price: 15,
+                },
+                {
+                    id: 5,
+                    minCards: 201,
+                    maxCards: null,
+                    price: 14,
+                },
+            ],
+            maxPrice: 18,
+            minPrice: 14,
         },
         status: 'success',
     },
@@ -386,7 +423,7 @@ export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder',
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('admin/orders');
+    const endpoint = apiService.createEndpoint('admin/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });
@@ -472,7 +509,7 @@ export const getShippingFee = createAsyncThunk(
 
 export const getServiceLevels = createAsyncThunk('adminCreateOrderSlice/getServiceLevels', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('admin/orders/payment-plans');
+    const endpoint = apiService.createEndpoint('admin/orders/payment-plans', { version: 'v3' });
     const serviceLevels = await endpoint.get('');
 
     return serviceLevels.data;
@@ -647,6 +684,9 @@ export const adminCreateOrderSlice = createSlice({
         setUser: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
         },
+        emptyUser: (state, action: PayloadAction<{}>) => {
+            state.user = action.payload;
+        },
         setShippingFee: (state, action: PayloadAction<number>) => {
             state.step02Data.shippingFee = action.payload;
         },
@@ -719,6 +759,7 @@ export const {
     setServiceLevel,
     setPayNow,
     setUser,
+    emptyUser,
     setBillingAddress,
     resetSelectedCards,
     setPreviewTotal,

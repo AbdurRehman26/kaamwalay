@@ -56,7 +56,7 @@ export function ApplyPromoCode() {
     );
     const validCouponId = useAppSelector((state) => state.newSubmission.couponState.validCouponId);
     const apiService = useInjectable(APIService);
-    const selectedServiceLevelID = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel.id);
+    const originalServiceLevelId = useAppSelector((state) => state.newSubmission.step01Data.originalServiceLevel.id);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const selectedPaymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
@@ -67,7 +67,7 @@ export function ApplyPromoCode() {
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}&items_count=${totalCardItems}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${originalServiceLevelId}&items_count=${totalCardItems}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -85,7 +85,7 @@ export function ApplyPromoCode() {
                 dispatch(setValidCouponId(-1));
             }
         },
-        [apiService, dispatch, selectedServiceLevelID, showInvalidState, totalCardItems],
+        [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems],
     );
 
     const debounceCheckCoupon = useMemo(
@@ -119,7 +119,7 @@ export function ApplyPromoCode() {
     const handleApplyCoupon = async () => {
         const DTO = {
             paymentPlan: {
-                id: selectedServiceLevelID,
+                id: originalServiceLevelId,
             },
             items: selectedCards.map((selectedCard: any) => ({
                 cardProduct: {

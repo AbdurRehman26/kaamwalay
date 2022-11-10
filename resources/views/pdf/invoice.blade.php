@@ -356,6 +356,11 @@
                             @endif
                         @endif
                     @endif
+                    @if($order->coupon)
+                        <div>
+                            Promo Code: {{$order->coupon->code}}
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="info-box pr-10">

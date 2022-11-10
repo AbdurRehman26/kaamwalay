@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
  * @property mixed $reviewed_at
  * @property mixed $reviewedBy
  * @property mixed $createdBy
+ * @property mixed $salesman
  * @property mixed $shipped_at
  * @property mixed $orderItems
  * @property mixed $invoice
@@ -52,6 +53,7 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
  * @property mixed $requires_cleaning
+ * @property mixed $salesman_commission
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
  * @method orderStatusHistory()
@@ -87,7 +89,7 @@ class OrderResource extends V1OrderResource
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
             'created_by' => new UserResource($this->createdBy),
-
+            'owner' => new UserResource($this->salesman),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
@@ -113,6 +115,7 @@ class OrderResource extends V1OrderResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
+            'salesman_commission' => $this->salesman_commission,
         ];
     }
 }

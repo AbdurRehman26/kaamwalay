@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect } from 'react';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { useAuth } from '../hooks/useAuth';
 
@@ -17,11 +18,15 @@ interface GuestOnlyRouteProps {
  */
 export function GuestOnlyRoute(Component: React.ElementType, { redirectRoute }: GuestOnlyRouteProps = {}) {
     function Wrapper() {
-        const { authenticated, checking } = useAuth();
+        const { authenticated, checking, user } = useAuth();
 
         useEffect(() => {
             if (authenticated && !checking) {
-                let link = redirectRoute ?? AuthenticationEnum.DashboardRoute;
+                let link =
+                    redirectRoute ??
+                    (user.hasRole(RolesEnum.Salesman)
+                        ? AuthenticationEnum.SalesRepDashboardRoute
+                        : AuthenticationEnum.DashboardRoute);
                 const url = new URL(window.location.href);
 
                 if (url.searchParams.has('from')) {
@@ -30,7 +35,7 @@ export function GuestOnlyRoute(Component: React.ElementType, { redirectRoute }: 
 
                 window.location.replace(link);
             }
-        }, [authenticated, checking]);
+        }, [authenticated, checking, user]);
 
         if (checking) {
             return (

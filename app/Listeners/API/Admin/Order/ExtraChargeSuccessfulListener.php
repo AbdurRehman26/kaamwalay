@@ -2,9 +2,11 @@
 
 namespace App\Listeners\API\Admin\Order;
 
+use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Services\EmailService;
+use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ExtraChargeSuccessfulListener implements ShouldQueue
@@ -25,7 +27,13 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
      * @param  ExtraChargeSuccessful  $event
      * @return void
      */
-    public function handle(ExtraChargeSuccessful $event)
+    public function handle(ExtraChargeSuccessful $event): void
+    {
+        $this->processEmails($event);
+        $this->processSalesmanCommission($event);
+    }
+
+    protected function processEmails(ExtraChargeSuccessful $event): void
     {
         $orderPayment = new OrderPaymentResource($event->order->lastOrderPayment);
         $order = $event->order;
@@ -49,5 +57,12 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
             ],
         );
+    }
+
+    protected function processSalesmanCommission(ExtraChargeSuccessful $event): void
+    {
+        if ($event->order->salesman()->exists() && $event->order->salesman->salesmanProfile->hasCommissionTypePercentage()) {
+            SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_EXTRA_CHARGE);
+        }
     }
 }

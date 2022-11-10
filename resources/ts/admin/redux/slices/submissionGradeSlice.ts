@@ -6,10 +6,12 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (id: number | string) => {
+    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${id}/grades`);
-        const cardsResponse = await endpoint.get('');
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const cardsResponse = await endpoint.get('', {
+            data: { fromAgs: DTO.fromAgs ?? true },
+        });
         return cardsResponse.data;
     },
 );
@@ -71,6 +73,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
         itemIndex: number;
@@ -88,6 +91,7 @@ export interface SubmissionsGrades {
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
     viewModes: [],
+    hasLoadedAllRobogrades: false,
 };
 
 export const submissionGradesSlice = createSlice({
@@ -220,6 +224,11 @@ export const submissionGradesSlice = createSlice({
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
             state.allSubmissions = action.payload;
+            state.hasLoadedAllRobogrades =
+                action.payload.filter(
+                    (card: Record<string, any>) =>
+                        card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
+                ).length === action.payload.length;
         },
     },
 });

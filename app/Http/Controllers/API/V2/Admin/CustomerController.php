@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\V2\Admin;
 
 use App\Exceptions\API\Admin\Customer\AccessEmailCanNotBeSent;
 use App\Exceptions\API\Admin\Customer\SalesmanCanNotBeAssigned;
-use App\Exceptions\API\Admin\Customer\SalesmanCanNotBeUnAssigned;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Customer\ListCustomerRequest;
 use App\Http\Requests\API\V2\Admin\Customer\StoreCustomerRequest;

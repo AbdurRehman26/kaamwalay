@@ -7,6 +7,7 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
@@ -36,6 +37,18 @@ test('admins can get list of card surfaces', function () {
     getJson(route('v2.surfaces.index'))->assertOk()->assertJsonCount(5, 'data');
 });
 
+test('a customer can not get card surfaces list', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+    getJson(route('v2.surfaces.index'))
+        ->assertStatus(403);
+});
+
+test('a guest can not get card surfaces list', function () {
+    getJson(route('v2.surfaces.index'))
+        ->assertStatus(401);
+});
+
 test('admins can get list of card surfaces filter by name', function () {
     getJson(route('v2.surfaces.index', [
         'filter' => [
@@ -59,6 +72,18 @@ test('admins can get single card surface', function () {
     getJson(route('v2.surfaces.show', ['surface' => CardSurface::first()]))->assertSuccessful();
 });
 
+test('a customer can not get single card surface', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+    getJson(route('v2.surfaces.show'))
+        ->assertStatus(403);
+});
+
+test('a guest can not get single card surface', function () {
+    getJson(route('v2.surfaces.show'))
+        ->assertStatus(401);
+});
+
 test('admins cannot create card surface with existing name in same category.', function () {
     postJson(route('v2.surfaces.store'), [
         'name' => CardSurface::first()->name,
@@ -80,6 +105,24 @@ test('admins can create card surfaces', function () {
         ])->dump()->assertJsonFragment([
             'name' => 'Lorem Ipsum',
         ])->assertJsonPath('data.card_category.id', $this->categories[0]->id);
+});
+
+test('a customer cannot create card surface', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    postJson(route('v2.surfaces.store'), [
+        'name' => 'Lorem Ipsum',
+        'card_category_id' => $this->categories[0]->id,
+    ])
+    ->assertStatus(403);
+});
+
+test('a guest cannot create card surface', function () {
+    postJson(route('v2.surfaces.store'), [
+        'name' => CardSurface::first()->name,
+        'card_category_id' => 1,
+    ])->assertStatus(401);
 });
 
 test('admins can update card surfaces', function () {

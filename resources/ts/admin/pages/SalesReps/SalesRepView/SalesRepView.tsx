@@ -5,10 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
+import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
+import { SalesRapStatusEnum } from '@shared/constants/SalesRapStatusEnum';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
@@ -124,17 +126,27 @@ export function SalesRepView() {
                         {nameInitials(data.fullName)}
                     </Avatar>
                 </Grid>
-                <Grid container item xs alignItems={'center'} pl={2}>
+                <Grid container item xs alignItems={'center'} pl={1.5}>
                     <Grid className={'Customer'}>
-                        <Typography className={'CustomerName'}>{data.fullName}</Typography>
-                        <Typography className={'CustomerHeading'}>
-                            Customer ID: <span className={'CustomerValue'}>{data.customerNumber}</span>
-                        </Typography>
+                        <Grid container item xs direction="row">
+                            <Typography className={'CustomerName'}>{data.fullName}</Typography>
+                            <Grid item xs pl={2}>
+                                {data.status !== null ? (
+                                    <SalesRepStatusChip color={data.status} label={SalesRapStatusEnum[data.status]} />
+                                ) : null}
+                            </Grid>
+                        </Grid>
                         <Typography className={'CustomerHeading'}>
                             Email: <span className={'CustomerValue'}>{data.email}</span>
                         </Typography>
                         <Typography className={'CustomerHeading'}>
                             Phone: <span className={'CustomerValue'}>{data.phone ?? '-'}</span>
+                        </Typography>
+                        <Typography className={'CustomerHeading'}>
+                            Commission Structure:
+                            <span className={'CustomerValue'}>
+                                {data.getCommissionText(data.commissionType, data.commissionValue)}
+                            </span>
                         </Typography>
                     </Grid>
                 </Grid>

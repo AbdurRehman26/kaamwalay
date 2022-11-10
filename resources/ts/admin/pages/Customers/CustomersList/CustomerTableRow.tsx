@@ -16,7 +16,7 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { assignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
+import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -84,7 +84,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
     );
 
     async function assignSalesRef(event: any) {
-        await dispatch(assignSalesRep({ userId: customer.id, salesmanId: event.target.value }));
+        if (event.target.value === 'none') {
+            await dispatch(unAssignSalesRep({ userId: customer.id }));
+        } else {
+            await dispatch(assignSalesRep({ userId: customer.id, salesmanId: event.target.value }));
+        }
         window.location.reload();
     }
 

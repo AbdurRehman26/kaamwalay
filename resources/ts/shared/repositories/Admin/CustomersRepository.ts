@@ -17,4 +17,9 @@ export class CustomersRepository extends Repository<CustomerEntity> {
         const { data } = await this.endpoint.post(`${userId}/assign-salesman/${salesmanId}`);
         return data;
     }
+
+    public async unAssignSalesRep(userId: number) {
+        const { data } = await this.endpoint.post(`${userId}/un-assign-salesman`);
+        return data;
+    }
 }

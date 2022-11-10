@@ -200,7 +200,7 @@ it('can un assign a salesman from customer', function () {
     $customer = User::factory()
         ->withRole(config('permission.roles.customer'))
         ->create([
-            'salesman_id' => $salesman->id
+            'salesman_id' => $salesman->id,
         ]);
 
     postJson(route('v2.customers.un-assign-salesman', [

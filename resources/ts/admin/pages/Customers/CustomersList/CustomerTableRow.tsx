@@ -142,47 +142,53 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                         value={customer?.salesman?.id || 'none'}
                     >
                         <MenuItem value="none">{defaultValue}</MenuItem>
-                        {salesReps?.map((saleRep: SalesRepEntity) => {
-                            return (
-                                <MenuItem
-                                    key={saleRep?.id}
-                                    value={saleRep?.id}
-                                    sx={{ ':hover': { backgroundColor: 'transparent' } }}
-                                >
-                                    <Grid
-                                        width={'100%'}
-                                        sx={{ ':hover': { backgroundColor: '#20BFB814' }, paddingLeft: '0px' }}
-                                        display={'flex'}
-                                        justifyContent={'flex-start'}
-                                        p={1}
-                                        alignItems={'left'}
+                        {salesReps
+                            .filter((saleRep) => {
+                                return saleRep.id !== customer.id;
+                            })
+                            .map((saleRep) => {
+                                return (
+                                    <MenuItem
+                                        key={saleRep?.id}
+                                        value={saleRep?.id}
+                                        sx={{ ':hover': { backgroundColor: 'transparent' } }}
                                     >
-                                        <Avatar
-                                            sx={{
-                                                marginRight: '5px',
-                                                padding: '2px',
-                                                height: '25px',
-                                                width: '25px',
-                                                fontSize: '12px',
-                                            }}
-                                            src={saleRep?.profileImage}
+                                        <Grid
+                                            width={'100%'}
+                                            sx={{ ':hover': { backgroundColor: '#20BFB814' }, paddingLeft: '0px' }}
+                                            display={'flex'}
+                                            justifyContent={'flex-start'}
+                                            p={1}
+                                            alignItems={'left'}
                                         >
-                                            {nameInitials(
-                                                `${saleRep.firstName ?? ''} ${saleRep.lastName ?? ''}`.trim(),
-                                            )}
-                                        </Avatar>
-                                        <Typography>
-                                            {!isOpen ? saleRep?.fullName.substring(0, 10) + '...' : saleRep.fullName}
-                                        </Typography>
-                                        {customer?.salesman?.id === saleRep.id &&
-                                        saleRep?.fullName.length > 10 &&
-                                        isOpen ? (
-                                            <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
-                                        ) : null}
-                                    </Grid>
-                                </MenuItem>
-                            );
-                        })}
+                                            <Avatar
+                                                sx={{
+                                                    marginRight: '5px',
+                                                    padding: '2px',
+                                                    height: '25px',
+                                                    width: '25px',
+                                                    fontSize: '12px',
+                                                }}
+                                                src={saleRep?.profileImage}
+                                            >
+                                                {nameInitials(
+                                                    `${saleRep.firstName ?? ''} ${saleRep.lastName ?? ''}`.trim(),
+                                                )}
+                                            </Avatar>
+                                            <Typography>
+                                                {!isOpen
+                                                    ? saleRep?.fullName.substring(0, 10) + '...'
+                                                    : saleRep.fullName}
+                                            </Typography>
+                                            {customer?.salesman?.id === saleRep.id &&
+                                            saleRep?.fullName.length > 10 &&
+                                            isOpen ? (
+                                                <DoneIcon sx={{ marginLeft: 'auto' }} color={'primary'} />
+                                            ) : null}
+                                        </Grid>
+                                    </MenuItem>
+                                );
+                            })}
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>

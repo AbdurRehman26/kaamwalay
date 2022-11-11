@@ -42,8 +42,7 @@ export function FeedAccordion() {
                     id="panel2a-header"
                 >
                     <Typography>
-                        Category{' '}
-                        {category.length > 0 ? <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} /> : null}
+                        Category {category.length > 0 && <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} />}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -57,9 +56,7 @@ export function FeedAccordion() {
                     aria-controls="panel3a-content"
                     id="panel3a-header"
                 >
-                    <Typography>
-                        Grade {grade ? <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} /> : null}
-                    </Typography>
+                    <Typography>Grade {grade && <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} />}</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ marginBottom: '60px' }}>
                     <FeedGrade />

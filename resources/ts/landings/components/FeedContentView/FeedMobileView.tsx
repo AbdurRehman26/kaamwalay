@@ -11,6 +11,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import FeedAccordion from './FeedAccordion';
+import FeedClearCategories from './FeedClearCategories';
 
 const FeedPopModalBox = styled(Box)({
     width: '100%',
@@ -88,8 +89,8 @@ export function FeedMobileView() {
     const handleClose = () => setOpen(false);
     const count = useSelector((state: RootState) => state.feed.filterCount.count);
     const results = useSelector((state: RootState) => state.feed.filterResults.results);
-    const categoryTeal = useSelector((state: RootState) => state.feed.categoryTeal.teal);
-    const gradeTeal = useSelector((state: RootState) => state.feed.gradeTeal.teal);
+    const category: Array<string> = useSelector((state: RootState) => state.feed.categoryValue.category);
+    const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
     return (
         <Box>
@@ -106,16 +107,19 @@ export function FeedMobileView() {
                         <Typography variant="subtitle1" sx={styles.ModalHeaderHeading}>
                             Sort & Filter
                         </Typography>
-                        <IconButton sx={{ color: 'rgba(0, 0, 0, 0.54)' }} onClick={handleClose}>
-                            <CloseOutlinedIcon />
-                        </IconButton>
+                        <Grid sx={{ display: 'flex' }}>
+                            <FeedClearCategories />
+                            <IconButton sx={{ color: 'rgba(0, 0, 0, 0.54)' }} onClick={handleClose}>
+                                <CloseOutlinedIcon />
+                            </IconButton>
+                        </Grid>
                     </Grid>
                     <Grid>
                         <FeedAccordion />
                     </Grid>
                     <Grid sx={styles.ModalButtonDiv}>
                         <Button sx={styles.ModalButton} onClick={handleClose}>
-                            {gradeTeal || categoryTeal ? `SEE ${results} RESULTS` : `SEE ALL RESULTS`}
+                            {grade || category.length > 0 ? `SEE ${results} RESULTS` : `SEE ALL RESULTS`}
                         </Button>
                     </Grid>
                 </FeedPopModalBox>

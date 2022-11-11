@@ -173,4 +173,16 @@ return [
         'exact',
         'custom',
     ],
+    'renderingContent' => [
+        'facetOrdering' => [
+            'facets' => [
+                'order' => ['card_category'],
+            ],
+            'values' => [
+                'card_category' => [
+                    'sortRemainingBy' => 'alpha',
+                ],
+            ],
+        ],
+    ],
 ];

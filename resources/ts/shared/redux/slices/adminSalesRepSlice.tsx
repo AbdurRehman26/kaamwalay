@@ -44,6 +44,23 @@ export const addExistingUserAsSalesRep = createAsyncThunk(
     },
 );
 
+export const removeSalesRepRoleFromUser = createAsyncThunk('removeSalesRepRoleFromUser', async (userId: number) => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint(`admin/salesman/${userId}/remove-salesman-role`);
+    const response = await endpoint.post('');
+    return response.data;
+});
+
+export const setActiveSalesRep = createAsyncThunk(
+    'setActiveSalesRep',
+    async (input: { userId: number; active: boolean }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/salesman/${input.userId}/set-active`);
+        const response = await endpoint.post('', { isActive: input.active });
+        return response.data;
+    },
+);
+
 export const adminSalesRepSlice = createSlice({
     name: adminSalesRepThunk.name,
     initialState: {

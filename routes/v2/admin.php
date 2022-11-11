@@ -157,6 +157,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'salesmen.show',
         ]);
     Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
+    Route::post('salesman/{user}/remove-salesman-role', [SalesmanController::class, 'removeSalesmanRoleFromUser'])->name('salesman.remove-salesman-role');
+    Route::post('salesman/{user}/set-active', [SalesmanController::class, 'setActive'])->name('salesman.set-active');
 
     // wallet
     Route::prefix('wallets')->group(function () {

@@ -11,15 +11,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
 import { SalesRapStatusEnum } from '@shared/constants/SalesRapStatusEnum';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
+import { removeSalesRepRoleFromUser, setActiveSalesRep } from '@shared/redux/slices/adminSalesRepSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import SalesRepViewContent from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContent';
-import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 
 enum RowOption {
-    CreditCustomer,
-    ResendAccessEmail,
+    RemoveSalesRep,
+    SetActive,
 }
 
 const Root = styled(Grid)({
@@ -76,6 +78,8 @@ export function SalesRepView() {
     const [creditDialog, setCreditDialog] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const notifications = useNotifications();
+    const confirm = useConfirmation();
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
@@ -95,19 +99,56 @@ export function SalesRepView() {
 
     const { data, isLoading } = salesrep$;
 
+    const setRemoveDialog = useCallback(async () => {
+        const result = await confirm({
+            title: 'Remove Sales Rep',
+            message: 'Are you sure you want to remove this sales rep?',
+            confirmText: 'Yes',
+            cancelButtonProps: {
+                color: 'inherit',
+            },
+            confirmButtonProps: {
+                variant: 'contained',
+                color: 'error',
+            },
+        });
+
+        try {
+            if (result) {
+                await dispatch(removeSalesRepRoleFromUser(Number(id)));
+                navigate(`/salesreps`);
+            }
+        } catch (e) {
+            notifications.exception(e as Error);
+        }
+    }, [dispatch, id, navigate, notifications, confirm]);
+
+    const toggleActive = useCallback(
+        async (data) => {
+            // console.log(data);
+            await dispatch(
+                setActiveSalesRep({
+                    userId: Number(id),
+                    active: !data?.status,
+                }),
+            );
+            window.location.reload();
+        },
+        [dispatch, id],
+    );
+
     const handleOption = useCallback(
         (action: RowOption) => {
             switch (action) {
-                case RowOption.CreditCustomer:
-                    setCreditDialog(true);
+                case RowOption.RemoveSalesRep:
+                    setRemoveDialog();
                     break;
-
-                case RowOption.ResendAccessEmail:
-                    dispatch(resendAccessEmail(id));
+                case RowOption.SetActive:
+                    toggleActive(data);
                     break;
             }
         },
-        [dispatch, id],
+        [data, setRemoveDialog, toggleActive],
     );
 
     if (isLoading || !data) {
@@ -160,7 +201,10 @@ export function SalesRepView() {
                         CREATE SUBMISSION
                     </Button>
                     <OptionsMenu onClick={handleOption}>
-                        <OptionsMenuItem action={RowOption.CreditCustomer}>Credit Customer</OptionsMenuItem>
+                        <OptionsMenuItem action={RowOption.RemoveSalesRep}>Remove Sales Rep</OptionsMenuItem>
+                        <OptionsMenuItem action={RowOption.SetActive}>
+                            Mark {data.status ? 'Inactive' : 'Active'}
+                        </OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog

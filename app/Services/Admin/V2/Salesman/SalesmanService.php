@@ -77,6 +77,55 @@ class SalesmanService
         }
     }
 
+    /**
+     * @throws Throwable
+     */
+    public function removeSalesmanRoleFromUser(User $user): User
+    {
+        try {
+            DB::beginTransaction();
+
+            $user->removeSalesmanRole();
+
+            DB::commit();
+
+            return $user->refresh();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function setActive(User $user, array $data): User
+    {
+        try {
+            DB::beginTransaction();
+
+            Salesman::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                ],
+                [
+                    'is_active' => $data['is_active'],
+                ]
+            );
+
+            DB::commit();
+
+            return $user->refresh();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
+    }
+
     protected function storeSalesmanProfile(User $user, array $data): Salesman
     {
         return Salesman::updateOrCreate(

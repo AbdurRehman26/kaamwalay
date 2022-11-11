@@ -253,6 +253,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         $this->assignRole(Role::findByName(config('permission.roles.salesman')));
     }
 
+    public function removeSalesmanRole(): void
+    {
+        $this->removeRole(Role::findByName(config('permission.roles.salesman')));
+    }
+    
     public function assignCustomerRole(): void
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));

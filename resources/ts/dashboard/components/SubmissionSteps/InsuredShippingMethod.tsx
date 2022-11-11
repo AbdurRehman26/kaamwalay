@@ -463,6 +463,10 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                 <Typography className={classes.methodDescription}>Full Name</Typography>
                                 <TextField
+                                    error={!fullName?.match(/(\w+\s+[^-])+\S[^-]+/)}
+                                    helperText={
+                                        !fullName?.match(/(\w+\s+[^-])+\S[^-]+/) ? 'Name should be two words long' : ' '
+                                    }
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Full Name"
                                     disabled={disableAllInputs}
@@ -487,6 +491,8 @@ export function InsuredShippingMethod() {
                             >
                                 <Typography className={classes.methodDescription}>Address Line #1</Typography>
                                 <TextField
+                                    error={address === ''}
+                                    helperText={address === '' ? 'Required Field' : ' '}
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Street Address"
                                     fullWidth
@@ -534,6 +540,8 @@ export function InsuredShippingMethod() {
                                 <div className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}>
                                     <Typography className={classes.methodDescription}>City</Typography>
                                     <TextField
+                                        error={city === ''}
+                                        helperText={city === '' ? 'Required Field' : ' '}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         value={city}
                                         onChange={(e: any) => updateField('city', e.target.value)}
@@ -557,6 +565,8 @@ export function InsuredShippingMethod() {
                                 <div className={` ${classes.cityFieldContainer} ${classes.fieldContainer}`}>
                                     <Typography className={classes.methodDescription}>City</Typography>
                                     <TextField
+                                        error={city === ''}
+                                        helperText={city === '' ? 'Required Field' : ' '}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         value={city}
                                         onChange={(e: any) => updateField('city', e.target.value)}
@@ -597,6 +607,8 @@ export function InsuredShippingMethod() {
                                     </Select>
                                 ) : (
                                     <TextField
+                                        error={stateName === ''}
+                                        helperText={stateName === '' ? 'Required Field' : ' '}
                                         style={{ marginTop: 2 }}
                                         placeholder="Enter State"
                                         fullWidth
@@ -616,6 +628,8 @@ export function InsuredShippingMethod() {
                             <div className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}>
                                 <Typography className={classes.methodDescription}>Zip Code</Typography>
                                 <TextField
+                                    error={zipCode === ''}
+                                    helperText={zipCode === '' ? 'Required Field' : ' '}
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Zip Code"
                                     fullWidth
@@ -637,6 +651,8 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                                 <Typography className={classes.methodDescription}>Phone Number</Typography>
                                 <NumberFormat
+                                    error={phoneNumber === ''}
+                                    helperText={phoneNumber === '' ? 'Required Field' : ' '}
                                     customInput={TextField}
                                     format={
                                         country.phoneCode

@@ -15,11 +15,13 @@ import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
-import { removeSalesRepRoleFromUser, setActiveSalesRep } from '@shared/redux/slices/adminSalesRepSlice';
+import { removeSalesRepRoleFromUser, setSalesRep, setSalesRepActive } from '@shared/redux/slices/adminSalesRepSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
+import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
 import SalesRepViewContent from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContent';
 
 enum RowOption {
+    EditSalesRep,
     RemoveSalesRep,
     SetActive,
 }
@@ -76,6 +78,7 @@ const Root = styled(Grid)({
 export function SalesRepView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [updateDialog, setUpdateDialog] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const notifications = useNotifications();
@@ -83,6 +86,10 @@ export function SalesRepView() {
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
+    }, []);
+
+    const handleUpdateDialogClose = useCallback(() => {
+        setUpdateDialog(false);
     }, []);
 
     const createCustomerSubmission = () => {
@@ -93,8 +100,13 @@ export function SalesRepView() {
         resourceId: Number(id),
     });
 
-    const handleReloadCustomerData = useCallback(() => {
+    const handleCredit = useCallback(() => {
+        window.location.reload();
+    }, []);
+
+    const handleUpdate = useCallback(() => {
         salesrep$.request();
+        setUpdateDialog(false);
     }, [salesrep$]);
 
     const { data, isLoading } = salesrep$;
@@ -127,19 +139,23 @@ export function SalesRepView() {
         async (data) => {
             // console.log(data);
             await dispatch(
-                setActiveSalesRep({
+                setSalesRepActive({
                     userId: Number(id),
                     active: !data?.status,
                 }),
             );
-            window.location.reload();
+            salesrep$.request();
         },
-        [dispatch, id],
+        [dispatch, id, salesrep$],
     );
 
     const handleOption = useCallback(
         (action: RowOption) => {
             switch (action) {
+                case RowOption.EditSalesRep:
+                    dispatch(setSalesRep(data));
+                    setUpdateDialog(true);
+                    break;
                 case RowOption.RemoveSalesRep:
                     setRemoveDialog();
                     break;
@@ -148,7 +164,7 @@ export function SalesRepView() {
                     break;
             }
         },
-        [data, setRemoveDialog, toggleActive],
+        [data, dispatch, setRemoveDialog, toggleActive],
     );
 
     if (isLoading || !data) {
@@ -201,18 +217,20 @@ export function SalesRepView() {
                         CREATE SUBMISSION
                     </Button>
                     <OptionsMenu onClick={handleOption}>
+                        <OptionsMenuItem action={RowOption.EditSalesRep}>Edit User</OptionsMenuItem>
                         <OptionsMenuItem action={RowOption.RemoveSalesRep}>Remove Sales Rep</OptionsMenuItem>
                         <OptionsMenuItem action={RowOption.SetActive}>
                             Mark {data.status ? 'Inactive' : 'Active'}
                         </OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
+                <SalesRepUpdateDialog open={updateDialog} onSubmit={handleUpdate} onClose={handleUpdateDialogClose} />
                 <CustomerCreditDialog
                     customer={data}
                     wallet={data?.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
-                    onSubmit={handleReloadCustomerData}
+                    onSubmit={handleCredit}
                 />
             </Root>
             <SalesRepViewContent salesrep={salesrep$} />

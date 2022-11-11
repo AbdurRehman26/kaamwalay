@@ -150,11 +150,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('customers/{user}/assign-salesman/{salesman}', [CustomerController::class, 'assignSalesman'])->name('customers.assign-salesman');
 
     // Salesmen
-    Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])
+    Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show', 'update'])
         ->names([
             'index' => 'salesmen.index',
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
+            'update' => 'salesmen.update',
         ]);
     Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
     Route::post('salesman/{user}/remove-salesman-role', [SalesmanController::class, 'removeSalesmanRoleFromUser'])->name('salesman.remove-salesman-role');

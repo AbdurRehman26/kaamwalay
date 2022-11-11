@@ -101,6 +101,28 @@ class SalesmanService
     /**
      * @throws Throwable
      */
+    public function updateSalesman(User $salesman, array $data): User
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->updateUserInfo($salesman, $data);
+            $this->storeSalesmanProfile($salesman, $data);
+
+            DB::commit();
+
+            return $salesman;
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function setActive(User $user, array $data): User
     {
         try {

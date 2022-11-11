@@ -102,7 +102,7 @@ test('admins can create card surfaces', function () {
                 'name',
                 'card_category',
             ],
-        ])->dump()->assertJsonFragment([
+        ])->assertJsonFragment([
             'name' => 'Lorem Ipsum',
         ])->assertJsonPath('data.card_category.id', $this->categories[0]->id);
 });
@@ -120,7 +120,7 @@ test('a customer cannot create card surface', function () {
 
 test('a guest cannot create card surface', function () {
     postJson(route('v2.surfaces.store'), [
-        'name' => CardSurface::first()->name,
+        'name' => 'Test Name',
         'card_category_id' => $this->categories[0]->id,
     ])->assertStatus(401);
 });

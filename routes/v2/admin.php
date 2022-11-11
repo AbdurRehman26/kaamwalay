@@ -114,7 +114,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
         Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'show', 'update']);
-        Route::apiResource('surfaces', CardSurfaceController::class)->only(['index', 'store', 'show', 'update']);
+        Route::apiResource('surfaces', CardSurfaceController::class)->only(['index', 'store', 'show', 'update'])
+        ->names([
+            'index' => 'surfaces.index',
+            'store' => 'surfaces.store',
+            'show' => 'surfaces.show',
+            'update' => 'surfaces.update',
+        ]);
         Route::put('/labels/{label}', [CardLabelController::class, 'update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);

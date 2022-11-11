@@ -29,11 +29,10 @@ beforeEach(function () {
         ->admin()
         ->withRole(config('permission.roles.admin'))
         ->create();
-
-    $this->actingAs($this->user);
 });
 
 test('admins can get list of card surfaces', function () {
+    $this->actingAs($this->user);
     getJson(route('v2.surfaces.index'))->assertOk()->assertJsonCount(5, 'data');
 });
 
@@ -50,6 +49,7 @@ test('a guest can not get card surfaces list', function () {
 });
 
 test('admins can get list of card surfaces filter by name', function () {
+    $this->actingAs($this->user);
     getJson(route('v2.surfaces.index', [
         'filter' => [
             'search' => CardSurface::first()->name,
@@ -60,6 +60,7 @@ test('admins can get list of card surfaces filter by name', function () {
 });
 
 test('admins can get list of card surfaces sort by name', function () {
+    $this->actingAs($this->user);
     $response = getJson(route('v2.surfaces.index', ['sort' => '-name']))->assertOk();
 
     $this->assertEquals(
@@ -69,6 +70,7 @@ test('admins can get list of card surfaces sort by name', function () {
 });
 
 test('admins can get single card surface', function () {
+    $this->actingAs($this->user);
     getJson(route('v2.surfaces.show', ['surface' => CardSurface::first()]))->assertSuccessful();
 });
 
@@ -85,6 +87,7 @@ test('a guest can not get single card surface', function () {
 });
 
 test('admins cannot create card surface with existing name in same category.', function () {
+    $this->actingAs($this->user);
     postJson(route('v2.surfaces.store'), [
         'name' => CardSurface::first()->name,
         'card_category_id' => 1,
@@ -92,6 +95,7 @@ test('admins cannot create card surface with existing name in same category.', f
 });
 
 test('admins can create card surfaces', function () {
+    $this->actingAs($this->user);
     postJson(route('v2.surfaces.store'), [
         'name' => 'Lorem Ipsum',
         'card_category_id' => $this->categories[0]->id,
@@ -126,6 +130,7 @@ test('a guest cannot create card surface', function () {
 });
 
 test('admins can update card surfaces', function () {
+    $this->actingAs($this->user);
     $cardSurface = CardSurface::first();
 
     putJson(

@@ -11,6 +11,7 @@ interface Props {
     label?: string;
     active?: boolean;
     value?: string;
+    customValueText?: string;
     onClear?: () => void;
 }
 
@@ -29,14 +30,21 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const StyledPopover = styled(Popover)(({ theme }) => ({
     '.MuiPaper-root': {
-        width: 345,
+        width: 400,
         padding: theme.spacing(1, 1, 1),
         borderRadius: 4,
         boxShadow: '0 16px 24px rgba(0, 0, 0, 0.14), 0 6px 30px rgba(0, 0, 0, 0.12), 0 8px 10px rgba(0, 0, 0, 0.2)',
     },
 }));
 
-export function FilterSelect({ label = '', active, value, onClear, children }: PropsWithChildren<Props>) {
+export function FilterSelect({
+    label = '',
+    active,
+    value,
+    onClear,
+    children,
+    customValueText = '',
+}: PropsWithChildren<Props>) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     const handleOpen = useCallback((event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget), []);
@@ -67,9 +75,10 @@ export function FilterSelect({ label = '', active, value, onClear, children }: P
                 onClick={handleOpen}
                 className={classNames({ active: active || !!anchorEl, hasValue: !!value })}
             >
-                {label ? label : null}
-                {label && value ? <>: &nbsp;</> : null}
-                {value ? value : null}
+                {customValueText ? customValueText : null}
+                {!customValueText && label ? label : null}
+                {!customValueText && label && value ? <>: &nbsp;</> : null}
+                {!customValueText && value ? value : null}
             </StyledButton>
             <StyledPopover
                 open={!!anchorEl}

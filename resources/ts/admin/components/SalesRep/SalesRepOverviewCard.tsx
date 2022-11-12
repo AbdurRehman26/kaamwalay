@@ -7,13 +7,22 @@ import Radio from '@mui/material/Radio';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useEffect, useState } from 'react';
+import { Form, Formik, FormikProps } from 'formik';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { FormikButton } from '@shared/components/fields/FormikButton';
+import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { app } from '@shared/lib/app';
+import { DateLike } from '@shared/lib/datetime/DateLike';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { APIService } from '@shared/services/APIService';
 import { FilterSelect } from '@admin/components/SalesRep/FilterSelect';
-import { useAppDispatch } from '@admin/redux/hooks';
+
+type InitialValues = {
+    startDate: DateLike;
+    endDate: DateLike;
+};
 
 interface SalesRepOverviewCardProps {
     title: string;
@@ -63,13 +72,24 @@ export function SalesRepOverviewCard({
 }: SalesRepOverviewCardProps) {
     const classes = useStyles();
     const [timeFilter, setTimeFilter] = useState({ label: 'This Month', value: 'this_month' });
-    const dispatch = useAppDispatch();
     const { id } = useParams<'id'>();
     const [cardValue, setCardValue] = useState(value);
-    const apiService = app(APIService);
+    const formikRef = useRef<FormikProps<InitialValues> | null>(null);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
+    const initialValues = useMemo<InitialValues>(
+        () => ({
+            startDate: startDate ? startDate : '',
+            endDate: endDate ? endDate : '',
+        }),
+        [endDate, startDate],
+    );
 
     useEffect(() => {
-        if (statName && timeFilter) {
+        console.log('effect');
+        if (statName && timeFilter && timeFilter.value !== 'custom') {
+            const apiService = app(APIService);
             const endpoint = apiService.createEndpoint(`admin/salesman/${id}/get-stat`);
             endpoint
                 .post('', {
@@ -80,7 +100,35 @@ export function SalesRepOverviewCard({
                     setCardValue(response.data);
                 });
         }
-    }, [apiService, dispatch, id, statName, timeFilter]);
+    }, [id, statName, timeFilter]);
+
+    const handleSubmit = useCallback(
+        async (values) => {
+            console.log('handle submit');
+            const apiService = app(APIService);
+            const endpoint = apiService.createEndpoint(`admin/salesman/${id}/get-stat`);
+
+            if (statName && timeFilter && timeFilter.value === 'custom') {
+                const startDateString = formatDate(values.startDate, 'YYYY-MM-DD');
+                const endDateString = formatDate(values.endDate, 'YYYY-MM-DD');
+
+                setStartDate(startDateString ?? '');
+                setEndDate(endDateString ?? '');
+
+                endpoint
+                    .post('', {
+                        statName,
+                        timeFilter: timeFilter.value,
+                        startDate: startDateString,
+                        endDate: endDateString,
+                    })
+                    .then((response) => {
+                        setCardValue(response.data);
+                    });
+            }
+        },
+        [id, statName, timeFilter],
+    );
 
     return (
         <Grid item container className={classes.cardContent} direction={'row'}>
@@ -116,24 +164,77 @@ export function SalesRepOverviewCard({
             <Grid container item xs>
                 <Grid container item xs className={classes.cardActionsWrapper} justifyContent={'flex-end'}>
                     {timeFilters ? (
-                        <FilterSelect value={timeFilter.label}>
-                            {TimeFilters?.map((item: any) => {
-                                return (
-                                    <MenuItem
-                                        onClick={() => setTimeFilter({ label: item.label, value: item.value })}
-                                        key={item.value}
-                                        value={item.label}
-                                        sx={{ paddingLeft: 0, paddingRight: 0 }}
-                                    >
-                                        <Radio
-                                            checked={timeFilter.value === item.value}
-                                            value={timeFilter.value}
-                                            name={timeFilter.value}
-                                        />
-                                        {item.label}
-                                    </MenuItem>
-                                );
-                            })}
+                        <FilterSelect
+                            value={timeFilter.label}
+                            customValueText={
+                                timeFilter.value === 'custom' && startDate && endDate ? startDate + ' - ' + endDate : ''
+                            }
+                        >
+                            <>
+                                {TimeFilters?.map((item: any) => {
+                                    return (
+                                        <MenuItem
+                                            onClick={() => setTimeFilter({ label: item.label, value: item.value })}
+                                            key={item.value}
+                                            value={item.label}
+                                            sx={{ paddingLeft: 0, paddingRight: 0 }}
+                                        >
+                                            <Radio
+                                                checked={timeFilter.value === item.value}
+                                                value={timeFilter.value}
+                                                name={timeFilter.value}
+                                            />
+                                            {item.label}
+                                        </MenuItem>
+                                    );
+                                })}
+
+                                {timeFilter.value === 'custom' ? (
+                                    <Grid container item xs justifyContent={'space-between'} p={1.5} pl={4}>
+                                        <Formik
+                                            initialValues={initialValues}
+                                            onSubmit={handleSubmit}
+                                            innerRef={formikRef}
+                                        >
+                                            {({ values }) => (
+                                                <Grid container component={Form} direction={'column'}>
+                                                    <Grid container alignItems={'center'}>
+                                                        <Grid item xs>
+                                                            <FormikDesktopDatePicker
+                                                                name={'startDate'}
+                                                                label={'Start Date'}
+                                                                fullWidth
+                                                            />
+                                                        </Grid>
+                                                        <Grid
+                                                            item
+                                                            xs
+                                                            container
+                                                            justifyContent={'center'}
+                                                            maxWidth={'28px !important'}
+                                                        >
+                                                            <Typography variant={'body2'}>-</Typography>
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormikDesktopDatePicker
+                                                                name={'endDate'}
+                                                                label={'End Date'}
+                                                                minDate={values.startDate}
+                                                                fullWidth
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid container justifyContent={'flex-end'} mt={2.5}>
+                                                        <FormikButton variant={'contained'} color={'primary'}>
+                                                            Apply
+                                                        </FormikButton>
+                                                    </Grid>
+                                                </Grid>
+                                            )}
+                                        </Formik>
+                                    </Grid>
+                                ) : null}
+                            </>
                         </FilterSelect>
                     ) : null}
                     {/* <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />*/}

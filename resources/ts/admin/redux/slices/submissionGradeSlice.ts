@@ -10,9 +10,7 @@ export const getAllSubmissions = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
         const cardsResponse = await endpoint.get('', {
-            params: {
-                fromAgs: DTO.fromAgs,
-            },
+            data: { fromAgs: DTO.fromAgs ?? true },
         });
         return cardsResponse.data;
     },

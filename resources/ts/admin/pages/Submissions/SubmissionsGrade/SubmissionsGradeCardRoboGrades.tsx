@@ -4,9 +4,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
-import { useTimeout } from '@shared/hooks/useTimeout';
 import { useAppSelector } from '@admin/redux/hooks';
 
 interface SubmissionsGradeCardRoboGradesProps {
@@ -62,9 +60,6 @@ const useStyles = makeStyles(
 );
 export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: SubmissionsGradeCardRoboGradesProps) {
     const classes = useStyles();
-    const [robogradesMessage, setRobogradesMessage] = useState(
-        'Robogrades are being loaded in the background and will be populated as soon as they are available.',
-    );
 
     const roboGradesFront = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].roboGradeValues.front,
@@ -73,19 +68,11 @@ export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: Sub
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].roboGradeValues.back,
     );
 
-    const handleRobogradeMessage = useCallback(() => {
-        if (roboGradesFront === null) {
-            setRobogradesMessage('Robogrades are not available right now.');
-        }
-    }, [roboGradesFront, setRobogradesMessage]);
-
-    useTimeout(handleRobogradeMessage, 15000);
-
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
             {roboGradesFront === null ? (
                 <Alert severity="info" className={classes.alert}>
-                    {robogradesMessage}
+                    Robogrades are being loaded in the background and will be populated as soon as they are available.
                 </Alert>
             ) : null}
             <Grid container spacing={2}>

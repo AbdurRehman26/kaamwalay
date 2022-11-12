@@ -1,13 +1,5 @@
 # Changelog
 
-## v3.0.1 - 2022-11-10
-
-### What's Changed
-
-- Hotfix: Guest | Submission without login by @muhammad-nauman in https://github.com/woozard/robograding/pull/780
-
-**Full Changelog**: https://github.com/woozard/robograding/compare/v2.12.0...v3.0.1
-
 ## v2.12.0 - 2022-11-10
 
 ### What's Changed

@@ -3,6 +3,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import Select from '@mui/material/Select';
@@ -600,6 +601,10 @@ export function InsuredShippingMethod() {
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     {country.code === 'US' || country.code === '' ? (
                                         <Select
+                                            error={state.id === 0}
+                                            {...(state.id === 0 ? (
+                                                <FormHelperText>Required Field:</FormHelperText>
+                                            ) : null)}
                                             fullWidth
                                             native
                                             disabled={disableAllInputs}

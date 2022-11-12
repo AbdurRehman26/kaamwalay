@@ -137,7 +137,6 @@ export function SalesRepView() {
 
     const toggleActive = useCallback(
         async (data) => {
-            // console.log(data);
             await dispatch(
                 setSalesRepActive({
                     userId: Number(id),
@@ -233,7 +232,7 @@ export function SalesRepView() {
                     onSubmit={handleCredit}
                 />
             </Root>
-            <SalesRepViewContent salesrep={salesrep$} />
+            <SalesRepViewContent salesrep={data} />
         </>
     );
 }

@@ -5,6 +5,7 @@ namespace App\Services\Admin\V2\Salesman;
 use App\Models\Salesman;
 use App\Models\User;
 use App\Services\EmailService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -181,5 +182,43 @@ class SalesmanService
             EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
             ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
         );
+    }
+
+    public function getStat(User $user, array $data): float
+    {
+        $now = Carbon::now();
+
+        switch ($data['time_filter']) {
+            case 'this_month':
+                $startDate = $now->copy()->startOfMonth()->toDateString();
+                $endDate = $now->copy()->endOfMonth()->toDateString();
+                break;
+            case 'last_month':
+                $startDate = $now->copy()->subMonth()->startOfMonth()->toDateString();
+                $endDate = $now->copy()->subMonth()->endOfMonth()->toDateString();
+                break;
+            case 'this_year':
+                $startDate = $now->copy()->startOfYear()->toDateString();
+                $endDate = $now->copy()->endOfYear()->toDateString();
+                break;
+            case 'last_year':
+                $startDate = $now->copy()->subYear()->startOfYear()->toDateString();
+                $endDate = $now->copy()->subYear()->endOfYear()->toDateString();
+                break;
+            case 'custom':
+                $startDate = $data['start_date'];
+                $endDate = $data['end_date'];
+                break;
+            default:
+                return 0;
+        }
+
+        switch ($data['stat_name']) {
+            case 'sales':
+                return $user->salesmanOrders()->whereBetween('created_at', [$startDate, $endDate])->sum('grand_total');
+            case 'commission_earned':
+                return $user->salesmanProfile->salesmanEarnedCommissions()->whereBetween('created_at', [$startDate, $endDate])->sum('commission');
+        }
+
     }
 }

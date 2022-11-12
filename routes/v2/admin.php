@@ -160,6 +160,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
     Route::post('salesman/{user}/remove-salesman-role', [SalesmanController::class, 'removeSalesmanRoleFromUser'])->name('salesman.remove-salesman-role');
     Route::post('salesman/{user}/set-active', [SalesmanController::class, 'setActive'])->name('salesman.set-active');
+    Route::post('salesman/{user}/get-stat', [SalesmanController::class, 'getStat'])->name('salesman.get-stat');
 
     // wallet
     Route::prefix('wallets')->group(function () {

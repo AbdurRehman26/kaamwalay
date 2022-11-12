@@ -7,10 +7,15 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import SalesRepViewContentHeader from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContentHeader';
 import SalesRepViewCustomersTab from '@admin/pages/SalesReps/SalesRepView/SalesRepViewCustomersTab';
 import { SalesRepViewOverviewTab } from '@admin/pages/SalesReps/SalesRepView/SalesRepViewOverviewTab';
 import SalesRepViewSubmissionsTab from '@admin/pages/SalesReps/SalesRepView/SalesRepViewSubmissionsTab';
+
+interface SalesRepViewContentProps {
+    salesrep: SalesRepEntity;
+}
 
 const TabContent = styled(TabPanel)(
     {
@@ -19,11 +24,10 @@ const TabContent = styled(TabPanel)(
     { name: 'TabContent' },
 );
 
-export function SalesRepViewContent({ salesrep }) {
+export function SalesRepViewContent({ salesrep }: SalesRepViewContentProps) {
     const { tab } = useParams<{ tab: string }>();
-    // const isTableLoading = useSharedSelector((state) => state.adminNewPromoCodeSlice.isTableLoading);
-
     const isLoading = false;
+
     if (isLoading) {
         return (
             <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>

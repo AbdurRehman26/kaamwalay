@@ -36,4 +36,18 @@ class CardSurface extends Model
             fn (Builder $subQuery) => $subQuery->where('card_categories.id', $categoryId)
         );
     }
+
+    /**
+     * @param  Builder <CardSurface> $query
+     * @return Builder <CardSurface>
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->whereLike(
+            [
+                'name',
+            ],
+            $value
+        );
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Resources\API\V2\Admin\CardSurface\CardSurfaceCollection;
 use App\Http\Resources\API\V2\Admin\CardSurface\CardSurfaceResource;
 use App\Models\CardSurface;
 use App\Services\Admin\Card\CardSurfaceService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class CardSurfaceController extends Controller
@@ -32,9 +33,13 @@ class CardSurfaceController extends Controller
         return new CardSurfaceResource($surface);
     }
 
-    public function update(int $cardSurfaceId, UpdateCardSurfaceRequest $request): JsonResponse
+    public function update(CardSurface $surface, UpdateCardSurfaceRequest $request): JsonResponse
     {
-        CardSurface::where('id', $cardSurfaceId)->update($request->validated());
+        try {
+            $surface->update($request->validated());
+        } catch(ModelNotFoundException) {
+            $this->info('Card Surface does not exist already.');
+        }
 
         return response()->json([
             'success' => true,

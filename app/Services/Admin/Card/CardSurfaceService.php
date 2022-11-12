@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Http\Filters\AdminCardSurfaceSearchFilter;
 use App\Models\CardSurface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -17,7 +16,7 @@ class CardSurfaceService
         return QueryBuilder::for(CardSurface::class)
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
-                AllowedFilter::custom('search', new AdminCardSurfaceSearchFilter),
+                AllowedFilter::scope('search')
             ])
             ->defaultSort('-created_at')
             ->allowedSorts(['name'])

@@ -81,7 +81,7 @@ class CustomerController extends Controller
         return new JsonResponse(
             [
                 'success' => true,
-                'message' => 'Salesman has been un assigned from the user.',
+                'message' => 'Salesman has been unassigned from the user.',
             ]
         );
     }

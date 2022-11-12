@@ -190,7 +190,7 @@ it('can assign a salesman to customer', function () {
         ->assertSuccessful();
 });
 
-it('can un assign a salesman from customer', function () {
+it('can unassign a salesman from customer', function () {
     actingAs($this->user);
 
     $salesman = User::factory()
@@ -203,7 +203,7 @@ it('can un assign a salesman from customer', function () {
             'salesman_id' => $salesman->id,
         ]);
 
-    postJson(route('v2.customers.un-assign-salesman', [
+    postJson(route('v2.customers.unassign-salesman', [
         'user' => $customer,
     ]))->assertSuccessful();
 

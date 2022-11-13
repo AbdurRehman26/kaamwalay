@@ -39,7 +39,6 @@ beforeEach(function () {
 });
 
 it('checks salesman commissions on different order lines', function ($orderLine) {
-
     $order = $this->order;
 
     SalesmanCommissionService::onOrderLine($this->order, $orderLine['commission_type']);

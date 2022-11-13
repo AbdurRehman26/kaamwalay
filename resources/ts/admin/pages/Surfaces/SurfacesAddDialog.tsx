@@ -52,14 +52,14 @@ export function SurfacesAddDialog(props: SurfacesAddDialogProps) {
             isUpdate ? `admin/cards/surfaces/${surfaceId}` : `admin/cards/surfaces`,
         );
         try {
-            const rarityDto = {
+            const surfaceDto = {
                 name: surfaceName,
                 cardCategoryId: cardCategory || 1,
             };
             if (isUpdate) {
-                await endpoint.put('', rarityDto);
+                await endpoint.put('', surfaceDto);
             } else {
-                await endpoint.post('', rarityDto);
+                await endpoint.post('', surfaceDto);
             }
             setIsLoading(false);
             await onSubmit();

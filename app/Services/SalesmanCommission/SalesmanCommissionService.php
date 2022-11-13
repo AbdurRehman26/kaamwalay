@@ -41,7 +41,7 @@ class SalesmanCommissionService
 
             $orderCommission = new OrderCommissionService();
             $commission = $orderCommission->getCommission($order, $orderCommissionType);
-            $order->salesman_commission += $commission;
+            $order->salesman_commission = $commission;
             $order->save();
 
             self::storeSalesmanEarnedCommission($order, $commission, $orderCommissionType->value);

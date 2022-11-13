@@ -591,8 +591,8 @@ export function InsuredShippingMethod() {
                                 <Typography className={classes.methodDescription}>State</Typography>
                                 {country.code === 'US' || country.code === '' ? (
                                     <Select
-                                        error={useCustomShippingAddress && state.id !== -1}
-                                        {...(useCustomShippingAddress && state.id !== -1 ? (
+                                        error={useCustomShippingAddress && !state.id}
+                                        {...(useCustomShippingAddress && !state.id ? (
                                             <FormHelperText>Required Field:</FormHelperText>
                                         ) : null)}
                                         fullWidth

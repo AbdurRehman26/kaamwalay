@@ -36,7 +36,7 @@ export const getSalesReps = createAsyncThunk('getSalesRep', async () => {
 
 export const addExistingUserAsSalesRep = createAsyncThunk(
     'addExistingUserAsSalesRep',
-    async (input: { userId: number; salesRep: AddSalesRepRequestDto }) => {
+    async (input: { userId: number | undefined; salesRep: AddSalesRepRequestDto }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`admin/salesman/${input.userId}/assign-salesman-role`);
         const response = await endpoint.post('', input.salesRep);

@@ -21,7 +21,6 @@ import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageUploader from '@shared/components/ImageUploader';
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
-import { useAuth } from '@shared/hooks/useAuth';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
@@ -126,7 +125,6 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
     const [listActive, setListActive] = useState(true);
     const filesRepository = useRepository(FilesRepository);
     const { data } = useCountriesListsQuery();
-    const { user } = useAuth();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
     const handleClose = useCallback(
         (event: {}) => {
@@ -156,7 +154,7 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
             setLoading(true);
             let data;
             if (userExist || customer.email !== '') {
-                data = await dispatch(addExistingUserAsSalesRep({ userId: user.id, salesRep: salesRepInput }));
+                data = await dispatch(addExistingUserAsSalesRep({ userId: customer?.id, salesRep: salesRepInput }));
             } else {
                 data = await dispatch(storeSalesRep(salesRepInput));
             }

@@ -70,4 +70,19 @@ class CustomerController extends Controller
             ]
         );
     }
+
+    /**
+     * @throws Throwable
+     */
+    public function unAssignSalesman(User $user): JsonResponse
+    {
+        $user->unAssignSalesman();
+
+        return new JsonResponse(
+            [
+                'success' => true,
+                'message' => 'Salesman has been unassigned from the user.',
+            ]
+        );
+    }
 }

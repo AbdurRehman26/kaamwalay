@@ -120,12 +120,12 @@ export function SalesRepUpdateDialog({ onClose, onSubmit, ...rest }: SalesRepUpd
     const [emailExist, setEmailExist] = useState(false);
     const [commissionValue, setCommissionValue] = useState(0);
     const [listActive, setListActive] = useState(true);
+    const [profileImage, setProfileImage] = useState('');
     const filesRepository = useRepository(FilesRepository);
     const { data } = useCountriesListsQuery();
     const salesRep = useAppSelector((state) => state.adminSalesRep.salesRep);
 
     useEffect(() => {
-        console.log(salesRep);
         setFirstName(salesRep.firstName);
         setLastName(salesRep.lastName);
         setEmail(salesRep.email);
@@ -133,6 +133,7 @@ export function SalesRepUpdateDialog({ onClose, onSubmit, ...rest }: SalesRepUpd
         setCommissionType(!!Number(salesRep.commissionType));
         setCommissionValue(salesRep.commissionValue);
         setListActive(!!salesRep.status);
+        setProfileImage(salesRep.profileImage);
     }, [salesRep]);
 
     const handleClose = useCallback(
@@ -145,12 +146,12 @@ export function SalesRepUpdateDialog({ onClose, onSubmit, ...rest }: SalesRepUpd
     );
 
     const handleAddSalesRep = async () => {
-        let profileImage = '';
+        let profileImageDTO = profileImage;
         if (uploadedImage) {
-            profileImage = await filesRepository.uploadFile(uploadedImage);
+            profileImageDTO = await filesRepository.uploadFile(uploadedImage);
         }
         const salesRepInput: UpdateSalesRepRequestDto = {
-            profileImage: profileImage,
+            profileImage: profileImageDTO,
             firstName: firstName,
             lastName: lastName,
             phone: phone,
@@ -173,6 +174,10 @@ export function SalesRepUpdateDialog({ onClose, onSubmit, ...rest }: SalesRepUpd
             setLoading(false);
         }
     };
+
+    const handleRemoveProfileImage = useCallback(() => {
+        setProfileImage('');
+    }, []);
 
     useEffect(() => {
         const parsedName = parseName(salesRep?.fullName);
@@ -227,7 +232,13 @@ export function SalesRepUpdateDialog({ onClose, onSubmit, ...rest }: SalesRepUpd
                         <Typography variant={'subtitle1'} className={classes.label}>
                             Profile Picture
                         </Typography>
-                        <ImageUploader maxHeight="230px" maxWidth="213px" onChange={(img) => setUploadedImage(img)} />
+                        <ImageUploader
+                            maxHeight="230px"
+                            maxWidth="213px"
+                            onChange={(img) => setUploadedImage(img)}
+                            onDelete={handleRemoveProfileImage}
+                            imageUrl={profileImage}
+                        />
                     </Grid>
                     <Grid md={8} m={1}>
                         <Grid display={'flex'} flexWrap={'nowrap'}>

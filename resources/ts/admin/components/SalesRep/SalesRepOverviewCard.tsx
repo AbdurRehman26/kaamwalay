@@ -87,7 +87,6 @@ export function SalesRepOverviewCard({
     );
 
     useEffect(() => {
-        console.log('effect');
         if (statName && timeFilter && timeFilter.value !== 'custom') {
             const apiService = app(APIService);
             const endpoint = apiService.createEndpoint(`admin/salesman/${id}/get-stat`);
@@ -104,7 +103,6 @@ export function SalesRepOverviewCard({
 
     const handleSubmit = useCallback(
         async (values) => {
-            console.log('handle submit');
             const apiService = app(APIService);
             const endpoint = apiService.createEndpoint(`admin/salesman/${id}/get-stat`);
 

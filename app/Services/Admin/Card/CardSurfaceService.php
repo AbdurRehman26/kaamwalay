@@ -16,7 +16,7 @@ class CardSurfaceService
         return QueryBuilder::for(CardSurface::class)
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
-                AllowedFilter::scope('search')
+                AllowedFilter::scope('search'),
             ])
             ->defaultSort('-created_at')
             ->allowedSorts(['name'])

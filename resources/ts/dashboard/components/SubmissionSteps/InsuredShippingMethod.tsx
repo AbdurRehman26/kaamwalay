@@ -3,6 +3,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
@@ -463,6 +464,12 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                 <Typography className={classes.methodDescription}>Full Name</Typography>
                                 <TextField
+                                    error={useCustomShippingAddress && !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)}
+                                    helperText={
+                                        useCustomShippingAddress && !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)
+                                            ? 'Name should be two words long'
+                                            : ' '
+                                    }
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Full Name"
                                     disabled={disableAllInputs}
@@ -487,6 +494,8 @@ export function InsuredShippingMethod() {
                             >
                                 <Typography className={classes.methodDescription}>Address Line #1</Typography>
                                 <TextField
+                                    error={useCustomShippingAddress && address === ''}
+                                    helperText={useCustomShippingAddress && address === '' ? 'Required Field' : ' '}
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Street Address"
                                     fullWidth
@@ -534,6 +543,8 @@ export function InsuredShippingMethod() {
                                 <div className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}>
                                     <Typography className={classes.methodDescription}>City</Typography>
                                     <TextField
+                                        error={useCustomShippingAddress && city === ''}
+                                        helperText={useCustomShippingAddress && city === '' ? 'Required Field' : ' '}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         value={city}
                                         onChange={(e: any) => updateField('city', e.target.value)}
@@ -557,6 +568,8 @@ export function InsuredShippingMethod() {
                                 <div className={` ${classes.cityFieldContainer} ${classes.fieldContainer}`}>
                                     <Typography className={classes.methodDescription}>City</Typography>
                                     <TextField
+                                        error={useCustomShippingAddress && city === ''}
+                                        helperText={useCustomShippingAddress && city === '' ? 'Required Field' : ' '}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         value={city}
                                         onChange={(e: any) => updateField('city', e.target.value)}
@@ -578,6 +591,10 @@ export function InsuredShippingMethod() {
                                 <Typography className={classes.methodDescription}>State</Typography>
                                 {country.code === 'US' || country.code === '' ? (
                                     <Select
+                                        error={useCustomShippingAddress && !state.id}
+                                        {...(useCustomShippingAddress && !state.id ? (
+                                            <FormHelperText>Required Field:</FormHelperText>
+                                        ) : null)}
                                         fullWidth
                                         native
                                         disabled={disableAllInputs}
@@ -597,6 +614,10 @@ export function InsuredShippingMethod() {
                                     </Select>
                                 ) : (
                                     <TextField
+                                        error={useCustomShippingAddress && stateName === ''}
+                                        helperText={
+                                            useCustomShippingAddress && stateName === '' ? 'Required Field' : ' '
+                                        }
                                         style={{ marginTop: 2 }}
                                         placeholder="Enter State"
                                         fullWidth
@@ -616,6 +637,8 @@ export function InsuredShippingMethod() {
                             <div className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}>
                                 <Typography className={classes.methodDescription}>Zip Code</Typography>
                                 <TextField
+                                    error={useCustomShippingAddress && zipCode === ''}
+                                    helperText={useCustomShippingAddress && zipCode === '' ? 'Required Field' : ' '}
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Zip Code"
                                     fullWidth
@@ -637,6 +660,8 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                                 <Typography className={classes.methodDescription}>Phone Number</Typography>
                                 <NumberFormat
+                                    error={useCustomShippingAddress && phoneNumber === ''}
+                                    helperText={useCustomShippingAddress && phoneNumber === '' ? 'Required Field' : ' '}
                                     customInput={TextField}
                                     format={
                                         country.phoneCode

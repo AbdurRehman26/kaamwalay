@@ -1,11 +1,7 @@
-import MoreIcon from '@mui/icons-material/MoreVert';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,16 +15,12 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { MouseEvent, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
-import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
-import { SalesRapStatusEnum } from '@shared/constants/SalesRapStatusEnum';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
-import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -37,10 +29,8 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminSalesRepsQuery } from '@shared/redux/hooks/useAdminSalesRepsQuery';
-import { removeSalesRepRoleFromUser, setSalesRep, setSalesRepActive } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
-import { useAppDispatch } from '@admin/redux/hooks';
+import { SalesRepsTableRow } from '@admin/pages/SalesReps/SalesRepsList/SalesRepsTableRow';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
 type InitialValues = {
@@ -55,21 +45,6 @@ const SalesMenStatus = [
     { label: 'Inactive', value: 0 },
 ];
 
-enum RowOption {
-    EditSalesRep,
-    RemoveSalesRep,
-    SetActive,
-}
-
-const styles = {
-    TableRow: {
-        '&:hover': {
-            cursor: 'pointer',
-            background: '#F9F9F9',
-        },
-    },
-};
-
 export function SalesRepsListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
@@ -77,13 +52,7 @@ export function SalesRepsListPage() {
     const [isExporting, setIsExporting] = useState(false);
     const [status, setStatus] = useState({ label: '', value: 0 });
     const dataExportRepository = useRepository(DataExportRepository);
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const notifications = useNotifications();
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const [updateDialog, setUpdateDialog] = useState(false);
-    const confirm = useConfirmation();
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -226,91 +195,6 @@ export function SalesRepsListPage() {
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
 
-    const handleRowClick = useCallback(
-        (e, id: number) => {
-            if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(`/salesreps/${id}/view/overview`);
-            }
-        },
-        [navigate],
-    );
-
-    const handleUpdateDialogClose = useCallback(() => {
-        setUpdateDialog(false);
-    }, []);
-
-    const handleUpdate = useCallback(() => {
-        window.location.reload();
-        setUpdateDialog(false);
-    }, []);
-
-    const setRemoveDialog = useCallback(
-        async (id: number) => {
-            const result = await confirm({
-                title: 'Remove Sales Rep',
-                message: 'Are you sure you want to remove this sales rep?',
-                confirmText: 'Yes',
-                cancelButtonProps: {
-                    color: 'inherit',
-                },
-                confirmButtonProps: {
-                    variant: 'contained',
-                    color: 'error',
-                },
-            });
-
-            try {
-                if (result) {
-                    await dispatch(removeSalesRepRoleFromUser(id));
-                    navigate(`/salesreps`);
-                }
-            } catch (e) {
-                notifications.exception(e as Error);
-            }
-        },
-        [dispatch, navigate, notifications, confirm],
-    );
-
-    const toggleActive = useCallback(
-        async (data: SalesRepEntity) => {
-            await dispatch(
-                setSalesRepActive({
-                    userId: data.id,
-                    active: !data?.status,
-                }),
-            );
-            window.location.reload();
-        },
-        [dispatch],
-    );
-
-    const handleClickOptions = useCallback<MouseEventHandler>(
-        (e) => {
-            e.stopPropagation();
-            setAnchorEl(e.target as Element);
-        },
-        [setAnchorEl],
-    );
-
-    const handleOption = useCallback(
-        (option: RowOption, salesRep: SalesRepEntity) => async (e: MouseEvent<HTMLElement>) => {
-            e.stopPropagation();
-            handleCloseOptions();
-            switch (option) {
-                case RowOption.EditSalesRep:
-                    dispatch(setSalesRep(salesRep));
-                    setUpdateDialog(true);
-                    break;
-                case RowOption.RemoveSalesRep:
-                    setRemoveDialog(salesRep.id);
-                    break;
-                case RowOption.SetActive:
-                    toggleActive(salesRep);
-                    break;
-            }
-        },
-        [dispatch, handleCloseOptions, setRemoveDialog, toggleActive],
-    );
     if (salesReps.isLoading) {
         return (
             <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -436,62 +320,7 @@ export function SalesRepsListPage() {
                         </TableHead>
                         <TableBody>
                             {salesReps.data.map((salesRep: SalesRepEntity) => (
-                                <TableRow
-                                    key={salesRep.id}
-                                    onClick={(e) => handleRowClick(e, salesRep.id)}
-                                    sx={styles.TableRow}
-                                >
-                                    <TableCell variant={'body'}>
-                                        <Grid container>
-                                            <Avatar src={salesRep.profileImage ?? ''}>{salesRep.getInitials()}</Avatar>
-                                            <Grid item xs container direction={'column'} pl={2}>
-                                                <Typography variant={'body2'}>{salesRep.fullName}</Typography>
-                                                <Typography variant={'caption'} color={'textSecondary'}>
-                                                    {salesRep.email}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.customers ?? '-'}
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.orders ?? '-'}
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.commissionEarned ?? '-'}
-                                    </TableCell>
-                                    {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}
-                                    <TableCell variant={'body'} align={'center'}>
-                                        {salesRep.status !== null ? (
-                                            <SalesRepStatusChip
-                                                color={salesRep.status}
-                                                label={SalesRapStatusEnum[salesRep.status]}
-                                            />
-                                        ) : (
-                                            '-'
-                                        )}
-                                    </TableCell>
-                                    <TableCell variant={'body'} align={'center'}>
-                                        {salesRep.sales || 0}
-                                    </TableCell>
-                                    <TableCell variant={'body'} align={'right'}>
-                                        <IconButton onClick={handleClickOptions} size="large">
-                                            <MoreIcon />
-                                        </IconButton>
-                                        <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                            <MenuItem onClick={handleOption(RowOption.EditSalesRep, salesRep)}>
-                                                Edit User
-                                            </MenuItem>
-                                            <MenuItem onClick={handleOption(RowOption.RemoveSalesRep, salesRep)}>
-                                                Remove Sales Rep
-                                            </MenuItem>
-                                            <MenuItem onClick={handleOption(RowOption.SetActive, salesRep)}>
-                                                Mark {salesRep.status ? 'Inactive' : 'Active'}
-                                            </MenuItem>
-                                        </Menu>
-                                    </TableCell>
-                                </TableRow>
+                                <SalesRepsTableRow salesRep={salesRep} />
                             ))}
                         </TableBody>
                         <TableFooter>
@@ -501,7 +330,6 @@ export function SalesRepsListPage() {
                         </TableFooter>
                     </Table>
                 </TableContainer>
-                <SalesRepUpdateDialog open={updateDialog} onSubmit={handleUpdate} onClose={handleUpdateDialogClose} />
             </Grid>
         </>
     );

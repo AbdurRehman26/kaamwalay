@@ -11,6 +11,7 @@ use App\Models\CardSurface;
 use App\Services\Admin\Card\CardSurfaceService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CardSurfaceController extends Controller
 {
@@ -38,7 +39,12 @@ class CardSurfaceController extends Controller
         try {
             $surface->update($request->validated());
         } catch(ModelNotFoundException) {
-            $this->info('Card Surface does not exist already.');
+            return new JsonResponse(
+                [
+                    'error' => 'Card Surface does not exist',
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         return response()->json([

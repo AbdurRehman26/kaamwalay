@@ -1,23 +1,24 @@
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectMenu } from 'react-instantsearch-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilterIncrement, setGradeTeal, setGradeValue } from '../../redux/slices/feedSlice';
+import { setFilterDecrement, setFilterIncrement, setGradeValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 
 const FeedGradeDropdown = styled(Box)(
     {
+        marginLeft: '20px',
         '.Select': {
             width: '100%',
             height: '40px',
@@ -82,10 +83,15 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const grades = items.sort((a, b) => getGrade(b) - getGrade(a));
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const dispatch = useDispatch();
+    const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
+
+    function IncrementDecrement() {
+        dispatch(setFilterDecrement());
+        dispatch(setFilterIncrement());
+    }
 
     return !isMobile ? (
         <>
-            <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
             <FeedGradeDropdown>
                 {!currentRefinement ? (
                     <Select
@@ -131,25 +137,26 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
             </FeedGradeDropdown>
         </>
     ) : (
-        <ul>
-            <RadioGroup>
-                {grades.map((item: any) => (
-                    <FormControlLabel
-                        key={item.value}
-                        value={item.value}
-                        control={<Radio checked={item.isRefined} />}
-                        label={item.label}
-                        onClick={(event) => {
-                            event.preventDefault();
-                            refine(item.value);
-                            dispatch(setGradeValue(item.value));
-                            dispatch(setFilterIncrement());
-                            dispatch(setGradeTeal(true));
-                        }}
-                    />
-                ))}
-            </RadioGroup>
-        </ul>
+        <RadioGroup>
+            {grades.map((item: any) => (
+                <FormControlLabel
+                    key={item.value}
+                    value={item.value}
+                    control={<Radio checked={item.isRefined ? true : false} />}
+                    label={
+                        <Typography sx={{ fontSize: '14px', fontWeight: item.isRefined ? 500 : 400 }}>
+                            {item.label}
+                        </Typography>
+                    }
+                    onClick={(event) => {
+                        event.preventDefault();
+                        refine(item.value);
+                        !item.isRefined ? dispatch(setGradeValue(item.label)) : dispatch(setGradeValue(''));
+                        !grade && item.label !== grade ? dispatch(setFilterIncrement()) : IncrementDecrement();
+                    }}
+                />
+            ))}
+        </RadioGroup>
     );
 });
 

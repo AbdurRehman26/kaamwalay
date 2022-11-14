@@ -1,42 +1,42 @@
-import DoneIcon from '@mui/icons-material/Done';
-import Chip from '@mui/material/Chip';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
+import Typography from '@mui/material/Typography';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
+import { useDispatch } from 'react-redux';
+import theme from '@shared/styles/theme';
+import { clearAllCategories, clearCount, setGradeValue } from '../../redux/slices/feedSlice';
 
 const styles = {
-    Chip: {
-        width: '100%',
-        height: '40px',
-        background: '#F4F4FB',
-        border: '1px solid rgba(0, 0, 0, 0.18)',
-        boxSizing: 'border-box',
-        borderRadius: '24px',
-        padding: '10px 10px',
+    ClearFilter: {
+        margin: '5px',
         cursor: 'pointer',
         color: 'rgba(0, 0, 0, 0.54)',
-    },
-    ChipSelected: {
-        width: '100%',
-        height: '40px',
-        background: 'rgba(32, 191, 184, 0.08)',
-        border: '1px solid #20BFB8',
-        boxSizing: 'border-box',
-        borderRadius: '24px',
-        padding: '10px 10px',
-        cursor: 'pointer',
-        color: '#20BFB8',
-        fontWeight: 'bold',
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: '0px',
+        },
+        marginLeft: '20px',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
     },
 };
 
 const CustomClearRefinements = connectCurrentRefinements(({ items, refine }) => {
+    const dispatch = useDispatch();
+
     return (
-        <Chip
-            onClick={() => refine(items)}
-            sx={items.length > 0 ? styles.Chip : styles.ChipSelected}
-            icon={items.length > 0 ? undefined : <DoneIcon sx={{ color: '#20BFB8!important' }} />}
-            label={'All Categories'}
-            variant="outlined"
-        />
+        <Typography
+            sx={styles.ClearFilter}
+            onClick={() => {
+                refine(items);
+                dispatch(clearAllCategories());
+                dispatch(clearCount());
+                dispatch(setGradeValue(''));
+            }}
+        >
+            <ClearAllIcon sx={{ margin: '5px' }} />
+            Clear Filters
+        </Typography>
     );
 });
 

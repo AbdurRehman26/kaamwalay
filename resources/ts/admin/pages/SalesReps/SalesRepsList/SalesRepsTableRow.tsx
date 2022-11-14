@@ -171,9 +171,7 @@ export function SalesRepsTableRow({ salesRep }: SalesRepsTableRowProps) {
                         <MoreIcon />
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        <MenuItem onClick={handleOption(RowOption.EditSalesRep, salesRep)}>
-                            Edit User {salesRep.email}
-                        </MenuItem>
+                        <MenuItem onClick={handleOption(RowOption.EditSalesRep, salesRep)}>Edit User</MenuItem>
                         <MenuItem onClick={handleOption(RowOption.RemoveSalesRep, salesRep)}>Remove Sales Rep</MenuItem>
                         <MenuItem onClick={handleOption(RowOption.SetActive, salesRep)}>
                             Mark {salesRep.status ? 'Inactive' : 'Active'}

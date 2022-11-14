@@ -78,7 +78,7 @@ export function AuthControls() {
                             : '/dashboard'
                     }
                 >
-                    <Avatar src={dummyLargeAvatar} />
+                    <Avatar src={user?.profileImage ?? dummyLargeAvatar} />
                 </ButtonBase>
             ) : (
                 <Button

@@ -3,7 +3,6 @@ import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import Select from '@mui/material/Select';
@@ -477,7 +476,7 @@ export function InsuredShippingMethod() {
                                         error={!fullName?.match(/(\w+\s+[^-])+\S[^-]+/)}
                                         helperText={
                                             !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)
-                                                ? 'Name should be two words long'
+                                                ? 'Please enter a valid full name'
                                                 : ' '
                                         }
                                         style={{ margin: 8, marginLeft: 0 }}
@@ -600,28 +599,40 @@ export function InsuredShippingMethod() {
                                 <div className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}>
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     {country.code === 'US' || country.code === '' ? (
-                                        <Select
-                                            error={state.id === 0}
-                                            {...(state.id === 0 ? (
-                                                <FormHelperText>Required Field:</FormHelperText>
-                                            ) : null)}
-                                            fullWidth
-                                            native
-                                            disabled={disableAllInputs}
-                                            value={state.id || 'none'}
-                                            onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
-                                            onBlur={handleShippingFee}
-                                            placeholder={'Select State'}
-                                            variant={'outlined'}
-                                            style={{ height: '43px' }}
-                                        >
-                                            <option value="none">Select a state</option>
-                                            {availableStates.map((item: any) => (
-                                                <option key={item.id} value={item.id}>
-                                                    {item?.code}
-                                                </option>
-                                            ))}
-                                        </Select>
+                                        <>
+                                            <Select
+                                                error={!state.id}
+                                                fullWidth
+                                                native
+                                                disabled={disableAllInputs}
+                                                value={state.id || 'none'}
+                                                onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
+                                                onBlur={handleShippingFee}
+                                                placeholder={'Select State'}
+                                                variant={'outlined'}
+                                                style={{ height: '43px' }}
+                                            >
+                                                <option value="none">Select a state</option>
+                                                {availableStates.map((item: any) => (
+                                                    <option key={item.id} value={item.id}>
+                                                        {item?.code}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                            {!state.id ? (
+                                                <div
+                                                    style={{
+                                                        marginTop: '4px',
+                                                        marginLeft: '14px',
+                                                        color: '#d32f2f',
+                                                        fontSize: '12px',
+                                                    }}
+                                                >
+                                                    {' '}
+                                                    Required Field{' '}
+                                                </div>
+                                            ) : null}
+                                        </>
                                     ) : (
                                         <TextField
                                             error={stateName === ''}

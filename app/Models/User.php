@@ -480,6 +480,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->profile_image;
     }
 
+    /**
+     * @return HasMany<SalesmanCommissionPayment>
+     */
     public function salesmanCommissionPayments(): HasMany
     {
         return $this->hasMany(SalesmanCommissionPayment::class, 'salesman_id');

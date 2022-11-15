@@ -13,10 +13,13 @@ use Throwable;
 
 class SalesmanCommissionPaymentService
 {
+    /**
+     * @return Collection<int, User>
+     */
     public function getCommissionPayments(User $salesman): Collection
     {
         return QueryBuilder::for(SalesmanCommissionPayment::class)
-            ->forSalesman($salesman)
+            ->where('salesman_id', $salesman->id)
             ->defaultSort('-created_at')
             ->allowedSorts([
                 'created_at',
@@ -24,6 +27,9 @@ class SalesmanCommissionPaymentService
             ->get();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function payCommission(User $salesman, User $addedBy, array $data): SalesmanCommissionPayment
     {
         throw_unless($salesman->isSalesman(), UserIsNotSalesmanException::class);

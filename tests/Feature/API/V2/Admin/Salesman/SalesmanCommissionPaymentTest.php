@@ -70,3 +70,17 @@ it('admin can not create a commission payment for user that does not have the sa
     fn () => config('permission.roles.customer'),
     fn () => config('permission.roles.admin'),
 ]);
+
+it('users without admin role can not create a commission payment', function (string $role) {
+    $user = User::factory()->withRole($role)->create();
+    $this->actingAs($user);
+    postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->salesman]), [
+        'file_url' => $this->faker->imageUrl(),
+        'notes' => $this->faker->sentence(),
+        'amount' => 60,
+    ])
+        ->assertForbidden();
+})->with([
+    fn () => config('permission.roles.customer'),
+    fn () => config('permission.roles.salesman'),
+]);

@@ -172,8 +172,16 @@ const MenuProps = {
         style: {
             maxHeight: '260px',
             borderRadius: '8px',
-            marginLeft: '60px',
         },
+    },
+    getContentAnchorEl: null,
+    anchorOrigin: {
+        vertical: 'bottom' as const,
+        horizontal: 'left' as const,
+    },
+    transformOrigin: {
+        vertical: 'top' as const,
+        horizontal: 'left' as const,
     },
 };
 

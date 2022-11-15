@@ -2,7 +2,10 @@ import * as yup from 'yup';
 
 export const addressValidationSchema = yup.object().shape(
     {
-        fullName: yup.string().required(),
+        fullName: yup
+            .string()
+            .required()
+            .matches(/(\w+\s+[^-])+\S[^-]+/),
         address: yup.string().required(),
         address2: yup.string().optional(),
         flat: yup.string().optional(),

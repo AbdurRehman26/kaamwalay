@@ -473,8 +473,12 @@ export function InsuredShippingMethod() {
                                 <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                     <Typography className={classes.methodDescription}>Full Name</Typography>
                                     <TextField
-                                        error={fullName === ''}
-                                        helperText={fullName === '' ? 'Required Field' : ' '}
+                                        error={!fullName?.match(/(\w+\s+[^-])+\S[^-]+/)}
+                                        helperText={
+                                            !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)
+                                                ? 'Please enter a valid full name'
+                                                : ' '
+                                        }
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Full Name"
                                         disabled={disableAllInputs}

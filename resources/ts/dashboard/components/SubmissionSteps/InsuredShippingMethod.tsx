@@ -463,8 +463,12 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                 <Typography className={classes.methodDescription}>Full Name</Typography>
                                 <TextField
-                                    error={useCustomShippingAddress && fullName === ''}
-                                    helperText={useCustomShippingAddress && fullName === '' ? 'Required Field' : ' '}
+                                    error={useCustomShippingAddress && !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)}
+                                    helperText={
+                                        useCustomShippingAddress && !fullName?.match(/(\w+\s+[^-])+\S[^-]+/)
+                                            ? 'Please enter a valid full name'
+                                            : ' '
+                                    }
                                     style={{ margin: 8, marginLeft: 0 }}
                                     placeholder="Enter Full Name"
                                     disabled={disableAllInputs}

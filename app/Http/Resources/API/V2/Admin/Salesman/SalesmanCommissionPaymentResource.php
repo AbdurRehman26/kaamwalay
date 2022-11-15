@@ -3,17 +3,30 @@
 namespace App\Http\Resources\API\V2\Admin\Salesman;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Admin\User\UserResource;
+use App\Models\SalesmanCommissionPayment;
 
+/**
+ * @mixin SalesmanCommissionPayment
+ */
 class SalesmanCommissionPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array <string, mixed>
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'salesman' => new SalesmanResource($this->whenLoaded('salesman')),
+            'added_by' => new UserResource($this->whenLoaded('added_by')),
+            'amount' => $this->amount,
+            'file_url' => $this->file_url,
+            'notes' => $this->notes ?? '',
+            'created_at' => $this->created_at->toDateString(),
+        ];
     }
 }

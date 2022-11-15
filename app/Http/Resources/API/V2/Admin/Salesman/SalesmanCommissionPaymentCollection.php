@@ -10,7 +10,7 @@ class SalesmanCommissionPaymentCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array<int, SalesmanCommissionPaymentResource>|\Illuminate\Contracts\Support\Arrayable<int, SalesmanCommissionPaymentResource>|\JsonSerializable
      */
     public function toArray($request)
     {

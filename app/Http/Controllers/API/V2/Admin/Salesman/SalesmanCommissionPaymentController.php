@@ -15,11 +15,6 @@ class SalesmanCommissionPaymentController extends Controller
     {
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(User $salesman): SalesmanCommissionPaymentCollection
     {
         $commissionPayments = $this->salesmanCommissionPaymentService->getCommissionPayments($salesman);

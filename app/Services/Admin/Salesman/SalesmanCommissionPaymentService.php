@@ -7,21 +7,23 @@ use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use App\Services\Order\Validators\SalesmanCommissionAmountValidator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class SalesmanCommissionPaymentService
 {
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Model>
      */
     public function getCommissionPayments(User $salesman): Collection
     {
         return QueryBuilder::for(SalesmanCommissionPayment::class)
-            ->where('salesman_id', $salesman->id)
             ->defaultSort('-created_at')
             ->allowedSorts([
                 'created_at',
             ])
+            ->where('salesman_id', $salesman->id)
             ->get();
     }
 

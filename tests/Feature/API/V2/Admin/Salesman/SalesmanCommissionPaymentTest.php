@@ -48,3 +48,25 @@ it('admin can create a commission payment', function () {
     ])
         ->assertCreated();
 });
+
+it('admin can not create a commission payment more than the unpaid amount', function () {
+    postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->salesman]), [
+        'file_url' => $this->faker->imageUrl(),
+        'notes' => $this->faker->sentence(),
+        'amount' => 60,
+    ])
+        ->assertUnprocessable();
+});
+
+it('admin can not create a commission payment for user that does not have the salesman role', function (string $role) {
+    $user = User::factory()->withRole($role)->create();
+    postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->user]), [
+        'file_url' => $this->faker->imageUrl(),
+        'notes' => $this->faker->sentence(),
+        'amount' => 60,
+    ])
+        ->assertUnprocessable();
+})->with([
+    fn () => config('permission.roles.customer'),
+    fn () => config('permission.roles.admin'),
+]);

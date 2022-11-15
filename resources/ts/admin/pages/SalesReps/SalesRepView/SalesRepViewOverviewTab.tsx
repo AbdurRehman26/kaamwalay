@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { SalesRepOverviewCard } from '@admin/components/SalesRep';
+import { CommissionPaymentsTable } from '@admin/pages/SalesReps/SalesRepView/CommissionPaymentsTable';
 
 interface SalesRepViewOverviewTabProps {
     salesrep: SalesRepEntity;
@@ -40,6 +41,7 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                 <Grid item container md={6}>
                     <SalesRepOverviewCard title={'Commission Paid'} value={0} />
                 </Grid>
+                <CommissionPaymentsTable />
             </Grid>
         </Grid>
     );

@@ -77,6 +77,7 @@ const Root = styled(Grid)({
 
 export function SalesRepView() {
     const { id } = useParams<'id'>();
+    const { tab } = useParams<{ tab: string }>();
     const [creditDialog, setCreditDialog] = useState(false);
     const [updateDialog, setUpdateDialog] = useState(false);
     const dispatch = useDispatch();
@@ -165,6 +166,31 @@ export function SalesRepView() {
         },
         [data, dispatch, setRemoveDialog, toggleActive],
     );
+    const headerActionButton = useCallback(() => {
+        if (tab === 'overview') {
+            return (
+                <Button
+                    variant={'contained'}
+                    color={'primary'}
+                    sx={{ borderRadius: '24px', padding: '10px 20px' }}
+                    onClick={createCustomerSubmission}
+                >
+                    ADD COMMISSION PAYMENT
+                </Button>
+            );
+        }
+        return (
+            <Button
+                variant={'contained'}
+                color={'primary'}
+                sx={{ borderRadius: '24px', padding: '10px 20px' }}
+                onClick={createCustomerSubmission}
+            >
+                CREATE SUBMISSION
+            </Button>
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tab]);
 
     if (isLoading || !data) {
         return (
@@ -207,14 +233,7 @@ export function SalesRepView() {
                     </Grid>
                 </Grid>
                 <Grid container item xs className={'Actions'}>
-                    <Button
-                        variant={'contained'}
-                        color={'primary'}
-                        sx={{ borderRadius: '24px', padding: '10px 20px' }}
-                        onClick={createCustomerSubmission}
-                    >
-                        CREATE SUBMISSION
-                    </Button>
+                    {headerActionButton()}
                     <OptionsMenu onClick={handleOption}>
                         <OptionsMenuItem action={RowOption.EditSalesRep}>Edit User</OptionsMenuItem>
                         <OptionsMenuItem action={RowOption.RemoveSalesRep}>Remove Sales Rep</OptionsMenuItem>

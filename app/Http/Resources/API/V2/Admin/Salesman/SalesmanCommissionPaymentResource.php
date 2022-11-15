@@ -21,8 +21,8 @@ class SalesmanCommissionPaymentResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'salesman' => new SalesmanResource($this->whenLoaded('salesman')),
-            'added_by' => new UserResource($this->whenLoaded('added_by')),
+            'salesman' => $this->whenLoaded('salesman', SalesmanResource::class),
+            'added_by' => $this->whenLoaded('addedBy', UserResource::class),
             'amount' => $this->amount,
             'file_url' => $this->file_url,
             'notes' => $this->notes ?? '',

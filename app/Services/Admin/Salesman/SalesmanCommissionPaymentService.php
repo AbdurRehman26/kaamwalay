@@ -6,17 +6,15 @@ use App\Exceptions\API\Admin\Salesman\UserIsNotSalesmanException;
 use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use App\Services\Order\Validators\SalesmanCommissionAmountValidator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
 class SalesmanCommissionPaymentService
 {
-    /**
-     * @return Collection<int, Model>
-     */
-    public function getCommissionPayments(User $salesman): Collection
+    protected const PER_PAGE = 10;
+
+    public function getCommissionPayments(User $salesman): LengthAwarePaginator
     {
         return QueryBuilder::for(SalesmanCommissionPayment::class)
             ->defaultSort('-created_at')
@@ -24,7 +22,8 @@ class SalesmanCommissionPaymentService
                 'created_at',
             ])
             ->where('salesman_id', $salesman->id)
-            ->get();
+            ->with('salesman', 'addedBy')
+            ->paginate(request('per_page', self::PER_PAGE));
     }
 
     /**

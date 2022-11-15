@@ -18,6 +18,7 @@ import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery
 import { removeSalesRepRoleFromUser, setSalesRep, setSalesRepActive } from '@shared/redux/slices/adminSalesRepSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
+import { AddCommissionPaymentDialog } from '@admin/pages/SalesReps/SalesRepView/AddCommissionPaymentDialog';
 import SalesRepViewContent from '@admin/pages/SalesReps/SalesRepView/SalesRepViewContent';
 
 enum RowOption {
@@ -84,6 +85,7 @@ export function SalesRepView() {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const confirm = useConfirmation();
+    const [showAddCommissionPayment, setShowAddCommissionPayment] = useState(false);
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
@@ -166,6 +168,7 @@ export function SalesRepView() {
         },
         [data, dispatch, setRemoveDialog, toggleActive],
     );
+
     const headerActionButton = useCallback(() => {
         if (tab === 'overview') {
             return (
@@ -173,7 +176,7 @@ export function SalesRepView() {
                     variant={'contained'}
                     color={'primary'}
                     sx={{ borderRadius: '24px', padding: '10px 20px' }}
-                    onClick={createCustomerSubmission}
+                    onClick={() => setShowAddCommissionPayment(true)}
                 >
                     ADD COMMISSION PAYMENT
                 </Button>
@@ -252,6 +255,13 @@ export function SalesRepView() {
                 />
             </Root>
             <SalesRepViewContent salesrep={data} />
+            <AddCommissionPaymentDialog
+                onSubmit={() => {
+                    window.location.reload();
+                }}
+                open={showAddCommissionPayment}
+                onClose={() => setShowAddCommissionPayment(false)}
+            />
         </>
     );
 }

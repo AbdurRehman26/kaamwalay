@@ -19,3 +19,4 @@ export { adminOrderLabelsSlice as adminOrderLabels } from './adminOrderLabelsSli
 export { adminCardsSlice as adminCards } from './adminCardsSlice';
 export { adminRaritiesSlice as adminRarities } from './adminRaritiesSlice';
 export { adminSalesRepSlice as adminSalesRep } from './adminSalesRepSlice';
+export { adminSalesRepCommissionPaymentsSlice as adminSalesRepCommissionPayments } from './adminSalesRepCommissionPayments';

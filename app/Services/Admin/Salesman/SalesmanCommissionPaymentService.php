@@ -7,8 +7,6 @@ use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use App\Services\Order\Validators\SalesmanCommissionAmountValidator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 

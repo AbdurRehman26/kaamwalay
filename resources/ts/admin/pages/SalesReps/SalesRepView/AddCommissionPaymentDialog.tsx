@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,9 +19,10 @@ import ImageUploader from '@shared/components/ImageUploader';
 import { AddCommissionPaymentDto } from '@shared/dto/AddCommissionPaymentDto';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
+import { nameInitials } from '@shared/lib/strings/initials';
 import { storeSalesRepCommissionPayment } from '@shared/redux/slices/adminSalesRepCommissionPayments';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
-import { useAppDispatch } from '@admin/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 
 interface SalesRepAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     onSubmit?(): Promise<void> | void;
@@ -64,6 +66,46 @@ const useStyles = makeStyles(
     { name: '' },
 );
 
+const SalesRepDetailsContainer = styled(Grid)({
+    '.ImageDiv': {
+        maxWidth: '10%!important',
+    },
+    '.Avatar': {
+        background: '#B5CBED',
+        width: '100%',
+        height: '100%',
+        fontWeight: 500,
+        fontSize: '30px',
+        lineHeight: '59px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
+    '.CustomerName': {
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '24px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
+    '.CustomerHeading': {
+        fontWeight: 400,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.25px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        padding: '2px 0px',
+    },
+    '.Customer': {
+        paddingTop: '10px',
+    },
+    '.CustomerValue': {
+        fontWeight: 400,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.25px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        paddingLeft: '5px',
+    },
+});
+
 export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, ...rest }: SalesRepAddDialogProps) {
     const { id } = useParams<'id'>();
     const classes = useStyles();
@@ -74,7 +116,7 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
     const [notes, setNotes] = useState('');
     const [amount, setAmount] = useState<number>(0);
     const filesRepository = useRepository(FilesRepository);
-
+    const salesrep = useAppSelector((state) => state.adminSalesRep.salesRep);
     const handleClose = useCallback(
         (event: {}) => {
             if (onClose) {
@@ -131,6 +173,23 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
             </Grid>
             <Divider />
             <DialogContent>
+                <SalesRepDetailsContainer>
+                    <Grid container item xs className={'ImageDiv'} alignItems={'center'}>
+                        <Avatar src={salesrep.profileImage ?? ''} variant="circular" className={'Avatar'}>
+                            {nameInitials(salesrep.fullName)}
+                        </Avatar>
+                    </Grid>
+                    <Grid container item xs alignItems={'center'} pl={1.5}>
+                        <Grid className={'Customer'}>
+                            <Grid container item xs direction="row">
+                                <Typography className={'CustomerName'}>{salesrep.fullName}</Typography>
+                            </Grid>
+                            <Typography className={'CustomerHeading'}>
+                                Unpaid Commission: <span className={'CustomerValue'}>${salesrep.unpaidCommission}</span>
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </SalesRepDetailsContainer>
                 <Grid container item display={'flex'} justifyContent={'space-between'} flexWrap={'nowrap'} my={2}>
                     <Grid md={4} m={1}>
                         <Typography variant={'subtitle1'} className={classes.label}>

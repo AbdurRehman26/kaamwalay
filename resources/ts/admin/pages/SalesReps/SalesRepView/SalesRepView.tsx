@@ -114,6 +114,10 @@ export function SalesRepView() {
 
     const { data, isLoading } = salesrep$;
 
+    if (data) {
+        dispatch(setSalesRep(data));
+    }
+
     const setRemoveDialog = useCallback(async () => {
         const result = await confirm({
             title: 'Remove Sales Rep',

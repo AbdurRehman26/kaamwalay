@@ -36,6 +36,7 @@ class SalesmanResource extends BaseResource
             'sales' => $this->salesmanOrders()->sum('grand_total'),
             'customers' => $this->salesmanCustomersCount(),
             'orders' => $this->salesmanOrders()->count(),
+            'unpaid_commission' => $this->salesmanProfile->earnedCommission() - $this->receivedCommissionTotal(),
         ];
     }
 }

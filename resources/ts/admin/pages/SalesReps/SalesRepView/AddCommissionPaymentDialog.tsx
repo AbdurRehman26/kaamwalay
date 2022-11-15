@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ImageUploader from '@shared/components/ImageUploader';
 import { AddCommissionPaymentDto } from '@shared/dto/AddCommissionPaymentDto';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -64,6 +65,7 @@ const useStyles = makeStyles(
 );
 
 export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, ...rest }: SalesRepAddDialogProps) {
+    const { id } = useParams<'id'>();
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -91,12 +93,15 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
             notes,
             amount,
             fileUrl: uploadedFile,
+            salesmanId: Number(id),
         };
         try {
             setLoading(true);
-            await dispatch(storeSalesRepCommissionPayment(commissionInput));
-            notifications.success('Commission Added successfully!');
-            onSubmit?.();
+            const { data } = await dispatch(storeSalesRepCommissionPayment(commissionInput));
+            if (data) {
+                onSubmit?.();
+                notifications.success('Commission Added successfully!');
+            }
         } catch (e: any) {
             notifications.exception(e);
             return;

@@ -9,7 +9,11 @@ export class SalesRepCommissionPaymentsRepository extends Repository<SalesRepCom
     readonly model = SalesRepCommissionPaymentsEntity;
 
     public async storeCommission(input: AddCommissionPaymentDto) {
-        const { data } = await this.endpoint.post('', input);
+        const { data } = await this.endpoint.post('', input, {
+            params: {
+                salesmanId: input.salesmanId,
+            },
+        });
         return this.toEntity(data);
     }
 }

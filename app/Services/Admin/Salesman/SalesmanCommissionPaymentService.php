@@ -6,10 +6,8 @@ use App\Exceptions\API\Admin\Salesman\UserIsNotSalesmanException;
 use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use App\Services\Order\Validators\SalesmanCommissionAmountValidator;
-use App\Services\Salesman\SalesmanDashboardService;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
-use Throwable;
 
 class SalesmanCommissionPaymentService
 {

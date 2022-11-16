@@ -27,6 +27,7 @@ use App\Http\Controllers\API\V2\Admin\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Admin\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanCommissionPaymentController;
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanController;
 use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
@@ -166,6 +167,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'salesmen.show',
         ]);
     Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
+    Route::apiResource('salesmen.commission-payments', SalesmanCommissionPaymentController::class)
+        ->only('index', 'store');
 
     // wallet
     Route::prefix('wallets')->group(function () {

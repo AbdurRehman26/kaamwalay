@@ -29,7 +29,7 @@ interface SalesRepAddDialogProps extends Omit<DialogProps, 'onSubmit'> {
     fromSubmission?: boolean;
 }
 
-const Root = styled(Dialog)(({ theme }) => ({
+const RootDialogContainer = styled(Dialog)(({ theme }) => ({
     '.MuiDialog-paper': {
         minWidth: 720,
     },
@@ -68,20 +68,21 @@ const useStyles = makeStyles(
 
 const SalesRepDetailsContainer = styled(Grid)({
     '.ImageDiv': {
-        maxWidth: '10%!important',
+        marginTop: 8,
+        maxWidth: '48px !important',
     },
     '.Avatar': {
         background: '#B5CBED',
-        width: '100%',
-        height: '100%',
+        width: '48px',
+        height: '48px',
         fontWeight: 500,
-        fontSize: '30px',
-        lineHeight: '59px',
+        fontSize: '25px',
+        lineHeight: '30px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
     '.CustomerName': {
         fontWeight: 500,
-        fontSize: '14px',
+        fontSize: '16px',
         lineHeight: '24px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
@@ -157,7 +158,7 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
     }, [amount]);
 
     return (
-        <Root onClose={handleClose} {...rest}>
+        <RootDialogContainer onClose={handleClose} {...rest}>
             <Grid container alignItems={'center'} justifyContent={'space-between'} py={2} pl={3} pr={2}>
                 <Grid item xs container alignItems={'center'} justifyContent={'flex-start'}>
                     <Typography variant={'h6'} fontWeight={500}>
@@ -173,8 +174,8 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
             </Grid>
             <Divider />
             <DialogContent>
-                <SalesRepDetailsContainer>
-                    <Grid container item xs className={'ImageDiv'} alignItems={'center'}>
+                <SalesRepDetailsContainer container marginTop={3} marginBottom={3} paddingLeft={0.5}>
+                    <Grid item xs className={'ImageDiv'} alignItems={'center'}>
                         <Avatar src={salesrep.profileImage ?? ''} variant="circular" className={'Avatar'}>
                             {nameInitials(salesrep.fullName)}
                         </Avatar>
@@ -260,6 +261,6 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
                     {'Add Payment'}
                 </LoadingButton>
             </DialogActions>
-        </Root>
+        </RootDialogContainer>
     );
 }

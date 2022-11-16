@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Admin\Salesman;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
 class SalesmanCommissionPaymentCollection extends ResourceCollection

@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\Salesman;
 
-use App\Exceptions\API\Admin\Salesman\UserIsNotSalesmanException;
 use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use App\Services\Order\Validators\SalesmanCommissionAmountValidator;

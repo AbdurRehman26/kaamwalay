@@ -82,7 +82,7 @@ export function CommissionPaymentsTable() {
     useEffect(
         () => {
             if (!commissions.isLoading) {
-                commissions.sort({ sort: !sortFilter ? 'created_at' : '-created_at' });
+                commissions.sort({ sort: sortFilter ? 'created_at' : '-created_at' });
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'salesman_id'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -260,6 +260,13 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function assignSalesman(User $salesman): bool
     {
         $this->salesman_id = $salesman->id;
+
+        return $this->save();
+    }
+
+    public function unAssignSalesman(): bool
+    {
+        $this->salesman_id = null;
 
         return $this->save();
     }

@@ -24,6 +24,7 @@ export function SubmissionStep01Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const serviceLevels = useAppSelector((state) => state.newSubmission.step01Data.availableServiceLevels);
+    const selectedServiceLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
     const [query] = useLocationQuery<InitialValues>();
     const plan = query.plan;
 
@@ -40,8 +41,15 @@ export function SubmissionStep01Content() {
                 setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
             );
             dispatch(setCustomStep(1));
+        } else {
+            const selectedService: any = serviceLevels.find((service) => service.id === selectedServiceLevel.id);
+            const { id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice } =
+                selectedService;
+            dispatch(
+                setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
+            );
         }
-    }, [serviceLevels, dispatch, plan]);
+    }, [serviceLevels, dispatch, plan, selectedServiceLevel.id]);
 
     return (
         <Container className={classes.contentContainer} maxWidth={'md'}>

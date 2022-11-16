@@ -38,11 +38,12 @@ beforeEach(function () {
     $this->actingAs($this->user);
 });
 
-it('salesman commissions on different order lines', function ($orderLine) {
+it('checks salesman commissions on different order lines', function ($orderLine) {
     $order = $this->order;
+
     SalesmanCommissionService::onOrderLine($this->order, $orderLine['commission_type']);
 
-    $commission = number_format($orderLine['commission'], 2);
+    $commission = $orderLine['commission'];
 
     $earnedCommission = SalesmanEarnedCommission::where('salesman_id', $order->salesman_id)->first();
 
@@ -64,7 +65,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_CREATED,
-            'commission' => $commission,
+            'commission' => number_format($commission, 2),
         ];
     };
 
@@ -88,7 +89,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_REFUNDED,
-            'commission' => $commission,
+            'commission' => number_format($commission, 2),
         ];
     };
 
@@ -112,7 +113,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_EXTRA_CHARGE,
-            'commission' => $commission,
+            'commission' => number_format($commission, 2),
         ];
     };
 });

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardRarityController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardSurfaceController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V2\Admin\Coupon\CouponController;
@@ -113,6 +114,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('series', CardSeriesController::class)->only(['index', 'store']);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
         Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'show', 'update']);
+        Route::apiResource('surfaces', CardSurfaceController::class)->only(['index', 'store', 'show', 'update'])
+        ->names([
+            'index' => 'surfaces.index',
+            'store' => 'surfaces.store',
+            'show' => 'surfaces.show',
+            'update' => 'surfaces.update',
+        ]);
         Route::put('/labels/{label}', [CardLabelController::class, 'update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
@@ -148,6 +156,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
     Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
     Route::post('customers/{user}/assign-salesman/{salesman}', [CustomerController::class, 'assignSalesman'])->name('customers.assign-salesman');
+    Route::post('customers/{user}/unassign-salesman', [CustomerController::class, 'unAssignSalesman'])->name('customers.unassign-salesman');
 
     // Salesmen
     Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])

@@ -45,6 +45,8 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                         value={salesrep.paidCommission}
                     />
                 </Grid>
+            </Grid>
+            <Grid item container direction={'row'}>
                 <CommissionPaymentsTable />
             </Grid>
         </Grid>

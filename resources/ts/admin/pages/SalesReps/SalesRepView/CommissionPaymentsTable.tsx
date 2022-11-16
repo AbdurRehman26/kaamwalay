@@ -33,10 +33,12 @@ const useStyles = makeStyles(() => {
             fontSize: '14px',
         },
         tableTitle: {
-            fontSize: '18px',
+            fontSize: '16px',
+            lineHeight: '24px',
             color: 'rgba(0, 0, 0, 0.87)',
-            marginLeft: '14px',
-            marginTop: '12px',
+            marginLeft: '20px',
+            marginTop: '22px',
+            fontWeight: 500,
         },
         balanceContainer: {
             width: '100%',
@@ -97,7 +99,7 @@ export function CommissionPaymentsTable() {
 
     return (
         <>
-            <TableContainer sx={{ borderRadius: '10px' }}>
+            <TableContainer sx={{ borderRadius: '10px', border: '1px solid #E0E0E0' }}>
                 <Typography className={classes.tableTitle}>Commission Payments</Typography>
                 {commissions.data?.length === 0 ? (
                     <Grid
@@ -176,7 +178,7 @@ export function CommissionPaymentsTable() {
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="left">
-                                            <Typography className={classes.tableRowLabel} sx={{ fontWeight: 'bold' }}>
+                                            <Typography className={classes.tableRowLabel} sx={{ fontWeight: '400' }}>
                                                 {item.addedBy.fullName}
                                             </Typography>
                                         </TableCell>

@@ -31,8 +31,6 @@ class SalesmanCommissionPaymentService
      */
     public function payCommission(User $salesman, User $addedBy, array $data): SalesmanCommissionPayment
     {
-        throw_unless($salesman->isSalesman(), UserIsNotSalesmanException::class);
-
         SalesmanCommissionAmountValidator::validate($salesman, $data['amount']);
 
         $commissionPayment = new SalesmanCommissionPayment($data);

@@ -1,6 +1,8 @@
 import Grid from '@mui/material/Grid';
+import React, { useState } from 'react';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { SalesRepOverviewCard } from '@admin/components/SalesRep';
+import { AddCommissionPaymentDialog } from '@admin/pages/SalesReps/SalesRepView/AddCommissionPaymentDialog';
 import { CommissionPaymentsTable } from '@admin/pages/SalesReps/SalesRepView/CommissionPaymentsTable';
 
 interface SalesRepViewOverviewTabProps {
@@ -8,6 +10,8 @@ interface SalesRepViewOverviewTabProps {
 }
 
 export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabProps) {
+    const [showAddCommissionPayment, setShowAddCommissionPayment] = useState(false);
+
     return (
         <Grid container direction={'row'} spacing={2.5} p={3}>
             <Grid item container direction={'row'} spacing={2.5}>
@@ -26,6 +30,8 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                         hint={
                             'Unpaid commission is calculated from fully paid orders up to the previous month. It does not include paid orders from the current month.'
                         }
+                        addButton={true}
+                        onAddButtonClick={() => setShowAddCommissionPayment(true)}
                     />
                 </Grid>
             </Grid>
@@ -43,12 +49,20 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                         title={'Commission Paid'}
                         timeFilters={true}
                         value={salesrep.paidCommission}
+                        statName={'commission_paid'}
                     />
                 </Grid>
             </Grid>
             <Grid item container direction={'row'}>
                 <CommissionPaymentsTable />
             </Grid>
+            <AddCommissionPaymentDialog
+                onSubmit={() => {
+                    window.location.reload();
+                }}
+                open={showAddCommissionPayment}
+                onClose={() => setShowAddCommissionPayment(false)}
+            />
         </Grid>
     );
 }

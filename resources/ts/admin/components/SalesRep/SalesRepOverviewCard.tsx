@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -30,6 +31,8 @@ interface SalesRepOverviewCardProps {
     hint?: string;
     timeFilters?: boolean;
     statName?: string;
+    addButton?: boolean;
+    onAddButtonClick?: () => void;
 }
 
 const TimeFilters = [
@@ -69,6 +72,8 @@ export function SalesRepOverviewCard({
     hint = '',
     timeFilters = false,
     statName = '',
+    addButton = false,
+    onAddButtonClick = () => {},
 }: SalesRepOverviewCardProps) {
     const classes = useStyles();
     const [timeFilter, setTimeFilter] = useState({ label: 'This Month', value: 'this_month' });
@@ -235,7 +240,7 @@ export function SalesRepOverviewCard({
                             </>
                         </FilterSelect>
                     ) : null}
-                    {/* <AddIcon onClick={handleCreditDialog} sx={{ cursor: 'pointer' }} />*/}
+                    {addButton ? <AddIcon onClick={onAddButtonClick} sx={{ cursor: 'pointer' }} /> : null}
                 </Grid>
             </Grid>
         </Grid>

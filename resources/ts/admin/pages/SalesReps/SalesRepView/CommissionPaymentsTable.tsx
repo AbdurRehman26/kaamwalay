@@ -193,7 +193,7 @@ export function CommissionPaymentsTable() {
                                             <Typography className={classes.tableRowLabel}>{item.notes}</Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Typography className={classes.tableRowLabel} sx={{ fontWeight: 'bold' }}>
+                                            <Typography className={classes.tableRowLabel} sx={{ fontWeight: '400' }}>
                                                 ${item.amount}
                                             </Typography>
                                         </TableCell>

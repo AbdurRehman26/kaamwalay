@@ -36,17 +36,17 @@ class CardGradeResource extends BaseResource
                 ],
             ]),
             'robo_grade_values' => [
-                'front' => ! is_null($this->resource['front_scan']) ? [
-                    'center' => $this->resource['front_scan']['centering_grade']['grade'],
-                    'surface' => $this->resource['front_scan']['surface_grade']['grade'],
-                    'edge' => $this->resource['front_scan']['edges_grade']['grade'],
-                    'corner' => $this->resource['front_scan']['corners_grade']['grade'],
+                'front' => ! is_null($this->resource['laser_front_scan']) ? [
+                    'center' => $this->resource['laser_front_scan']['centering_grade']['grade'],
+                    'surface' => $this->resource['laser_front_scan']['surface_grade']['grade'],
+                    'edge' => $this->resource['laser_front_scan']['edges_grade']['grade'],
+                    'corner' => $this->resource['laser_front_scan']['corners_grade']['grade'],
                 ] : null,
-                'back' => ! is_null($this->resource['back_scan']) ? [
-                    'center' => $this->resource['back_scan']['centering_grade']['grade'],
-                    'surface' => $this->resource['back_scan']['surface_grade']['grade'],
-                    'edge' => $this->resource['back_scan']['edges_grade']['grade'],
-                    'corner' => $this->resource['back_scan']['corners_grade']['grade'],
+                'back' => ! is_null($this->resource['laser_back_scan']) ? [
+                    'center' => $this->resource['laser_back_scan']['centering_grade']['grade'],
+                    'surface' => $this->resource['laser_back_scan']['surface_grade']['grade'],
+                    'edge' => $this->resource['laser_back_scan']['edges_grade']['grade'],
+                    'corner' => $this->resource['laser_back_scan']['corners_grade']['grade'],
                 ] : null,
             ],
             'generated_images' => [

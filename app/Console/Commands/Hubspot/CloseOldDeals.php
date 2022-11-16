@@ -33,6 +33,7 @@ class CloseOldDeals extends Command
      */
     public function handle(HubspotService $hubspotService)
     {
+        // @phpstan-ignore-next-line
         $deals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage'])->getData()->deals;
 
         foreach ($deals as $deal) {

@@ -65,7 +65,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_CREATED,
-            'commission' => number_format($commission, 2),
+            'commission' => round($commission, 2),
         ];
     };
 
@@ -89,7 +89,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_REFUNDED,
-            'commission' => number_format($commission, 2),
+            'commission' => round($commission, 2),
         ];
     };
 
@@ -113,7 +113,7 @@ dataset('orderLine', function () {
 
         return [
             'commission_type' => CommissionEarnedEnum::ORDER_EXTRA_CHARGE,
-            'commission' => number_format($commission, 2),
+            'commission' => round($commission, 2),
         ];
     };
 });

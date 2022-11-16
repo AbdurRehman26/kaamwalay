@@ -15,6 +15,6 @@ class OrderCommissionService
 
     public function getCommission(Order $order, CommissionEarnedEnum $orderCommissionType): float
     {
-        return (float) number_format($this->orderLineCommissionService[$orderCommissionType->toString()]::calculateCommission($order), 2);
+        return round($this->orderLineCommissionService[$orderCommissionType->toString()]::calculateCommission($order), 2);
     }
 }

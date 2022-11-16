@@ -192,22 +192,27 @@ class SalesmanService
             case 'this_month':
                 $startDate = $now->copy()->startOfMonth()->toDateString();
                 $endDate = $now->copy()->endOfMonth()->toDateString();
+
                 break;
             case 'last_month':
                 $startDate = $now->copy()->subMonth()->startOfMonth()->toDateString();
                 $endDate = $now->copy()->subMonth()->endOfMonth()->toDateString();
+
                 break;
             case 'this_year':
                 $startDate = $now->copy()->startOfYear()->toDateString();
                 $endDate = $now->copy()->endOfYear()->toDateString();
+
                 break;
             case 'last_year':
                 $startDate = $now->copy()->subYear()->startOfYear()->toDateString();
                 $endDate = $now->copy()->subYear()->endOfYear()->toDateString();
+
                 break;
             case 'custom':
                 $startDate = $data['start_date'];
                 $endDate = $data['end_date'];
+
                 break;
             default:
                 return 0;
@@ -224,6 +229,5 @@ class SalesmanService
             case 'commission_paid':
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
         }
-
     }
 }

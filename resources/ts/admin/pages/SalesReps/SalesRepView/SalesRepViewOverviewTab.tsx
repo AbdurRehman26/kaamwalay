@@ -22,7 +22,7 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                 <Grid item container md={6}>
                     <SalesRepOverviewCard
                         title={'Unpaid Commission'}
-                        value={100}
+                        value={salesrep.unpaidCommission}
                         hint={
                             'Unpaid commission is calculated from fully paid orders up to the previous month. It does not include paid orders from the current month.'
                         }
@@ -33,13 +33,17 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                 <Grid item container md={6}>
                     <SalesRepOverviewCard
                         title={'Commission Earned'}
-                        value={salesrep.commissionEarned}
+                        value={salesrep.unpaidCommissionTillLastMonth}
                         timeFilters={true}
                         statName={'commission_earned'}
                     />
                 </Grid>
                 <Grid item container md={6}>
-                    <SalesRepOverviewCard title={'Commission Paid'} value={0} />
+                    <SalesRepOverviewCard
+                        title={'Commission Paid'}
+                        timeFilters={true}
+                        value={salesrep.paidCommission}
+                    />
                 </Grid>
                 <CommissionPaymentsTable />
             </Grid>

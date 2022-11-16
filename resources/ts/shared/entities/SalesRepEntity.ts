@@ -14,6 +14,8 @@ export class SalesRepEntity extends UserEntity {
     public commissionType!: CommissionTypeEnum;
     public commissionValue!: number;
     public unpaidCommission!: number;
+    public unpaidCommissionTillLastMonth!: number;
+    public paidCommission!: number;
 
     @Type(() => UserEntity)
     public createdBy!: UserEntity;

@@ -140,11 +140,8 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
         };
         try {
             setLoading(true);
-            const { data } = await dispatch(storeSalesRepCommissionPayment(commissionInput));
-            if (data) {
-                onSubmit?.();
-                notifications.success('Commission Added successfully!');
-            }
+            const data = await dispatch(storeSalesRepCommissionPayment(commissionInput));
+            if (!data?.error) onSubmit?.();
         } catch (e: any) {
             notifications.exception(e);
             return;
@@ -255,7 +252,7 @@ export function AddCommissionPaymentDialog({ onClose, fromSubmission, onSubmit, 
                     type={'submit'}
                     onClick={handleAddCommissionPayment}
                     loading={loading}
-                    disabled={!isValid}
+                    disabled={!isValid || loading}
                     variant={'contained'}
                 >
                     {'Add Payment'}

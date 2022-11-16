@@ -46,4 +46,11 @@ class Salesman extends Model
     {
         return $this->salesmanEarnedCommissions()->sum('commission');
     }
+
+    public function earnedCommissionTillLastMonth(): float
+    {
+        return $this->salesmanEarnedCommissions()
+            ->where('created_at', '<=', now()->startOfMonth())
+            ->sum('commission');
+    }
 }

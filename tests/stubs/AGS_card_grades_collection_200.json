@@ -42,7 +42,7 @@
                     "image_bucket_path": "https://ags.cards/pokemon_cards_images/series_images/Base-Set.logo.119.png"
                 }
             },
-            "front_scan": {
+            "laser_front_scan": {
                 "centering_grade": {
                     "grade": "2.00",
                     "nickname": "GOOD"
@@ -150,7 +150,7 @@
                 },
                 "input_image": "https://ags.cards/pokemon-statics/media/front/pidgey2_front_VTLLC6k.jpg"
             },
-            "back_scan": {
+            "laser_back_scan": {
                 "centering_grade": {
                     "grade": "2.00",
                     "nickname": "GOOD"

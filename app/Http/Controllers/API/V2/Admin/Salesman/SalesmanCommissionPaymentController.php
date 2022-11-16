@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Salesman;
 
+use App\Exceptions\API\Admin\Salesman\UserIsNotSalesmanException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Salesman\StoreSalesmanCommissionPaymentRequest;
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanCommissionPaymentCollection;
@@ -26,6 +27,8 @@ class SalesmanCommissionPaymentController extends Controller
         User $salesman,
         StoreSalesmanCommissionPaymentRequest $request
     ): SalesmanCommissionPaymentResource {
+        throw_unless($salesman->isSalesman(), UserIsNotSalesmanException::class);
+        
         $salesmanCommissionPayment = $this->salesmanCommissionPaymentService->payCommission(
             $salesman,
             auth()->user(),

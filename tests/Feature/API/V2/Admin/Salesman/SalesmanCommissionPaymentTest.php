@@ -40,7 +40,7 @@ it('returns paid commission list for specific salesman', function () {
         ->assertJsonCount(5, 'data');
 });
 
-it('admin can create a commission payment', function () {
+test('admin can create a commission payment', function () {
     postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->salesman]), [
         'file_url' => $this->faker->imageUrl(),
         'notes' => $this->faker->sentence(),
@@ -49,7 +49,7 @@ it('admin can create a commission payment', function () {
         ->assertCreated();
 });
 
-it('admin can not create a commission payment more than the unpaid amount', function () {
+test('admin can not create a commission payment more than the unpaid amount', function () {
     postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->salesman]), [
         'file_url' => $this->faker->imageUrl(),
         'notes' => $this->faker->sentence(),
@@ -58,7 +58,7 @@ it('admin can not create a commission payment more than the unpaid amount', func
         ->assertUnprocessable();
 });
 
-it('admin can not create a commission payment for user that does not have the salesman role', function (string $role) {
+test('admin can not create a commission payment for user that does not have the salesman role', function (string $role) {
     $user = User::factory()->withRole($role)->create();
     postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->user]), [
         'file_url' => $this->faker->imageUrl(),
@@ -71,7 +71,7 @@ it('admin can not create a commission payment for user that does not have the sa
     fn () => config('permission.roles.admin'),
 ]);
 
-it('users without admin role can not create a commission payment', function (string $role) {
+test('users without admin role can not create a commission payment', function (string $role) {
     $user = User::factory()->withRole($role)->create();
     $this->actingAs($user);
     postJson(route('v2.salesmen.commission-payments.store', ['salesman' => $this->salesman]), [

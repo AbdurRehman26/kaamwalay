@@ -12,7 +12,7 @@ class SalesmanCommissionPayment extends Model
 
     protected $fillable = [
         'salesman_id',
-        'added_by',
+        'added_by_id',
         'amount',
         'notes',
         'file_url',

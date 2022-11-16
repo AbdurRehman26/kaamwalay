@@ -1,21 +1,39 @@
 # Changelog
 
+## v3.0.2 - 2022-11-16
+
+### What's Changed
+
+- Hotfix: Admin | improve grading recurring calls by @muhammad-nauman in https://github.com/woozard/robograding/pull/782
+- picking grades from laser_front_scan and laser_back_scan by @luis-molina in https://github.com/woozard/robograding/pull/794
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.0.1...v3.0.2
+
+## v3.0.1 - 2022-11-10
+
+### What's Changed
+
+- Hotfix: Guest | Submission without login by @muhammad-nauman in https://github.com/woozard/robograding/pull/780
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v2.12.0...v3.0.1
+
 ## v2.12.0 - 2022-11-10
 
 ### What's Changed
 
 - Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/755
-- Feature: Invoice Promo Code  by @aliwooter in https://github.com/woozard/robograding/pull/753
+- Feature: Invoice Promo Code by @aliwooter in https://github.com/woozard/robograding/pull/753
 - Fix: Mobile Tooltip by @aliwooter in https://github.com/woozard/robograding/pull/754
 - Feature: Quantity Depending Pricing BE by @luis-molina in https://github.com/woozard/robograding/pull/756
 - Feature/quantity depending pricing be 3345796887 by @luis-molina in https://github.com/woozard/robograding/pull/759
-- Feature: Admin | Add Cards Manually on Create Submission Flow by @numair97 in https://github.com/woozard/robograding/pull/758
+- Feature: Admin | Add Cards Manually on Create Submission Flow by @numair97 in
+- https://github.com/woozard/robograding/pull/758
 - Feature: Frontend | Quantity Dependent Pricing by @numair97 in https://github.com/woozard/robograding/pull/760
 - Fix: Feed | Missing POP Report data by @luis-molina in https://github.com/woozard/robograding/pull/761
 - Fix: Customer | Fix Cards Qty bug by @muhammad-nauman in https://github.com/woozard/robograding/pull/762
 - Fix: Quantity Dependent Pricing by @numair97 in https://github.com/woozard/robograding/pull/763
-- Fix: Css Issue In Service Level  by @numair97 in https://github.com/woozard/robograding/pull/765
-- Feature : Salesman & User Roles ( Backend )  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/764
+- Fix: Css Issue In Service Level by @numair97 in https://github.com/woozard/robograding/pull/765
+- Feature : Salesman & User Roles ( Backend ) by @AbdurRehman26 in https://github.com/woozard/robograding/pull/764
 - Fix: Admin | Async AGS API calls by @muhammad-nauman in https://github.com/woozard/robograding/pull/757
 - Fix: Error in revenue calculations from listener by @luis-molina in https://github.com/woozard/robograding/pull/768
 - Feature: FE Sales Rep by @aliwooter in https://github.com/woozard/robograding/pull/767

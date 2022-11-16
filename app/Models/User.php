@@ -373,6 +373,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $query->role(Role::findByName(config('permission.roles.customer')));
     }
 
+    /**
+     * @param  Builder<User>  $query
+     * @param  string  $salesmanId
+     * @return Builder<User>
+     */
     public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));

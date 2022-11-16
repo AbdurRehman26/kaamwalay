@@ -228,6 +228,8 @@ class SalesmanService
                 return $user->salesmanProfile->salesmanEarnedCommissions()->whereBetween('created_at', [$startDate, $endDate])->sum('commission');
             case 'commission_paid':
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            default:
+                return 0;
         }
     }
 }

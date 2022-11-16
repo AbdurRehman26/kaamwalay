@@ -37,6 +37,9 @@ class Salesman extends Model
         return $this->commission_type === $type;
     }
 
+    /**
+     * @return HasMany<SalesmanEarnedCommission>
+     */
     public function salesmanEarnedCommissions(): HasMany
     {
         return $this->hasMany(SalesmanEarnedCommission::class, 'salesman_id', 'user_id');

@@ -392,6 +392,11 @@ class Order extends Model implements Exportable
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
     }
 
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string  $salesmanId
+     * @return Builder<Order>
+     */
     public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));

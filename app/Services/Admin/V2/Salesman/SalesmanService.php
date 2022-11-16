@@ -213,6 +213,9 @@ class SalesmanService
                 return 0;
         }
 
+        $startDate .= ' 00:00:00';
+        $endDate .= ' 23:59:59';
+
         switch ($data['stat_name']) {
             case 'sales':
                 return $user->salesmanOrders()->whereBetween('created_at', [$startDate, $endDate])->sum('grand_total');

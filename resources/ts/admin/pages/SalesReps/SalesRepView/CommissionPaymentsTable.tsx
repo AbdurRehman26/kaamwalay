@@ -183,14 +183,20 @@ export function CommissionPaymentsTable() {
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="left">
-                                            <Avatar
-                                                variant={'square'}
-                                                sx={{ height: '48px', width: '35px' }}
-                                                src={item.fileUrl ?? ''}
-                                            ></Avatar>
+                                            {item.fileUrl ? (
+                                                <Avatar
+                                                    variant={'square'}
+                                                    sx={{ height: '48px', width: '35px' }}
+                                                    src={item.fileUrl ?? ''}
+                                                ></Avatar>
+                                            ) : (
+                                                '-'
+                                            )}
                                         </TableCell>
                                         <TableCell align="left">
-                                            <Typography className={classes.tableRowLabel}>{item.notes}</Typography>
+                                            <Typography className={classes.tableRowLabel}>
+                                                {item.notes === '' ? '-' : item.notes}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell align="right">
                                             <Typography className={classes.tableRowLabel} sx={{ fontWeight: '400' }}>

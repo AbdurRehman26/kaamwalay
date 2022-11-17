@@ -240,7 +240,6 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                                   ]
                                 : null}
                         </>
-                        {/* )} */}
                     </Menu>
                 </TableCell>
             </TableRow>

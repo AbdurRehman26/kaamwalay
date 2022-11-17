@@ -36,7 +36,8 @@ class CloseOldDeals extends Command
         $offset = 0;
         $hasMore = true;
 
-        if (empty(config('services.hubspot.deal_stage'))) {
+        if (empty(config('services.hubspot.close_deal_from_stage')))
+        {
             return $this->info("Deal stage is not set");
         }
         
@@ -46,14 +47,14 @@ class CloseOldDeals extends Command
             $deals = $allDeals->getData()->deals;
 
             foreach ($deals as $deal) {
-                if ($deal->properties->dealstage->value == config('services.hubspot.deal_stage')) {
-                    $hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first();
-                    if ($hubspotDeal) {
-                        $user = User::where('email', $hubspotDeal->user_email)->first();
-
-                        if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
-                            $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
-                            $hubspotService->updateDealStageForPaidOrder($order);
+                if ($deal->properties->dealstage->value == config('services.hubspot.close_deal_from_stage')) {
+                    if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
+                        if($user = User::where('email', $hubspotDeal->user_email)->first())
+                        {
+                            if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
+                                $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
+                                $hubspotService->updateDealStageForPaidOrder($order);
+                            }
                         }
                     }
                 }

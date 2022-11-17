@@ -193,9 +193,7 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                <TableCell>
-                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
-                </TableCell>
+                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 <TableCell align={'right'}>
                     <SubmissionActionButton
                         orderId={order.id}
@@ -215,43 +213,34 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     </Grid>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (
-                            <>
-                                <MenuItem onClick={() => navigate(`/submissions/${order.id}/view`)}>
-                                    View Submission
-                                </MenuItem>
+                        <>
+                            <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
+                                {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                            </MenuItem>
 
-                                <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
-                            </>
-                        ) : (
-                            <>
-                                <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
-                                    {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                </MenuItem>
+                            <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                            {order.paymentStatus !== PaymentStatusEnum.PAID ? (
+                                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                            ) : null}
 
-                                <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
-                                {order.paymentStatus !== PaymentStatusEnum.PAID ? (
-                                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
-                                ) : null}
-
-                                {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
-                                order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
-                                order?.orderStatus.is(OrderStatusEnum.SHIPPED)
-                                    ? [
-                                          <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
-                                              View Grades
-                                          </MenuItem>,
-                                          <MenuItem
-                                              key={Options.DownloadOrderLabel}
-                                              onClick={handleOption(Options.DownloadOrderLabel)}
-                                              disabled={!order.orderLabel}
-                                          >
-                                              Export Labels
-                                          </MenuItem>,
-                                      ]
-                                    : null}
-                            </>
-                        )}
+                            {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
+                            order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
+                            order?.orderStatus.is(OrderStatusEnum.SHIPPED)
+                                ? [
+                                      <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
+                                          View Grades
+                                      </MenuItem>,
+                                      <MenuItem
+                                          key={Options.DownloadOrderLabel}
+                                          onClick={handleOption(Options.DownloadOrderLabel)}
+                                          disabled={!order.orderLabel}
+                                      >
+                                          Export Labels
+                                      </MenuItem>,
+                                  ]
+                                : null}
+                        </>
+                        {/* )} */}
                     </Menu>
                 </TableCell>
             </TableRow>

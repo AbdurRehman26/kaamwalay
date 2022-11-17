@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin\Salesman;
+namespace App\Services\Salesman;
 
 use App\Models\SalesmanCommissionPayment;
 use App\Models\User;

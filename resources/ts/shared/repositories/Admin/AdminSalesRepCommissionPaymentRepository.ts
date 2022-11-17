@@ -3,8 +3,8 @@ import { SalesRepCommissionPaymentsEntity } from '@shared/entities/SalesRepCommi
 import { Injectable } from '../../decorators/Injectable';
 import { Repository } from '../Repository';
 
-@Injectable('AdminSalesMenRepository')
-export class SalesRepCommissionPaymentsRepository extends Repository<SalesRepCommissionPaymentsEntity> {
+@Injectable('AdminSalesRepCommissionPaymentRepository')
+export class AdminSalesRepCommissionPaymentRepository extends Repository<SalesRepCommissionPaymentsEntity> {
     readonly endpointPath: string = 'admin/salesmen/:salesmanId/commission-payments';
     readonly model = SalesRepCommissionPaymentsEntity;
 

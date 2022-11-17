@@ -13,12 +13,12 @@
 */
 
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
+use App\Http\Controllers\API\V2\Salesman\SalesmanCommissionPaymentController;
 
 Route::middleware(['auth', 'role:salesman'])->group(function () {
+    Route::post('get-stat', [SalesmanDashboardController::class, 'getStat'])
+        ->name('salesman.dashboard.get-stat');
 
-    Route::get('dashboard/sales', [SalesmanDashboardController::class, 'getSales'])
-        ->name('salesman.dashboard.sales');
-    Route::get('dashboard/commission-earned', [SalesmanDashboardController::class, 'getCommissionsEarned'])
-        ->name('salesman.dashboard.commission-earned');
-
+    Route::get('commission-payments', [SalesmanCommissionPaymentController::class, 'index'])
+        ->name('salesman.commission-payments.index');
 });

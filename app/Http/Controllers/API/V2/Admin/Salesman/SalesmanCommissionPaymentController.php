@@ -8,7 +8,7 @@ use App\Http\Requests\API\V2\Admin\Salesman\StoreSalesmanCommissionPaymentReques
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanCommissionPaymentCollection;
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanCommissionPaymentResource;
 use App\Models\User;
-use App\Services\Admin\Salesman\SalesmanCommissionPaymentService;
+use App\Services\Salesman\SalesmanCommissionPaymentService;
 
 class SalesmanCommissionPaymentController extends Controller
 {

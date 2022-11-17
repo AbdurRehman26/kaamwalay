@@ -3,24 +3,24 @@ import { instanceToPlain } from 'class-transformer';
 import { AddCommissionPaymentDto } from '@shared/dto/AddCommissionPaymentDto';
 import { SalesRepCommissionPaymentsEntity } from '@shared/entities/SalesRepCommissionPaymentsEntity';
 import { app } from '@shared/lib/app';
-import { SalesRepCommissionPaymentsRepository } from '@shared/repositories/Admin/SalesRepCommissionPaymentRepository';
+import { AdminSalesRepCommissionPaymentRepository } from '@shared/repositories/Admin/AdminSalesRepCommissionPaymentRepository';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<SalesRepCommissionPaymentsEntity> {
-    salesRepCommissionPayment: SalesRepCommissionPaymentsEntity;
+    adminSalesRepCommissionPayment: SalesRepCommissionPaymentsEntity;
 }
 
 const adminSalesRepCommissionsThunk = createRepositoryThunk(
     'adminSalesRepCommissionPayments',
-    SalesRepCommissionPaymentsRepository,
+    AdminSalesRepCommissionPaymentRepository,
 );
 
 export const storeSalesRepCommissionPayment = createAsyncThunk(
     'storeSalesRepCommissionPayment',
     async (input: AddCommissionPaymentDto, thunkAPI) => {
-        const salesRepCommissionPaymentsRepository = app(SalesRepCommissionPaymentsRepository);
+        const salesRepCommissionPaymentsRepository = app(AdminSalesRepCommissionPaymentRepository);
         try {
             const commission: SalesRepCommissionPaymentsEntity =
                 await salesRepCommissionPaymentsRepository.storeCommission(input);

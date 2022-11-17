@@ -1,9 +1,9 @@
 import Grid from '@mui/material/Grid';
 import React, { useState } from 'react';
+import { SalesRepCommissionPaymentsList } from '@shared/components/SalesReps/SalesRepCommissionPaymentsList';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { SalesRepOverviewCard } from '@admin/components/SalesRep';
 import { AddCommissionPaymentDialog } from '@admin/pages/SalesReps/SalesRepView/AddCommissionPaymentDialog';
-import { CommissionPaymentsTable } from '@admin/pages/SalesReps/SalesRepView/CommissionPaymentsTable';
 
 interface SalesRepViewOverviewTabProps {
     salesrep: SalesRepEntity;
@@ -54,7 +54,7 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                 </Grid>
             </Grid>
             <Grid item container direction={'row'}>
-                <CommissionPaymentsTable />
+                <SalesRepCommissionPaymentsList isAdmin />
             </Grid>
             <AddCommissionPaymentDialog
                 onSubmit={() => {

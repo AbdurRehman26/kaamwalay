@@ -228,11 +228,18 @@ class OrderService extends V1OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
+        $itemsCount = $order->orderItems()->count();
+
+        $agsPageCount = (int) (ceil($itemsCount / 10) * 10) / 10;
+
+        $itemsPerPage = 10;
 
         $cards = $this->getCardsForGrading($order);
 
-        $this->updateLocalGrades($grades['results'] ?? [], $cards);
+        for ($iterator = 0; $iterator < $agsPageCount; $iterator++) {
+            $grades = $this->agsService->getGrades($this->getOrderCertificates($order), $iterator * $itemsPerPage);
+            $this->updateLocalGrades($grades['results'] ?? [], $cards);
+        }
 
         return $cards;
     }

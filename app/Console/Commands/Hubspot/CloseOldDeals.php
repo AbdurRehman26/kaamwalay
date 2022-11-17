@@ -38,6 +38,7 @@ class CloseOldDeals extends Command
 
         if (empty(config('services.hubspot.close_deal_from_stage'))) {
             $this->info("Deal stage is not set");
+
             return 0;
         }
 

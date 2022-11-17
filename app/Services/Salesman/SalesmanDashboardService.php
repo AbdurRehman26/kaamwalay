@@ -24,7 +24,7 @@ class SalesmanDashboardService
         return $orderSalesQuery->sum('grand_total');
     }
 
-    public function getCommissionsEarned(User $salesman, array $data): int
+    public function getCommissionsEarned(User $salesman, array $data = []): int
     {
         $orderCommissionQuery = Order::forSalesman($salesman);
 

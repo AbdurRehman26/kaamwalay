@@ -7,6 +7,7 @@ use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
@@ -202,4 +203,130 @@ test('a salesman can not get single salesman detail', function () {
     actingAs($user);
     getJson(route('v2.salesmen.show', ['salesman' => $this->salesmen->first()]))
         ->assertStatus(403);
+});
+
+test('an admin can update a salesman', function () {
+    actingAs($this->user);
+    putJson(route('v2.salesmen.update', $this->salesmen[0]->id), [
+        'first_name' => 'Jane',
+        'last_name' => 'Updated',
+        'phone' => '+1234567890',
+        'commission_type' => CommissionTypeEnum::PERCENTAGE,
+        'commission_value' => 1,
+        'is_active' => false,
+    ])
+        ->assertSuccessful()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'profile_image',
+                'full_name',
+                'email',
+                'customers',
+                'orders',
+                'commission_earned',
+                'status',
+                'sales',
+            ],
+        ])->assertJsonFragment([
+            'full_name' => 'Jane Updated',
+            'status' => 0,
+        ]);
+});
+
+test('a customer can not update a salesman', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+    putJson(route('v2.salesmen.update', $this->salesmen[0]->id), [
+        'first_name' => 'Jane',
+        'last_name' => 'Updated',
+        'phone' => '+1234567890',
+        'commission_type' => CommissionTypeEnum::PERCENTAGE,
+        'commission_value' => 1,
+        'is_active' => false,
+    ])->assertStatus(403);
+});
+
+test('an admin can mark a salesman as inactive', function () {
+    actingAs($this->user);
+    postJson(route('v2.salesman.set-active', $this->salesmen[0]->id), [
+        'is_active' => false,
+    ])
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'status' => 0,
+        ]);
+});
+
+test('a customer can not mark a salesman as inactive', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    postJson(route('v2.salesman.set-active', $this->salesmen[0]->id), [
+        'is_active' => false,
+    ])->assertStatus(403);
+});
+
+test('an admin can remove salesman role from an user', function () {
+    actingAs($this->user);
+    postJson(route('v2.salesman.remove-salesman-role', $this->salesmen[0]->id))
+        ->assertSuccessful();
+
+    $this->assertFalse(User::find($this->salesmen[0]->id)->isSalesman());
+});
+
+test('a customer can not remove salesman role from an user', function () {
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    postJson(route('v2.salesman.remove-salesman-role', $this->salesmen[0]->id))
+        ->assertStatus(403);
+});
+
+test('an admin can get overview stats for a salesman', function () {
+    $salesman = User::factory()->withSalesmanRole()->create();
+
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create([
+        'salesman_id' => $salesman->id,
+    ]);
+
+    $order = Order::factory()->create([
+        'salesman_id' => $salesman->id,
+        'user_id' => $user->id,
+    ]);
+
+    actingAs($this->user);
+    postJson(route('v2.salesman.get-stat', $salesman->id), [
+        'stat_name' => 'sales',
+        'time_filter' => 'custom',
+        'start_date' => $order->created_at->toDateString(),
+        'end_date' => $order->created_at->toDateString(),
+    ])
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'data' => $order->grand_total,
+        ]);
+});
+
+test('a customer can not get overview stats for a salesman', function () {
+    $salesman = User::factory()->withSalesmanRole()->create();
+
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create([
+        'salesman_id' => $salesman->id,
+    ]);
+
+    $order = Order::factory()->create([
+        'salesman_id' => $salesman->id,
+        'user_id' => $user->id,
+    ]);
+
+    $user = User::factory()->withRole(config('permission.roles.customer'))->create();
+    actingAs($user);
+
+    postJson(route('v2.salesman.get-stat', $salesman->id), [
+        'stat_name' => 'sales',
+        'time_filter' => 'custom',
+        'start_date' => $order->created_at->toDateString(),
+        'end_date' => $order->created_at->toDateString(),
+    ])->assertStatus(403);
 });

@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
-import { SelectAndCreateCustomerDialog } from '../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { SurfacesAddDialog } from './SurfacesAddDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -24,7 +25,7 @@ const Root = styled(Grid)(() => ({
     backgroundColor: '#f9f9f9',
     width: '100%',
     borderBottom: '1px solid #e0e0e0',
-    '.SalesRepsPageHeader-search': {
+    '.SurfacesPageHeader-search': {
         '.MuiOutlinedInput-root': {
             backgroundColor: '#fff',
             borderRadius: 24,
@@ -39,7 +40,7 @@ const Root = styled(Grid)(() => ({
 
 const useStyles = makeStyles(
     (theme) => ({
-        newSalesRepBtn: {
+        newSurfaceBtn: {
             borderRadius: 24,
             padding: '12px 24px',
             [theme.breakpoints.down('sm')]: {
@@ -49,14 +50,16 @@ const useStyles = makeStyles(
         },
     }),
     {
-        name: 'SalesRepsPageHeader',
+        name: 'SurfacesPageHeader',
     },
 );
 
-export function SalesRepsPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
+export function SurfacesPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
-    const [createSubmission, setCreateSubmission] = useState(false);
+    const [addSurfacesDialog, setAddSurfacesDialog] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const notifications = useNotifications();
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -75,19 +78,31 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
         [handleSearch],
     );
 
+    const handleAddSubmit = async () => {
+        try {
+            setIsLoading(true);
+            setAddSurfacesDialog(false);
+            window.location.reload();
+            setIsLoading(false);
+        } catch (e: any) {
+            setIsLoading(false);
+            notifications.exception(e);
+        }
+    };
+
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
-            {false ? (
+            {isLoading ? (
                 <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                     <CircularProgress />
                 </Box>
             ) : (
                 <>
-                    <SelectAndCreateCustomerDialog
-                        btnText={'Create New User'}
-                        fromSalesReps={true}
-                        onClose={() => setCreateSubmission(false)}
-                        open={createSubmission}
+                    <SurfacesAddDialog
+                        title={'Add Surface'}
+                        onSubmit={handleAddSubmit}
+                        open={addSurfacesDialog}
+                        onClose={() => setAddSurfacesDialog(false)}
                     />
                     <Grid container justifyContent={'space-between'}>
                         <Grid display={'flex'} alignItems={'center'} item>
@@ -96,7 +111,7 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                             </Typography>
                             {searchField && (
                                 <TextField
-                                    className={'SalesRepsPageHeader-search'}
+                                    className={'SurfacesPageHeader-search'}
                                     value={search}
                                     onChange={handleSearchValue}
                                     onKeyDown={handleKeyDown}
@@ -121,12 +136,12 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                         </Grid>
                         <Grid item>
                             <Button
-                                onClick={() => setCreateSubmission(true)}
+                                onClick={() => setAddSurfacesDialog(true)}
                                 variant={'contained'}
                                 color={'primary'}
-                                className={classes.newSalesRepBtn}
+                                className={classes.newSurfaceBtn}
                             >
-                                Add Sales Rep
+                                Create Surface
                             </Button>
                         </Grid>
                     </Grid>

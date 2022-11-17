@@ -88,6 +88,7 @@ class SalesmanDashboardService
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
             case 'commission_unpaid': {
                 $salesmanStatsService = resolve(SalesmanDashboardService::class);
+
                 return $salesmanStatsService->getCommissionsEarned($user) - $user->receivedCommissionTotal();
             }
             default:

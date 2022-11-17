@@ -106,11 +106,11 @@ export function CommissionPaymentsTable() {
                         container
                         direction={'row'}
                         marginTop={'21px'}
-                        marginLeft={'20px'}
+                        marginLeft={'28px'}
                         spacing={2}
                         mb={{ xs: 3, md: 5 }}
                     >
-                        <Grid item xs={12} sm={8} order={{ xs: 2, sm: 1 }}>
+                        <Grid item xs={12} sm={11}>
                             <Paper
                                 variant={'outlined'}
                                 sx={{ width: '100%', backgroundColor: '#F9F9F9', borderRadius: '10px' }}

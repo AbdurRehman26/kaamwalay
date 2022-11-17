@@ -10,6 +10,8 @@ use App\Services\HubspotService;
 use Illuminate\Console\Command;
 use SevenShores\Hubspot\Resources\Deals;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CloseOldDeals extends Command
 {
     /**
@@ -36,6 +38,11 @@ class CloseOldDeals extends Command
         $offset = 0;
         $hasMore = true;
 
+        if (empty(config('services.hubspot.deal_stage')))
+        {
+            return $this->info("Deal stage is not set");
+        }
+        
         while ($hasMore == true) {
             $allDeals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage', 'limit' => 250, 'offset' => $offset]);
             // @phpstan-ignore-next-line

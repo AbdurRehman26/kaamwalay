@@ -10,8 +10,6 @@ use App\Services\HubspotService;
 use Illuminate\Console\Command;
 use SevenShores\Hubspot\Resources\Deals;
 
-use function PHPUnit\Framework\isEmpty;
-
 class CloseOldDeals extends Command
 {
     /**
@@ -38,8 +36,7 @@ class CloseOldDeals extends Command
         $offset = 0;
         $hasMore = true;
 
-        if (empty(config('services.hubspot.deal_stage')))
-        {
+        if (empty(config('services.hubspot.deal_stage'))) {
             return $this->info("Deal stage is not set");
         }
         

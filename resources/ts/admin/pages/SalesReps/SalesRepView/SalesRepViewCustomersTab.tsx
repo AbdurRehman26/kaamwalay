@@ -241,11 +241,19 @@ export function CustomersList() {
         setOrderBy(property);
     };
 
-    useEffect(() => {
-        setSortFilter((order === 'desc' ? '-' : '') + orderBy);
+    const calculateSortFilterValue = useCallback((order, orderBy) => {
+        return (order === 'desc' ? '-' : '') + orderBy;
+    }, []);
 
-        formikRef.current?.submitForm();
-    }, [order, orderBy]);
+    useEffect(() => {
+        if (!customers.isLoading) {
+            if (sortFilter !== calculateSortFilterValue(order, orderBy)) {
+                setSortFilter(calculateSortFilterValue(order, orderBy));
+
+                formikRef.current?.submitForm();
+            }
+        }
+    }, [calculateSortFilterValue, customers.isLoading, order, orderBy, sortFilter]);
 
     return (
         <Grid container>

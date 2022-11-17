@@ -178,7 +178,12 @@ export function SubmissionsTableRow({
                 {isCustomerDetailPage ? (
                     <TableCell>
                         {order?.owner?.fullName ? (
-                            <MuiLink component={Link} color={'primary'} to={''} className={font.fontWeightMedium}>
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/salesreps/${order.owner?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
                                 {order.owner.fullName}
                             </MuiLink>
                         ) : (

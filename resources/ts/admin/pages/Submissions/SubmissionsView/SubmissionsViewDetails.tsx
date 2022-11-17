@@ -101,7 +101,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(owner?.fullName && {
                 'Owner:': [
                     <>
-                        <MuiLink component={Link} to={''}>
+                        <MuiLink component={Link} to={`/salesreps/${owner?.id}/view/overview`}>
                             {owner?.fullName}
                         </MuiLink>
                     </>,

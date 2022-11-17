@@ -62,6 +62,7 @@ return [
         'pipline_stage_id_new_signup' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_SIGNUP'),
         'pipline_stage_id_new_customer' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_CUSTOMER'),
         'pipline_stage_id_closed' => env('HUBSPOT_PIPELINE_STAGE_ID_CLOSED'),
+        'deal_stage' => env('HUBSPOT_DEAL_STAGE'),
     ],
 
     'dropbox' => [

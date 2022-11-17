@@ -33,21 +33,29 @@ class CloseOldDeals extends Command
      */
     public function handle(HubspotService $hubspotService)
     {
-        // @phpstan-ignore-next-line
-        $deals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage'])->getData()->deals;
+        $offset = 0;
+        $hasMore = true;
 
-        foreach ($deals as $deal) {
-            if ($deal->properties->dealstage->value === config('services.hubspot.pipline_stage_id_new_customer')) {
-                $hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first();
-                if ($hubspotDeal) {
-                    $user = User::where('email', $hubspotDeal->user_email)->first();
-                    $order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first();
-                    if ($order) {
-                        $this->info("Moving $user->first_name deal from " . config('services.hubspot.pipline_stage_id_new_customer') . " to " . config('services.hubspot.pipline_stage_id_closed'));
-                        $hubspotService->updateDealStageForPaidOrder($order);
+        while ($hasMore == true) {
+            $allDeals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage', 'limit' => 250, 'offset' => $offset]);
+            // @phpstan-ignore-next-line
+            $deals = $allDeals->getData()->deals;
+
+            foreach ($deals as $deal) {
+                if ($deal->properties->dealstage->value == config('services.hubspot.deal_stage')) {
+                    $hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first();
+                    if ($hubspotDeal) {
+                        $user = User::where('email', $hubspotDeal->user_email)->first();
+
+                        if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
+                            $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
+                            $hubspotService->updateDealStageForPaidOrder($order);
+                        }
                     }
                 }
             }
+            $offset = $allDeals->offset;
+            $hasMore = $allDeals->hasMore;
         }
 
         return Command::SUCCESS;

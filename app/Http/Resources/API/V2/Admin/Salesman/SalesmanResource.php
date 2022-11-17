@@ -20,12 +20,15 @@ class SalesmanResource extends BaseResource
      */
     public function toArray($request): array
     {
+        $paidCommission = $this->receivedCommissionTotal();
+
         return [
             'id' => $this->id,
             'profile_image' => $this->profile_image,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'full_name' => $this->getFullName(),
+            'phone ' => $this->phone,
             'email' => $this->email,
             'created_by' => new UserResource($this->createdBy),
             'commission_type' => $this->salesmanProfile->commission_type,
@@ -35,6 +38,9 @@ class SalesmanResource extends BaseResource
             'sales' => $this->salesmanOrders()->sum('grand_total'),
             'customers' => $this->salesmanCustomersCount(),
             'orders' => $this->salesmanOrders()->count(),
+            'unpaid_commission' => $this->salesmanProfile->earnedCommission() - $paidCommission,
+            'unpaid_commission_till_last_month' => $this->salesmanProfile->earnedCommissionTillLastMonth() - $paidCommission,
+            'paid_commission' => $paidCommission,
         ];
     }
 }

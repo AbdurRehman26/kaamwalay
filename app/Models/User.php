@@ -141,6 +141,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             AllowedFilter::custom('search', new AdminCustomerSearchFilter),
             AllowedFilter::scope('signed_up_between'),
             AllowedFilter::scope('submissions'),
+            AllowedFilter::scope('salesman_id'),
         ];
     }
 
@@ -252,6 +253,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         $this->assignRole(Role::findByName(config('permission.roles.salesman')));
     }
 
+    public function removeSalesmanRole(): void
+    {
+        $this->removeRole(Role::findByName(config('permission.roles.salesman')));
+    }
+    
     public function assignCustomerRole(): void
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
@@ -365,6 +371,16 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         // @phpstan-ignore-next-line
         return $query->role(Role::findByName(config('permission.roles.customer')));
+    }
+
+    /**
+     * @param  Builder<User>  $query
+     * @param  string  $salesmanId
+     * @return Builder<User>
+     */
+    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
+    {
+        return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }
 
     /**

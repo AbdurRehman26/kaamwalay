@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Salesman\CommissionTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Salesman extends Model
 {
@@ -36,8 +37,23 @@ class Salesman extends Model
         return $this->commission_type === $type;
     }
 
+    /**
+     * @return HasMany<SalesmanEarnedCommission>
+     */
+    public function salesmanEarnedCommissions(): HasMany
+    {
+        return $this->hasMany(SalesmanEarnedCommission::class, 'salesman_id', 'user_id');
+    }
+
     public function earnedCommission(): float
     {
-        return $this->hasMany(SalesmanEarnedCommission::class, 'salesman_id', 'user_id')->sum('commission');
+        return $this->salesmanEarnedCommissions()->sum('commission');
+    }
+
+    public function earnedCommissionTillLastMonth(): float
+    {
+        return $this->salesmanEarnedCommissions()
+            ->where('created_at', '<=', now()->startOfMonth())
+            ->sum('commission');
     }
 }

@@ -32,6 +32,7 @@ import MarkAsPaidDialog from '../SubmissionsView/MarkAsPaidDialog';
 interface SubmissionsTableRowProps {
     order: OrderEntity;
     isCustomerDetailPage: boolean;
+    isSalesRepDetailPage?: boolean;
 }
 
 enum Options {
@@ -59,7 +60,11 @@ const useStyles = makeStyles(
  * @date: 15.09.2021
  * @time: 04:42
  */
-export function SubmissionsTableRow({ order, isCustomerDetailPage }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({
+    order,
+    isCustomerDetailPage,
+    isSalesRepDetailPage = false,
+}: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
@@ -196,16 +201,20 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                 <TableCell>
                     {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
                 </TableCell>
-                <TableCell align={'right'}>
-                    <SubmissionActionButton
-                        orderId={order.id}
-                        orderStatus={order.orderStatus}
-                        size={'small'}
-                        buttonOnly
-                        trackingNumber={order.orderShipment?.trackingNumber}
-                        shippingProvider={order.orderShipment?.shippingProvider}
-                    />
-                </TableCell>
+                {isSalesRepDetailPage ? (
+                    <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
+                ) : (
+                    <TableCell align={'right'}>
+                        <SubmissionActionButton
+                            orderId={order.id}
+                            orderStatus={order.orderStatus}
+                            size={'small'}
+                            buttonOnly
+                            trackingNumber={order.orderShipment?.trackingNumber}
+                            shippingProvider={order.orderShipment?.shippingProvider}
+                        />
+                    </TableCell>
+                )}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}

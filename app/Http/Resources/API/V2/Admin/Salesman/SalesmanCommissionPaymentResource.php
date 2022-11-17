@@ -27,7 +27,7 @@ class SalesmanCommissionPaymentResource extends BaseResource
             'amount' => $this->amount,
             'file_url' => $this->file_url,
             'notes' => $this->notes ?? '',
-            'created_at' => $this->created_at->toDateString(),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 }

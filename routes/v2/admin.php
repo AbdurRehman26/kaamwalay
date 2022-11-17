@@ -160,13 +160,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('customers/{user}/unassign-salesman', [CustomerController::class, 'unAssignSalesman'])->name('customers.unassign-salesman');
 
     // Salesmen
-    Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show'])
+    Route::apiResource('salesmen', SalesmanController::class)->only(['index', 'store', 'show', 'update'])
         ->names([
             'index' => 'salesmen.index',
             'store' => 'salesmen.store',
             'show' => 'salesmen.show',
+            'update' => 'salesmen.update',
         ]);
     Route::post('salesman/{user}/assign-salesman-role', [SalesmanController::class, 'assignSalesmanRoleToUser'])->name('salesman.assign-salesman-role');
+    Route::post('salesman/{user}/remove-salesman-role', [SalesmanController::class, 'removeSalesmanRoleFromUser'])->name('salesman.remove-salesman-role');
+    Route::post('salesman/{user}/set-active', [SalesmanController::class, 'setActive'])->name('salesman.set-active');
+    Route::post('salesman/{user}/get-stat', [SalesmanController::class, 'getStat'])->name('salesman.get-stat');
     Route::apiResource('salesmen.commission-payments', SalesmanCommissionPaymentController::class)
         ->only('index', 'store');
 

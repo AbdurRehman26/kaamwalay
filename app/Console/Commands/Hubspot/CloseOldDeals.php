@@ -44,8 +44,8 @@ class CloseOldDeals extends Command
             foreach ($deals as $deal) {
                 if (empty($deal->properties->dealstage->value)) {
                     continue;
-                }
-                if ($deal->properties->dealstage->value == 13370474) {
+                if ($deal->properties->dealstage->value == config('services.hubspot.pipline_stage_id_new_customer')) {
+                    // @phpstan-ignore-next-line
                     if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
                         if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
                             if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {

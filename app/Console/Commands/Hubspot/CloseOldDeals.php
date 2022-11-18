@@ -36,19 +36,15 @@ class CloseOldDeals extends Command
         $offset = 0;
         $hasMore = true;
 
-        if (empty(config('services.hubspot.close_deal_from_stage'))) {
-            $this->info("Deal stage is not set");
-
-            return 0;
-        }
-
         while ($hasMore == true) {
             $allDeals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage', 'limit' => 250, 'offset' => $offset]);
             // @phpstan-ignore-next-line
             $deals = $allDeals->getData()->deals;
 
             foreach ($deals as $deal) {
-                if ($deal->properties->dealstage->value == config('services.hubspot.close_deal_from_stage')) {
+                if (empty($deal->properties->dealstage->value))
+                    continue;
+                if ($deal->properties->dealstage->value == 13370474) {
                     if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
                         if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
                             if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {

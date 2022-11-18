@@ -110,14 +110,21 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     return (
         <>
-            <SalesRepAddDialog
-                onSubmit={() => {
-                    window.location.reload();
-                }}
-                open={showAddSalesRep}
-                onClose={() => setShowAddSalesRep(false)}
-            />
-            <CustomerAddDialog onClose={() => setShowAddCustomer(false)} open={showAddCustomer} fromSubmission={true} />
+            {props.fromSalesReps ? (
+                <SalesRepAddDialog
+                    onSubmit={() => {
+                        window.location.reload();
+                    }}
+                    open={showAddSalesRep}
+                    onClose={() => setShowAddSalesRep(false)}
+                />
+            ) : (
+                <CustomerAddDialog
+                    onClose={() => setShowAddCustomer(false)}
+                    open={showAddCustomer}
+                    fromSubmission={true}
+                />
+            )}
             {!showAddCustomer ? (
                 <Dialog {...rest} fullWidth onClose={handleClose}>
                     <DialogTitle>

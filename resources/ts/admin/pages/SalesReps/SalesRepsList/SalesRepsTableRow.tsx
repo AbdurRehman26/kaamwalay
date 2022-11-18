@@ -15,11 +15,11 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { removeSalesRepRoleFromUser, setSalesRep, setSalesRepActive } from '@shared/redux/slices/adminSalesRepSlice';
-import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface SalesRepsTableRowProps {
     salesRep: SalesRepEntity;
+    setUpdateDialog: any;
 }
 
 const styles = {
@@ -37,14 +37,13 @@ enum RowOption {
     SetActive,
 }
 
-export function SalesRepsTableRow({ salesRep }: SalesRepsTableRowProps) {
+export function SalesRepsTableRow({ salesRep, setUpdateDialog }: SalesRepsTableRowProps) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const confirm = useConfirmation();
     const notifications = useNotifications();
-    const [updateDialog, setUpdateDialog] = useState(false);
 
     const setRemoveDialog = useCallback(
         async (id: number) => {
@@ -120,17 +119,8 @@ export function SalesRepsTableRow({ salesRep }: SalesRepsTableRowProps) {
                     break;
             }
         },
-        [dispatch, handleCloseOptions, setRemoveDialog, toggleActive],
+        [dispatch, handleCloseOptions, setRemoveDialog, setUpdateDialog, toggleActive],
     );
-
-    const handleUpdateDialogClose = useCallback(() => {
-        setUpdateDialog(false);
-    }, []);
-
-    const handleUpdate = useCallback(() => {
-        window.location.reload();
-        setUpdateDialog(false);
-    }, []);
 
     return (
         <>
@@ -179,7 +169,6 @@ export function SalesRepsTableRow({ salesRep }: SalesRepsTableRowProps) {
                     </Menu>
                 </TableCell>
             </TableRow>
-            <SalesRepUpdateDialog open={updateDialog} onSubmit={handleUpdate} onClose={handleUpdateDialogClose} />
         </>
     );
 }

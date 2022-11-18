@@ -95,10 +95,6 @@ export function SalesRepView() {
         setUpdateDialog(false);
     }, []);
 
-    const createCustomerSubmission = () => {
-        navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
-    };
-
     const salesrep$ = useAdminSalesRepQuery({
         resourceId: Number(id),
     });
@@ -174,26 +170,14 @@ export function SalesRepView() {
     );
 
     const headerActionButton = useCallback(() => {
-        if (tab === 'overview') {
-            return (
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    sx={{ borderRadius: '24px', padding: '10px 20px' }}
-                    onClick={() => setShowAddCommissionPayment(true)}
-                >
-                    ADD COMMISSION PAYMENT
-                </Button>
-            );
-        }
         return (
             <Button
                 variant={'contained'}
                 color={'primary'}
                 sx={{ borderRadius: '24px', padding: '10px 20px' }}
-                onClick={createCustomerSubmission}
+                onClick={() => setShowAddCommissionPayment(true)}
             >
-                CREATE SUBMISSION
+                ADD COMMISSION PAYMENT
             </Button>
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps

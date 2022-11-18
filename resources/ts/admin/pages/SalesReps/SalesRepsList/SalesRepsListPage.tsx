@@ -30,6 +30,7 @@ import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminSalesRepsQuery } from '@shared/redux/hooks/useAdminSalesRepsQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
 import { SalesRepsTableRow } from '@admin/pages/SalesReps/SalesRepsList/SalesRepsTableRow';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
@@ -53,6 +54,7 @@ export function SalesRepsListPage() {
     const [status, setStatus] = useState({ label: '', value: 0 });
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+    const [updateDialog, setUpdateDialog] = useState(false);
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -195,6 +197,15 @@ export function SalesRepsListPage() {
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
 
+    const handleUpdateDialogClose = useCallback(() => {
+        setUpdateDialog(false);
+    }, []);
+
+    const handleUpdate = useCallback(() => {
+        window.location.reload();
+        setUpdateDialog(false);
+    }, []);
+
     if (salesReps.isLoading) {
         return (
             <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -320,7 +331,7 @@ export function SalesRepsListPage() {
                         </TableHead>
                         <TableBody>
                             {salesReps.data.map((salesRep: SalesRepEntity) => (
-                                <SalesRepsTableRow salesRep={salesRep} />
+                                <SalesRepsTableRow salesRep={salesRep} setUpdateDialog={setUpdateDialog} />
                             ))}
                         </TableBody>
                         <TableFooter>
@@ -330,6 +341,7 @@ export function SalesRepsListPage() {
                         </TableFooter>
                     </Table>
                 </TableContainer>
+                <SalesRepUpdateDialog open={updateDialog} onSubmit={handleUpdate} onClose={handleUpdateDialogClose} />
             </Grid>
         </>
     );

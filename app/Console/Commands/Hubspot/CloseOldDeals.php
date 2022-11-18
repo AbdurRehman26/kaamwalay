@@ -62,11 +62,11 @@ class CloseOldDeals extends Command
                         }
                     }
                 }
-                // @phpstan-ignore-next-line
-                $offset = $allDeals->offset;
-                // @phpstan-ignore-next-line
-                $hasMore = $allDeals->hasMore;
             }
+            // @phpstan-ignore-next-line
+            $offset = $allDeals->offset;
+            // @phpstan-ignore-next-line
+            $hasMore = $allDeals->hasMore;
         }
 
         return Command::SUCCESS;

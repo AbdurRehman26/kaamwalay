@@ -42,8 +42,9 @@ class CloseOldDeals extends Command
             $deals = $allDeals->getData()->deals;
 
             foreach ($deals as $deal) {
-                if (empty($deal->properties->dealstage->value))
+                if (empty($deal->properties->dealstage->value)) {
                     continue;
+                }
                 if ($deal->properties->dealstage->value == 13370474) {
                     if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
                         if ($user = User::where('email', $hubspotDeal->user_email)->first()) {

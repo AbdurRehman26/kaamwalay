@@ -36,6 +36,12 @@ class CloseOldDeals extends Command
         $offset = 0;
         $hasMore = true;
 
+        if (empty(config('services.hubspot.pipline_stage_id_new_customer'))) {
+            $this->info("Deal stage is not set");
+
+            return 0;
+        }
+
         while ($hasMore == true) {
             $allDeals = (new Deals($hubspotService->getClient()))->all(['properties' => 'dealstage', 'limit' => 250, 'offset' => $offset]);
             // @phpstan-ignore-next-line
@@ -44,14 +50,14 @@ class CloseOldDeals extends Command
             foreach ($deals as $deal) {
                 if (empty($deal->properties->dealstage->value)) {
                     continue;
-                    if ($deal->properties->dealstage->value == config('services.hubspot.pipline_stage_id_new_customer')) {
-                        // @phpstan-ignore-next-line
-                        if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
-                            if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
-                                if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
-                                    $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
-                                    $hubspotService->updateDealStageForPaidOrder($order);
-                                }
+                }
+                if ($deal->properties->dealstage->value == config('services.hubspot.pipline_stage_id_new_customer')) {
+                    // @phpstan-ignore-next-line
+                    if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
+                        if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
+                            if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
+                                $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
+                                $hubspotService->updateDealStageForPaidOrder($order);
                             }
                         }
                     }

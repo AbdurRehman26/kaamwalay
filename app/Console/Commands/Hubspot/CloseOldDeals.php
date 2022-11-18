@@ -44,24 +44,24 @@ class CloseOldDeals extends Command
             foreach ($deals as $deal) {
                 if (empty($deal->properties->dealstage->value)) {
                     continue;
-                if ($deal->properties->dealstage->value == config('services.hubspot.pipline_stage_id_new_customer')) {
-                    // @phpstan-ignore-next-line
-                    if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
-                        if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
-                            if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
-                                $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
-                                $hubspotService->updateDealStageForPaidOrder($order);
+                    if ($deal->properties->dealstage->value == config('services.hubspot.pipline_stage_id_new_customer')) {
+                        // @phpstan-ignore-next-line
+                        if ($hubspotDeal = HubspotDeal::where('deal_id', $deal->dealId)->first()) {
+                            if ($user = User::where('email', $hubspotDeal->user_email)->first()) {
+                                if ($order = Order::where('user_id', $user->id)->where('payment_status', OrderPaymentStatusEnum::PAID)->first()) {
+                                    $this->info("Moving $user->first_name deal from New Customer Stage to Closed Won Stage");
+                                    $hubspotService->updateDealStageForPaidOrder($order);
+                                }
                             }
                         }
                     }
                 }
+                // @phpstan-ignore-next-line
+                $offset = $allDeals->offset;
+                // @phpstan-ignore-next-line
+                $hasMore = $allDeals->hasMore;
             }
-            // @phpstan-ignore-next-line
-            $offset = $allDeals->offset;
-            // @phpstan-ignore-next-line
-            $hasMore = $allDeals->hasMore;
         }
-
         return Command::SUCCESS;
     }
 }

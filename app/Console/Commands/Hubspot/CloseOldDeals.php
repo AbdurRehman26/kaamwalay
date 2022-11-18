@@ -62,6 +62,7 @@ class CloseOldDeals extends Command
                 $hasMore = $allDeals->hasMore;
             }
         }
+
         return Command::SUCCESS;
     }
 }

@@ -2,9 +2,33 @@
 
 namespace App\Http\Controllers\API\V2\Auth;
 
-use App\Http\Controllers\API\V1\Auth\RegisterController as V1RegisterController;
+use App\Events\API\Auth\CustomerRegistered;
+use App\Events\API\Auth\UserLoggedIn;
+use App\Http\Requests\API\V2\Auth\RegisterRequest;
+use App\Jobs\Auth\CreateUserDeviceJob;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Controller;
 
-class RegisterController extends V1RegisterController
+class RegisterController extends Controller
 {
-    //
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $user = User::createCustomer($request->validated());
+
+        CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id'));
+
+        $token = auth()->guard()->login($user);
+
+        UserLoggedIn::dispatch($user);
+
+        CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
+
+        return new JsonResponse([
+            'access_token' => $token,
+            'type' => 'bearer',
+            'expiry' => config('jwt.ttl'),
+        ], Response::HTTP_CREATED);
+    }
 }

@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'marketing_notifications_enabled'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -75,6 +75,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'ags_access_token' => 'encrypted',
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
+        'marketing_notifications_enabled' => 'boolean',
     ];
 
     /**

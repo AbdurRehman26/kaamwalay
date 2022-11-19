@@ -125,6 +125,10 @@ export function PayWithCollectorCoinButton() {
                     orderID,
                     chainID: currentChainId,
                     paymentByWallet: appliedCredit,
+                    ...(couponCode && {
+                        coupon: couponCode,
+                        paymentPlan: originalPaymentPlanId,
+                    }),
                     discountedAmount: isCouponApplied ? discountedValue : 0,
                 }),
             );
@@ -138,7 +142,7 @@ export function PayWithCollectorCoinButton() {
                 discountedAmount: isCouponApplied ? discountedValue : 0,
             }),
         );
-    }, [appliedCredit, discountedValue, dispatch, isCouponApplied, orderID]);
+    }, [appliedCredit, discountedValue, dispatch, isCouponApplied, orderID, couponCode, originalPaymentPlanId]);
 
     const handleClick = () => {
         fetchTotalInAGS().then((result: any) => initiateTransaction(result.payload));

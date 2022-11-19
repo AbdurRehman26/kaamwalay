@@ -101,34 +101,34 @@ class OrderService extends V1OrderService
         float $walletAmount = 0.0,
         float $discountedAmount = 0.0,
     ): float {
+        $orderTotalPayableWithoutCollectorCoinDiscount = $this->getOrderGrandTotalWithoutCollectorCoinDiscount(
+            $order,
+            $walletAmount,
+            $discountedAmount
+        );
+        $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount);
+
+        $orderTotalPayableWithCollectorCoinDiscount = ($orderTotalPayableWithoutCollectorCoinDiscount - $collectorCoinDiscountAmount);
+
+        $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
+            $paymentBlockchainNetwork,
+            $orderTotalPayableWithCollectorCoinDiscount
+        );
+        if ($collectorCoinPrice <= 0) {
+            return 0.0;
+        }
+
         Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
             'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
             'orderTotal' => $order->grand_total_before_discount,
-            'ccDiscount' => $this->getCollectorCoinDiscount($order),
+            'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount),
             'walletAmount' => $walletAmount,
             'discountedAmount' => $discountedAmount,
             'refund' => $order->refund_total,
             'extraCharge' => $order->extra_charge_total,
             'usdPrice' => $order->grand_total_before_discount -
-                $this->getCollectorCoinDiscount($order) -
-                $walletAmount -
-                $discountedAmount -
-                $order->refund_total +
-                $order->extra_charge_total,
+                $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount),
         ]);
-
-        $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
-            $paymentBlockchainNetwork,
-            $order->grand_total_before_discount -
-            $this->getCollectorCoinDiscount($order) -
-            $walletAmount -
-            $discountedAmount -
-            $order->refund_total +
-            $order->extra_charge_total
-        );
-        if ($collectorCoinPrice <= 0) {
-            return 0.0;
-        }
 
         Cache::put(
             'cc-payment-' . $order->id,
@@ -139,12 +139,11 @@ class OrderService extends V1OrderService
         return $collectorCoinPrice;
     }
 
-    protected function getCollectorCoinDiscount(Order $order): float
+    protected function getCollectorCoinDiscount(Order $order, float $totalAmount): float
     {
-        return round(
-            $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100,
-            2
-        );
+        $discountedAmount = $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100;
+
+        return ($totalAmount - $discountedAmount) > 0 ? round($discountedAmount, 2) : 0;
     }
 
     public function updateBillingAddress(Order $order, array $data): Order
@@ -253,5 +252,22 @@ class OrderService extends V1OrderService
             ],
             'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
         ];
+    }
+
+    protected function getOrderGrandTotalWithoutCollectorCoinDiscount(
+        Order $order,
+        float $walletAmount = 0,
+        float $discountedAmount = 0
+    ): float {
+        return $order->grand_total -
+            $walletAmount -
+            ($this->hasCouponCodeApplied($order) ? 0 : $discountedAmount) -
+            $order->refund_total +
+            $order->extra_charge_total;
+    }
+
+    protected function hasCouponCodeApplied(Order $order): bool
+    {
+        return $order->discounted_amount > 0;
     }
 }

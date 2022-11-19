@@ -6,6 +6,7 @@ use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\UpdateCustomerRequest;
+use App\Http\Requests\API\V2\Customer\ToggleMarketingNotificationsRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\AGS\AgsService;
@@ -41,6 +42,34 @@ class ProfileController extends Controller
                 throw_if($response['code'] === Response::HTTP_BAD_REQUEST, new InvalidAgsDataForCustomer($response['message'], Response::HTTP_UNPROCESSABLE_ENTITY));
                 throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
             }
+
+            $userResponse = $customerProfileService->update($user, $data);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+
+        return new UserResource($userResponse);
+    }
+
+    /**
+     * @param  ToggleMarketingNotificationsRequest  $request
+     * @param  CustomerProfileService  $customerProfileService
+     * @return JsonResponse|UserResource
+     */
+    public function toggleMarketingNotifications(ToggleMarketingNotificationsRequest $request, CustomerProfileService $customerProfileService): JsonResponse|UserResource
+    {
+        try {
+            $data = $request->safe()->only([
+                'marketing_notifications_enabled',
+            ]);
+
+            /** @var User $user */
+            $user = auth()->user();
 
             $userResponse = $customerProfileService->update($user, $data);
         } catch (Exception $e) {

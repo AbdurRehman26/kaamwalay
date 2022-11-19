@@ -112,6 +112,7 @@ Route::prefix('customer')->group(function () {
             Route::post('/', [CardProductController::class, 'store']);
         });
         Route::put('profile', [ProfileController::class, 'update'])->name('customer.profile');
+        Route::put('toggle-marketing-notifications', [ProfileController::class, 'toggleMarketingNotifications'])->name('customer.toggleMarketingNotifications');
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\API\V2\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Events\API\Auth\UserLoggedIn;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Controller;
 
 class RegisterController extends Controller
 {

@@ -10,9 +10,9 @@ use App\Http\Requests\API\V2\Customer\ToggleMarketingNotificationsRequest;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\CustomerProfileService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Exception;
 use Throwable;
 
 class ProfileController extends V1ProfileController

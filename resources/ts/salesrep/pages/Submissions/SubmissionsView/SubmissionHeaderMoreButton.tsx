@@ -6,8 +6,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAppDispatch } from '@salesrep/redux/hooks';
 import React, { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -152,19 +150,7 @@ export default function SubmissionHeaderMoreButton({
                 <MoreVertIcon />
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                <MenuItem onClick={handleOption(Options.AddExtraCharge)}>Add Extra Charge</MenuItem>
-                <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
-                <MenuItem onClick={handleOption(Options.CancelOrder)}>Cancel Submission</MenuItem>
-                {orderStatus.isAny([OrderStatusEnum.GRADED, OrderStatusEnum.ASSEMBLED, OrderStatusEnum.SHIPPED]) ? (
-                    <MenuItem onClick={handleOption(Options.GenerateLabel)}>Generate Label</MenuItem>
-                ) : null}
-                {paymentStatus !== PaymentStatusEnum.PAID ? (
-                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
-                ) : null}
-                {orderStatus.isAny([OrderStatusEnum.GRADED, OrderStatusEnum.ASSEMBLED, OrderStatusEnum.SHIPPED]) ? (
-                    <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
-                ) : null}
             </Menu>
             {customer ? (
                 <CustomerCreditDialog

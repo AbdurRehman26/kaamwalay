@@ -13,6 +13,7 @@
 */
 
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
+use App\Http\Controllers\API\V2\Salesman\Order\OrderController;
 use App\Http\Controllers\API\V2\Salesman\SalesmanCommissionPaymentController;
 
 Route::middleware(['auth', 'role:salesman'])->group(function () {
@@ -21,4 +22,6 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
 
     Route::get('commission-payments', [SalesmanCommissionPaymentController::class, 'index'])
         ->name('salesman.commission-payments.index');
+
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
 });

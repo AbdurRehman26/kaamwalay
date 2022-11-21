@@ -17,7 +17,6 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { font } from '@shared/styles/utils';
-import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 import SubmissionHeaderMoreButton from '../SubmissionsView/SubmissionHeaderMoreButton';
 
 interface SubmissionViewHeaderProps {
@@ -76,7 +75,6 @@ export function SubmissionsViewHeader({
     orderNumber,
     orderStatus,
     orderStatusHistory,
-    orderShipment,
     customer,
     orderCertificate,
     isVault,
@@ -167,13 +165,6 @@ export function SubmissionsViewHeader({
                             </Button>
                         </>
                     ) : null}
-                    <SubmissionActionButton
-                        orderId={orderId}
-                        orderStatus={orderStatus}
-                        trackingNumber={orderShipment?.trackingNumber}
-                        shippingProvider={orderShipment?.shippingProvider}
-                        inVault={isVault}
-                    />
                     <SubmissionHeaderMoreButton
                         paymentStatus={paymentStatus}
                         orderId={orderId}

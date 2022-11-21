@@ -16,7 +16,7 @@ import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useListSalesRepOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -156,7 +156,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         );
     };
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useListSalesRepOrdersQuery({
         params: {
             include: [
                 'orderStatus',
@@ -178,6 +178,8 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     });
 
     const totals = orders$.pagination?.meta?.total ?? 0;
+
+    console.log(orders$);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';

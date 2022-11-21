@@ -99,13 +99,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
             ...(owner?.fullName && {
-                'Owner:': [
-                    <>
-                        <MuiLink component={Link} to={`/salesreps/${owner?.id}/view/overview`}>
-                            {owner?.fullName}
-                        </MuiLink>
-                    </>,
-                ],
+                'Owner:': owner?.fullName,
             }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
         }),

@@ -34,11 +34,8 @@ import {
     getSavedAddresses,
     getServiceLevels,
     setIsCouponApplied,
-    setPayNow,
     setServiceLevel,
-    updatePaymentMethod,
-    updatePaymentMethodId,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { SelectAndCreateCustomerDialog } from '../CreateSubmission/SelectAndCreateCustomerDialog';
 import { CardSubmissionSearchField } from './CardSubmissionSearchField';
 
@@ -93,7 +90,6 @@ export function CreateSubmission() {
     const { customerId } = useParams<'customerId'>();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
     const classes = useStyles({});
-    const paymentMethod = useAppSelector((state) => state.adminCreateOrderSlice.step04Data.paymentMethod);
     const navigate = useNavigate();
     const { state } = useLocation();
     useSidebarHidden();
@@ -141,12 +137,6 @@ export function CreateSubmission() {
         } else {
             navigate(-1);
         }
-    };
-
-    const handlePayNow = (payNow: boolean) => {
-        dispatch(updatePaymentMethodId(paymentMethod.id));
-        dispatch(updatePaymentMethod(paymentMethod));
-        dispatch(setPayNow(payNow));
     };
 
     function getMaxProtectionAmount(maxProtectionAmount: any) {
@@ -365,27 +355,13 @@ export function CreateSubmission() {
                                             Pay Now or Later?
                                         </Typography>
                                         <Grid display={'flex'} wrap={'nowrap'} mx={1.5} mt={1.5} mb={4}>
-                                            <Grid md={6} pl={1} pr={1.25}>
-                                                <Root
-                                                    disabled={true}
-                                                    style={{
-                                                        border: '1px solid #DDDDDD',
-                                                    }}
-                                                >
-                                                    <Radio checked={false} />
-                                                    <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
-                                                        Pay Now
-                                                    </Typography>
-                                                </Root>
-                                            </Grid>
                                             <Grid md={6} pl={1.25} pr={1}>
                                                 <Root
-                                                    onClick={() => handlePayNow(false)}
                                                     style={{
                                                         border: '3px solid #20BFB8',
                                                     }}
                                                 >
-                                                    <Radio onClick={() => handlePayNow(false)} checked={true} />
+                                                    <Radio checked={true} />
                                                     <Typography ml={1} variant={'subtitle1'} fontWeight={500}>
                                                         Pay Later
                                                     </Typography>

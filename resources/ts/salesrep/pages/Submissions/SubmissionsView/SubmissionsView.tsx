@@ -7,14 +7,14 @@ import { useParams } from 'react-router-dom';
 import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
-import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import { useSalesRepOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { SubmissionsViewDetails } from './SubmissionsViewDetails';
 import { SubmissionsViewHeader } from './SubmissionsViewHeader';
 
 export function SubmissionsView() {
     const { id } = useParams<'id'>();
 
-    const { data, isLoading } = useAdminOrderQuery({
+    const { data, isLoading } = useSalesRepOrderQuery({
         resourceId: Number(id),
         config: {
             params: {

@@ -36,7 +36,7 @@ import {
     setBillingAddress,
     setIsCouponApplied,
     setPreviewTotal,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -336,7 +336,7 @@ export function AddedSubmissionCards() {
             NotificationsService.success('Order Placed Successfully!');
             setIsLoading(false);
             dispatch(clearSubmissionState());
-            window.location.href = `/admin/submissions/${order.id}/view`;
+            window.location.href = `/salesman/submissions/${order.id}/view`;
         } catch (e: any) {
             setIsLoading(false);
             NotificationsService.exception(e);

@@ -8,9 +8,11 @@ use App\Exceptions\API\Customer\UserAccountCannotBeDeletedException;
 use App\Http\Controllers\API\V1\Customer\ProfileController as V1ProfileController;
 use App\Http\Requests\API\V2\Customer\ToggleMarketingNotificationsRequest;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
+use App\Models\User;
 use App\Services\CustomerProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Exception;
 use Throwable;
 
 class ProfileController extends V1ProfileController

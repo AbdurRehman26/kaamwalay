@@ -183,3 +183,17 @@ test('deleting profile returns password error if ags token is null', function ()
         'error' => 'Please enter your AGS password.',
     ]);
 });
+
+test('a customer can opt in or out of marketing notifiations from their profile', function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    $this->actingAs($this->user);
+
+    putJson(route('v2.customer.toggleMarketingNotifications'), [
+        'marketing_notifications_enabled' => false,
+    ])->assertSuccessful()->assertStatus(200)->assertJsonFragment([
+        'marketing_notifications_enabled' => false,
+    ]);
+});

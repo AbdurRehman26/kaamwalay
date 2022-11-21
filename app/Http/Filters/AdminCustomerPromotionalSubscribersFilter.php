@@ -5,6 +5,9 @@ namespace App\Http\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;
 
+/**
+ * @template TModelClass of \App\Models\User
+ */
 class AdminCustomerPromotionalSubscribersFilter implements Filter
 {
     /**

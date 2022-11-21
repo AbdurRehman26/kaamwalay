@@ -6,6 +6,7 @@ use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Http\Filters\AdminCustomerPromotionalSubscribersFilter;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Filters\AdminSalesmanSearchFilter;
 use App\Http\Sorts\AdminCustomerCardsSort;
@@ -143,6 +144,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             AllowedFilter::scope('signed_up_between'),
             AllowedFilter::scope('submissions'),
             AllowedFilter::scope('salesman_id'),
+            AllowedFilter::custom('promotional_subscribers', new AdminCustomerPromotionalSubscribersFilter),
         ];
     }
 

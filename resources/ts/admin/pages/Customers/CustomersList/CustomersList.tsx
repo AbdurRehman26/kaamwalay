@@ -1,6 +1,7 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,6 +13,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PageSelector } from '@shared/components/PageSelector';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
@@ -43,7 +45,13 @@ type InitialValues = {
     signedUpStart: DateLike;
     signedUpEnd: DateLike;
     search: string;
+    promotionalSubscribers?: string;
 };
+
+const PromotionalSubscribersStatus = [
+    { label: 'Enabled', value: 'true' },
+    { label: 'Disabled', value: 'false' },
+];
 
 const headings: EnhancedTableHeadCell[] = [
     {
@@ -128,6 +136,7 @@ const getFilters = (values: InitialValues) => ({
     search: values.search,
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
+    promotionalSubscribers: values.promotionalSubscribers,
 });
 
 const useStyles = makeStyles(
@@ -163,6 +172,10 @@ export function CustomersList() {
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
+    const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
+        label: '',
+        value: '',
+    });
 
     const navigate = useNavigate();
 
@@ -170,6 +183,9 @@ export function CustomersList() {
         (async () => {
             const data = await dispatch(getSalesReps());
             setSalesRep(data.payload.data);
+
+            const status = PromotionalSubscribersStatus?.filter((item) => item.value === query.promotionalSubscribers);
+            setPromotionalSubscribersStatusFilter({ value: status[0]?.value, label: status[0]?.label });
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -191,8 +207,16 @@ export function CustomersList() {
             signedUpStart: query.signedUpStart ? moment(query.signedUpStart) : '',
             signedUpEnd: query.signedUpEnd ? moment(query.signedUpEnd) : '',
             search: query.search ?? '',
+            promotionalSubscribers: query.promotionalSubscribers ?? '',
         }),
-        [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
+        [
+            query.minSubmissions,
+            query.maxSubmissions,
+            query.signedUpStart,
+            query.signedUpEnd,
+            query.search,
+            query.promotionalSubscribers,
+        ],
     );
 
     const customers = useAdminCustomersQuery({
@@ -216,10 +240,11 @@ export function CustomersList() {
                 ...formikRef.current!.values,
                 minSubmissions: '',
                 maxSubmissions: '',
+                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
             }),
             1,
         );
-    }, [sortFilter, customers, delQuery]);
+    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value]);
 
     const handleClearSignUp = useCallback(async () => {
         formikRef.current?.setFieldValue('signedUpStart', '');
@@ -232,10 +257,11 @@ export function CustomersList() {
                 ...formikRef.current!.values,
                 signedUpStart: '',
                 signedUpEnd: '',
+                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
             }),
             1,
         );
-    }, [sortFilter, customers, delQuery]);
+    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value]);
 
     const handleSearch = useCallback(
         async (search: string) => {
@@ -250,12 +276,13 @@ export function CustomersList() {
                 { sort: sortFilter },
                 getFilters({
                     ...formikRef.current!.values,
+                    promotionalSubscribers: promotionalSubscribersStatusFilter.value,
                     search,
                 }),
                 1,
             );
         },
-        [addQuery, customers, delQuery, sortFilter],
+        [addQuery, customers, delQuery, promotionalSubscribersStatusFilter.value, sortFilter],
     );
 
     const handleSubmit = useCallback(
@@ -279,11 +306,19 @@ export function CustomersList() {
         setOrderBy(property);
     };
 
-    useEffect(() => {
-        setSortFilter((order === 'desc' ? '-' : '') + orderBy);
+    const calculateSortFilterValue = useCallback((order, orderBy) => {
+        return (order === 'desc' ? '-' : '') + orderBy;
+    }, []);
 
-        formikRef.current?.submitForm();
-    }, [order, orderBy]);
+    useEffect(() => {
+        if (!customers.isLoading) {
+            if (sortFilter !== calculateSortFilterValue(order, orderBy)) {
+                setSortFilter(calculateSortFilterValue(order, orderBy));
+
+                formikRef.current?.submitForm();
+            }
+        }
+    }, [calculateSortFilterValue, customers.isLoading, order, orderBy, sortFilter]);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -314,6 +349,31 @@ export function CustomersList() {
             Add Customer
         </Button>
     );
+
+    const handleClearPromotionalSubscribers = useCallback(async () => {
+        formikRef.current?.setFieldValue('promotionalSubscribers', '');
+        delQuery('promotionalSubscribers');
+        setPromotionalSubscribersStatusFilter({ value: '', label: '' });
+        await customers.searchSortedWithPagination(
+            { sort: sortFilter },
+            getFilters({
+                ...formikRef.current!.values,
+                promotionalSubscribers: '',
+            }),
+            1,
+        );
+        // handleSubmit(formikRef.current!.values);
+    }, [delQuery, customers, sortFilter]);
+
+    const handlePromotionalSubscribers = useCallback(async (values, promotionalSubscribers) => {
+        values = { ...values, promotionalSubscribers: promotionalSubscribers.value };
+        setPromotionalSubscribersStatusFilter({
+            value: promotionalSubscribers.value,
+            label: promotionalSubscribers.label,
+        });
+        await handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Grid container>
@@ -417,6 +477,26 @@ export function CustomersList() {
                                         </Grid>
                                     </Grid>
                                 </ListPageSelector>
+
+                                <PageSelector
+                                    label={'Promotional Subscribers'}
+                                    value={promotionalSubscribersStatusFilter.label}
+                                    onClear={handleClearPromotionalSubscribers}
+                                >
+                                    {PromotionalSubscribersStatus?.map((item: any) => {
+                                        return (
+                                            <Grid key={item.value}>
+                                                <MenuItem
+                                                    onClick={() => handlePromotionalSubscribers(values, item)}
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
+                                </PageSelector>
                             </Grid>
                         )}
                     </Formik>

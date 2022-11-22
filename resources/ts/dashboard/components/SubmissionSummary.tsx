@@ -8,6 +8,7 @@ import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCleaningFee, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
@@ -144,6 +145,8 @@ const useStyles = makeStyles((theme) => ({
 function SubmissionSummary() {
     const classes = useStyles();
 
+    const [query, { delQuery }] = useLocationQuery();
+
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const priceRanges = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.priceRanges);
     const maxPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxPrice);
@@ -192,6 +195,9 @@ function SubmissionSummary() {
     finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPrice;
 
     function onLevelEditPress() {
+        if (query.plan) {
+            delQuery('plan');
+        }
         dispatch(setCustomStep(0));
     }
 

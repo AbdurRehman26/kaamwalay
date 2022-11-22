@@ -21,9 +21,12 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
-import { emptyUser, setUser } from '@shared/redux/slices/adminCreateOrderSlice';
-import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
+import { useSalesRepCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { emptyUser, setUser } from '@shared/redux/slices/salesRepCreateOrderSlice';
+import {
+    resetSelectedExistingAddress,
+    setUseCustomShippingAddress,
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 
 const useStyles = makeStyles({
@@ -46,7 +49,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const customers = useAdminCustomersQuery({
+    const customers = useSalesRepCustomersQuery({
         ...bracketParams(),
     });
 

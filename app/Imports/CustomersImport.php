@@ -8,9 +8,10 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 class CustomersImport implements ToCollection
 {
     /**
-    * @param Collection $collection
+    * @param Collection<int,array> $collection
+    * @return array
     */
-    public function collection(Collection $collection)
+    public function collection(Collection $collection): array
     {
         $emails = [];
 

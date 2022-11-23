@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands\Salesman;
 
-use Illuminate\Console\Command;
 use App\Imports\CustomersImport;
 use App\Models\Salesman;
 use App\Models\User;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LinkCustomersToSalesman extends Command
 {
@@ -45,6 +45,7 @@ class LinkCustomersToSalesman extends Command
             );
             $this->info('Linked Customers With Salesman Successfully');
         }
+
         return Command::SUCCESS;
     }
 }

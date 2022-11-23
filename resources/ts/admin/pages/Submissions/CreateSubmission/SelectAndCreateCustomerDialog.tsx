@@ -24,7 +24,7 @@ import { emptyUser, setUser } from '@shared/redux/slices/adminCreateOrderSlice';
 import { resetSelectedExistingAddress, setUseCustomShippingAddress } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
-import { SalesRepAddDialog } from '@admin/pages/SalesReps/SalesRepAddDialog';
+import { SalesRepAddDialog } from '@admin/pages/SalesReps/SalesRepsList/SalesRepAddDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 const useStyles = makeStyles({
@@ -110,14 +110,21 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
 
     return (
         <>
-            <SalesRepAddDialog
-                onSubmit={() => {
-                    window.location.reload();
-                }}
-                open={showAddSalesRep}
-                onClose={() => setShowAddSalesRep(false)}
-            />
-            <CustomerAddDialog onClose={() => setShowAddCustomer(false)} open={showAddCustomer} fromSubmission={true} />
+            {props.fromSalesReps ? (
+                <SalesRepAddDialog
+                    onSubmit={() => {
+                        window.location.reload();
+                    }}
+                    open={showAddSalesRep}
+                    onClose={() => setShowAddSalesRep(false)}
+                />
+            ) : (
+                <CustomerAddDialog
+                    onClose={() => setShowAddCustomer(false)}
+                    open={showAddCustomer}
+                    fromSubmission={true}
+                />
+            )}
             {!showAddCustomer ? (
                 <Dialog {...rest} fullWidth onClose={handleClose}>
                     <DialogTitle>

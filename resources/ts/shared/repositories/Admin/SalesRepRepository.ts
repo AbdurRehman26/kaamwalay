@@ -1,4 +1,5 @@
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
+import { UpdateSalesRepRequestDto } from '@shared/dto/UpdateSalesRepRequestDto';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { Injectable } from '../../decorators/Injectable';
 import { Repository } from '../Repository';
@@ -14,7 +15,12 @@ export class SalesRepRepository extends Repository<SalesRepEntity> {
     }
 
     public async getSalesReps() {
-        const { data } = await this.endpoint.get('/?filter[is_active]=1');
+        const { data } = await this.endpoint.get('/');
+        return this.toEntity(data);
+    }
+
+    public async updateSalesRep(id: number, input: UpdateSalesRepRequestDto) {
+        const { data } = await this.endpoint.put('/' + id, input);
         return this.toEntity(data);
     }
 }

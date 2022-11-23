@@ -1,8 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import Grid, { GridProps } from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
-import { SelectAndCreateCustomerDialog } from '../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
+import { SelectAndCreateCustomerDialog } from '../../Submissions/CreateSubmission/SelectAndCreateCustomerDialog';
 
 interface Props extends GridProps {
     title: string;
@@ -56,7 +54,7 @@ const useStyles = makeStyles(
 export function SalesRepsPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
     const classes = useStyles();
     const [search, setSearch] = useState(value ?? '');
-    const [createSubmission, setCreateSubmission] = useState(false);
+    const [createSalesRep, setCreateSalesRep] = useState(false);
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
 
@@ -77,17 +75,13 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
 
     return (
         <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
-            {false ? (
-                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                    <CircularProgress />
-                </Box>
-            ) : (
+            {
                 <>
                     <SelectAndCreateCustomerDialog
                         btnText={'Create New User'}
                         fromSalesReps={true}
-                        onClose={() => setCreateSubmission(false)}
-                        open={createSubmission}
+                        onClose={() => setCreateSalesRep(false)}
+                        open={createSalesRep}
                     />
                     <Grid container justifyContent={'space-between'}>
                         <Grid display={'flex'} alignItems={'center'} item>
@@ -121,7 +115,7 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                         </Grid>
                         <Grid item>
                             <Button
-                                onClick={() => setCreateSubmission(true)}
+                                onClick={() => setCreateSalesRep(true)}
                                 variant={'contained'}
                                 color={'primary'}
                                 className={classes.newSalesRepBtn}
@@ -132,7 +126,7 @@ export function SalesRepsPageHeader({ title, searchField, value, onSearch, child
                     </Grid>
                     {children}
                 </>
-            )}
+            }
         </Root>
     );
 }

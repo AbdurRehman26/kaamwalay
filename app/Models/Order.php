@@ -162,6 +162,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::scope('salesman_id'),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
@@ -389,6 +390,16 @@ class Order extends Model implements Exportable
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
+
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string  $salesmanId
+     * @return Builder<Order>
+     */
+    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
+    {
+        return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }
 
     public function missingItemsCount(): int

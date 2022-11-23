@@ -1,5 +1,4 @@
 import LoadingButton from '@mui/lab/LoadingButton';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
@@ -18,11 +17,9 @@ import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
-import { SalesRepStatusChip } from '@shared/components/SalesRepStatusChip';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
-import { SalesRapStatusEnum } from '@shared/constants/SalesRapStatusEnum';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -31,8 +28,10 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminSalesRepQuery } from '@shared/redux/hooks/useAdminSalesRepQuery';
+import { useAdminSalesRepsQuery } from '@shared/redux/hooks/useAdminSalesRepsQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { SalesRepUpdateDialog } from '@admin/pages/SalesReps/SalesRepUpdateDialog';
+import { SalesRepsTableRow } from '@admin/pages/SalesReps/SalesRepsList/SalesRepsTableRow';
 import { SalesRepsPageHeader } from './SalesRepsPageHeader';
 
 type InitialValues = {
@@ -55,6 +54,7 @@ export function SalesRepsListPage() {
     const [status, setStatus] = useState({ label: '', value: 0 });
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+    const [updateDialog, setUpdateDialog] = useState(false);
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -82,7 +82,7 @@ export function SalesRepsListPage() {
         signedUpBetween: dateRangeFilter(values.signedUpStart, values.signedUpEnd),
     });
 
-    const salesReps = useAdminSalesRepQuery({
+    const salesReps = useAdminSalesRepsQuery({
         params: {
             filter: getFilters(query),
             sort: sortFilter ? 'sales' : '-sales',
@@ -196,6 +196,15 @@ export function SalesRepsListPage() {
             1,
         );
     }, [delQuery, sortFilter, salesReps, getFilters]);
+
+    const handleUpdateDialogClose = useCallback(() => {
+        setUpdateDialog(false);
+    }, []);
+
+    const handleUpdate = useCallback(() => {
+        window.location.reload();
+        setUpdateDialog(false);
+    }, []);
 
     if (salesReps.isLoading) {
         return (
@@ -317,46 +326,12 @@ export function SalesRepsListPage() {
                                     ></TableSortLabel>{' '}
                                     Sales
                                 </TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {salesReps.data.map((salesRep: SalesRepEntity) => (
-                                <TableRow key={salesRep.id}>
-                                    <TableCell variant={'body'}>
-                                        <Grid container>
-                                            <Avatar src={salesRep.profileImage ?? ''}>{salesRep.getInitials()}</Avatar>
-                                            <Grid item xs container direction={'column'} pl={2}>
-                                                <Typography variant={'body2'}>{salesRep.fullName}</Typography>
-                                                <Typography variant={'caption'} color={'textSecondary'}>
-                                                    {salesRep.email}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.customers ?? '-'}
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.orders ?? '-'}
-                                    </TableCell>
-                                    <TableCell align="center" variant={'body'}>
-                                        {salesRep.commissionEarned ?? '-'}
-                                    </TableCell>
-                                    {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}
-                                    <TableCell variant={'body'} align={'center'}>
-                                        {salesRep.status !== null ? (
-                                            <SalesRepStatusChip
-                                                color={salesRep.status}
-                                                label={SalesRapStatusEnum[salesRep.status]}
-                                            />
-                                        ) : (
-                                            '-'
-                                        )}
-                                    </TableCell>
-                                    <TableCell variant={'body'} align={'center'}>
-                                        {salesRep.sales || 0}
-                                    </TableCell>
-                                </TableRow>
+                                <SalesRepsTableRow salesRep={salesRep} setUpdateDialog={setUpdateDialog} />
                             ))}
                         </TableBody>
                         <TableFooter>
@@ -366,6 +341,7 @@ export function SalesRepsListPage() {
                         </TableFooter>
                     </Table>
                 </TableContainer>
+                <SalesRepUpdateDialog open={updateDialog} onSubmit={handleUpdate} onClose={handleUpdateDialogClose} />
             </Grid>
         </>
     );

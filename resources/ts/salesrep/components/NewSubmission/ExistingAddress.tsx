@@ -9,7 +9,7 @@ import {
     getShippingFee,
     setSelectedExistingAddress,
     setUseCustomShippingAddress,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 
 type ExistingAddressProps = {
     fullName: string;
@@ -68,9 +68,9 @@ const useStyles = makeStyles(
 
 function ExistingAddress(props: ExistingAddressProps) {
     const selectedExistingAddressID = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress.id,
+        (state) => state.salesRepCreateOrderSlice.step03Data.selectedExistingAddress.id,
     );
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
 
     const dispatch = useAppDispatch();
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);

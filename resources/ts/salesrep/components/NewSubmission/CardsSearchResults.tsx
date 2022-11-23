@@ -22,7 +22,7 @@ import {
     markCardAsSelected,
     markCardAsUnselected,
     setCardsSearchValue,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import CustomPagination from './CustomPagination';
 import SearchResultItemCard from './SearchResultItemCard';
@@ -63,7 +63,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
     const subtitle = result.longName.value;
     const shortname = result.shortName.value;
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
 
     function generateMarkCardDto(item: CardProductEntity) {
         return {

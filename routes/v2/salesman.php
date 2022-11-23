@@ -17,6 +17,7 @@ use App\Http\Controllers\API\V2\Salesman\CustomerController;
 use App\Http\Controllers\API\V2\Salesman\Order\OrderController;
 use App\Http\Controllers\API\V2\Salesman\Order\PaymentMethodController;
 use App\Http\Controllers\API\V2\Salesman\Order\PaymentPlanController;
+use App\Http\Controllers\API\V2\Salesman\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Salesman\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Salesman\SalesmanCommissionPaymentController;
 use App\Http\Controllers\API\V2\Salesman\Address\CustomerAddressController;
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
             'index' => 'admin.shipping-methods.index',
             'show' => 'admin.shipping-methods.show',
         ]);
+        Route::post('shipping-fee', ShippingFeeController::class);
     });
 
     Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);

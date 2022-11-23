@@ -9,7 +9,7 @@ use App\Http\Resources\API\V2\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
-use App\Services\Admin\V2\CreateOrderService;
+use App\Services\Salesman\V2\Order\CreateOrderService;
 use App\Services\Salesman\V2\Order\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -38,6 +38,7 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
+
             $createOrderService = resolve(CreateOrderService::class);
 
             $order = $createOrderService->create($request->validated());

@@ -205,36 +205,36 @@ export function AddedSubmissionCards() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const classes = useStyles();
     const useCustomShippingAddress = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.useCustomShippingAddress,
+        (state) => state.salesRepCreateOrderSlice.step03Data.useCustomShippingAddress,
     );
-    const existingAddresses = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.existingAddresses);
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const existingAddresses = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.existingAddresses);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
     const serviceLevelPrice = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
+        (state) => state.salesRepCreateOrderSlice.step01Data?.selectedServiceLevel.price,
     );
     const priceRanges = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.priceRanges,
+        (state) => state.salesRepCreateOrderSlice.step01Data?.selectedServiceLevel.priceRanges,
     );
     const protectionLimit = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
+        (state) => state.salesRepCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
     const selectedExistingAddress = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress,
+        (state) => state.salesRepCreateOrderSlice.step03Data.selectedExistingAddress,
     );
-    const shippingAddress = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress);
-    const isNextDisabled = useAppSelector((state) => state.adminCreateOrderSlice.isNextDisabled);
-    const isCouponApplied = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponApplied);
-    const userId = useAppSelector((state) => state.adminCreateOrderSlice.user.id);
-    const appliedCredit = useAppSelector((state) => state.adminCreateOrderSlice.appliedCredit);
+    const shippingAddress = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress);
+    const isNextDisabled = useAppSelector((state) => state.salesRepCreateOrderSlice.isNextDisabled);
+    const isCouponApplied = useAppSelector((state) => state.salesRepCreateOrderSlice.couponState.isCouponApplied);
+    const userId = useAppSelector((state) => state.salesRepCreateOrderSlice.user.id);
+    const appliedCredit = useAppSelector((state) => state.salesRepCreateOrderSlice.appliedCredit);
     const shippingMethod = useAppSelector(
-        (state) => state.adminCreateOrderSlice.shippingMethod || DefaultShippingMethodEntity,
+        (state) => state.salesRepCreateOrderSlice.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
     );
     const discountedValue = useAppSelector(
-        (state) => state.adminCreateOrderSlice.couponState.appliedCouponData.discountedAmount,
+        (state) => state.salesRepCreateOrderSlice.couponState.appliedCouponData.discountedAmount,
     );
-    const shippingFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.shippingFee);
-    const cleaningFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.cleaningFee);
+    const shippingFee = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.shippingFee);
+    const cleaningFee = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.cleaningFee);
 
     const finalShippingAddress =
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0

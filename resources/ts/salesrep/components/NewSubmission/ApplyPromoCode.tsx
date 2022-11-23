@@ -22,7 +22,7 @@ import {
     setIsCouponValid,
     setValidCouponId,
     updatePaymentMethodId,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { APIService } from '@shared/services/APIService';
 
 const useStyles = makeStyles(
@@ -47,24 +47,26 @@ export function ApplyPromoCode() {
     const { id } = useParams<'id'>();
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const isCouponValid = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponValid);
-    const isCouponApplied = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponApplied);
-    const couponCode = useAppSelector((state) => state.adminCreateOrderSlice.couponState.couponCode);
+    const isCouponValid = useAppSelector((state) => state.salesRepCreateOrderSlice.couponState.isCouponValid);
+    const isCouponApplied = useAppSelector((state) => state.salesRepCreateOrderSlice.couponState.isCouponApplied);
+    const couponCode = useAppSelector((state) => state.salesRepCreateOrderSlice.couponState.couponCode);
     const couponInvalidMessage = useAppSelector(
-        (state) => state.adminCreateOrderSlice.couponState.couponInvalidMessage,
+        (state) => state.salesRepCreateOrderSlice.couponState.couponInvalidMessage,
     );
     const discountStatement = useAppSelector(
-        (state) => state.adminCreateOrderSlice.couponState.appliedCouponData.discountStatement,
+        (state) => state.salesRepCreateOrderSlice.couponState.appliedCouponData.discountStatement,
     );
-    const validCouponId = useAppSelector((state) => state.adminCreateOrderSlice.couponState.validCouponId);
+    const validCouponId = useAppSelector((state) => state.salesRepCreateOrderSlice.couponState.validCouponId);
     const apiService = useInjectable(APIService);
     const selectedServiceLevelID = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data.selectedServiceLevel.id,
+        (state) => state.salesRepCreateOrderSlice.step01Data.selectedServiceLevel.id,
     );
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
-    const selectedPaymentMethodID = useAppSelector((state) => state.adminCreateOrderSlice.step04Data.paymentMethodId);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
+    const selectedPaymentMethodID = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step04Data.paymentMethodId,
+    );
     const selectedCreditCardID = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step04Data.selectedCreditCard.id,
+        (state) => state.salesRepCreateOrderSlice.step04Data.selectedCreditCard.id,
     );
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
@@ -72,7 +74,7 @@ export function ApplyPromoCode() {
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `admin/coupons/verify/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
+                `salesman/coupons/verify/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -149,8 +151,8 @@ export function ApplyPromoCode() {
         };
         try {
             const endpointUrl = id
-                ? `admin/orders/${id}/coupons/calculate-discount`
-                : `admin/coupons/calculate-discount`;
+                ? `salesman/orders/${id}/coupons/calculate-discount`
+                : `salesman/coupons/calculate-discount`;
             const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
             const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));

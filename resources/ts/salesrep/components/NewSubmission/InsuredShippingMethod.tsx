@@ -27,7 +27,7 @@ import {
     setSelectedExistingAddress,
     setUseCustomShippingAddress,
     updateShippingAddressField,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import ExistingAddress from './ExistingAddress';
 import { addressValidationSchema } from './addressValidationSchema';
 
@@ -155,32 +155,36 @@ export function InsuredShippingMethod() {
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
     const [isShippingFee, setIsShippingFee] = useState(false);
 
-    const disableAllInputs = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.disableAllShippingInputs);
-    const saveForLater = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.saveForLater);
+    const disableAllInputs = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step03Data.disableAllShippingInputs,
+    );
+    const saveForLater = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.saveForLater);
 
     const selectedExistingAddressId = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.selectedExistingAddress.id,
+        (state) => state.salesRepCreateOrderSlice.step03Data.selectedExistingAddress.id,
     );
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
 
     const useCustomShippingAddress = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data.useCustomShippingAddress,
+        (state) => state.salesRepCreateOrderSlice.step03Data.useCustomShippingAddress,
     );
-    const existingAddresses = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.existingAddresses);
-    const fullName = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.fullName);
-    const address = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.address);
-    const address2 = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.address2);
-    const city = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.city);
-    const state = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.state);
-    const stateName = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.stateName);
-    const zipCode = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.zipCode);
-    const country = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.country);
-    const phoneNumber = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.selectedAddress?.phoneNumber);
-    const availableStates = useAppSelector((state) => state.adminCreateOrderSlice.step03Data?.availableStatesList);
-    const customerId = useAppSelector((state) => state.adminCreateOrderSlice.user.id);
+    const existingAddresses = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.existingAddresses);
+    const fullName = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.fullName);
+    const address = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.address);
+    const address2 = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.address2);
+    const city = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.city);
+    const state = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.state);
+    const stateName = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.stateName);
+    const zipCode = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.zipCode);
+    const country = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.country);
+    const phoneNumber = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step03Data.selectedAddress?.phoneNumber,
+    );
+    const availableStates = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data?.availableStatesList);
+    const customerId = useAppSelector((state) => state.salesRepCreateOrderSlice.user.id);
 
     const availableCountries = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step03Data?.availableCountriesList,
+        (state) => state.salesRepCreateOrderSlice.step03Data?.availableCountriesList,
     );
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 

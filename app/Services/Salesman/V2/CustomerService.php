@@ -32,6 +32,7 @@ class CustomerService
     {
         $data['password'] = Str::random(8);
         $data['created_by'] = auth()->user()->id;
+        $data['salesman_id'] = auth()->user()->id;
 
         $user = User::createCustomer($data);
 

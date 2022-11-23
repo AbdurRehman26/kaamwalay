@@ -15,7 +15,7 @@ import React, { useCallback, useMemo } from 'react';
 import ReactGA from 'react-ga';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
-import { markCardAsUnselected } from '@shared/redux/slices/adminCreateOrderSlice';
+import { markCardAsUnselected } from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -110,7 +110,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const { image, name, longName, id, addedMode, reviewMode, onPreview, onSelectCard } = props;
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 

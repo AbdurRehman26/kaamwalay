@@ -21,7 +21,7 @@ import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
-import { storeCustomer } from '@shared/redux/slices/adminCustomersSlice';
+import { storeCustomer } from '@shared/redux/slices/salesRepCustomersSlice';
 
 interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
     customerAdded?(customer: CustomerEntity): void;
@@ -132,7 +132,7 @@ export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...r
                         handleClose({});
                         customerAdded?.(customer);
                         if (fromSubmission) {
-                            window.location.href = `/admin/submissions/${customer.id}/new`;
+                            window.location.href = `/salesrep/submissions/${customer.id}/new`;
                         }
                     });
             } catch (e: any) {

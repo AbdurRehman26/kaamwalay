@@ -11,7 +11,7 @@ import { useAppDispatch } from '@salesrep/redux/hooks';
 import React from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import { cx } from '@shared/lib/utils/cx';
-import { setCardsSearchValue } from '@shared/redux/slices/adminCreateOrderSlice';
+import { setCardsSearchValue } from '@shared/redux/slices/salesRepCreateOrderSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {

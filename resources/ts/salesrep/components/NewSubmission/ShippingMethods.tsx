@@ -16,7 +16,7 @@ import {
     initializeShippingMethod,
     setShippingFee,
     setShippingMethod,
-} from '@shared/redux/slices/adminCreateOrderSlice';
+} from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { ShippingMethodsRepository } from '@shared/repositories/ShippingMethodsRepository';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
@@ -31,7 +31,7 @@ const mappedContent: Record<string, ReactNode> = {
 
 export function ShippingMethods() {
     const dispatch = useAppDispatch();
-    const shippingMethod = useAppSelector((state) => state.adminCreateOrderSlice.shippingMethod);
+    const shippingMethod = useAppSelector((state) => state.salesRepCreateOrderSlice.shippingMethod);
     const shippingMethodsRepository = useRepository(ShippingMethodsRepository);
     const shippingMethods = useQuery('checkout/shippingMethods', () => shippingMethodsRepository.listAll(), {
         onSuccess(data) {

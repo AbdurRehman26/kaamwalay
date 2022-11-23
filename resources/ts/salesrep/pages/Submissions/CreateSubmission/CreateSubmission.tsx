@@ -83,12 +83,14 @@ export function CreateSubmission() {
     const [createSubmission, setCreateSubmission] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [openDropDown, setOpenDropDown] = useState(false);
-    const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
-    const searchValue = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.searchValue);
-    const serviceLevels = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.availableServiceLevels);
-    const selectedServiceLevel = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.selectedServiceLevel);
+    const selectedCards = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.selectedCards);
+    const searchValue = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.searchValue);
+    const serviceLevels = useAppSelector((state) => state.salesRepCreateOrderSlice.step01Data.availableServiceLevels);
+    const selectedServiceLevel = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step01Data.selectedServiceLevel,
+    );
     const { customerId } = useParams<'customerId'>();
-    const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
+    const customer = useAppSelector((state) => state.salesRepCreateOrderSlice.user);
     const classes = useStyles({});
     const navigate = useNavigate();
     const { state } = useLocation();

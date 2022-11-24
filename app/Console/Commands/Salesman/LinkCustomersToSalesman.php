@@ -36,16 +36,14 @@ class LinkCustomersToSalesman extends Command
         if ($fileName && $salesmanEmail) {
             $emails = Arr::flatten(Excel::toArray(new CustomersImport, $fileName, 's3', \Maatwebsite\Excel\Excel::XLSX)[0]);
             $user = User::where('email', $salesmanEmail)->first();
-            if($user)
-            {
+            if ($user) {
                 User::whereIn('email', $emails)->update(
                     [
                         'salesman_id' => $user->id,
                     ],
                 );
                 $this->info('Linked Customers With Salesman Successfully');
-            }
-            else {
+            } else {
                 $this->info('Invalid Email');
             }
         }

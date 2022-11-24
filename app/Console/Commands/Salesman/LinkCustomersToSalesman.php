@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Salesman;
 
 use App\Imports\CustomersImport;
-use App\Models\Salesman;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
@@ -16,14 +15,14 @@ class LinkCustomersToSalesman extends Command
      *
      * @var string
      */
-    protected $signature = 'salesman:link-salesman-with-users';
+    protected $signature = 'salesman:assign-to-customers';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This command will link given customers emails sheet with the give salesman email';
+    protected $description = 'It assigns salesman to customers, provided in the sheet.';
 
     /**
      * Execute the console command.
@@ -37,13 +36,18 @@ class LinkCustomersToSalesman extends Command
         if ($fileName && $salesmanEmail) {
             $emails = Arr::flatten(Excel::toArray(new CustomersImport, $fileName, 's3', \Maatwebsite\Excel\Excel::XLSX)[0]);
             $user = User::where('email', $salesmanEmail)->first();
-            $salesman = Salesman::where('user_id', $user->id)->first();
-            User::whereIn('email', $emails)->update(
-                [
-                    'salesman_id' => $salesman->id,
-                ],
-            );
-            $this->info('Linked Customers With Salesman Successfully');
+            if($user)
+            {
+                User::whereIn('email', $emails)->update(
+                    [
+                        'salesman_id' => $user->id,
+                    ],
+                );
+                $this->info('Linked Customers With Salesman Successfully');
+            }
+            else {
+                $this->info('Invalid Email');
+            }
         }
 
         return Command::SUCCESS;

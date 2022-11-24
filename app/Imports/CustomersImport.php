@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Arr;
 
 class CustomersImport implements ToCollection
 {
@@ -13,12 +14,6 @@ class CustomersImport implements ToCollection
     */
     public function collection(Collection $collection): array
     {
-        $emails = [];
-
-        foreach ($collection as $row) {
-            array_push($emails, $row[0]);
-        }
-        
-        return $emails;
+        return $collection->toArray();
     }
 }

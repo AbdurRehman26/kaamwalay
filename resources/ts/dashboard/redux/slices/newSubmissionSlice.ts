@@ -773,6 +773,9 @@ export const newSubmissionSlice = createSlice({
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
+        setOriginalServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
+            state.step01Data.originalServiceLevel = action.payload;
+        },
         setRequiresCleaning: (state, action: PayloadAction<boolean>) => {
             state.step02Data.requiresCleaning = action.payload;
         },
@@ -1126,6 +1129,7 @@ export const {
     backStep,
     setCustomStep,
     setServiceLevel,
+    setOriginalServiceLevel,
     setIsNextDisabled,
     setCardsSearchValue,
     setSaveShippingAddress,

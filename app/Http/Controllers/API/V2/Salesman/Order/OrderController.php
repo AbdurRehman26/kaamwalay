@@ -38,7 +38,6 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
-
             $createOrderService = resolve(CreateOrderService::class);
 
             $order = $createOrderService->create($request->validated());

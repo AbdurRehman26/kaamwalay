@@ -4,10 +4,10 @@ namespace App\Http\Resources\API\V2\Salesman\Order;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Salesman\Order\OrderLabel\OrderLabelResource;
-use App\Http\Resources\API\V2\Salesman\User\UserResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V2\Salesman\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Salesman\User\UserResource;
 use Illuminate\Http\Request;
 
 /**

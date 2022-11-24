@@ -35,7 +35,7 @@ class CustomerResource extends BaseResource
             'created_by' => new UserResource($this->createdBy),
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
-            'last_login_at' => $this->formatDate($this->last_login_at)
+            'last_login_at' => $this->formatDate($this->last_login_at),
         ];
     }
 }

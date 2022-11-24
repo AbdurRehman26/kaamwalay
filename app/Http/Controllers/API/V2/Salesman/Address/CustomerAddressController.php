@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V2\Salesman\Address;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Resources\API\V2\Admin\Customer\Address\CustomerAddressCollection;
+use App\Http\Resources\API\V2\Salesman\Customer\Address\CustomerAddressCollection;
 use App\Models\CustomerAddress;
 use App\Models\User;
 

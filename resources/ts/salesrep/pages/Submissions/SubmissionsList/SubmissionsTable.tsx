@@ -179,8 +179,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const totals = orders$.pagination?.meta?.total ?? 0;
 
-    console.log(orders$);
-
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
         setOrderDirection(isAsc ? 'desc' : 'asc');

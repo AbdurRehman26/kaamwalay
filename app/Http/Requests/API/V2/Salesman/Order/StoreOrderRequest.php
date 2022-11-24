@@ -15,7 +15,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin();
+        return $this->user()->isSalesman();
     }
 
     public function rules(): array

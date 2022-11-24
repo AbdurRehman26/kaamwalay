@@ -9,7 +9,7 @@ class ListCustomerRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()->isSalesman();
     }
 
     public function rules(): array

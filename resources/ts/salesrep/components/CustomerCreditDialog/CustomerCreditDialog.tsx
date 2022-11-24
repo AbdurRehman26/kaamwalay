@@ -18,8 +18,8 @@ import { WalletEntity } from '@shared/entities/WalletEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { updateOrderWalletById } from '@shared/redux/slices/adminOrdersSlice';
-import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
+import { updateOrderWalletById } from '@shared/redux/slices/salesRepOrdersSlice';
+import { WalletRepository } from '@shared/repositories/SalesRep/WalletRepository';
 import { useAppDispatch } from '../../redux/hooks';
 import { CustomerCreditHistory } from './CustomerCreditHistory';
 
@@ -83,12 +83,6 @@ const Root = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: CustomerCreditDialog
- * @date: 23.12.2021
- * @time: 18:31
- */
 export function CustomerCreditDialog({ customer, wallet, onClose, onSubmit, ...rest }: Props) {
     const walletRepository = useRepository(WalletRepository);
     const dispatch = useAppDispatch();

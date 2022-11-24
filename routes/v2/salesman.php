@@ -21,6 +21,7 @@ use App\Http\Controllers\API\V2\Salesman\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Salesman\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Salesman\SalesmanCommissionPaymentController;
 use App\Http\Controllers\API\V2\Salesman\Address\CustomerAddressController;
+use App\Http\Controllers\API\V2\Salesman\Wallet\CustomerWalletController;
 
 Route::middleware(['auth', 'role:salesman'])->group(function () {
     Route::post('get-stat', [SalesmanDashboardController::class, 'getStat'])
@@ -56,4 +57,12 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
 
     Route::get('customer/{user}/addresses', [CustomerAddressController::class, 'getCustomerAddresses']);
 
+    Route::prefix('wallets')->group(function () {
+        Route::get('{wallet}', [CustomerWalletController::class, 'show'])
+            ->name('customer.wallet.show');
+        Route::post('{wallet}/credit', [CustomerWalletController::class, 'creditToWallet'])
+            ->name('customer.wallet.credit');
+        Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
+            ->name('customer.wallet.history');
+    });
 });

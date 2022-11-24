@@ -15,19 +15,13 @@ import Typography from '@mui/material/Typography';
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRepository } from '@shared/hooks/useRepository';
-import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
+import { WalletRepository } from '@shared/repositories/SalesRep/WalletRepository';
 import { CustomerHistoryRow } from './CustomerHistoryRow';
 
 interface CustomerCreditHistoryProps {
     walletId?: number;
 }
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: CustomerCreditHistory
- * @date: 12.01.2022
- * @time: 20:06
- */
 export function CustomerCreditHistory({ walletId }: CustomerCreditHistoryProps) {
     const walletRepository = useRepository(WalletRepository);
     const [collapseHistory, setCollapseHistory] = useState(true);

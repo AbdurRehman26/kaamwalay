@@ -10,12 +10,6 @@ interface CustomerHistoryRowProps {
     amount: number;
 }
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: CustomerHistoryRow
- * @date: 23.12.2021
- * @time: 19:45
- */
 export function CustomerHistoryRow({ date, description, amount }: CustomerHistoryRowProps) {
     return (
         <TableRow>

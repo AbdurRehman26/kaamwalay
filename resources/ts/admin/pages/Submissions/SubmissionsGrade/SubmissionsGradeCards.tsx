@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { useInterval } from '@shared/hooks/useInterval';
+import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -60,20 +60,20 @@ export function SubmissionsGradeCards() {
 
     const loadGrades = useCallback(
         (fromAgs = true) => {
-            dispatch(getAllSubmissions({ fromAgs: fromAgs, id: Number(id) }))
+            dispatch(getAllSubmissions({ fromAgs, id: Number(id) }))
                 .unwrap()
                 .then(() => dispatch(matchExistingOrderItemsToViewModes()));
         },
         [dispatch, id],
     );
 
-    const loadDataOnRecursively = useCallback(() => {
-        if (!hasLoadedAllRobogrades) loadGrades(false);
-    }, [hasLoadedAllRobogrades, loadGrades]);
-
-    useInterval(() => {
-        loadDataOnRecursively();
-    }, 5000);
+    useRetry(
+        () => {
+            loadGrades(false);
+        },
+        () => !hasLoadedAllRobogrades,
+        { windowTime: 5000 },
+    );
 
     const handleOnEditCard = useCallback(
         async (data) => {

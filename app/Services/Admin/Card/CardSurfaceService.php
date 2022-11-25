@@ -11,6 +11,7 @@ class CardSurfaceService
 {
     protected const LIST_CARD_SURFACE_PER_PAGE = 15;
 
+    // @phpstan-ignore-next-line
     public function getCardSurfaces(): LengthAwarePaginator
     {
         return QueryBuilder::for(CardSurface::class)

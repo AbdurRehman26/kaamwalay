@@ -20,6 +20,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
+    /**
+     * @return LengthAwarePaginator<Order>
+     */
     public function getOrders(): LengthAwarePaginator
     {
         /* @var User $user */

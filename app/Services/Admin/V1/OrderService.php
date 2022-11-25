@@ -38,6 +38,9 @@ class OrderService
     ) {
     }
 
+    /**
+     * @return LengthAwarePaginator<Order>
+     */
     public function getOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');

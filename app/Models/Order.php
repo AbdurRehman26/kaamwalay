@@ -394,10 +394,10 @@ class Order extends Model implements Exportable
 
     /**
      * @param  Builder<Order>  $query
-     * @param  string  $salesmanId
+     * @param  string|int  $salesmanId
      * @return Builder<Order>
      */
-    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
+    public function scopeSalesmanId(Builder $query, string|int $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }

@@ -1761,6 +1761,11 @@ parameters:
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 
 		-
+			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Salesman/Coupon/CouponResource.php
+
+		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Imports/CardProductAttributesUpdate.php
@@ -2874,6 +2879,11 @@ parameters:
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
 			path: app/Services/Admin/V1/OrderService.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Salesman/V2/Order/OrderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"

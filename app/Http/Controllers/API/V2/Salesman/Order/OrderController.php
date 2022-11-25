@@ -4,11 +4,9 @@ namespace App\Http\Controllers\API\V2\Salesman\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Salesman\Order\StoreOrderRequest;
-use App\Http\Requests\API\V2\Salesman\Order\UpdateBillingAddressRequest;
 use App\Http\Resources\API\V2\Salesman\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Salesman\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Salesman\Order\OrderResource;
-use App\Models\Order;
 use App\Services\Salesman\V2\Order\CreateOrderService;
 use App\Services\Salesman\V2\Order\OrderService;
 use Exception;
@@ -51,17 +49,5 @@ class OrderController extends Controller
         }
 
         return new OrderCreateResource($order);
-    }
-
-    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request): JsonResponse
-    {
-        /** @var OrderService $orderService */
-        $orderService = resolve(OrderService::class);
-        $orderService->updateBillingAddress($order, $request->validated());
-
-        return new JsonResponse([
-            'success' => true,
-            'message' => 'Billing Address Updated successfully.',
-        ]);
     }
 }

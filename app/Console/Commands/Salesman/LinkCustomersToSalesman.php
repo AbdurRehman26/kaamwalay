@@ -34,7 +34,7 @@ class LinkCustomersToSalesman extends Command
         $fileName = $this->ask('Filename (ExcelFile.xlsx)');
         $salesmanEmail = $this->ask('SalesMan Email');
         if ($fileName && $salesmanEmail) {
-            $emails = Arr::flatten(Excel::toArray(new CustomersImport, $fileName, 's3', \Maatwebsite\Excel\Excel::XLSX)[0]);
+            $emails = Arr::flatten(Excel::toArray(new CustomersImport, $fileName, 'local', \Maatwebsite\Excel\Excel::XLSX)[0]);
             $user = User::where('email', $salesmanEmail)->first();
             if ($user) {
                 User::whereIn('email', $emails)->update(

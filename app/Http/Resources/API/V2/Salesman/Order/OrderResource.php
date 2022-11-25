@@ -15,6 +15,7 @@ use App\Http\Resources\API\V2\Salesman\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Salesman\User\UserResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use Closure;
 use Illuminate\Http\Request;
 
 /**
@@ -117,5 +118,19 @@ class OrderResource extends BaseResource
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
         ];
+    }
+
+    protected function reviewedBy(Closure $selector): mixed
+    {
+        return $this->when($this->order_status_id >= OrderStatus::CONFIRMED, function () use ($selector) {
+            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::CONFIRMED)->latest()->first());
+        });
+    }
+
+    protected function gradedBy(Closure $selector): mixed
+    {
+        return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
+            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());
+        });
     }
 }

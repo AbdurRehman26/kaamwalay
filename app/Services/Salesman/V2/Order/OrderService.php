@@ -36,5 +36,4 @@ class OrderService
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->findOrFail($orderId);
     }
-
 }

@@ -965,6 +965,8 @@ it('can calculate collector coin price for an order with coupon code', function 
         ],
     ]);
 
+    config(['robograding.collector_coin_discount_percentage' => 0]);
+
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create([
         'service_fee' => 20,
@@ -987,5 +989,5 @@ it('can calculate collector coin price for an order with coupon code', function 
         ]
     )
         ->assertSuccessful()
-        ->assertJsonPath('value', 18);
+        ->assertJsonPath('value', 20);
 });

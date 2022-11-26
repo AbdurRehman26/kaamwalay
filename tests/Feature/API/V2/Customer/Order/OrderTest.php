@@ -940,3 +940,52 @@ test('a customer can see estimated delivery date in order', function () {
         'estimated_delivery_end_at' => $order->estimated_delivery_end_at,
     ]);
 });
+
+it('can calculate collector coin price for an order with coupon code', function () {
+    config([
+        'robograding.web3.supported_networks' => '97',
+    ]);
+
+    config([
+        'web3networks' => [
+            97 => [
+                'chain_id' => '0x61',
+                'chain_name' => 'Binance Smart Chain - Testnet',
+                'native_currency' => [
+                    'name' => 'tBnb',
+                    'symbol' => 'tBNB',
+                    'decimals' => 18,
+                ],
+                'rpc_urls' => ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+                'block_explorer_urls' => ['https://testnet.bscscan.com'],
+                'is_testnet' => true,
+                'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
+            ],
+        ],
+    ]);
+
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create([
+        'service_fee' => 20,
+        'shipping_fee' => 10,
+        'grand_total' => 30,
+    ]);
+    $paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'collector_coin',
+    ]);
+    OrderItem::factory()->for($order)->create();
+    OrderPayment::factory()->for($order)->for($paymentMethod)->create();
+
+    $this->json(
+        'GET',
+        '/api/v2/customer/orders/' . $order->id . '/collector-coin',
+        [
+            'payment_blockchain_network' => 97,
+            'payment_by_wallet' => 0,
+            'discounted_amount' => 10,
+        ]
+    )
+        ->assertSuccessful()
+        ->assertJsonPath('value', 18);
+});

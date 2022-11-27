@@ -166,7 +166,7 @@ export function CustomersList() {
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
-    const [salesRepFilter, setSalesRepFilter] = useState({ salesRepFilter: '' });
+    const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '' });
 
     const navigate = useNavigate();
 
@@ -272,7 +272,7 @@ export function CustomersList() {
 
     const handleSalesRep = useCallback(async (values, saleRep) => {
         values = { ...values, salesmanId: saleRep.id };
-        setSalesRepFilter({ salesRepFilter: saleRep.fullName });
+        setSalesRepFilter({ salesmanName: saleRep.fullName });
         handleSubmit(values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -280,7 +280,7 @@ export function CustomersList() {
     const handleClearSalesRep = useCallback(async () => {
         formikRef.current?.setFieldValue('salesmanId', '');
         delQuery('salesmanId');
-        setSalesRepFilter({ salesRepFilter: '' });
+        setSalesRepFilter({ salesmanName: '' });
         await customers.search(
             getFilters({
                 ...formikRef.current!.values,
@@ -450,7 +450,7 @@ export function CustomersList() {
                                 </ListPageSelector>
                                 <ListPageSelector
                                     label={'Sales Rep'}
-                                    value={salesRepFilter.salesRepFilter}
+                                    value={salesRepFilter.salesmanName}
                                     onClear={handleClearSalesRep}
                                 >
                                     {salesReps?.map((saleRep: any) => {

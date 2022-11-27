@@ -145,6 +145,9 @@ class CardProductService
         ])['results'][0]['id'];
     }
 
+    /**
+     * @return LengthAwarePaginator<CardProduct>
+     */
     public function getCards(): LengthAwarePaginator
     {
         // @phpstan-ignore-next-line

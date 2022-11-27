@@ -271,6 +271,7 @@ class PopReportService
         $this->updateMultipleSeriesReports($orderSeries);
     }
 
+    // @phpstan-ignore-next-line
     public function getSeriesReport(CardCategory $cardCategory): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -286,6 +287,7 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
+    // @phpstan-ignore-next-line
     public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -301,6 +303,7 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
+    // @phpstan-ignore-next-line
     public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;

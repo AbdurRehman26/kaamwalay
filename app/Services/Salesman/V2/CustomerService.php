@@ -18,9 +18,6 @@ class CustomerService
         //
     }
 
-    /**
-     * @return LengthAwarePaginator
-     */
     public function getCustomers(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::customer())

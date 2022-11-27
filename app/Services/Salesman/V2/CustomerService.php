@@ -18,6 +18,7 @@ class CustomerService
         //
     }
 
+    // @phpstan-ignore-next-line
     public function getCustomers(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::customer())

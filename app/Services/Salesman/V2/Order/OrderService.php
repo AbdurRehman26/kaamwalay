@@ -17,6 +17,7 @@ class OrderService
     ) {
     }
 
+    // @phpstan-ignore-next-line
     public function getOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');

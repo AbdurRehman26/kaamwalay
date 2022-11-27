@@ -14,6 +14,7 @@ class VaultShipmentService
 {
     protected const LIST_VAULT_PER_PAGE = 15;
 
+    // @phpstan-ignore-next-line
     public function getVaultShipments(): LengthAwarePaginator
     {
         return QueryBuilder::for(VaultShipment::class)

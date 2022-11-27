@@ -1,6 +1,7 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -43,6 +44,7 @@ type InitialValues = {
     signedUpStart: DateLike;
     signedUpEnd: DateLike;
     search: string;
+    salesmanId: string;
 };
 
 const headings: EnhancedTableHeadCell[] = [
@@ -126,6 +128,7 @@ const submissionsFilter = (min: number | string, max: number | string, separator
 
 const getFilters = (values: InitialValues) => ({
     search: values.search,
+    salesmanId: values.salesmanId,
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
@@ -163,6 +166,7 @@ export function CustomersList() {
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
+    const [salesRepFilter, setSalesRepFilter] = useState({ salesRepFilter: '' });
 
     const navigate = useNavigate();
 
@@ -191,8 +195,16 @@ export function CustomersList() {
             signedUpStart: query.signedUpStart ? moment(query.signedUpStart) : '',
             signedUpEnd: query.signedUpEnd ? moment(query.signedUpEnd) : '',
             search: query.search ?? '',
+            salesmanId: query.salesmanId ?? '',
         }),
-        [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
+        [
+            query.minSubmissions,
+            query.maxSubmissions,
+            query.signedUpStart,
+            query.signedUpEnd,
+            query.search,
+            query.salesmanId,
+        ],
     );
 
     const customers = useAdminCustomersQuery({
@@ -257,6 +269,25 @@ export function CustomersList() {
         },
         [addQuery, customers, delQuery, sortFilter],
     );
+
+    const handleSalesRep = useCallback(async (values, saleRep) => {
+        values = { ...values, salesmanId: saleRep.id };
+        setSalesRepFilter({ salesRepFilter: saleRep.fullName });
+        handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleClearSalesRep = useCallback(async () => {
+        formikRef.current?.setFieldValue('salesmanId', '');
+        delQuery('salesmanId');
+        setSalesRepFilter({ salesRepFilter: '' });
+        await customers.search(
+            getFilters({
+                ...formikRef.current!.values,
+                salesmanId: '',
+            }),
+        );
+    }, [customers, delQuery]);
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -416,6 +447,25 @@ export function CustomersList() {
                                             </FormikButton>
                                         </Grid>
                                     </Grid>
+                                </ListPageSelector>
+                                <ListPageSelector
+                                    label={'Sales Rep'}
+                                    value={salesRepFilter.salesRepFilter}
+                                    onClear={handleClearSalesRep}
+                                >
+                                    {salesReps?.map((saleRep: any) => {
+                                        return (
+                                            <Grid>
+                                                <MenuItem
+                                                    onClick={() => handleSalesRep(values, saleRep)}
+                                                    key={saleRep.id}
+                                                    value={saleRep.id}
+                                                >
+                                                    {saleRep.fullName ?? ''}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
                                 </ListPageSelector>
                             </Grid>
                         )}

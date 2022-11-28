@@ -300,6 +300,60 @@ export function CustomersList() {
         ],
     );
 
+    const handleSubmit = useCallback(
+        async (values) => {
+            setQuery({
+                ...values,
+                signedUpStart: formatDate(values.signedUpStart, 'YYYY-MM-DD'),
+                signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
+            });
+
+            await customers.searchSortedWithPagination({ sort: sortFilter }, getFilters(values), 1);
+
+            document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
+        },
+        [customers, setQuery, sortFilter],
+    );
+
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const calculateSortFilterValue = useCallback((order, orderBy) => {
+        return (order === 'desc' ? '-' : '') + orderBy;
+    }, []);
+
+    useEffect(() => {
+        if (!customers.isLoading) {
+            if (sortFilter !== calculateSortFilterValue(order, orderBy)) {
+                setSortFilter(calculateSortFilterValue(order, orderBy));
+
+                formikRef.current?.submitForm();
+            }
+        }
+    }, [calculateSortFilterValue, customers.isLoading, order, orderBy, sortFilter]);
+
+    const handleExportData = useCallback(async () => {
+        try {
+            setIsExporting(true);
+            const exportData = await dataExportRepository.export({
+                model: ExportableModelsEnum.User,
+                sort: { sort: sortFilter },
+                filter: getFilters({
+                    ...formikRef.current!.values,
+                }),
+            });
+
+            await downloadFromUrl(exportData.fileUrl, `robograding-customers.xlsx`);
+            setIsExporting(false);
+        } catch (e: any) {
+            notifications.exception(e);
+            setIsExporting(false);
+        }
+    }, [dataExportRepository, notifications, sortFilter]);
+
     const handleSalesRep = useCallback(
         async (values, saleRep) => {
             values = {
@@ -358,60 +412,6 @@ export function CustomersList() {
         },
         [salesRepFilter, handleSubmit],
     );
-
-    const handleSubmit = useCallback(
-        async (values) => {
-            setQuery({
-                ...values,
-                signedUpStart: formatDate(values.signedUpStart, 'YYYY-MM-DD'),
-                signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
-            });
-
-            await customers.searchSortedWithPagination({ sort: sortFilter }, getFilters(values), 1);
-
-            document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
-        },
-        [customers, setQuery, sortFilter],
-    );
-
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const calculateSortFilterValue = useCallback((order, orderBy) => {
-        return (order === 'desc' ? '-' : '') + orderBy;
-    }, []);
-
-    useEffect(() => {
-        if (!customers.isLoading) {
-            if (sortFilter !== calculateSortFilterValue(order, orderBy)) {
-                setSortFilter(calculateSortFilterValue(order, orderBy));
-
-                formikRef.current?.submitForm();
-            }
-        }
-    }, [calculateSortFilterValue, customers.isLoading, order, orderBy, sortFilter]);
-
-    const handleExportData = useCallback(async () => {
-        try {
-            setIsExporting(true);
-            const exportData = await dataExportRepository.export({
-                model: ExportableModelsEnum.User,
-                sort: { sort: sortFilter },
-                filter: getFilters({
-                    ...formikRef.current!.values,
-                }),
-            });
-
-            await downloadFromUrl(exportData.fileUrl, `robograding-customers.xlsx`);
-            setIsExporting(false);
-        } catch (e: any) {
-            notifications.exception(e);
-            setIsExporting(false);
-        }
-    }, [dataExportRepository, notifications, sortFilter]);
 
     const headerActions = (
         <Button

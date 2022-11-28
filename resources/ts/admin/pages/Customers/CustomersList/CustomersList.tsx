@@ -45,6 +45,7 @@ type InitialValues = {
     signedUpStart: DateLike;
     signedUpEnd: DateLike;
     search: string;
+    salesmanId: string;
     promotionalSubscribers?: string;
 };
 
@@ -134,6 +135,7 @@ const submissionsFilter = (min: number | string, max: number | string, separator
 
 const getFilters = (values: InitialValues) => ({
     search: values.search,
+    salesmanId: values.salesmanId,
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
     promotionalSubscribers: values.promotionalSubscribers,
@@ -172,6 +174,7 @@ export function CustomersList() {
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
+    const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '' });
     const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
         label: '',
         value: '',
@@ -207,6 +210,7 @@ export function CustomersList() {
             signedUpStart: query.signedUpStart ? moment(query.signedUpStart) : '',
             signedUpEnd: query.signedUpEnd ? moment(query.signedUpEnd) : '',
             search: query.search ?? '',
+            salesmanId: query.salesmanId ?? '',
             promotionalSubscribers: query.promotionalSubscribers ?? '',
         }),
         [
@@ -215,6 +219,7 @@ export function CustomersList() {
             query.signedUpStart,
             query.signedUpEnd,
             query.search,
+            query.salesmanId,
             query.promotionalSubscribers,
         ],
     );
@@ -284,6 +289,25 @@ export function CustomersList() {
         },
         [addQuery, customers, delQuery, promotionalSubscribersStatusFilter.value, sortFilter],
     );
+
+    const handleSalesRep = useCallback(async (values, saleRep) => {
+        values = { ...values, salesmanId: saleRep.id };
+        setSalesRepFilter({ salesmanName: saleRep.fullName });
+        handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleClearSalesRep = useCallback(async () => {
+        formikRef.current?.setFieldValue('salesmanId', '');
+        delQuery('salesmanId');
+        setSalesRepFilter({ salesmanName: '' });
+        await customers.search(
+            getFilters({
+                ...formikRef.current!.values,
+                salesmanId: '',
+            }),
+        );
+    }, [customers, delQuery]);
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -476,6 +500,25 @@ export function CustomersList() {
                                             </FormikButton>
                                         </Grid>
                                     </Grid>
+                                </ListPageSelector>
+                                <ListPageSelector
+                                    label={'Sales Rep'}
+                                    value={salesRepFilter.salesmanName}
+                                    onClear={handleClearSalesRep}
+                                >
+                                    {salesReps?.map((saleRep: any) => {
+                                        return (
+                                            <Grid>
+                                                <MenuItem
+                                                    onClick={() => handleSalesRep(values, saleRep)}
+                                                    key={saleRep.id}
+                                                    value={saleRep.id}
+                                                >
+                                                    {saleRep.fullName ?? ''}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
                                 </ListPageSelector>
 
                                 <PageSelector

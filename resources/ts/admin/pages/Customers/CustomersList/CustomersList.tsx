@@ -174,7 +174,7 @@ export function CustomersList() {
     const [isExporting, setIsExporting] = useState(false);
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
-    const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '' });
+    const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '', salesmanId: '' });
     const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
         label: '',
         value: '',
@@ -246,10 +246,11 @@ export function CustomersList() {
                 minSubmissions: '',
                 maxSubmissions: '',
                 promotionalSubscribers: promotionalSubscribersStatusFilter.value,
+                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value]);
+    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value, salesRepFilter.salesmanId]);
 
     const handleClearSignUp = useCallback(async () => {
         formikRef.current?.setFieldValue('signedUpStart', '');
@@ -263,10 +264,11 @@ export function CustomersList() {
                 signedUpStart: '',
                 signedUpEnd: '',
                 promotionalSubscribers: promotionalSubscribersStatusFilter.value,
+                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value]);
+    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value, salesRepFilter.salesmanId]);
 
     const handleSearch = useCallback(
         async (search: string) => {
@@ -282,32 +284,48 @@ export function CustomersList() {
                 getFilters({
                     ...formikRef.current!.values,
                     promotionalSubscribers: promotionalSubscribersStatusFilter.value,
+                    salesmanId: salesRepFilter.salesmanId,
                     search,
                 }),
                 1,
             );
         },
-        [addQuery, customers, delQuery, promotionalSubscribersStatusFilter.value, sortFilter],
+        [
+            addQuery,
+            customers,
+            delQuery,
+            promotionalSubscribersStatusFilter.value,
+            salesRepFilter.salesmanId,
+            sortFilter,
+        ],
     );
 
-    const handleSalesRep = useCallback(async (values, saleRep) => {
-        values = { ...values, salesmanId: saleRep.id };
-        setSalesRepFilter({ salesmanName: saleRep.fullName });
-        handleSubmit(values);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handleSalesRep = useCallback(
+        async (values, saleRep) => {
+            values = {
+                ...values,
+                salesmanId: saleRep.id,
+                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
+            };
+            setSalesRepFilter({ salesmanName: saleRep.fullName, salesmanId: saleRep.id });
+            handleSubmit(values);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [promotionalSubscribersStatusFilter, handleSubmit],
+    );
 
     const handleClearSalesRep = useCallback(async () => {
         formikRef.current?.setFieldValue('salesmanId', '');
         delQuery('salesmanId');
-        setSalesRepFilter({ salesmanName: '' });
+        setSalesRepFilter({ salesmanName: '', salesmanId: '' });
         await customers.search(
             getFilters({
                 ...formikRef.current!.values,
                 salesmanId: '',
+                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
             }),
         );
-    }, [customers, delQuery]);
+    }, [customers, delQuery, promotionalSubscribersStatusFilter.value]);
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -383,21 +401,28 @@ export function CustomersList() {
             getFilters({
                 ...formikRef.current!.values,
                 promotionalSubscribers: '',
+                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-        // handleSubmit(formikRef.current!.values);
-    }, [delQuery, customers, sortFilter]);
+    }, [delQuery, customers, sortFilter, salesRepFilter.salesmanId]);
 
-    const handlePromotionalSubscribers = useCallback(async (values, promotionalSubscribers) => {
-        values = { ...values, promotionalSubscribers: promotionalSubscribers.value };
-        setPromotionalSubscribersStatusFilter({
-            value: promotionalSubscribers.value,
-            label: promotionalSubscribers.label,
-        });
-        await handleSubmit(values);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handlePromotionalSubscribers = useCallback(
+        async (values, promotionalSubscribers) => {
+            values = {
+                ...values,
+                promotionalSubscribers: promotionalSubscribers.value,
+                salesmanId: salesRepFilter.salesmanId,
+            };
+            setPromotionalSubscribersStatusFilter({
+                value: promotionalSubscribers.value,
+                label: promotionalSubscribers.label,
+            });
+            await handleSubmit(values);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [salesRepFilter, handleSubmit],
+    );
 
     return (
         <Grid container>

@@ -24,9 +24,9 @@ class OrderService
 
         return QueryBuilder::for(Order::query()->salesmanId(auth()->user()->id))
             ->excludeCancelled()
-            ->allowedFilters(Order::getAllowedAdminFilters())
-            ->allowedIncludes(Order::getAllowedAdminIncludes())
-            ->allowedSorts(Order::getAllowedAdminSorts())
+            ->allowedFilters(Order::getAllowedSalesmanFilters())
+            ->allowedIncludes(Order::getAllowedSalesmanIncludes())
+            ->allowedSorts(Order::getAllowedSalesmanSorts())
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }
@@ -34,7 +34,7 @@ class OrderService
     public function getOrder(int $orderId): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)
-            ->allowedIncludes(Order::getAllowedAdminIncludes())
+            ->allowedIncludes(Order::getAllowedSalesmanIncludes())
             ->findOrFail($orderId);
     }
 }

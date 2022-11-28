@@ -13,7 +13,7 @@ class PaymentPlanController extends Controller
     public function index(): PaymentPlanCollection
     {
         $paymentPlans = Cache::remember(
-            'v3.payment_plans',
+            'v2.payment_plans',
             now()->addMonth(),
             fn () => PaymentPlan::orderBy('display_position')->with('paymentPlanRanges')->get()
         );

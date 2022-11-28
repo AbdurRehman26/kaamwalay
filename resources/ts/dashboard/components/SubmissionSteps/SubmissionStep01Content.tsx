@@ -3,7 +3,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getServiceLevels, setCustomStep, setServiceLevel } from '../../redux/slices/newSubmissionSlice';
+import {
+    getServiceLevels,
+    setCustomStep,
+    setOriginalServiceLevel,
+    setServiceLevel,
+} from '../../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from '../ServiceLevelItem';
 import StepDescription from '../StepDescription';
 
@@ -40,6 +45,18 @@ export function SubmissionStep01Content() {
             dispatch(
                 setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
             );
+            dispatch(
+                setOriginalServiceLevel({
+                    id,
+                    price,
+                    turnaround,
+                    type,
+                    maxProtectionAmount,
+                    priceRanges,
+                    minPrice,
+                    maxPrice,
+                }),
+            );
             dispatch(setCustomStep(1));
         } else {
             const selectedService: any = serviceLevels.find((service) => service.id === selectedServiceLevel.id);
@@ -47,6 +64,18 @@ export function SubmissionStep01Content() {
                 selectedService;
             dispatch(
                 setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
+            );
+            dispatch(
+                setOriginalServiceLevel({
+                    id,
+                    price,
+                    turnaround,
+                    type,
+                    maxProtectionAmount,
+                    priceRanges,
+                    minPrice,
+                    maxPrice,
+                }),
             );
         }
     }, [serviceLevels, dispatch, plan, selectedServiceLevel.id]);

@@ -87,7 +87,6 @@ it('returns order details', function () {
 });
 
 test('orders throws error for roles other than salesman', function () {
-
     $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
         ->getJson('/api/v2/salesman/orders/1')
         ->assertForbidden();
@@ -317,7 +316,7 @@ it(
 )->with([
     fn () => $this->orders[0]->order_number,
     fn () => $this->orders[0]->user->customer_number,
-    fn () => $this->orders[0]->user->first_name
+    fn () => $this->orders[0]->user->first_name,
 ]);
 
 it('returns only orders with filtered payment status', function ($data) {

@@ -13,6 +13,7 @@
 */
 
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponController;
 use App\Http\Controllers\API\V2\Salesman\CustomerController;
 use App\Http\Controllers\API\V2\Salesman\Order\OrderController;
 use App\Http\Controllers\API\V2\Salesman\Order\PaymentMethodController;
@@ -71,4 +72,10 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
         Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
             ->name('salesman.wallet.history');
     });
+
+    Route::prefix('coupons')->group(function () {
+        Route::get('verify/{coupon:code}', [CouponController::class, 'verify'])->name('salesman.coupon.verify');
+        Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('salesman.coupon.discount');
+    });
+
 });

@@ -21,7 +21,7 @@ class CustomerService
     // @phpstan-ignore-next-line
     public function getCustomers(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::customer())
+        return QueryBuilder::for(User::customer()->salesmanId(auth()->user()->id))
             ->allowedFilters(User::getAllowedAdminFilters())
             ->allowedSorts(User::getAllowedAdminSorts())
             ->defaultSort('-created_at')

@@ -1,7 +1,7 @@
 /**
- * @api {post} /v2/admin/orders/1/coupons/calculate-discount Calculate Order Coupon Discount
+ * @api {post} /v2/salesman/orders/1/coupons/calculate-discount Calculate Order Coupon Discount
  * @apiName Calculate Discount on Coupon For Order
- * @apiGroup Admin Orders
+ * @apiGroup Salesman Orders
  *
  * @apiVersion 2.0.0
  *

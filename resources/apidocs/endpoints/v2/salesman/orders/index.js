@@ -1,7 +1,7 @@
 /**
- * @api {get} /v2/admin/orders List orders
+ * @api {get} /v2/salesman/orders List orders
  * @apiName List Orders
- * @apiGroup Admin Orders
+ * @apiGroup Salesman Orders
  *
  * @apiVersion 2.0.0
  *

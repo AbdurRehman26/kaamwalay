@@ -27,7 +27,6 @@ test('customer can register without platform', function () {
         'password' => 'passWord1',
         'password_confirmation' => 'password',
         'phone' => '',
-        'marketing_notifications_enabled' => true,
     ]);
 
     $response->assertStatus(Response::HTTP_CREATED);
@@ -45,7 +44,6 @@ test('user can not register with duplicate email', function () {
         'username' => $this->faker->userName(),
         'password' => 'password',
         'phone' => '',
-        'marketing_notifications_enabled' => true,
     ]);
 
     $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -64,7 +62,6 @@ test('user registration dispatches events and jobs', function () {
         'password' => 'passWord1',
         'password_confirmation' => 'password',
         'phone' => '',
-        'marketing_notifications_enabled' => true,
     ]);
 
     Event::assertDispatched(CustomerRegistered::class);
@@ -92,7 +89,6 @@ test('customer can register with valid platform', function () {
         'phone' => '',
         'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
         'app_generated_id' => '12345',
-        'marketing_notifications_enabled' => true,
     ]);
 
     $response->assertStatus(Response::HTTP_CREATED);
@@ -112,7 +108,6 @@ test('customer cannot register with invalid platform', function () {
         'password_confirmation' => 'password',
         'phone' => '',
         'platform' => 'foo',
-        'marketing_notifications_enabled' => true,
     ]);
 
     $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -131,7 +126,6 @@ test('customer can register and have wallet assigned', function () {
         'password' => 'passWord1',
         'password_confirmation' => 'password',
         'phone' => '',
-        'marketing_notifications_enabled' => true,
     ]);
     $user = User::whereEmail($email)->first();
     
@@ -148,7 +142,6 @@ test('customer username is auto generated', function () {
         'password' => 'passWord1',
         'password_confirmation' => 'password',
         'phone' => '',
-        'marketing_notifications_enabled' => true,
     ]);
     $user = User::whereEmail($email)->first();
 

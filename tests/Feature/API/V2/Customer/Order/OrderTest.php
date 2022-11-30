@@ -972,6 +972,8 @@ it('can calculate collector coin price for an order with coupon code', function 
         'service_fee' => 20,
         'shipping_fee' => 10,
         'grand_total' => 30,
+        'discounted_amount' => 10,
+        'grand_total_before_discount' => 30,
     ]);
     $paymentMethod = PaymentMethod::factory()->create([
         'code' => 'collector_coin',
@@ -985,7 +987,6 @@ it('can calculate collector coin price for an order with coupon code', function 
         [
             'payment_blockchain_network' => 97,
             'payment_by_wallet' => 0,
-            'discounted_amount' => 10,
         ]
     )
         ->assertSuccessful()

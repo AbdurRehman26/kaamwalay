@@ -40,6 +40,11 @@ class CouponController extends Controller
                 $coupon,
                 $order
             );
+
+            $order->coupon()->associate($coupon);
+            $order->discounted_amount = $discountedAmount;
+
+            $order->save();
         } catch (Exception $e) {
             return match (true) {
                 $e instanceof CouponHasInvalidMinThreshold => throw $e,

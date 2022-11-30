@@ -99,12 +99,10 @@ class OrderService extends V1OrderService
         Order $order,
         int $paymentBlockchainNetwork,
         float $walletAmount = 0.0,
-        float $discountedAmount = 0.0,
     ): float {
         $orderTotalPayableWithoutCollectorCoinDiscount = $this->getOrderGrandTotalWithoutCollectorCoinDiscount(
             $order,
             $walletAmount,
-            $discountedAmount
         );
         $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount);
 
@@ -123,7 +121,6 @@ class OrderService extends V1OrderService
             'orderTotal' => $order->grand_total_before_discount,
             'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount),
             'walletAmount' => $walletAmount,
-            'discountedAmount' => $discountedAmount,
             'refund' => $order->refund_total,
             'extraCharge' => $order->extra_charge_total,
             'usdPrice' => $order->grand_total_before_discount -
@@ -257,11 +254,10 @@ class OrderService extends V1OrderService
     protected function getOrderGrandTotalWithoutCollectorCoinDiscount(
         Order $order,
         float $walletAmount = 0,
-        float $discountedAmount = 0
     ): float {
-        return $order->grand_total -
+        return $order->grand_total_before_discount -
             $walletAmount -
-            ($this->hasCouponCodeApplied($order) ? 0 : $discountedAmount) -
+            $order->discounted_amount -
             $order->refund_total +
             $order->extra_charge_total;
     }

@@ -180,7 +180,7 @@ export function ApplyPromoCode() {
                         {discountStatement}
                     </Typography>
                     <Typography variant={'caption'} color={'red'} sx={{ marginTop: '3px' }}>
-                        {couponInvalidMessage}
+                        {!isCouponApplied && couponInvalidMessage}
                     </Typography>
                 </Box>
                 <Box>

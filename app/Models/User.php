@@ -375,10 +375,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     /**
      * @param  Builder<User>  $query
-     * @param  string|int  $salesmanId
+     * @param  string  $salesmanId
      * @return Builder<User>
      */
-    public function scopeSalesmanId(Builder $query, int|string $salesmanId): Builder
+    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }

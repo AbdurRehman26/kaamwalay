@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\API\V1\Auth\ChangePasswordController;

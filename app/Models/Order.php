@@ -128,7 +128,7 @@ class Order extends Model implements Exportable
         'cleaning_fee' => 0,
     ];
 
-    private static function allowedIncludes(): array
+    public static function getAllowedAdminIncludes(): array
     {
         return [
             AllowedInclude::relationship('invoice'),
@@ -153,7 +153,7 @@ class Order extends Model implements Exportable
         ];
     }
 
-    private static function allowedFilters(): array
+    public static function getAllowedAdminFilters(): array
     {
         return [
             AllowedFilter::exact('order_id', 'id'),
@@ -168,7 +168,7 @@ class Order extends Model implements Exportable
         ];
     }
 
-    private static function allowedSorts(): array
+    public static function getAllowedAdminSorts(): array
     {
         return [
             AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
@@ -181,36 +181,6 @@ class Order extends Model implements Exportable
             'arrived_at',
             'grand_total',
         ];
-    }
-
-    public static function getAllowedAdminIncludes(): array
-    {
-        return self::allowedIncludes();
-    }
-
-    public static function getAllowedAdminFilters(): array
-    {
-        return self::allowedFilters();
-    }
-
-    public static function getAllowedAdminSorts(): array
-    {
-        return self::allowedSorts();
-    }
-
-    public static function getAllowedSalesmanIncludes(): array
-    {
-        return self::allowedIncludes();
-    }
-
-    public static function getAllowedSalesmanFilters(): array
-    {
-        return self::allowedFilters();
-    }
-
-    public static function getAllowedSalesmanSorts(): array
-    {
-        return self::allowedSorts();
     }
 
     public static function getAllowedIncludes(): array
@@ -424,10 +394,10 @@ class Order extends Model implements Exportable
 
     /**
      * @param  Builder<Order>  $query
-     * @param  string|int  $salesmanId
+     * @param  string  $salesmanId
      * @return Builder<Order>
      */
-    public function scopeSalesmanId(Builder $query, string|int $salesmanId): Builder
+    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }

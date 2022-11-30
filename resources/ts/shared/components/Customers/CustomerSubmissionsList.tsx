@@ -48,9 +48,7 @@ export function CustomerSubmissionsList({
                 <TableHead>
                     <TableRow>
                         <TableCell variant={'head'}>Submission #</TableCell>
-                        <TableCell variant={'head'}>
-                            {tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed'}
-                        </TableCell>
+                        <TableCell variant={'head'}>{'Placed'}</TableCell>
                         {!isCustomerDetailPage ? (
                             <>
                                 <TableCell variant={'head'}>Reviewed</TableCell>

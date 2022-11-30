@@ -36,7 +36,6 @@ export function SubmissionsList() {
             <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
             <Tab component={Link} to={'/submissions/assembled/list'} value={'assembled'} label="Assembled" />
             <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
-            <Tab component={Link} to={'/submissions/incomplete/list'} value={'incomplete'} label="Incomplete" />
         </TabList>
     );
 
@@ -93,9 +92,6 @@ export function SubmissionsList() {
                 </TabContent>
                 <TabContent value={'shipped'}>
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.SHIPPED} />
-                </TabContent>
-                <TabContent value={'incomplete'}>
-                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.INCOMPLETE} />
                 </TabContent>
             </Grid>
         </TabContext>

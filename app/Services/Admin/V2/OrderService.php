@@ -230,10 +230,9 @@ class OrderService extends V1OrderService
     {
         $itemsCount = $order->orderItems()->count();
 
+        $agsPageCount = (int) (ceil($itemsCount / 10) * 10) / 10;
+
         $itemsPerPage = 10;
-
-        $agsPageCount = (int) (ceil($itemsCount / $itemsPerPage) * $itemsPerPage) / $itemsPerPage;
-
 
         $cards = $this->getCardsForGrading($order);
 

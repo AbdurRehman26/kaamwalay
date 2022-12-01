@@ -228,7 +228,7 @@ class OrderService extends V1OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
+        $grades = $this->agsService->getGrades($this->getOrderCertificates($order), $order->orderItems()->count());
 
         $cards = $this->getCardsForGrading($order);
 

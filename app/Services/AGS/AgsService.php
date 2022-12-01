@@ -77,11 +77,10 @@ class AgsService
         return $this->client->createCertificates($this->prepareDataForCertificate(data: $data));
     }
 
-    public function getGrades(array $certificateIds, int $offset = 0): array
+    public function getGrades(array $certificateIds): array
     {
         return $this->client->getGrades([
             'certificate_ids' => implode(',', $certificateIds),
-            'offset' => $offset,
         ]);
     }
 

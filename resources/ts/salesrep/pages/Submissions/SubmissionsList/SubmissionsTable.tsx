@@ -50,7 +50,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);

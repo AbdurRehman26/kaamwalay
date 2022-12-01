@@ -23,7 +23,6 @@ class SalesmanService
         //
     }
 
-    // @phpstan-ignore-next-line
     public function getSalesmen(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::salesmen())

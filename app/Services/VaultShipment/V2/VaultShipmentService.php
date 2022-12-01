@@ -11,7 +11,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class VaultShipmentService
 {
-    // @phpstan-ignore-next-line
     public function getVaultShipments(): LengthAwarePaginator
     {
         /* @var User $user */

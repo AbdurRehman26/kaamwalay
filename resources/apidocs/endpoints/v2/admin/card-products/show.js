@@ -1,5 +1,5 @@
 /**
- * @api {get} /v2/admin/cards/{cardProduct} Create Card Product
+ * @api {get} /v2/admin/cards/{cardProduct} Get Card Product
  * @apiName Get Card Product
  * @apiGroup Admin Card Products
  *
@@ -31,7 +31,12 @@
  *              "edition": "1st Edition",
  *              "surface": "Holo",
  *              "variant": "Lorem"
- *              "added_by_customer": false
+ *              "added_by_customer": false,
+ *              "card_category": {
+ *                  "id": 1,
+ *                  "name": "Pokemon",
+ *                  "image_url": "https:\/\/robograding-live.s3.us-west-2.amazonaws.com\/platform\/categories\/Pokemon.png"
+ *              }
  *          }
  *      }
  */

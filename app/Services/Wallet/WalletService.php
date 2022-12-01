@@ -101,7 +101,6 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    // @phpstan-ignore-next-line
     public function getWalletTransactions(): LengthAwarePaginator
     {
         /* @var User $user */

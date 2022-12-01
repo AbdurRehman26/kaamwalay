@@ -64,7 +64,7 @@ class UserCardService
     }
 
     /**
-     * @return LengthAwarePaginator<UserCard>
+     * @return LengthAwarePaginator
      */
     public function getFeedCards(): LengthAwarePaginator
     {
@@ -82,7 +82,6 @@ class UserCardService
         ->paginate($itemsPerPage);
     }
 
-    // @phpstan-ignore-next-line
     public function getCustomerCards(User $user): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');
@@ -378,7 +377,6 @@ class UserCardService
         });
     }
 
-    // @phpstan-ignore-next-line
     public function getCertificates(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;

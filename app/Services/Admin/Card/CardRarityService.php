@@ -12,7 +12,6 @@ class CardRarityService
 {
     protected const LIST_CARD_RARITY_PER_PAGE = 15;
 
-    // @phpstan-ignore-next-line
     public function getCardRarities(): LengthAwarePaginator
     {
         return QueryBuilder::for(CardRarity::class)

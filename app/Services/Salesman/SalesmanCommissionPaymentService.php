@@ -13,7 +13,6 @@ class SalesmanCommissionPaymentService
 {
     protected const PER_PAGE = 10;
 
-    // @phpstan-ignore-next-line
     public function getCommissionPayments(User $salesman): LengthAwarePaginator
     {
         return QueryBuilder::for(SalesmanCommissionPayment::class)

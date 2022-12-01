@@ -261,9 +261,4 @@ class OrderService extends V1OrderService
             $order->refund_total +
             $order->extra_charge_total;
     }
-
-    protected function hasCouponCodeApplied(Order $order): bool
-    {
-        return $order->discounted_amount > 0;
-    }
 }

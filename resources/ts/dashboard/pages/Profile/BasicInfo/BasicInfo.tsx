@@ -170,7 +170,7 @@ export function BasicInfo() {
     const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
 
     const [marketingNotificationsEnabled, setMarketingNotificationsEnabled] = useState<boolean>(
-        user$.marketingNotificationsEnabled ?? true,
+        user$.marketingNotificationsEnabled,
     );
 
     const toggleAskForPasswordDialog = useCallback(() => {

@@ -17,7 +17,7 @@ export class UserEntity extends Entity {
     public profileImage!: string;
     public emailSubscription!: number;
     public fullName!: string;
-    public marketingNotificationsEnabled?: boolean;
+    public marketingNotificationsEnabled!: boolean;
 
     public wallet!: WalletEntity;
 

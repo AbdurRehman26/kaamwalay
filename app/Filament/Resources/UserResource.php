@@ -67,9 +67,9 @@ class UserResource extends Resource
                     ->maxLength(255),
                 TextInput::make('pm_last_four')
                     ->maxLength(4),
-                BelongsToSelect::make('salesman')
+                Forms\Components\Select::make('salesman_id')
                     // @phpstan-ignore-next-line
-                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
+                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesmen())
                     ->nullable(),
                 Forms\Components\BelongsToManyMultiSelect::make('role')
                     ->relationship('roles', 'name'),

@@ -155,8 +155,7 @@ export function SalesRepCommissionPaymentsList({ isAdmin, listQuery }: Record<st
                                     </Typography>
                                     <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
                                         No commission payments have been
-                                    </Typography>
-                                    <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
+                                        <br />
                                         disbursed to you, yet.
                                     </Typography>
                                 </Stack>

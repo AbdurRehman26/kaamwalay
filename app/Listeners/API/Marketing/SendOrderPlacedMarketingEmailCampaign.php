@@ -22,13 +22,17 @@ class SendOrderPlacedMarketingEmailCampaign implements ShouldQueue
     {
         $user = $event->order->user;
 
+        if (! $user->wantsToReceiveMarketingContent()) {
+            return;
+        }
+
         /*
          * Schedule for user only when they place their first order.
          * Since they have already placed an order, so order count is 1.
          * Hence we do not schedule if order count >= 2
          */
 
-        if ($user->orders()->placed()->count() >= 2 || ! $user->wantsToReceiveMarketingContent()) {
+        if ($user->orders()->placed()->count() >= 2) {
             return;
         }
 

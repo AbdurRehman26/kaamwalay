@@ -15,7 +15,7 @@ class RegisteredUserMarketingEmailCampaignCheck implements ShouldStillSendCheckI
         $user = User::find($extraData['user_id']);
 
         // User does not exist anymore
-        if (! $user) {
+        if (! $user || ! $user->wantsToReceiveMarketingContent()) {
             return false;
         }
 

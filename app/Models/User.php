@@ -518,4 +518,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         return $this->salesmanCommissionPayments()->sum('amount');
     }
+
+    public function wantsToReceiveMarketingContent(): bool
+    {
+        return $this->is_marketing_notifications_enabled;
+    }
 }

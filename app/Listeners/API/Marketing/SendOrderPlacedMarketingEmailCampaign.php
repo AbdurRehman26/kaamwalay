@@ -28,7 +28,7 @@ class SendOrderPlacedMarketingEmailCampaign implements ShouldQueue
          * Hence we do not schedule if order count >= 2
          */
 
-        if ($user->orders()->placed()->count() >= 2) {
+        if ($user->orders()->placed()->count() >= 2 || ! $user->wantsToReceiveMarketingContent()) {
             return;
         }
 

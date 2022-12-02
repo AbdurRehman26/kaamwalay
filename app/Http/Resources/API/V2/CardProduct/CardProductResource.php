@@ -19,7 +19,7 @@ class CardProductResource extends V1CardProductResource
             'population' => $this->population ?? 0,
             'rarity' => $this->rarity,
             'card_number' => $this->card_number,
-            'card_category' => new CardCategoryResource($this->cardCategory),
+            'card_category' => $this->whenLoaded('cardCategory', CardCategoryResource::class),
         ]);
     }
 }

@@ -4,6 +4,7 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import ReactGA from 'react-ga';
@@ -21,7 +22,23 @@ import { useInjectable } from '../../hooks/useInjectable';
 import { AuthDialogContentProps } from './AuthDialogContentProps';
 import { AuthDialogView } from './AuthDialogView';
 
+const useStyles = makeStyles(
+    () => ({
+        notificationsCheckbox: {
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
+        notificationsControlLabel: {
+            marginBottom: '24px',
+            alignItems: 'flex-start',
+        },
+    }),
+    { name: 'SignUpContent' },
+);
+
 export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContentProps) {
+    const classes = useStyles();
+
     const authenticationRepository = useInjectable(AuthenticationRepository);
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
@@ -86,10 +103,11 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                                     <Checkbox
                                         checked={values.isMarketingNotificationsEnabled}
                                         onChange={handleChange}
+                                        className={classes.notificationsCheckbox}
                                     />
                                 }
                                 label={'Opt in to receive updates & promotions from AGS via email and text.'}
-                                sx={{ 'margin-bottom': 24 }}
+                                className={classes.notificationsControlLabel}
                             />
                         </FormRoot>
 

@@ -184,16 +184,34 @@ test('deleting profile returns password error if ags token is null', function ()
     ]);
 });
 
-test('a customer can opt in or out of marketing notifiations from their profile', function () {
+test('a customer can opt out of marketing notifications from their profile', function () {
     Http::fake([
         // Faking AGS update user API
         'ags.api/users/me/' => Http::response([]),
     ]);
     $this->actingAs($this->user);
 
-    putJson(route('v2.customer.toggleMarketingNotifications'), [
-        'marketing_notifications_enabled' => false,
+    putJson(route('v2.customer.profile.toggleMarketingNotifications'), [
+        'is_marketing_notifications_enabled' => false,
     ])->assertSuccessful()->assertStatus(200)->assertJsonFragment([
-        'marketing_notifications_enabled' => false,
+        'is_marketing_notifications_enabled' => false,
+    ]);
+});
+
+test('a customer can opt in of marketing notifications from their profile', function () {
+    $user = User::factory()->create([
+        'is_marketing_notifications_enabled' => false,
+    ]);
+
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    $this->actingAs($user);
+
+    putJson(route('v2.customer.profile.toggleMarketingNotifications'), [
+        'is_marketing_notifications_enabled' => true,
+    ])->assertSuccessful()->assertStatus(200)->assertJsonFragment([
+        'is_marketing_notifications_enabled' => true,
     ]);
 });

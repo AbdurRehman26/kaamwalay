@@ -7,7 +7,7 @@
  *
  * @apiUse header_main
  *
- * @apiParam { Boolean } marketing_notifications_enabled If the user has opted in or out for SMS/Email marketing notifications
+ * @apiParam { Boolean } is_marketing_notifications_enabled If the user has opted in or out for SMS/Email marketing notifications
  *
  * @apiSuccess { Boolean } success success boolean
  *
@@ -25,7 +25,7 @@
  *                  "username": "test",
  *                  "phone": null,
  *                  "stripe_id": "cus_K0651IOZjCy9Wa",
- *                  "marketing_notifications_enabled": true,
+ *                  "is_marketing_notifications_enabled": true,
  *                  "profile_image":  "http://minio:9000/robograding/users/18/files/dates/2022-11-14/6qW2XkuI_400x400.png",
  *                  "roles": [
  *                      {

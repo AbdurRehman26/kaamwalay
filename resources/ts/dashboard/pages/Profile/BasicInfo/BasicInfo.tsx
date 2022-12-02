@@ -169,8 +169,8 @@ export function BasicInfo() {
     const [showAskForPasswordDialog, setShowAskForPasswordDialog] = useState<boolean>(false);
     const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
 
-    const [marketingNotificationsEnabled, setMarketingNotificationsEnabled] = useState<boolean>(
-        user$.marketingNotificationsEnabled,
+    const [isMarketingNotificationsEnabled, setIsMarketingNotificationsEnabled] = useState<boolean>(
+        user$.isMarketingNotificationsEnabled,
     );
 
     const toggleAskForPasswordDialog = useCallback(() => {
@@ -385,11 +385,11 @@ export function BasicInfo() {
 
     const handleMarketingNotificationsEnabledChange = useCallback(
         (e) => {
-            setMarketingNotificationsEnabled(e.target.value);
+            setIsMarketingNotificationsEnabled(e.target.value);
 
             dispatch(
                 toggleMarketingNotifications({
-                    marketingNotificationsEnabled: e.target.value === 'true',
+                    isMarketingNotificationsEnabled: e.target.value === 'true',
                 }),
             );
         },
@@ -567,8 +567,8 @@ export function BasicInfo() {
                 <FormControl className={classes.marketingEnabledFormControl}>
                     <RadioGroup
                         row
-                        name="marketingNotificationsEnabled"
-                        value={marketingNotificationsEnabled}
+                        name="isMarketingNotificationsEnabled"
+                        value={isMarketingNotificationsEnabled}
                         onChange={handleMarketingNotificationsEnabledChange}
                     >
                         <FormControlLabel

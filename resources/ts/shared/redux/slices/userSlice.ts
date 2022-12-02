@@ -85,7 +85,7 @@ export const toggleMarketingNotifications = createAsyncThunk(
             thunkAPI.dispatch(updateUserProfileData(data));
             NotificationsService.success(
                 'Notifications have been ' +
-                    (input.marketingNotificationsEnabled ? 'enabled' : 'disabled') +
+                    (input.isMarketingNotificationsEnabled ? 'enabled' : 'disabled') +
                     ' successfully!',
             );
         } catch (error: any) {

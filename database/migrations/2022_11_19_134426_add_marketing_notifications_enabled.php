@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('marketing_notifications_enabled')->default(true);
+            $table->boolean('is_marketing_notifications_enabled')->default(true);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('marketing_notifications_enabled');
+            $table->dropColumn('is_marketing_notifications_enabled');
         });
     }
 };

@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'last_login_at' => now(),
             'is_active' => true,
             'salesman_id' => null,
-            'marketing_notifications_enabled' => true,
+            'is_marketing_notifications_enabled' => true,
         ];
     }
 

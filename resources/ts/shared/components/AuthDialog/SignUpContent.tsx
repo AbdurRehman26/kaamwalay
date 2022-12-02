@@ -30,7 +30,7 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
             phone: '',
             password: '',
             passwordConfirmation: '',
-            marketingNotificationsEnabled: true,
+            isMarketingNotificationsEnabled: true,
         }),
         [],
     );
@@ -81,9 +81,12 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
 
                         <FormRoot>
                             <FormControlLabel
-                                name={'marketingNotificationsEnabled'}
+                                name={'isMarketingNotificationsEnabled'}
                                 control={
-                                    <Checkbox checked={values.marketingNotificationsEnabled} onChange={handleChange} />
+                                    <Checkbox
+                                        checked={values.isMarketingNotificationsEnabled}
+                                        onChange={handleChange}
+                                    />
                                 }
                                 label={'Opt in to receive updates & promotions from AGS via email and text.'}
                                 sx={{ 'margin-bottom': 24 }}

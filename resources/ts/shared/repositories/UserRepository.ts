@@ -57,7 +57,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
 
     public async toggleMarketingNotifications(input: ToggleCustomerMarketingNotificationsEnabledDto) {
-        const { data } = await this.endpoint.put('/customer/toggle-marketing-notifications', input);
+        const { data } = await this.endpoint.put('/customer/profile/toggle-marketing-notifications', input);
 
         return this.toEntity(data);
     }

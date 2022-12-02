@@ -6,7 +6,7 @@ use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeactivatedException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeletedException;
 use App\Http\Controllers\API\V1\Customer\ProfileController as V1ProfileController;
-use App\Http\Requests\API\V2\Customer\ToggleMarketingNotificationsRequest;
+use App\Http\Requests\API\V2\Customer\Profile\ToggleMarketingNotificationsRequest;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\CustomerProfileService;
@@ -56,7 +56,7 @@ class ProfileController extends V1ProfileController
     {
         try {
             $data = $request->safe()->only([
-                'marketing_notifications_enabled',
+                'is_marketing_notifications_enabled',
             ]);
 
             /** @var User $user */

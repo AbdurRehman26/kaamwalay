@@ -16,7 +16,7 @@ class AdminCustomerPromotionalSubscribersFilter implements Filter
     public function __invoke(Builder $query, $value, string $property): void
     {
         $query->where(
-            'marketing_notifications_enabled',
+            'is_marketing_notifications_enabled',
             $value
         );
     }

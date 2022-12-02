@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API\V2\Customer;
+namespace App\Http\Requests\API\V2\Customer\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +14,7 @@ class ToggleMarketingNotificationsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'marketing_notifications_enabled' => ['boolean', 'required'],
+            'is_marketing_notifications_enabled' => ['boolean', 'required'],
         ];
     }
 }

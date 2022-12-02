@@ -23,7 +23,7 @@
  *                  "username": "test",
  *                  "phone": null,
  *                  "stripe_id": "cus_K0651IOZjCy9Wa",
- *                  "marketing_notifications_enabled": true,
+ *                  "is_marketing_notifications_enabled": true,
  *                  "roles": [
  *                      {
  *                          "id": 2,

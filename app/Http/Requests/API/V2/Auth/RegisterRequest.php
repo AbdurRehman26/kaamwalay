@@ -42,7 +42,7 @@ class RegisterRequest extends FormRequest
                 Rule::in(['web', 'ios', 'android']),
             ],
             'app_generated_id' => ['sometimes', 'string'],
-            'marketing_notifications_enabled' => ['sometimes', 'boolean'],
+            'is_marketing_notifications_enabled' => ['sometimes', 'boolean'],
         ];
     }
 

@@ -27,6 +27,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminCardQuery } from '@shared/redux/hooks/useCardsQuery';
 import { deleteCard, getCardCategories, getCardData } from '@shared/redux/slices/adminCardsSlice';
 import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { EditLabelDialog } from '@admin/pages/LabelDialog/EditLabelDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CardAddDialog } from './CardAddDialog';
@@ -152,6 +153,7 @@ export function CardsListPage() {
     const handleEdit = async (cardId: number) => {
         setIsLoading(true);
         const cardData = await dispatch(getCardData(cardId));
+        dispatch(manageCardDialogActions.setSelectedCategory(cardData.payload.data.cardCategory));
         setUpdateCardData(cardData.payload.data);
         setAddCardDialog(true);
         setIsLoading(false);

@@ -39,7 +39,7 @@ class OrderService
     }
 
     /**
-     * @return LengthAwarePaginator
+     * @return LengthAwarePaginator<Order>
      */
     public function getOrders(): LengthAwarePaginator
     {

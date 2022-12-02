@@ -146,7 +146,7 @@ class CardProductService
     }
 
     /**
-     * @return LengthAwarePaginator
+     * @return LengthAwarePaginator<CardProduct>
      */
     public function getCards(): LengthAwarePaginator
     {

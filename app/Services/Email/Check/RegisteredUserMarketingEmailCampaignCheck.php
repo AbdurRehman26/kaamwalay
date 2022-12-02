@@ -19,6 +19,10 @@ class RegisteredUserMarketingEmailCampaignCheck implements ShouldStillSendCheckI
             return false;
         }
 
+        if (! $user->wantsToReceiveMarketingContent()) {
+            return false;
+        }
+
         return $user->orders()->placed()->count() === 0;
     }
 }

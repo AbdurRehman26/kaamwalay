@@ -21,4 +21,6 @@ export class SignUpRequestDto {
     @ValidateIf((dto) => typeof dto.phone !== 'undefined' && dto.phone !== '')
     @IsPhoneNumber('US', createErrorMessageOption(ErrorMessages.ShouldBeValidPhoneNumber, 'Phone'))
     public phone?: string;
+
+    public isMarketingNotificationsEnabled!: boolean;
 }

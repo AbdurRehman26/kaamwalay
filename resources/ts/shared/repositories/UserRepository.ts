@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Injectable } from '@shared/decorators/Injectable';
 import { ChangeUserPasswordDto } from '@shared/dto/ChangeUserPasswordDto';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { ToggleCustomerMarketingNotificationsEnabledDto } from '@shared/dto/ToggleCustomerMarketingNotificationsEnabledDto';
 import { UpdateUserProfileDto } from '@shared/dto/UpdateUserProfileDto';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { AddressStateEntity } from '@shared/entities/AddressStateEntity';
@@ -53,5 +54,11 @@ export class UserRepository extends Repository<UserEntity> {
         const { data } = await this.endpoint.post('/customer/profile/delete');
 
         return data;
+    }
+
+    public async toggleMarketingNotifications(input: ToggleCustomerMarketingNotificationsEnabledDto) {
+        const { data } = await this.endpoint.put('/customer/profile/toggle-marketing-notifications', input);
+
+        return this.toEntity(data);
     }
 }

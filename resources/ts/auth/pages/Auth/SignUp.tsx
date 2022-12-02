@@ -31,6 +31,7 @@ export function SignUp() {
             phone: '',
             password: '',
             passwordConfirmation: '',
+            isMarketingNotificationsEnabled: true,
         }),
         [],
     );

@@ -1,5 +1,7 @@
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
@@ -28,6 +30,7 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
             phone: '',
             password: '',
             passwordConfirmation: '',
+            isMarketingNotificationsEnabled: true,
         }),
         [],
     );
@@ -57,38 +60,54 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
             validationSchema={PopupSignUpValidationRules}
             validateOnChange
         >
-            <Form>
-                <Grid container marginTop={4} sx={{ padding: '24px 24px 0 24px' }}>
-                    <FormRoot>
-                        <FormInput type={'text'} label={'Full Name'} name={'fullName'} />
-                    </FormRoot>
+            {({ values, handleChange }) => (
+                <Form>
+                    <Grid container marginTop={4} sx={{ padding: '24px 24px 0 24px' }}>
+                        <FormRoot>
+                            <FormInput type={'text'} label={'Full Name'} name={'fullName'} />
+                        </FormRoot>
 
-                    <FormRoot>
-                        <FormInput type={'text'} label={'Email'} name={'email'} />
-                    </FormRoot>
+                        <FormRoot>
+                            <FormInput type={'text'} label={'Email'} name={'email'} />
+                        </FormRoot>
 
-                    <FormRoot>
-                        <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
-                    </FormRoot>
+                        <FormRoot>
+                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
+                        </FormRoot>
 
-                    <FormRoot>
-                        <FormInput type={'password'} label={'Create Password'} name={'password'} />
-                    </FormRoot>
+                        <FormRoot>
+                            <FormInput type={'password'} label={'Create Password'} name={'password'} />
+                        </FormRoot>
 
-                    <FormRoot>
-                        <SubmitButton isModal>Sign up</SubmitButton>
-                    </FormRoot>
-                </Grid>
-                <Divider />
-                <ActionContent>
-                    <Typography align={'center'} variant={'caption'} marginRight={2}>
-                        Already have an account?
-                    </Typography>
-                    <Button variant={'text'} onClick={handleSignInClick}>
-                        Log In
-                    </Button>
-                </ActionContent>
-            </Form>
+                        <FormRoot>
+                            <FormControlLabel
+                                name={'isMarketingNotificationsEnabled'}
+                                control={
+                                    <Checkbox
+                                        checked={values.isMarketingNotificationsEnabled}
+                                        onChange={handleChange}
+                                    />
+                                }
+                                label={'Opt in to receive updates & promotions from AGS via email and text.'}
+                                sx={{ 'margin-bottom': 24 }}
+                            />
+                        </FormRoot>
+
+                        <FormRoot>
+                            <SubmitButton isModal>Sign up</SubmitButton>
+                        </FormRoot>
+                    </Grid>
+                    <Divider />
+                    <ActionContent>
+                        <Typography align={'center'} variant={'caption'} marginRight={2}>
+                            Already have an account?
+                        </Typography>
+                        <Button variant={'text'} onClick={handleSignInClick}>
+                            Log In
+                        </Button>
+                    </ActionContent>
+                </Form>
+            )}
         </Formik>
     );
 }

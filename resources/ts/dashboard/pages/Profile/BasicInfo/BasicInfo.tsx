@@ -1,8 +1,12 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
@@ -10,7 +14,7 @@ import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
+import { toggleMarketingNotifications, updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
 import { BasicInfoRow } from './BasicInfoRow';
 import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
 import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
@@ -117,6 +121,13 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '12px',
         color: '#20BFB8',
     },
+    marketingEnabledFormControl: {
+        paddingLeft: 20,
+        marginBottom: 26,
+    },
+    marketingEnabledFirstRadio: {
+        marginRight: 52,
+    },
 }));
 
 const CustomTextField = withStyles({
@@ -157,6 +168,10 @@ export function BasicInfo() {
 
     const [showAskForPasswordDialog, setShowAskForPasswordDialog] = useState<boolean>(false);
     const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
+
+    const [isMarketingNotificationsEnabled, setIsMarketingNotificationsEnabled] = useState<boolean>(
+        user$.isMarketingNotificationsEnabled,
+    );
 
     const toggleAskForPasswordDialog = useCallback(() => {
         setShowAskForPasswordDialog((prev) => !prev);
@@ -368,6 +383,18 @@ export function BasicInfo() {
         hideRows();
     }, [dispatch, currentPassword, newPassword, confirmPassword]);
 
+    const handleMarketingNotificationsEnabledChange = useCallback(
+        (e) => {
+            setIsMarketingNotificationsEnabled(e.target.value);
+
+            dispatch(
+                toggleMarketingNotifications({
+                    isMarketingNotificationsEnabled: e.target.value === 'true',
+                }),
+            );
+        },
+        [dispatch],
+    );
     return (
         <>
             <ConfirmUserPasswordDialog
@@ -533,7 +560,27 @@ export function BasicInfo() {
                     </div>
                 </BasicInfoRow>
             </SettingsSection>
-
+            <SettingsSection headline={'Text/Email Notifications'}>
+                <Typography className={classes.valueLabel} pl={2.5} pb={2}>
+                    Would you like to receive email/text updates & promotions from AGS?
+                </Typography>
+                <FormControl className={classes.marketingEnabledFormControl}>
+                    <RadioGroup
+                        row
+                        name="isMarketingNotificationsEnabled"
+                        value={isMarketingNotificationsEnabled}
+                        onChange={handleMarketingNotificationsEnabledChange}
+                    >
+                        <FormControlLabel
+                            value={true}
+                            control={<Radio />}
+                            label="Yes"
+                            className={classes.marketingEnabledFirstRadio}
+                        />
+                        <FormControlLabel value={false} control={<Radio />} label="No" />
+                    </RadioGroup>
+                </FormControl>
+            </SettingsSection>
             <ProfileActions />
         </>
     );

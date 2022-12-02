@@ -71,7 +71,7 @@ class UserCardService
         $itemsPerPage = request('per_page');
 
         return UserCard::with([
-            'orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory', 'user'
+            'orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory', 'user',
         ])
             ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
             ->join('orders', 'orders.id', '=', 'order_items.order_id')

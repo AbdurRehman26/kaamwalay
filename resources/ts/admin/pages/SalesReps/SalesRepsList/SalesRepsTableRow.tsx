@@ -14,6 +14,7 @@ import { SalesRapStatusEnum } from '@shared/constants/SalesRapStatusEnum';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { removeSalesRepRoleFromUser, setSalesRep, setSalesRepActive } from '@shared/redux/slices/adminSalesRepSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -143,7 +144,7 @@ export function SalesRepsTableRow({ salesRep, setUpdateDialog }: SalesRepsTableR
                     {salesRep.orders ?? '-'}
                 </TableCell>
                 <TableCell align="center" variant={'body'}>
-                    {salesRep.commissionEarned ?? '-'}
+                    {formatCurrency(salesRep.commissionEarned ?? 0)}
                 </TableCell>
                 {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}
                 <TableCell variant={'body'} align={'center'}>
@@ -154,7 +155,7 @@ export function SalesRepsTableRow({ salesRep, setUpdateDialog }: SalesRepsTableR
                     )}
                 </TableCell>
                 <TableCell variant={'body'} align={'center'}>
-                    {salesRep.sales || 0}
+                    {formatCurrency(salesRep.sales ?? 0)}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <IconButton onClick={handleClickOptions} size="large">

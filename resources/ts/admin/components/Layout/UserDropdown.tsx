@@ -80,9 +80,9 @@ export function UserDropdown() {
                 {isSaleRep ? (
                     <StyledMenuItem onClick={handleUserProfileClick('/salesrep')}>
                         <ListItemIcon>
-                            <Face />
+                            <Face sx={{ color: 'black' }} />
                         </ListItemIcon>
-                        SalesRep
+                        Sales Rep
                     </StyledMenuItem>
                 ) : null}
                 <Divider />

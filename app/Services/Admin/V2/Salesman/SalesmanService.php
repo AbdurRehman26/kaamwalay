@@ -230,7 +230,7 @@ class SalesmanService
             case 'commission_paid':
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
             case 'orders':
-                return $user->salesmanOrders()->whereBetween('created_at', [$startDate, $endDate])->count();
+                return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->count();
             case 'cards':
                 return 0;
             default:

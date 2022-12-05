@@ -92,7 +92,7 @@ class SalesmanDashboardService
                 return $salesmanStatsService->getCommissionsEarned($user) - $user->receivedCommissionTotal();
             }
             case 'orders':
-                return $user->salesmanOrders()->whereBetween('created_at', [$startDate, $endDate])->count();
+                return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->count();
             case 'cards':
                 return 0;
             default:

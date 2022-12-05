@@ -232,7 +232,7 @@ class SalesmanService
             case 'orders':
                 return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->count();
             case 'cards':
-                return 0;
+                return $user->getSalesmanCardsCount($startDate, $endDate);
             default:
                 return 0;
         }

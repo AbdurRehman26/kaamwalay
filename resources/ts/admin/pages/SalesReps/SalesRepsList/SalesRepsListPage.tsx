@@ -309,6 +309,9 @@ export function SalesRepsListPage() {
                                     Orders
                                 </TableCell>
                                 <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
+                                    Cards
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center">
                                     Commission Earned
                                 </TableCell>
                                 {/* <TableCell sx={{ fontSize: '12px', fontWeight: '500' }} align="center" >Commission Paid</TableCell> */}

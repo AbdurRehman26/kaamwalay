@@ -38,7 +38,7 @@ class SalesmanResource extends BaseResource
             'sales' => $this->salesmanOrders()->sum('grand_total'),
             'customers' => $this->salesmanCustomersCount(),
             'orders' => $this->salesmanOrders()->count(),
-            'cards' => 0,
+            'cards' => $this->getSalesmanCardsCount(),
             'unpaid_commission' => $this->salesmanProfile->earnedCommission() - $paidCommission,
             'unpaid_commission_till_last_month' => $this->salesmanProfile->earnedCommissionTillLastMonth() - $paidCommission,
             'paid_commission' => $paidCommission,

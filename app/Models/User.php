@@ -523,4 +523,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         return $this->is_marketing_notifications_enabled;
     }
+
+    public function getSalesmanCardsCount(string $startDate = '', string $endDate = ''): int
+    {
+        $query = $this->salesmanOrders()->paid()->withSum('orderItems', 'quantity');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        return $query->get()->sum('order_items_sum_quantity');
+    }
 }

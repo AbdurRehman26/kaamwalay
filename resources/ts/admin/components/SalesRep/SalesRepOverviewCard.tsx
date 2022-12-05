@@ -31,6 +31,7 @@ interface SalesRepOverviewCardProps {
     hint?: string;
     timeFilters?: boolean;
     statName?: string;
+    formatAsCurrency?: boolean;
     addButton?: boolean;
     onAddButtonClick?: () => void;
 }
@@ -72,6 +73,7 @@ export function SalesRepOverviewCard({
     hint = '',
     timeFilters = false,
     statName = '',
+    formatAsCurrency = true,
     addButton = false,
     onAddButtonClick = () => {},
 }: SalesRepOverviewCardProps) {
@@ -101,7 +103,15 @@ export function SalesRepOverviewCard({
                     timeFilter: timeFilter.value,
                 })
                 .then((response) => {
-                    setCardValue(response.data);
+                    if (
+                        typeof response.data === 'object' &&
+                        response.data !== null &&
+                        response.data.hasOwnProperty('data')
+                    ) {
+                        setCardValue(response.data.data);
+                    } else {
+                        setCardValue(response.data);
+                    }
                 });
         }
     }, [id, statName, timeFilter]);
@@ -159,7 +169,7 @@ export function SalesRepOverviewCard({
                 <Grid display={'flex'} mt={2} alignItems={'center'}>
                     <Grid>
                         <Typography variant={'h4'} className={classes.cardValue}>
-                            {formatCurrency(cardValue || 0)}
+                            {formatAsCurrency ? formatCurrency(cardValue || 0) : cardValue}
                         </Typography>
                     </Grid>
                 </Grid>

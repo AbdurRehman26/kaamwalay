@@ -13,7 +13,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -160,9 +159,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                <TableCell>
-                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
-                </TableCell>
+                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
@@ -173,17 +170,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     </Grid>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (
-                            <>
-                                <MenuItem onClick={() => navigate(`/submissions/${order.id}/view`)}>
-                                    View Submission
-                                </MenuItem>
-                            </>
-                        ) : (
-                            <>
-                                <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
-                            </>
-                        )}
+                        <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
                     </Menu>
                 </TableCell>
             </TableRow>

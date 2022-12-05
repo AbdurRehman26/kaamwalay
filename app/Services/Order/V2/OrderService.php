@@ -3,6 +3,7 @@
 namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\Coupon;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -260,5 +261,13 @@ class OrderService extends V1OrderService
             $order->discounted_amount -
             $order->refund_total +
             $order->extra_charge_total;
+    }
+
+    public function attachCouponToOrder(Order $order, Coupon $coupon, float $discountedAmount)
+    {
+        $order->coupon()->associate($coupon);
+        $order->discounted_amount = $discountedAmount;
+
+        $this->recalculateGrandTotal($order)->saveOrder($order);
     }
 }

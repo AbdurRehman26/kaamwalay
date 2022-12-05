@@ -263,7 +263,7 @@ class OrderService extends V1OrderService
             $order->extra_charge_total;
     }
 
-    public function attachCouponToOrder(Order $order, Coupon $coupon, float $discountedAmount)
+    public function attachCouponToOrder(Order $order, Coupon $coupon, float $discountedAmount): void
     {
         $order->coupon()->associate($coupon);
         $order->discounted_amount = $discountedAmount;

@@ -5,9 +5,12 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
+
+uses(WithFaker::class);
 
 beforeEach(function () {
     $this->seed([
@@ -40,6 +43,14 @@ beforeEach(function () {
         'order_status_id' => 1,
         'salesman_id' => $this->user->id,
     ]);
+
+    User::factory()->withRole(config('permission.roles.customer'))
+        ->count(10)
+        ->create([
+            'first_name' => $this->faker()->firstName,
+            'created_at' => now()->addDays(4)->toDateString(),
+            'salesman_id' => $this->user->id,
+        ]);
 
     actingAs($this->user);
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\Order;
 use App\Models\User;
@@ -299,6 +300,7 @@ test('an admin can get overview stats for a salesman', function () {
     $order = Order::factory()->create([
         'salesman_id' => $salesman->id,
         'user_id' => $user->id,
+        'payment_status' => OrderPaymentStatusEnum::PAID,
     ]);
 
     actingAs($this->user);

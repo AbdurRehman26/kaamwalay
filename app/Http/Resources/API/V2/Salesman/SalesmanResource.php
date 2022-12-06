@@ -35,7 +35,7 @@ class SalesmanResource extends BaseResource
             'commission_value' => $this->salesmanProfile->commission_value,
             'status' => $this->salesmanProfile->is_active,
             'commission_earned' => $this->salesmanProfile->earnedCommission(),
-            'sales' => $this->salesmanOrders()->sum('grand_total'),
+            'sales' => $this->salesmanOrders()->paid()->sum('grand_total'),
             'customers' => $this->salesmanCustomersCount(),
             'orders' => $this->salesmanOrders()->count(),
             'cards' => $this->getSalesmanCardsCount(),

@@ -149,9 +149,6 @@ export function CustomerView() {
                     </Button>
                     <OptionsMenu onClick={handleOption}>
                         <OptionsMenuItem action={RowOption.CreditCustomer}>Credit Customer</OptionsMenuItem>
-                        {data.createdBy && !data.lastLoginAt ? (
-                            <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
-                        ) : null}
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog

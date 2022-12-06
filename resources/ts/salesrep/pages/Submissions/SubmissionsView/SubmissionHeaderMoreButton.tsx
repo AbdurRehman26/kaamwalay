@@ -18,13 +18,7 @@ const useStyles = makeStyles(
 );
 
 enum Options {
-    AddExtraCharge,
-    IssueRefund,
     CustomerCredit,
-    ViewGrades,
-    CancelOrder,
-    MarkAsPaid,
-    GenerateLabel,
 }
 
 interface SubmissionHeaderMoreButtonProps {

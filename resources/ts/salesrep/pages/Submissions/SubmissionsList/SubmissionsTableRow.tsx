@@ -25,6 +25,7 @@ import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
+    headings?: Array<any>;
     isSalesRepDetailPage?: boolean;
 }
 
@@ -47,13 +48,7 @@ const useStyles = makeStyles(
     { name: 'SubmissionsTableRow' },
 );
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: SubmissionsTableRow
- * @date: 15.09.2021
- * @time: 04:42
- */
-export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
@@ -116,51 +111,79 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     );
 
     const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
-
+    console.log(headings);
     return (
         <>
             <TableRow>
-                <TableCell>
-                    <MuiLink
-                        component={Link}
-                        color={'primary'}
-                        to={`/submissions/${order.id}/view`}
-                        className={font.fontWeightMedium}
-                    >
-                        {order.orderNumber}
-                    </MuiLink>
-                </TableCell>
-                <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                <>
-                    <TableCell>
-                        {order.customer?.id && order.customer?.customerNumber ? (
+                {!headings ||
+                    (headings?.includes('order_number') && (
+                        <TableCell>
                             <MuiLink
                                 component={Link}
                                 color={'primary'}
-                                to={`/customers/${order.customer?.id}/view`}
+                                to={`/submissions/${order.id}/view`}
                                 className={font.fontWeightMedium}
                             >
-                                {order.customer?.customerNumber}
+                                {order.orderNumber}
                             </MuiLink>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                </>
-                <TableCell>{order.numberOfCards}</TableCell>
-                <TableCell>
-                    <StatusChip label={statusLabel} color={statusType} />
-                </TableCell>
-                <TableCell>
-                    <PaymentStatusChip
-                        color={order?.paymentStatus}
-                        label={PaymentStatusMap[order?.paymentStatus]}
-                        mode={'admin'}
-                    />
-                </TableCell>
-                <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
-                <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
+                        </TableCell>
+                    ))}
+
+                {!headings ||
+                    (headings?.includes('created_at') && (
+                        <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
+                    ))}
+
+                {!headings ||
+                    (headings?.includes('customer_number') && (
+                        <TableCell>
+                            {order.customer?.id && order.customer?.customerNumber ? (
+                                <MuiLink
+                                    component={Link}
+                                    color={'primary'}
+                                    to={`/customers/${order.customer?.id}/view`}
+                                    className={font.fontWeightMedium}
+                                >
+                                    {order.customer?.customerNumber}
+                                </MuiLink>
+                            ) : (
+                                '-'
+                            )}
+                        </TableCell>
+                    ))}
+
+                {!headings || (headings?.includes('cards') && <TableCell>{order.numberOfCards}</TableCell>)}
+
+                {!headings ||
+                    (headings?.includes('status') && (
+                        <TableCell>
+                            <StatusChip label={statusLabel} color={statusType} />
+                        </TableCell>
+                    ))}
+
+                {!headings ||
+                    (headings?.includes('payment_status') && (
+                        <TableCell>
+                            <PaymentStatusChip
+                                color={order?.paymentStatus}
+                                label={PaymentStatusMap[order?.paymentStatus]}
+                                mode={'admin'}
+                            />
+                        </TableCell>
+                    ))}
+
+                {!headings ||
+                    (headings?.includes('total_declared_value') && (
+                        <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                    ))}
+
+                {!headings ||
+                    (headings?.includes('grand_total') && <TableCell>{formatCurrency(order.grandTotal)}</TableCell>)}
+
+                {!headings ||
+                    (headings?.includes('commission') && (
+                        <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
+                    ))}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}

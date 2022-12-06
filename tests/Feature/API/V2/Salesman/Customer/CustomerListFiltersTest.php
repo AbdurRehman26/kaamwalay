@@ -20,12 +20,12 @@ beforeEach(function () {
         ->create([
             'first_name' => 'test_first_name',
             'created_at' => now()->subDays(10)->toDateString(),
-            'salesman_id' => $this->user->id
+            'salesman_id' => $this->user->id,
         ]);
 
     $this->orders = Order::factory()->for($this->customer)->count(10)->create([
         'order_status_id' => 5,
-        'salesman_id' => $this->user->id
+        'salesman_id' => $this->user->id,
     ]);
 
     OrderStatusHistory::factory()->count(5)->sequence(
@@ -38,7 +38,7 @@ beforeEach(function () {
 
     Order::factory()->count(10)->create([
         'order_status_id' => 1,
-        'salesman_id' => $this->user->id
+        'salesman_id' => $this->user->id,
     ]);
 
     actingAs($this->user);

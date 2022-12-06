@@ -18,10 +18,10 @@ beforeEach(function () {
 
     $this->user = User::factory()->withSalesmanRole()->create();
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create([
-        'salesman_id' => $this->user->id
+        'salesman_id' => $this->user->id,
     ]);
     Order::factory()->for($this->customer)->count(10)->create([
-        'salesman_id' => $this->user->id
+        'salesman_id' => $this->user->id,
     ]);
 });
 

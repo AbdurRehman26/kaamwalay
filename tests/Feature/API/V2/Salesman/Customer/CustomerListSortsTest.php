@@ -15,7 +15,7 @@ beforeEach(function () {
 
     $this->user = User::factory()->withSalesmanRole()->create();
     User::factory()->count(20)->withRole(config('permission.roles.customer'))->create([
-        'salesman_id' => $this->user->id
+        'salesman_id' => $this->user->id,
     ]);
     actingAs($this->user);
 });

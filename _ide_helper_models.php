@@ -29,8 +29,10 @@ namespace App\Models{
  * @property string $name
  * @property string|null $image_url
  * @property int $is_enabled
+ * @property int|null $card_category_type_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CardCategoryType|null $cardCategoryType
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardProduct[] $cardProducts
  * @property-read int|null $card_products_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardRarity[] $cardRarities
@@ -46,6 +48,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCardCategoryTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereImageUrl($value)
@@ -54,6 +57,78 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereUpdatedAt($value)
  */
 	class CardCategory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardCategoryType
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardCategory[] $cardCategories
+ * @property-read int|null $card_categories_count
+ * @method static \Database\Factories\CardCategoryTypeFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType whereUpdatedAt($value)
+ */
+	class CardCategoryType extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardEditionAbbreviation
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $abbreviation
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation whereAbbreviation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardEditionAbbreviation whereUpdatedAt($value)
+ */
+	class CardEditionAbbreviation extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardLabel
+ *
+ * @property int $id
+ * @property int $card_product_id
+ * @property string $line_one
+ * @property string $line_two
+ * @property string $line_three
+ * @property string $line_four
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CardProduct $cardProduct
+ * @method static \Database\Factories\CardLabelFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereCardProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereLineFour($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereLineOne($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereLineThree($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereLineTwo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardLabel whereUpdatedAt($value)
+ */
+	class CardLabel extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -83,14 +158,25 @@ namespace App\Models{
  * @property string|null $description
  * @property int $added_manually
  * @property int|null $added_by
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\User|null $addedBy
  * @property-read \App\Models\CardCategory|null $cardCategory
+ * @property-read \App\Models\CardLabel|null $cardLabel
  * @property-read \App\Models\CardSet|null $cardSet
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
+ * @property-read int|null $order_items_count
+ * @property-read \App\Models\PopReportsCard|null $popReportsCard
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCard[] $userCards
+ * @property-read int|null $user_cards_count
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct canBeInitializedInPopReport()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct cardCategory(int $categoryId)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct excludeAddedManually()
  * @method static \Database\Factories\CardProductFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newQuery()
+ * @method static \Illuminate\Database\Query\Builder|CardProduct onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct releaseDate(string $startDate, string $endDate)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereAddedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereAddedManually($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardCategoryId($value)
@@ -100,6 +186,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardSetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereEdition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereHoloType($value)
@@ -114,6 +201,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariant($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantCategory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantName($value)
+ * @method static \Illuminate\Database\Query\Builder|CardProduct withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|CardProduct withoutTrashed()
  */
 	class CardProduct extends \Eloquent {}
 }
@@ -128,6 +217,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity cardCategory(int $categoryId)
+ * @method static \Database\Factories\CardRarityFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity query()
@@ -155,6 +246,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
  * @property-read int|null $card_sets_count
  * @property-read string $release_date
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeries category(\App\Models\CardCategory $cardCategory)
  * @method static \Database\Factories\CardSeriesFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newQuery()
@@ -168,6 +260,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries whereUpdatedAt($value)
  */
 	class CardSeries extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardSeriesAbbreviation
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $abbreviation
+ * @property string $language
+ * @property int $card_category_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation category(\App\Models\CardCategory $category)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation language(string $language)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereAbbreviation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereCardCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereLanguage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSeriesAbbreviation whereUpdatedAt($value)
+ */
+	class CardSeriesAbbreviation extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -218,6 +337,33 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\CardSetAbbreviation
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $abbreviation
+ * @property string $language
+ * @property int $card_category_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation category(\App\Models\CardCategory $category)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation language(string $language)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereAbbreviation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereCardCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereLanguage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSetAbbreviation whereUpdatedAt($value)
+ */
+	class CardSetAbbreviation extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\CardSurface
  *
  * @property int $id
@@ -226,9 +372,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface cardCategory(int $categoryId)
+ * @method static \Database\Factories\CardSurfaceFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface search(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereCardCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereId($value)
@@ -236,6 +385,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereUpdatedAt($value)
  */
 	class CardSurface extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardSurfaceAbbreviation
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $abbreviation
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation whereAbbreviation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurfaceAbbreviation whereUpdatedAt($value)
+ */
+	class CardSurfaceAbbreviation extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -267,10 +437,7 @@ namespace App\Models{
 }
 
 namespace App\Models{
-
-    use App\Enums\Coupon\CouponMinThresholdTypeEnum;
-
-    /**
+/**
  * App\Models\Coupon
  *
  * @property int $id
@@ -285,8 +452,8 @@ namespace App\Models{
  * @property string $discount_value
  * @property bool $is_capped
  * @property float|null $capped_amount
- * @property CouponMinThresholdTypeEnum $min_threshold_type
- * @property int $min_threshold_value
+ * @property \App\Enums\Coupon\CouponMinThresholdTypeEnum $min_threshold_type 0 => No threshold, 1 => card count, 2 => amount
+ * @property int $min_threshold_value when 0 it means no threshold
  * @property $available_from
  * @property |null $available_till if its null then the coupon is permanent
  * @property int $coupon_applicable_id
@@ -305,6 +472,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Database\Factories\CouponFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
@@ -329,6 +497,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereIsCapped($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMaxUsageAllowed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
@@ -545,6 +715,39 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\DatabaseNotification
+ *
+ * @property string $id
+ * @property string $type
+ * @property string $notifiable_type
+ * @property int $notifiable_id
+ * @property array $data
+ * @property \Illuminate\Support\Carbon|null $read_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notifiable
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] all($columns = ['*'])
+ * @method static \Database\Factories\DatabaseNotificationFactory factory(...$parameters)
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] get($columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification read()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification unread()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereNotifiableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereNotifiableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereReadAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification whereUpdatedAt($value)
+ */
+	class DatabaseNotification extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\HubspotDeal
  *
  * @property int $id
@@ -650,26 +853,32 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $notes
+ * @property int|null $created_by
  * @property int|null $reviewed_by_id
  * @property int|null $graded_by_id
  * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property \Illuminate\Support\Carbon|null $shipped_at
  * @property \Illuminate\Support\Carbon|null $paid_at
+ * @property string|null $salesman_commission
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments
  * @property-read int|null $all_payments_count
  * @property-read \App\Models\OrderAddress|null $billingAddress
  * @property-read \App\Models\Coupon|null $coupon
+ * @property-read \App\Models\User|null $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
  * @property-read int|null $extra_charges_count
  * @property-read \App\Models\OrderPayment|null $firstOrderPayment
  * @property-read int $grand_total_cents
  * @property-read float $grand_total_to_be_paid
  * @property-read \App\Models\User|null $gradedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $gradedOrderItems
+ * @property-read int|null $graded_order_items_count
  * @property-read \App\Models\Invoice|null $invoice
  * @property-read \App\Models\OrderPayment|null $lastOrderPayment
+ * @property-read \App\Models\OrderCertificate|null $orderCertificate
  * @property-read \App\Models\OrderCustomerShipment|null $orderCustomerShipment
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
  * @property-read int|null $order_items_count
@@ -697,12 +906,14 @@ namespace App\Models{
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forDate(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forMonth(string $date)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order forSalesman(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order paid()
  * @method static \Illuminate\Database\Eloquent\Builder|Order placed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order salesmanId(string $salesmanId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order status(string|int $status)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmountPaidFromWallet($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereArrivedAt($value)
@@ -711,6 +922,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCleaningFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscountedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereEstimatedDeliveryEndAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereEstimatedDeliveryStartAt($value)
@@ -737,6 +949,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresCleaning($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanCommission($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippedAt($value)
@@ -786,6 +999,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress whereZip($value)
  */
 	class OrderAddress extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\OrderCertificate
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property string $path
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCertificate whereUpdatedAt($value)
+ */
+	class OrderCertificate extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -845,7 +1079,6 @@ namespace App\Models{
  * @property-read int|null $order_item_status_history_count
  * @property-read \App\Models\UserCard|null $userCard
  * @method static \Database\Factories\OrderItemFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderItem forOrder(\App\Models\Order $order)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
@@ -1233,6 +1466,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
  * @property-read int|null $coupons_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlanRange[] $paymentPlanRanges
+ * @property-read int|null $payment_plan_ranges_count
  * @method static \Database\Factories\PaymentPlanFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
@@ -1254,6 +1489,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|PaymentPlan withoutTrashed()
  */
 	class PaymentPlan extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PaymentPlanRange
+ *
+ * @property int $id
+ * @property int $payment_plan_id
+ * @property int $min_cards
+ * @property int|null $max_cards
+ * @property float $price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\PaymentPlan $paymentPlan
+ * @method static \Database\Factories\PaymentPlanRangeFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange whereMaxCards($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange whereMinCards($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange wherePaymentPlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange whereUpdatedAt($value)
+ */
+	class PaymentPlanRange extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1286,6 +1548,7 @@ namespace App\Models{
  * @property int $total_plus
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $population
  * @property-read \App\Models\CardProduct $cardProduct
  * @method static \Database\Factories\PopReportsCardFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newModelQuery()
@@ -1309,6 +1572,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard whereNmMt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard whereNmMtPlus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard whereNmPlus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard wherePopulation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard wherePr($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard whereTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard whereTotalPlus($value)
@@ -1497,6 +1761,111 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Salesman
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property \App\Enums\Salesman\CommissionTypeEnum $commission_type 0 => percentage, 1 => fixed
+ * @property string $commission_value
+ * @property int|null $is_active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalesmanEarnedCommission[] $salesmanEarnedCommissions
+ * @property-read int|null $salesman_earned_commissions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereCommissionType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereCommissionValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salesman whereUserId($value)
+ */
+	class Salesman extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SalesmanCommission
+ *
+ * @property int $id
+ * @property int $salesman_id
+ * @property string $event_at
+ * @property string $commission
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereCommission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereEventAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereSalesmanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommission whereUpdatedAt($value)
+ */
+	class SalesmanCommission extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SalesmanCommissionPayment
+ *
+ * @property int $id
+ * @property int $salesman_id
+ * @property int $added_by_id
+ * @property string $amount
+ * @property string|null $file_url
+ * @property string|null $notes
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $addedBy
+ * @property-read \App\Models\User $salesman
+ * @method static \Database\Factories\SalesmanCommissionPaymentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereAddedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereFileUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereSalesmanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment whereUpdatedAt($value)
+ */
+	class SalesmanCommissionPayment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SalesmanEarnedCommission
+ *
+ * @property int $id
+ * @property int $salesman_id
+ * @property int|null $order_id
+ * @property int $type 1 => Order Created, 2 => Order Refunded
+ * @property string $commission
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereCommission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereSalesmanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalesmanEarnedCommission whereUpdatedAt($value)
+ */
+	class SalesmanEarnedCommission extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\ScheduledEmail
  *
  * @property int $id
@@ -1601,10 +1970,12 @@ namespace App\Models{
 /**
  * App\Models\User
  *
+ * @property-read int $paid_orders_count
+ * @property-read int $order_items_sum_quantity
  * @property int $id
  * @property string|null $first_name
  * @property string|null $last_name
- * @property string $email
+ * @property string|null $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $username
  * @property string $password
@@ -1633,6 +2004,8 @@ namespace App\Models{
  * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
+ * @property-read int|null $order_items_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
  * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
@@ -1640,21 +2013,27 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
  * @property-read User|null $salesman
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalesmanCommissionPayment[] $salesmanCommissionPayments
+ * @property-read int|null $salesman_commission_payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $salesmanOrders
+ * @property-read int|null $salesman_orders_count
+ * @property-read \App\Models\Salesman|null $salesmanProfile
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read \App\Models\Wallet|null $wallet
- * @property-read int|null $order_items_sum_quantity
- * @property-read int|null $paid_orders_count
  * @method static \Illuminate\Database\Eloquent\Builder|User admin()
  * @method static \Illuminate\Database\Eloquent\Builder|User customer()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User isActiveSalesman(bool $value)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|User salesman()
+ * @method static \Illuminate\Database\Eloquent\Builder|User salesmanId(string $salesmanId)
+ * @method static \Illuminate\Database\Eloquent\Builder|User salesmanSignedUpBetween(string $startDate, string $endDate)
+ * @method static \Illuminate\Database\Eloquent\Builder|User salesmen()
  * @method static \Illuminate\Database\Eloquent\Builder|User signedUpBetween(string $startDate, string $endDate)
  * @method static \Illuminate\Database\Eloquent\Builder|User submissions(string $minSubmissionCount, string $maxSubmissionCount)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAgsAccessToken($value)
@@ -1703,7 +2082,7 @@ namespace App\Models{
  * @property array|null $generated_images
  * @property \App\Enums\UserCard\UserCardShippingStatus|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
  * @property bool|null $is_fake
- * @property mixed|null $social_images
+ * @property array|null $social_images
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta

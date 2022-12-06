@@ -45,12 +45,6 @@ const StyledPopover = styled(Popover)(({ theme }) => ({
     },
 }));
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: ListPageSelector
- * @date: 23.12.2021
- * @time: 22:37
- */
 export function ListPageSelector({ label, active, value, onClear, children }: PropsWithChildren<Props>) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 

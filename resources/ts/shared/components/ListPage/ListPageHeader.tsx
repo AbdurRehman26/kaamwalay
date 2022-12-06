@@ -33,12 +33,6 @@ const Root = styled(Grid)(() => ({
     },
 }));
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: ListPageHeader
- * @date: 23.12.2021
- * @time: 21:44
- */
 export function ListPageHeader({ title, searchField, value, onSearch, children, headerActions, ...rest }: Props) {
     const [search, setSearch] = useState(value ?? '');
 

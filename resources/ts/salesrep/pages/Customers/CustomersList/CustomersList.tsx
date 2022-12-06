@@ -1,4 +1,3 @@
-import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -9,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { CustomerAddDialog } from '@salesrep/components/Customer/CustomerAddDialog';
-import { useAppDispatch } from '@salesrep/redux/hooks';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -21,20 +19,13 @@ import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCe
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
-import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
-import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
-import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { useSalesRepCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { CustomerTableRow } from './CustomerTableRow';
 
 type InitialValues = {
@@ -85,14 +76,6 @@ const headings: EnhancedTableHeadCell[] = [
         label: 'Cards',
         align: 'center',
         sortable: true,
-    },
-    {
-        id: 'owners',
-        numeric: true,
-        disablePadding: false,
-        label: 'Owners',
-        align: 'left',
-        sortable: false,
     },
     {
         id: 'customer_type',
@@ -146,12 +129,6 @@ const useStyles = makeStyles(
     },
 );
 
-/**
- * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: CustomersListPage
- * @date: 23.12.2021
- * @time: 21:39
- */
 export function CustomersList() {
     const classes = useStyles();
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
@@ -160,22 +137,8 @@ export function CustomersList() {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
-    const [isExporting, setIsExporting] = useState(false);
-    const dispatch = useAppDispatch();
-    const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        (async () => {
-            const data = await dispatch(getSalesReps());
-            setSalesRep(data.payload.data);
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const dataExportRepository = useRepository(DataExportRepository);
-    const notifications = useNotifications();
 
     const redirectToCustomerProfile = useCallback(
         (customer: CustomerEntity) => {
@@ -195,7 +158,7 @@ export function CustomersList() {
         [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
     );
 
-    const customers = useAdminCustomersQuery({
+    const customers = useSalesRepCustomersQuery({
         params: {
             include: ['salesman'],
             sort: sortFilter,
@@ -284,25 +247,6 @@ export function CustomersList() {
 
         formikRef.current?.submitForm();
     }, [order, orderBy]);
-
-    const handleExportData = useCallback(async () => {
-        try {
-            setIsExporting(true);
-            const exportData = await dataExportRepository.export({
-                model: ExportableModelsEnum.User,
-                sort: { sort: sortFilter },
-                filter: getFilters({
-                    ...formikRef.current!.values,
-                }),
-            });
-
-            await downloadFromUrl(exportData.fileUrl, `robograding-customers.xlsx`);
-            setIsExporting(false);
-        } catch (e: any) {
-            notifications.exception(e);
-            setIsExporting(false);
-        }
-    }, [dataExportRepository, notifications, sortFilter]);
 
     const headerActions = (
         <Button
@@ -421,18 +365,6 @@ export function CustomersList() {
                         )}
                     </Formik>
                 </Grid>
-                <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                    <LoadingButton
-                        variant={'outlined'}
-                        color={'primary'}
-                        sx={{ borderRadius: 20, padding: '7px 24px' }}
-                        onClick={handleExportData}
-                        loading={isExporting}
-                        disabled={isExporting}
-                    >
-                        Export List
-                    </LoadingButton>
-                </Grid>
             </Grid>
             <TableContainer>
                 <Table>
@@ -445,7 +377,7 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} salesReps={salesReps} />
+                            <CustomerTableRow customer={customer} />
                         ))}
                     </TableBody>
                     <TableFooter>

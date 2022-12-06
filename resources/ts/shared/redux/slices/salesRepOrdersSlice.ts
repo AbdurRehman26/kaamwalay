@@ -8,7 +8,7 @@ import { app } from '@shared/lib/app';
 import { OrdersRepository } from '@shared/repositories/SalesRep/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
 import { WalletEntity } from '../../entities/WalletEntity';
-import { WalletRepository } from '../../repositories/Admin/WalletRepository';
+import { WalletRepository } from '../../repositories/SalesRep/WalletRepository';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 

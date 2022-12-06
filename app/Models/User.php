@@ -531,6 +531,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         if ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
+
         return $query->get()->sum('order_items_sum_quantity');
     }
 }

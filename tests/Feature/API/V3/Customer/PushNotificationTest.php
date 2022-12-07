@@ -15,10 +15,10 @@ beforeEach(function () {
 test('a customer can see their push notifications', function () {
     $this->otherUser = User::factory()->create();
 
-    $notificationDataForCustomer = ['title' => 'Title1', 'body' => 'Body1', 'intent' =>[]];
+    $notificationDataForCustomer = ['title' => 'Title1', 'body' => 'Body1', 'intent' => []];
     DatabaseNotification::factory()->count(5)->create(['notifiable_id' => $this->user->id, 'data' => $notificationDataForCustomer]);
 
-    $notificationDataForOtherUser = ['title' => 'Title2', 'body' => 'Body2', 'intent' =>[]];
+    $notificationDataForOtherUser = ['title' => 'Title2', 'body' => 'Body2', 'intent' => []];
     DatabaseNotification::factory()->count(2)->create(['notifiable_id' => $this->otherUser->id, 'data' => $notificationDataForOtherUser]);
 
     $response = getJson(route('v3.customer.push-notifications.index'));
@@ -41,7 +41,7 @@ test('a customer can mark all notifications as read', function () {
 
     postJson(route('v3.customer.push-notifications.mark-all-as-read'))->assertOk()->assertJsonFragment([
         'success' => true,
-        'message' => 'All notifications have been marked as read.'
+        'message' => 'All notifications have been marked as read.',
     ]);
 
     assertDatabaseMissing('notifications', ['read_at' => null]);

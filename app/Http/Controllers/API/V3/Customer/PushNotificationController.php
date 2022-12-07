@@ -32,7 +32,7 @@ class PushNotificationController extends V2PushNotificationController
 
         return response()->json([
             'success' => true,
-            'message' => 'All notifications have been marked as read.'
+            'message' => 'All notifications have been marked as read.',
         ]);
     }
 }

@@ -203,6 +203,7 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                <TableCell>{order?.coupon?.code ?? '-'}</TableCell>
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 {isSalesRepDetailPage ? (
                     <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>

@@ -1,27 +1,29 @@
-import Check from '@mui/icons-material/Check';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import classNames from 'classnames';
 import { upperFirst } from 'lodash';
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
+import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -29,36 +31,13 @@ interface SubmissionsTableProps {
     search?: string;
 }
 
-interface Props {
-    label: string;
-    active?: boolean;
-    value?: string;
-    onClear?: () => void;
-}
-
-const StyledButton = styled(Button)(({ theme }) => ({
-    borderRadius: 20,
-    textTransform: 'capitalize',
-    fontSize: 14,
-    fontWeight: 400,
-    margin: theme.spacing(0, 1),
-    padding: '7px 14px',
-    borderColor: '#e0e0e0',
-    '.MuiSvgIcon-root': {
-        color: 'rgba(0, 0, 0, .54)',
-    },
-    '&.active': {
-        '&, .MuiSvgIcon-root': {
-            color: theme.palette.primary.main,
-        },
-    },
-}));
-
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[OrderStatusEnum.PLACED], []);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+    const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
+    const [promoCode, setPromoCode] = useState('');
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -66,6 +45,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+    const dispatch = useAppDispatch();
 
     const headings: EnhancedTableHeadCell[] = [
         {
@@ -141,6 +121,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
+            id: 'coupon',
+            numeric: true,
+            disablePadding: false,
+            label: 'Promo Code',
+            align: 'left',
+            sortable: true,
+        },
+        {
             id: 'grand_total',
             numeric: true,
             disablePadding: false,
@@ -166,20 +154,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         },
     ];
 
-    const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
-        return (
-            <StyledButton
-                variant={'outlined'}
-                color={'inherit'}
-                startIcon={active ? <Check onClick={() => setPaymentStatus(null)} /> : null}
-                onClick={() => handleApplyFilter(value)}
-                className={classNames({ active: active })}
-            >
-                {label}
-            </StyledButton>
-        );
-    };
-
     const orders$ = useListAdminOrdersQuery({
         params: {
             include: [
@@ -190,18 +164,46 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'orderShipment',
                 'orderLabel',
                 'shippingMethod',
+                'coupon',
             ],
             sort: sortFilter,
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
+                promoCode,
             },
         },
         ...bracketParams(),
     });
 
     const totals = orders$.pagination?.meta?.total ?? 0;
+
+    const clearPromoCode = useCallback(() => {
+        setPromoCode('');
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus: paymentStatus,
+                promoCode: '',
+            }),
+            1,
+        );
+    }, [orders$, paymentStatus, search, sortFilter]);
+
+    const clearPaymentStatus = useCallback(() => {
+        setPaymentStatus(null);
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus: null,
+                promoCode,
+            }),
+            1,
+        );
+    }, [orders$, sortFilter, search, promoCode]);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -240,12 +242,36 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
+                    promoCode,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, promoCode],
     );
+
+    const handlePromoCodeFilter = useCallback(
+        async (promoCode) => {
+            setPromoCode(promoCode);
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus: paymentStatus,
+                    promoCode: promoCode,
+                }),
+                1,
+            );
+        },
+        [orders$, paymentStatus, search, sortFilter],
+    );
+
+    useEffect(() => {
+        (async () => {
+            const result = await dispatch(getPromoCodes());
+            setPromoCodes(result.payload.data);
+        })();
+    }, [dispatch]);
 
     useEffect(
         () => {
@@ -301,9 +327,37 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 </Grid>
             </Grid>
             <Grid alignItems={'left'}>
-                {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                    return <FilterButton label={status} active={paymentStatus === key} value={key} />;
-                })}
+                <PageSelector label={'Payment Status'} value={paymentStatus || ''} onClear={clearPaymentStatus}>
+                    {Object.entries(PaymentStatusMap).map(([key, status]) => {
+                        return (
+                            <Grid key={key}>
+                                <MenuItem
+                                    sx={{ textTransform: 'capitalize' }}
+                                    onClick={() => handleApplyFilter(key)}
+                                    key={key}
+                                    value={key}
+                                >
+                                    {status}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
+                <PageSelector label={'Coupon'} value={promoCode} onClear={clearPromoCode}>
+                    {promoCodes.map((item) => {
+                        return (
+                            <Grid key={item.id}>
+                                <MenuItem
+                                    onClick={() => handlePromoCodeFilter(item.code)}
+                                    key={item.id}
+                                    value={item.id}
+                                >
+                                    {item.code}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
             </Grid>
             <TableContainer>
                 <CustomerSubmissionsList

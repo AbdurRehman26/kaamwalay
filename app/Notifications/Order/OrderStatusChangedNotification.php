@@ -42,4 +42,13 @@ class OrderStatusChangedNotification extends PushNotification
             'object_id' => $this->order->id,
         ];
     }
+
+    protected function getDatabaseContent(): array
+    {
+        return [
+            'title' => $this->getTitle(),
+            'body' => $this->getBody(),
+            'intent' => $this->getIntent(),
+        ];
+    }
 }

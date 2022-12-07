@@ -26,9 +26,9 @@ abstract class PushNotification extends Notification implements ShouldQueue
      */
     public function via(User $notifiable): array
     {
-//        if (app()->environment('local')) {
-//            return [];
-//        }
+        if (app()->environment('local')) {
+            return [];
+        }
 
         if ($notifiable->devices()->whereIn('platform', self::ALLOWED_PLATFORMS)->doesntExist()) {
             return [];

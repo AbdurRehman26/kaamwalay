@@ -34,6 +34,7 @@ interface SubmissionsTableProps {
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[OrderStatusEnum.PLACED], []);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
@@ -194,6 +195,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const clearPaymentStatus = useCallback(() => {
         setPaymentStatus(null);
+        setPaymentStatusLabel('');
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({
@@ -230,11 +232,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     };
 
     const handleApplyFilter = useCallback(
-        async (selectedPaymentStatus) => {
+        async (selectedPaymentStatus, selectedPaymentStatusLabel) => {
             if (selectedPaymentStatus === paymentStatus) {
                 setPaymentStatus(null);
+                setPaymentStatusLabel('');
             } else {
                 setPaymentStatus(selectedPaymentStatus);
+                setPaymentStatusLabel(selectedPaymentStatusLabel);
             }
 
             orders$.searchSortedWithPagination(
@@ -327,13 +331,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 </Grid>
             </Grid>
             <Grid alignItems={'left'}>
-                <PageSelector label={'Payment Status'} value={paymentStatus || ''} onClear={clearPaymentStatus}>
+                <PageSelector label={'Payment Status'} value={paymentStatusLabel} onClear={clearPaymentStatus}>
                     {Object.entries(PaymentStatusMap).map(([key, status]) => {
                         return (
                             <Grid key={key}>
                                 <MenuItem
                                     sx={{ textTransform: 'capitalize' }}
-                                    onClick={() => handleApplyFilter(key)}
+                                    onClick={() => handleApplyFilter(key, status)}
                                     key={key}
                                     value={key}
                                 >

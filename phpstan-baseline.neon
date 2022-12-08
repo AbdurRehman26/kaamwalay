@@ -581,6 +581,21 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
@@ -596,14 +611,39 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_item_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$id\\.$#"
@@ -646,6 +686,21 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
@@ -659,6 +714,21 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$created_at\\.$#"
@@ -1764,6 +1834,11 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Salesman/Coupon/CouponResource.php
 
 		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
@@ -2879,6 +2954,11 @@ parameters:
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
 			path: app/Services/Admin/V1/OrderService.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Salesman/V2/Order/OrderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"

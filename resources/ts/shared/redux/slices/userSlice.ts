@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { ToggleCustomerMarketingNotificationsEnabledDto } from '@shared/dto/ToggleCustomerMarketingNotificationsEnabledDto';
 import { UpdateUserProfileDto } from '@shared/dto/UpdateUserProfileDto';
 import { app } from '@shared/lib/app';
 import { updateUserProfileData } from '@shared/redux/slices/authenticationSlice';
@@ -74,6 +75,25 @@ export const deleteProfile = createAsyncThunk('user/deleteProfile', async () => 
         return error;
     }
 });
+
+export const toggleMarketingNotifications = createAsyncThunk(
+    'user/toggleMarketingNotifications',
+    async (input: ToggleCustomerMarketingNotificationsEnabledDto, thunkAPI) => {
+        const userRepository = app(UserRepository);
+        try {
+            const data = await userRepository.toggleMarketingNotifications(input);
+            thunkAPI.dispatch(updateUserProfileData(data));
+            NotificationsService.success(
+                'Notifications have been ' +
+                    (input.isMarketingNotificationsEnabled ? 'enabled' : 'disabled') +
+                    ' successfully!',
+            );
+        } catch (error: any) {
+            NotificationsService.exception(error);
+            return thunkAPI.rejectWithValue(error);
+        }
+    },
+);
 
 export const userSlice = createSlice({
     name: 'userSlice',

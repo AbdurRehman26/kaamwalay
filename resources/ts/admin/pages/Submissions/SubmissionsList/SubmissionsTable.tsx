@@ -55,7 +55,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
@@ -80,7 +80,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             id: 'created_at',
             numeric: false,
             disablePadding: false,
-            label: tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed',
+            label: 'Placed',
             align: 'left',
             sortable: true,
         },

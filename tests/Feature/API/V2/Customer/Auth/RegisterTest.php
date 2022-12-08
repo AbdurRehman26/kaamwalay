@@ -147,3 +147,34 @@ test('customer username is auto generated', function () {
 
     expect($user->username)->not()->toBeEmpty();
 })->group('auth');
+
+test('a customer by default is opted in for marketing notifications on register ', function () {
+    $email = $this->faker->safeEmail();
+    $this->postJson('/api/v2/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+    ]);
+    $user = User::whereEmail($email)->first();
+
+    expect($user->is_marketing_notifications_enabled)->toBeTrue();
+})->group('auth');
+
+test('a customer can opt out of marketing notifications during register ', function () {
+    $email = $this->faker->safeEmail();
+    $this->postJson('/api/v2/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'is_marketing_notifications_enabled' => false,
+    ]);
+    $user = User::whereEmail($email)->first();
+
+    expect($user->is_marketing_notifications_enabled)->toBeFalse();
+})->group('auth');

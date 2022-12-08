@@ -34,7 +34,12 @@ abstract class PushNotification extends Notification implements ShouldQueue
             return [];
         }
 
-        return [PusherChannel::class];
+        return [PusherChannel::class, 'database'];
+    }
+
+    public function toDatabase(User $notifiable): array
+    {
+        return $this->getDatabaseContent();
     }
 
     public function toPushNotification(User $notifiable): PusherMessage
@@ -77,4 +82,5 @@ abstract class PushNotification extends Notification implements ShouldQueue
     abstract protected function getTitle(): string;
     abstract protected function getBody(): string;
     abstract protected function getIntent(): array;
+    abstract protected function getDatabaseContent(): array;
 }

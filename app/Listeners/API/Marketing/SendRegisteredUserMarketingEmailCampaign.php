@@ -25,6 +25,10 @@ class SendRegisteredUserMarketingEmailCampaign implements ShouldQueue, ShouldBeE
         $userEmail = $user->email;
         $userFirstName = $user->first_name ?? '';
 
+        if (! $user->refresh()->wantsToReceiveMarketingContent()) {
+            return;
+        }
+
         $this->emailService->scheduleEmail(
             now()->addDay(),
             [[$userEmail => $userFirstName]],

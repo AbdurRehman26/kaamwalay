@@ -7,7 +7,6 @@ type StatusColorProps = {
     secondary: string;
 };
 const colorsMap: { [key in OrderStatusEnum]: StatusColorProps } = {
-    [OrderStatusEnum.INCOMPLETE]: { primary: '#000000', secondary: 'rgba(0, 0, 0, 0.12)' },
     [OrderStatusEnum.PLACED]: { primary: 'rgba(154, 31, 149, 1)', secondary: 'rgba(154, 31, 149, 0.12)' },
     [OrderStatusEnum.CONFIRMED]: { primary: 'rgba(39, 153, 179, 1)', secondary: 'rgba(39, 153, 179, 0.12)' },
     [OrderStatusEnum.GRADED]: { primary: 'rgba(33, 70, 199, 1)', secondary: 'rgba(33, 70, 199, 0.12)' },

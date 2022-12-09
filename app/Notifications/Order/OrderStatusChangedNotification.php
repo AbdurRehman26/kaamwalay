@@ -13,6 +13,7 @@ class OrderStatusChangedNotification extends PushNotification
         OrderStatus::PLACED => 'placed',
         OrderStatus::CONFIRMED => 'confirmed',
         OrderStatus::GRADED => 'graded',
+        OrderStatus::ASSEMBLED => 'assembled',
         OrderStatus::SHIPPED => 'shipped',
     ];
 

@@ -5,7 +5,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { transparentize } from 'polished';
-import React, { ElementType, useMemo } from 'react';
+import React, { ElementType, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import { setCardsManagementState } from '@admin/redux/slices/pageSlice';
@@ -77,6 +77,16 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     const dispatch = useDispatch();
     const location = useLocation();
     const classes = useStyles();
+
+    useEffect(() => {
+        if (
+            itemClasses.selected === classes.notSelected &&
+            !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname)
+        ) {
+            dispatch(setCardsManagementState(true));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const itemClasses = useMemo(
         () => ({

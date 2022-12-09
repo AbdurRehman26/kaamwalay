@@ -387,7 +387,11 @@ class Order extends Model implements Exportable
             )
         );
     }
-
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string  $coupon
+     * @return Builder<Order>
+     */
     public function scopePromoCode(Builder $query, string $coupon): Builder
     {
         return $query->whereHas(

@@ -54,6 +54,11 @@ const useStyles = makeStyles(
         icon: {},
         title: {
             marginBottom: 3,
+            '& .MuiListItemText-primary': {
+                fontSize: '14px !important',
+                lineHeight: '20px !important',
+                letterSpacing: '0.2px !important',
+            },
         },
         iconHolder: {
             minWidth: 42,

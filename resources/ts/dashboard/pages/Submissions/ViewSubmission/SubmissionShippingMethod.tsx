@@ -169,23 +169,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
                         {shippingMethod?.name ?? 'Insured Shipping'}
                     </Typography>
-                    {/* // <Tooltip
-                        //     title={
-                        //         <Stack>
-                        //             <Typography variant={'caption'} mb={2.5}>
-                        //                 Since you have already paid, you cannot switch from Vault Storage to Insured
-                        //                 Shipping from the submission page.
-                        //             </Typography>
-                        //             <Typography variant={'caption'}>
-                        //                 If you want your cards shipped back to you, you will have to wait till this
-                        //                 submission is <b>Stored in Vault</b>, then go to Your Cards to create a
-                        //                 shipment.
-                        //             </Typography>
-                        //         </Stack>
-                        //     }
-                        // > */}
                     <InfoIcon color={'disabled'} sx={{ ml: 1 }} onClick={handleDialog} />
-                    {/* // </Tooltip> */}
                 </Grid>
                 {content}
             </Stack>

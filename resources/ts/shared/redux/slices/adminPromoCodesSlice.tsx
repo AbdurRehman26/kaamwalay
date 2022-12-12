@@ -16,6 +16,16 @@ interface StateType extends APIState<PromoCodeEntity> {}
 
 const adminPromoCodesThunk = createRepositoryThunk('adminPromoCodes', AdminPromoCodesRepository);
 
+export const getPromoCodes = createAsyncThunk('getPromoCodes', async () => {
+    const promoCodesRepository = app(AdminPromoCodesRepository);
+    try {
+        const promoCodes = await promoCodesRepository.getPromoCodes();
+        return promoCodes;
+    } catch (e: any) {
+        NotificationsService.exception(e);
+    }
+});
+
 export const changePromoCodeStatus = createAsyncThunk(
     'changePromoCodeStatus',
     async (input: { promoCodeID: number; newStatus: number }, thunkAPI) => {

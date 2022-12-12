@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { initializeShippingMethod, setIsNextDisabled, setShippingMethod } from '../../redux/slices/newSubmissionSlice';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
+import ShippingMethodDetail from './ShippingMethodDetail';
 import { VaultStorageMethod } from './VaultStorageMethod';
 
 const mappedContent: Record<string, ReactNode> = {
@@ -96,6 +97,7 @@ export function ShippingMethods() {
                     ) : null,
                 )}
             </Grid>
+            <ShippingMethodDetail />
 
             {shippingMethod?.code && mappedContent[shippingMethod?.code] ? mappedContent[shippingMethod?.code] : null}
         </Stack>

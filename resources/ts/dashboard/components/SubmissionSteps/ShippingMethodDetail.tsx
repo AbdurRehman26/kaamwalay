@@ -35,7 +35,7 @@ const AccordionDiv = styled(Accordion)({
 export default function ShippingMethodDetail() {
     return (
         <div>
-            <AccordionDiv sx={{}}>
+            <AccordionDiv>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                     <Typography className={'Heading'}>What is insured shipping?</Typography>
                 </AccordionSummary>

@@ -14,9 +14,19 @@ import CardImageModal from './CardImageModal';
 import CardImageModalMobile from './CardImageModalMobile';
 
 const CardImageDiv = styled(Grid)({
-    '.mySwiper2': {
+    '.SwiperMultiple': {
         height: '80%',
         width: '50%',
+        '.swiper-button-prev': {
+            display: 'none',
+        },
+        '.swiper-button-next': {
+            display: 'none',
+        },
+    },
+    '.SwiperSingle': {
+        height: '100%',
+        width: '75%',
         '.swiper-button-prev': {
             display: 'none',
         },
@@ -28,6 +38,10 @@ const CardImageDiv = styled(Grid)({
         '.swiper-wrapper': {
             justifyContent: 'center',
         },
+    },
+    '.Image': {
+        borderRadius: '8px',
+        filter: 'drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.14)) drop-shadow(0px 1px 10px rgba(0, 0, 0, 0.12)) drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2))',
     },
 });
 
@@ -54,34 +68,36 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
                 navigation={true}
                 thumbs={{ swiper: thumbsSwiper }}
                 modules={[FreeMode, Thumbs]}
-                className={'mySwiper2'}
+                className={'image_path' in imagesJson ? 'SwiperSingle' : 'SwiperMultiple'}
             >
                 {Object.keys(imagesJson).map((key) => {
                     return (
                         <SwiperSlide onClick={handleDialog}>
-                            <img src={imagesJson[key]} alt={''} />
+                            <img src={imagesJson[key]} alt={''} className={'Image'} />
                         </SwiperSlide>
                     );
                 })}
             </Swiper>
-            <Swiper
-                onSwiper={setThumbsSwiper}
-                loop={false}
-                spaceBetween={10}
-                slidesPerView={2}
-                freeMode={true}
-                watchSlidesProgress={false}
-                modules={[FreeMode, Thumbs]}
-                className={'mySwiper'}
-            >
-                {Object.keys(imagesJson).map((key) => {
-                    return (
-                        <SwiperSlide>
-                            <img src={imagesJson[key]} alt={''} />
-                        </SwiperSlide>
-                    );
-                })}
-            </Swiper>
+            {'image_path' in imagesJson ? null : (
+                <Swiper
+                    onSwiper={setThumbsSwiper}
+                    loop={false}
+                    spaceBetween={10}
+                    slidesPerView={2}
+                    freeMode={true}
+                    watchSlidesProgress={false}
+                    modules={[FreeMode, Thumbs]}
+                    className={'mySwiper'}
+                >
+                    {Object.keys(imagesJson).map((key) => {
+                        return (
+                            <SwiperSlide>
+                                <img src={imagesJson[key]} alt={''} />
+                            </SwiperSlide>
+                        );
+                    })}
+                </Swiper>
+            )}
         </CardImageDiv>
     );
 }

@@ -111,7 +111,7 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
     );
 
     const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
-    console.log(headings);
+
     return (
         <>
             <TableRow>

@@ -1,4 +1,4 @@
-import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -142,32 +142,25 @@ export function SalesRepCommissionPaymentsList({ isAdmin, listQuery }: Record<st
             <TableContainer sx={{ borderRadius: '10px', border: '1px solid #E0E0E0' }}>
                 <Typography className={classes.tableTitle}>Commission Payments</Typography>
                 {commissions.data?.length === 0 ? (
-                    <Grid
-                        container
-                        direction={'row'}
-                        marginTop={'21px'}
-                        marginLeft={'28px'}
-                        spacing={2}
-                        mb={{ xs: 3, md: 5 }}
-                    >
-                        <Grid item xs={12} sm={11}>
-                            <Paper
-                                variant={'outlined'}
-                                sx={{ width: '100%', backgroundColor: '#F9F9F9', borderRadius: '10px' }}
-                            >
-                                <Grid container justifyContent={'center'} className={'page-content'}>
-                                    <Stack p={3} alignItems={'center'} justifyContent={'center'}>
-                                        <AccountBalanceWalletTwoToneIcon />
-                                        <Typography mt={1} variant={'subtitle1'} fontWeight={700}>
-                                            No Commission Payment History
-                                        </Typography>
-                                        <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
-                                            No commission payments have been disbursed to you, yet.
-                                        </Typography>
-                                    </Stack>
-                                </Grid>
-                            </Paper>
-                        </Grid>
+                    <Grid direction={'row'} marginTop={'21px'}>
+                        <Paper
+                            variant={'outlined'}
+                            sx={{ padding: 5, width: '100%', backgroundColor: '#F9F9F9', borderRadius: 0 }}
+                        >
+                            <Grid justifyContent={'center'} className={'page-content'}>
+                                <Stack p={3} alignItems={'center'} justifyContent={'center'}>
+                                    <PriceCheckIcon />
+                                    <Typography mt={1} variant={'subtitle1'} fontWeight={700}>
+                                        No Commission Payment History
+                                    </Typography>
+                                    <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
+                                        No commission payments have been
+                                        <br />
+                                        disbursed to you, yet.
+                                    </Typography>
+                                </Stack>
+                            </Grid>
+                        </Paper>
                     </Grid>
                 ) : (
                     <Table aria-label="simple table">

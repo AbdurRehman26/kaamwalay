@@ -6,7 +6,11 @@ use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeactivatedException;
 use App\Exceptions\API\Customer\UserAccountCannotBeDeletedException;
 use App\Http\Controllers\API\V1\Customer\ProfileController as V1ProfileController;
+use App\Http\Requests\API\V2\Customer\Profile\ToggleMarketingNotificationsRequest;
+use App\Http\Resources\API\V2\Customer\User\UserResource;
+use App\Models\User;
 use App\Services\CustomerProfileService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
@@ -41,5 +45,33 @@ class ProfileController extends V1ProfileController
         auth()->logout();
 
         return response()->json(compact('success'));
+    }
+
+    /**
+     * @param  ToggleMarketingNotificationsRequest  $request
+     * @param  CustomerProfileService  $customerProfileService
+     * @return JsonResponse|UserResource
+     */
+    public function toggleMarketingNotifications(ToggleMarketingNotificationsRequest $request, CustomerProfileService $customerProfileService): JsonResponse|UserResource
+    {
+        try {
+            $data = $request->safe()->only([
+                'is_marketing_notifications_enabled',
+            ]);
+
+            /** @var User $user */
+            $user = auth()->user();
+
+            $userResponse = $customerProfileService->update($user, $data);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+
+        return new UserResource($userResponse);
     }
 }

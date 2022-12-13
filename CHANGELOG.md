@@ -1,14 +1,41 @@
 # Changelog
 
+## Release v3.2.0 - 2022-12-08
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/815
+- Fix: Enabling going back to service step through edit button by @luis-molina in https://github.com/woozard/robograding/pull/806
+- Feature: Admin | Sales Rep | Missing Changes by @numair97 in https://github.com/woozard/robograding/pull/816
+- Feature: Remove Incomplete Tab by @aliwooter in https://github.com/woozard/robograding/pull/798
+- Feature | Sales Rep Submissions Listing by @AbdurRehman26 in https://github.com/woozard/robograding/pull/812
+- Revert "Feature | Sales Rep Submissions Listing" by @luis-molina in https://github.com/woozard/robograding/pull/818
+- Admin: AGS API | Fix Pagination Issue by @muhammad-nauman in https://github.com/woozard/robograding/pull/799
+- Fixed | Heading label fixes  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/822
+- Fix: Salesrep Improvements by @thenabeel in https://github.com/woozard/robograding/pull/819
+- Feature: Toggle marketing notifications by @luis-molina in https://github.com/woozard/robograding/pull/805
+- Fix | Styling of Empty State for Commission payment  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/817
+- Feature: Customer | Stop Marketing Emails if customer opted out. by @muhammad-nauman in https://github.com/woozard/robograding/pull/823
+- fixed alignment of checkbox by @luis-molina in https://github.com/woozard/robograding/pull/824
+- Fix: Admin | Edit Card | Category not loading properly on state by @luis-molina in https://github.com/woozard/robograding/pull/825
+- Feature: Database Push Notifications by @thenabeel in https://github.com/woozard/robograding/pull/829
+- Feature: Customer | TikTok Pixel by @muhammad-nauman in https://github.com/woozard/robograding/pull/830
+- Release v3.2.0 by @thenabeel in https://github.com/woozard/robograding/pull/831
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.1.1...v3.2.0
+
 ## v3.1.1 - 2022-11-25
 
 ### What's Changed
 
-- Hotfix: Setting Original Service Level on New Submission Flow by @luis-molina in https://github.com/woozard/robograding/pull/810
+- Hotfix: Setting Original Service Level on New Submission Flow by @luis-molina in
+- https://github.com/woozard/robograding/pull/810
 - Hotfix: Fix grading page calls by @muhammad-nauman in https://github.com/woozard/robograding/pull/808
 - Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/811
-- Feature: Admin | Sales Rep | Import customers file command by @numair97 in https://github.com/woozard/robograding/pull/809
-- Feature: Intent in General Push Notification (Ninja) by @thenabeel in https://github.com/woozard/robograding/pull/814
+- Feature: Admin | Sales Rep | Import customers file command by @numair97 in
+- https://github.com/woozard/robograding/pull/809
+- Feature: Intent in General Push Notification (Ninja) by @thenabeel in
+- https://github.com/woozard/robograding/pull/814
 - Release v3.1.1 by @thenabeel in https://github.com/woozard/robograding/pull/813
 
 **Full Changelog**: https://github.com/woozard/robograding/compare/v3.1.0...v3.1.1

@@ -31,6 +31,7 @@ class UserResource extends JsonResource
             'stripe_id' => $this->stripe_id,
             'roles' => new RoleCollection($this->roles),
             'wallet' => new WalletResource($this->wallet),
+            'is_marketing_notifications_enabled' => $this->is_marketing_notifications_enabled,
         ];
     }
 }

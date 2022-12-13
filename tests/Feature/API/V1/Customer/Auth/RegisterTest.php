@@ -137,7 +137,7 @@ test('customer can register and have wallet assigned', function () {
 
 test('customer username is auto generated', function () {
     $email = $this->faker->safeEmail();
-    $this->postJson('/api/v2/auth/register', [
+    $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $email,

@@ -101,17 +101,17 @@ class OrderService extends V1OrderService
         int $paymentBlockchainNetwork,
         float $walletAmount = 0.0,
     ): float {
-        $orderTotalPayableWithoutCollectorCoinDiscount = $this->getOrderGrandTotalWithoutCollectorCoinDiscount(
+        $orderPayable = $this->getOrderPayable(
             $order,
             $walletAmount,
         );
-        $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount);
+        $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderPayable);
 
-        $orderTotalPayableWithCollectorCoinDiscount = ($orderTotalPayableWithoutCollectorCoinDiscount - $collectorCoinDiscountAmount);
+        $orderPayableWithCollectorCoinDiscount = ($orderPayable - $collectorCoinDiscountAmount);
 
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
-            $orderTotalPayableWithCollectorCoinDiscount
+            $orderPayableWithCollectorCoinDiscount
         );
         if ($collectorCoinPrice <= 0) {
             return 0.0;
@@ -120,7 +120,7 @@ class OrderService extends V1OrderService
         Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
             'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
             'orderTotal' => $order->grand_total_before_discount,
-            'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount),
+            'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderPayable),
             'walletAmount' => $walletAmount,
             'refund' => $order->refund_total,
             'extraCharge' => $order->extra_charge_total,
@@ -137,11 +137,24 @@ class OrderService extends V1OrderService
         return $collectorCoinPrice;
     }
 
-    protected function getCollectorCoinDiscount(Order $order, float $totalAmount): float
+    /**
+     * With collector coin, we can have 2 types of discounts.
+     * 1. Promo code discount
+     * 2. Collector coin discount
+     * In the case where we have both discounts, the coupon code will have the higher precedence. So we will apply that
+     * first and then go for the collector coin discount. Sometimes, both discounts together can make the order total
+     * negative. This method will not apply the collector coin discount if the order total becomes negative after the
+     * collector coin discount.
+     *
+     * @param  Order  $order
+     * @param  float  $orderPayable  it's a total amount that needs to be paid after doing all the necessary calculations.
+     * @return float
+     */
+    protected function getCollectorCoinDiscount(Order $order, float $orderPayable): float
     {
         $discountedAmount = $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100;
 
-        return ($totalAmount - $discountedAmount) > 0 ? round($discountedAmount, 2) : 0;
+        return ($orderPayable - $discountedAmount) > 0 ? round($discountedAmount, 2) : 0;
     }
 
     public function updateBillingAddress(Order $order, array $data): Order
@@ -252,7 +265,7 @@ class OrderService extends V1OrderService
         ];
     }
 
-    protected function getOrderGrandTotalWithoutCollectorCoinDiscount(
+    protected function getOrderPayable(
         Order $order,
         float $walletAmount = 0,
     ): float {

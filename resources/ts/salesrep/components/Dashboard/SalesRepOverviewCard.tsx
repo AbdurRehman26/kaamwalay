@@ -101,15 +101,7 @@ export function SalesRepOverviewCard({
                     timeFilter: timeFilter.value,
                 })
                 .then((response) => {
-                    if (
-                        typeof response.data === 'object' &&
-                        response.data !== null &&
-                        response.data.hasOwnProperty('data')
-                    ) {
-                        setCardValue(response.data.data);
-                    } else {
-                        setCardValue(response.data);
-                    }
+                    setCardValue(response.data);
                 });
         }
     }, [statName, timeFilter]);
@@ -141,6 +133,14 @@ export function SalesRepOverviewCard({
         [statName, timeFilter],
     );
 
+    const getPlainValue = useCallback((value: any) => {
+        let value$ = parseInt(`${value || 0}`);
+        if (Number.isNaN(value$)) {
+            value$ = 0;
+        }
+        return value$;
+    }, []);
+
     return (
         <Grid item container className={classes.cardContent} direction={'row'}>
             <Grid item container md={6}>
@@ -167,7 +167,7 @@ export function SalesRepOverviewCard({
                 <Grid display={'flex'} mt={2} alignItems={'center'}>
                     <Grid>
                         <Typography variant={'h4'} className={classes.cardValue}>
-                            {formatAsCurrency ? formatCurrency(cardValue || 0) : cardValue}
+                            {formatAsCurrency ? formatCurrency(cardValue || 0) : getPlainValue(cardValue || 0)}
                         </Typography>
                     </Grid>
                 </Grid>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V2\Admin\Order;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Admin\User\UserResource;

@@ -8,18 +8,11 @@ use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Admin\User\UserResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 /**
- * @property mixed $id
- * @property mixed $order_number
- * @property mixed $grand_total
- * @property mixed $salesman
- * @property mixed $amount_paid_from_wallet
- * @property mixed $arrived_at
- * @property mixed $created_at
- * @property mixed $orderItems
- * @property OrderPaymentStatusEnum $payment_status
+ * @mixin Order
  */
 class OrderListResource extends BaseResource
 {
@@ -50,6 +43,7 @@ class OrderListResource extends BaseResource
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
+            'salesman_commission' => $this->salesman_commission,
         ];
     }
 }

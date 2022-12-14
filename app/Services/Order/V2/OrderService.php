@@ -107,8 +107,10 @@ class OrderService extends V1OrderService
         );
         $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderPayable);
 
+        // Final amount payable in USD
         $orderPayableWithCollectorCoinDiscount = ($orderPayable - $collectorCoinDiscountAmount);
 
+        // Final amount payable in AGS coins
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
             $orderPayableWithCollectorCoinDiscount
@@ -145,10 +147,6 @@ class OrderService extends V1OrderService
      * first and then go for the collector coin discount. Sometimes, both discounts together can make the order total
      * negative. This method will not apply the collector coin discount if the order total becomes negative after the
      * collector coin discount.
-     *
-     * @param  Order  $order
-     * @param  float  $orderPayable  it's a total amount that needs to be paid after doing all the necessary calculations.
-     * @return float
      */
     protected function getCollectorCoinDiscount(Order $order, float $orderPayable): float
     {

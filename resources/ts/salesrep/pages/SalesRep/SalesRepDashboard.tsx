@@ -13,10 +13,19 @@ export function SalesRepDashboard() {
                 </Typography>
             </Grid>
             <Grid container p={3} wrap={'nowrap'} spacing={2}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
+                    <SalesRepOverviewCard
+                        title={'Orders'}
+                        value={0}
+                        timeFilters={true}
+                        statName={'orders'}
+                        formatAsCurrency={false}
+                    />
+                </Grid>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard title={'Sales'} value={0} timeFilters={true} statName={'sales'} />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Unpaid Commission'}
                         hint={
@@ -28,7 +37,16 @@ export function SalesRepDashboard() {
                 </Grid>
             </Grid>
             <Grid container p={3} wrap={'nowrap'} spacing={2}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
+                    <SalesRepOverviewCard
+                        title={'Cards'}
+                        value={0}
+                        timeFilters={true}
+                        statName={'cards'}
+                        formatAsCurrency={false}
+                    />
+                </Grid>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Commission Earned'}
                         value={0}
@@ -36,7 +54,7 @@ export function SalesRepDashboard() {
                         statName={'commission_earned'}
                     />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Paid Commission'}
                         value={0}

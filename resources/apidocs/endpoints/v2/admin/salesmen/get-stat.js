@@ -9,7 +9,7 @@
  * @apiUse Authorization
  *
  * @apiParam {Number} user Salesman User Id. Example: 39
- * @apiParam {String} stat_name The stat that we wanna obtain, sales | commission_earned | commission_paid
+ * @apiParam {String} stat_name The stat that we wanna obtain, sales | commission_earned | commission_paid | orders | cards
  * @apiParam {String} time_filter For what range of time we want the stat, this_month | last_month | this_year | last_year | custom
  * @apiParam {String} [start_date] required on custom range, initial date for the range, Ex: 2022-11-16
  * @apiParam {String} [end_date] required on custom range, end date for the range, Ex: 2022-11-30

@@ -526,12 +526,13 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public function getSalesmanCardsCount(string $startDate = '', string $endDate = ''): int
     {
-        $query = $this->salesmanOrders()->paid()->withSum('orderItems', 'quantity');
+        $query = $this->salesmanOrders()->join('order_items', 'order_items.order_id', 'orders.id')
+            ->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
 
         if ($startDate && $endDate) {
-            $query->whereBetween('created_at', [$startDate, $endDate]);
+            $query->whereBetween('orders.created_at', [$startDate, $endDate]);
         }
 
-        return $query->get()->sum('order_items_sum_quantity');
+        return $query->sum('order_items.quantity');
     }
 }

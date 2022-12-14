@@ -10,8 +10,8 @@ use App\Http\Requests\API\V2\Salesman\Coupon\CalculateCouponDiscountForOrderRequ
 use App\Http\Requests\API\V2\Salesman\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\V2\Salesman\Coupon\StoreCouponRequest;
 use App\Http\Requests\API\V2\Salesman\Coupon\VerifyCouponRequest;
-use App\Http\Resources\API\V2\Salesman\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Salesman\Coupon\CouponCollection;
+use App\Http\Resources\API\V2\Salesman\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Salesman\Coupon\VerifyCouponResource;
 use App\Models\Coupon;
 use App\Models\Order;

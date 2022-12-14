@@ -125,7 +125,7 @@ class OrderService extends V1OrderService
             'refund' => $order->refund_total,
             'extraCharge' => $order->extra_charge_total,
             'usdPrice' => $order->grand_total_before_discount -
-                $this->getCollectorCoinDiscount($order, $orderTotalPayableWithoutCollectorCoinDiscount),
+                $this->getCollectorCoinDiscount($order, $orderPayable),
         ]);
 
         Cache::put(

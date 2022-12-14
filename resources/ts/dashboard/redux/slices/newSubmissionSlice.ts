@@ -464,7 +464,7 @@ export const getTotalInAGS = createAsyncThunk(
     async (input: { orderID: number; chainID: number; paymentByWallet: number; discountedAmount: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}&discounted_amount=${input.discountedAmount}`,
+            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}`,
         );
         const response = await endpoint.get('');
         return response.data.value;
@@ -892,6 +892,12 @@ export const newSubmissionSlice = createSlice({
         },
         setCouponCode: (state, action: PayloadAction<string>) => {
             state.couponState.couponCode = action.payload;
+            if (action.payload === '') {
+                state.couponState.isCouponApplied = false;
+                // This is to clear the error being shown if the text field is empty. It will enable the submit button
+                // and will process the transaction.
+                state.couponState.isCouponValid = true;
+            }
         },
         SetCouponInvalidMessage: (state, action: PayloadAction<string>) => {
             state.couponState.couponInvalidMessage = action.payload;

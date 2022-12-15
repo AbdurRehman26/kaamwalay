@@ -611,19 +611,23 @@ export function Payment() {
                                                 <Typography className={classes.billingAddressTitle}>
                                                     Billing Address
                                                 </Typography>
-                                                <Typography
-                                                    className={classes.billingAddressItem}
-                                                >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
-                                                <Typography className={classes.billingAddressItem}>{`${
-                                                    shippingAddress.address
-                                                } ${
-                                                    shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : ''
-                                                }`}</Typography>
-                                                <Typography className={classes.billingAddressItem}>{`${
-                                                    shippingAddress.city
-                                                }, ${shippingAddress.state} ${shippingAddress.zip}, ${
-                                                    shippingAddress.country?.code ?? ''
-                                                }`}</Typography>
+                                                {shippingAddress.firstName && shippingAddress.address ? (
+                                                    <>
+                                                        <Typography
+                                                            className={classes.billingAddressItem}
+                                                        >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                                        <Typography className={classes.billingAddressItem}>{`${
+                                                            shippingAddress.address
+                                                        } ${
+                                                            shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : ''
+                                                        }`}</Typography>
+                                                        <Typography className={classes.billingAddressItem}>{`${
+                                                            shippingAddress.city
+                                                        }, ${shippingAddress.state} ${shippingAddress.zip}, ${
+                                                            shippingAddress.country?.code ?? ''
+                                                        }`}</Typography>
+                                                    </>
+                                                ) : null}
                                             </>
                                         ) : (
                                             <>

@@ -6,6 +6,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V2\Salesman\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Salesman\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Salesman\User\UserResource;
 use Illuminate\Http\Request;
@@ -50,6 +51,7 @@ class OrderListResource extends BaseResource
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
+            'coupon' => $this->whenLoaded('coupon', CouponResource::class),
         ];
     }
 }

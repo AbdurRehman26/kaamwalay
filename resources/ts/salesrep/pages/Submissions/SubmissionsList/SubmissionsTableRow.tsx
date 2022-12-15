@@ -159,6 +159,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                <TableCell>{order?.coupon?.code ?? '-'}</TableCell>
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
                 <TableCell align={'right'} className={classes.optionsCell}>

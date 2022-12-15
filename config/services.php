@@ -56,7 +56,7 @@ return [
     ],
 
     'hubspot' => [
-        'api_key' => env('HUBSPOT_API_KEY'),
+        'access_token' => env('HUBSPOT_ACCESS_TOKEN'),
         'owner_email' => env('HUBSPOT_OWNER_EMAIL'),
         'pipeline_id' => env('HUBSPOT_PIPELINE_ID'),
         'pipline_stage_id_new_signup' => env('HUBSPOT_PIPELINE_STAGE_ID_NEW_SIGNUP'),

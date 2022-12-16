@@ -238,7 +238,9 @@ export const submissionGradesSlice = createSlice({
                 // This will be true when the API is called first time, and the robogrades are not available.
                 (state.hasLoadedAllRobogrades && !areGradesLoaded) ||
                 // This will be true when the API is called more than once, and the robogrades are now available.
-                (!state.hasLoadedAllRobogrades && areGradesLoaded)
+                (!state.hasLoadedAllRobogrades && areGradesLoaded) ||
+                // This will be true when the API is called first time and the grades are available instantly.
+                (state.hasLoadedAllRobogrades && areGradesLoaded)
             ) {
                 state.allSubmissions = action.payload;
             }

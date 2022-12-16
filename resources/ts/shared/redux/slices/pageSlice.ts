@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface PageState {
     drawerOpened: boolean;
+    cardsManagementSelected: boolean;
 }
 
 const initialState: PageState = {
     drawerOpened: true,
+    cardsManagementSelected: false,
 };
 
 export const pageSlice = createSlice({
@@ -15,7 +17,10 @@ export const pageSlice = createSlice({
         drawerVisibility: (state, action: PayloadAction<boolean>) => {
             state.drawerOpened = action.payload;
         },
+        setCardsManagementState: (state, action: PayloadAction<boolean>) => {
+            state.cardsManagementSelected = action.payload;
+        },
     },
 });
 
-export const { drawerVisibility } = pageSlice.actions;
+export const { drawerVisibility, setCardsManagementState } = pageSlice.actions;

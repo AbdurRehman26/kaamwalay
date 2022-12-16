@@ -8,7 +8,7 @@ import { transparentize } from 'polished';
 import React, { ElementType, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, matchPath, useLocation } from 'react-router-dom';
-import { setCardsManagementState } from '@admin/redux/slices/pageSlice';
+import { setCardsManagementState } from '@shared/redux/slices/pageSlice';
 
 type SidebarMenuItemProps = {
     icon?: ElementType;

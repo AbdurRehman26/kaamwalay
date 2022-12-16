@@ -12,6 +12,14 @@
 |
 */
 
+use App\Http\Controllers\API\V2\Admin\Address\CountryController;
+use App\Http\Controllers\API\V2\Admin\Address\StateController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardRarityController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
+use App\Http\Controllers\API\V2\Admin\Cards\CardSurfaceController;
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
 use App\Http\Controllers\API\V2\Salesman\Coupon\CouponController;
 use App\Http\Controllers\API\V2\Salesman\Coupon\CouponStatusController;
@@ -93,5 +101,29 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
         Route::get('verify/{coupon:code}', [CouponController::class, 'verify'])->name('salesman.coupon.verify');
         Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('salesman.coupon.discount');
     });
+
+    Route::prefix('addresses')->group(function () {
+        Route::apiResource('countries', CountryController::class)->only(['index'])->names([
+            'index' => 'salesman.countries.index',
+        ]);
+        Route::apiResource('states', StateController::class)->only(['index'])->names([
+            'index' => 'salesman.states.index',
+        ]);
+    });
+
+    Route::prefix('cards')->group(function () {
+        Route::get('categories', [CardCategoryController::class, 'index']);
+        Route::apiResource('series', CardSeriesController::class)->only(['index', 'store'])->names([
+            'index' => 'salesman.series.index',
+            'store' => 'salesman.series.store',
+        ]);
+        Route::apiResource('sets', CardSetController::class)->only(['index', 'store'])->names([
+            'index' => 'salesman.sets.index',
+            'store' => 'salesman.sets.store'
+        ]);
+        Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
+        Route::post('/', [CardProductController::class, 'store'])->name('salesman.card-products.store');
+    });
+
 
 });

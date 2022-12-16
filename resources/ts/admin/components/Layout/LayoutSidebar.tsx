@@ -36,7 +36,7 @@ const useStyles = makeStyles(
             background: ({ open }: any) => (open ? '#F9F9F9' : '#fff'),
         },
         drawerPaper: ({ drawerState }: Record<string, any>) => ({
-            width: drawerState ? 246 : 0,
+            width: drawerState ? 260 : 0,
             position: 'relative',
             transition:
                 'transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms, width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms !important',

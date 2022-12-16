@@ -14,7 +14,7 @@ import { delay } from '@shared/lib/utils/delay';
 import { updateOrderShippingMethod } from '@shared/redux/slices/ordersSlice';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import { setDialog } from '@dashboard/redux/slices/dashboardSlice';
+import { setDialog } from '@dashboard/redux/slices/newSubmissionSlice';
 import SubmissionShippingDetailDialog from './SubmissionShippingDetailDialog';
 
 interface Props {

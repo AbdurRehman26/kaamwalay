@@ -12,7 +12,7 @@ import { useCallback, useMemo } from 'react';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { setDialog } from '@dashboard/redux/slices/dashboardSlice';
+import { setDialog } from '@dashboard/redux/slices/newSubmissionSlice';
 
 interface SubmissionShippingDetailDialogProps {
     shippingMethod?: ShippingMethodEntity;
@@ -52,7 +52,7 @@ const LabelDialog = styled(Dialog)({
 
 export default function SubmissionShippingDetailDialog({ shippingMethod, paid }: SubmissionShippingDetailDialogProps) {
     const dispatch = useAppDispatch();
-    const dialog = useAppSelector((state) => state.dashboardSlice.dialog);
+    const dialog = useAppSelector((state) => state.newSubmission.dialog);
 
     const handleDialog = useCallback(() => {
         dispatch(setDialog(false));

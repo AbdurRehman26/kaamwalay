@@ -138,8 +138,8 @@ export interface NewSubmissionSliceState {
     paymentStatus: PaymentStatusEnum;
     shippingAddress: any;
     billingAddress: any;
-
     stepValidations: boolean[];
+    dialog: boolean;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -427,6 +427,7 @@ const initialState: NewSubmissionSliceState = {
     shippingAddress: [],
     billingAddress: [],
     stepValidations: [true, false, false, false, false],
+    dialog: false,
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -763,6 +764,9 @@ export const newSubmissionSlice = createSlice({
             if (state.currentStep !== 0) {
                 state.currentStep -= 1;
             }
+        },
+        setDialog: (state, action: PayloadAction<boolean>) => {
+            state.dialog = action.payload;
         },
         setCustomStep: (state, action: PayloadAction<number>) => {
             state.currentStep = action.payload;
@@ -1144,6 +1148,7 @@ export const {
     setSaveCardForLater,
     setUseShippingAddressAsBilling,
     updatePaymentMethodField,
+    setDialog,
     updateBillingAddressField,
     saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,

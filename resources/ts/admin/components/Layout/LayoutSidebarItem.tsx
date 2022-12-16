@@ -33,9 +33,6 @@ const useStyles = makeStyles(
             },
             '& $title .MuiListItemText-primary': {
                 fontWeight: '500 !important',
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
             },
         },
         notSelected: {
@@ -46,19 +43,11 @@ const useStyles = makeStyles(
             },
             '& $title .MuiListItemText-primary': {
                 fontWeight: '500 !important',
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
             },
         },
         icon: {},
         title: {
             marginBottom: 3,
-            '& .MuiListItemText-primary': {
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
-            },
         },
         iconHolder: {
             minWidth: 42,

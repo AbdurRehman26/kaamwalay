@@ -26,6 +26,16 @@ const useStyles = makeStyles(
             overflow: 'hidden',
             borderLeft: '4px solid transparent',
         },
+        list: {
+            paddingTop: '0px',
+        },
+        collapse: {
+            background: '#F9F9F9',
+        },
+        cardManagementButton: {
+            borderLeft: ({ cardsManagementState }: any) => (cardsManagementState ? '4px solid #20BFB8' : 'none'),
+            background: ({ open }: any) => (open ? '#F9F9F9' : '#fff'),
+        },
         drawerPaper: ({ drawerState }: Record<string, any>) => ({
             width: drawerState ? 240 : 0,
             position: 'relative',
@@ -51,9 +61,10 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
-    const classes = useStyles({ drawerState });
     const cardsManagementState = useSelector((state: RootState) => state.page.cardsManagementSelected);
     const [open, setOpen] = useState(false);
+
+    const classes = useStyles({ drawerState, cardsManagementState, open });
 
     const handleClick = () => {
         setOpen(!open);
@@ -77,18 +88,15 @@ function LayoutSidebar() {
                     href={'/vault-storage'}
                     comingSoon
                 />
-                <ListItemButton
-                    onClick={handleClick}
-                    sx={{ borderLeft: cardsManagementState ? '4px solid #20BFB8' : 'none' }}
-                >
+                <ListItemButton onClick={handleClick} className={classes.cardManagementButton}>
                     <ListItemIcon className={classes.iconHolder}>
                         <StyleIcon sx={{ color: cardsManagementState ? '#20BFB8' : 'rgba(0, 0, 0, 0.54)' }} />
                     </ListItemIcon>
                     <ListItemText primary="Cards Management" className={classes.title} />
                     {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-                <Collapse in={open} timeout="auto">
-                    <List component="div" sx={{ paddingTop: '0px' }}>
+                <Collapse in={open} timeout="auto" className={classes.collapse}>
+                    <List component="div" className={classes.list}>
                         <LayoutSidebarItem title={'Cards'} href={'/cards'} cardsManagementStyle={true} />
                         <LayoutSidebarItem title={'Rarities'} href={'/rarities'} cardsManagementStyle={true} />
                         <LayoutSidebarItem title={'Surfaces'} href={'/surfaces'} cardsManagementStyle={true} />

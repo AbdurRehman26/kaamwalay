@@ -222,18 +222,15 @@ export function SurfacesListPage() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ fontSize: '12px' }} align="left" variant={'head'}>
+                                        Name
                                         <TableSortLabel
                                             sx={{
-                                                position: 'absolute',
-                                                left: '15%',
-                                                marginTop: '2px',
                                                 color: '#0000008A',
                                             }}
                                             onClick={() => handleSort(!sortFilter)}
                                             direction={!sortFilter ? 'desc' : 'asc'}
                                             active={true}
                                         ></TableSortLabel>{' '}
-                                        Name
                                     </TableCell>
                                     <TableCell>Category</TableCell>
                                     <TableCell variant={'head'}></TableCell>

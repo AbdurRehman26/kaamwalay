@@ -14,10 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { SafeSquareOutline } from '@shared/components/icons/SafeSquareOutline';
 import { useAppSelector } from '@admin/redux/hooks';
-import { RootState } from '../../redux/store';
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(
@@ -61,7 +59,7 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
-    const cardsManagementState = useSelector((state: RootState) => state.page.cardsManagementSelected);
+    const cardsManagementState = useAppSelector((state) => state.page.cardsManagementSelected);
     const [open, setOpen] = useState(false);
 
     const classes = useStyles({ drawerState, cardsManagementState, open });

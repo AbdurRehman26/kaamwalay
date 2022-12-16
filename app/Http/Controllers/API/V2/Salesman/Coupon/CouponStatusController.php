@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Salesman\Coupon\ChangeCouponStatusRequest;
 use App\Http\Resources\API\V2\Salesman\Coupon\CouponResource;
 use App\Models\Coupon;
-use App\Services\Admin\Coupon\CouponService;
+use App\Services\Salesman\Coupon\CouponService;
 
 class CouponStatusController extends Controller
 {

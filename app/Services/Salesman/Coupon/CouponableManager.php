@@ -2,7 +2,7 @@
 
 namespace App\Services\Salesman\Coupon;
 
-use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
+use App\Exceptions\API\Salesman\Coupon\CouponableEntityDoesNotExistException;
 use App\Services\Salesman\Coupon\Contracts\CouponableEntityInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

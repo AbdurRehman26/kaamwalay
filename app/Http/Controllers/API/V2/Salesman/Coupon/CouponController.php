@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API\V2\Salesman\Coupon;
 
-use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
-use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
-use App\Exceptions\API\Admin\Coupon\CouponHasInvalidMinThreshold;
+use App\Exceptions\API\Salesman\Coupon\CouponableEntityDoesNotExistException;
+use App\Exceptions\API\Salesman\Coupon\CouponCodeAlreadyExistsException;
+use App\Exceptions\API\Salesman\Coupon\CouponHasInvalidMinThreshold;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Salesman\Coupon\CalculateCouponDiscountForOrderRequest;
 use App\Http\Requests\API\V2\Salesman\Coupon\CalculateCouponDiscountRequest;

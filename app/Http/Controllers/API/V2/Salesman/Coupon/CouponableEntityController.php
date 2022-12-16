@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API\V2\Salesman\Coupon;
 
-use App\Exceptions\API\Admin\Coupon\CouponableEntitiesNotAvailableException;
-use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
+use App\Exceptions\API\Salesman\Coupon\CouponableEntitiesNotAvailableException;
+use App\Exceptions\API\Salesman\Coupon\CouponableEntityDoesNotExistException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Salesman\Coupon\CouponableEntityRequest;
 use App\Models\CouponApplicable;
-use App\Services\Admin\Coupon\CouponService;
+use App\Services\Salesman\Coupon\CouponService;
 use Countable;
 use IteratorAggregate;
 

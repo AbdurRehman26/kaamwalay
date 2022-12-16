@@ -3,12 +3,12 @@
 namespace App\Services\Salesman\Coupon;
 
 use App\Enums\Coupon\CouponMinThresholdTypeEnum;
-use App\Events\API\Admin\Coupon\NewCouponAdded;
-use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
-use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
-use App\Exceptions\API\Admin\Coupon\CouponExpiredOrInvalid;
-use App\Exceptions\API\Admin\Coupon\CouponHasInvalidMinThreshold;
-use App\Exceptions\API\Admin\Coupon\CouponUsageLimitReachedException;
+use App\Events\API\Salesman\Coupon\NewCouponAdded;
+use App\Exceptions\API\Salesman\Coupon\CouponableEntityDoesNotExistException;
+use App\Exceptions\API\Salesman\Coupon\CouponCodeAlreadyExistsException;
+use App\Exceptions\API\Salesman\Coupon\CouponExpiredOrInvalid;
+use App\Exceptions\API\Salesman\Coupon\CouponHasInvalidMinThreshold;
+use App\Exceptions\API\Salesman\Coupon\CouponUsageLimitReachedException;
 use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
 use App\Models\CouponApplicable;

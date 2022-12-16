@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import TabList from '@mui/lab/TabList';
 import Button from '@mui/material/Button';
@@ -35,7 +34,9 @@ const useStyles = makeStyles(
             padding: theme.spacing(3),
         },
         newPromoCodeBtn: {
-            borderRadius: 18,
+            textTransform: 'uppercase',
+            padding: '10px 20px',
+            borderRadius: '24px',
         },
         searchField: {
             backgroundColor: '#fff',
@@ -116,11 +117,10 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
                         <Button
                             variant={'contained'}
                             color={'primary'}
-                            startIcon={<AddIcon />}
                             onClick={onNewPromoCodePress}
                             className={classes.newPromoCodeBtn}
                         >
-                            New Promo Code
+                            create promo code
                         </Button>
                     </span>
                 </Grid>

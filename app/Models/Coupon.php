@@ -169,6 +169,15 @@ class Coupon extends Model
         );
     }
 
+    /**
+     * @param  Builder <Coupon> $query
+     * @return Builder <Coupon>
+     */
+    public function scopeNotCreatedBy(Builder $query, string|int $id): Builder
+    {
+        return $query->where('created_by', '!=', $id);
+    }
+
     public function getCodeAttribute(string $value): string
     {
         return Str::upper($value);
@@ -180,6 +189,19 @@ class Coupon extends Model
     }
 
     public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            'couponStatus',
+            'couponApplicable',
+            'couponStats',
+            'couponLogs',
+            'users',
+            'paymentPlans',
+            'createdBy',
+        ];
+    }
+
+    public static function getAllowedSalesmanIncludes(): array
     {
         return [
             'couponStatus',

@@ -68,7 +68,7 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
                 navigation={true}
                 thumbs={{ swiper: thumbsSwiper }}
                 modules={[FreeMode, Thumbs]}
-                className={'image_path' in imagesJson ? 'SwiperSingle' : 'SwiperMultiple'}
+                className={Object.keys(imagesJson).length === 1 ? 'SwiperSingle' : 'SwiperMultiple'}
             >
                 {Object.keys(imagesJson).map((key) => {
                     return (
@@ -78,7 +78,7 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
                     );
                 })}
             </Swiper>
-            {'image_path' in imagesJson ? null : (
+            {Object.keys(imagesJson).length === 1 ? null : (
                 <Swiper
                     onSwiper={setThumbsSwiper}
                     loop={false}

@@ -154,6 +154,7 @@ export function CardsListPage() {
         setIsLoading(true);
         const cardData = await dispatch(getCardData(cardId));
         dispatch(manageCardDialogActions.setSelectedCategory(cardData.payload.data.cardCategory));
+        dispatch(manageCardDialogActions.setSelectedCardSet(cardData.payload.data.cardSet));
         setUpdateCardData(cardData.payload.data);
         setAddCardDialog(true);
         setIsLoading(false);

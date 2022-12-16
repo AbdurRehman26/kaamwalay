@@ -480,7 +480,18 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     useEffect(() => {
         setCardCategory(updateCard?.id);
         setSelectedSeries(updateCard?.cardSeriesName);
-        setSelectedSet(updateCard?.cardSetName);
+        setSelectedSet(
+            dialogState.selectedCardSet
+                ? {
+                      id: dialogState.selectedCardSet.id,
+                      cardSeriesId: dialogState.selectedCardSet.cardSeriesId,
+                      label: dialogState.selectedCardSet.name,
+                      name: dialogState.selectedCardSet.name,
+                      imagePath: dialogState.selectedCardSet.imagePath,
+                      releaseDate: dialogState.selectedCardSet.releaseDate,
+                  }
+                : updateCard?.cardSetName,
+        );
         setCardName(updateCard?.name);
         setCardNumber(updateCard?.cardNumber);
         setReleaseDate(updateCard?.releaseDate);
@@ -490,7 +501,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         setSelectedLanguage(updateCard?.language);
         setProductVariant(updateCard?.variant);
         setSelectedCardPhoto(updateCard?.imagePath);
-    }, [isUpdate, updateCard]);
+    }, [dialogState.selectedCardSet, isUpdate, updateCard]);
 
     const handleModalBack = () => {
         setCreateCardView(true);

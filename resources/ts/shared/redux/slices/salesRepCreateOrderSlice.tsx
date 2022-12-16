@@ -527,7 +527,7 @@ export const getStatesList = createAsyncThunk(
     async (input?: { countryId: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `admin/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
+            `salesman/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
         );
         const americanStates = await endpoint.get('');
         return americanStates.data;

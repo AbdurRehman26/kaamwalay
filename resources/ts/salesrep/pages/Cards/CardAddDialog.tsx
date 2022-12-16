@@ -150,7 +150,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const fetchSeries = useCallback(
         async (categoryId: any) => {
-            const endpoint = apiService.createEndpoint(`admin/cards/series?category_id=` + categoryId);
+            const endpoint = apiService.createEndpoint(`salesman/cards/series?category_id=` + categoryId);
             const response = await endpoint.get('');
             setAvailableSeries(
                 response.data.map((item: CardSeries) => {
@@ -168,7 +168,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const fetchSets = useCallback(
         async (seriesId: Number) => {
-            const endpoint = apiService.createEndpoint(`admin/cards/sets?series_id=` + seriesId);
+            const endpoint = apiService.createEndpoint(`salesman/cards/sets?series_id=` + seriesId);
             const response = await endpoint.get('');
             setAvailableSets(
                 response.data.map((item: CardSets) => {
@@ -188,7 +188,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const fetchDropdownsData = useCallback(
         async (categoryId: Number) => {
-            const endpoint = apiService.createEndpoint(`admin/cards/options/` + categoryId);
+            const endpoint = apiService.createEndpoint(`salesman/cards/options/` + categoryId);
             const response = await endpoint.get('');
             setAvailableRarities(
                 response.data.rarity.map((item: string) => {
@@ -243,7 +243,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     useEffect(
         () => {
             async function fetchCategories() {
-                const endpoint = apiService.createEndpoint(`admin/cards/categories`);
+                const endpoint = apiService.createEndpoint(`salesman/cards/categories`);
                 const response = await endpoint.get('');
                 const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
                 setAvailableCategories(response.data);
@@ -368,7 +368,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [selectedSeries, selectedSet, cardName, selectedCardPhoto, selectedLanguage, selectedRarity, cardNumber]);
 
     const handleAddCard = async () => {
-        const endpoint = apiService.createEndpoint(isUpdate ? `admin/cards/${updateCard?.id}` : `admin/cards`);
+        const endpoint = apiService.createEndpoint(isUpdate ? `salesman/cards/${updateCard?.id}` : `salesman/cards`);
 
         setIsLoading(true);
         try {
@@ -421,7 +421,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [newSetLogo, newSetName]);
 
     const handleAddSet = async () => {
-        const endpoint = apiService.createEndpoint('/admin/cards/sets');
+        const endpoint = apiService.createEndpoint('/salesman/cards/sets');
         setIsLoading(true);
         try {
             const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
@@ -453,7 +453,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [newSeriesLogo, newSeriesName]);
 
     const handleAddSeries = async () => {
-        const endpoint = apiService.createEndpoint('/admin/cards/series');
+        const endpoint = apiService.createEndpoint('/salesman/cards/series');
         setIsLoading(true);
         try {
             const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);

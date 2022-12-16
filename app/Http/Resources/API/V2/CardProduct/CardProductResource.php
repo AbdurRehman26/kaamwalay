@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V2\CardProduct;
 
 use App\Http\Resources\API\V1\CardProduct\CardProductResource as V1CardProductResource;
-use App\Http\Resources\API\V2\CardSet\CardSetResource;
 use App\Http\Resources\API\V2\Admin\CardCategory\CardCategoryResource;
+use App\Http\Resources\API\V2\CardSet\CardSetResource;
 use App\Models\CardProduct;
 
 /**

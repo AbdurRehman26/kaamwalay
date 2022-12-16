@@ -162,7 +162,6 @@ it('creates card with one different param from existing card', function () {
     ]);
 
     $response->assertSuccessful();
-
 });
 
 test('admins can update cards manually', function () {

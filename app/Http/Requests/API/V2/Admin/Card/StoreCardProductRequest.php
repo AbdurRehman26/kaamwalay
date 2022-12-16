@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
+use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest as V1StoreCardProductRequest;
 use App\Services\Admin\Card\CardProductService;
 use Illuminate\Validation\Rule;
-use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest as V1StoreCardProductRequest;
 
 class StoreCardProductRequest extends V1StoreCardProductRequest
 {

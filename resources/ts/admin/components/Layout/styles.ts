@@ -12,7 +12,7 @@ export const Content = styled('div')({
 
 export const SidebarHolder = styled('aside')({
     display: 'inline-flex',
-    maxWidth: 240,
+    maxWidth: 246,
 });
 
 export const useLayoutHeaderStyles = makeStyles(

@@ -31,22 +31,18 @@ const useStyles = makeStyles(
             background: '#F9F9F9',
         },
         cardManagementButton: {
-            borderLeft: ({ cardsManagementState }: any) => (cardsManagementState ? '4px solid #20BFB8' : 'none'),
+            borderLeft: ({ cardsManagementState }: any) =>
+                cardsManagementState ? '4px solid #20BFB8' : '4px solid transparent',
             background: ({ open }: any) => (open ? '#F9F9F9' : '#fff'),
         },
         drawerPaper: ({ drawerState }: Record<string, any>) => ({
-            width: drawerState ? 240 : 0,
+            width: drawerState ? 246 : 0,
             position: 'relative',
             transition:
                 'transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms, width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms !important',
         }),
         title: {
             marginBottom: 3,
-            '& .MuiListItemText-primary': {
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
-            },
         },
         iconHolder: {
             minWidth: 42,

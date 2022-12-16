@@ -10,19 +10,25 @@ const AccordionDiv = styled(Accordion)({
     borderRadius: '4px',
     boxShadow: 'none',
     position: 'inherit',
+    minHeight: '53px',
+    '&:nth-child(2)': {
+        marginTop: '20px',
+    },
     '& .Mui-expanded': {
         minHeight: '0px !important',
     },
-
     '.Heading': {
         fontStyle: 'normal',
         fontWeight: 500,
-        fontSize: '12px',
+        fontSize: '14px',
         lineHeight: '20px',
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
-    '.Detail': {
+    '.DetailSection': {
+        padding: '0px 16px 16px',
+    },
+    '.DetailText': {
         fontStyle: 'normal',
         fontWeight: 400,
         fontSize: '12px',
@@ -36,11 +42,15 @@ export default function ShippingMethodDetail() {
     return (
         <div>
             <AccordionDiv>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="insuredShipping-content"
+                    id="insuredShipping-header"
+                >
                     <Typography className={'Heading'}>What is insured shipping?</Typography>
                 </AccordionSummary>
-                <AccordionDetails sx={{ padding: '0px 16px 16px' }}>
-                    <Typography className={'Detail'}>
+                <AccordionDetails className={'DetailSection'}>
+                    <Typography className={'DetailText'}>
                         AGS insurance begins to apply to your cards once we receive them up to the point that they are
                         marked delivered back to you by our carrier. It covers any loss or damage that might occur to
                         your cards (up to their full value) while they are in our possession or in transit back to you.
@@ -50,12 +60,16 @@ export default function ShippingMethodDetail() {
                     </Typography>
                 </AccordionDetails>
             </AccordionDiv>
-            <AccordionDiv sx={{ marginTop: '20px' }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
+            <AccordionDiv>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="vaultStorage-content"
+                    id="vaultStorage-header"
+                >
                     <Typography className={'Heading'}>What is vault storage?</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <Typography className={'Detail'}>
+                <AccordionDetails className={'DetailSection'}>
+                    <Typography className={'DetailText'}>
                         Vault storage allows you to safely store your cards in our AGS Vault. Rather than shipping it
                         back after grading, we will store your slabbed cards in a level-8 secrity safe. Vault storage is
                         completely free and you can opt to have your cards shipped back to you at any point.

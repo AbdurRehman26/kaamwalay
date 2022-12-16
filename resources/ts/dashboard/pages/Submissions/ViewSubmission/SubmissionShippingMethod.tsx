@@ -169,7 +169,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
                         {shippingMethod?.name ?? 'Insured Shipping'}
                     </Typography>
-                    <InfoIcon color={'disabled'} sx={{ ml: 1 }} onClick={handleDialog} />
+                    <InfoIcon sx={{ ml: 1, color: 'rgba(0, 0, 0, 0.54)', cursor: 'pointer' }} onClick={handleDialog} />
                 </Grid>
                 {content}
             </Stack>

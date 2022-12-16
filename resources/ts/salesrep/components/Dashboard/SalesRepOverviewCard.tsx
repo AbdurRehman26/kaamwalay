@@ -30,6 +30,7 @@ interface SalesRepOverviewCardProps {
     hint?: string;
     timeFilters?: boolean;
     statName?: string;
+    formatAsCurrency?: boolean;
     addButton?: boolean;
     onAddButtonClick?: () => void;
 }
@@ -71,6 +72,7 @@ export function SalesRepOverviewCard({
     hint = '',
     timeFilters = false,
     statName = '',
+    formatAsCurrency = true,
     addButton = false,
     onAddButtonClick = () => {},
 }: SalesRepOverviewCardProps) {
@@ -131,6 +133,14 @@ export function SalesRepOverviewCard({
         [statName, timeFilter],
     );
 
+    const getPlainValue = useCallback((value: any) => {
+        let value$ = parseInt(`${value || 0}`);
+        if (Number.isNaN(value$)) {
+            value$ = 0;
+        }
+        return value$;
+    }, []);
+
     return (
         <Grid item container className={classes.cardContent} direction={'row'}>
             <Grid item container md={6}>
@@ -157,7 +167,7 @@ export function SalesRepOverviewCard({
                 <Grid display={'flex'} mt={2} alignItems={'center'}>
                     <Grid>
                         <Typography variant={'h4'} className={classes.cardValue}>
-                            {formatCurrency(cardValue || 0)}
+                            {formatAsCurrency ? formatCurrency(cardValue || 0) : getPlainValue(cardValue || 0)}
                         </Typography>
                     </Grid>
                 </Grid>

@@ -2,7 +2,6 @@ import InfoIcon from '@mui/icons-material/InfoOutlined';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useCallback, useMemo } from 'react';
 import { SelectAddressDialog, SelectAddressFormValues } from '@shared/components/SelectAddressDialog';
@@ -14,7 +13,9 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { delay } from '@shared/lib/utils/delay';
 import { updateOrderShippingMethod } from '@shared/redux/slices/ordersSlice';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch } from '@dashboard/redux/hooks';
+import { setDialog } from '@dashboard/redux/slices/newSubmissionSlice';
+import SubmissionShippingDetailDialog from './SubmissionShippingDetailDialog';
 
 interface Props {
     orderId?: number;
@@ -28,6 +29,10 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
     const loadingModal = useLoadingModal();
 
     const dispatch = useAppDispatch();
+
+    const handleDialog = useCallback(() => {
+        dispatch(setDialog(true));
+    }, [dispatch]);
 
     const handleSelectAddress = useCallback(
         async ({ address, newAddress }: SelectAddressFormValues) => {
@@ -155,6 +160,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
 
     return (
         <>
+            <SubmissionShippingDetailDialog shippingMethod={shippingMethod} paid={paid} />
             <Stack py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500} sx={{ fontSize: '14px' }}>
                     Shipping/Storage Selection
@@ -163,25 +169,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
                         {shippingMethod?.name ?? 'Insured Shipping'}
                     </Typography>
-                    {paid && shippingMethod?.code === ShippingMethodType.VaultStorage ? (
-                        <Tooltip
-                            title={
-                                <Stack>
-                                    <Typography variant={'caption'} mb={2.5}>
-                                        Since you have already paid, you cannot switch from Vault Storage to Insured
-                                        Shipping from the submission page.
-                                    </Typography>
-                                    <Typography variant={'caption'}>
-                                        If you want your cards shipped back to you, you will have to wait till this
-                                        submission is <b>Stored in Vault</b>, then go to Your Cards to create a
-                                        shipment.
-                                    </Typography>
-                                </Stack>
-                            }
-                        >
-                            <InfoIcon color={'disabled'} sx={{ ml: 1 }} />
-                        </Tooltip>
-                    ) : null}
+                    <InfoIcon sx={{ ml: 1, color: 'rgba(0, 0, 0, 0.54)', cursor: 'pointer' }} onClick={handleDialog} />
                 </Grid>
                 {content}
             </Stack>

@@ -6,13 +6,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { CustomerCreditDialog } from '@salesrep/components/CustomerCreditDialog';
-import { resendAccessEmail } from '@salesrep/redux/slices/submissionGradeSlice';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
-import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { useSalesRepCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { resendAccessEmail } from '@shared/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
@@ -83,7 +83,7 @@ export function CustomerView() {
         navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
     };
 
-    const customer$ = useAdminCustomerQuery({
+    const customer$ = useSalesRepCustomerQuery({
         resourceId: Number(id),
     });
 

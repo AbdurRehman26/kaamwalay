@@ -17,7 +17,7 @@ import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useListSalesRepOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 
 interface Props {
     label: string;
@@ -78,7 +78,7 @@ const headings: EnhancedTableHeadCell[] = [
         id: 'created_at',
         numeric: false,
         disablePadding: false,
-        label: 'Placed',
+        label: 'Date Created',
         align: 'left',
         sortable: true,
     },
@@ -91,18 +91,18 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: true,
     },
     {
-        id: 'status',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
-        align: 'left',
-        sortable: true,
-    },
-    {
         id: 'payment_status',
         numeric: false,
         disablePadding: false,
         label: 'Payment',
+        align: 'left',
+        sortable: true,
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
         align: 'left',
         sortable: true,
     },
@@ -118,7 +118,7 @@ const headings: EnhancedTableHeadCell[] = [
         id: 'grand_total',
         numeric: true,
         disablePadding: false,
-        label: 'Order Total',
+        label: 'Total',
         align: 'left',
         sortable: true,
     },
@@ -151,7 +151,7 @@ export function CustomerSubmissionListView() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useListSalesRepOrdersQuery({
         params: {
             include: [
                 'orderStatus',

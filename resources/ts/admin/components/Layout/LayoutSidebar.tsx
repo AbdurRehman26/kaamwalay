@@ -1,5 +1,7 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import Face from '@mui/icons-material/Face';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SellIcon from '@mui/icons-material/Sell';
@@ -11,17 +13,26 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
-import { transparentize } from 'polished';
-import React, { useMemo } from 'react';
+import { useState } from 'react';
 import { SafeSquareOutline } from '@shared/components/icons/SafeSquareOutline';
 import { useAppSelector } from '@admin/redux/hooks';
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(
-    (theme) => ({
+    () => ({
         root: {
             overflow: 'hidden',
             borderLeft: '4px solid transparent',
+        },
+        list: {
+            paddingTop: '0px',
+        },
+        collapse: {
+            background: '#F9F9F9',
+        },
+        cardManagementButton: {
+            borderLeft: ({ cardsManagementState }: any) => (cardsManagementState ? '4px solid #20BFB8' : 'none'),
+            background: ({ open }: any) => (open ? '#F9F9F9' : '#fff'),
         },
         drawerPaper: ({ drawerState }: Record<string, any>) => ({
             width: drawerState ? 240 : 0,
@@ -29,19 +40,13 @@ const useStyles = makeStyles(
             transition:
                 'transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms, width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms !important',
         }),
-        selected: {
-            borderLeftColor: theme.palette.primary.main,
-            backgroundColor: `${transparentize(0.8, theme.palette.primary.main)} !important`,
-
-            '& $icon, & $title': {
-                color: theme.palette.primary.main,
-            },
-            '& $title .MuiListItemText-primary': {
-                fontWeight: '500 !important',
-            },
-        },
         title: {
             marginBottom: 3,
+            '& .MuiListItemText-primary': {
+                fontSize: '14px !important',
+                lineHeight: '20px !important',
+                letterSpacing: '0.2px !important',
+            },
         },
         iconHolder: {
             minWidth: 42,
@@ -54,15 +59,14 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
-    const classes = useStyles({ drawerState });
+    const cardsManagementState = useAppSelector((state) => state.page.cardsManagementSelected);
+    const [open, setOpen] = useState(false);
 
-    const itemClasses = useMemo(
-        () => ({
-            root: classes.root,
-            selected: classes.selected,
-        }),
-        [classes.root, classes.selected],
-    );
+    const classes = useStyles({ drawerState, cardsManagementState, open });
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
 
     return (
         <Drawer
@@ -82,17 +86,18 @@ function LayoutSidebar() {
                     href={'/vault-storage'}
                     comingSoon
                 />
-                <ListItemButton classes={itemClasses}>
+                <ListItemButton onClick={handleClick} className={classes.cardManagementButton}>
                     <ListItemIcon className={classes.iconHolder}>
-                        <StyleIcon />
+                        <StyleIcon sx={{ color: cardsManagementState ? '#20BFB8' : 'rgba(0, 0, 0, 0.54)' }} />
                     </ListItemIcon>
                     <ListItemText primary="Cards Management" className={classes.title} />
+                    {open ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-                <Collapse in={true} timeout="auto" unmountOnExit>
-                    <List component="div">
-                        <LayoutSidebarItem title={'Cards'} href={'/cards'} />
-                        <LayoutSidebarItem title={'Rarities'} href={'/rarities'} />
-                        <LayoutSidebarItem title={'Surfaces'} href={'/surfaces'} />
+                <Collapse in={open} timeout="auto" className={classes.collapse}>
+                    <List component="div" className={classes.list}>
+                        <LayoutSidebarItem title={'Cards'} href={'/cards'} cardsManagementStyle={true} />
+                        <LayoutSidebarItem title={'Rarities'} href={'/rarities'} cardsManagementStyle={true} />
+                        <LayoutSidebarItem title={'Surfaces'} href={'/surfaces'} cardsManagementStyle={true} />
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />

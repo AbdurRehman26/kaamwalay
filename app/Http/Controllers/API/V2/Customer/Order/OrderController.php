@@ -109,7 +109,6 @@ class OrderController extends Controller
                 $order,
                 $blockchainNetworkChainId,
                 $request->input('payment_by_wallet'),
-                $request->input('discounted_amount'),
             );
 
             return new JsonResponse(

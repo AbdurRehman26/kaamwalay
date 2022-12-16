@@ -224,11 +224,15 @@ class SalesmanService
 
         switch ($data['stat_name']) {
             case 'sales':
-                return $user->salesmanOrders()->whereBetween('created_at', [$startDate, $endDate])->sum('grand_total');
+                return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->sum('grand_total');
             case 'commission_earned':
                 return $user->salesmanProfile->salesmanEarnedCommissions()->whereBetween('created_at', [$startDate, $endDate])->sum('commission');
             case 'commission_paid':
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            case 'orders':
+                return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->count();
+            case 'cards':
+                return $user->getSalesmanCardsCount($startDate, $endDate);
             default:
                 return 0;
         }

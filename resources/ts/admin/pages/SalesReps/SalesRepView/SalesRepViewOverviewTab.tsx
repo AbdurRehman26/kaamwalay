@@ -15,7 +15,16 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
     return (
         <Grid container direction={'row'} spacing={2.5} p={3}>
             <Grid item container direction={'row'} spacing={2.5}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
+                    <SalesRepOverviewCard
+                        title={'Orders'}
+                        value={salesrep.orders}
+                        timeFilters={true}
+                        statName={'orders'}
+                        formatAsCurrency={false}
+                    />
+                </Grid>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Sales'}
                         value={salesrep.sales}
@@ -23,7 +32,7 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                         statName={'sales'}
                     />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Unpaid Commission'}
                         value={salesrep.unpaidCommission}
@@ -36,7 +45,16 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                 </Grid>
             </Grid>
             <Grid item container direction={'row'} spacing={2.5}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
+                    <SalesRepOverviewCard
+                        title={'Cards'}
+                        value={salesrep.cards}
+                        timeFilters={true}
+                        statName={'cards'}
+                        formatAsCurrency={false}
+                    />
+                </Grid>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Commission Earned'}
                         value={salesrep.unpaidCommissionTillLastMonth}
@@ -44,7 +62,7 @@ export function SalesRepViewOverviewTab({ salesrep }: SalesRepViewOverviewTabPro
                         statName={'commission_earned'}
                     />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Commission Paid'}
                         timeFilters={true}

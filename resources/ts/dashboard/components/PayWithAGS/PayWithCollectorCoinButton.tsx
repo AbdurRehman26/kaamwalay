@@ -92,7 +92,7 @@ export function PayWithCollectorCoinButton() {
                             verifyOrderStatus({
                                 orderID,
                                 txHash: txHash,
-                                paymentByWallet: 0,
+                                paymentByWallet: appliedCredit,
                                 paymentBlockchainNetwork: currentChainId,
                                 paymentMethod: {
                                     id: paymentMethodId,

@@ -17,7 +17,7 @@ import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListSalesRepOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
-import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
+import { getPromoCodes } from '@shared/redux/slices/salesmanPromoCodesSlice';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;

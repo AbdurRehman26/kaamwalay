@@ -8,6 +8,11 @@ export class SalesmanPromoCodesRepository extends Repository<PromoCodeEntity> {
     readonly endpointPath: string = 'salesman/coupons';
     readonly model = PromoCodeEntity;
 
+    public async getPromoCodes() {
+        const { data } = await this.endpoint.get('/');
+        return this.toEntity(data);
+    }
+
     async storeCoupon(input: StoreCouponDto) {
         const { data } = await this.endpoint.post(``, input);
         return data;

@@ -14,6 +14,9 @@
 
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
 use App\Http\Controllers\API\V2\Salesman\Coupon\CouponController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponStatusController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponApplicableController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\V2\Salesman\CustomerController;
 use App\Http\Controllers\API\V2\Salesman\Order\OrderController;
 use App\Http\Controllers\API\V2\Salesman\Order\PaymentMethodController;
@@ -73,6 +76,19 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
             ->name('salesman.wallet.history');
     });
 
+    Route::apiResource('coupons', CouponController::class)->except('update')->names([
+        'index' => 'salesman.coupons.index',
+        'show' => 'salesman.coupons.show',
+        'store' => 'salesman.coupons.store',
+        'destroy' => 'salesman.coupons.destroy',
+        'verify' => 'salesman.coupons.verify',
+        'calculateDiscountForOrder' => 'salesman.coupons.calculateDiscountForOrder',
+        'calculateDiscount' => 'salesman.coupons.calculateDiscount',
+    ]);;
+    Route::put('coupons/{coupon}/change-status', CouponStatusController::class)
+        ->name('salesman.coupons.change-status');
+    Route::get('coupon-applicables', CouponApplicableController::class)->name('salesman.coupon.applicables');
+    Route::get('couponable/entities', CouponableEntityController::class)->name('salesman.couponable.entities');
     Route::prefix('coupons')->group(function () {
         Route::get('verify/{coupon:code}', [CouponController::class, 'verify'])->name('salesman.coupon.verify');
         Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('salesman.coupon.discount');

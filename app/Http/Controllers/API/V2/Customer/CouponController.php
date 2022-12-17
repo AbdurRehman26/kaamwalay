@@ -10,6 +10,7 @@ use App\Http\Requests\API\V2\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\V2\Customer\Coupon\CouponResource;
 use App\Models\Order;
 use App\Services\Coupon\V2\CouponService;
+use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -40,6 +41,11 @@ class CouponController extends Controller
                 $coupon,
                 $order
             );
+
+            /** @var OrderService $orderService */
+            $orderService = resolve(OrderService::class);
+
+            $orderService->attachCouponToOrder($order, $coupon, $discountedAmount);
         } catch (Exception $e) {
             return match (true) {
                 $e instanceof CouponHasInvalidMinThreshold => throw $e,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\Order;
 use App\Models\User;
@@ -45,6 +46,7 @@ it('returns salesmen list for admin', function () {
                     'email',
                     'customers',
                     'orders',
+                    'cards',
                     'commission_earned',
                     'status',
                     'sales',
@@ -77,6 +79,7 @@ it('returns salesmen list by status filter for admin', function () {
                     'email',
                     'customers',
                     'orders',
+                    'cards',
                     'commission_earned',
                     'status',
                     'sales',
@@ -100,6 +103,7 @@ it('returns salesmen list by sales sort for admin', function () {
                     'email',
                     'customers',
                     'orders',
+                    'cards',
                     'commission_earned',
                     'status',
                     'sales',
@@ -145,6 +149,7 @@ test('an admin can create a salesman', function () {
                 'email',
                 'customers',
                 'orders',
+                'cards',
                 'commission_earned',
                 'status',
                 'sales',
@@ -186,6 +191,7 @@ it('returns single salesman details for admin', function () {
                 'email',
                 'customers',
                 'orders',
+                'cards',
                 'commission_earned',
                 'status',
                 'sales',
@@ -224,6 +230,7 @@ test('an admin can update a salesman', function () {
                 'email',
                 'customers',
                 'orders',
+                'cards',
                 'commission_earned',
                 'status',
                 'sales',
@@ -293,6 +300,7 @@ test('an admin can get overview stats for a salesman', function () {
     $order = Order::factory()->create([
         'salesman_id' => $salesman->id,
         'user_id' => $user->id,
+        'payment_status' => OrderPaymentStatusEnum::PAID,
     ]);
 
     actingAs($this->user);

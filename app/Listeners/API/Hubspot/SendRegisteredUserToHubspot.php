@@ -23,7 +23,7 @@ class SendRegisteredUserToHubspot implements ShouldQueue, ShouldBeEncrypted
             return;
         }
 
-        if (! config('services.hubspot.api_key')) {
+        if (! config('services.hubspot.access_token')) {
             return;
         }
 

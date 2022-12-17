@@ -22,8 +22,8 @@ class CustomerService
     public function getCustomers(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::customer()->salesmanId(auth()->user()->id))
-            ->allowedFilters(User::getAllowedAdminFilters())
-            ->allowedSorts(User::getAllowedAdminSorts())
+            ->allowedFilters(User::getAllowedSalesmanFilters())
+            ->allowedSorts(User::getAllowedSalesmanSorts())
             ->defaultSort('-created_at')
             ->with('salesman')
             ->paginate(request('per_page', self::PER_PAGE));

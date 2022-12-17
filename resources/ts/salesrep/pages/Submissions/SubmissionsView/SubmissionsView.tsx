@@ -13,7 +13,7 @@ import { SubmissionsViewHeader } from './SubmissionsViewHeader';
 
 export function SubmissionsView() {
     const { id } = useParams<'id'>();
-    console.log(12313);
+
     const { data, isLoading } = useSalesRepOrderQuery({
         resourceId: Number(id),
         config: {

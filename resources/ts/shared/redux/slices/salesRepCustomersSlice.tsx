@@ -38,4 +38,5 @@ export const salesRepCustomersSlice = createSlice({
     },
 });
 
-export const { listAction: listSalesRepCustomersAction } = salesRepCustomersThunk;
+export const { listAction: listSalesRepCustomersAction, showAction: showSalesRepCustomerAction } =
+    salesRepCustomersThunk;

@@ -14,10 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { SafeSquareOutline } from '@shared/components/icons/SafeSquareOutline';
 import { useAppSelector } from '@admin/redux/hooks';
-import { RootState } from '../../redux/store';
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(
@@ -33,22 +31,18 @@ const useStyles = makeStyles(
             background: '#F9F9F9',
         },
         cardManagementButton: {
-            borderLeft: ({ cardsManagementState }: any) => (cardsManagementState ? '4px solid #20BFB8' : 'none'),
+            borderLeft: ({ cardsManagementState }: any) =>
+                cardsManagementState ? '4px solid #20BFB8' : '4px solid transparent',
             background: ({ open }: any) => (open ? '#F9F9F9' : '#fff'),
         },
         drawerPaper: ({ drawerState }: Record<string, any>) => ({
-            width: drawerState ? 240 : 0,
+            width: drawerState ? 260 : 0,
             position: 'relative',
             transition:
                 'transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms, width 225ms cubic-bezier(0, 0, 0.2, 1) 0ms !important',
         }),
         title: {
             marginBottom: 3,
-            '& .MuiListItemText-primary': {
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
-            },
         },
         iconHolder: {
             minWidth: 42,
@@ -61,7 +55,7 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
-    const cardsManagementState = useSelector((state: RootState) => state.page.cardsManagementSelected);
+    const cardsManagementState = useAppSelector((state) => state.page.cardsManagementSelected);
     const [open, setOpen] = useState(false);
 
     const classes = useStyles({ drawerState, cardsManagementState, open });

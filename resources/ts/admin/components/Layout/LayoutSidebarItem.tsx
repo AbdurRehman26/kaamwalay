@@ -8,7 +8,7 @@ import { transparentize } from 'polished';
 import React, { ElementType, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, matchPath, useLocation } from 'react-router-dom';
-import { setCardsManagementState } from '@admin/redux/slices/pageSlice';
+import { setCardsManagementState } from '@shared/redux/slices/pageSlice';
 
 type SidebarMenuItemProps = {
     icon?: ElementType;
@@ -33,9 +33,6 @@ const useStyles = makeStyles(
             },
             '& $title .MuiListItemText-primary': {
                 fontWeight: '500 !important',
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
             },
         },
         notSelected: {
@@ -46,19 +43,11 @@ const useStyles = makeStyles(
             },
             '& $title .MuiListItemText-primary': {
                 fontWeight: '500 !important',
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
             },
         },
         icon: {},
         title: {
             marginBottom: 3,
-            '& .MuiListItemText-primary': {
-                fontSize: '14px !important',
-                lineHeight: '20px !important',
-                letterSpacing: '0.2px !important',
-            },
         },
         iconHolder: {
             minWidth: 42,

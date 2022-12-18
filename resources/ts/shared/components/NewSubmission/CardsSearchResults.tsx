@@ -20,6 +20,7 @@ import {
     markCardAsSelected,
     markCardAsUnselected,
     setCardsSearchValue,
+    setIsCouponApplied,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { font } from '@shared/styles/utils';
 import CardAddDialog from '@admin/pages/Cards/CardAddDialog';
@@ -64,6 +65,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const subtitle = result.longName.value;
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const isCouponApplied = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponApplied);
 
     function generateMarkCardDto(item: CardProductEntity) {
         return {
@@ -103,11 +105,14 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         } else {
             deselectCard(item);
         }
+        if (isCouponApplied) {
+            dispatch(setIsCouponApplied(false));
+        }
         setTimeout(() => {
             dispatch(setCardsSearchValue(''));
             (window as any).globalThis.clearSearch();
         }, 500);
-    }, [selectedCards, item, selectCard, deselectCard, dispatch]);
+    }, [selectedCards, item, selectCard, deselectCard, dispatch, isCouponApplied]);
 
     return (
         <>

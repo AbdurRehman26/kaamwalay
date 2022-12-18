@@ -137,7 +137,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $user;
     }
 
-    public static function getAllowedAdminFilters(): array
+    public static function getAllowedFilters(): array
     {
         return [
             AllowedFilter::custom('search', new AdminCustomerSearchFilter),
@@ -148,7 +148,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         ];
     }
 
-    public static function getAllowedAdminSorts(): array
+    public static function getAllowedSorts(): array
     {
         return [
             AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
@@ -159,6 +159,26 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             'customer_number',
             'created_at',
         ];
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return self::getAllowedSorts();
+    }
+
+    public static function getAllowedSalesmanFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedSalesmanSorts(): array
+    {
+        return self::getAllowedSorts();
     }
 
     public static function getAllowedAdminSalesmanFilters(): array

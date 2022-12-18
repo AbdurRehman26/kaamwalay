@@ -41,7 +41,9 @@ export function CustomerSubmissionsList({
             />
             <TableBody>
                 {orders?.length > 0 ? (
-                    orders.map((order) => <SubmissionsTableRow order={order} key={order.id} />)
+                    orders.map((order) => (
+                        <SubmissionsTableRow headings={headings?.map((i) => i.id)} order={order} key={order.id} />
+                    ))
                 ) : (
                     <TableRow>
                         <TableCell align={'center'} colSpan={9}>

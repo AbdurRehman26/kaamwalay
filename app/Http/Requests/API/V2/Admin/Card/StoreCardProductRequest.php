@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
-use App\Models\CardProduct;
+use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest as V1StoreCardProductRequest;
 use App\Services\Admin\Card\CardProductService;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCardProductRequest extends FormRequest
+class StoreCardProductRequest extends V1StoreCardProductRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->isAdmin();
+        return true;
     }
 
     public function rules(): array
@@ -19,16 +18,15 @@ class UpdateCardProductRequest extends FormRequest
         return [
             'image_path' => ['required', 'string'],
             'name' => ['required', 'string'],
+            'category' => ['required','exists:card_categories,id'],
             'release_date' => ['required', 'date'],
+            'series_id' => ['required', 'integer', 'exists:card_series,id'],
+            'set_id' => ['required', 'integer', 'exists:card_sets,id'],
             'card_number' => [
                 'required',
                 'string',
                 Rule::unique('card_products', 'card_number_order')->where(function ($query) {
-                    /** @var CardProduct $cardProduct */
-                    $cardProduct = $this->route('cardProduct');
-
-                    return $query->where('id', '!=', $cardProduct->id)
-                        ->where('card_set_id', $this->set_id)
+                    return $query->where('card_set_id', $this->set_id)
                         ->where('language', $this->language)
                         ->where('rarity', $this->rarity)
                         ->where('edition', $this->edition ?? 'Unlimited')

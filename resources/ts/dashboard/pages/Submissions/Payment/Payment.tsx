@@ -595,7 +595,7 @@ export function Payment() {
                                         <PaymentForm />
                                     </div>
                                     <div className={classes.billingAddressAsShippingContainer}>
-                                        {canUseShippingAsBilling ? (
+                                        {Object.keys(shippingAddress).length !== 0 && canUseShippingAsBilling ? (
                                             <FormControlLabel
                                                 control={
                                                     <GreenCheckbox
@@ -606,7 +606,8 @@ export function Payment() {
                                                 label="Billing address same as shipping"
                                             />
                                         ) : null}
-                                        {useBillingAddressSameAsShipping ? (
+                                        {Object.keys(shippingAddress).length !== 0 &&
+                                        useBillingAddressSameAsShipping ? (
                                             <>
                                                 <Typography className={classes.billingAddressTitle}>
                                                     Billing Address
@@ -893,7 +894,7 @@ export function Payment() {
                                         step.
                                     </Typography>
                                     <Typography variant={'subtitle2'}>
-                                        All you need is a MetaMask crypto wallet
+                                        All you need is a MetaMask crypto wallet.
                                     </Typography>
                                 </div>
                             ) : null}

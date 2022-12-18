@@ -439,7 +439,7 @@ export function Payment() {
             address,
             apt,
             city,
-            phone: order?.data.shippingAddress.phone,
+            phone: order?.data.shippingAddress?.phone ?? 'Default',
             zip: zipCode,
             state: state.code,
         });

@@ -26,11 +26,11 @@ class CouponController extends Controller
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
         } catch (Exception $e) {
             return new JsonResponse(
-                    [
-                        'error' => $e->getMessage(),
-                    ],
-                    $e->getCode()
-                );
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
         }
 
         return new CouponResource($coupon);

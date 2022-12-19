@@ -217,12 +217,16 @@ function SubmissionSummary() {
     }
 
     function getPreviewTotal() {
-        const previewTotal =
-            numberOfSelectedCards * finalPrice +
-            Number(cleaningFee) +
-            shippingFee -
-            Number(isCouponApplied ? discountedValue : 0) -
-            appliedCredit;
+        const previewTotal = Number(
+            (
+                numberOfSelectedCards * finalPrice +
+                Number(cleaningFee) +
+                shippingFee -
+                Number(isCouponApplied ? discountedValue : 0) -
+                appliedCredit
+            ).toFixed(2),
+        );
+
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }

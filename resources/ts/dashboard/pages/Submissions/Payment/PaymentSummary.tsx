@@ -244,19 +244,23 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     };
 
     function getPreviewTotal() {
-        const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice -
-            Number(
-                paymentMethodID === 3
-                    ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
-                    : 0,
-            ) +
-            shippingFee -
-            Number(isCouponApplied ? discountedValue : 0) -
-            refundTotal +
-            Number(cleaningFee) +
-            extraChargesTotal -
-            appliedCredit;
+        const previewTotal = Number(
+            (
+                numberOfSelectedCards * serviceLevelPrice -
+                Number(
+                    paymentMethodID === 3
+                        ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
+                        : 0,
+                ) +
+                shippingFee -
+                Number(isCouponApplied ? discountedValue : 0) -
+                refundTotal +
+                Number(cleaningFee) +
+                extraChargesTotal -
+                appliedCredit
+            ).toFixed(2),
+        );
+
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }

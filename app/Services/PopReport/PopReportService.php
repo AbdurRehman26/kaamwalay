@@ -310,6 +310,7 @@ class PopReportService
 
         $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
             ->where('pop_reports_cards.card_set_id', $cardSet->id)
+            ->whereNull('card_products.deleted_at')
             ->select('*')
             ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 

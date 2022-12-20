@@ -56,8 +56,8 @@ function LayoutSidebar() {
             classes={{ paper: classes.drawerPaper }}
         >
             <List>
-                <LayoutSidebarItem icon={DashboardIcon} title={'Dashboard'} href={'/dashboard'} exact />
-                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} exact />
+                <LayoutSidebarItem icon={DashboardIcon} title={'Dashboard'} href={'/dashboard'} />
+                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
             </List>

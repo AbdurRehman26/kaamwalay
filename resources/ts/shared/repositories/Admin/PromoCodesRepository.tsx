@@ -9,7 +9,7 @@ export class AdminPromoCodesRepository extends Repository<PromoCodeEntity> {
     readonly model = PromoCodeEntity;
 
     public async getPromoCodes() {
-        const { data } = await this.endpoint.get('/');
+        const { data } = await this.endpoint.get('?page=1&per_page=9999');
         return this.toEntity(data);
     }
 

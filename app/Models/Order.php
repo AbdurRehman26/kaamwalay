@@ -427,7 +427,7 @@ class Order extends Model implements Exportable
     {
         return $query->whereHas(
             'coupon',
-            fn ($query) => $query->where('code', 'like', "%$coupon%")
+            fn ($query) => $query->where('code', 'like', "$coupon")
         );
     }
 

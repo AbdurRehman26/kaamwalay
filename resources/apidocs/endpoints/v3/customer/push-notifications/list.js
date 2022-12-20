@@ -8,6 +8,8 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {Number} [per_page] Per page count for pagination. Defaults to 15.
+ *
  * @apiSuccess {Array} data Push notifications data
  * @apiSuccess {String} data.id ID of notification
  * @apiSuccess {String} data.title Title of notification

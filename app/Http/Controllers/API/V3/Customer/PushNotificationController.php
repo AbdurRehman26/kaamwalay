@@ -12,7 +12,7 @@ class PushNotificationController extends V2PushNotificationController
 {
     public function index(): AnonymousResourceCollection
     {
-        $notifications = auth()->user()->notifications()->paginate();
+        $notifications = auth()->user()->notifications()->paginate(request('per_page', 15));
 
         return PushNotificationResource::collection($notifications);
     }
@@ -33,6 +33,23 @@ class PushNotificationController extends V2PushNotificationController
         return response()->json([
             'success' => true,
             'message' => 'All notifications have been marked as read.',
+        ]);
+    }
+
+    public function stats(): JsonResponse
+    {
+        // Can be improved to be a one database query in future
+        // If more performance is needed
+        $unreadNotificationsCount = auth()->user()->unreadNotifications()->count();
+        $readNotificationsCount = auth()->user()->readNotifications()->count();
+        $totalNotificationsCount = $unreadNotificationsCount + $readNotificationsCount;
+
+        return response()->json([
+            'data' => [
+                'unread_count' => $unreadNotificationsCount,
+                'read_count' => $readNotificationsCount,
+                'total' => $totalNotificationsCount,
+            ],
         ]);
     }
 }

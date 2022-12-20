@@ -48,7 +48,7 @@ class PushNotificationController extends V2PushNotificationController
             'data' => [
                 'unread_count' => $unreadNotificationsCount,
                 'read_count' => $readNotificationsCount,
-                'total' => $totalNotificationsCount
+                'total' => $totalNotificationsCount,
             ],
         ]);
     }

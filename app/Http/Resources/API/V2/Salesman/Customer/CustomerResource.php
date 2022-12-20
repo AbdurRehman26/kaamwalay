@@ -29,7 +29,7 @@ class CustomerResource extends BaseResource
             'customer_number' => $this->customer_number,
             'email' => $this->email,
             'phone' => $this->phone,
-            'submissions' => $this->orders()->paid()->count(),
+            'submissions' => $this->orders()->salesmanId($this->salesman_id)->paid()->count(),
             'cards_count' => $this->cardsCount(),
             'wallet' => $this->wallet,
             'created_by' => new UserResource($this->createdBy),

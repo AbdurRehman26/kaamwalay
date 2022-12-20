@@ -84,6 +84,7 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerHeading'}>Signed Up:</Typography>
                             <Typography className={'CustomerHeading'}>Created By:</Typography>
                             <Typography className={'CustomerHeading'}>Accessed:</Typography>
+                            <Typography className={'CustomerHeading'}>Paid Orders:</Typography>
                         </div>
                         <div>
                             <Typography className={'CustomerValue'}>
@@ -93,14 +94,9 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                                 {customer?.createdBy ? `Admin (${customer?.createdBy?.fullName})` : 'User'}
                             </Typography>
                             <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
+                            <Typography className={'CustomerValue'}>{customer?.submissions}</Typography>
                         </div>
                     </Grid>
-                </Grid>
-                <Grid container item xs className={'CustomerDetailBox'}>
-                    <div>
-                        <Typography className={'Submissions'}>Paid Submissions</Typography>
-                        <Typography className={'TotalSubmissions'}>{customer?.submissions}</Typography>
-                    </div>
                 </Grid>
                 <Grid container item xs className={'CustomerDetailBox'}>
                     <Grid container>

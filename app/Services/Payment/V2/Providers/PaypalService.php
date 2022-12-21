@@ -49,7 +49,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
         try {
             $response = $this->client->captureOrder($paymentIntentId);
 
-            return $this->validateOrderIsPaid($order, json_decode(json_encode($response->result), associative: true));
+            return $this->validateOrderIsPaid($order, json_decode(json_encode($response), associative: true));
         } catch (RequestException $e) {
             dd($e);
             return false;

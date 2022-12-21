@@ -2,19 +2,15 @@
 
 namespace App\Http\APIClients;
 
-use App\Models\Order;
-use App\Models\OrderPayment;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 
 class PaypalClient
 {
     public function getInstance(): PendingRequest
     {
-        return Http::baseUrl($this->baseUrl());
+        return Http::baseUrl($this->baseUrl())->withUserAgent($this->userAgent());
     }
 
     public function baseUrl()
@@ -47,10 +43,7 @@ class PaypalClient
     public function createOrder(array $data): array
     {
         return $this->getInstance()->withToken($this->getAccessToken())
-            ->withHeaders([
-                'Prefer' => 'return=representation',
-                'Content-Type' => 'application/json',
-            ])
+            ->withHeaders($this->headers())
             ->post('v2/checkout/orders?', $data)
             ->throw()
             ->json();
@@ -63,11 +56,14 @@ class PaypalClient
     {
         return $this->getInstance()
             ->withToken($this->getAccessToken())
-            ->withHeaders([
-                'Prefer' => 'return=representation',
-                'Content-Type' => 'application/json',
+            ->withHeaders($this->headers())
+            ->post('v2/checkout/orders/' . $paypalOrderId . '/capture?', [
+                // This is required, without this, the API was not working.
+                'application_context' => [
+                    'return_url' => '',
+                    'cancel_url' => '',
+                ],
             ])
-            ->post('v2/checkout/orders/' . $paypalOrderId . '/capture?')
             ->throw()
             ->json();
     }
@@ -79,10 +75,7 @@ class PaypalClient
     {
         return $this->getInstance()
             ->withToken($this->getAccessToken())
-            ->withHeaders([
-                'Prefer' => 'return=representation',
-                'Content-Type' => 'application/json',
-            ])
+            ->withHeaders($this->headers())
             ->post('/v2/payments/captures/' . $paymentCaptureId . '/refund?', $refundData)
             ->throw()
             ->json();
@@ -90,6 +83,14 @@ class PaypalClient
 
     protected function userAgent(): string
     {
-        return "PayPalHttp-PHP HTTP/1.1";
+        return "RG-PHP HTTP/1.1";
+    }
+
+    protected function headers(): array
+    {
+        return [
+            'Prefer' => 'return=representation',
+            'Content-Type' => 'application/json',
+        ];
     }
 }

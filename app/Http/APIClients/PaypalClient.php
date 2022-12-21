@@ -13,7 +13,7 @@ class PaypalClient
         return Http::baseUrl($this->baseUrl())->withUserAgent($this->userAgent());
     }
 
-    public function baseUrl()
+    public function baseUrl(): string
     {
         return config('services.paypal.base_url');
     }
@@ -52,7 +52,7 @@ class PaypalClient
     /**
      * @throws RequestException
      */
-    public function captureOrder(string $paypalOrderId)
+    public function captureOrder(string $paypalOrderId): array
     {
         return $this->getInstance()
             ->withToken($this->getAccessToken())
@@ -71,7 +71,7 @@ class PaypalClient
     /**
      * @throws RequestException
      */
-    public function captureRefund(string $paymentCaptureId, $refundData)
+    public function captureRefund(string $paymentCaptureId, $refundData): array
     {
         return $this->getInstance()
             ->withToken($this->getAccessToken())

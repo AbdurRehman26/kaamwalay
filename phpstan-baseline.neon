@@ -3061,11 +3061,6 @@ parameters:
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
-			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
-			count: 1
-			path: app/Services/Payment/V1/Providers/PaypalService.php
-
-		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
 			path: app/Services/Payment/V1/Providers/StripeService.php

@@ -3,6 +3,8 @@
 use App\Models\DatabaseNotification;
 use App\Models\User;
 
+use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
@@ -24,6 +26,15 @@ test('a customer can see their push notifications', function () {
     $response = getJson(route('v3.customer.push-notifications.index'));
 
     $response->assertOk()->assertJsonCount(5, 'data')->assertJsonFragment(['title' => 'Title1'])->assertJsonMissing(['title' => 'Title2']);
+});
+
+test('a customer can set pagination count', function () {
+    $notificationDataForCustomer = ['title' => 'Title1', 'body' => 'Body1', 'intent' => []];
+    DatabaseNotification::factory()->count(5)->create(['notifiable_id' => $this->user->id, 'data' => $notificationDataForCustomer]);
+
+    $response = getJson(route('v3.customer.push-notifications.index', ['per_page' => 2]));
+
+    $response->assertOk()->assertJsonCount(2, 'data');
 });
 
 test('a customer can mark a notification as read', function () {
@@ -56,4 +67,27 @@ test('a customer cannot mark someone else\'s notification as read', function () 
     $response = postJson(route('v3.customer.push-notifications.mark-as-read', ['notification' => $notificationForOtherUser->id]));
 
     $response->assertForbidden();
+});
+
+test('a customer can see their stats', function () {
+    DatabaseNotification::factory()
+        ->count(5)
+        ->state(new Sequence(
+            ['read_at' => now()],
+            ['read_at' => null],
+            ['read_at' => null],
+            ['read_at' => now()],
+            ['read_at' => now()],
+        ))
+        ->create(['notifiable_id' => $this->user->id]);
+
+    $response = getJson(route('v3.customer.push-notifications.stats'));
+
+    $response->assertOk()->assertJsonFragment([
+        'data' => [
+            'unread_count' => 2,
+            'read_count' => 3,
+            'total' => 5,
+        ],
+    ]);
 });

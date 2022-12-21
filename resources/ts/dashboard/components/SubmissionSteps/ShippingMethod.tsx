@@ -5,8 +5,11 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { ReactNode, useCallback } from 'react';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { cx } from '@shared/lib/utils/cx';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getShippingFee } from '@dashboard/redux/slices/newSubmissionSlice';
 
 interface Props {
     shippingMethod: ShippingMethodEntity;
@@ -22,7 +25,15 @@ const mappedIcons: Record<string, ReactNode> = {
 };
 
 export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
-    const handleClick = useCallback(() => onSelect(shippingMethod), [onSelect, shippingMethod]);
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const dispatch = useAppDispatch();
+
+    const handleClick = useCallback(() => {
+        onSelect(shippingMethod);
+        if (shippingMethod.code === ShippingMethodType.VaultStorage) {
+            dispatch(getShippingFee(selectedCards));
+        }
+    }, [shippingMethod, onSelect, dispatch, selectedCards]);
 
     return (
         <Root onClick={handleClick} className={cx({ selected })}>

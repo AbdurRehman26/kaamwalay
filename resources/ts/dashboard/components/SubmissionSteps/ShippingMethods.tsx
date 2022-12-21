@@ -15,13 +15,12 @@ import { initializeShippingMethod, setIsNextDisabled, setShippingMethod } from '
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
 import ShippingMethodDetail from './ShippingMethodDetail';
-import { VaultStorageMethod } from './VaultStorageMethod';
 
 const mappedContent: Record<string, ReactNode> = {
     // eslint-disable-next-line camelcase
     insured_shipping: <InsuredShippingMethod />,
     // eslint-disable-next-line camelcase
-    vault_storage: <VaultStorageMethod />,
+    vault_storage: <></>,
 };
 
 export function ShippingMethods() {

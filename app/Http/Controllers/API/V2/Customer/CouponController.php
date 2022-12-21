@@ -24,16 +24,15 @@ class CouponController extends Controller
     {
         try {
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
+            return new CouponResource($coupon);
         } catch (Exception $e) {
             return new JsonResponse(
                 [
-                    'error' => $e->getMessage(),
+                    'error' =>  $e->render($request)->getData()->error,
                 ],
                 $e->getCode()
             );
         }
-
-        return new CouponResource($coupon);
     }
 
     public function calculateDiscountForOrder(CalculateCouponDiscountForOrderRequest $request, Order $order): JsonResponse

@@ -9,7 +9,7 @@ class MarketingWeeklyReport extends MarketingReport
 {
     public function shouldSendNow(): bool
     {
-        return now()->isDayOfWeek('Saturday');
+        return now()->isDayOfWeek(6);
     }
 
     public function getReportTitle(): string

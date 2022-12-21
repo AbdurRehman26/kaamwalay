@@ -66,7 +66,7 @@ class CouponController extends Controller
         } catch (Exception $e) {
             return new JsonResponse(
                 [
-                    'error' =>  $e->render($request)->getData()->error,
+                    'error' =>  $e->getMessage(),
                 ],
                 $e->getCode()
             );

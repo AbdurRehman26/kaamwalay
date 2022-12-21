@@ -1,12 +1,58 @@
 # Changelog
 
+## Release v3.3.0 - 2022-12-21
+
+### What's Changed
+
+-   Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/832
+-   Hotfix: Missing order status in notification by @thenabeel in https://github.com/woozard/robograding/pull/838
+-   Feature | Sales rep submission listing by @AbdurRehman26 in https://github.com/woozard/robograding/pull/834
+-   Fix | Compiling issue on sales rep by @AbdurRehman26 in https://github.com/woozard/robograding/pull/820
+-   Fix: Search For Card On Mobile Issue by @luis-molina in https://github.com/woozard/robograding/pull/841
+-   Fix: Customer | Collector Coin payment with coupon code flow by @muhammad-nauman in
+    https://github.com/woozard/robograding/pull/804
+-   Fix: Commission Earned showing as 0 in Admin salesrep submissions list by @luis-molina in
+    https://github.com/woozard/robograding/pull/843
+-   Feature: Extra stats for sales reps by @luis-molina in https://github.com/woozard/robograding/pull/827
+-   Fix: Disable Edit Profile by @aliwooter in https://github.com/woozard/robograding/pull/844
+-   Feature: Services | Private Apps for Hubspot by @muhammad-nauman in https://github.com/woozard/robograding/pull/835
+-   Fix: Public Card Page Image by @numair97 in https://github.com/woozard/robograding/pull/840
+-   Feature: Cards Management Navigation Dropdown by @numair97 in https://github.com/woozard/robograding/pull/836
+-   Feature: Sales Rep | Promo Codes by @numair97 in https://github.com/woozard/robograding/pull/842
+-   Fix: Admin | Card Management Page Crashing Issue by @numair97 in https://github.com/woozard/robograding/pull/848
+-   Feature: Insured Shipping Details by @numair97 in https://github.com/woozard/robograding/pull/839
+-   Fix : Salesman Submissions List by @AbdurRehman26 in https://github.com/woozard/robograding/pull/850
+-   Fix: Admin | Cards Management Css Issue by @numair97 in https://github.com/woozard/robograding/pull/851
+-   Feature: Sales rep customers listing by @AbdurRehman26 in https://github.com/woozard/robograding/pull/826
+-   Fix: Using wallet credit in Collector Coin payment by @luis-molina in
+    https://github.com/woozard/robograding/pull/853
+-   Fix: Admin | Avoid Background Grades Sync by @muhammad-nauman in https://github.com/woozard/robograding/pull/847
+-   Fix: Payment Summary Address by @aliwooter in https://github.com/woozard/robograding/pull/845
+-   Fix: Admin submission creation discount by @aliwooter in https://github.com/woozard/robograding/pull/846
+-   Fix: Issue when creating cards with similar information by @luis-molina in
+    https://github.com/woozard/robograding/pull/849
+-   Fix: Mix Error & Admin | Customer Detail | Image Alignment Issue by @numair97 in
+    https://github.com/woozard/robograding/pull/854
+-   Fix: Rounding summary total to 2 decimals by @luis-molina in https://github.com/woozard/robograding/pull/856
+-   Fix : Pagination issue in salesrep customers section by @AbdurRehman26 in
+    https://github.com/woozard/robograding/pull/858
+-   Fix | Design change by @AbdurRehman26 in https://github.com/woozard/robograding/pull/859
+-   Fix: clearing of card category/series information when selecting set by @luis-molina in
+    https://github.com/woozard/robograding/pull/862
+-   Feature: Push Notifications Stats Endpoint by @thenabeel in https://github.com/woozard/robograding/pull/865
+-   Fix: Customer | Remove Vault Storage Section From Shipping Details by @numair97 in
+    https://github.com/woozard/robograding/pull/864
+-   Release v3.3.0 by @thenabeel in https://github.com/woozard/robograding/pull/866
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.2.0...v3.3.0
+
 ## Release v3.2.0 - 2022-12-08
 
 ### What's Changed
 
 -   Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/815
 -   Fix: Enabling going back to service step through edit button by @luis-molina in
-    https://github.com/woozard/robograding/pull/806
+-   https://github.com/woozard/robograding/pull/806
 -   Feature: Admin | Sales Rep | Missing Changes by @numair97 in https://github.com/woozard/robograding/pull/816
 -   Feature: Remove Incomplete Tab by @aliwooter in https://github.com/woozard/robograding/pull/798
 -   Feature | Sales Rep Submissions Listing by @AbdurRehman26 in https://github.com/woozard/robograding/pull/812
@@ -16,12 +62,12 @@
 -   Fix: Salesrep Improvements by @thenabeel in https://github.com/woozard/robograding/pull/819
 -   Feature: Toggle marketing notifications by @luis-molina in https://github.com/woozard/robograding/pull/805
 -   Fix | Styling of Empty State for Commission payment by @AbdurRehman26 in
-    https://github.com/woozard/robograding/pull/817
+-   https://github.com/woozard/robograding/pull/817
 -   Feature: Customer | Stop Marketing Emails if customer opted out. by @muhammad-nauman in
-    https://github.com/woozard/robograding/pull/823
+-   https://github.com/woozard/robograding/pull/823
 -   fixed alignment of checkbox by @luis-molina in https://github.com/woozard/robograding/pull/824
 -   Fix: Admin | Edit Card | Category not loading properly on state by @luis-molina in
-    https://github.com/woozard/robograding/pull/825
+-   https://github.com/woozard/robograding/pull/825
 -   Feature: Database Push Notifications by @thenabeel in https://github.com/woozard/robograding/pull/829
 -   Feature: Customer | TikTok Pixel by @muhammad-nauman in https://github.com/woozard/robograding/pull/830
 -   Release v3.2.0 by @thenabeel in https://github.com/woozard/robograding/pull/831

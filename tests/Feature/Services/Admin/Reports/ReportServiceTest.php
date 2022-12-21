@@ -37,7 +37,7 @@ it('sends monthly and quarterly emails.', function () {
 
 it('sends weekly emails.', function () {
     /* selected date lies on 6th January Saturday which means it's valid for weekly */
-    Carbon::setTestNow(Carbon::create(6, 1, 2024));
+    Carbon::setTestNow(Carbon::create(2024, 1, 6));
 
     $this->reportService->send();
     Mail::assertSent(ReportMail::class, 1);

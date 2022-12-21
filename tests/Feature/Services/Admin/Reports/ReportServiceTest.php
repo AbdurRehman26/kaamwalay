@@ -27,12 +27,20 @@ beforeEach(function () {
     $this->reportService = resolve(ReportsService::class);
 });
 
-it('sends weekly, monthly and quarterly emails.', function () {
-    /* selected date lies on 1st January Monday which means it's valid for weekly, monthly and quarterly */
+it('sends monthly and quarterly emails.', function () {
+    /* selected date lies on 1st January Monday which means it's valid for monthly and quarterly */
     Carbon::setTestNow(Carbon::create(2024));
 
     $this->reportService->send();
-    Mail::assertSent(ReportMail::class, 3);
+    Mail::assertSent(ReportMail::class, 2);
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
+
+it('sends weekly emails.', function () {
+    /* selected date lies on 6th January Saturday which means it's valid for weekly */
+    Carbon::setTestNow(Carbon::create(6, 1, 2024));
+
+    $this->reportService->send();
+    Mail::assertSent(ReportMail::class, 1);
 })->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 it('checks if ReportService class has array of reports that have reportable implemented', function () {

@@ -65,10 +65,10 @@
         }
         &-image {
             width: auto;
-            height: 48px;
+            height: 64px;
 
             @include breakpoints.down(xs) {
-                height: 36px;
+                height: 48px;
             }
         }
     }

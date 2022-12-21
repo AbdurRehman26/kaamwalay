@@ -71,7 +71,7 @@ class PaypalClient
     /**
      * @throws RequestException
      */
-    public function captureRefund(string $paymentCaptureId, $refundData): array
+    public function captureRefund(string $paymentCaptureId, array $refundData): array
     {
         return $this->getInstance()
             ->withToken($this->getAccessToken())

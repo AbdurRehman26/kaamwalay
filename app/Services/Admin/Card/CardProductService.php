@@ -232,6 +232,7 @@ class CardProductService
             throw new CardProductCanNotBeDeleted;
         }
 
+        $cardProduct->popReportsCard()?->delete();
         $cardProduct->delete();
     }
 

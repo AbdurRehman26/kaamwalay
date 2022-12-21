@@ -57,14 +57,9 @@ function LayoutSidebar() {
         >
             <List>
                 <LayoutSidebarItem icon={DashboardIcon} title={'Dashboard'} href={'/dashboard'} exact />
-                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} comingSoon />
-                <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} comingSoon />
-                <LayoutSidebarItem
-                    icon={AccountCircleOutlinedIcon}
-                    title={'Customers'}
-                    href={'/customers'}
-                    comingSoon
-                />
+                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} exact />
+                <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
+                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
             </List>
         </Drawer>
     );

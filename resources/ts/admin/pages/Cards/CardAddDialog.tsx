@@ -477,20 +477,35 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         setIsLoading(false);
     };
 
-    useEffect(() => {
-        setCardCategory(updateCard?.id);
-        setSelectedSeries(updateCard?.cardSeriesName);
-        setSelectedSet(updateCard?.cardSetName);
-        setCardName(updateCard?.name);
-        setCardNumber(updateCard?.cardNumber);
-        setReleaseDate(updateCard?.releaseDate);
-        setSelectedRarity(updateCard?.rarity);
-        setSelectedSurface(updateCard?.surface);
-        setSelectedEdition(updateCard?.edition);
-        setSelectedLanguage(updateCard?.language);
-        setProductVariant(updateCard?.variant);
-        setSelectedCardPhoto(updateCard?.imagePath);
-    }, [isUpdate, updateCard]);
+    useEffect(
+        () => {
+            setCardCategory(updateCard?.id);
+            setSelectedSeries(updateCard?.cardSeriesName);
+            setSelectedSet(
+                dialogState.selectedCardSet
+                    ? {
+                          id: dialogState.selectedCardSet.id,
+                          cardSeriesId: dialogState.selectedCardSet.cardSeriesId,
+                          label: dialogState.selectedCardSet.name,
+                          name: dialogState.selectedCardSet.name,
+                          imagePath: dialogState.selectedCardSet.imagePath,
+                          releaseDate: dialogState.selectedCardSet.releaseDate,
+                      }
+                    : updateCard?.cardSetName,
+            );
+            setCardName(updateCard?.name);
+            setCardNumber(updateCard?.cardNumber);
+            setReleaseDate(updateCard?.releaseDate);
+            setSelectedRarity(updateCard?.rarity);
+            setSelectedSurface(updateCard?.surface);
+            setSelectedEdition(updateCard?.edition);
+            setSelectedLanguage(updateCard?.language);
+            setProductVariant(updateCard?.variant);
+            setSelectedCardPhoto(updateCard?.imagePath);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [isUpdate, updateCard],
+    );
 
     const handleModalBack = () => {
         setCreateCardView(true);

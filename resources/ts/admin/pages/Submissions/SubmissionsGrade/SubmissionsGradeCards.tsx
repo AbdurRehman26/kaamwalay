@@ -62,7 +62,7 @@ export function SubmissionsGradeCards() {
         (fromAgs = true) => {
             dispatch(getAllSubmissions({ fromAgs, id: Number(id) }))
                 .unwrap()
-                .then(() => dispatch(matchExistingOrderItemsToViewModes()));
+                .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
         },
         [dispatch, id],
     );

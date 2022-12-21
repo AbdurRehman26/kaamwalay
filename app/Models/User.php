@@ -137,7 +137,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $user;
     }
 
-    public static function getAllowedAdminFilters(): array
+    public static function getAllowedFilters(): array
     {
         return [
             AllowedFilter::custom('search', new AdminCustomerSearchFilter),
@@ -148,7 +148,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         ];
     }
 
-    public static function getAllowedAdminSorts(): array
+    public static function getAllowedSorts(): array
     {
         return [
             AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
@@ -159,6 +159,26 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             'customer_number',
             'created_at',
         ];
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return self::getAllowedSorts();
+    }
+
+    public static function getAllowedSalesmanFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedSalesmanSorts(): array
+    {
+        return self::getAllowedSorts();
     }
 
     public static function getAllowedAdminSalesmanFilters(): array
@@ -378,10 +398,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     /**
      * @param  Builder<User>  $query
-     * @param  string  $salesmanId
+     * @param  string|int  $salesmanId
      * @return Builder<User>
      */
-    public function scopeSalesmanId(Builder $query, string $salesmanId): Builder
+    public function scopeSalesmanId(Builder $query, int|string $salesmanId): Builder
     {
         return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }
@@ -522,5 +542,16 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function wantsToReceiveMarketingContent(): bool
     {
         return $this->is_marketing_notifications_enabled;
+    }
+
+    public function getSalesmanCardsCount(string $startDate = '', string $endDate = ''): int
+    {
+        $query = $this->salesmanOrders()->paid()->join('order_items', 'order_items.order_id', 'orders.id');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+
+        return $query->sum('order_items.quantity');
     }
 }

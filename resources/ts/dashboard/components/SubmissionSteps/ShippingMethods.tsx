@@ -14,13 +14,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { initializeShippingMethod, setIsNextDisabled, setShippingMethod } from '../../redux/slices/newSubmissionSlice';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
-import { VaultStorageMethod } from './VaultStorageMethod';
+import ShippingMethodDetail from './ShippingMethodDetail';
 
 const mappedContent: Record<string, ReactNode> = {
     // eslint-disable-next-line camelcase
     insured_shipping: <InsuredShippingMethod />,
     // eslint-disable-next-line camelcase
-    vault_storage: <VaultStorageMethod />,
+    vault_storage: <></>,
 };
 
 export function ShippingMethods() {
@@ -96,6 +96,7 @@ export function ShippingMethods() {
                     ) : null,
                 )}
             </Grid>
+            <ShippingMethodDetail />
 
             {shippingMethod?.code && mappedContent[shippingMethod?.code] ? mappedContent[shippingMethod?.code] : null}
         </Stack>

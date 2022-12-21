@@ -36,7 +36,6 @@ class CalculateOrderCollectorCoinPriceRequest extends FormRequest
                 ),
             ],
             'payment_by_wallet' => ['required', 'numeric'],
-            'discounted_amount' => ['required', 'numeric'],
         ];
     }
 }

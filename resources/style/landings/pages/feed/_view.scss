@@ -558,11 +558,6 @@
             box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .swiper {
-            width: 100%;
-            height: 100%;
-        }
-
         .swiper-slide {
             text-align: center;
             font-size: 18px;
@@ -592,13 +587,6 @@
             justify-content: center;
         }
 
-        .swiper {
-            width: 100%;
-            height: 300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
         .swiper-slide {
             background-size: cover;
             background-position: center;
@@ -606,11 +594,6 @@
 
         .swiper-slide:hover {
             cursor: pointer;
-        }
-
-        .mySwiper2 {
-            height: 80%;
-            width: 50%;
         }
 
         .mySwiper {

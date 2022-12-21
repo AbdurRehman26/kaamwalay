@@ -144,6 +144,9 @@ export function SalesRepsTableRow({ salesRep, setUpdateDialog }: SalesRepsTableR
                     {salesRep.orders ?? '-'}
                 </TableCell>
                 <TableCell align="center" variant={'body'}>
+                    {salesRep.cards ?? '-'}
+                </TableCell>
+                <TableCell align="center" variant={'body'}>
                     {formatCurrency(salesRep.commissionEarned ?? 0)}
                 </TableCell>
                 {/* <TableCell variant={'body'}>{salesRep.commissionPaid}</TableCell> */}

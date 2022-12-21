@@ -29,6 +29,7 @@
  *                   "commission_value": null,
  *                   "customers": null,
  *                   "orders": null,
+ *                   "cards": 0,
  *                   "commission_earned": null,
  *                   "status": null,
  *                   "sales": null

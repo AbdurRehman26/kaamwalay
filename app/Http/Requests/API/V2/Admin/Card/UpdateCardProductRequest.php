@@ -32,7 +32,8 @@ class UpdateCardProductRequest extends FormRequest
                         ->where('language', $this->language)
                         ->where('rarity', $this->rarity)
                         ->where('edition', $this->edition ?? 'Unlimited')
-                        ->where('surface', $this->surface ?? '');
+                        ->where('surface', $this->surface ?? '')
+                        ->where('name', $this->name);
                 }),
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],

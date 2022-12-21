@@ -41,7 +41,7 @@ export const getCardData = createAsyncThunk('newCard/getCardData', async (cardId
     const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
     return await endpoint.get('', {
         params: {
-            include: ['cardCategory'],
+            include: ['cardCategory', 'cardSet'],
         },
     });
 });

@@ -116,6 +116,8 @@ function AlogliaSearchWrapper(props: any) {
                 onChange={(e) => handleSearch(e)}
                 onClick={handleClick}
                 variant="outlined"
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus={isMobileSearchModalOpen}
                 InputProps={{
                     ...(!isMobileSearchModalOpen && {
                         startAdornment: (

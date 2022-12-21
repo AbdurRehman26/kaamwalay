@@ -86,7 +86,7 @@ export function UserDropdown() {
                     </StyledMenuItem>
                 ) : null}
                 <Divider />
-                <StyledMenuItem>
+                <StyledMenuItem disabled>
                     <ListItemIcon>
                         <CreateOutlinedIcon sx={{ color: 'black' }} />
                     </ListItemIcon>

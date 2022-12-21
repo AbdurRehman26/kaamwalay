@@ -7,6 +7,7 @@ import { UserEntity } from './UserEntity';
 export class SalesRepEntity extends UserEntity {
     public customers?: number;
     public orders?: number;
+    public cards?: number;
     public commissionEarned?: number;
     public commissionPaid?: number;
     public sales?: number;

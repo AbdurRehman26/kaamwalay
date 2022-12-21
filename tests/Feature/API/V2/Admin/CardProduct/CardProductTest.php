@@ -41,6 +41,11 @@ beforeEach(function () {
         'name' => 'Rare Holo',
     ]);
 
+    CardRarity::create([
+        'card_category_id' => $this->card->cardSet->cardSeries->card_category_id,
+        'name' => $this->card->rarity,
+    ]);
+
     CardSurface::create([
         'card_category_id' => 1,
         'name' => 'Holo',
@@ -112,7 +117,7 @@ it('fails on repeated card number and params', function () {
     ]);
 
     $response = $this->postJson(route('v2.admin.card-products.store', ['cardProduct' => $this->card]), [
-        'name' => 'Lorem Ipsum',
+        'name' => $this->card->name,
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
         'category' => $this->card->cardSet->cardSeries->card_category_id,
@@ -131,6 +136,32 @@ it('fails on repeated card number and params', function () {
     $response->assertJsonFragment([
         'card_number' => ['This card number already exists in this set'],
     ]);
+});
+
+it('creates card with one different param from existing card', function () {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+    ]);
+
+    $response = $this->postJson(route('v2.admin.card-products.store', ['cardProduct' => $this->card]), [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
+        'release_date' => '2021-11-06',
+        'series_id' => $this->card->cardSet->card_series_id,
+        'set_id' => $this->card->card_set_id,
+        'card_number' => strval($this->card->card_number_order),
+        'language' => $this->card->language,
+        'rarity' => $this->card->rarity,
+        'edition' => $this->card->edition,
+        'surface' => $this->card->surface,
+        'variant' => 'Lorem',
+    ]);
+
+    $response->assertSuccessful();
 });
 
 test('admins can update cards manually', function () {

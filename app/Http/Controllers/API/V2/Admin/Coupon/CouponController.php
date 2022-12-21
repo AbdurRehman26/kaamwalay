@@ -61,6 +61,7 @@ class CouponController extends Controller
     {
         try {
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
+
             return new VerifyCouponResource($coupon);
         } catch (Exception $e) {
             return new JsonResponse(

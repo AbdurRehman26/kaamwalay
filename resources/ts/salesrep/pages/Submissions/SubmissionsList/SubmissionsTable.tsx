@@ -1,8 +1,11 @@
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import CustomerSubmissionsList from '@salesrep/components/Customers/CustomerSubmissionsList';
 import { useAppDispatch } from '@salesrep/redux/hooks';
@@ -29,10 +32,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
+    const [searchPromoCode, setSearchPromoCode] = useState('');
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
-    const [promoCode, setPromoCode] = useState('');
+    const [promoCode, setPromoCode] = useState<PromoCodeEntity | undefined | null>(null);
     const dispatch = useAppDispatch();
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
@@ -156,7 +160,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const totals = orders$.pagination?.meta?.total ?? 0;
 
     const clearPromoCode = useCallback(() => {
-        setPromoCode('');
+        setPromoCode(undefined);
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({
@@ -167,6 +171,24 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             1,
         );
     }, [orders$, paymentStatus, search, sortFilter]);
+
+    const handlePromoCodeSearch = useCallback(
+        (event: any) => {
+            setSearchPromoCode(event.target.value);
+            setTimeout(async () => {
+                const result = await dispatch(getPromoCodes(event.target.value));
+                await setPromoCodes(
+                    result.payload.data.map((item: PromoCodeEntity) => {
+                        return {
+                            id: item?.id,
+                            code: item?.code,
+                        };
+                    }),
+                );
+            }, 1500);
+        },
+        [dispatch],
+    );
 
     const clearPaymentStatus = useCallback(() => {
         setPaymentStatus(null);
@@ -212,27 +234,20 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     );
 
     const handlePromoCodeFilter = useCallback(
-        async (promoCode) => {
-            setPromoCode(promoCode);
+        (e, promoCode) => {
+            setPromoCode(promoCode.code);
             orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
                     search,
                     paymentStatus: paymentStatus,
-                    promoCode: promoCode,
+                    promoCode: promoCode.code,
                 }),
                 1,
             );
         },
-        [orders$, paymentStatus, search, sortFilter],
+        [orders$, paymentStatus, sortFilter, search],
     );
-
-    useEffect(() => {
-        (async () => {
-            const result = await dispatch(getPromoCodes());
-            setPromoCodes(result.payload.data);
-        })();
-    }, [dispatch]);
 
     useEffect(
         () => {
@@ -295,19 +310,17 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     })}
                 </PageSelector>
                 <PageSelector label={'Coupon'} value={promoCode} onClear={clearPromoCode}>
-                    {promoCodes.map((item) => {
-                        return (
-                            <Grid key={item.id}>
-                                <MenuItem
-                                    onClick={() => handlePromoCodeFilter(item.code)}
-                                    key={item.id}
-                                    value={item.id}
-                                >
-                                    {item.code}
-                                </MenuItem>
-                            </Grid>
-                        );
-                    })}
+                    <FormControl sx={{ width: '300px' }}>
+                        <Autocomplete
+                            getOptionLabel={(promoCodes) => promoCodes.code || searchPromoCode}
+                            value={promoCode}
+                            onKeyDown={(e) => handlePromoCodeSearch(e)}
+                            onChange={handlePromoCodeFilter}
+                            options={promoCodes}
+                            fullWidth
+                            renderInput={(params) => <TextField {...params} placeholder={'Search promo code'} />}
+                        />
+                    </FormControl>
                 </PageSelector>
             </Grid>
             <TableContainer>

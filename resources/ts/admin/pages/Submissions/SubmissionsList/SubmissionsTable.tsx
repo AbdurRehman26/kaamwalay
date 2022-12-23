@@ -42,7 +42,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [searchPromoCode, setSearchPromoCode] = useState('');
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
-    const [promoCode, setPromoCode] = useState<PromoCodeEntity | undefined | null>(null);
+    const [promoCode, setPromoCode] = useState<PromoCodeEntity | null>(null);
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -185,7 +185,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const totals = orders$.pagination?.meta?.total ?? 0;
 
     const clearPromoCode = useCallback(() => {
-        setPromoCode(undefined);
+        setPromoCode(null);
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({
@@ -278,7 +278,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const handlePromoCodeFilter = useCallback(
         (e, promoCode) => {
-            setPromoCode(promoCode.code);
+            setPromoCode(promoCode);
             orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
@@ -362,7 +362,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         );
                     })}
                 </PageSelector>
-                <PageSelector label={'Coupon'} value={promoCode} onClear={clearPromoCode}>
+                <PageSelector label={'Coupon'} value={promoCode?.code} onClear={clearPromoCode}>
                     <FormControl sx={{ width: '300px' }}>
                         <Autocomplete
                             getOptionLabel={(promoCodes) => promoCodes.code || searchPromoCode}

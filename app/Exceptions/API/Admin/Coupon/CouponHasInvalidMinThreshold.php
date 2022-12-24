@@ -11,8 +11,13 @@ class CouponHasInvalidMinThreshold extends Exception
 {
     public function __construct(protected int $itemsCount)
     {
-        $this->message = sprintf('You must have a minimum of %d cards in your submission to use this code.', $this->itemsCount);
+        $this->message = sprintf($this->message, $this->itemsCount);
     }
+
+    /**
+     * @var string
+     */
+    protected $message = 'You must have a minimum of %d cards in your submission to use this code.';
 
     /**
      * @var int

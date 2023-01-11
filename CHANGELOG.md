@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v3.4.1 - 2023-01-11
+
+### What's Changed
+
+- Hotfix: Revert christmas logo back to normal by @luis-molina in https://github.com/woozard/robograding/pull/874
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.4.0...v3.4.1
+
 ## Release v3.4.0 - 2022-12-25
 
 ### What's Changed

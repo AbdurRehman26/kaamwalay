@@ -33,9 +33,9 @@ const useStyles = makeStyles(
         },
         brandImage: {
             display: 'block',
-            height: 64,
+            height: 48,
             [theme.breakpoints.down('sm')]: {
-                height: 48,
+                height: 36,
             },
         },
         toggleButton: {

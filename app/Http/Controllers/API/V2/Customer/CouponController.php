@@ -8,6 +8,7 @@ use App\Http\Requests\API\V2\Customer\Coupon\CalculateCouponDiscountForOrderRequ
 use App\Http\Requests\API\V2\Customer\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\V2\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\V2\Customer\Coupon\CouponResource;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Services\Coupon\V2\CouponService;
 use App\Services\Order\V2\OrderService;
@@ -110,5 +111,41 @@ class CouponController extends Controller
                 'coupon' => new CouponResource($coupon),
             ],
         ]);
+    }
+
+    public function removeCouponFromOrder(Order $order): JsonResponse
+    {
+        try {
+
+            return response()->json([
+                'success' => $this->couponService->removeCouponFromOrder($order)
+            ]);
+
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+    }
+
+    public function saveCouponOnOrder(Order $order, Coupon $coupon): JsonResponse
+    {
+        try {
+
+            return response()->json([
+                'success' => $this->couponService->saveCouponOnOrder($order, $coupon)
+            ]);
+
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
     }
 }

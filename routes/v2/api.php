@@ -92,6 +92,8 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
             Route::post('{order}/coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('orders.coupon.discount');
+            Route::post('{order}/coupons/remove', [CouponController::class, 'removeCouponFromOrder'])->name('orders.coupon.remove');
+            Route::post('{order}/coupons/{coupon}/save', [CouponController::class, 'saveCouponOnOrder'])->name('orders.coupon.save');
 
             Route::apiResource('', OrderController::class)
                 ->only(['index', 'store'])

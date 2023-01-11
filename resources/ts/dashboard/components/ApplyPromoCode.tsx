@@ -63,7 +63,7 @@ export function ApplyPromoCode() {
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
     const totalCardItems = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
-
+    console.log(validCouponId, id, 12312312);
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
@@ -105,10 +105,16 @@ export function ApplyPromoCode() {
         [debounceCheckCoupon, dispatch],
     );
 
-    const handleCouponDismiss = useCallback(() => {
+    const handleCouponDismiss = useCallback(async () => {
+        if (id) {
+            const endpointUrl = `customer/orders/${id}/coupons/remove`;
+            const removeCouponEndpoint = apiService.createEndpoint(endpointUrl);
+            await removeCouponEndpoint.post('');
+        }
+
         dispatch(setIsCouponApplied(false));
         dispatch(setIsCouponValid(true));
-    }, [dispatch]);
+    }, [apiService, dispatch, id]);
 
     useEffect(() => {
         handleChange({ target: { value: couponCode } });
@@ -153,15 +159,22 @@ export function ApplyPromoCode() {
             const endpointUrl = id
                 ? `customer/orders/${id}/coupons/calculate-discount`
                 : `customer/coupons/calculate-discount`;
-            const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
-            const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
+            const calculateDiscountEndpoint = apiService.createEndpoint(endpointUrl);
+            const calculateDiscountResponse = await calculateDiscountEndpoint.post('', DTO);
+
+            if (id) {
+                const endpointUrl = `customer/orders/${id}/coupons/${calculateDiscountResponse.data.coupon.id}/save`;
+                const saveCouponEndpoint = apiService.createEndpoint(endpointUrl);
+                await saveCouponEndpoint.post('', DTO);
+            }
+
             dispatch(setIsCouponApplied(true));
             dispatch(
                 setAppliedCouponData({
-                    id: appliedCouponResponse.data.coupon.id,
-                    discountStatement: appliedCouponResponse.data.coupon.discountStatement,
-                    discountValue: appliedCouponResponse.data.coupon.discountValue,
-                    discountedAmount: appliedCouponResponse.data.discountedAmount,
+                    id: calculateDiscountResponse.data.coupon.id,
+                    discountStatement: calculateDiscountResponse.data.coupon.discountStatement,
+                    discountValue: calculateDiscountResponse.data.coupon.discountValue,
+                    discountedAmount: calculateDiscountResponse.data.discountedAmount,
                 }),
             );
         } catch (error: any) {

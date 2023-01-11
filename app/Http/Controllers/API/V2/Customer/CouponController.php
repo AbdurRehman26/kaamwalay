@@ -116,11 +116,9 @@ class CouponController extends Controller
     public function removeCouponFromOrder(Order $order): JsonResponse
     {
         try {
-
             return response()->json([
-                'success' => $this->couponService->removeCouponFromOrder($order)
+                'success' => $this->couponService->removeCouponFromOrder($order),
             ]);
-
         } catch (Exception $e) {
             return new JsonResponse(
                 [
@@ -134,11 +132,9 @@ class CouponController extends Controller
     public function saveCouponOnOrder(Order $order, Coupon $coupon): JsonResponse
     {
         try {
-
             return response()->json([
-                'success' => $this->couponService->saveCouponOnOrder($order, $coupon)
+                'success' => $this->couponService->saveCouponOnOrder($order, $coupon),
             ]);
-
         } catch (Exception $e) {
             return new JsonResponse(
                 [

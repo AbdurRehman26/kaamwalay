@@ -28,7 +28,7 @@ class PaypalClient
             config('services.paypal.client_secret'),
         )
             ->asForm()
-            ->post('v1/oauth2/token', [
+            ->post('/v1/oauth2/token', [
                 'grant_type' => 'client_credentials',
             ])
             ->throw()
@@ -44,7 +44,7 @@ class PaypalClient
     {
         return $this->getInstance()->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->post('v2/checkout/orders?', $data)
+            ->post('/v2/checkout/orders?', $data)
             ->throw()
             ->json();
     }
@@ -57,7 +57,7 @@ class PaypalClient
         return $this->getInstance()
             ->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->post('v2/checkout/orders/' . $paypalOrderId . '/capture?', [
+            ->post('/v2/checkout/orders/' . $paypalOrderId . '/capture?', [
                 // This is required, without this, the API was not working.
                 'application_context' => [
                     'return_url' => '',

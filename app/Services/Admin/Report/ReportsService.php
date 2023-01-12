@@ -18,7 +18,7 @@ class ReportsService
         MarketingWeeklyReport::class,
         MarketingMonthlyReport::class,
         MarketingQuarterlyReport::class,
-        MarketingYearlyReport::class
+        MarketingYearlyReport::class,
     ];
 
     /**

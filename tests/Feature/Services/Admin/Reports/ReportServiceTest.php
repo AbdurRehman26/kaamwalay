@@ -24,7 +24,7 @@ beforeEach(function () {
         MarketingWeeklyReport::class,
         MarketingMonthlyReport::class,
         MarketingQuarterlyReport::class,
-        MarketingYearlyReport::class
+        MarketingYearlyReport::class,
     ];
     $this->reportService = resolve(ReportsService::class);
 });

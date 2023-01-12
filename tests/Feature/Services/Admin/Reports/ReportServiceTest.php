@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\Admin\Report\MarketingReport\MarketingMonthlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingQuarterlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;
+use App\Services\Admin\Report\MarketingReport\MarketingYearlyReport;
 use App\Services\Admin\Report\ReportsService;
 use Carbon\Carbon;
 use Database\Seeders\RolesSeeder;
@@ -23,16 +24,17 @@ beforeEach(function () {
         MarketingWeeklyReport::class,
         MarketingMonthlyReport::class,
         MarketingQuarterlyReport::class,
+        MarketingYearlyReport::class
     ];
     $this->reportService = resolve(ReportsService::class);
 });
 
-it('sends monthly and quarterly emails.', function () {
+it('sends monthly, quarterly and yearly emails.', function () {
     /* selected date lies on 1st January Monday which means it's valid for monthly and quarterly */
     Carbon::setTestNow(Carbon::create(2024));
 
     $this->reportService->send();
-    Mail::assertSent(ReportMail::class, 2);
+    Mail::assertSent(ReportMail::class, 3);
 })->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 it('sends weekly emails.', function () {
@@ -64,6 +66,12 @@ it('checks if monthly report is eligible to be sent now.', function () {
 it('checks if weekly report is eligible to be sent now.', function () {
     Carbon::setTestNow(Carbon::create('First Saturday of 2022'));
     $report = resolve(MarketingWeeklyReport::class);
+    expect($report->shouldSendNow())->toBeTrue();
+});
+
+it('checks if yearly report is eligible to be sent now.', function () {
+    Carbon::setTestNow(Carbon::create('first day of January'));
+    $report = resolve(MarketingYearlyReport::class);
     expect($report->shouldSendNow())->toBeTrue();
 });
 

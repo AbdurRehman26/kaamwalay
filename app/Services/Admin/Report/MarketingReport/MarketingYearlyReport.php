@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Services\Admin\Report\MarketingReport;
+
+use Carbon\Carbon;
+
+/**
+ * On request of Alex Kegan (Marketing)
+ */
+class MarketingYearlyReport extends MarketingReport
+{
+    public function shouldSendNow(): bool
+    {
+        return now()->is(Carbon::parse('first day of January'));
+    }
+
+    public function getReportTitle(): string
+    {
+        return "Marketing Report (Yearly)";
+    }
+
+    public function getReportData(): array
+    {
+        return $this->getDataForReport(now()->subYear()->firstOfYear()->startOfDay(), now()->subYear()->lastOfYear()->endOfDay());
+    }
+}

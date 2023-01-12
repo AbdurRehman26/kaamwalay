@@ -375,7 +375,6 @@ export function Payment() {
     );
 
     useEffect(() => {
-        console.log(state);
         schema
             .isValid({
                 fullName,
@@ -498,7 +497,7 @@ export function Payment() {
             state: state?.code ?? state,
             zip: zipCode,
             phone: phoneNumber,
-            countryCode: country.code ? country.code : 1,
+            countryCode: country?.code ? country.code : 'US',
         });
         notifications.success(response?.data?.message);
         setCanUseShippingAsBilling(false);

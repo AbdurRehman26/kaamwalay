@@ -63,7 +63,7 @@ export function ApplyPromoCode() {
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
     const totalCardItems = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
-    console.log(validCouponId, id, 12312312);
+
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(

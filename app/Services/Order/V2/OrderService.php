@@ -3,6 +3,7 @@
 namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
 use App\Models\Order;
@@ -157,6 +158,8 @@ class OrderService extends V1OrderService
 
     public function updateBillingAddress(Order $order, array $data): Order
     {
+        $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;
+
         if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
             $orderAddress = OrderAddress::create($data);
             $order->billingAddress()->associate($orderAddress);

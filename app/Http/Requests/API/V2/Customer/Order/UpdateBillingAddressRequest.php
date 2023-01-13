@@ -31,11 +31,13 @@ class UpdateBillingAddressRequest extends FormRequest
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'address' => ['required', 'string'],
+            'address_2' => ['nullable', 'string'],
             'city' => ['required', 'string'],
-            'state' => ['required', 'string', 'max:2'],
+            'state' => ['required', 'string'],
             'zip' => ['required', 'string'],
             'phone' => ['required', 'string'],
             'flat' => ['nullable', 'string'],
+            'country_code' => ['sometimes', 'exists:countries,code'],
         ];
     }
 }

@@ -159,22 +159,15 @@ export function ApplyPromoCode() {
             const endpointUrl = id
                 ? `customer/orders/${id}/coupons/calculate-discount`
                 : `customer/coupons/calculate-discount`;
-            const calculateDiscountEndpoint = apiService.createEndpoint(endpointUrl);
-            const calculateDiscountResponse = await calculateDiscountEndpoint.post('', DTO);
-
-            if (id) {
-                const endpointUrl = `customer/orders/${id}/coupons/${calculateDiscountResponse.data.coupon.id}/save`;
-                const saveCouponEndpoint = apiService.createEndpoint(endpointUrl);
-                await saveCouponEndpoint.post('', DTO);
-            }
-
+            const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
+            const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));
             dispatch(
                 setAppliedCouponData({
-                    id: calculateDiscountResponse.data.coupon.id,
-                    discountStatement: calculateDiscountResponse.data.coupon.discountStatement,
-                    discountValue: calculateDiscountResponse.data.coupon.discountValue,
-                    discountedAmount: calculateDiscountResponse.data.discountedAmount,
+                    id: appliedCouponResponse.data.coupon.id,
+                    discountStatement: appliedCouponResponse.data.coupon.discountStatement,
+                    discountValue: appliedCouponResponse.data.coupon.discountValue,
+                    discountedAmount: appliedCouponResponse.data.discountedAmount,
                 }),
             );
         } catch (error: any) {

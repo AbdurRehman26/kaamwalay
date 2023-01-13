@@ -58,22 +58,6 @@ beforeEach(function () {
     $this->order = $orderItem->order;
 });
 
-
-it('saves coupon on order', function () {
-    actingAs($this->user);
-
-    postJson(route('v2.orders.coupon.save', [
-        'order' => $this->order->id,
-        'coupon' => $this->coupon->id,
-    ]))->assertOk();
-
-    $this->order->refresh();
-
-    expect($this->order->discounted_amount)->toBe($this->order->grand_total_before_discount - $this->order->grand_total)
-        ->and($this->order->coupon_id)->toBe($this->coupon->id)
-        ->and($this->order->discounted_amount)->toBeGreaterThan(0);
-});
-
 it('removes coupon from order', function () {
     actingAs($this->user);
 

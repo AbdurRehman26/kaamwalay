@@ -128,20 +128,4 @@ class CouponController extends Controller
             );
         }
     }
-
-    public function saveCouponOnOrder(Order $order, Coupon $coupon): JsonResponse
-    {
-        try {
-            return response()->json([
-                'success' => $this->couponService->saveCouponOnOrder($order, $coupon),
-            ]);
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                $e->getCode()
-            );
-        }
-    }
 }

@@ -26,6 +26,7 @@ import {
     changeSelectedCardValue,
     markCardAsUnselected,
     setCustomStep,
+    setIsCouponApplied,
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -141,6 +142,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const dispatch = useAppDispatch();
 
     const selectedCardEntities = useMemo(
@@ -161,8 +163,11 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
             dispatch(markCardAsUnselected(row));
+            if (isCouponApplied) {
+                dispatch(setIsCouponApplied(false));
+            }
         },
-        [dispatch],
+        [dispatch, isCouponApplied],
     );
 
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {
@@ -170,6 +175,9 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         const valueAsInt = parseInt(receivedValue);
         const newValue = Math.min(valueAsInt, 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
+        if (isCouponApplied) {
+            dispatch(setIsCouponApplied(false));
+        }
     }
 
     function handleChangeCardValue(card: SearchResultItemCardProps, newValue: any) {

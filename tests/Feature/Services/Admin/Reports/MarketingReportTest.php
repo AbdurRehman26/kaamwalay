@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Admin\Report\MarketingReport\MarketingMonthlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingQuarterlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;
+use App\Services\Admin\Report\MarketingReport\MarketingYearlyReport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\DB;
@@ -126,7 +127,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $reportData = $report->getDataForReport($fromDate, $toDate);
 
     expect($reportData)->toBe($resultArray);
-})->with('reportable')->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
+})->with('reportable');
 
 it('checks if template exists', function () {
     $report = resolve(MarketingQuarterlyReport::class);
@@ -135,6 +136,15 @@ it('checks if template exists', function () {
 });
 
 dataset('reportable', function () {
+    /* Yearly */
+    yield function () {
+        return [
+            'report' => resolve(MarketingYearlyReport::class),
+            'fromDate' => $this->date,
+            'toDate' => Carbon::create($this->date)->endOfYear(),
+        ];
+    };
+
     /* Weekly */
     yield function () {
         return [

@@ -22,6 +22,7 @@ import {
     markCardAsSelected,
     markCardAsUnselected,
     setCardsSearchValue,
+    setIsCouponApplied,
 } from '@dashboard/redux/slices/newSubmissionSlice';
 import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
@@ -66,6 +67,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const subtitle = result.longName.value;
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const isCardSelected = useMemo(
         () => !!selectedCards.find((card: Record<string, any>) => card.id === item.id),
         [item.id, selectedCards],
@@ -113,11 +115,14 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
         } else {
             deselectCard(item);
         }
+        if (isCouponApplied) {
+            dispatch(setIsCouponApplied(false));
+        }
         setTimeout(() => {
             dispatch(setCardsSearchValue(''));
             (window as any).globalThis.clearSearch();
         }, 500);
-    }, [selectedCards, item, selectCard, deselectCard, dispatch]);
+    }, [selectedCards, item, selectCard, deselectCard, dispatch, isCouponApplied]);
 
     const handleRemove = useCallback(
         (cardProductEntity: CardProductEntity) => {

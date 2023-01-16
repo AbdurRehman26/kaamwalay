@@ -926,7 +926,7 @@ export function Payment() {
                                                             style={{ width: '100%', marginTop: '4px' }}
                                                         >
                                                             <Typography className={classes.methodDescription}>
-                                                                Phone Number
+                                                                Phone Number (Optional)
                                                             </Typography>
                                                             <NumberFormat
                                                                 customInput={TextField}

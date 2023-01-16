@@ -263,7 +263,7 @@ const GreenCheckbox = withStyles({
 const schema = yup.object().shape({
     fullName: yup.string().required(),
     address: yup.string().required(),
-    address2: yup.string().optional(),
+    address2: yup.string().optional().nullable(),
     city: yup.string().required(),
     state: yup.string().required(),
     zipCode: yup.string().required(),
@@ -275,6 +275,7 @@ function addressFromEntity(address: AddressEntity) {
         firstName: address.firstName,
         lastName: address.lastName,
         address: address.address,
+        address2: address.address2,
         city: address.city,
         zipCode: address.zip,
         phoneNumber: address.phone,
@@ -924,7 +925,7 @@ export function Payment() {
                                                             className={'fieldContainer'}
                                                             style={{ width: '100%', marginTop: '4px' }}
                                                         >
-                                                            <Typography className={'methodDescription'}>
+                                                            <Typography className={classes.methodDescription}>
                                                                 Phone Number
                                                             </Typography>
                                                             <NumberFormat

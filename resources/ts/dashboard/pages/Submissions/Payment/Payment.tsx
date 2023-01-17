@@ -263,7 +263,7 @@ const GreenCheckbox = withStyles({
 const schema = yup.object().shape({
     fullName: yup.string().required(),
     address: yup.string().required(),
-    address2: yup.string().optional(),
+    address2: yup.string().optional().nullable(),
     city: yup.string().required(),
     state: yup.string().required(),
     zipCode: yup.string().required(),
@@ -275,6 +275,7 @@ function addressFromEntity(address: AddressEntity) {
         firstName: address.firstName,
         lastName: address.lastName,
         address: address.address,
+        address2: address.address2,
         city: address.city,
         zipCode: address.zip,
         phoneNumber: address.phone,
@@ -886,7 +887,10 @@ export function Payment() {
                                                                             }),
                                                                         );
                                                                     }}
-                                                                    value={state?.code ?? state}
+                                                                    value={
+                                                                        state?.code ??
+                                                                        (typeof state === 'string' ? state : '')
+                                                                    }
                                                                     size={'small'}
                                                                     variant={'outlined'}
                                                                     margin="normal"
@@ -924,16 +928,16 @@ export function Payment() {
                                                             className={'fieldContainer'}
                                                             style={{ width: '100%', marginTop: '4px' }}
                                                         >
-                                                            <Typography className={'methodDescription'}>
-                                                                Phone Number
+                                                            <Typography className={classes.methodDescription}>
+                                                                Phone Number (Optional)
                                                             </Typography>
                                                             <NumberFormat
                                                                 customInput={TextField}
                                                                 format={
-                                                                    country.phoneCode
-                                                                        ? '+' + country.phoneCode + ' (###) ###-####'
+                                                                    country?.phoneCode
+                                                                        ? '+' + country?.phoneCode + ' (###) ###-####'
                                                                         : '+' +
-                                                                          availableCountries[0].phoneCode +
+                                                                          availableCountries[0]?.phoneCode +
                                                                           ' (###) ###-####'
                                                                 }
                                                                 mask=""

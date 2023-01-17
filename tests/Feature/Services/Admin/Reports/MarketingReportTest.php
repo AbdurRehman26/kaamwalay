@@ -127,7 +127,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $reportData = $report->getDataForReport($fromDate, $toDate);
 
     expect($reportData)->toBe($resultArray);
-})->with('reportable');
+})->with('reportable')->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 it('checks if template exists', function () {
     $report = resolve(MarketingQuarterlyReport::class);

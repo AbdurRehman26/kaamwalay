@@ -159,6 +159,7 @@ class OrderService extends V1OrderService
     public function updateBillingAddress(Order $order, array $data): Order
     {
         $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;
+        $data['phone'] = $data['phone'] ?? '';
 
         if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
             $orderAddress = OrderAddress::create($data);

@@ -931,10 +931,10 @@ export function Payment() {
                                                             <NumberFormat
                                                                 customInput={TextField}
                                                                 format={
-                                                                    country.phoneCode
-                                                                        ? '+' + country.phoneCode + ' (###) ###-####'
+                                                                    country?.phoneCode
+                                                                        ? '+' + country?.phoneCode + ' (###) ###-####'
                                                                         : '+' +
-                                                                          availableCountries[0].phoneCode +
+                                                                          availableCountries[0]?.phoneCode +
                                                                           ' (###) ###-####'
                                                                 }
                                                                 mask=""

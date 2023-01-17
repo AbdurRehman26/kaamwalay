@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Mail;
 class ReportsService
 {
     protected array $reports = [
+        MarketingYearlyReport::class,
         MarketingWeeklyReport::class,
         MarketingMonthlyReport::class,
         MarketingQuarterlyReport::class,
-        MarketingYearlyReport::class,
     ];
 
     /**

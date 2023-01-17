@@ -15,6 +15,7 @@ interface ListHeaderProps {
     noMargin?: boolean;
     onSearch?: (value: string) => void;
     actions?: ReactNode;
+    isReferral?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -74,6 +75,7 @@ export function ListHeader({
     headline,
     noSearch,
     noMargin,
+    isReferral,
     onSearch,
     actions,
 }: PropsWithChildren<ListHeaderProps>) {
@@ -118,7 +120,7 @@ export function ListHeader({
                     {children}
                 </Box>
             </Grid>
-            <Divider className={classes.divider} />
+            {!isReferral ? <Divider className={classes.divider} /> : null}
         </>
     );
 }

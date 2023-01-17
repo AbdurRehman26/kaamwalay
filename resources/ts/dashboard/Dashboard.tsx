@@ -6,6 +6,7 @@ import { ListAddresses } from './pages/Addresses';
 import { Cards } from './pages/Cards/Cards';
 import { PaymentCards } from './pages/PaymentCards';
 import { Profile } from './pages/Profile';
+import { ReferralProgram } from './pages/Referral';
 import { Submissions } from './pages/Submissions';
 import { VaultShipments } from './pages/VaultShipments';
 
@@ -27,6 +28,7 @@ export function Dashboard() {
             <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />
             <Route path={'/payment-cards/*'} element={ProtectedRoute(PaymentCards)} />
             <Route path={'/address-book/*'} element={ProtectedRoute(ListAddresses)} />
+            <Route path={'/referral-program/*'} element={ProtectedRoute(ReferralProgram)} />
         </Routes>
     );
 }

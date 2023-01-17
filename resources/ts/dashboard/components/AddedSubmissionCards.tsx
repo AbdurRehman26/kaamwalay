@@ -249,70 +249,67 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
 
             {mobileMode && !reviewMode ? (
                 <>
-                    {selectedCards
-                        .slice()
-                        .reverse()
-                        .map((row: SearchResultItemCardProps) => (
-                            <>
-                                <div className={classes.mobileViewContainer}>
-                                    <div title={row.shortName || row.name}>
-                                        <SearchResultItemCard
-                                            onPreview={handlePreview}
-                                            key={row.id}
-                                            id={row.id}
-                                            image={row.image}
-                                            longName={row.longName}
-                                            shortName={row.shortName}
-                                            name={row.name}
-                                            addedMode
-                                            reviewMode
+                    {selectedCards.map((row: SearchResultItemCardProps) => (
+                        <>
+                            <div className={classes.mobileViewContainer} key={row.id}>
+                                <div title={row.shortName || row.name}>
+                                    <SearchResultItemCard
+                                        onPreview={handlePreview}
+                                        key={row.id}
+                                        id={row.id}
+                                        image={row.image}
+                                        longName={row.longName}
+                                        shortName={row.shortName}
+                                        name={row.name}
+                                        addedMode
+                                        reviewMode
+                                    />
+                                </div>
+
+                                <div className={classes.mobileViewCardActions}>
+                                    <div className={classes.mobileViewCardActionContainer}>
+                                        <Typography variant={'caption'} className={classes.actionLabel}>
+                                            Qty
+                                        </Typography>
+                                        <TextField
+                                            onChange={(e) => handleChangeCardQty(row, e.target.value)}
+                                            type="number"
+                                            size={'small'}
+                                            value={row.qty === 0 ? '' : row.qty}
+                                            InputProps={{
+                                                inputProps: { min: 1, max: 100 },
+                                            }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            className={classes.qtyField}
+                                            variant="outlined"
                                         />
                                     </div>
 
-                                    <div className={classes.mobileViewCardActions}>
-                                        <div className={classes.mobileViewCardActionContainer}>
-                                            <Typography variant={'caption'} className={classes.actionLabel}>
-                                                Qty
-                                            </Typography>
-                                            <TextField
-                                                onChange={(e) => handleChangeCardQty(row, e.target.value)}
-                                                type="number"
-                                                size={'small'}
-                                                value={row.qty === 0 ? '' : row.qty}
-                                                InputProps={{
-                                                    inputProps: { min: 1, max: 100 },
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                className={classes.qtyField}
-                                                variant="outlined"
-                                            />
-                                        </div>
-
-                                        <div className={classes.mobileViewCardActionContainer}>
-                                            <Typography variant={'caption'} className={classes.actionLabel}>
-                                                Value (USD)
-                                            </Typography>
-                                            <TextField
-                                                value={row.value}
-                                                onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
-                                                name="numberformat"
-                                                size="small"
-                                                id="formatted-numberformat-input"
-                                                variant="outlined"
-                                                InputProps={{
-                                                    inputProps: { min: 1 },
-                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                }}
-                                                className={classes.valueField}
-                                            />
-                                        </div>
+                                    <div className={classes.mobileViewCardActionContainer}>
+                                        <Typography variant={'caption'} className={classes.actionLabel}>
+                                            Value (USD)
+                                        </Typography>
+                                        <TextField
+                                            value={row.value}
+                                            onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                            name="numberformat"
+                                            size="small"
+                                            id="formatted-numberformat-input"
+                                            variant="outlined"
+                                            InputProps={{
+                                                inputProps: { min: 1 },
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                            className={classes.valueField}
+                                        />
                                     </div>
                                 </div>
-                                {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
-                            </>
-                        ))}
+                            </div>
+                            {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
+                        </>
+                    ))}
                 </>
             ) : (
                 <Table className={classes.table}>
@@ -325,87 +322,82 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {selectedCards
-                            .slice()
-                            .reverse()
-                            .map((row: SearchResultItemCardProps) => (
-                                <>
-                                    <TableRow key={row.id} className={classes.row}>
-                                        <TableCell component="th" scope="row" align={'left'}>
-                                            {!reviewMode ? (
-                                                <TextField
-                                                    onChange={(e) => handleChangeCardQty(row, Number(e.target.value))}
-                                                    type="number"
-                                                    size={'small'}
-                                                    value={row.qty === 0 ? '' : row.qty}
-                                                    InputProps={{
-                                                        inputProps: { min: 1, max: 100 },
-                                                    }}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    className={classes.qtyField}
-                                                    variant="outlined"
-                                                />
-                                            ) : (
-                                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                                    {row.qty}
-                                                </Typography>
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <SearchResultItemCard
-                                                onPreview={handlePreview}
-                                                key={row.id}
-                                                id={row.id}
-                                                image={row.image}
-                                                longName={row.longName}
-                                                shortName={row.shortName}
-                                                name={row.name}
-                                                addedMode
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {!reviewMode ? (
-                                                <NumberFormatTextField
-                                                    value={row.value}
-                                                    onChange={(e) => handleChangeCardValue(row, e.target.value)}
-                                                    name="numberformat"
-                                                    size="small"
-                                                    id="formatted-numberformat-input"
-                                                    variant="outlined"
-                                                    InputProps={{
-                                                        inputProps: { min: 1 },
-                                                        startAdornment: (
-                                                            <InputAdornment position="start">$</InputAdornment>
-                                                        ),
-                                                    }}
-                                                />
-                                            ) : (
-                                                <NumberFormat
-                                                    value={row.value}
-                                                    displayType={'text'}
-                                                    thousandSeparator
-                                                    decimalSeparator={'.'}
-                                                    prefix={'$'}
-                                                    className={classes.tableRowText}
-                                                />
-                                            )}
-                                        </TableCell>
+                        {selectedCards.map((row: SearchResultItemCardProps) => (
+                            <>
+                                <TableRow key={row.id} className={classes.row}>
+                                    <TableCell component="th" scope="row" align={'left'}>
                                         {!reviewMode ? (
-                                            <TableCell align="left">
-                                                <IconButton
-                                                    aria-label="delete"
-                                                    onClick={() => handleDeselectCard(row)}
-                                                    size="large"
-                                                >
-                                                    <DeleteIcon fontSize="medium" />
-                                                </IconButton>
-                                            </TableCell>
-                                        ) : null}
-                                    </TableRow>
-                                </>
-                            ))}
+                                            <TextField
+                                                onChange={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                                type="number"
+                                                size={'small'}
+                                                value={row.qty === 0 ? '' : row.qty}
+                                                InputProps={{
+                                                    inputProps: { min: 1, max: 100 },
+                                                }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                className={classes.qtyField}
+                                                variant="outlined"
+                                            />
+                                        ) : (
+                                            <Typography variant={'subtitle1'} className={classes.tableRowText}>
+                                                {row.qty}
+                                            </Typography>
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <SearchResultItemCard
+                                            onPreview={handlePreview}
+                                            key={row.id}
+                                            id={row.id}
+                                            image={row.image}
+                                            longName={row.longName}
+                                            shortName={row.shortName}
+                                            name={row.name}
+                                            addedMode
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {!reviewMode ? (
+                                            <NumberFormatTextField
+                                                value={row.value}
+                                                onChange={(e) => handleChangeCardValue(row, e.target.value)}
+                                                name="numberformat"
+                                                size="small"
+                                                id="formatted-numberformat-input"
+                                                variant="outlined"
+                                                InputProps={{
+                                                    inputProps: { min: 1 },
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }}
+                                            />
+                                        ) : (
+                                            <NumberFormat
+                                                value={row.value}
+                                                displayType={'text'}
+                                                thousandSeparator
+                                                decimalSeparator={'.'}
+                                                prefix={'$'}
+                                                className={classes.tableRowText}
+                                            />
+                                        )}
+                                    </TableCell>
+                                    {!reviewMode ? (
+                                        <TableCell align="left">
+                                            <IconButton
+                                                aria-label="delete"
+                                                onClick={() => handleDeselectCard(row)}
+                                                size="large"
+                                            >
+                                                <DeleteIcon fontSize="medium" />
+                                            </IconButton>
+                                        </TableCell>
+                                    ) : null}
+                                </TableRow>
+                            </>
+                        ))}
                     </TableBody>
                 </Table>
             )}

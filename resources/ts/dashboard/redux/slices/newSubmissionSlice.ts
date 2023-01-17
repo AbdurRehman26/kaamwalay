@@ -99,6 +99,8 @@ export interface PaymentSubmissionState {
     fetchingStatus: string | null;
 }
 
+const retrievedOrder = localStorage.getItem('incompleteOrder');
+const parsedOrder = retrievedOrder ? JSON.parse(retrievedOrder) : null;
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
@@ -305,7 +307,7 @@ const initialState: NewSubmissionSliceState = {
     step02Data: {
         searchValue: '',
         searchResults: [],
-        selectedCards: [],
+        selectedCards: parsedOrder?.selectedCards ?? [],
         shippingFee: 0,
         cleaningFee: 0,
         requiresCleaning: false,
@@ -687,6 +689,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
+    localStorage.removeItem('incompleteOrder');
     return newOrder.data;
 });
 
@@ -751,6 +754,67 @@ const parseName = (id: number, fullName: any) => {
     }
 };
 
+const presistOrder = (state: any, data: any, option: string) => {
+    type OrderToSave = {
+        selectedCards: SearchResultItemCardProps[] | any;
+        numberOfCards: number;
+    };
+
+    const retrievedObject = localStorage.getItem('incompleteOrder');
+    let orderToSave: OrderToSave = { selectedCards: [], numberOfCards: 0 };
+
+    orderToSave = retrievedObject ? JSON.parse(retrievedObject) : '';
+
+    switch (option) {
+        case 'add':
+            orderToSave = {
+                ...orderToSave,
+                selectedCards:
+                    orderToSave?.selectedCards?.length > 0
+                        ? [{ ...data }, ...orderToSave.selectedCards]
+                        : state?.step02Data?.selectedCards,
+                numberOfCards: state?.step02Data?.selectedCards.reduce(function (prev: number, cur: any) {
+                    // @ts-ignore
+                    return prev + cur?.qty;
+                }, 0),
+            };
+            break;
+        case 'remove':
+            orderToSave = {
+                ...orderToSave,
+                selectedCards: orderToSave.selectedCards.filter((item: { id: any }) => item.id !== data.id),
+                numberOfCards: orderToSave.selectedCards
+                    .filter((item: { id: any }) => item.id !== data.id)
+                    .reduce(function (prev: number, cur: any) {
+                        // @ts-ignore
+                        return prev + cur?.qty;
+                    }, 0),
+            };
+            break;
+        case 'value':
+            const lookup = orderToSave.selectedCards.find((card: { id: any }) => card.id === data.card.id);
+            if (lookup) {
+                lookup.value = data.newValue;
+            }
+            break;
+        case 'quantity':
+            const lookup1 = orderToSave.selectedCards.find((card: { id: any }) => card.id === data.card.id);
+            if (lookup1) {
+                lookup1.qty = data.qty;
+            }
+            orderToSave = {
+                ...orderToSave,
+                numberOfCards: orderToSave.selectedCards.reduce(function (prev: number, cur: any) {
+                    // @ts-ignore
+                    return prev + cur?.qty;
+                }, 0),
+            };
+            break;
+    }
+    localStorage.setItem('incompleteOrder', JSON.stringify(orderToSave));
+    state.step02Data.selectedCards = orderToSave.selectedCards;
+};
+
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
     initialState,
@@ -796,17 +860,21 @@ export const newSubmissionSlice = createSlice({
                 ...state.step02Data.selectedCards,
                 { ...action.payload, qty: 1, value: 1 },
             ];
+            action.payload = { ...action.payload, qty: 1, value: 1 };
+            presistOrder(state, action.payload, 'add');
         },
         markCardAsUnselected: (state, action: PayloadAction<Pick<SearchResultItemCardProps, 'id'>>) => {
             state.step02Data.selectedCards = state.step02Data.selectedCards.filter(
                 (cardItem) => cardItem.id !== action.payload.id,
             );
+            presistOrder(state, action.payload, 'remove');
         },
         changeSelectedCardQty: (state, action: PayloadAction<{ card: SearchResultItemCardProps; qty: number }>) => {
             const lookup = state.step02Data.selectedCards.find((card) => card.id === action.payload.card.id);
             if (lookup) {
                 lookup.qty = action.payload.qty;
             }
+            presistOrder(state, { card: action.payload.card, qty: action.payload.qty }, 'quantity');
         },
         changeSelectedCardValue: (
             state,
@@ -816,6 +884,7 @@ export const newSubmissionSlice = createSlice({
             if (lookup) {
                 lookup.value = action.payload.newValue;
             }
+            presistOrder(state, { card: action.payload.card, newValue: action.payload.newValue }, 'value');
         },
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;
@@ -926,7 +995,293 @@ export const newSubmissionSlice = createSlice({
         setPreviewTotal: (state, action: PayloadAction<number>) => {
             state.previewTotal = action.payload;
         },
-        clearSubmissionState: () => initialState,
+        clearSubmissionState: (state) => {
+            state.orderID = -1;
+            state.totalInAgs = 0;
+            state.confirmedCollectorCoinPayment = false;
+            state.orderTransactionHash = '';
+            state.grandTotal = 0;
+            state.refundTotal = 0;
+            state.extraChargesTotal = 0;
+            state.availableCredit = 0;
+            state.previewTotal = 0;
+            state.appliedCredit = 0;
+            state.amountPaidFromWallet = 0;
+            state.orderNumber = '';
+            state.paymentMethodDiscountedAmount = 0;
+            state.isNextDisabled = false;
+            state.isNextLoading = false;
+            state.currentStep = 0;
+            state.shippingMethod = DefaultShippingMethodEntity;
+            state.couponState = {
+                isCouponValid: false,
+                couponCode: '',
+                validCouponId: -1,
+                isCouponApplied: false,
+                couponInvalidMessage: '',
+                appliedCouponData: {
+                    id: -1,
+                    discountStatement: '',
+                    discountValue: '',
+                    discountedAmount: 0,
+                },
+            };
+            state.step01Status = null;
+            state.step01Data = {
+                availableServiceLevels: [
+                    {
+                        id: 1,
+                        type: 'card',
+                        maxProtectionAmount: 200,
+                        turnaround: '20 Business Days',
+                        price: 18,
+                        priceRanges: [
+                            {
+                                id: 1,
+                                minCards: 1,
+                                maxCards: 20,
+                                price: 18,
+                            },
+                            {
+                                id: 2,
+                                minCards: 21,
+                                maxCards: 50,
+                                price: 17,
+                            },
+                            {
+                                id: 3,
+                                minCards: 51,
+                                maxCards: 100,
+                                price: 16,
+                            },
+                            {
+                                id: 4,
+                                minCards: 101,
+                                maxCards: 200,
+                                price: 15,
+                            },
+                            {
+                                id: 5,
+                                minCards: 201,
+                                maxCards: null,
+                                price: 14,
+                            },
+                        ],
+                        maxPrice: 18,
+                        minPrice: 14,
+                    },
+                ],
+                selectedServiceLevel: {
+                    id: 1,
+                    type: 'card',
+                    maxProtectionAmount: 200,
+                    turnaround: '20 Business Days',
+                    price: 18,
+                    priceRanges: [
+                        {
+                            id: 1,
+                            minCards: 1,
+                            maxCards: 20,
+                            price: 18,
+                        },
+                        {
+                            id: 2,
+                            minCards: 21,
+                            maxCards: 50,
+                            price: 17,
+                        },
+                        {
+                            id: 3,
+                            minCards: 51,
+                            maxCards: 100,
+                            price: 16,
+                        },
+                        {
+                            id: 4,
+                            minCards: 101,
+                            maxCards: 200,
+                            price: 15,
+                        },
+                        {
+                            id: 5,
+                            minCards: 201,
+                            maxCards: null,
+                            price: 14,
+                        },
+                    ],
+                    maxPrice: 18,
+                    minPrice: 14,
+                },
+                status: 'success',
+                originalServiceLevel: {
+                    id: 1,
+                    type: 'card',
+                    maxProtectionAmount: 200,
+                    turnaround: '20 Business Days',
+                    price: 18,
+                    priceRanges: [
+                        {
+                            id: 1,
+                            minCards: 1,
+                            maxCards: 20,
+                            price: 18,
+                        },
+                        {
+                            id: 2,
+                            minCards: 21,
+                            maxCards: 50,
+                            price: 17,
+                        },
+                        {
+                            id: 3,
+                            minCards: 51,
+                            maxCards: 100,
+                            price: 16,
+                        },
+                        {
+                            id: 4,
+                            minCards: 101,
+                            maxCards: 200,
+                            price: 15,
+                        },
+                        {
+                            id: 5,
+                            minCards: 201,
+                            maxCards: null,
+                            price: 14,
+                        },
+                    ],
+                    maxPrice: 18,
+                    minPrice: 14,
+                },
+            };
+            state.step02Data = {
+                searchValue: '',
+                searchResults: [],
+                selectedCards: [],
+                shippingFee: 0,
+                cleaningFee: 0,
+                requiresCleaning: false,
+                isMobileSearchModalOpen: false,
+            };
+            state.step03Data = {
+                existingAddresses: [],
+                selectedAddress: {
+                    fullName: '',
+                    lastName: '',
+                    address: '',
+                    address2: '',
+                    flat: '',
+                    city: '',
+                    state: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
+                    zipCode: '',
+                    phoneNumber: '',
+                    country: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                        phoneCode: '',
+                    },
+                    id: -1,
+                    userId: 0,
+                    isDefaultShipping: false,
+                    isDefaultBilling: false,
+                },
+                selectedExistingAddress: {
+                    fullName: '',
+                    lastName: '',
+                    address: '',
+                    flat: '',
+                    city: '',
+                    state: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
+                    zipCode: '',
+                    phoneNumber: '',
+                    country: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                        phoneCode: '',
+                    },
+                    id: -1,
+                    userId: 0,
+                    isDefaultShipping: false,
+                    isDefaultBilling: false,
+                },
+                availableCountriesList: [
+                    {
+                        name: '',
+                        code: '',
+                        id: 0,
+                        phoneCode: '',
+                    },
+                ],
+                availableStatesList: [
+                    {
+                        name: '',
+                        code: '',
+                        id: 0,
+                    },
+                ],
+                fetchingStatus: null,
+                saveForLater: true,
+                disableAllShippingInputs: true,
+                useCustomShippingAddress: false,
+            };
+            state.step04Data = {
+                paymentMethodId: 0,
+                existingCreditCards: [],
+                availableStatesList: [],
+                selectedCreditCard: {
+                    expMonth: 0,
+                    expYear: 0,
+                    last4: '',
+                    brand: '',
+                    id: '',
+                },
+                saveForLater: true,
+                useShippingAddressAsBillingAddress: true,
+                selectedBillingAddress: {
+                    fullName: '',
+                    lastName: '',
+                    address: '',
+                    address2: '',
+                    flat: '',
+                    city: '',
+                    state: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                    },
+                    zipCode: '',
+                    phoneNumber: '',
+                    country: {
+                        id: 0,
+                        code: '',
+                        name: '',
+                        phoneCode: '',
+                    },
+                    id: 0,
+                    userId: 0,
+                    isDefaultShipping: false,
+                    isDefaultBilling: false,
+                },
+                existingBillingAddresses: [],
+                fetchingStatus: null,
+            };
+            state.paymentStatus = PaymentStatusEnum.PENDING;
+            state.shippingAddress = [];
+            state.billingAddress = [];
+            state.stepValidations = [true, false, false, false, false];
+            state.dialog = false;
+        },
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,

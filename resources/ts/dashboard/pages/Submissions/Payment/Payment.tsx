@@ -887,7 +887,10 @@ export function Payment() {
                                                                             }),
                                                                         );
                                                                     }}
-                                                                    value={state?.code ?? state}
+                                                                    value={
+                                                                        state?.code ??
+                                                                        (typeof state === 'string' ? state : '')
+                                                                    }
                                                                     size={'small'}
                                                                     variant={'outlined'}
                                                                     margin="normal"

@@ -110,6 +110,7 @@ export function ApplyPromoCode() {
             const endpointUrl = `customer/orders/${id}/coupons/remove`;
             const removeCouponEndpoint = apiService.createEndpoint(endpointUrl);
             await removeCouponEndpoint.post('');
+            dispatch(setCouponCode(''));
         }
 
         dispatch(setIsCouponApplied(false));

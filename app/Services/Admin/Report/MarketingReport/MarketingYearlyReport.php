@@ -11,7 +11,7 @@ class MarketingYearlyReport extends MarketingReport
 {
     public function shouldSendNow(): bool
     {
-        return now()->is(Carbon::parse('first day of January'));
+        return now()->firstOfYear()->isCurrentDay();
     }
 
     public function getReportTitle(): string

@@ -58,7 +58,7 @@ beforeEach(function () {
     $this->order = $orderItem->order;
 });
 
-it('removes coupon from order', function () {
+it('a customer can remove coupon from order payment page', function () {
     actingAs($this->user);
 
     $this->order->coupon_id = $this->coupon->id;

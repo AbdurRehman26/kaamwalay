@@ -111,4 +111,20 @@ class CouponController extends Controller
             ],
         ]);
     }
+
+    public function removeCouponFromOrder(Order $order): JsonResponse
+    {
+        try {
+            return response()->json([
+                'success' => $this->couponService->removeCouponFromOrder($order),
+            ]);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+    }
 }

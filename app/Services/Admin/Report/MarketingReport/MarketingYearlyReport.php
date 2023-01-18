@@ -2,8 +2,6 @@
 
 namespace App\Services\Admin\Report\MarketingReport;
 
-use Carbon\Carbon;
-
 /**
  * On request of Alex Kegan (Marketing)
  */

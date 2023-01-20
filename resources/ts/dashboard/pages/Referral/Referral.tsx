@@ -80,7 +80,7 @@ export function Referral() {
                             />
                         </TabList>
                     </Box>
-                    <TabPanel value={'main'}>
+                    <TabPanel value={'main'} sx={{ padding: '24px 0px' }}>
                         <Main />
                     </TabPanel>
                     <TabPanel value={'referrals'}>

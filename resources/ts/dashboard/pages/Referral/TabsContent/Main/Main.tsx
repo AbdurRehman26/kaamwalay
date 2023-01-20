@@ -1,4 +1,3 @@
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
@@ -9,20 +8,17 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Grid from '@mui/material/Grid';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
 import ShareLink from '@shared/assets/shareLink.png';
-import SocialShare from '../SocialShare';
-import WithDrawBox from '../WithDrawBox';
+import Copylink from './CopyLink';
+import SocialShare from './SocialShare';
+import WithDrawBox from './WithDrawBox';
 
 const ImageDiv = styled(Grid)({
     display: 'flex',
@@ -148,23 +144,10 @@ const styles = {
 
 export function Main() {
     const [value, setValue] = useState('share-link');
-    const [open, setOpen] = useState(false);
     const classes = useStyle();
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
-    };
-
-    const handleClick = () => {
-        setOpen(true);
-    };
-
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
     };
 
     return (
@@ -204,50 +187,7 @@ export function Main() {
                             <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" />
                         </TabList>
                         <TabPanel value="share-link">
-                            <div>
-                                <Typography sx={styles.ShareLinkText}>Your unique link:</Typography>
-                                <Input
-                                    type="text"
-                                    value={'www.robograding.com/referral/C902039'}
-                                    disableUnderline
-                                    sx={styles.InputBox}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <CopyToClipboard
-                                                text={'www.robograding.com/referral/C902039'}
-                                                onCopy={() => handleClick()}
-                                            >
-                                                <Typography sx={styles.CopyButton}>copy</Typography>
-                                            </CopyToClipboard>
-                                        </InputAdornment>
-                                    }
-                                />
-                                <Typography sx={styles.SmallText}>
-                                    Copy and paste this link to send it through any channel you prefer.
-                                </Typography>
-                                <Snackbar
-                                    open={open}
-                                    onClose={handleClose}
-                                    autoHideDuration={1000}
-                                    sx={{
-                                        background: '#20BFB8',
-                                        borderRadius: '28px',
-                                        padding: '15px 25px',
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            fontWeight: '500px',
-                                            fontSize: '20px',
-                                            lineHeight: '24px',
-                                            letterSpacing: '0.15px',
-                                            color: '#FFFFFF',
-                                        }}
-                                    >
-                                        <CheckCircleRoundedIcon sx={{ color: '#fff', fontSize: '25px' }} /> Link Copied!
-                                    </Typography>
-                                </Snackbar>
-                            </div>
+                            <Copylink />
                         </TabPanel>
                         <TabPanel value="facebook">
                             <SocialShare name="Facebook" />

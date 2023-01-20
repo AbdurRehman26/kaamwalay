@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { ListHeader } from '@dashboard/components/ListHeader';
 import CommissionStructure from './TabsContent/CommissionStructure';
-import Main from './TabsContent/Main';
+import Main from './TabsContent/Main/Main';
 import MarketingContent from './TabsContent/MarketingContent';
 import Referrals from './TabsContent/Referrals';
 import Withdrawals from './TabsContent/WithDrawals';

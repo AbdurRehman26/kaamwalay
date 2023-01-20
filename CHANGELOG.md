@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v3.4.2 - 2023-01-20
+
+### What's Changed
+
+- Hotfix: Pricing Update by @luis-molina in https://github.com/woozard/robograding/pull/885
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.4.1...v3.4.2
+
 ## Release v3.4.1 - 2023-01-11
 
 ### What's Changed

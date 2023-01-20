@@ -37,7 +37,6 @@ return new class extends Migration
         DB::table('payment_plan_ranges')->where(['id' => 33])->update(['price' => 350,'updated_at' => $now]);
         DB::table('payment_plan_ranges')->where(['id' => 34])->update(['price' => 300,'updated_at' => $now]);
         DB::table('payment_plan_ranges')->where(['id' => 35])->update(['price' => 250,'updated_at' => $now]);
-
     }
 
     /**
@@ -73,6 +72,5 @@ return new class extends Migration
         DB::table('payment_plan_ranges')->where(['id' => 33])->update(['price' => 498,'updated_at' => $now]);
         DB::table('payment_plan_ranges')->where(['id' => 34])->update(['price' => 497,'updated_at' => $now]);
         DB::table('payment_plan_ranges')->where(['id' => 35])->update(['price' => 496,'updated_at' => $now]);
-
     }
 };

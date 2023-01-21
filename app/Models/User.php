@@ -56,7 +56,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'is_marketing_notifications_enabled'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'is_marketing_notifications_enabled', 'referred_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -77,6 +77,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
         'is_marketing_notifications_enabled' => 'boolean',
+        'referred_by' => 'integer',
     ];
 
     /**
@@ -221,6 +222,13 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->belongsTo(User::class, 'salesman_id');
     }
 
+    /**
+     * @return BelongsTo<User, User>
+     */
+    public function referredBy()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

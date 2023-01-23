@@ -2,6 +2,7 @@
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Jobs\Auth\CreateUserDeviceJob;
+use App\Models\Referrer;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -178,3 +179,51 @@ test('a customer can opt out of marketing notifications during register ', funct
 
     expect($user->is_marketing_notifications_enabled)->toBeFalse();
 })->group('auth');
+
+test('customer can register with referral code and is marked as referee', function () {
+    $referrer = Referrer::factory()->create();
+
+    $email = $this->faker->safeEmail();
+    $response = $this->postJson('/api/v2/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
+        'app_generated_id' => '12345',
+        'referral_code' => $referrer->referral_code,
+    ]);
+
+    $response->assertStatus(Response::HTTP_CREATED);
+    $response->assertJsonStructure([
+        'access_token', 'type', 'expiry',
+    ]);
+
+    $user = User::whereEmail($email)->first();
+
+    expect($user->referred_by)->toBe($referrer->id);
+});
+
+test('customer cannot register with incorrect referral code', function () {
+    $email = $this->faker->safeEmail();
+    $response = $this->postJson('/api/v2/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
+        'app_generated_id' => '12345',
+        'referral_code' => 'Lorem Ipsum',
+    ]);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonStructure([
+        'errors' => ['referral_code'],
+    ]);
+});

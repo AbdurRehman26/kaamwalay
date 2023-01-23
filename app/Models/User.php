@@ -99,6 +99,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $data['is_active'] = true;
         }
 
+        if (array_key_exists('referral_code', $data) && $data['referral_code']) {
+            $data['referred_by'] = Referrer::where('referral_code', $data['referral_code'])->first()->id;
+        }
+
         /* @var User $user */
         $user = self::create($data);
 

@@ -16,6 +16,7 @@
  * @apiParam { String } [platform] Platform of User device. Possible values [web, ios, android]
  * @apiParam { String } [app_generated_id] App generated ID
  * @apiParam { Boolean } [is_marketing_notifications_enabled] If the user has opted in or out for SMS/Email marketing notifications
+ * @apiParam { String } [referral_code] Code linked to a referrer in order to link it to the new user
  *
  * @apiSuccess { String } data.token authentication token
  * @apiSuccess { String } data.type  type of authentication token

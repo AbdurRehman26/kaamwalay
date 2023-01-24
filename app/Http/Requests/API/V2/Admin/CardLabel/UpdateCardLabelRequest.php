@@ -17,7 +17,7 @@ class UpdateCardLabelRequest extends FormRequest
             'line_one' => ['string', 'required'],
             'line_two' => ['string', 'required'],
             'line_three' => ['string', 'nullable'],
-            'line_four' => ['string', 'required'],
+            'line_four' => ['string', 'nullable'],
         ];
     }
 }

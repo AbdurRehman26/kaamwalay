@@ -63,4 +63,13 @@ class CouponService
         $couponStat->total_discount = $orderCouponLog->sum('discounted_amount');
         $couponStat->save();
     }
+
+    public function removeCouponFromOrder(Order $order): bool
+    {
+        $order->discounted_amount = 0;
+        $order->grand_total = $order->grand_total_before_discount;
+        $order->coupon_id = null;
+
+        return $order->save();
+    }
 }

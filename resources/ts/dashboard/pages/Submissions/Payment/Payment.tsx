@@ -15,6 +15,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import NumberFormat from 'react-number-format';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
@@ -32,6 +33,7 @@ import { PaymentForm } from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getCountriesList } from '@dashboard/redux/slices/newAddressSlice';
 import {
     getAvailableCredit,
     getStatesList,
@@ -259,15 +261,11 @@ const GreenCheckbox = withStyles({
 })((props: any) => <Checkbox color="default" {...props} />);
 
 const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
+    fullName: yup.string().required(),
     address: yup.string().required(),
-    apt: yup.string().optional(),
+    address2: yup.string().optional().nullable(),
     city: yup.string().required(),
-    state: yup.object().shape({
-        name: yup.string().required(),
-        id: yup.number().required(),
-    }),
+    state: yup.string().required(),
     zipCode: yup.string().required(),
 });
 
@@ -277,6 +275,7 @@ function addressFromEntity(address: AddressEntity) {
         firstName: address.firstName,
         lastName: address.lastName,
         address: address.address,
+        address2: address.address2,
         city: address.city,
         zipCode: address.zip,
         phoneNumber: address.phone,
@@ -311,16 +310,18 @@ export function Payment() {
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
 
+    const availableCountries = useAppSelector((state) => state.newAddressSlice.availableCountriesList);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
-    const firstName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.firstName);
-    const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
+    const fullName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.fullName);
     const address = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address);
+    const address2 = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address2);
+    const country = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.country);
     const city = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.city);
     const state = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
-    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
+    const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const amountPaidFromWallet = useAppSelector((state) => state.newSubmission.amountPaidFromWallet);
@@ -363,15 +364,25 @@ export function Payment() {
     const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
     const { featureOrderWalletCreditEnabled, featureOrderWalletCreditPercentage } = useConfiguration();
 
+    useEffect(
+        () => {
+            (async () => {
+                await dispatch(getCountriesList());
+                await dispatch(getStatesList());
+            })();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
+
     useEffect(() => {
         schema
             .isValid({
-                firstName,
-                lastName,
+                fullName,
                 address,
-                apt,
+                address2,
                 city,
-                state,
+                state: state?.code ?? state,
                 zipCode,
             })
             .then((valid) => {
@@ -379,10 +390,9 @@ export function Payment() {
                 setIsAddressDataValid(valid);
             });
     }, [
-        firstName,
-        lastName,
+        fullName,
         address,
-        apt,
+        address2,
         city,
         state,
         zipCode,
@@ -406,6 +416,26 @@ export function Payment() {
         [dispatch],
     );
 
+    const updateBillingCountry = useCallback(
+        (countryId: any) => {
+            const countryLookup = availableCountries.find((country: any) => country.id === parseInt(countryId));
+            if (countryLookup) {
+                dispatch(
+                    updateBillingAddressField({
+                        fieldName: 'country',
+                        newValue: {
+                            name: countryLookup.name,
+                            id: countryLookup.id,
+                            code: countryLookup.code,
+                            phoneCode: countryLookup.phoneCode,
+                        },
+                    }),
+                );
+            }
+        },
+        [availableCountries, dispatch],
+    );
+
     const updateBillingState = useCallback(
         (stateId: any) => {
             const stateLookup = availableStates.find((state: any) => state.id === parseInt(stateId));
@@ -420,6 +450,17 @@ export function Payment() {
         },
         [availableStates, dispatch],
     );
+    const getStateValue = useCallback(
+        (code: any) => {
+            const stateLookup = availableStates.find((state: any) => state.code === code);
+            if (stateLookup) {
+                return stateLookup.id;
+            } else {
+                return code;
+            }
+        },
+        [availableStates],
+    );
 
     async function getPaymentMethods() {
         setArePaymentMethodsLoading(true);
@@ -430,18 +471,34 @@ export function Payment() {
         setArePaymentMethodsLoading(false);
     }
 
+    const parseName = (fullName: any) => {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
+    };
+
     async function updateBillingAddress() {
         setIsUpdateAddressButtonEnabled(false);
         const endpoint = apiService.createEndpoint(`customer/orders/${id}/update-billing-address`);
+        const parsedName = parseName(fullName);
+
         const response = await endpoint.patch('', {
-            firstName,
-            lastName,
+            firstName: parsedName?.firstName,
+            lastName: parsedName?.lastName,
             address,
-            apt,
+            address2,
             city,
-            phone: order?.data.shippingAddress?.phone ?? 'Default',
+            state: state?.code ?? state,
             zip: zipCode,
-            state: state.code,
+            phone: phoneNumber,
+            countryCode: country?.code ? country.code : 'US',
         });
         notifications.success(response?.data?.message);
         setCanUseShippingAsBilling(false);
@@ -614,11 +671,11 @@ export function Payment() {
                                                 </Typography>
                                                 <Typography
                                                     className={classes.billingAddressItem}
-                                                >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                                >{`${shippingAddress.getFullName()}`}</Typography>
                                                 <Typography className={classes.billingAddressItem}>{`${
                                                     shippingAddress.address
                                                 } ${
-                                                    shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : ''
+                                                    shippingAddress?.address2 ? shippingAddress.address2 : ''
                                                 }`}</Typography>
                                                 <Typography className={classes.billingAddressItem}>{`${
                                                     shippingAddress.city
@@ -635,44 +692,47 @@ export function Payment() {
                                                             Billing Address
                                                         </Typography>
                                                     </div>
-
-                                                    <div className={classes.inputsRow01}>
+                                                    <div className={classes.fieldContainer} style={{ width: '100%' }}>
+                                                        <Typography className={classes.methodDescription}>
+                                                            Country
+                                                        </Typography>
+                                                        <Select
+                                                            fullWidth
+                                                            native
+                                                            key={`billingAddressCountry${id}`}
+                                                            name={`billingAddressCountry${id}`}
+                                                            id={`billingAddressCountry${id}`}
+                                                            onChange={(e) => {
+                                                                updateField('phoneNumber', '');
+                                                                updateBillingCountry(e.target.value);
+                                                            }}
+                                                            placeholder={'Select Country'}
+                                                            variant={'outlined'}
+                                                            style={{ height: '43px', marginTop: 6 }}
+                                                            value={country?.id}
+                                                        >
+                                                            <option value="none">Select a country</option>
+                                                            {availableCountries.map((item: any) => (
+                                                                <option key={item.id} value={item.id}>
+                                                                    {item?.name}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </div>
+                                                    <div className={classes.inputsRow02}>
                                                         <div
                                                             className={classes.fieldContainer}
-                                                            style={{ width: '47%' }}
+                                                            style={{ width: '100%' }}
                                                         >
                                                             <Typography className={classes.methodDescription}>
-                                                                First Name
+                                                                Full Name
                                                             </Typography>
                                                             <TextField
                                                                 style={{ margin: 8, marginLeft: 0 }}
-                                                                placeholder="Enter First Name"
-                                                                value={firstName}
+                                                                placeholder="Enter Full Name"
+                                                                value={fullName}
                                                                 onChange={(e: any) =>
-                                                                    updateField('firstName', e.target.value)
-                                                                }
-                                                                fullWidth
-                                                                size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            className={classes.fieldContainer}
-                                                            style={{ width: '47%' }}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                Last Name
-                                                            </Typography>
-                                                            <TextField
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                placeholder="Enter Last Name"
-                                                                value={lastName}
-                                                                onChange={(e: any) =>
-                                                                    updateField('lastName', e.target.value)
+                                                                    updateField('fullName', e.target.value)
                                                                 }
                                                                 fullWidth
                                                                 size={'small'}
@@ -688,6 +748,7 @@ export function Payment() {
                                                     <div className={classes.inputsRow02}>
                                                         <div
                                                             className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
+                                                            style={{ width: '100%' }}
                                                         >
                                                             <Typography className={classes.methodDescription}>
                                                                 Address
@@ -708,58 +769,32 @@ export function Payment() {
                                                                 }}
                                                             />
                                                         </div>
-                                                        {!isMobile ? (
-                                                            <div
-                                                                className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
-                                                            >
-                                                                <Typography className={classes.methodDescription}>
-                                                                    Apt # (optional)
-                                                                </Typography>
-                                                                <TextField
-                                                                    style={{ margin: 8, marginLeft: 0 }}
-                                                                    placeholder="Apt #"
-                                                                    fullWidth
-                                                                    value={apt}
-                                                                    onChange={(e: any) =>
-                                                                        updateField('flat', e.target.value)
-                                                                    }
-                                                                    size={'small'}
-                                                                    variant={'outlined'}
-                                                                    margin="normal"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        ) : null}
                                                     </div>
-
-                                                    {isMobile ? (
-                                                        <div className={classes.inputsRow02}>
-                                                            <div
-                                                                className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
-                                                            >
-                                                                <Typography className={classes.methodDescription}>
-                                                                    Apt # (optional)
-                                                                </Typography>
-                                                                <TextField
-                                                                    style={{ margin: 8, marginLeft: 0 }}
-                                                                    placeholder="Apt #"
-                                                                    fullWidth
-                                                                    value={apt}
-                                                                    onChange={(e: any) =>
-                                                                        updateField('flat', e.target.value)
-                                                                    }
-                                                                    size={'small'}
-                                                                    variant={'outlined'}
-                                                                    margin="normal"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                />
-                                                            </div>
+                                                    <div className={'inputsRow02'}>
+                                                        <div
+                                                            className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
+                                                            style={{ width: '100%' }}
+                                                        >
+                                                            <Typography className={classes.methodDescription}>
+                                                                Address Line #2 (Optional)
+                                                            </Typography>
+                                                            <TextField
+                                                                style={{ margin: 8, marginLeft: 0 }}
+                                                                placeholder="Enter apt, suite, building, floor etc."
+                                                                fullWidth
+                                                                value={address2}
+                                                                onChange={(e: any) =>
+                                                                    updateField('address2', e.target.value)
+                                                                }
+                                                                size={'small'}
+                                                                variant={'outlined'}
+                                                                margin="normal"
+                                                                InputLabelProps={{
+                                                                    shrink: true,
+                                                                }}
+                                                            />
                                                         </div>
-                                                    ) : null}
+                                                    </div>
 
                                                     {isMobile ? (
                                                         <div className={classes.inputsRow03}>
@@ -820,24 +855,50 @@ export function Payment() {
                                                             <Typography className={classes.methodDescription}>
                                                                 State
                                                             </Typography>
-                                                            <Select
-                                                                fullWidth
-                                                                native
-                                                                value={state.id || 'none'}
-                                                                onChange={(e: any) =>
-                                                                    updateBillingState(e.nativeEvent.target.value)
-                                                                }
-                                                                placeholder={'Select State'}
-                                                                variant={'outlined'}
-                                                                style={{ height: '43px' }}
-                                                            >
-                                                                <option value="none">Select a state</option>
-                                                                {availableStates.map((item: any) => (
-                                                                    <option key={item.id} value={item.id}>
-                                                                        {item.code}
-                                                                    </option>
-                                                                ))}
-                                                            </Select>
+                                                            {country?.id === 1 || !country?.id ? (
+                                                                <Select
+                                                                    fullWidth
+                                                                    native
+                                                                    value={getStateValue(state?.code ?? state)}
+                                                                    onChange={(e: any) =>
+                                                                        updateBillingState(e.nativeEvent.target.value)
+                                                                    }
+                                                                    placeholder={'Select State'}
+                                                                    variant={'outlined'}
+                                                                    style={{ height: '43px' }}
+                                                                >
+                                                                    <option value="none">Select a state</option>
+                                                                    {availableStates.map((item: any) => (
+                                                                        <option key={item.id} value={item.id}>
+                                                                            {item.code}
+                                                                        </option>
+                                                                    ))}
+                                                                </Select>
+                                                            ) : (
+                                                                <TextField
+                                                                    style={{ marginTop: 2 }}
+                                                                    placeholder="Enter State"
+                                                                    fullWidth
+                                                                    onChange={(e: any) => {
+                                                                        dispatch(
+                                                                            updateBillingAddressField({
+                                                                                fieldName: 'state',
+                                                                                newValue: e.target.value,
+                                                                            }),
+                                                                        );
+                                                                    }}
+                                                                    value={
+                                                                        state?.code ??
+                                                                        (typeof state === 'string' ? state : '')
+                                                                    }
+                                                                    size={'small'}
+                                                                    variant={'outlined'}
+                                                                    margin="normal"
+                                                                    InputLabelProps={{
+                                                                        shrink: true,
+                                                                    }}
+                                                                />
+                                                            )}
                                                         </div>
                                                         <div
                                                             className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}
@@ -856,6 +917,37 @@ export function Payment() {
                                                                 size={'small'}
                                                                 variant={'outlined'}
                                                                 margin="normal"
+                                                                InputLabelProps={{
+                                                                    shrink: true,
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className={'inputsRow04'}>
+                                                        <div
+                                                            className={'fieldContainer'}
+                                                            style={{ width: '100%', marginTop: '4px' }}
+                                                        >
+                                                            <Typography className={classes.methodDescription}>
+                                                                Phone Number (Optional)
+                                                            </Typography>
+                                                            <NumberFormat
+                                                                customInput={TextField}
+                                                                format={
+                                                                    country?.phoneCode
+                                                                        ? '+' + country?.phoneCode + ' (###) ###-####'
+                                                                        : '+' +
+                                                                          availableCountries[0]?.phoneCode +
+                                                                          ' (###) ###-####'
+                                                                }
+                                                                mask=""
+                                                                style={{ margin: 8, marginLeft: 0 }}
+                                                                placeholder="Enter Phone Number"
+                                                                onChange={(e: any) =>
+                                                                    updateField('phoneNumber', e.target.value)
+                                                                }
+                                                                value={phoneNumber}
+                                                                fullWidth
                                                                 InputLabelProps={{
                                                                     shrink: true,
                                                                 }}

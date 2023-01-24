@@ -105,10 +105,17 @@ export function ApplyPromoCode() {
         [debounceCheckCoupon, dispatch],
     );
 
-    const handleCouponDismiss = useCallback(() => {
+    const handleCouponDismiss = useCallback(async () => {
+        if (id) {
+            const endpointUrl = `customer/orders/${id}/coupons/remove`;
+            const removeCouponEndpoint = apiService.createEndpoint(endpointUrl);
+            await removeCouponEndpoint.post('');
+            dispatch(setCouponCode(''));
+        }
+
         dispatch(setIsCouponApplied(false));
         dispatch(setIsCouponValid(true));
-    }, [dispatch]);
+    }, [apiService, dispatch, id]);
 
     useEffect(() => {
         handleChange({ target: { value: couponCode } });

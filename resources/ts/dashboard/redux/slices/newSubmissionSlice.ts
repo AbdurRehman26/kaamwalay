@@ -1004,9 +1004,10 @@ export const newSubmissionSlice = createSlice({
                     !action.payload.billingAddress,
                 selectedBillingAddress: {
                     id: billingAddress?.id,
-                    fullName: billingAddress?.firstName,
+                    fullName: billingAddress ? billingAddress?.firstName + ' ' + billingAddress?.lastName : '',
                     lastName: billingAddress?.lastName,
                     address: billingAddress?.address,
+                    address2: billingAddress?.address2,
                     city: billingAddress?.city,
                     state: {
                         id: 0,

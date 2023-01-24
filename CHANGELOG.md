@@ -1,5 +1,24 @@
 # Changelog
 
+## v3.5.0 - 2023-01-24
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/877
+- Admin: Make fourth line optional in all card label edits by @luis-molina in https://github.com/woozard/robograding/pull/876
+- Fix: Admin | Create Coupon Button Improvement by @numair97 in https://github.com/woozard/robograding/pull/875
+- Feature: Services | Paypal client by @muhammad-nauman in https://github.com/woozard/robograding/pull/870
+- Fix: Customer Coupon Discount by @aliwooter in https://github.com/woozard/robograding/pull/878
+- Fix: Salesrep | Submission Creation | Persisting Discount Value Issue by @numair97 in https://github.com/woozard/robograding/pull/879
+- Feature | Billing Address Form Update by @luis-molina in https://github.com/woozard/robograding/pull/881
+- Updated Apidoc for Update Billing Address method by @luis-molina in https://github.com/woozard/robograding/pull/883
+- Feature | Remove Coupon on Payment Page by @AbdurRehman26 in https://github.com/woozard/robograding/pull/880
+- Feature | Admin : Marketing yearly report by @AbdurRehman26 in https://github.com/woozard/robograding/pull/882
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/886
+- Release v3.5.0 by @thenabeel in https://github.com/woozard/robograding/pull/887
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.4.2...v3.5.0
+
 ## Release v3.4.2 - 2023-01-20
 
 ### What's Changed

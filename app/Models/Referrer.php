@@ -44,4 +44,20 @@ class Referrer extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referees()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function earnedCommissions()
+    {
+        return $this->hasMany(ReferrerEarnedCommission::class);
+    }
 }

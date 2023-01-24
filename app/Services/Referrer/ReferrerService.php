@@ -4,6 +4,7 @@ namespace App\Services\Referrer;
 
 use App\Models\Referrer;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 class ReferrerService
 {
@@ -26,5 +27,21 @@ class ReferrerService
         }
 
         return Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
+    }
+
+    public function getSignUps(Referrer $referrer): Collection
+    {
+        return $referrer->referees;
+    }
+
+    public function getEarnedCommissionsByReferee(Referrer $referrer, User $referee): Collection
+    {
+        return $referrer->earnedCommissions()->join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
+            ->where('orders.user_id', $referee->id)->select('referrer_earned_commissions.*')->get();
+    }
+
+    public function getTotalCommissionsByReferee(Referrer $referrer, User $referee): float
+    {
+        return $this->getEarnedCommissionsByReferee($referrer, $referee)->sum('commission');
     }
 }

@@ -43,7 +43,6 @@ class RegisterRequest extends FormRequest
             ],
             'app_generated_id' => ['sometimes', 'string'],
             'is_marketing_notifications_enabled' => ['sometimes', 'boolean'],
-            'referral_code' => ['sometimes', 'string', 'exists:referrers'],
         ];
     }
 

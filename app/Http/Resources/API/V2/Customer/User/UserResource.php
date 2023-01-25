@@ -32,7 +32,7 @@ class UserResource extends JsonResource
             'roles' => new RoleCollection($this->roles),
             'wallet' => new WalletResource($this->wallet),
             'is_marketing_notifications_enabled' => $this->is_marketing_notifications_enabled,
-            'has_successful_referrals' => $this->referrerObject->total_earned > 0,
+            'has_successful_referrals' => ($this?->referrerObject?->total_earned ?? 0) > 0,
         ];
     }
 }

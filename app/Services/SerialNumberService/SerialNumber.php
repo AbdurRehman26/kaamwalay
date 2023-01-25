@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class SerialNumber
 {
-    private ?int $value;
+    private mixed $value;
 
     public function __construct(
         private string $prefix,
@@ -22,7 +22,7 @@ class SerialNumber
         return ($this->prefix ?? '') . Str::padLeft((string) $this->value, $this->length, $this->padding);
     }
 
-    public function setValue(?int $value): self
+    public function setValue(mixed $value): self
     {
         $this->value = $value;
 

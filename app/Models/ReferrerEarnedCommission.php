@@ -26,9 +26,9 @@ class ReferrerEarnedCommission extends Model
     ];
 
     /**
-     * @return BelongsTo<User, ReferrerEarnedCommission>
+     * @return BelongsTo<Referrer, ReferrerEarnedCommission>
      */
-    public function referrer()
+    public function referrer(): BelongsTo
     {
         return $this->belongsTo(Referrer::class);
     }
@@ -36,7 +36,7 @@ class ReferrerEarnedCommission extends Model
     /**
      * @return BelongsTo<Order, ReferrerEarnedCommission>
      */
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
@@ -44,7 +44,7 @@ class ReferrerEarnedCommission extends Model
     /**
      * @return BelongsTo<CommissionStructure, ReferrerEarnedCommission>
      */
-    public function commissionStructure()
+    public function commissionStructure(): BelongsTo
     {
         return $this->belongsTo(CommissionStructure::class);
     }

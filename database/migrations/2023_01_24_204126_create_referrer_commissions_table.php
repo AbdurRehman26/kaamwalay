@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('referrer_earned_commissions', function (Blueprint $table) {
+        Schema::create('referrer_commissions', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('referrer_id');
             $table->foreign('referrer_id')->references('id')->on('referrers');
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->unsignedBigInteger('commission_structure_id');
-            $table->foreign('commission_structure_id')->references('id')->on('commission_structures');
+            $table->date('event_at');
             $table->decimal('commission', 10)->default(0);
-
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('referrer_earned_commissions');
+        Schema::dropIfExists('referrer_commissions');
     }
 };

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Referrer extends Model
 {
@@ -38,25 +40,25 @@ class Referrer extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Referrer>
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<User>
      */
-    public function referees()
+    public function referees(): HasMany
     {
         return $this->hasMany(User::class, 'referred_by');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ReferrerEarnedCommission>
      */
-    public function earnedCommissions()
+    public function earnedCommissions(): HasMany
     {
         return $this->hasMany(ReferrerEarnedCommission::class);
     }

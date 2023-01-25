@@ -8,6 +8,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { ChangeEvent, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
 import { font } from '@shared/styles/utils';
+import ReferralBanner from '@dashboard/pages/Referral/ReferralBanner';
+import ReferralDialog from '@dashboard/pages/Referral/ReferralDialog';
 
 interface ListHeaderProps {
     headline: string;
@@ -95,6 +97,12 @@ export function ListHeader({
 
     return (
         <>
+            {!isReferral ? (
+                <>
+                    <ReferralBanner />
+                    <ReferralDialog />
+                </>
+            ) : null}
             <Grid component={'header'} container direction={'row'} alignItems={'center'} className={classes.root}>
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}

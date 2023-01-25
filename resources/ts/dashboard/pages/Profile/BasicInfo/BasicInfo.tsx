@@ -15,6 +15,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { toggleMarketingNotifications, updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
+import ReferralBanner from '@dashboard/pages/Referral/ReferralBanner';
+import ReferralDialog from '@dashboard/pages/Referral/ReferralDialog';
 import { BasicInfoRow } from './BasicInfoRow';
 import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
 import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
@@ -403,6 +405,8 @@ export function BasicInfo() {
                 afterSaveCallback={passwordConfirmCallback}
             />
             <ChangeUserPictureDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
+            <ReferralDialog />
+            <ReferralBanner />
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>

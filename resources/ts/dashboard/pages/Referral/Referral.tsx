@@ -7,13 +7,14 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { ListHeader } from '@dashboard/components/ListHeader';
 import CommissionStructure from './TabsContent/CommissionStructure';
 import Main from './TabsContent/Main/Main';
 import MarketingContent from './TabsContent/MarketingContent';
-import Referrals from './TabsContent/Referrals';
+import Referrals from './TabsContent/Referrals/Referrals';
 import Withdrawals from './TabsContent/WithDrawals';
 
 const PayoutButton = styled(Button)({
@@ -29,6 +30,14 @@ const PayoutButton = styled(Button)({
     padding: '10px 15px',
 });
 
+const useStyle = makeStyles({
+    indicator: {
+        background: '#20BFB8',
+        borderRadius: '4px 4px 0px 0px',
+        height: '4px',
+    },
+});
+
 const styles = {
     TabsBox: {
         borderBottom: 1,
@@ -37,10 +46,17 @@ const styles = {
     TabContextDiv: {
         marginTop: '20px',
     },
+    TabsLink: {
+        textTransform: 'capitalize',
+    },
+    TabsPanel: {
+        padding: '24px 0px',
+    },
 };
 
 export function Referral() {
     const { tab } = useParams<{ tab: string }>();
+    const classes = useStyle();
 
     return (
         <>
@@ -52,47 +68,61 @@ export function Referral() {
             <TabContext value={tab ?? 'main'}>
                 <Grid container direction={'column'} sx={styles.TabContextDiv}>
                     <Box sx={styles.TabsBox}>
-                        <TabList indicatorColor={'primary'} textColor={'primary'}>
-                            <Tab component={Link} to={'/referral-program/main'} value={'main'} label="Main" />
+                        <TabList
+                            classes={{
+                                indicator: classes.indicator,
+                            }}
+                        >
+                            <Tab
+                                component={Link}
+                                to={'/referral-program/main'}
+                                value={'main'}
+                                label="Main"
+                                sx={styles.TabsLink}
+                            />
                             <Tab
                                 component={Link}
                                 to={'/referral-program/referrals'}
                                 value={'referrals'}
                                 label="Referrals"
+                                sx={styles.TabsLink}
                             />
                             <Tab
                                 component={Link}
                                 to={'/referral-program/with-drawals'}
                                 value={'with-drawals'}
                                 label="Withdrawals"
+                                sx={styles.TabsLink}
                             />
                             <Tab
                                 component={Link}
                                 to={'/referral-program/commission-structure'}
                                 value={'commission-structure'}
                                 label="Commission Structure"
+                                sx={styles.TabsLink}
                             />
                             <Tab
                                 component={Link}
                                 to={'/referral-program/marketing-content'}
                                 value={'marketing-content'}
                                 label="Marketing Content"
+                                sx={styles.TabsLink}
                             />
                         </TabList>
                     </Box>
-                    <TabPanel value={'main'} sx={{ padding: '24px 0px' }}>
+                    <TabPanel value={'main'} sx={styles.TabsPanel}>
                         <Main />
                     </TabPanel>
-                    <TabPanel value={'referrals'}>
+                    <TabPanel value={'referrals'} sx={styles.TabsPanel}>
                         <Referrals />
                     </TabPanel>
-                    <TabPanel value={'with-drawals'}>
+                    <TabPanel value={'with-drawals'} sx={styles.TabsPanel}>
                         <Withdrawals />
                     </TabPanel>
-                    <TabPanel value={'commission-structure'}>
+                    <TabPanel value={'commission-structure'} sx={styles.TabsPanel}>
                         <CommissionStructure />
                     </TabPanel>
-                    <TabPanel value={'marketing-content'}>
+                    <TabPanel value={'marketing-content'} sx={styles.TabsPanel}>
                         <MarketingContent />
                     </TabPanel>
                 </Grid>

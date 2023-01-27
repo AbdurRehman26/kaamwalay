@@ -2,6 +2,7 @@
 
 namespace App\Services\Referrer;
 
+use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
@@ -26,7 +27,7 @@ class ReferrerService
     }
 
     /**
-     * @param  Referrer  $referrer
+     * @param  int  $referrerId
      * @return LengthAwarePaginator
      */
     public function getSignUps(int $referrerId): LengthAwarePaginator
@@ -37,6 +38,24 @@ class ReferrerService
         return QueryBuilder::for($query)
             ->allowedSorts(['created_at'])
             ->defaultSort('-users.created_at')
+            ->paginate($itemsPerPage);
+    }
+
+    /**
+     * @param  int  $referrerId
+     * @return LengthAwarePaginator
+     */
+    public function getCommissionEarnings(int $referrerId): LengthAwarePaginator
+    {
+        $query = Order::join('referrer_earned_commissions','orders.id','referrer_earned_commissions.order_id')
+            ->join('referrers','referrer_earned_commissions.referrer_id','referrers.id')
+            ->selectRaw('SUM(referrer_earned_commissions.commission) as commission')
+            ->addSelect('orders.*')->where('referrers.id',$referrerId)->groupBy('orders.id');
+        $itemsPerPage = 10;
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['created_at'])
+            ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }
 

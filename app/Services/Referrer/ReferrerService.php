@@ -5,12 +5,10 @@ namespace App\Services\Referrer;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
-use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Support\Collection;
 
 class ReferrerService
 {
-
     public function create(User $user): Referrer
     {
         $code = '';

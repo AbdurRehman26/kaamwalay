@@ -107,7 +107,17 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                     </>,
                 ],
             }),
+            ...(owner?.fullName && {
+                'Referrer:': [
+                    <>
+                        <MuiLink component={Link} to={`/salesreps/${owner?.id}/view/overview`}>
+                            {owner?.fullName}
+                        </MuiLink>
+                    </>,
+                ],
+            }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
+            ...(salesmanCommission && { 'Referrer Commission:': formatCurrency(salesmanCommission) }),
         }),
         [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission],
     );

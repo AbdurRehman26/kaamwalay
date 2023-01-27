@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -10,6 +11,7 @@ import classNames from 'classnames';
 import { upperFirst } from 'lodash';
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
@@ -36,6 +38,11 @@ interface Props {
     onClear?: () => void;
 }
 
+const ReferralStatus = [
+    { label: 'Yes', value: 1 },
+    { label: 'No', value: 0 },
+];
+
 const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: 20,
     textTransform: 'capitalize',
@@ -59,6 +66,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+    const [referralStatus, setReferralStatus] = useState({ label: '', value: 0 });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -105,6 +113,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             numeric: false,
             disablePadding: false,
             label: 'Owner',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'referrer',
+            numeric: false,
+            disablePadding: false,
+            label: 'Referrer',
             align: 'left',
             sortable: true,
         },
@@ -247,6 +263,16 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
     );
 
+    const handleClearReferralStatus = useCallback(async () => {
+        setReferralStatus({ label: '', value: 0 });
+    }, []);
+
+    const handleReferralStatus = useCallback(async (values, isActive) => {
+        values = { ...values, isActive: isActive.value };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useEffect(
         () => {
             if (!orders$.isLoading && isSearchEnabled) {
@@ -304,6 +330,21 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 {Object.entries(PaymentStatusMap).map(([key, status]) => {
                     return <FilterButton label={status} active={paymentStatus === key} value={key} />;
                 })}
+                <PageSelector label={'Referral'} value={referralStatus.label} onClear={handleClearReferralStatus}>
+                    {ReferralStatus?.map((item: any) => {
+                        return (
+                            <Grid key={item.value}>
+                                <MenuItem
+                                    onClick={() => handleReferralStatus('values', item)}
+                                    key={item.value}
+                                    value={item.value}
+                                >
+                                    {item.label}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
             </Grid>
             <TableContainer>
                 <CustomerSubmissionsList

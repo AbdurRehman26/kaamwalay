@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedInteger('level');
-            $table->decimal('fixed_value')->default(0);
+            $table->decimal('fixed_value_per_card')->default(0);
             $table->decimal('percentage_value', 8, 4)->default(0);
 
             $table->timestamps();

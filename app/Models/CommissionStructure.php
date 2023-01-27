@@ -11,7 +11,7 @@ class CommissionStructure extends Model
 
     protected $fillable = [
         'level',
-        'fixed_value',
+        'fixed_value_per_card',
         'percentage_value',
     ];
 
@@ -23,7 +23,7 @@ class CommissionStructure extends Model
     protected $casts = [
         'id' => 'integer',
         'level' => 'integer',
-        'fixed_value' => 'float',
+        'fixed_value_per_card' => 'float',
         'percentage_value' => 'float',
     ];
 }

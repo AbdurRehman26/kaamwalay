@@ -15,7 +15,7 @@ class CommissionStructureFactory extends Factory
     {
         return [
             'level' => $this->faker->randomDigitNotZero(),
-            'fixed_value' => $this->faker->randomDigitNotZero(),
+            'fixed_value_per_card' => $this->faker->randomDigitNotZero(),
             'percentage_value' => $this->faker->randomFloat(2, 1, 10),
         ];
     }

@@ -23,9 +23,7 @@ class ReferrerResource extends JsonResource
             'withdrawable_commission' => $this->withdrawable_commission,
             'link_clicks' => $this->link_clicks,
             'successful_signups' => $this->successful_signups,
-            'commission_earnings' => $this->commission_earnings,
-            'sales_total' => $this->sales_total,
-            'total_earned' => $this->total_earned,
+            'referral_orders' => $this->referral_orders,
             'is_referral_active' => $this->is_referral_active,
         ];
     }

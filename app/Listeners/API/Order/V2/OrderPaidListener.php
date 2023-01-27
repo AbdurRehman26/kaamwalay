@@ -34,6 +34,7 @@ class OrderPaidListener implements ShouldQueue
     {
         $this->processEmails($event);
         $this->processSalesmanCommission($event);
+        $this->processReferrerCommission($event);
     }
 
     protected function processEmails(OrderPaid $event): void
@@ -51,7 +52,10 @@ class OrderPaidListener implements ShouldQueue
         if ($event->order->salesman()->exists()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_CREATED);
         }
+    }
 
+    protected function processReferrerCommission(OrderPaid $event): void
+    {
         if ($event->order->user->referredBy()->exists()) {
             $level1Structure = CommissionStructure::where('level', 1)->first();
             ReferrerCommissionService::onOrderLine($event->order, $event->order->user->referredBy, $level1Structure, ReferrerCommissionEarnedEnum::ORDER_PAID);

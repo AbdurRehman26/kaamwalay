@@ -223,11 +223,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     /**
-     * @return BelongsTo<Referrer, User>
+     * @return BelongsTo<User, User>
      */
     public function referredBy()
     {
-        return $this->belongsTo(Referrer::class, 'referred_by');
+        return $this->belongsTo(User::class, 'referred_by');
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -425,7 +425,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     /**
      * @return HasOne<Referrer>
      */
-    public function referrerObject(): HasOne
+    public function referrer(): HasOne
     {
         return $this->hasOne(Referrer::class, 'user_id', 'id');
     }

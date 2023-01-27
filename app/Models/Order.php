@@ -74,6 +74,7 @@ class Order extends Model implements Exportable
         'estimated_delivery_start_at',
         'estimated_delivery_end_at',
         'created_by',
+        'referral_total_commission',
     ];
 
     /**
@@ -117,6 +118,7 @@ class Order extends Model implements Exportable
         'estimated_delivery_end_at' => 'datetime',
         'created_by' => 'integer',
         'discounted_amount' => 'float',
+        'referral_total_commission' => 'float',
     ];
 
     protected $appends = [

@@ -19,13 +19,13 @@ class ReferralController extends Controller
     {
         return new JsonResponse([
             'data' => [
-                'referrer' => new ReferrerResource(auth()->user()->referrerObject),
+                'referrer' => new ReferrerResource(auth()->user()->referrer),
             ],
         ], Response::HTTP_OK);
     }
 
     public function getSignUps(): ReferrerSignUpCollection
     {
-        return new ReferrerSignUpCollection($this->referrerService->getSignUps(auth()->user()->referrerObject));
+        return new ReferrerSignUpCollection($this->referrerService->getSignUps(auth()->user()->referrer));
     }
 }

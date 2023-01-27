@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-
-            $table->unsignedBigInteger('referred_by')->nullable();
-            $table->foreign('referred_by')->references('id')->on('users');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->decimal('referral_total_commission', 10)->default(0)->nullable();
         });
     }
 
@@ -27,9 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['referred_by']);
-            $table->dropColumn(['referred_by']);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('referral_total_commission');
         });
     }
 };

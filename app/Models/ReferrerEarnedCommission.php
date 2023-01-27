@@ -10,7 +10,7 @@ class ReferrerEarnedCommission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['referrer_id', 'order_id', 'commission_structure_id', 'commission'];
+    protected $fillable = ['referrer_id', 'order_id', 'commission_structure_id', 'commission', 'type'];
 
     /**
      * The attributes that should be cast to native types.
@@ -23,6 +23,7 @@ class ReferrerEarnedCommission extends Model
         'order_id' => 'integer',
         'commission_structure_id' => 'integer',
         'commission' => 'float',
+        'type' => 'integer',
     ];
 
     /**

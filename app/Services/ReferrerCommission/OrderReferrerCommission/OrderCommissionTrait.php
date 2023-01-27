@@ -22,6 +22,6 @@ trait OrderCommissionTrait
 
     public static function getFixedCommission(Order $order, CommissionStructure $commissionStructure): float
     {
-        return $commissionStructure->fixed_value * $order->orderItems()->count();
+        return $commissionStructure->fixed_value_per_card * $order->orderItems()->count();
     }
 }

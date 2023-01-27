@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->unsignedBigInteger('commission_structure_id');
             $table->foreign('commission_structure_id')->references('id')->on('commission_structures');
+            $table->tinyInteger('type')->default(1)->comment('1 => Order Paid, 2 => Order Refunded, 3 => Extra Charge');
             $table->decimal('commission', 10)->default(0);
 
             $table->timestamps();

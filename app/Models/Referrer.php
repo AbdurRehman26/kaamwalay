@@ -17,9 +17,7 @@ class Referrer extends Model
         'withdrawable_commission',
         'link_clicks',
         'successful_signups',
-        'commission_earnings',
-        'sales_total',
-        'total_earned',
+        'referral_orders',
         'is_referral_active',
     ];
 
@@ -33,9 +31,7 @@ class Referrer extends Model
         'withdrawable_commission' => 'float',
         'link_clicks' => 'integer',
         'successful_signups' => 'integer',
-        'commission_earnings' => 'integer',
-        'sales_total' => 'float',
-        'total_earned' => 'float',
+        'referral_orders' => 'integer',
         'is_referral_active' => 'boolean',
     ];
 

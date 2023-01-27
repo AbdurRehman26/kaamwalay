@@ -15,21 +15,26 @@ class ReferrerService
 {
     public function create(User $user): Referrer
     {
+        $referrer = null;
+
         try {
             $code = ReferralCodeGeneratorService::generate();
 
-            return Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
+            $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
         } catch(QueryException $e) {
             if ($e->errorInfo[1] === 1062) {
-                return $this->create($user);
+                $referrer = $this->create($user);
             }
         }
+
+        return $referrer;
     }
 
     /**
      * @param  int  $referrerId
      * @return LengthAwarePaginator
      */
+    // @phpstan-ignore-next-line
     public function getSignUps(int $referrerId): LengthAwarePaginator
     {
         $query = User::where('referred_by', $referrerId);
@@ -45,6 +50,7 @@ class ReferrerService
      * @param  int  $referrerId
      * @return LengthAwarePaginator
      */
+    // @phpstan-ignore-next-line
     public function getCommissionEarnings(int $referrerId): LengthAwarePaginator
     {
         $query = Order::join('referrer_earned_commissions', 'orders.id', 'referrer_earned_commissions.order_id')
@@ -60,11 +66,11 @@ class ReferrerService
     }
 
     /**
-     * @param  Referrer  $referrer
-     * @param  User  $referee
+     * @param  int $referrerId
+     * @param  int $refereeId
      * @return Collection<int, ReferrerEarnedCommission>
      */
-    public function getEarnedCommissionsByReferee($referrerId, $refereeId): Collection
+    public function getEarnedCommissionsByReferee(int $referrerId, int $refereeId): Collection
     {
         return ReferrerEarnedCommission::join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')

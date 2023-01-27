@@ -4,7 +4,7 @@ namespace App\Services\Referrer;
 
 class ReferralCodeGeneratorService
 {
-    public static function generate($length = 5): string
+    public static function generate(int $length = 5): string
     {
         $code = '';
         $characters = range('A', 'Z');

@@ -10,10 +10,6 @@ use Illuminate\Support\Collection;
 
 class ReferrerService
 {
-    public function generateReferralCode(User $user): string
-    {
-        return SerialNumberService::for('referral_code', strtoupper(substr(md5($user->email), 0, 8)))->toString();
-    }
 
     public function create(User $user): Referrer
     {
@@ -21,7 +17,7 @@ class ReferrerService
         $isNewCode = false;
 
         while (! $isNewCode) {
-            $code = $this->generateReferralCode($user);
+            $code = ReferralCodeGeneratorService::generate();
 
             $isNewCode = Referrer::where('referral_code', $code)->count() === 0;
         }

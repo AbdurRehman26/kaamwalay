@@ -2,10 +2,13 @@
 
 namespace App\Listeners\API\Order\V2;
 
+use App\Enums\Referrer\CommissionEarnedEnum as ReferrerCommissionEarnedEnum;
 use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Models\CommissionStructure;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
+use App\Services\ReferrerCommission\ReferrerCommissionService;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -47,6 +50,11 @@ class OrderPaidListener implements ShouldQueue
     {
         if ($event->order->salesman()->exists()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_CREATED);
+        }
+
+        if ($event->order->user->referredBy()->exists()) {
+            $level1Structure = CommissionStructure::where('level', 1)->first();
+            ReferrerCommissionService::onOrderLine($event->order, $event->order->user->referredBy, $level1Structure, ReferrerCommissionEarnedEnum::ORDER_PAID);
         }
     }
 }

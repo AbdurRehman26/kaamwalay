@@ -5,7 +5,6 @@ namespace App\Services\ReferrerCommission\OrderReferrerCommission;
 use App\Enums\Referrer\CommissionEarnedEnum;
 use App\Models\CommissionStructure;
 use App\Models\Order;
-use App\Models\Referrer;
 
 class OrderCommissionService
 {

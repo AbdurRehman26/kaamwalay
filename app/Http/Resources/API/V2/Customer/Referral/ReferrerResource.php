@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V2\Customer\Referral;
 
-use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\Referrer;
 use Illuminate\Http\Resources\Json\JsonResource;
 

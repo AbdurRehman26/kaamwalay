@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Customer\Referral;
 
-use App\Models\User;
 use App\Http\Resources\API\BaseResource;
+use App\Models\User;
 use App\Services\Referrer\ReferrerService;
 
 /** @mixin User */

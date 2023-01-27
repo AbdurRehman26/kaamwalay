@@ -26,5 +26,4 @@ class CommissionStructure extends Model
         'fixed_value' => 'float',
         'percentage_value' => 'float',
     ];
-
 }

@@ -5,8 +5,10 @@ namespace App\Services\Referrer;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerService
 {
@@ -25,11 +27,17 @@ class ReferrerService
 
     /**
      * @param  Referrer  $referrer
-     * @return Collection<int, User>
+     * @return LengthAwarePaginator
      */
-    public function getSignUps(Referrer $referrer): Collection
+    public function getSignUps(int $referrerId): LengthAwarePaginator
     {
-        return $referrer->referees;
+        $query = User::where('referred_by', $referrerId);
+        $itemsPerPage = 10;
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['created_at'])
+            ->defaultSort('-users.created_at')
+            ->paginate($itemsPerPage);
     }
 
     /**

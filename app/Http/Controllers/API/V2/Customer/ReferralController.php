@@ -26,6 +26,6 @@ class ReferralController extends Controller
 
     public function getSignUps(): ReferrerSignUpCollection
     {
-        return new ReferrerSignUpCollection($this->referrerService->getSignUps(auth()->user()->referrer));
+        return new ReferrerSignUpCollection($this->referrerService->getSignUps(auth()->user()->id));
     }
 }

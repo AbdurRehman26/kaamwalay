@@ -19,6 +19,7 @@ class ReferrerResource extends JsonResource
         return [
             'id' => $this->id,
             'referral_code' => $this->referral_code,
+            'referral_url' => route('referral', $this->referral_code),
             'withdrawable_commission' => $this->withdrawable_commission,
             'link_clicks' => $this->link_clicks,
             'successful_signups' => $this->successful_signups,

@@ -6,7 +6,7 @@ use App\Events\API\Auth\CustomerRegistered;
 use App\Services\Referrer\ReferrerService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 
-class GenerateReferrerOnRegister implements ShouldBeEncrypted
+class GenerateReferrerOnCustomerRegister implements ShouldBeEncrypted
 {
     public function __construct(protected ReferrerService $referrerService)
     {
@@ -16,6 +16,6 @@ class GenerateReferrerOnRegister implements ShouldBeEncrypted
     {
         $user = $event->user;
 
-        $this->referrerService->createUserReferrer($user);
+        $this->referrerService->create($user);
     }
 }

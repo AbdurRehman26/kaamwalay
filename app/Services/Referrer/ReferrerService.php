@@ -15,7 +15,7 @@ class ReferrerService
         return SerialNumberService::for('referral_code', strtoupper(substr(md5($user->email), 0, 8)))->toString();
     }
 
-    public function createUserReferrer(User $user): Referrer
+    public function create(User $user): Referrer
     {
         $code = '';
         $isNewCode = false;

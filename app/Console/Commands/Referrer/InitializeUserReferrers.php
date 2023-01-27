@@ -34,7 +34,7 @@ class InitializeUserReferrers extends Command
 
         foreach ($users as $user) {
             $this->info('Processing user '. $user->id);
-            $referrerService->createUserReferrer($user);
+            $referrerService->create($user);
         }
 
         return Command::SUCCESS;

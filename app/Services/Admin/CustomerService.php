@@ -58,6 +58,6 @@ class CustomerService
 
     public function generateUserReferrer(User $user): void
     {
-        $this->referrerService->createUserReferrer($user);
+        $this->referrerService->create($user);
     }
 }

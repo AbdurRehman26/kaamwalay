@@ -30,8 +30,7 @@ class ReferrerSignUpResource extends BaseResource
             'submissions' => $this->orders()->paid()->count(),
             'cards_count' => $this->cardsCount(),
             'total_spent' => $this->orders()->paid()->sum('grand_total'),
-            //TODO: Improve this
-//            'total_commissions' => $referrerService->getTotalCommissionsByReferee($this->referredBy, User::find($this->id)),
+            'total_commissions' => $referrerService->getTotalReferrerCommissionsByReferee($this->referred_by, $this->id),
         ];
     }
 }

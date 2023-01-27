@@ -5,22 +5,22 @@ namespace App\Services\Referrer;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 
 class ReferrerService
 {
     public function create(User $user): Referrer
     {
-        $code = '';
-        $isNewCode = false;
-
-        while (! $isNewCode) {
+        try {
             $code = ReferralCodeGeneratorService::generate();
 
-            $isNewCode = Referrer::where('referral_code', $code)->count() === 0;
+            return Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
+        } catch(QueryException $e) {
+            if ($e->errorInfo[1] === 1062) {
+                return $this->create($user);
+            }
         }
-
-        return Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
     }
 
     /**
@@ -37,14 +37,17 @@ class ReferrerService
      * @param  User  $referee
      * @return Collection<int, ReferrerEarnedCommission>
      */
-    public function getEarnedCommissionsByReferee(Referrer $referrer, User $referee): Collection
+    public function getEarnedCommissionsByReferee($referrerId, $refereeId): Collection
     {
-        return $referrer->earnedCommissions()->join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
-            ->where('orders.user_id', $referee->id)->select('referrer_earned_commissions.*')->get();
+        return ReferrerEarnedCommission::join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
+            ->join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')
+            ->where('orders.user_id', $refereeId)
+            ->where('referrers.user_id', $referrerId)
+            ->select('referrer_earned_commissions.*')->get();
     }
 
-    public function getTotalCommissionsByReferee(Referrer $referrer, User $referee): float
+    public function getTotalReferrerCommissionsByReferee(int $referrerId, int $refereeId): float
     {
-        return $this->getEarnedCommissionsByReferee($referrer, $referee)->sum('commission');
+        return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
 }

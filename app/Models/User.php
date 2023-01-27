@@ -17,6 +17,7 @@ use App\Http\Sorts\AdminSalesmanSalesSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
+use App\Traits\ReferrableTrait;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -47,7 +48,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes, ReferrableTrait;
 
     public string $pushNotificationType = 'users';
 
@@ -222,13 +223,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->belongsTo(User::class, 'salesman_id');
     }
 
-    /**
-     * @return BelongsTo<User, User>
-     */
-    public function referredBy()
-    {
-        return $this->belongsTo(User::class, 'referred_by');
-    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -422,13 +416,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasOne(Salesman::class, 'user_id', 'id');
     }
 
-    /**
-     * @return HasOne<Referrer>
-     */
-    public function referrer(): HasOne
-    {
-        return $this->hasOne(Referrer::class, 'user_id', 'id');
-    }
     /**
      * @param  Builder <User> $query
      * @return Builder <User>

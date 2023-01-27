@@ -47,10 +47,10 @@ class ReferrerService
      */
     public function getCommissionEarnings(int $referrerId): LengthAwarePaginator
     {
-        $query = Order::join('referrer_earned_commissions','orders.id','referrer_earned_commissions.order_id')
-            ->join('referrers','referrer_earned_commissions.referrer_id','referrers.id')
+        $query = Order::join('referrer_earned_commissions', 'orders.id', 'referrer_earned_commissions.order_id')
+            ->join('referrers', 'referrer_earned_commissions.referrer_id', 'referrers.id')
             ->selectRaw('SUM(referrer_earned_commissions.commission) as commission')
-            ->addSelect('orders.*')->where('referrers.id',$referrerId)->groupBy('orders.id');
+            ->addSelect('orders.*')->where('referrers.id', $referrerId)->groupBy('orders.id');
         $itemsPerPage = 10;
 
         return QueryBuilder::for($query)

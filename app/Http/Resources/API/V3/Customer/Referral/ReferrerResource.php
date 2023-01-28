@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Customer\Referral;
+namespace App\Http\Resources\API\V3\Customer\Referral;
 
 use App\Models\Referrer;
 use Illuminate\Http\Resources\Json\JsonResource;

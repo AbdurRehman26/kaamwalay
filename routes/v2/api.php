@@ -23,7 +23,6 @@ use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodControll
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
-use App\Http\Controllers\API\V2\Customer\ReferralController;
 use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
@@ -135,11 +134,6 @@ Route::prefix('customer')->group(function () {
             Route::post('delete', [ProfileController::class, 'deleteProfile'])->name('customer.profile.delete');
         });
 
-        Route::prefix('referral')->group(function () {
-            Route::get('/', [ReferralController::class, 'getReferralProfile'])->name('customer.referral');
-            Route::get('/sign-ups', [ReferralController::class, 'getSignUps'])->name('customer.referral.sign-ups');
-            Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');
-        });
     });
 });
 

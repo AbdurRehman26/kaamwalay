@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API\V2\Customer;
+namespace App\Http\Controllers\API\V3\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V2\Customer\Referral\CommissionEarningCollection;
-use App\Http\Resources\API\V2\Customer\Referral\ReferrerResource;
-use App\Http\Resources\API\V2\Customer\Referral\ReferrerSignUpCollection;
+use App\Http\Resources\API\V3\Customer\Referral\CommissionEarningCollection;
+use App\Http\Resources\API\V3\Customer\Referral\ReferrerResource;
+use App\Http\Resources\API\V3\Customer\Referral\ReferrerSignUpCollection;
 use App\Services\Referrer\ReferrerService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

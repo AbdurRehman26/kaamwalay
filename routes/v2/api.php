@@ -133,7 +133,6 @@ Route::prefix('customer')->group(function () {
             Route::post('deactivate', [ProfileController::class, 'deactivateProfile'])->name('customer.profile.deactivate');
             Route::post('delete', [ProfileController::class, 'deleteProfile'])->name('customer.profile.delete');
         });
-
     });
 });
 

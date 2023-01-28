@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V3\Customer\User;
 
-use App\Models\User;
 use App\Http\Resources\API\V2\Customer\User\UserResource as V2UserResource;
+use App\Models\User;
 
 /** @mixin User */
 class UserResource extends V2UserResource

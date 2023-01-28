@@ -26,7 +26,7 @@ class ReferrerEarnedCommissionFactory extends Factory
             'order_id' => Order::factory(),
             'commission_structure_id' => CommissionStructure::factory(),
             'type' => $this->faker->randomDigitNotZero(),
-            'commission' => $this->faker->randomFloat(2),
+            'commission' => $this->faker->randomFloat(2, 1, 100),
         ];
     }
 }

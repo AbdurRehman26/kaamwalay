@@ -13,7 +13,7 @@ beforeEach(function () {
 
 test('a referrer can get his own referral data', function () {
     $this->getJson('/api/v3/customer/referral')
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertJsonStructure(['data' => [
             'referrer' => [
                 'id',
@@ -34,7 +34,7 @@ test('a referrer can get information about their referees', function () {
     ))->create();
 
     $this->getJson('/api/v3/customer/referral/sign-ups')
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure([
             'data' => [
@@ -72,7 +72,7 @@ test('a referrer can get information about their commission earnings', function 
     ))->create();
 
     $this->getJson('/api/v3/customer/referral/commission-earnings')
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure([
             'data' => [

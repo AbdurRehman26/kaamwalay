@@ -24,7 +24,7 @@ test('a referrer can get his own referral data', function () {
                 'successful_signups',
                 'referral_orders',
                 'is_referral_active',
-            ]
+            ],
         ]]);
 });
 
@@ -90,4 +90,3 @@ test('a referrer can get information about their commission earnings', function 
             ],
         ]);
 });
-

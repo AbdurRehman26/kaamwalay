@@ -6,7 +6,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -44,6 +45,7 @@ const styles = {
         borderColor: 'divider',
     },
     TabContextDiv: {
+        flexWrap: 'nowrap',
         marginTop: '20px',
     },
     TabsLink: {
@@ -51,24 +53,39 @@ const styles = {
     },
     TabsPanel: {
         padding: '24px 0px',
+        width: '100%',
+    },
+    PayoutIcon: {
+        marginLeft: 'auto',
+        color: '#20BFB8',
     },
 };
 
 export function Referral() {
     const { tab } = useParams<{ tab: string }>();
     const classes = useStyle();
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     return (
         <>
-            <ListHeader headline={'Referral Program'} noMargin noSearch isReferral>
-                <PayoutButton variant="outlined" startIcon={<SettingsOutlinedIcon />}>
-                    payout settings
-                </PayoutButton>
+            <ListHeader
+                headline={'Referral Program'}
+                noMargin
+                noSearch
+                isReferral
+                actions={isSm ? <SettingsOutlinedIcon sx={styles.PayoutIcon} /> : null}
+            >
+                {!isSm ? (
+                    <PayoutButton variant="outlined" startIcon={<SettingsOutlinedIcon />}>
+                        payout settings
+                    </PayoutButton>
+                ) : null}
             </ListHeader>
             <TabContext value={tab ?? 'main'}>
                 <Grid container direction={'column'} sx={styles.TabContextDiv}>
                     <Box sx={styles.TabsBox}>
                         <TabList
+                            variant="scrollable"
                             classes={{
                                 indicator: classes.indicator,
                             }}

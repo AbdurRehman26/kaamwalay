@@ -84,7 +84,7 @@ export function ReferralTable({ data, heading, tableHeading, isCustomerSignup }:
     return (
         <StyledTableContainer>
             <Typography className={'TableHeading'}>{heading} (9)</Typography>
-            <Table>
+            <Table sx={{ minWidth: 800 }}>
                 <EnhancedTableHead
                     onRequestSort={handleRequestSort}
                     order={order}

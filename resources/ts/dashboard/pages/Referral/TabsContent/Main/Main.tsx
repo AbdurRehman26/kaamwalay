@@ -10,12 +10,14 @@ import TabPanel from '@mui/lab/TabPanel';
 import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
 import ShareLink from '@shared/assets/shareLink.png';
+import theme from '@shared/styles/theme';
 import Copylink from './CopyLink';
 import SocialShare from './SocialShare';
 import WithDrawBox from './WithDrawBox';
@@ -25,6 +27,10 @@ const ImageDiv = styled(Grid)({
     justifyContent: 'space-between',
     textAlign: 'center',
     margin: '10px',
+    [theme.breakpoints.down('sm')]: {
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    },
     '.Image': {
         maxWidth: '241px',
         maxHeight: '160px',
@@ -36,6 +42,7 @@ const ImageDiv = styled(Grid)({
         textAlign: 'center',
         letterSpacing: '0.15px',
         color: 'rgba(0, 0, 0, 0.87)',
+        marginTop: '10px',
     },
     '.ImageCaption': {
         fontWeight: 400,
@@ -44,7 +51,11 @@ const ImageDiv = styled(Grid)({
         textAlign: 'center',
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.54)',
-        maxWidth: '214px',
+        padding: '15px 0px',
+    },
+    '.ImagesSection': {
+        maxWidth: '233px',
+        margin: '20px 0px',
     },
 });
 
@@ -53,7 +64,7 @@ const ShareBox = styled(Grid)({
     border: '1px solid #E0E0E0',
     borderRadius: '4px',
     padding: '20px',
-    minWidth: '547px',
+    width: '100%',
 
     '.ShareLinkText': {
         fontWeight: 500,
@@ -145,6 +156,7 @@ const styles = {
 export function Main() {
     const [value, setValue] = useState('share-link');
     const classes = useStyle();
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -152,17 +164,22 @@ export function Main() {
 
     return (
         <>
-            <Grid maxWidth={661}>
-                <Typography sx={styles.MainText}>
-                    Share your unique link to refer people to RoboGrading. They will get 50% off their first submission
-                    and you will earn commission every time they pay & anytime someone they refer pays.{' '}
-                </Typography>
-            </Grid>
+            {!isSm ? (
+                <Grid maxWidth={661}>
+                    <Typography sx={styles.MainText}>
+                        Share your unique link to refer people to RoboGrading. They will get 50% off their first
+                        submission and you will earn commission every time they pay & anytime someone they refer pays.{' '}
+                    </Typography>
+                </Grid>
+            ) : (
+                <WithDrawBox />
+            )}
             <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <ShareBox>
                     <Typography className={'ShareLinkText'}>Share Link</Typography>
                     <TabContext value={value}>
                         <TabList
+                            variant="scrollable"
                             onChange={handleChange}
                             aria-label="share-tabs"
                             classes={{
@@ -204,32 +221,44 @@ export function Main() {
                         <TabPanel value="email"></TabPanel>
                     </TabContext>
                 </ShareBox>
-                <WithDrawBox />
+                {!isSm ? <WithDrawBox /> : null}
             </Grid>
             <Grid>
                 <Typography sx={styles.ImagesDivHeading}>How it works</Typography>
                 <ImageDiv>
-                    <div>
-                        <img className={'Image'} src={ShareLink} alt={'share-link'} />
-                        <Typography className={'ImageHeading'}>Share Your Link</Typography>
-                        <Typography className={'ImageCaption'}>
-                            Share your link with all your friends & followers.
-                        </Typography>
-                    </div>
-                    <div>
-                        <img className={'Image'} src={Pay} alt={'pay'} />
-                        <Typography className={'ImageHeading'}>They Pay</Typography>
-                        <Typography className={'ImageCaption'}>
-                            They click your link to sign up & pay for a submission.
-                        </Typography>
-                    </div>
-                    <div>
-                        <img className={'Image'} src={EarnCommission} alt={'earn-commission'} />
-                        <Typography className={'ImageHeading'}>You Earn Commission</Typography>
-                        <Typography className={'ImageCaption'}>
-                            You earn commission every time they pay or someone they refer pays.
-                        </Typography>
-                    </div>
+                    <Grid className={'ImagesSection'}>
+                        <div>
+                            <img className={'Image'} src={ShareLink} alt={'share-link'} />
+                        </div>
+                        <div>
+                            <Typography className={'ImageHeading'}>Share Your Link</Typography>
+                            <Typography className={'ImageCaption'}>
+                                Share your link with all your friends & followers.
+                            </Typography>
+                        </div>
+                    </Grid>
+                    <Grid className={'ImagesSection'}>
+                        <div>
+                            <img className={'Image'} src={Pay} alt={'pay'} />
+                        </div>
+                        <div>
+                            <Typography className={'ImageHeading'}>They Pay</Typography>
+                            <Typography className={'ImageCaption'}>
+                                They click your link to sign up & pay for a submission.
+                            </Typography>
+                        </div>
+                    </Grid>
+                    <Grid className={'ImagesSection'}>
+                        <div>
+                            <img className={'Image'} src={EarnCommission} alt={'earn-commission'} />
+                        </div>
+                        <div>
+                            <Typography className={'ImageHeading'}>You Earn Commission</Typography>
+                            <Typography className={'ImageCaption'}>
+                                You earn commission every time they pay or someone they refer pays.
+                            </Typography>
+                        </div>
+                    </Grid>
                 </ImageDiv>
             </Grid>
         </>

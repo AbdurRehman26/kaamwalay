@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import DummyImage from '@shared/assets/avatar.png';
 import Crown from '@shared/assets/crown.png';
+import theme from '@shared/styles/theme';
 
 const CommissionStructureBox = styled(Box)({
     '.TopSection': {
@@ -14,6 +15,9 @@ const CommissionStructureBox = styled(Box)({
         alignItems: 'flex-start',
         marginBottom: '20px',
         maxWidth: '780px',
+        [theme.breakpoints.down('sm')]: {
+            alignItems: 'baseline',
+        },
     },
     '.TopSectionHeading': {
         fontWeight: 500,
@@ -29,6 +33,20 @@ const CommissionStructureBox = styled(Box)({
         lineHeight: '20px',
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.54)',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+    '.TopSectionDescriptionMobile': {
+        fontWeight: 400,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        display: 'none',
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+        },
     },
     '.AvatarDiv': {
         maxWidth: '90px',
@@ -109,12 +127,19 @@ export function CommissionStructure() {
                     <Typography className={'TopSectionHeading'}>Your Commission Stucture</Typography>
                     <Typography className={'TopSectionDescription'}>
                         You will earn commission for every paid submission (forever) from people your refer. Commission
-                        can be &nbsp;
-                        <strong className={'TopSectionHighlightedText'}>$1 per card in submission</strong> or{' '}
+                        can be <strong className={'TopSectionHighlightedText'}>$1 per card in submission</strong> or{' '}
                         <strong className={'TopSectionHighlightedText'}>10% of total cost of submission </strong>
                         (whichever is lower).
                     </Typography>
                 </Grid>
+            </Grid>
+            <Grid>
+                <Typography className={'TopSectionDescriptionMobile'}>
+                    You will earn commission for every paid submission (forever) from people your refer. Commission can
+                    be <strong className={'TopSectionHighlightedText'}>$1 per card in submission</strong> or{' '}
+                    <strong className={'TopSectionHighlightedText'}>10% of total cost of submission </strong>
+                    (whichever is lower).
+                </Typography>
             </Grid>
             <Grid className={'FaqSectionDiv'}>
                 <Typography className={'FaqSection'}>Frequently Asked Questions</Typography>

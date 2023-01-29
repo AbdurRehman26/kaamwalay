@@ -2,13 +2,18 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import theme from '@shared/styles/theme';
 
 const WithDrawDiv = styled(Grid)({
     background: '#FFFFFF',
     border: '1px solid #E0E0E0',
     borderRadius: '4px',
-    minWidth: '348px',
+    width: '100%',
     marginLeft: '20px',
+    [theme.breakpoints.down('sm')]: {
+        marginLeft: '0px',
+        marginBottom: '15px',
+    },
 
     '.HeadingDiv': {
         background: '#5022A7',

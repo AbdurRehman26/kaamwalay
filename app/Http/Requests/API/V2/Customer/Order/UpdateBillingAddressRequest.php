@@ -35,7 +35,7 @@ class UpdateBillingAddressRequest extends FormRequest
             'city' => ['required', 'string'],
             'state' => ['required', 'string'],
             'zip' => ['required', 'string'],
-            'phone' => ['required', 'string'],
+            'phone' => ['nullable', 'string'],
             'flat' => ['nullable', 'string'],
             'country_code' => ['sometimes', 'exists:countries,code'],
         ];

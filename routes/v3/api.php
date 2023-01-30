@@ -5,9 +5,11 @@ use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\PushNotificationController;
 use App\Http\Controllers\API\V3\Customer\ReferralController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
+use App\Http\Controllers\API\V3\Auth\RegisterController;
 
 Route::prefix('auth')->group(function () {
     Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');
+    Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
 });
 
 Route::prefix('customer')->group(function () {

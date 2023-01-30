@@ -6,6 +6,8 @@ use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
+use function Pest\Laravel\getJson;
+
 beforeEach(function () {
     $this->referrer = Referrer::factory()->create();
     $this->actingAs($this->referrer->user);
@@ -59,19 +61,25 @@ test('a referrer can get information about their commission earnings', function 
         ['referred_by' => $this->referrer->user_id],
     ))->create();
 
+    dump($users);
+
     $orders = Order::factory()->count(3)->state(new Sequence(
         ['user_id' => $users[0]->id],
         ['user_id' => $users[1]->id],
         ['user_id' => $users[2]->id],
     ))->create();
 
-    ReferrerEarnedCommission::factory()->count(3)->state(new Sequence(
+    dump($orders);
+
+    $commission = ReferrerEarnedCommission::factory()->count(3)->state(new Sequence(
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[0]->id],
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[1]->id],
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[2]->id],
     ))->create();
 
-    $this->getJson('/api/v3/customer/referral/commission-earnings')
+    dump($commission);
+
+    $response = getJson('/api/v3/customer/referral/commission-earnings')
         ->assertSuccessful()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure([
@@ -89,4 +97,6 @@ test('a referrer can get information about their commission earnings', function 
                 ],
             ],
         ]);
+
+    dump($response);
 });

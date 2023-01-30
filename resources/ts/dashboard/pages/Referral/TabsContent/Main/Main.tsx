@@ -175,52 +175,54 @@ export function Main() {
                 <WithDrawBox />
             )}
             <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <ShareBox>
-                    <Typography className={'ShareLinkText'}>Share Link</Typography>
-                    <TabContext value={value}>
-                        <TabList
-                            variant="scrollable"
-                            onChange={handleChange}
-                            aria-label="share-tabs"
-                            classes={{
-                                indicator: classes.indicator,
-                            }}
-                        >
-                            <Tab
-                                className={'Tab'}
-                                icon={<InsertLinkOutlinedIcon />}
-                                value="share-link"
-                                aria-label="share-link"
-                            />
-                            <Tab
-                                className={'Tab'}
-                                icon={<FacebookOutlinedIcon />}
-                                value="facebook"
-                                aria-label="facebook"
-                            />
-                            <Tab className={'Tab'} icon={<TwitterIcon />} value="twitter" aria-label="twitter" />
-                            <Tab className={'Tab'} icon={<LinkedInIcon />} value="linkedin" aria-label="linkedin" />
-                            <Tab className={'Tab'} icon={<WhatsAppIcon />} value="whatsapp" aria-label="whatsapp" />
-                            <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" />
-                        </TabList>
-                        <TabPanel value="share-link">
-                            <Copylink />
-                        </TabPanel>
-                        <TabPanel value="facebook">
-                            <SocialShare name="Facebook" />
-                        </TabPanel>
-                        <TabPanel value="twitter">
-                            <SocialShare name="Twitter" />
-                        </TabPanel>
-                        <TabPanel value="linkedin">
-                            <SocialShare name="Linkedin" />
-                        </TabPanel>
-                        <TabPanel value="whatsapp">
-                            <SocialShare name="Whatsapp" />
-                        </TabPanel>
-                        <TabPanel value="email"></TabPanel>
-                    </TabContext>
-                </ShareBox>
+                <Grid width={'100%'}>
+                    <ShareBox>
+                        <Typography className={'ShareLinkText'}>Share Link</Typography>
+                        <TabContext value={value}>
+                            <TabList
+                                variant="scrollable"
+                                onChange={handleChange}
+                                aria-label="share-tabs"
+                                classes={{
+                                    indicator: classes.indicator,
+                                }}
+                            >
+                                <Tab
+                                    className={'Tab'}
+                                    icon={<InsertLinkOutlinedIcon />}
+                                    value="share-link"
+                                    aria-label="share-link"
+                                />
+                                <Tab
+                                    className={'Tab'}
+                                    icon={<FacebookOutlinedIcon />}
+                                    value="facebook"
+                                    aria-label="facebook"
+                                />
+                                <Tab className={'Tab'} icon={<TwitterIcon />} value="twitter" aria-label="twitter" />
+                                <Tab className={'Tab'} icon={<LinkedInIcon />} value="linkedin" aria-label="linkedin" />
+                                <Tab className={'Tab'} icon={<WhatsAppIcon />} value="whatsapp" aria-label="whatsapp" />
+                                <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" />
+                            </TabList>
+                            <TabPanel value="share-link">
+                                <Copylink />
+                            </TabPanel>
+                            <TabPanel value="facebook">
+                                <SocialShare name="Facebook" />
+                            </TabPanel>
+                            <TabPanel value="twitter">
+                                <SocialShare name="Twitter" />
+                            </TabPanel>
+                            <TabPanel value="linkedin">
+                                <SocialShare name="Linkedin" />
+                            </TabPanel>
+                            <TabPanel value="whatsapp">
+                                <SocialShare name="Whatsapp" />
+                            </TabPanel>
+                            <TabPanel value="email"></TabPanel>
+                        </TabContext>
+                    </ShareBox>
+                </Grid>
                 {!isSm ? <WithDrawBox /> : null}
             </Grid>
             <Grid>

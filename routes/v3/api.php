@@ -5,6 +5,8 @@ use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\PushNotificationController;
 use App\Http\Controllers\API\V3\Customer\ReferralController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
+use App\Http\Controllers\API\V3\Customer\RefereeCouponController;
+
 
 Route::prefix('auth')->group(function () {
     Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');
@@ -32,5 +34,10 @@ Route::prefix('customer')->group(function () {
             Route::get('/sign-ups', [ReferralController::class, 'getSignUps'])->name('customer.referral.sign-ups');
             Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');
         });
+
+        Route::prefix('referee')->group(function () {
+            Route::apiResource('coupon', RefereeCouponController::class)->only(['show']);
+        });
     });
+
 });

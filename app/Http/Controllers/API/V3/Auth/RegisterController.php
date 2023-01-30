@@ -9,14 +9,14 @@ use App\Http\Requests\API\V3\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\Referrer;
 use App\Models\User;
+use App\Services\Referrer\ReferrerService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Referrer\ReferrerService;
 
 class RegisterController extends Controller
 {
-    public function __construct(protected ReferrerService $referrerService) {
-
+    public function __construct(protected ReferrerService $referrerService)
+    {
     }
 
     public function register(RegisterRequest $request): JsonResponse

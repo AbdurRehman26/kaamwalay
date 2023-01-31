@@ -32,7 +32,7 @@ Route::prefix('customer')->group(function () {
         Route::prefix('referral')->group(function () {
             Route::get('/', [ReferralController::class, 'getReferralProfile'])->name('customer.referral');
             Route::get('/sign-ups', [ReferralController::class, 'getSignUps'])->name('customer.referral.sign-ups');
-            Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');
+            Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('customer.referral.commission-earnings');
         });
     });
 });

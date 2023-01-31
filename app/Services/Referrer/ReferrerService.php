@@ -13,6 +13,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerService
 {
+    protected const DEFAULT_PAGE_SIZE = 100;
+
     public function create(User $user): Referrer
     {
         $referrer = null;
@@ -38,7 +40,7 @@ class ReferrerService
     public function getSignUps(int $referrerId): LengthAwarePaginator
     {
         $query = User::where('referred_by', $referrerId);
-        $itemsPerPage = 10;
+        $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
         return QueryBuilder::for($query)
             ->allowedSorts(['created_at'])
@@ -56,8 +58,8 @@ class ReferrerService
         $query = Order::join('referrer_earned_commissions', 'orders.id', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrer_earned_commissions.referrer_id', 'referrers.id')
             ->selectRaw('SUM(referrer_earned_commissions.commission) as commission')
-            ->addSelect('orders.*')->where('referrers.id', $referrerId)->groupBy('orders.id');
-        $itemsPerPage = 10;
+            ->addSelect('orders.*')->where('referrers.user_id', $referrerId)->groupBy('orders.id');
+        $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
         return QueryBuilder::for($query)
             ->allowedSorts(['created_at'])

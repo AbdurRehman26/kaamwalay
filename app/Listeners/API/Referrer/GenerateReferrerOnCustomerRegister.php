@@ -14,8 +14,6 @@ class GenerateReferrerOnCustomerRegister implements ShouldBeEncrypted
 
     public function handle(CustomerRegistered $event): void
     {
-        $user = $event->user;
-
-        $this->referrerService->create($user);
+        $this->referrerService->create($event->user);
     }
 }

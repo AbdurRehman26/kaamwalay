@@ -52,5 +52,4 @@ class CustomerService
             ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
         );
     }
-
 }

@@ -4,7 +4,6 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use App\Services\EmailService;
-use App\Services\Referrer\ReferrerService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -14,7 +13,7 @@ class CustomerService
 {
     protected const PER_PAGE = 20;
 
-    public function __construct(protected EmailService $emailService, protected ReferrerService $referrerService)
+    public function __construct(protected EmailService $emailService)
     {
         //
     }
@@ -39,8 +38,6 @@ class CustomerService
 
         $this->sendAccessEmailToCreatedCustomer($user);
 
-        $this->generateUserReferrer($user);
-
         return $user;
     }
 
@@ -56,8 +53,4 @@ class CustomerService
         );
     }
 
-    public function generateUserReferrer(User $user): void
-    {
-        $this->referrerService->create($user);
-    }
 }

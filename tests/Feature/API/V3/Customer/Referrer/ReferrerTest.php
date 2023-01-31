@@ -1,17 +1,18 @@
 <?php
 
+use App\Events\API\Auth\CustomerRegistered;
+use App\Listeners\API\Referrer\GenerateReferrerOnCustomerRegister;
 use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
+use App\Services\Referrer\ReferrerService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Events\API\Auth\CustomerRegistered;
-use App\Listeners\API\Referrer\GenerateReferrerOnCustomerRegister;
-use App\Services\Referrer\ReferrerService;
 
 use function Pest\Laravel\getJson;
+
 uses(WithFaker::class);
 
 beforeEach(function () {

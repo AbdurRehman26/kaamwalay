@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
+use App\Http\Controllers\API\V3\Admin\ReferralController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
 
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+    });
+    Route::prefix('referral')->group(function () {
+        Route::get('/sign-ups', [ReferralController::class, 'getSignUps'])->name('admin.referral.sign-ups');
+        Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('admin.commission-earnings');
     });
 });

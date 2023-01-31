@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 test('a referrer can get his own referral data', function () {
-    $this->getJson('/api/v3/customer/referral')
+    $this->getJson(route('v3.customer.referral'))
         ->assertSuccessful()
         ->assertJsonStructure(['data' => [
             'referrer' => [
@@ -35,7 +35,7 @@ test('a referrer can get information about their referees', function () {
         ['referred_by' => $this->referrer->user_id],
     ))->create();
 
-    $this->getJson('/api/v3/customer/referral/sign-ups')
+    $this->getJson(route('v3.customer.referral.sign-ups'))
         ->assertSuccessful()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure([
@@ -61,25 +61,19 @@ test('a referrer can get information about their commission earnings', function 
         ['referred_by' => $this->referrer->user_id],
     ))->create();
 
-    dump($users);
-
     $orders = Order::factory()->count(3)->state(new Sequence(
         ['user_id' => $users[0]->id],
         ['user_id' => $users[1]->id],
         ['user_id' => $users[2]->id],
     ))->create();
 
-    dump($orders);
-
-    $commission = ReferrerEarnedCommission::factory()->count(3)->state(new Sequence(
+    ReferrerEarnedCommission::factory()->count(3)->state(new Sequence(
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[0]->id],
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[1]->id],
         ['referrer_id' => $this->referrer->id, 'order_id' => $orders[2]->id],
     ))->create();
 
-    dump($commission);
-
-    $response = getJson('/api/v3/customer/referral/commission-earnings')
+    getJson(route('v3.customer.referral.commission-earnings'))
         ->assertSuccessful()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure([
@@ -97,6 +91,4 @@ test('a referrer can get information about their commission earnings', function 
                 ],
             ],
         ]);
-
-    dump($response);
 });

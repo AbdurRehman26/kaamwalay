@@ -16,7 +16,7 @@ class ReferrerFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'referral_code' => 'R'.$this->faker->text(7),
+            'referral_code' => $this->faker->text(5),
             'withdrawable_commission' => $this->faker->randomFloat(2, 100, 1000),
             'link_clicks' => $this->faker->numberBetween(0, 100),
             'successful_signups' => $this->faker->numberBetween(0, 50),

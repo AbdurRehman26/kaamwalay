@@ -30,6 +30,8 @@ class Coupon extends Model
         'free_cards' => self::TYPE_FREE_CARDS,
     ];
 
+    const REFEREE_DISCOUNT = 30;
+
     protected $fillable = [
         'created_by',
         'coupon_applicable_id',
@@ -41,6 +43,7 @@ class Coupon extends Model
         'type',
         'discount_value',
         'is_capped',
+        'is_referred',
         'capped_amount',
         'available_from',
         'available_till',

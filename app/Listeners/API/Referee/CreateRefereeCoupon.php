@@ -13,6 +13,8 @@ class CreateRefereeCoupon
 
     public function handle(CustomerRegistered $event): void
     {
-        $this->refereeCouponService->createRefereeCoupon($event->user);
+        if($event->user->referredBy){
+            $this->refereeCouponService->createRefereeCoupon($event->user);
+        }
     }
 }

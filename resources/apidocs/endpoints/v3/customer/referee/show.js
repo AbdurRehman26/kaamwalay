@@ -15,7 +15,8 @@
  *      {
  *          "data": {
  *             "id": 1,
- *              "code": "HVTGSYS",
+ *             "code": "HVTGSYS",
+ *             "available_from": "2021-12-30T10:18:01.000000Z"
  *          }
  *      }
  */

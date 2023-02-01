@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\Admin\Coupon\CouponCodeService;
 use App\Services\Admin\Coupon\CouponStatusService;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -104,5 +105,17 @@ class RefereeCouponService
     protected function createCouponStats(Coupon $coupon): void
     {
         $coupon->couponStats()->save(new CouponStat());
+    }
+
+    public function markCouponAsViewedAndReturn(): object
+    {
+        $coupon = Coupon::whereExists(function ($query){
+            $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by');
+        })->where('is_referred', 1)->where('is_viewed', 0)->first();
+
+        $coupon->is_viewed = 1;
+        $coupon->save();
+
+        return $coupon->refresh();
     }
 }

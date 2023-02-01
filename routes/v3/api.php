@@ -37,7 +37,7 @@ Route::prefix('customer')->group(function () {
         });
 
         Route::prefix('referee')->group(function () {
-            Route::apiResource('coupon', RefereeCouponController::class)->only(['show']);
+            Route::get('/coupon', [RefereeCouponController::class, 'show'])->name('customer.referee.coupon');
         });
     });
 

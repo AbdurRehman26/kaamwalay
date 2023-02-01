@@ -64,6 +64,11 @@ class Coupon extends Model
         'min_threshold_type' => CouponMinThresholdTypeEnum::class,
     ];
 
+    public function scopeAdminCoupons(Builder $query): Builder
+    {
+        return $query->where('is_referred', '=', 0);
+    }
+
     public function couponStatusHistories(): HasMany
     {
         return $this->hasMany(CouponStatusHistory::class);

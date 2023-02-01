@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Coupon;
 use App\Models\Referrer;
 use App\Models\User;
 use App\Services\RefereeCouponService;
@@ -22,5 +23,7 @@ test('a coupon is assigned to referee when they sign up with a referral code', f
 
     $response = $this->refereeCouponService->createRefereeCoupon($user);
 
-    dd($response);
+    expect(Coupon::whereCode($response->code)->exists())->toBe(true);
+    expect((bool)$response->is_referred)->toBe(true);
+    expect($response->couponable->couponables_type)->toBe('App\Models\User');
 });

@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\V3\Admin\Referral;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
-use App\Services\Admin\V3\ReferrerService;
+use App\Services\Referrer\ReferrerService;
 
 /** @mixin User */
 class ReferrerSignUpResource extends BaseResource

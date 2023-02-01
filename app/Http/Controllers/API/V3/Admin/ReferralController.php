@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API\V3\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V3\Admin\Referral\CommissionEarningCollection;
+use App\Http\Requests\API\V3\Admin\Referral\GetReferralStatRequest;
 use App\Http\Resources\API\V3\Admin\Referral\ReferrerSignUpCollection;
-use App\Services\Admin\V3\ReferrerService;
+use App\Models\User;
+use App\Services\Referrer\ReferrerService;
+use Illuminate\Http\JsonResponse;
 
 class ReferralController extends Controller
 {
@@ -13,13 +16,18 @@ class ReferralController extends Controller
     {
     }
 
-    public function getSignUps(): ReferrerSignUpCollection
+    public function getSignUps(User $user): ReferrerSignUpCollection
     {
-        return new ReferrerSignUpCollection($this->referrerService->getSignUps());
+        return new ReferrerSignUpCollection($this->referrerService->getSignUps($user->id));
     }
 
-    public function getCommissionEarnings(): CommissionEarningCollection
+    public function getCommissionEarnings(User $user): CommissionEarningCollection
     {
-        return new CommissionEarningCollection($this->referrerService->getCommissionEarnings());
+        return new CommissionEarningCollection($this->referrerService->getCommissionEarnings($user->id));
+    }
+
+    public function getStat(GetReferralStatRequest $request, User $user): JsonResponse
+    {
+        return new JsonResponse([ 'data' => $this->referrerService->getStat($user, $request->validated())]);
     }
 }

@@ -18,7 +18,7 @@ class CouponCodeService
 
     private function setCouponLength(int $length = -1): void
     {
-           $this->couponLength = $length > 0 ? $length : $this->couponLength;
+        $this->couponLength = $length > 0 ? $length : $this->couponLength;
     }
 
     /**
@@ -28,6 +28,7 @@ class CouponCodeService
     {
         if ($shouldSystemGenerate) {
             $this->setCouponLength($length);
+
             return $this->generateValidCoupon();
         }
         if ($this->exists($code)) {

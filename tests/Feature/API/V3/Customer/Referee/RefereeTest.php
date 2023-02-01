@@ -22,7 +22,8 @@ beforeEach(function () {
                 'code' => 'users',
                 'label' => 'Users',
                 'is_active' => 1,
-            ]);
+            ]
+        );
 
     $this->coupon = Coupon::factory()
         ->create(
@@ -58,7 +59,6 @@ test('a referee can view his coupon', function () {
 });
 
 test('a referee can view a coupon only once', function () {
-
     $this->coupon->is_viewed = 1;
     $this->coupon->save();
 

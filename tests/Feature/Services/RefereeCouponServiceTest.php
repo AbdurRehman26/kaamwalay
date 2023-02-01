@@ -13,12 +13,11 @@ beforeEach(function () {
     $this->seed(RolesSeeder::class);
 
     $this->refereeCouponService = resolve(RefereeCouponService::class);
-
 });
 
 test('a coupon is assigned to referee when they sign up with a referral code', function () {
     $user = User::factory()->create([
-        'referred_by' => Referrer::factory()->create()
+        'referred_by' => Referrer::factory()->create(),
     ]);
 
     $response = $this->refereeCouponService->createRefereeCoupon($user);

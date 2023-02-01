@@ -15,7 +15,7 @@ class RefereeCouponController extends Controller
     {
         try {
             return new CouponResource($refereeCouponService->markCouponAsViewedAndReturn());
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

@@ -30,6 +30,8 @@ class Coupon extends Model
         'free_cards' => self::TYPE_FREE_CARDS,
     ];
 
+    const REFEREE_DISCOUNT = 30;
+
     protected $fillable = [
         'created_by',
         'coupon_applicable_id',
@@ -41,6 +43,7 @@ class Coupon extends Model
         'type',
         'discount_value',
         'is_capped',
+        'is_referred',
         'capped_amount',
         'available_from',
         'available_till',
@@ -60,6 +63,11 @@ class Coupon extends Model
         'available_till' => CouponDateRange::class,
         'min_threshold_type' => CouponMinThresholdTypeEnum::class,
     ];
+
+    public function scopeAdminCoupons(Builder $query): Builder
+    {
+        return $query->where('is_referred', '=', 0);
+    }
 
     public function couponStatusHistories(): HasMany
     {

@@ -50,7 +50,7 @@ class CouponService
     // @phpstan-ignore-next-line
     public function getCoupons(): LengthAwarePaginator
     {
-        return QueryBuilder::for(Coupon::class)
+        return QueryBuilder::for(Coupon::adminCoupons())
             ->allowedFilters([
                 'code',
                 AllowedFilter::scope('status'),
@@ -126,7 +126,6 @@ class CouponService
 
     protected function getNewCouponStatus(Coupon $coupon): int
     {
-        /** @phpstan-ignore-next-line  */
         if ($coupon->available_from->isPast()) {
             return CouponStatus::STATUS_ACTIVE;
         }

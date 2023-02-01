@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Salesman\Order\OrderCertificate;
+namespace App\Http\Resources\API\V2\Salesman\Order;
 
 use App\Models\OrderCertificate;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -602,8 +602,8 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
 
     $order->refresh();
 
-    expect($order->estimated_delivery_start_at)->toEqual($estimatedDeliveryStartAt)
-        ->and($order->estimated_delivery_end_at)->toEqual($estimatedDeliveryEndAt);
+    expect($order->estimated_delivery_start_at->toDateTimeString())->toBe($estimatedDeliveryStartAt->toDateTimeString())
+        ->and($order->estimated_delivery_end_at->toDateTimeString())->toBe($estimatedDeliveryEndAt->toDateTimeString());
 });
 
 test('an admin can place order for an user', function () {

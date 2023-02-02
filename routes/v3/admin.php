@@ -30,5 +30,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/{user}/referral/sign-ups', [ReferralController::class, 'getSignUps'])->name('admin.customer.referral.sign-ups');
         Route::get('/{user}/referral/commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('admin.customer.commission-earnings');
         Route::post('/{user}/referral/get-stat', [ReferralController::class, 'getStat'])->name('admin.customer.referral.get-stat');
+        Route::post('/{user}/referral/set-referrers-status', [ReferralController::class, 'setReferrersStatus'])->name('admin.customer.referral.set-referrers-status');
     });
 });

@@ -7,7 +7,10 @@ use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -85,6 +88,34 @@ class ReferrerService
         return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
 
+    /**
+     * @throws Throwable
+     */
+    public function setReferrersStatus(User $user, array $data): User
+    {
+        try {
+            DB::beginTransaction();
+
+            Referrer::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                ],
+                [
+                    'is_referral_active' => $data['is_referral_active'],
+                ]
+            );
+
+            DB::commit();
+
+            return $user->refresh();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            throw $e;
+        }
+    }
+
     public function getStat(User $user, array $data): float
     {
         $now = Carbon::now();
@@ -140,6 +171,7 @@ class ReferrerService
     {
         return Order::join('users', 'users.id', 'orders.user_id')
             ->where('users.referred_by', $userId)
+            ->where('orders.paid_at', '!=', null)
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }
@@ -148,6 +180,7 @@ class ReferrerService
     {
         return Order::join('users', 'users.id', 'orders.user_id')
             ->where('users.referred_by', $userId)
+            ->where('orders.paid_at', '!=', null)
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum('grand_total');
     }
@@ -157,6 +190,7 @@ class ReferrerService
         return Order::join('users', 'users.id', 'orders.user_id')
             ->join('order_items', 'order_items.order_id', 'orders.id')
             ->where('users.referred_by', $userId)
+            ->where('orders.paid_at', '!=', null)
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }

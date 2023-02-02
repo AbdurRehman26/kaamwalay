@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.5.1 - 2023-02-02
+
+### What's Changed
+
+- Hotfix: Admin | Customer Listing | Full Name Search by @thenabeel in https://github.com/woozard/robograding/pull/893
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.5.0...v3.5.1
+
 ## v3.5.0 - 2023-01-24
 
 ### What's Changed

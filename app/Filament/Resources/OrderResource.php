@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use App\Services\Payment\V2\InvoiceService;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -90,7 +90,15 @@ class OrderResource extends Resource
             ->actions([
                 EditAction::make(),
                 Action::make('regenerate-invoice')
-                    ->action(fn (Order $record) => GenerateOrderInvoice::dispatch($record))
+                    ->action(function (Order $record){
+                        $invoiceService = new InvoiceService();
+
+                        if ($record->hasInvoice()) {
+                            $record->invoice()->delete();
+                        }
+
+                        $invoiceService->saveInvoicePDF($record);
+                    })
                     ->label('Regenerate Invoice')
                     ->requiresConfirmation(),
                 Action::make('mark-paid')

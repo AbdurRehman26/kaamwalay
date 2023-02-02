@@ -13,9 +13,9 @@ class AdminCustomerSearchFilter implements Filter
     public function __invoke(Builder $query, $value, string $property): void
     {
         // If searching for both first and last name together, search exact
-        if (str_word_count($value) === 2) {
-            $fullName = explode(' ', $value);
-            $query->where('first_name', $fullName[0])->where('last_name', $fullName[1]);
+        $fullNameArray = explode(' ', $value);
+        if (count($fullNameArray) === 2) {
+            $query->where('first_name', $fullNameArray[0])->where('last_name', $fullNameArray[1]);
         } else {
             $query->whereLike(
                 [

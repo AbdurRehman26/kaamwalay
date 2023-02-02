@@ -90,7 +90,7 @@ class OrderResource extends Resource
             ->actions([
                 EditAction::make(),
                 Action::make('regenerate-invoice')
-                    ->action(function (Order $record){
+                    ->action(function (Order $record) {
                         $invoiceService = new InvoiceService();
 
                         if ($record->hasInvoice()) {

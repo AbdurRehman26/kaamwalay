@@ -2,13 +2,14 @@
 
 namespace App\Listeners\API\Order\V2;
 
-use App\Events\API\Order\V2\GenerateOrderInvoice;
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Services\Payment\V2\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Log;
 
-class GenerateOrderInvoiceListener implements ShouldQueue
+class GenerateOrderInvoiceOnOrderPaid implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -22,7 +23,7 @@ class GenerateOrderInvoiceListener implements ShouldQueue
     /**
      * @throws InvoiceNotUploaded
      */
-    public function handle(GenerateOrderInvoice $event): void
+    public function handle(OrderPaid $event): void
     {
         $order = $event->order;
 
@@ -31,5 +32,19 @@ class GenerateOrderInvoiceListener implements ShouldQueue
         }
 
         $this->invoiceService->saveInvoicePDF($order);
+    }
+
+
+    /**
+     * @param  OrderPaid  $event
+     * @param \Throwable $exception
+     * @return void
+     */
+    public function failed(OrderPaid $event, $exception): void
+    {
+        Log::error($exception->getMessage(), [
+            'Invoice generation failed. Order ID: ' => $event->order->id,
+            'trace' => $exception->getTraceAsString(),
+        ]);
     }
 }

@@ -54,14 +54,14 @@ class RefereeCouponService
         $code = $this->couponCodeService->newCoupon('', true, 5);
         $coupon = new Coupon(
             array_merge(
-            [
-                'code' => $code,
-                'name' => $code,
-                'created_by' => $user->id,
-                'is_referred' => 1,
-            ],
-            $this->generateCouponData()
-        )
+                [
+                    'code' => $code,
+                    'name' => $code,
+                    'created_by' => $user->id,
+                    'is_referred' => 1,
+                ],
+                $this->generateCouponData()
+            )
         );
 
         $coupon->save();

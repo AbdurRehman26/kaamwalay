@@ -46,3 +46,5 @@ Route::prefix('pop')->group(function () {
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
+
+Route::get('referral/{code}', [ReferralController::class, 'getReferralPage'])->name('referral');

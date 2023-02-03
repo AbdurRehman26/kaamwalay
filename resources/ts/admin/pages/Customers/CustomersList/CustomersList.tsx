@@ -104,6 +104,14 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
+        id: 'referrer',
+        numeric: true,
+        disablePadding: false,
+        label: 'Referrer',
+        align: 'left',
+        sortable: false,
+    },
+    {
         id: 'customer_type',
         numeric: true,
         disablePadding: false,

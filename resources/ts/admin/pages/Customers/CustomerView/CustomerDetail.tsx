@@ -124,6 +124,8 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerHeading'}>Created By:</Typography>
                             <Typography className={'CustomerHeading'}>Accessed:</Typography>
                             <Typography className={'CustomerHeading'}>Paid Orders:</Typography>
+                            <Typography className={'CustomerHeading'}>Referrer:</Typography>
+                            <Typography className={'CustomerHeading'}>Referral Status:</Typography>
                         </div>
                         <div>
                             <Typography className={'CustomerValue'}>
@@ -134,6 +136,8 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             </Typography>
                             <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
                             <Typography className={'CustomerValue'}>{customer?.submissions}</Typography>
+                            <Typography className={'CustomerValue'}>Johan D</Typography>
+                            <Typography className={'CustomerValue'}>Active</Typography>
                         </div>
                     </Grid>
                 </Grid>

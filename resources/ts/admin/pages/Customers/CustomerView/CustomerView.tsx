@@ -14,6 +14,7 @@ import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
+import { CustomerViewContent } from './CustomerViewContent';
 
 enum RowOption {
     CreditCustomer,
@@ -163,6 +164,10 @@ export function CustomerView() {
                     onSubmit={handleReloadCustomerData}
                 />
             </Root>
+            <Grid container>
+                {' '}
+                <CustomerViewContent customer={data} />{' '}
+            </Grid>
             <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
         </>
     );

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\ReferrerCommission\OrderReferrerCommission;
+namespace App\Services\ReferralProgram\OrderReferrerCommission;
 
 use App\Enums\Referrer\CommissionEarnedEnum;
 use App\Models\CommissionStructure;
@@ -8,12 +8,12 @@ use App\Models\Order;
 
 class OrderCommissionService
 {
-    protected array $orderLineCommissionService = [
+    protected array $commissionServiceInstances = [
         'order_paid' => OrderPaidCommissionService::class,
     ];
 
     public function getCommission(Order $order, CommissionStructure $commissionStructure, CommissionEarnedEnum $orderCommissionType): float
     {
-        return round($this->orderLineCommissionService[$orderCommissionType->toString()]::calculateCommission($order, $commissionStructure), 2);
+        return round($this->commissionServiceInstances[$orderCommissionType->toString()]::calculateCommission($order, $commissionStructure), 2);
     }
 }

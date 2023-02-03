@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\V3\Customer\Order\OrderController;
 use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\PushNotificationController;
-use App\Http\Controllers\API\V3\Customer\ReferralController;
+use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
 
 Route::prefix('auth')->group(function () {
@@ -28,9 +28,9 @@ Route::prefix('customer')->group(function () {
         });
 
         Route::prefix('referral')->group(function () {
-            Route::get('/', [ReferralController::class, 'getReferralProfile'])->name('customer.referral');
-            Route::get('/sign-ups', [ReferralController::class, 'getSignUps'])->name('customer.referral.sign-ups');
-            Route::get('commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('customer.referral.commission-earnings');
+            Route::get('/', [ReferralProgramController::class, 'getReferrerProfile'])->name('customer.referral');
+            Route::get('/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');
+            Route::get('commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('customer.referral.commission-earnings');
         });
     });
 });

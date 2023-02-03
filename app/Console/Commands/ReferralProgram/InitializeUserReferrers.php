@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Referrer;
+namespace App\Console\Commands\ReferralProgram;
 
 use App\Models\User;
 use App\Services\ReferralProgram\ReferrerService;

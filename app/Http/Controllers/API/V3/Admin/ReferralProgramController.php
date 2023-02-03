@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\API\V3\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V3\Admin\Referral\CommissionEarningCollection;
-use App\Http\Requests\API\V3\Admin\Referral\GetReferralStatRequest;
-use App\Http\Requests\API\V3\Admin\Referral\SetReferrerStatusRequest;
-use App\Http\Resources\API\V3\Admin\Referral\ReferrerResource;
-use App\Http\Resources\API\V3\Admin\Referral\ReferrerSignUpCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
+use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralStatRequest;
+use App\Http\Requests\API\V3\Admin\ReferralProgram\SetReferrerStatusRequest;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerResource;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerSignUpCollection;
 use App\Models\User;
-use App\Services\Referrer\ReferrerService;
+use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Http\JsonResponse;
 
-class ReferralController extends Controller
+class ReferralProgramController extends Controller
 {
     public function __construct(protected ReferrerService $referrerService)
     {

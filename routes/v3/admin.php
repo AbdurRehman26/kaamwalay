@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
-use App\Http\Controllers\API\V3\Admin\ReferralController;
+use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +27,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
     });
     Route::prefix('customers')->group(function () {
-        Route::get('/{user}/referral/sign-ups', [ReferralController::class, 'getSignUps'])->name('admin.customer.referral.sign-ups');
-        Route::get('/{user}/referral/commission-earnings', [ReferralController::class, 'getCommissionEarnings'])->name('admin.customer.commission-earnings');
-        Route::post('/{user}/referral/get-stat', [ReferralController::class, 'getStat'])->name('admin.customer.referral.get-stat');
-        Route::post('/{user}/referral/set-referrers-status', [ReferralController::class, 'setReferrersStatus'])->name('admin.customer.referral.set-referrers-status');
+        Route::get('/{user}/referral/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('admin.customer.referral.sign-ups');
+        Route::get('/{user}/referral/commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('admin.customer.commission-earnings');
+        Route::post('/{user}/referral/get-stat', [ReferralProgramController::class, 'getStat'])->name('admin.customer.referral.get-stat');
+        Route::post('/{user}/referral/set-referrers-status', [ReferralProgramController::class, 'setReferrersStatus'])->name('admin.customer.referral.set-referrers-status');
     });
 });

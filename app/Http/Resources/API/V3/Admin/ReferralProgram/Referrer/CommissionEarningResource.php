@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Admin\Referral;
+namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\Order;

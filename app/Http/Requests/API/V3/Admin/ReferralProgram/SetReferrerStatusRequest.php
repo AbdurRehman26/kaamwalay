@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API\V3\Admin\Referral;
+namespace App\Http\Requests\API\V3\Admin\ReferralProgram;
 
 use Illuminate\Foundation\Http\FormRequest;
 

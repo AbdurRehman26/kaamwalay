@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Referrer;
+namespace App\Services\ReferralProgram;
 
 use App\Models\Order;
 use App\Models\Referrer;
@@ -13,20 +13,17 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerService
 {
-    protected const DEFAULT_PAGE_SIZE = 100;
+    protected const DEFAULT_PAGE_SIZE = 10;
 
     public function create(User $user): Referrer
     {
-        $referrer = null;
-
         try {
             $code = ReferralCodeGeneratorService::generate();
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
         } catch(QueryException $e) {
-            if ($e->errorInfo[1] === 1062) {
-                $referrer = $this->create($user);
-            }
+            report($e);
+            $referrer = $this->create($user);
         }
 
         return $referrer;

@@ -19,7 +19,7 @@ class UserResource extends V2UserResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            'show_referral_promotional_popup' => ($this->referrer?->referral_orders ?? 0) <= 0,
+            'show_referral_promotional_popup' => $this->referrer?->referral_orders <= 0,
         ]);
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Listeners\API\Referrer\GenerateReferrerOnCustomerRegister;
+use App\Listeners\API\ReferralProgram\Referrer\GenerateReferrerOnCustomerRegister;
 use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
-use App\Services\Referrer\ReferrerService;
+use App\Services\ReferralProgram\ReferrerService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function Pest\Laravel\getJson;
 
 uses(WithFaker::class);
@@ -107,7 +106,6 @@ test('a referrer can get information about their commission earnings', function 
 
 test('a referral code is assigned after user registered', function () {
     $this->seed(RolesSeeder::class);
-    Bus::fake();
     Event::fake();
 
     $email = $this->faker->safeEmail();

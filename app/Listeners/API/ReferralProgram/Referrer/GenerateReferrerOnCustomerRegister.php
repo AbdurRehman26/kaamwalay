@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Listeners\API\Referrer;
+namespace App\Listeners\API\ReferralProgram\Referrer;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Services\Referrer\ReferrerService;
+use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 
 class GenerateReferrerOnCustomerRegister implements ShouldBeEncrypted

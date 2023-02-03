@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Referrer;
 
 use App\Models\User;
-use App\Services\Referrer\ReferrerService;
+use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Console\Command;
 
 class InitializeUserReferrers extends Command

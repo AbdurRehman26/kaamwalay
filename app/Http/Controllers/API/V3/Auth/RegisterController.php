@@ -7,9 +7,7 @@ use App\Events\API\Auth\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
-use App\Models\Referrer;
 use App\Models\User;
-use App\Services\Referrer\ReferrerService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

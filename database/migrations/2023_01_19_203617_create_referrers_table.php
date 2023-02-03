@@ -15,9 +15,7 @@ return new class extends Migration {
         Schema::create('referrers', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->foreign('user_id')->references('id')->on('users');
-
+            $table->foreignId('user_id');
             $table->string('referral_code')->unique();
             $table->decimal('withdrawable_commission', 8, 2)->default(0);
             $table->unsignedInteger('link_clicks')->default(0);

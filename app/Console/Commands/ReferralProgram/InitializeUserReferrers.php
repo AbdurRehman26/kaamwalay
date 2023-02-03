@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Console\Commands\Referrer;
+namespace App\Console\Commands\ReferralProgram;
 
 use App\Models\User;
-use App\Services\Referrer\ReferrerService;
+use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Console\Command;
 
 class InitializeUserReferrers extends Command

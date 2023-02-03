@@ -1,21 +1,23 @@
 <?php
 
-namespace App\Services\ReferrerCommission;
+namespace App\Services\ReferralProgram;
 
-use App\Enums\Referrer\CommissionEarnedEnum;
+use App\Enums\ReferralProgram\Referrer\CommissionEarnedEnum as ReferrerCommissionEarnedEnum;
 use App\Models\CommissionStructure;
 use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
-use App\Services\ReferrerCommission\OrderReferrerCommission\OrderCommissionService;
+use App\Services\ReferralProgram\OrderReferrerCommission\OrderCommissionService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ReferrerCommissionService
 {
-    protected static function storeReferrerEarnedCommission(Order $order, User $referrer, int $commissionStructureId, float $commission, CommissionEarnedEnum $orderCommissionType): void
+    protected const DEFAULT_LEVEL = 1;
+
+    protected static function storeReferrerEarnedCommission(Order $order, User $referrer, int $commissionStructureId, float $commission, ReferrerCommissionEarnedEnum $orderCommissionType): void
     {
         ReferrerEarnedCommission::create([
             'referrer_id' => $referrer->referrer->id,
@@ -39,7 +41,7 @@ class ReferrerCommissionService
         ]);
     }
 
-    public static function onOrderLine(Order $order, User $referrer, CommissionStructure $commissionStructure, CommissionEarnedEnum $orderCommissionType): void
+    public static function processReferrerCommisionForOrder(Order $order, User $referrer, CommissionStructure $commissionStructure, ReferrerCommissionEarnedEnum $orderCommissionType): void
     {
         try {
             DB::beginTransaction();
@@ -57,6 +59,13 @@ class ReferrerCommissionService
             Log::error($e->getMessage());
 
             throw $e;
+        }
+    }
+    public static function processOrderReferralCommissions(Order $order): void
+    {
+        if ($order->user->referredBy()->exists()) {
+            $defaultCommissionStructure = CommissionStructure::where('level', self::DEFAULT_LEVEL)->first();
+            self::processReferrerCommisionForOrder($order, $order->user->referredBy, $defaultCommissionStructure, ReferrerCommissionEarnedEnum::ORDER_PAID);
         }
     }
 }

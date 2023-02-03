@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('referred_by')->nullable();
-            $table->foreign('referred_by')->references('id')->on('users');
+            $table->foreignId('referred_by')->nullable()->after('salesman_id');
         });
     }
 
@@ -29,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['referred_by']);
-            $table->dropColumn(['referred_by']);
+            $table->dropColumn('referred_by');
         });
     }
 };

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('referral_total_commission', 10)->default(0)->nullable();
+            $table->decimal('referral_total_commission', 10)->default(0)->after('salesman_id');
         });
     }
 

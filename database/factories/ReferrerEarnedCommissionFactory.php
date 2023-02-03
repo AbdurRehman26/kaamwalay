@@ -9,9 +9,6 @@ use App\Models\UserCard;
 use App\Models\VaultShipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\VaultShipmentItem>
- */
 class ReferrerEarnedCommissionFactory extends Factory
 {
     /**

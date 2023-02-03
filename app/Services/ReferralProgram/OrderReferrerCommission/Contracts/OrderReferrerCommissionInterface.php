@@ -10,5 +10,4 @@ interface OrderReferrerCommissionInterface
     public static function getFixedCommission(Order $order, CommissionStructure $commissionStructure): float;
 
     public static function getPercentageCommission(Order $order, CommissionStructure $commissionStructure): float;
-
 }

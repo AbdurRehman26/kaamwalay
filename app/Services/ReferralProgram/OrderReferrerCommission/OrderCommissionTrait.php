@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\ReferrerCommission\OrderReferrerCommission;
+namespace App\Services\ReferralProgram\OrderReferrerCommission;
 
 use App\Models\CommissionStructure;
 use App\Models\Order;

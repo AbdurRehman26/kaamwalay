@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Referrer;
+namespace App\Services\ReferralProgram;
 
 class ReferralCodeGeneratorService
 {

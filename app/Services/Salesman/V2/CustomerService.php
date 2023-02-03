@@ -4,7 +4,6 @@ namespace App\Services\Salesman\V2;
 
 use App\Models\User;
 use App\Services\EmailService;
-use App\Services\Referrer\ReferrerService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -14,7 +13,7 @@ class CustomerService
 {
     protected const PER_PAGE = 20;
 
-    public function __construct(protected EmailService $emailService, protected ReferrerService $referrerService)
+    public function __construct(protected EmailService $emailService)
     {
         //
     }
@@ -40,8 +39,6 @@ class CustomerService
 
         $this->sendAccessEmailToCreatedCustomer($user);
 
-        $this->generateUserReferrer($user);
-
         return $user;
     }
 
@@ -55,10 +52,5 @@ class CustomerService
             EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
             ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
         );
-    }
-
-    public function generateUserReferrer(User $user): void
-    {
-        $this->referrerService->create($user);
     }
 }

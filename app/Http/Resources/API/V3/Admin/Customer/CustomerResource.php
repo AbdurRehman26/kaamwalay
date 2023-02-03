@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin User
+ * @property mixed $referrer
  */
 class CustomerResource extends V2CustomerResource
 {
@@ -25,7 +26,7 @@ class CustomerResource extends V2CustomerResource
 
         return array_merge($data, [
             'referrer' => new UserResource($this->referredBy),
-            'referral_status' => $this->referrer->is_referral_active,
+            'referral_status' => new ReferrerResource($this->referredBy),
         ]);
     }
 }

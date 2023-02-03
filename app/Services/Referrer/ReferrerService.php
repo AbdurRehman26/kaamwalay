@@ -88,9 +88,6 @@ class ReferrerService
         return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
 
-    /**
-     * @throws Throwable
-     */
     public function setReferrersStatus(User $user, array $data): User
     {
         try {

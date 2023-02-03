@@ -6,6 +6,8 @@ use App\Models\Referrer;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Referrer */
+/** @property mixed $referrer*/
+
 class ReferrerResource extends JsonResource
 {
     /**
@@ -17,7 +19,7 @@ class ReferrerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id' => $this->referrer->id,
             'referral_code' => $this->referrer->referral_code,
             'withdrawable_commission' => $this->referrer->withdrawable_commission,
             'link_clicks' => $this->referrer->link_clicks,

@@ -28,9 +28,6 @@ class ReferralController extends Controller
         return new CommissionEarningCollection($this->referrerService->getCommissionEarnings($user->id));
     }
 
-    /**
-     * @throws Throwable
-     */
     public function setReferrersStatus(SetReferrerStatusRequest $request, User $user): ReferrerResource
     {
         return new ReferrerResource($this->referrerService->setReferrersStatus($user, $request->validated()));

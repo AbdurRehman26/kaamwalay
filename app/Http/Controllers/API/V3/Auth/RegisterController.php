@@ -15,25 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
-    public function __construct(protected ReferrerService $referrerService)
-    {
-    }
-
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::createCustomer($request->validated());
 
-        CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id'));
+        CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id', 'referral_code'));
 
         $token = auth()->guard()->login($user);
 
         UserLoggedIn::dispatch($user);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
-
-        if (array_key_exists('referral_code', $request->validated())) {
-            $this->referrerService->increaseSuccessfulSignups(Referrer::where('referral_code', $request->referral_code)->first());
-        }
 
         return new JsonResponse([
             'access_token' => $token,

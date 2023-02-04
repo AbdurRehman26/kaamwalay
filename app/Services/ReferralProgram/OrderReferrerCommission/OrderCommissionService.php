@@ -2,7 +2,7 @@
 
 namespace App\Services\ReferralProgram\OrderReferrerCommission;
 
-use App\Enums\Referrer\CommissionEarnedEnum;
+use App\Enums\ReferralProgram\Referrer\CommissionEarnedEnum;
 use App\Models\CommissionStructure;
 use App\Models\Order;
 

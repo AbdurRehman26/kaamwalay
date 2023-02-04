@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Referrer;
+namespace App\Enums\ReferralProgram\Referrer;
 
 enum CommissionEarnedEnum: int
 {

@@ -1921,21 +1921,6 @@ parameters:
 			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
-
-		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has parameter \\$exception with no type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
-
-		-
-			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:\\$tries has no type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
-
-		-
 			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/SendOrderPaidNotificationToSlack.php

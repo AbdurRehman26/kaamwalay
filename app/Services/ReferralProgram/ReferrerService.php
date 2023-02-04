@@ -82,4 +82,9 @@ class ReferrerService
     {
         return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
+
+    public function increaseSuccessfulSignups(Referrer $referrer): void
+    {
+        $referrer->increment('successful_signups', 1);
+    }
 }

@@ -105,6 +105,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
         $user->assignCustomerRole();
         $user->assignCustomerNumber();
+        $user->assignReferrer($data);
 
         (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
@@ -354,6 +355,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         }
 
         return $this;
+    }
+
+    public function assignReferrer(array $data): void
+    {
+        if (array_key_exists('referral_code', $data) && $data['referral_code']) {
+            $this->referred_by = Referrer::where('referral_code', $data['referral_code'])->first()->user_id;
+            $this->save();
+        }
     }
 
     public static function generateUserName(): string

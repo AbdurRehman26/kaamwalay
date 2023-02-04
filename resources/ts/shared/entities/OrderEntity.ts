@@ -43,6 +43,8 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
+    public referrer!: UserEntity;
+    public referrelCommission!: number;
     public paymentStatus!: PaymentStatusEnum;
     public estimatedDeliveryStartAt!: string;
     public estimatedDeliveryEndAt!: string;

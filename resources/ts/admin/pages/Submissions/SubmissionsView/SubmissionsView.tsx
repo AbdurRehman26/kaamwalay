@@ -94,7 +94,9 @@ export function SubmissionsView() {
                 admin={data?.orderPayment?.user?.fullName}
                 createdBy={data?.createdBy}
                 owner={data?.owner}
+                referrer={data?.referrer}
                 salesmanCommission={data?.salesmanCommission}
+                referralCommission={data?.referrelCommission}
             />
             <Divider />
             <RefundsAndExtraCharges

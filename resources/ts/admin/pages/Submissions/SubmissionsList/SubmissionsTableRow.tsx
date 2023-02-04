@@ -191,7 +191,7 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
-                <TableCell>{'Referrer'}</TableCell>
+                <TableCell>{order?.referrer?.fullName ? order?.referrer.fullName : '-'}</TableCell>
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

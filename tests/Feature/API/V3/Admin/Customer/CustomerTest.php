@@ -6,17 +6,14 @@ use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\WithFaker;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
-use function Pest\Laravel\postJson;
-use Illuminate\Database\Eloquent\Factories\Sequence;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
-
     $this->seed([
         RolesSeeder::class,
         UsersSeeder::class,

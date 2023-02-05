@@ -140,7 +140,7 @@ class OrderPaymentService
             $coupon = $this->couponService->returnCouponIfValid($couponData['code'], [
                 'items_count' => $this->order->orderItems()->count(),
                 'couponables_id' => $couponData['couponables_id'] ?? $this->order->payment_plan_id,
-                'user_id' => $this->order->user_id
+                'user_id' => $this->order->user_id,
             ]);
             $this->order->coupon_id = $coupon->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($coupon, $this->order);

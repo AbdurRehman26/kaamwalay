@@ -271,7 +271,7 @@ class CreateOrderService
             $couponParams = [
                 'items_count' => $this->order->orderItems()->count(),
                 'couponables_id' => $couponData['couponables_id'] ?? $this->data['payment_plan']['id'],
-                'user_id' => $this->order->user_id
+                'user_id' => $this->order->user_id,
             ];
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'], $couponParams)->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);

@@ -84,7 +84,7 @@ class CouponController extends Controller
             $couponParams = [
                 'couponables_id' => $request->payment_plan['id'],
                 'items_count' => $request->input('items_count', 0),
-                'user_id' => $request->input('user_id')
+                'user_id' => $request->input('user_id'),
             ];
 
             $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Customer\Referee;
+namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referee;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
+/** @mixin Coupon */
 class CouponResource extends BaseResource
 {
     /**

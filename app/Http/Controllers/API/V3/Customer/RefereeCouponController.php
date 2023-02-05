@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V3\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V3\Customer\Referee\CouponResource;
+use App\Http\Resources\API\V3\Customer\ReferralProgram\Referee\CouponResource;
 use App\Services\RefereeCouponService;
 use Exception;
 use Illuminate\Http\JsonResponse;

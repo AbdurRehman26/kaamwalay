@@ -199,4 +199,9 @@ class ReferrerService
             ->whereBetween('orders.created_at', [$startDate, $endDate]) 
             ->sum('commission');
     }
+    
+    public function increaseSuccessfulSignups(Referrer $referrer): void
+    {
+        $referrer->increment('successful_signups', 1);
+    }
 }

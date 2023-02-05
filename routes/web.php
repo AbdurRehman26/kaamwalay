@@ -8,6 +8,7 @@ use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
 use App\Http\Controllers\SalesRepController;
+use App\Http\Controllers\Landings\ReferralController;
 use Illuminate\Support\Facades\Route;
 
 /*

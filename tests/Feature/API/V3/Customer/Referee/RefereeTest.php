@@ -61,7 +61,6 @@ test('a referee can view his coupon', function () {
 });
 
 test('a referee can not view a coupon if it has expired.', function () {
-
     $this->coupon->available_from = now()->subDays(2);
     $this->coupon->available_to = now()->subDay();
     $this->coupon->save();

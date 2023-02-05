@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\V3\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralStatRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\SetReferrerStatusRequest;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerResource;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerSignUpCollection;
 use App\Models\User;

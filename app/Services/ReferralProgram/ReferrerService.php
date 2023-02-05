@@ -9,10 +9,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerService
@@ -196,7 +196,7 @@ class ReferrerService
         return ReferrerEarnedCommission::join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')
             ->where('referrers.user_id', $userId)
-            ->whereBetween('orders.created_at', [$startDate, $endDate]) 
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum('commission');
     }
     

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('coupons', function (Blueprint $table) {
             $table->boolean('is_referred')->default(false)->after('min_threshold_value');
-            $table->boolean('is_viewed')->default(false)->after('is_referred');
         });
     }
 
@@ -28,7 +27,6 @@ return new class extends Migration
     {
         Schema::table('coupons', function (Blueprint $table) {
             $table->dropColumn('is_referred');
-            $table->dropColumn('is_viewed');
         });
     }
 };

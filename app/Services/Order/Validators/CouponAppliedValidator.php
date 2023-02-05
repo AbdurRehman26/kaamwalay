@@ -24,6 +24,7 @@ class CouponAppliedValidator
                     [
                         'couponables_id' => $data['coupon']['couponables_id'] ?? $data['payment_plan']['id'],
                         'items_count' => is_int($items) ? $items : collect($items)->sum('quantity'),
+                        'user_id' => !empty($data['user_id']) ? $data['user_id'] : null 
                     ]
                 ),
                 CouponExpiredOrInvalid::class

@@ -4,8 +4,9 @@ namespace App\Listeners\API\Referee;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\RefereeCouponService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 
-class CreateRefereeCoupon
+class CreateRefereeCoupon implements ShouldBeEncrypted
 {
     public function __construct(protected RefereeCouponService $refereeCouponService)
     {

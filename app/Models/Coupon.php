@@ -145,9 +145,18 @@ class Coupon extends Model
             return $query;
         }
 
-        return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
+        $query = $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
             $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
+
+        if(!empty($couponParams['user_id'])){
+            $query = $query->orWhereHas('couponAble', function ($subQuery) use ($couponParams) {
+                $subQuery->where('couponables_id', '=', $couponParams['user_id'])
+                    ->where('couponables_type', '=', Couponable::COUPONABLE_TYPES['user']);
+            });
+        }
+
+        return $query;
     }
 
     public function scopeValidForUserLimit(Builder $query, string $couponCode, User $user):  Builder

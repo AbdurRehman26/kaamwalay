@@ -72,7 +72,7 @@ class CreateOrderService
     {
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
-        CouponAppliedValidator::validate($this->data);
+        CouponAppliedValidator::validate(array_merge($this->data, ['user_id' => auth()->user()->id]));
         WalletCreditAppliedValidator::validate($this->data);
     }
 
@@ -271,6 +271,7 @@ class CreateOrderService
             $couponParams = [
                 'items_count' => $this->order->orderItems()->count(),
                 'couponables_id' => $couponData['couponables_id'] ?? $this->data['payment_plan']['id'],
+                'user_id' => $this->order->user_id
             ];
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'], $couponParams)->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);

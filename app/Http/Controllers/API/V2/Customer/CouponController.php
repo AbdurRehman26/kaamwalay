@@ -23,7 +23,7 @@ class CouponController extends Controller
     public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
-            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
+            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count', 'user_id'));
 
             return new CouponResource($coupon);
         } catch (Exception $e) {
@@ -84,13 +84,14 @@ class CouponController extends Controller
             $couponParams = [
                 'couponables_id' => $request->payment_plan['id'],
                 'items_count' => $request->input('items_count', 0),
+                'user_id' => $request->input('user_id')
             ];
 
             $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
 
             $discountedAmount = $this->couponService->calculateDiscount(
                 $coupon,
-                $request->safe()->only('payment_plan', 'items')
+                $request->safe()->only('payment_plan', 'items', 'user_id')
             );
         } catch (Exception $e) {
             return match (true) {

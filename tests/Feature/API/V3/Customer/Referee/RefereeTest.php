@@ -31,6 +31,8 @@ beforeEach(function () {
                 'coupon_status_id' => 2,
                 'is_referred' => 1.,
                 'created_by' => $user->id,
+                'available_from' => now()->subDay(),
+                'available_till' => now()->addDays(5),
             ]
         );
 
@@ -57,9 +59,10 @@ test('a referee can view his coupon', function () {
         ]]);
 });
 
-test('a referee can view a coupon only once', function () {
+test('a referee can not view a coupon if it has expired.', function () {
 
-    $this->coupon->is_viewed = 1;
+    $this->coupon->available_from = now()->subDays(2);
+    $this->coupon->available_to = now()->subDay();
     $this->coupon->save();
 
     $this->getJson('/api/v3/customer/referee/coupon')

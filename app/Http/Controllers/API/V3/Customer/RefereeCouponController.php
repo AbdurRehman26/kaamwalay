@@ -14,7 +14,7 @@ class RefereeCouponController extends Controller
     public function show(RefereeCouponService $refereeCouponService): JsonResponse | CouponResource
     {
         try {
-            return new CouponResource($refereeCouponService->markCouponAsViewedAndReturn());
+            return new CouponResource($refereeCouponService->getRefereeCoupon());
         }catch (Exception $e){
             return new JsonResponse(
                 [

@@ -42,7 +42,7 @@ class OrderPaymentService
     protected function validate(): self
     {
         $this->data['items'] = $this->order->orderItems()->count();
-        CouponAppliedValidator::validate($this->data);
+        CouponAppliedValidator::validate(array_merge($this->data, ['user_id' => $this->order->user_id]));
         WalletCreditAppliedValidator::validate($this->data);
 
         return $this;
@@ -140,6 +140,7 @@ class OrderPaymentService
             $coupon = $this->couponService->returnCouponIfValid($couponData['code'], [
                 'items_count' => $this->order->orderItems()->count(),
                 'couponables_id' => $couponData['couponables_id'] ?? $this->order->payment_plan_id,
+                'user_id' => $this->order->user_id
             ]);
             $this->order->coupon_id = $coupon->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($coupon, $this->order);

@@ -88,7 +88,7 @@ class RefereeCouponService
             'max_usage_allowed' => 1,
             'is_referred' => 1,
             'available_from' => now(),
-            'available_to' => now()->addHours(48),
+            'available_till' => now()->addHours(48),
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ];
     }
@@ -107,18 +107,14 @@ class RefereeCouponService
         $coupon->couponStats()->save(new CouponStat());
     }
 
-    public function markCouponAsViewedAndReturn(): object|null
+    public function getRefereeCoupon(): object|null
     {
-        $coupon = Coupon::whereExists(function ($query){
+        $coupon = Coupon::validOnCurrentDate()->whereExists(function ($query){
             $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by');
-        })->where('is_referred', 1)->where('is_viewed', 0);
+        })->where('is_referred', 1);
 
         throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
 
-        $coupon = $coupon->first();
-        $coupon->is_viewed = 1;
-        $coupon->save();
-
-        return $coupon;
+        return $coupon->first();
     }
 }

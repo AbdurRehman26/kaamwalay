@@ -72,6 +72,7 @@ class UserResource extends Resource
                     ->nullable(),
                 Forms\Components\BelongsToManyMultiSelect::make('role')
                     ->relationship('roles', 'name'),
+                TextInput::make('referred_by'),
             ]);
     }
 

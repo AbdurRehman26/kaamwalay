@@ -7,7 +7,6 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
-use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
 use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
@@ -74,6 +73,7 @@ class Order extends Model implements Exportable
         'estimated_delivery_start_at',
         'estimated_delivery_end_at',
         'created_by',
+        'referral_total_commission',
     ];
 
     /**
@@ -117,6 +117,7 @@ class Order extends Model implements Exportable
         'estimated_delivery_end_at' => 'datetime',
         'created_by' => 'integer',
         'discounted_amount' => 'float',
+        'referral_total_commission' => 'float',
     ];
 
     protected $appends = [
@@ -565,8 +566,6 @@ class Order extends Model implements Exportable
         $this->payment_status = OrderPaymentStatusEnum::PAID;
         $this->paid_at = now();
         $this->save();
-
-        GenerateOrderInvoice::dispatch($this);
     }
 
     public function hasInvoice(): bool

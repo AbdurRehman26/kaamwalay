@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;
 use App\Models\Couponable;
 use App\Models\CouponApplicable;
@@ -11,7 +12,6 @@ use App\Models\User;
 use App\Services\Admin\Coupon\CouponCodeService;
 use App\Services\Admin\Coupon\CouponStatusService;
 use Exception;
-use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -29,8 +29,7 @@ class RefereeCouponService
      */
     public function createRefereeCoupon(User $user): Coupon
     {
-        try{
-
+        try {
             DB::beginTransaction();
 
             $coupon = $this->generateCoupon($user);
@@ -42,26 +41,24 @@ class RefereeCouponService
             DB::commit();
 
             return $coupon->refresh();
-
-
-        }catch (Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 
             throw $e;
         }
-
     }
 
     protected function generateCoupon(User $user): Coupon
     {
         $code = $this->couponCodeService->newCoupon('', true, 5);
-        $coupon = new Coupon(array_merge(
+        $coupon = new Coupon(
+            array_merge(
                 [
                     'code' => $code,
                     'name' => $code,
                     'created_by' => $user->id,
-                    'is_referred' => 1
+                    'is_referred' => 1,
                 ],
                 $this->generateCouponData()
             )
@@ -79,7 +76,8 @@ class RefereeCouponService
         return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }
 
-    protected function generateCouponData(): array {
+    protected function generateCouponData(): array
+    {
         return [
             'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
             'type' => 'percentage',
@@ -99,6 +97,7 @@ class RefereeCouponService
         $couponable->couponables_id = $user->id;
         $couponable->couponables_type = Couponable::COUPONABLE_TYPES['user'];
         $couponable->coupon_id = $coupon->id;
+
         return $couponable->save();
     }
 

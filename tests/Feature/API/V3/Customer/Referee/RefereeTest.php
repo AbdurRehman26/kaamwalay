@@ -22,7 +22,8 @@ beforeEach(function () {
                 'code' => 'users',
                 'label' => 'Users',
                 'is_active' => 1,
-            ]);
+            ]
+        );
 
     $this->coupon = Coupon::factory()
         ->create(

@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\API\V3\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V3\Customer\Referral\CommissionEarningCollection;
-use App\Http\Resources\API\V3\Customer\Referral\ReferrerResource;
-use App\Http\Resources\API\V3\Customer\Referral\ReferrerSignUpCollection;
-use App\Services\Referrer\ReferrerService;
+use App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer\CommissionEarningCollection;
+use App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer\ReferrerResource;
+use App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer\ReferrerSignUpCollection;
+use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ReferralController extends Controller
+class ReferralProgramController extends Controller
 {
     public function __construct(protected ReferrerService $referrerService)
     {
     }
 
-    public function getReferralProfile(): JsonResponse
+    public function getReferrerProfile(): JsonResponse
     {
         return new JsonResponse([
             'data' => [

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Referrer;
+namespace App\Services\ReferralProgram;
 
 use App\Models\Order;
 use App\Models\Referrer;
@@ -13,18 +13,17 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerService
 {
+    protected const DEFAULT_PAGE_SIZE = 10;
+
     public function create(User $user): Referrer
     {
-        $referrer = null;
-
         try {
             $code = ReferralCodeGeneratorService::generate();
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
         } catch(QueryException $e) {
-            if ($e->errorInfo[1] === 1062) {
-                $referrer = $this->create($user);
-            }
+            report($e);
+            $referrer = $this->create($user);
         }
 
         return $referrer;
@@ -38,7 +37,7 @@ class ReferrerService
     public function getSignUps(int $referrerId): LengthAwarePaginator
     {
         $query = User::where('referred_by', $referrerId);
-        $itemsPerPage = 10;
+        $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
         return QueryBuilder::for($query)
             ->allowedSorts(['created_at'])
@@ -56,8 +55,8 @@ class ReferrerService
         $query = Order::join('referrer_earned_commissions', 'orders.id', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrer_earned_commissions.referrer_id', 'referrers.id')
             ->selectRaw('SUM(referrer_earned_commissions.commission) as commission')
-            ->addSelect('orders.*')->where('referrers.id', $referrerId)->groupBy('orders.id');
-        $itemsPerPage = 10;
+            ->addSelect('orders.*')->where('referrers.user_id', $referrerId)->groupBy('orders.id');
+        $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
         return QueryBuilder::for($query)
             ->allowedSorts(['created_at'])

@@ -14,7 +14,7 @@ class CreateRefereeCoupon implements ShouldBeEncrypted
 
     public function handle(CustomerRegistered $event): void
     {
-        if($event->user->referredBy){
+        if ($event->user->referredBy) {
             $this->refereeCouponService->createRefereeCoupon($event->user);
         }
     }

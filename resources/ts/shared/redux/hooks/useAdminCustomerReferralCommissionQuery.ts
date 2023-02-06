@@ -7,7 +7,7 @@ export function useAdminCustomerReferralCommissionQuery(options: ThunkShowAction
     return useShowQuery(
         showAdminCustomersReferralAction,
         CustomerEntity,
-        (state) => state.adminCustomerReferralSlice,
+        (state) => state.adminCustomersReferral,
         options,
     );
 }

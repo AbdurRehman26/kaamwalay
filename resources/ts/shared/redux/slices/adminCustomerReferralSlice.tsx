@@ -8,13 +8,15 @@ interface StateType extends APIState<CustomerEntity> {}
 const adminCustomersReferralThunk = createRepositoryThunk('adminCustomersReferral', AdminCustomerReferralRepository);
 
 export const adminCustomerReferralSlice = createSlice({
-    name: adminCustomersReferralThunk.name,
+    name: 'adminCustomersReferral',
     initialState: {
         ...adminCustomersReferralThunk.initialState,
     } as StateType,
-    reducers: {},
+    reducers: {
+        invalidateAdminCustomersReferral: adminCustomersReferralThunk.invalidateEntities,
+    },
 });
 
-export const {} = adminCustomerReferralSlice.actions;
+export const { invalidateAdminCustomersReferral } = adminCustomerReferralSlice.actions;
 export const { listAction: listAdminCustomersReferralAction, showAction: showAdminCustomersReferralAction } =
     adminCustomersReferralThunk;

@@ -28,7 +28,7 @@ export function CustomerViewReferralTab({ customer }: CustomerViewReferralTabPro
                         statName={'sales'}
                     />
                 </Grid>
-                <Grid item container md={4}>
+                {/* <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Withdrawable Commission'}
                         value={customer.unpaidCommission}
@@ -36,7 +36,7 @@ export function CustomerViewReferralTab({ customer }: CustomerViewReferralTabPro
                             'Unpaid commission is calculated from fully paid orders up to the previous month. It does not include paid orders from the current month.'
                         }
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
             <Grid item container direction={'row'} spacing={2.5}>
                 <Grid item container md={4}>
@@ -48,7 +48,7 @@ export function CustomerViewReferralTab({ customer }: CustomerViewReferralTabPro
                         formatAsCurrency={false}
                     />
                 </Grid>
-                {/* <Grid item container md={4}>
+                <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Commission Earned'}
                         value={customer.unpaidCommissionTillLastMonth}
@@ -56,7 +56,7 @@ export function CustomerViewReferralTab({ customer }: CustomerViewReferralTabPro
                         statName={'commission_earned'}
                     />
                 </Grid>
-                <Grid item container md={4}>
+                {/* <Grid item container md={4}>
                     <SalesRepOverviewCard
                         title={'Commission Paid'}
                         timeFilters={true}

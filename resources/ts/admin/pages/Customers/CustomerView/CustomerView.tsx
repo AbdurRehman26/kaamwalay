@@ -89,6 +89,10 @@ export function CustomerView() {
         resourceId: Number(id),
     });
 
+    // const customerReferral$ = useAdminCustomerQuery({
+    //     resourceId: Number(id),
+    // });
+
     const handleReloadCustomerData = useCallback(() => {
         customer$.request();
     }, [customer$]);

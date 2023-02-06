@@ -7,7 +7,7 @@ export function useAdminCustomerReferralSignUpQuery(options: ThunkShowActionArg)
     return useShowQuery(
         showAdminCustomersReferralAction,
         CustomerEntity,
-        (state) => state.adminCustomerReferralSignUpSlice,
+        (state) => state.adminCustomersReferralSignUp,
         options,
     );
 }

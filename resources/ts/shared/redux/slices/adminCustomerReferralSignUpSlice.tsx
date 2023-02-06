@@ -11,13 +11,15 @@ const adminCustomersReferralSignUpThunk = createRepositoryThunk(
 );
 
 export const adminCustomerReferralSignUpSlice = createSlice({
-    name: adminCustomersReferralSignUpThunk.name,
+    name: 'adminCustomersReferralSignUp',
     initialState: {
         ...adminCustomersReferralSignUpThunk.initialState,
     } as StateType,
-    reducers: {},
+    reducers: {
+        invalidateAdminCustomerReferralSignUp: adminCustomersReferralSignUpThunk.invalidateEntities,
+    },
 });
 
-export const {} = adminCustomerReferralSignUpSlice.actions;
+export const { invalidateAdminCustomerReferralSignUp } = adminCustomerReferralSignUpSlice.actions;
 export const { listAction: listAdminCustomersReferralAction, showAction: showAdminCustomersReferralAction } =
     adminCustomersReferralSignUpThunk;

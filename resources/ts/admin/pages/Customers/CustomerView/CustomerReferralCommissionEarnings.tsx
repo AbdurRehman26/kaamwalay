@@ -11,6 +11,7 @@ import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCe
 import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
+import { useAdminCustomerReferralCommissionQuery } from '@shared/redux/hooks/useAdminCustomerReferralCommissionQuery';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { CustomerReferralListing } from './CustomerReferralListing';
 
@@ -75,6 +76,11 @@ export function CustomerReferralCommissionEarnings() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
 
+    const commissionEarnings = useAdminCustomerReferralCommissionQuery({
+        resourceId: Number(id),
+    });
+    console.log('commissionEarnings ', commissionEarnings);
+
     const orders$ = useListAdminOrdersQuery({
         params: {
             include: [
@@ -134,6 +140,12 @@ export function CustomerReferralCommissionEarnings() {
                         {orders$.data.length !== 0 || ordersCount !== 0 ? (
                             <>
                                 <TableContainer>
+                                    <Box p={2}>
+                                        <Typography fontSize={'16px'} fontWeight={'400'}>
+                                            {' '}
+                                            Cummissions Earnings <span> ({orders$.data.length}) </span>{' '}
+                                        </Typography>
+                                    </Box>
                                     <CustomerReferralListing
                                         orders={orders$.data}
                                         paginationProp={orders$.paginationProps}

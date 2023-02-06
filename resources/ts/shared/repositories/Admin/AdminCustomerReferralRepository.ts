@@ -4,9 +4,11 @@ import { Repository } from '../Repository';
 
 @Injectable('AdminCustomerReferralRepository')
 export class AdminCustomerReferralRepository extends Repository<CustomerEntity> {
-    readonly endpointPath: string = 'v3/admin/referral/:user_id/sign-ups';
+    readonly endpointPath: string = 'customers/:user_id/referral/commission-earnings';
     readonly model = CustomerEntity;
-
+    readonly endpointConfig = {
+        version: 'v3',
+    };
     // const { data } = await this.endpoint.post(`${userId}/assign-salesman/${salesmanId}`);
     // for reference how to use single repository for multiple get calls
     public async getCustomerReferrals() {

@@ -28,4 +28,5 @@ return [
     'feature_order_wallet_credit_percentage' => env('FEATURE_ORDER_WALLET_CREDIT_PERCENTAGE'),
     'feature_order_cleaning_fee_per_card' => env('FEATURE_ORDER_CLEANING_FEE_PER_CARD'),
     'feature_order_cleaning_fee_max_cap' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
+    'feature_referee_coupon_discount' => env('FEATURE_REFEREE_COUPON_DISCOUNT', 35)
 ];

@@ -30,8 +30,6 @@ class Coupon extends Model
         'free_cards' => self::TYPE_FREE_CARDS,
     ];
 
-    const REFEREE_DISCOUNT = 30;
-
     protected $fillable = [
         'created_by',
         'coupon_applicable_id',
@@ -241,5 +239,10 @@ class Coupon extends Model
             CouponMinThresholdTypeEnum::CARD_COUNT => $itemsCount < $this->min_threshold_value,
             default => false,
         };
+    }
+
+    public static function getRefereeCouponDiscount(): float
+    {
+        return config('robograding.feature_referee_coupon_discount');
     }
 }

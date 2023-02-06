@@ -57,7 +57,7 @@ test('a referee can view his coupon', function () {
             'id',
             'code',
             'available_from',
-            'available_till'
+            'available_till',
         ]]);
 });
 

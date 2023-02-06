@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Customer\ListCustomerRequest;
 use App\Http\Requests\API\V2\Admin\Customer\StoreCustomerRequest;
 use App\Http\Resources\API\V2\Admin\Customer\CustomerCollection;
-use App\Http\Resources\API\V2\Admin\Customer\CustomerResource;
+use App\Http\Resources\API\V3\Admin\Customer\CustomerResource;
 use App\Models\User;
 use App\Services\Admin\CustomerService;
 use Illuminate\Http\JsonResponse;

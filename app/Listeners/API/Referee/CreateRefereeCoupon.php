@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Referee;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Services\RefereeCouponService;
+use App\Services\ReferralProgram\RefereeCouponService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 
 class CreateRefereeCoupon implements ShouldBeEncrypted

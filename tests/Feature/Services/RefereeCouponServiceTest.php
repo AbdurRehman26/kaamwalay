@@ -3,7 +3,7 @@
 use App\Models\Coupon;
 use App\Models\Referrer;
 use App\Models\User;
-use App\Services\RefereeCouponService;
+use App\Services\ReferralProgram\RefereeCouponService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 

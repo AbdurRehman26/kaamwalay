@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\ReferralProgram;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;

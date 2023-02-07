@@ -191,7 +191,22 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
-                <TableCell>{order?.referrer?.fullName ? order?.referrer.fullName : '-'}</TableCell>
+                {isCustomerDetailPage ? (
+                    <TableCell>
+                        {order?.owner?.fullName ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/salesreps/${order.owner?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order?.referrer.firstName} {order.referrer.lastName}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

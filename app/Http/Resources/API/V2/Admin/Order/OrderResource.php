@@ -116,6 +116,8 @@ class OrderResource extends V1OrderResource
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
+            'referrer' => $this->user->referredBy,
+            'referrel_commission' => $this->referral_total_commission,
         ];
     }
 }

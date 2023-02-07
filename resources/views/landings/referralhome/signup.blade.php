@@ -5,7 +5,7 @@
         <div class="ReferralHome-mainLeft">
             <div class="ReferralHome-referralName">
                     <img src="{{ asset('assets/images/landings/referralhome/announcement.png') }}" alt=""/>
-                    <span>Referral by Ali Raza</span>
+                    <span>Referral by {{ $referBy }}</span>
             </div>
             <div>
                 <h1 class="ReferralHome-sectionTitle">Sign Up to Claim <span> 30% OFF </span> Your First Submission</h1>

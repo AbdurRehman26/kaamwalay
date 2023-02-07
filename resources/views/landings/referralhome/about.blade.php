@@ -2,9 +2,11 @@
     <div class="container ReferralHome-sectionContainer">
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--half">
             <div style="position: relative;">
-                <video id="robograding" width="710" height="410">
+                <video width="710" height="410">
                     <source src="{{ asset('assets/images/landings/referralhome/home.mp4') }}" type="video/mp4">
                 </video>
+                <img style="height: 410; width: 710" src="{{ asset('assets/images/landings/referralhome/videoPoster.png') }}"
+                     class="Home-sectionImage" />
                 <div onclick="playVideo()" class="ReferralHome-sectionImagePlay">
                     <span id="icon" class="material-icons">play_arrow</span>
                 </div>

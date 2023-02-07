@@ -1,5 +1,8 @@
+import CheckIcon from '@mui/icons-material/Check';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import MenuIcon from '@mui/icons-material/Menu';
+import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,11 +11,14 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
+import Link from '@mui/material/Link';
+import Snackbar from '@mui/material/Snackbar';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@shared/assets/robogradingLogo.svg';
 import { getRemainingTime } from '@shared/components/Counter';
@@ -90,6 +96,27 @@ const useStyles = makeStyles(
             width: 56,
             color: 'rgba(56, 142, 60, 1)',
         },
+        contentCopy: {
+            height: 28,
+            width: 28,
+            margin: 10,
+            color: 'rgba(0, 0, 0, 0.54)',
+            '&:hover': {
+                color: 'rgba(32, 191, 184, 1) !important',
+            },
+        },
+        couponCode: {
+            color: 'rgba(0, 0, 0, 0.87) !important',
+            textDecoration: 'none !important',
+            boxShadow: 'none',
+            cursor: 'pointer',
+            '&:hover': {
+                color: 'rgba(32, 191, 184, 1) !important',
+                '& $contentCopy': {
+                    color: 'rgba(32, 191, 184, 1) !important',
+                },
+            },
+        },
     }),
     {
         name: 'LayoutHeader',
@@ -116,6 +143,7 @@ export function CouponCode() {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const [isLoading, setIsLoading] = useState(true);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const [coupon, setCoupon] = useState<CouponType>({
         availableFrom: '',
@@ -124,11 +152,9 @@ export function CouponCode() {
         code: '',
     });
 
-    const endTime = coupon.availableTill ? new Date(new Date(coupon.availableTill.toString()).getTime() + 86400000) : 0;
+    const endTime = coupon.availableTill ? new Date(new Date(coupon.availableTill.toString()).getTime()) : 0;
     const timeInMs =
-        coupon.availableTill && new Date() <= endTime
-            ? new Date(coupon.availableTill.toString()).getTime() + 86400000
-            : 0;
+        coupon.availableTill && new Date() <= endTime ? new Date(coupon.availableTill.toString()).getTime() : 0;
 
     const defaultRemainingTime = {
         seconds: '00',
@@ -153,7 +179,6 @@ export function CouponCode() {
         navigate(`/submissions/new?coupon=${coupon.code}`);
     };
 
-    console.log(endTime, timeInMs, remainingTime);
     useEffect(() => {
         // noinspection JSIgnoredPromiseFromCall
         const loadCoupon = async () => {
@@ -171,6 +196,11 @@ export function CouponCode() {
         loadCoupon();
     }, [apiService]);
 
+    const handleCopyContent = useCallback(() => {
+        navigator.clipboard.writeText(`${coupon?.code}`);
+        setOpen(true);
+    }, [coupon?.code]);
+
     return (
         <Root>
             <AppBar position="sticky" className={classes.root} elevation={4}>
@@ -187,6 +217,22 @@ export function CouponCode() {
             {!isLoading ? (
                 <Grid marginTop={'4%'} container direction={'column'}>
                     <Box marginTop={0} marginBottom={4} display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}
+                        >
+                            <Alert
+                                icon={<CheckIcon fontSize="inherit" />}
+                                variant={'filled'}
+                                severity="success"
+                                sx={{ width: '100%' }}
+                            >
+                                Discount Code Copied
+                            </Alert>
+                        </Snackbar>
+
                         <CheckCircleIcon className={classes.checkMark} />
                         <Typography
                             margin={1}
@@ -209,20 +255,27 @@ export function CouponCode() {
                             variant={'body1'}
                             align={'center'}
                         >
-                            Here is the discount code for your {coupon.discountValue}% OFF:
+                            Here is the discount code for your {coupon?.discountValue}% OFF:
                         </Typography>
 
-                        <Typography
-                            fontFamily={'Roboto'}
-                            fontStyle={'normal'}
-                            fontSize={'64px'}
-                            margin={1}
-                            fontWeight={700}
-                            variant={'h3'}
-                            align={'center'}
-                        >
-                            {coupon.code}
-                        </Typography>
+                        <Tooltip title="Click to copy">
+                            <Typography
+                                onClick={handleCopyContent}
+                                className={classes.couponCode}
+                                component={Link}
+                                fontFamily={'Roboto'}
+                                fontStyle={'normal'}
+                                fontSize={'64px'}
+                                margin={1}
+                                fontWeight={700}
+                                variant={'h3'}
+                                align={'center'}
+                            >
+                                {coupon.code}
+                                <ContentCopyIcon className={classes.contentCopy} />
+                            </Typography>
+                        </Tooltip>
+
                         <Divider />
 
                         <Typography
@@ -238,8 +291,10 @@ export function CouponCode() {
                         >
                             Click the button below to start your submission & get your discount.
                             <br />
-                            Your code will expire in Time {remainingTime.hours}h : {remainingTime.minutes}m :{' '}
-                            {remainingTime.seconds}s
+                            Your code will expire in{' '}
+                            <b>
+                                {remainingTime.hours}h:{remainingTime.minutes}m:{remainingTime.seconds}s
+                            </b>
                         </Typography>
 
                         <Button

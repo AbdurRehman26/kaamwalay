@@ -1,0 +1,296 @@
+.ReferralHome-sectionContentCaption,
+.ReferralHome-sectionContentHeadline,
+.ReferralHome-sectionContentText {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    max-width: 600px;
+}
+
+.ReferralHome-sectionContentCaption,
+.ReferralHome-sectionContentHeadline,
+.ReferralHome-sectionContentText {
+    color: #251f33;
+}
+
+.ReferralHome-sectionContentCaption,
+.ReferralHome-sectionContentHeadline {
+    margin-bottom: 16px;
+}
+
+.ReferralHome-sectionContentCaption {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 25px;
+    line-height: 24px;
+    letter-spacing: 1.5px;
+    padding: 0px;
+    text-transform: uppercase;
+    @media screen and (max-width: 599px) {
+        font-size: 14px;
+        line-height: 22px;
+    }
+}
+
+.ReferralHome-sectionContentCaptionSteps {
+    font-weight: 900;
+    font-size: 36px;
+    text-transform: uppercase;
+    line-height: 37.5px;
+}
+
+.ReferralHome-sectionContentHeadline {
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 48px;
+    @media screen and (max-width: 599px) {
+        font-size: 24px;
+        line-height: 32px;
+    }
+}
+
+.ReferralHome-sectionContentText {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+}
+
+.ReferralHome-sectionContainer {
+    display: flex;
+    flex-wrap: wrap;
+    @media screen and (min-width: 1600px) {
+        max-width: 1440px;
+    }
+    @media screen and (min-width: 1200px) and (max-width: 1599px) {
+        max-width: 100%;
+    }
+}
+
+.ReferralHome-communityColumn {
+    padding: 24px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    @media screen and (max-width: 959px) {
+        padding: 24px;
+    }
+}
+
+.ReferralHome-section {
+    padding: 180px 0;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    overflow: hidden;
+    @media screen and (max-width: 767px) {
+        padding: 80px 0;
+    }
+}
+
+.ReferralHome-sectionCommunity {
+    padding: 70px 0;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.ReferralHome-sectionCommunityGrid {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.ReferralHome-sectionCommunityColumn {
+    padding: 50px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    @media screen and (max-width: 959px) {
+        padding: 24px;
+    }
+}
+
+.ReferralHome-button {
+    background-color: #20bfb8;
+    color: white;
+    border-radius: 28px;
+    padding: 12px;
+    margin-left: 5%;
+    text-transform: uppercase;
+    height: 48px;
+    width: 13%;
+    margin-top: 5%;
+    min-width: 128px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.ReferralHome-sectionLayers {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.ReferralHome-sectionLayer {
+    position: absolute;
+    @media screen and (max-width: 959px) {
+        opacity: 0.5;
+    }
+    &--topLeft {
+        left: 64px;
+        top: 92px;
+    }
+    &--topRight {
+        right: 64px;
+        top: 92px;
+    }
+    &--bottomRight {
+        right: 64px;
+        bottom: 92px;
+        &.ReferralHome-sectionLayer--offset {
+            right: -5%;
+            bottom: -20%;
+        }
+    }
+    &--bottomLeft {
+        left: 64px;
+        bottom: 92px;
+        &.ReferralHome-sectionLayer--offset {
+            left: -25%;
+            bottom: -30%;
+        }
+    }
+}
+
+.ReferralHome-sectionColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    &--half {
+        width: 50%;
+        @media screen and (max-width: 1199px) {
+            width: 100%;
+        }
+        @media screen and (max-width: 959px) {
+            padding: 0 24px;
+        }
+        @media screen and (max-width: 599px) {
+            padding: 0 14px;
+        }
+    }
+    &--third {
+        width: 33.333334%;
+        @media screen and (max-width: 1279px) {
+            width: 50%;
+        }
+        @media screen and (max-width: 959px) {
+            padding: 0 24px;
+            width: 100%;
+        }
+        @media screen and (max-width: 599px) {
+            padding: 0 14px;
+            width: 100%;
+        }
+    }
+    &--fourth {
+        width: 25%;
+        @media screen and (max-width: 1279px) {
+            width: 50%;
+        }
+        @media screen and (max-width: 959px) {
+            padding: 0 24px;
+        }
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            padding: 0;
+        }
+        @media screen and (max-width: 599px) {
+            padding: 0 14px;
+        }
+    }
+}
+
+.ReferralHome-communityIcon {
+    width: 348px;
+    height: 348px;
+    padding: 0px 4px 0px;
+    object-fit: cover;
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        padding-top: 5px;
+    }
+}
+
+.ReferralHome-sectionColumn,
+.ReferralHome-sectionContainer {
+    &--center-center {
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.ReferralHome-sectionImageHolder {
+    display: block;
+    width: 100%;
+    padding-bottom: 60%;
+    position: relative;
+    @media screen and (max-width: 1199px) {
+        margin-bottom: 48px;
+    }
+}
+
+.ReferralHome-sectionImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.14), 0 1px 18px rgba(0, 0, 0, 0.12), 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ReferralHome-sectionImagePlay {
+    position: absolute;
+    z-index: 1;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.71);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media screen and (max-width: 767px) {
+        width: 64px;
+        height: 64px;
+    }
+    .material-icons {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #fff;
+        @media screen and (max-width: 767px) {
+            width: 32px;
+            height: 32px;
+            font-size: 32px;
+        }
+    }
+}

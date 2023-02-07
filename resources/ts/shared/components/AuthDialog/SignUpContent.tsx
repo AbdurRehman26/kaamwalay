@@ -36,7 +36,7 @@ const useStyles = makeStyles(
     { name: 'SignUpContent' },
 );
 
-export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContentProps) {
+export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome }: AuthDialogContentProps) {
     const classes = useStyles();
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
@@ -115,15 +115,19 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                             <SubmitButton isModal>Sign up</SubmitButton>
                         </FormRoot>
                     </Grid>
-                    <Divider />
-                    <ActionContent>
-                        <Typography align={'center'} variant={'caption'} marginRight={2}>
-                            Already have an account?
-                        </Typography>
-                        <Button variant={'text'} onClick={handleSignInClick}>
-                            Log In
-                        </Button>
-                    </ActionContent>
+                    {fromReferralHome ? null : (
+                        <>
+                            <Divider />
+                            <ActionContent>
+                                <Typography align={'center'} variant={'caption'} marginRight={2}>
+                                    Already have an account?
+                                </Typography>
+                                <Button variant={'text'} onClick={handleSignInClick}>
+                                    Log In
+                                </Button>
+                            </ActionContent>
+                        </>
+                    )}
                 </Form>
             )}
         </Formik>

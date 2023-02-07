@@ -152,9 +152,10 @@ export function CouponCode() {
         code: '',
     });
 
-    const endTime = coupon.availableTill ? new Date(new Date(coupon.availableTill.toString()).getTime()) : 0;
-    const timeInMs =
-        coupon.availableTill && new Date() <= endTime ? new Date(coupon.availableTill.toString()).getTime() : 0;
+    const endTime =
+        coupon.availableTill && new Date() <= new Date(coupon.availableTill)
+            ? new Date(coupon.availableTill.toString()).getTime()
+            : 0;
 
     const defaultRemainingTime = {
         seconds: '00',
@@ -166,10 +167,10 @@ export function CouponCode() {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            updateRemainingTime(timeInMs);
+            updateRemainingTime(endTime);
         }, 1000);
         return () => clearInterval(intervalId);
-    }, [timeInMs]);
+    }, [endTime]);
 
     function updateRemainingTime(countdown: any) {
         setRemainingTime(getRemainingTime(countdown));

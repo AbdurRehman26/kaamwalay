@@ -108,7 +108,8 @@ class RefereeCouponService
     public function getRefereeCoupon(): object|null
     {
         $coupon = Coupon::validOnCurrentDate()->whereExists(function ($query) {
-            $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by');
+            $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by')
+                ->where('coupons.created_by', auth()->user()->id);
         })->where('is_referred', 1);
 
         throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);

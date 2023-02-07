@@ -408,6 +408,11 @@ class Order extends Model implements Exportable
         );
     }
 
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string|int  $status
+     * @return Builder<Order>
+     */
     public function scopeReferredBy(Builder $query, int $status): Builder
     {
         return $query->whereHas(

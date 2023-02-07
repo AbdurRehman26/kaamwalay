@@ -50,7 +50,7 @@ class CouponService
     // @phpstan-ignore-next-line
     public function getCoupons(): LengthAwarePaginator
     {
-        return QueryBuilder::for(Coupon::adminCoupons())
+        return QueryBuilder::for(Coupon::excludeSystemGeneratedCoupons())
             ->allowedFilters([
                 'code',
                 AllowedFilter::scope('status'),

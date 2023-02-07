@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\API\Referee;
+namespace App\Listeners\API\ReferralProgram\Referee;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\ReferralProgram\RefereeCouponService;

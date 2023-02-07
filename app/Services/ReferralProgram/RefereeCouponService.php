@@ -84,6 +84,7 @@ class RefereeCouponService
             'discount_value' => Coupon::getRefereeCouponDiscount(),
             'usage_allowed_per_user' => 1,
             'max_usage_allowed' => 1,
+            'description' => 'Coupon referred by a user',
             'available_from' => now(),
             'available_till' => now()->addHours(48),
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,

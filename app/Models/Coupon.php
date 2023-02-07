@@ -66,7 +66,7 @@ class Coupon extends Model
      * @param  Builder <Coupon> $query
      * @return Builder <Coupon>
      */
-    public function scopeAdminCoupons(Builder $query): Builder
+    public function scopeExcludeSystemGeneratedCoupons(Builder $query): Builder
     {
         return $query->where('is_referred', '=', 0);
     }

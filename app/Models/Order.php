@@ -417,7 +417,8 @@ class Order extends Model implements Exportable
     {
         return $query->whereHas(
             'user',
-            fn ($query) => $query->where('referred_by', '=', $status));
+            fn ($query) => $query->where('referred_by', '=', $status)
+        );
     }
 
     public function scopeCustomerName(Builder $query, string $customerName): Builder

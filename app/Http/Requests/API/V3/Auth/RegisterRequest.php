@@ -43,7 +43,9 @@ class RegisterRequest extends FormRequest
             ],
             'app_generated_id' => ['sometimes', 'string'],
             'is_marketing_notifications_enabled' => ['sometimes', 'boolean'],
-            'referral_code' => ['sometimes', 'string', 'exists:referrers'],
+            'referral_code' => ['sometimes', 'string', Rule::exists('referrers')->where(function ($query) {
+                return $query->where('is_referral_active', 1);
+            })],
         ];
     }
 

@@ -165,6 +165,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
+            AllowedFilter::scope('referred_by'),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
@@ -405,6 +406,13 @@ class Order extends Model implements Exportable
                     ->orWhere('code', $status);
             }
         );
+    }
+
+    public function scopeReferredBy(Builder $query, int $status): Builder
+    {
+        return $query->whereHas(
+            'user',
+            fn ($query) => $query->where('referred_by', '=', $status));
     }
 
     public function scopeCustomerName(Builder $query, string $customerName): Builder

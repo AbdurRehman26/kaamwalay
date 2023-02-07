@@ -112,11 +112,11 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                     </>,
                 ],
             }),
-            ...(owner?.fullName && {
+            ...(referrer && {
                 'Referrer:': [
                     <>
                         <MuiLink component={Link} to={''}>
-                            {referrer?.fullName}
+                            {referrer?.firstName} {referrer.lastName}
                         </MuiLink>
                     </>,
                 ],

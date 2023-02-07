@@ -66,7 +66,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-    const [referralStatus, setReferralStatus] = useState({ label: '', value: 0 });
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -263,13 +263,26 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
     );
 
-    const handleClearReferralStatus = useCallback(async () => {
-        setReferralStatus({ label: '', value: 0 });
-    }, []);
+    const handleClearReferrerStatus = useCallback(async () => {
+        setReferrerStatus({ label: '', value: 0 });
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+            }),
+            1,
+        );
+    }, [orders$, search, sortFilter]);
 
-    const handleReferralStatus = useCallback(async (values, isActive) => {
-        values = { ...values, isActive: isActive.value };
-
+    const handleReferrerStatus = useCallback(async (values) => {
+        setReferrerStatus({ value: values.value, label: values.label });
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                referredBy: values.value,
+            }),
+            1,
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -330,12 +343,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 {Object.entries(PaymentStatusMap).map(([key, status]) => {
                     return <FilterButton label={status} active={paymentStatus === key} value={key} />;
                 })}
-                <PageSelector label={'Referral'} value={referralStatus.label} onClear={handleClearReferralStatus}>
+                <PageSelector label={'Referrer'} value={referrerStatus.label} onClear={handleClearReferrerStatus}>
                     {ReferralStatus?.map((item: any) => {
                         return (
                             <Grid key={item.value}>
                                 <MenuItem
-                                    onClick={() => handleReferralStatus('values', item)}
+                                    onClick={() => handleReferrerStatus(item)}
                                     key={item.value}
                                     value={item.value}
                                 >

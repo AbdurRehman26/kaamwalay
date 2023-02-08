@@ -41,7 +41,7 @@ class Coupon extends Model
         'type',
         'discount_value',
         'is_capped',
-        'is_referred',
+        'is_system_generated',
         'capped_amount',
         'available_from',
         'available_till',
@@ -68,7 +68,7 @@ class Coupon extends Model
      */
     public function scopeExcludeSystemGeneratedCoupons(Builder $query): Builder
     {
-        return $query->where('is_referred', '=', 0);
+        return $query->where('is_system_generated', '=', 0);
     }
 
     public function couponStatusHistories(): HasMany

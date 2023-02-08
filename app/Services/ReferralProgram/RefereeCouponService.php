@@ -52,17 +52,20 @@ class RefereeCouponService
     protected function generateCoupon(User $user): Coupon
     {
         $code = $this->couponCodeService->newCoupon('', true, 5);
-        $coupon = new Coupon(
+
+        $coupon = new Coupon();
+        $coupon->setRawAttributes(
             array_merge(
-                [
-                    'code' => $code,
-                    'name' => $code,
-                    'created_by' => $user->id,
-                    'is_referred' => 1,
-                ],
-                $this->generateCouponData()
-            )
-        );
+            [
+                'available_from' => now(),
+                'available_till' => now()->addHours(48),
+                'code' => $code,
+                'name' => $code,
+                'created_by' => $user->id,
+                'is_system_generated' => 1,
+            ],
+            $this->generateCouponData()
+        ));
 
         $coupon->save();
 
@@ -80,13 +83,11 @@ class RefereeCouponService
     {
         return [
             'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
-            'type' => 'percentage',
+            'type' => Coupon::TYPE_PERCENTAGE,
             'discount_value' => Coupon::getRefereeCouponDiscount(),
             'usage_allowed_per_user' => 1,
             'max_usage_allowed' => 1,
-            'description' => 'Coupon referred by a user',
-            'available_from' => now(),
-            'available_till' => now()->addHours(48),
+            'description' => 'Submission discount referred by a user',
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ];
     }
@@ -111,7 +112,7 @@ class RefereeCouponService
         $coupon = Coupon::validOnCurrentDate()->whereExists(function ($query) {
             $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by')
                 ->where('coupons.created_by', auth()->user()->id);
-        })->where('is_referred', 1);
+        })->where('is_system_generated', 1);
 
         throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
 

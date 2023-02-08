@@ -30,7 +30,7 @@ beforeEach(function () {
             [
                 'coupon_applicable_id' => $couponApplicable->id,
                 'coupon_status_id' => 2,
-                'is_referred' => 1.,
+                'is_system_generated' => 1,
                 'created_by' => $user->id,
                 'available_from' => now()->subDay(),
                 'available_till' => now()->addDays(5),

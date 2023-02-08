@@ -13,14 +13,16 @@ import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
 import ShareLink from '@shared/assets/shareLink.png';
 import theme from '@shared/styles/theme';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
 import Copylink from './CopyLink';
 import SocialShare from './SocialShare';
-import WithDrawBox from './WithDrawBox';
+import WithdrawBox from './WithdrawBox';
 
 const ImageDiv = styled(Grid)({
     display: 'flex',
@@ -157,6 +159,14 @@ export function Main() {
     const [value, setValue] = useState('share-link');
     const classes = useStyle();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const dispatch = useAppDispatch();
+    const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
+
+    console.log(referrer);
+
+    useEffect(() => {
+        dispatch(getReferrerDetail());
+    }, [dispatch]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -172,7 +182,7 @@ export function Main() {
                     </Typography>
                 </Grid>
             ) : (
-                <WithDrawBox />
+                <WithdrawBox referrer={referrer} />
             )}
             <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Grid width={'100%'}>
@@ -205,7 +215,7 @@ export function Main() {
                                 <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" />
                             </TabList>
                             <TabPanel value="share-link">
-                                <Copylink />
+                                <Copylink referralUrl={referrer?.referralUrl} />
                             </TabPanel>
                             <TabPanel value="facebook">
                                 <SocialShare name="Facebook" />
@@ -223,7 +233,7 @@ export function Main() {
                         </TabContext>
                     </ShareBox>
                 </Grid>
-                {!isSm ? <WithDrawBox /> : null}
+                {!isSm ? <WithdrawBox referrer={referrer} /> : null}
             </Grid>
             <Grid>
                 <Typography sx={styles.ImagesDivHeading}>How it works</Typography>

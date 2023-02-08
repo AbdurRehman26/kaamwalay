@@ -1,5 +1,6 @@
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
+import { useListReferralQuery } from '@shared/redux/hooks/useReferralQuery';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
@@ -46,19 +47,8 @@ const headings: EnhancedTableHeadCell[] = [
     },
 ];
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Alban Toci', 159, 6.0, 24, 4.0),
-    createData('Alban Toci', 237, 9.0, 37, 4.3),
-    createData('Alban Toci', 262, 16.0, 24, 6.0),
-    createData('Alban Toci', 305, 3.7, 67, 4.3),
-    createData('Alban Toci', 356, 16.0, 49, 3.9),
-];
-
 export function CommissionEarnings() {
+    const customerSignup$ = useListReferralQuery({});
     return (
         <>
             <EmptyStates
@@ -66,7 +56,7 @@ export function CommissionEarnings() {
                 description={'You haven’t earned any commission, yet.'}
                 icon={<MonetizationOnTwoToneIcon />}
             />
-            <ReferralTable data={rows} heading={'Commission Earnings'} tableHeading={headings} />
+            <ReferralTable tableData={customerSignup$} heading={'Commission Earnings'} tableHeading={headings} />
         </>
     );
 }

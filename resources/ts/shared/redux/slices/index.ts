@@ -1,5 +1,6 @@
 export { notificationsSlice as notifications } from './notificationsSlice';
 export { ordersSlice as orders } from './ordersSlice';
+export { referralSlice as referral } from './referralSlice';
 export { userCardsSlice as userCards } from './userCardsSlice';
 export { adminOrdersSlice as adminOrders } from './adminOrdersSlice';
 export { adminPromoCodesSlice as adminPromoCodes } from './adminPromoCodesSlice';

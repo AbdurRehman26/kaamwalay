@@ -59,8 +59,13 @@ const styles = {
     },
 };
 
-export function Copylink() {
+interface props {
+    referralUrl: string;
+}
+
+export function Copylink({ referralUrl }: props) {
     const [open, setOpen] = useState(false);
+
     const handleClick = () => {
         setOpen(true);
     };
@@ -77,12 +82,12 @@ export function Copylink() {
             <Typography sx={styles.ShareLinkText}>Your unique link:</Typography>
             <Input
                 type="text"
-                value={'www.robograding.com/referral/C902039'}
+                value={referralUrl}
                 disableUnderline
                 sx={styles.InputBox}
                 endAdornment={
                     <InputAdornment position="end">
-                        <CopyToClipboard text={'www.robograding.com/referral/C902039'} onCopy={() => handleClick()}>
+                        <CopyToClipboard text={referralUrl} onCopy={() => handleClick()}>
                             <Typography sx={styles.CopyButton}>copy</Typography>
                         </CopyToClipboard>
                     </InputAdornment>

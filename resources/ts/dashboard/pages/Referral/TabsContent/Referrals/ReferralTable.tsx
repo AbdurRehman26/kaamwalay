@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
+import { ReferrerEntity } from '@shared/entities/ReferrerEntity';
 import { nameInitials } from '@shared/lib/strings/initials';
 
 const StyledTableCell = styled(TableCell)({
@@ -53,28 +54,17 @@ const StyledTableContainer = styled(TableContainer)({
 });
 
 interface props {
-    data: any;
+    tableData: any;
     heading: string;
     tableHeading: any;
     isCustomerSignup?: boolean;
 }
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Alban Toci', 159, 6.0, 24, 4.0),
-    createData('Alban Toci', 237, 9.0, 37, 4.3),
-    createData('Alban Toci', 262, 16.0, 24, 6.0),
-    createData('Alban Toci', 305, 3.7, 67, 4.3),
-    createData('Alban Toci', 356, 16.0, 49, 3.9),
-];
-
-export function ReferralTable({ data, heading, tableHeading, isCustomerSignup }: props) {
+export function ReferralTable({ tableData, heading, tableHeading, isCustomerSignup }: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
-
+    const { data } = tableData;
+    console.log(tableData, data);
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -93,13 +83,13 @@ export function ReferralTable({ data, heading, tableHeading, isCustomerSignup }:
                     isReferral
                 />
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={'Alban Toci'}>
+                    {data?.map((data: ReferrerEntity) => (
+                        <TableRow key={data?.id}>
                             <StyledTableCell>
                                 <Grid container alignItems={'center'}>
                                     <Avatar src={''}>{nameInitials('Alban Toci')}</Avatar>
                                     <Grid item xs container pl={2}>
-                                        <Typography sx={{ fontSize: '14px' }}>{'Alban Toci'}</Typography>
+                                        <Typography sx={{ fontSize: '14px' }}>{data?.fullName}</Typography>
                                     </Grid>
                                 </Grid>
                             </StyledTableCell>
@@ -119,7 +109,7 @@ export function ReferralTable({ data, heading, tableHeading, isCustomerSignup }:
                                 borderRadius: '0px 0px 3px 3px',
                             }}
                             rowsPerPageOptions={[5, 10, 25]}
-                            count={rows.length}
+                            count={tableData.length}
                             rowsPerPage={1}
                             page={1}
                             onPageChange={() => {}}

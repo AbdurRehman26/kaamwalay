@@ -56,16 +56,17 @@ class RefereeCouponService
         $coupon = new Coupon();
         $coupon->setRawAttributes(
             array_merge(
-            [
-                'available_from' => now(),
-                'available_till' => now()->addHours(48),
-                'code' => $code,
-                'name' => $code,
-                'created_by' => $user->id,
-                'is_system_generated' => 1,
-            ],
-            $this->generateCouponData()
-        ));
+                [
+                    'available_from' => now(),
+                    'available_till' => now()->addHours(48),
+                    'code' => $code,
+                    'name' => $code,
+                    'created_by' => $user->id,
+                    'is_system_generated' => 1,
+                ],
+                $this->generateCouponData()
+            )
+        );
 
         $coupon->save();
 

@@ -7,6 +7,7 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Http\Filters\AdminOrderReferByFilter;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
 use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
@@ -152,6 +153,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
+            AllowedInclude::relationship('referredBy', 'user')
         ];
     }
 
@@ -165,7 +167,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
-            AllowedFilter::scope('referred_by'),
+            AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
@@ -405,19 +407,6 @@ class Order extends Model implements Exportable
                     ->where('id', $status)
                     ->orWhere('code', $status);
             }
-        );
-    }
-
-    /**
-     * @param Builder<Order>  $query
-     * @param int  $status
-     * @return Builder<Order>
-     */
-    public function scopeReferredBy(Builder $query, int $status): Builder
-    {
-        return $query->whereHas(
-            'user',
-            fn ($query) => $query->where('referred_by', '=', $status)
         );
     }
 

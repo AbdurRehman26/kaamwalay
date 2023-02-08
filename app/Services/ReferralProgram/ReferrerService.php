@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -98,9 +97,11 @@ class ReferrerService
                     'is_referral_active' => $data['is_referral_active'],
                 ]
             );
+
             return $referrer;
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             throw $e;
         }
     }

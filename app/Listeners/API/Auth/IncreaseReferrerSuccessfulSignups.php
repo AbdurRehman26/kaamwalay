@@ -15,6 +15,8 @@ class IncreaseReferrerSuccessfulSignups implements ShouldBeEncrypted
 
     public function handle(CustomerRegistered $event): void
     {
-        $this->referrerService->increaseSuccessfulSignups(Referrer::where('referral_code', $event->request['referral_code'])->first());
+        if (array_key_exists('referral_code', $event->request) && $event->request['referral_code']) {
+            $this->referrerService->increaseSuccessfulSignups(Referrer::where('referral_code', $event->request['referral_code'])->first());
+        }
     }
 }

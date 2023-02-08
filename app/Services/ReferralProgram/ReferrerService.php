@@ -25,7 +25,7 @@ class ReferrerService
             $code = ReferralCodeGeneratorService::generate();
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
-        } catch(QueryException $e) {
+        } catch (QueryException $e) {
             report($e);
             $referrer = $this->create($user);
         }
@@ -87,27 +87,20 @@ class ReferrerService
         return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
 
-    public function setReferrersStatus(User $user, array $data): User
+    public function setReferrersStatus(int $referrerId, array $data): Referrer
     {
         try {
-            DB::beginTransaction();
-
-            Referrer::updateOrCreate(
+            $referrer = Referrer::updateOrCreate(
                 [
-                    'user_id' => $user->id,
+                    'user_id' => $referrerId,
                 ],
                 [
                     'is_referral_active' => $data['is_referral_active'],
                 ]
             );
-
-            DB::commit();
-
-            return $user->refresh();
+            return $referrer;
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error($e->getMessage());
-
             throw $e;
         }
     }
@@ -167,7 +160,7 @@ class ReferrerService
     {
         return Order::join('users', 'users.id', 'orders.user_id')
             ->where('users.referred_by', $userId)
-            ->where('orders.paid_at', '!=', null)
+            ->paid()
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }
@@ -176,7 +169,7 @@ class ReferrerService
     {
         return Order::join('users', 'users.id', 'orders.user_id')
             ->where('users.referred_by', $userId)
-            ->where('orders.paid_at', '!=', null)
+            ->paid()
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum('grand_total');
     }
@@ -185,8 +178,8 @@ class ReferrerService
     {
         return Order::join('users', 'users.id', 'orders.user_id')
             ->join('order_items', 'order_items.order_id', 'orders.id')
+            ->paid()
             ->where('users.referred_by', $userId)
-            ->where('orders.paid_at', '!=', null)
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->count();
     }
@@ -199,7 +192,7 @@ class ReferrerService
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum('commission');
     }
-    
+
     public function increaseSuccessfulSignups(Referrer $referrer): void
     {
         $referrer->increment('successful_signups', 1);

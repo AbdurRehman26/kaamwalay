@@ -40,4 +40,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/{user}/referral/get-referrer-stat', [ReferralProgramController::class, 'getReferrerStat'])->name('customer.referral.get-referrer-stat');
         Route::post('/{user}/referral/set-referrers-status', [ReferralProgramController::class, 'setReferrersStatus'])->name('customer.referral.set-referrers-status');
     });
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
 });

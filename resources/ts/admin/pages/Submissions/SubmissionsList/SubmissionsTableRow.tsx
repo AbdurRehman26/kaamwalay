@@ -193,14 +193,14 @@ export function SubmissionsTableRow({
                 ) : null}
                 {isCustomerDetailPage ? (
                     <TableCell>
-                        {order?.owner?.fullName ? (
+                        {order?.referrer ? (
                             <MuiLink
                                 component={Link}
                                 color={'primary'}
-                                to={`/salesreps/${order.owner?.id}/view/overview`}
+                                to={`/customers/${order.customer?.id}/view`}
                                 className={font.fontWeightMedium}
                             >
-                                {order?.referrer.firstName} {order.referrer.lastName}
+                                {order?.referrer?.firstName} {order?.referrer?.lastName}
                             </MuiLink>
                         ) : (
                             '-'

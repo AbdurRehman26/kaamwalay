@@ -43,7 +43,6 @@ class OrderListResource extends BaseResource
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
             'salesman_commission' => $this->salesman_commission,
-            'referrer' => $this->user->referredBy,
         ];
     }
 }

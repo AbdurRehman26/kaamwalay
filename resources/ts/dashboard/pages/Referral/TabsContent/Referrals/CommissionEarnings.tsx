@@ -1,6 +1,6 @@
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
-import { useListReferralQuery } from '@shared/redux/hooks/useReferralQuery';
+import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
@@ -48,15 +48,23 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CommissionEarnings() {
-    const customerSignup$ = useListReferralQuery({});
+    const commissionEarnings$ = useListReferralCommissionEarningsQuery({});
+
     return (
         <>
-            <EmptyStates
-                heading={'No Commission Earnings'}
-                description={'You haven’t earned any commission, yet.'}
-                icon={<MonetizationOnTwoToneIcon />}
-            />
-            <ReferralTable tableData={customerSignup$} heading={'Commission Earnings'} tableHeading={headings} />
+            {commissionEarnings$.data.length === 0 ? (
+                <EmptyStates
+                    heading={'No Commission Earnings'}
+                    description={'You haven’t earned any commission, yet.'}
+                    icon={<MonetizationOnTwoToneIcon />}
+                />
+            ) : (
+                <ReferralTable
+                    tableData={commissionEarnings$}
+                    heading={'Commission Earnings'}
+                    tableHeading={headings}
+                />
+            )}
         </>
     );
 }

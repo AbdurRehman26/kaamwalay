@@ -9,11 +9,13 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { round } from 'lodash';
+import moment from 'moment';
 import { useState } from 'react';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
-import { ReferrerEntity } from '@shared/entities/ReferrerEntity';
-import { nameInitials } from '@shared/lib/strings/initials';
+import { ReferralCommissionEarningsEntity } from '@shared/entities/ReferralCommissionEarningsEntity';
+import { ReferralCustomerSignUpsEntity } from '@shared/entities/ReferralCustomerSignUpsEntity';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -63,8 +65,8 @@ interface props {
 export function ReferralTable({ tableData, heading, tableHeading, isCustomerSignup }: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
-    const { data } = tableData;
-    console.log(tableData, data);
+    const { data, paginationProps } = tableData;
+
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -73,7 +75,9 @@ export function ReferralTable({ tableData, heading, tableHeading, isCustomerSign
 
     return (
         <StyledTableContainer>
-            <Typography className={'TableHeading'}>{heading} (9)</Typography>
+            <Typography className={'TableHeading'}>
+                {heading} ({data?.length})
+            </Typography>
             <Table sx={{ minWidth: 800 }}>
                 <EnhancedTableHead
                     onRequestSort={handleRequestSort}
@@ -83,23 +87,52 @@ export function ReferralTable({ tableData, heading, tableHeading, isCustomerSign
                     isReferral
                 />
                 <TableBody>
-                    {data?.map((data: ReferrerEntity) => (
-                        <TableRow key={data?.id}>
-                            <StyledTableCell>
-                                <Grid container alignItems={'center'}>
-                                    <Avatar src={''}>{nameInitials('Alban Toci')}</Avatar>
-                                    <Grid item xs container pl={2}>
-                                        <Typography sx={{ fontSize: '14px' }}>{data?.fullName}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </StyledTableCell>
-                            <StyledTableCell>Jan 1, 2023 at 10:54 AM</StyledTableCell>
-                            <StyledTableCell align={'right'}>5</StyledTableCell>
-                            {isCustomerSignup ? <StyledTableCell align={'right'}>5</StyledTableCell> : null}
-                            <StyledTableCell align={'right'}>$100.00</StyledTableCell>
-                            <StyledTableCell align={'right'}>$100.00</StyledTableCell>
-                        </TableRow>
-                    ))}
+                    {isCustomerSignup
+                        ? data?.map((data: ReferralCustomerSignUpsEntity) => (
+                              <TableRow key={data?.id}>
+                                  <StyledTableCell>
+                                      <Grid container alignItems={'center'}>
+                                          <Avatar src={data?.profileImage ?? ''}>{data?.getInitials()}</Avatar>
+                                          <Grid item xs container pl={2}>
+                                              <Typography sx={{ fontSize: '14px' }}>{data?.fullName}</Typography>
+                                          </Grid>
+                                      </Grid>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                      {data?.signedUpAt ? moment(data?.signedUpAt).format('lll') : '-'}
+                                  </StyledTableCell>
+                                  <StyledTableCell align={'right'}>{data?.cardsCount}</StyledTableCell>
+                                  <StyledTableCell align={'right'}>{data?.submissions}</StyledTableCell>
+                                  <StyledTableCell align={'right'}>
+                                      ${round(data?.totalSpent, 2).toFixed(2)}
+                                  </StyledTableCell>
+                                  <StyledTableCell align={'right'}>
+                                      ${round(data?.totalCommissions, 2).toFixed(2)}
+                                  </StyledTableCell>
+                              </TableRow>
+                          ))
+                        : data?.map((data: ReferralCommissionEarningsEntity) => (
+                              <TableRow key={data?.id}>
+                                  <StyledTableCell>
+                                      <Grid container alignItems={'center'}>
+                                          <Avatar src={data?.profileImage ?? ''}>{data?.getInitials()}</Avatar>
+                                          <Grid item xs container pl={2}>
+                                              <Typography sx={{ fontSize: '14px' }}>{data?.fullName}</Typography>
+                                          </Grid>
+                                      </Grid>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                      {data?.paidAt ? moment(data?.paidAt).format('lll') : '-'}
+                                  </StyledTableCell>
+                                  <StyledTableCell align={'right'}>{data?.cards}</StyledTableCell>
+                                  <StyledTableCell align={'right'}>
+                                      ${round(data?.submissionTotal, 2).toFixed(2)}
+                                  </StyledTableCell>
+                                  <StyledTableCell align={'right'}>
+                                      ${round(data?.commission, 2).toFixed(2)}
+                                  </StyledTableCell>
+                              </TableRow>
+                          ))}
                 </TableBody>
                 <TableFooter>
                     <TableRow>
@@ -108,12 +141,7 @@ export function ReferralTable({ tableData, heading, tableHeading, isCustomerSign
                                 background: '#F9F9F9',
                                 borderRadius: '0px 0px 3px 3px',
                             }}
-                            rowsPerPageOptions={[5, 10, 25]}
-                            count={tableData.length}
-                            rowsPerPage={1}
-                            page={1}
-                            onPageChange={() => {}}
-                            onRowsPerPageChange={() => {}}
+                            {...paginationProps}
                         />
                     </TableRow>
                 </TableFooter>

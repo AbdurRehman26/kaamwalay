@@ -1,6 +1,7 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -26,7 +27,7 @@ const styles = {
     InputBox: {
         background: '#FFFFFF',
         border: '1px solid #DEDEDE',
-        borderRadius: '4px',
+        borderRadius: '4px 0px 0px 4px',
         padding: '10px 15px',
         width: '100%',
     },
@@ -40,7 +41,6 @@ const styles = {
     },
     CopyButton: {
         background: '#F5F5F5',
-        borderLeft: '1px solid #E0E0E0',
         borderRadius: '0px 3px 3px 0px',
         fontWeight: 500,
         fontSize: '14px',
@@ -48,6 +48,11 @@ const styles = {
         textAlign: 'center',
         letterSpacing: '0.35px',
         color: '#20BFB8',
+        padding: '17px',
+        '&:hover': {
+            background: '#F5F5F5',
+            color: '#20BFB8',
+        },
     },
     ImagesDivHeading: {
         fontWeight: 500,
@@ -56,6 +61,31 @@ const styles = {
         letterSpacing: '0.15px',
         color: 'rgba(0, 0, 0, 0.87)',
         margin: '50px 0px',
+    },
+    InputDiv: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    SnackBarDiv: {
+        background: '#20BFB8',
+        borderRadius: '28px',
+        padding: '15px 25px',
+        left: 'auto!important',
+    },
+    SnackBarTitle: {
+        fontWeight: '500px',
+        fontSize: '20px',
+        lineHeight: '24px',
+        letterSpacing: '0.15px',
+        color: '#FFFFFF',
+        marginLeft: '5px',
+    },
+    SnackBarIcon: {
+        color: '#fff',
+        fontSize: '25px',
+    },
+    SnackBarContentDiv: {
+        display: 'flex',
     },
 };
 
@@ -80,44 +110,25 @@ export function Copylink({ referralUrl }: props) {
     return (
         <div>
             <Typography sx={styles.ShareLinkText}>Your unique link:</Typography>
-            <Input
-                type="text"
-                value={referralUrl}
-                disableUnderline
-                sx={styles.InputBox}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <CopyToClipboard text={referralUrl} onCopy={() => handleClick()}>
-                            <Typography sx={styles.CopyButton}>copy</Typography>
-                        </CopyToClipboard>
-                    </InputAdornment>
-                }
-            />
+            <Grid sx={styles.InputDiv}>
+                <Grid width={'100%'}>
+                    <Input type="text" value={referralUrl} disableUnderline sx={styles.InputBox} />
+                </Grid>
+                <Grid>
+                    <CopyToClipboard text={referralUrl} onCopy={() => handleClick()}>
+                        <Button sx={styles.CopyButton}>copy</Button>
+                    </CopyToClipboard>
+                    <Snackbar open={open} onClose={handleClose} autoHideDuration={1000} sx={styles.SnackBarDiv}>
+                        <Grid sx={styles.SnackBarContentDiv}>
+                            <CheckCircleRoundedIcon sx={styles.SnackBarIcon} />
+                            <Typography sx={styles.SnackBarTitle}>Link Copied!</Typography>
+                        </Grid>
+                    </Snackbar>
+                </Grid>
+            </Grid>
             <Typography sx={styles.SmallText}>
                 Copy and paste this link to send it through any channel you prefer.
             </Typography>
-            <Snackbar
-                open={open}
-                onClose={handleClose}
-                autoHideDuration={1000}
-                sx={{
-                    background: '#20BFB8',
-                    borderRadius: '28px',
-                    padding: '15px 25px',
-                }}
-            >
-                <Typography
-                    sx={{
-                        fontWeight: '500px',
-                        fontSize: '20px',
-                        lineHeight: '24px',
-                        letterSpacing: '0.15px',
-                        color: '#FFFFFF',
-                    }}
-                >
-                    <CheckCircleRoundedIcon sx={{ color: '#fff', fontSize: '25px' }} /> Link Copied!
-                </Typography>
-            </Snackbar>
         </div>
     );
 }

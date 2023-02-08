@@ -1,4 +1,3 @@
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -17,6 +16,7 @@ import { useEffect, useState } from 'react';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
 import ShareLink from '@shared/assets/shareLink.png';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import theme from '@shared/styles/theme';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
@@ -161,8 +161,7 @@ export function Main() {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const dispatch = useAppDispatch();
     const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
-
-    console.log(referrer);
+    const { featureReferralDiscountPercentage } = useConfiguration();
 
     useEffect(() => {
         dispatch(getReferrerDetail());
@@ -177,8 +176,9 @@ export function Main() {
             {!isSm ? (
                 <Grid maxWidth={661}>
                     <Typography sx={styles.MainText}>
-                        Share your unique link to refer people to RoboGrading. They will get 50% off their first
-                        submission and you will earn commission every time they pay & anytime someone they refer pays.{' '}
+                        Share your unique link to refer people to RoboGrading. They will get{' '}
+                        {featureReferralDiscountPercentage}% off their first submission and you will earn commission
+                        every time they pay & anytime someone they refer pays.{' '}
                     </Typography>
                 </Grid>
             ) : (
@@ -212,24 +212,24 @@ export function Main() {
                                 <Tab className={'Tab'} icon={<TwitterIcon />} value="twitter" aria-label="twitter" />
                                 <Tab className={'Tab'} icon={<LinkedInIcon />} value="linkedin" aria-label="linkedin" />
                                 <Tab className={'Tab'} icon={<WhatsAppIcon />} value="whatsapp" aria-label="whatsapp" />
-                                <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" />
+                                {/* <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" /> */}
                             </TabList>
                             <TabPanel value="share-link">
                                 <Copylink referralUrl={referrer?.referralUrl} />
                             </TabPanel>
                             <TabPanel value="facebook">
-                                <SocialShare name="Facebook" />
+                                <SocialShare name="Facebook" referralUrl={referrer?.referralUrl} />
                             </TabPanel>
                             <TabPanel value="twitter">
-                                <SocialShare name="Twitter" />
+                                <SocialShare name="Twitter" referralUrl={referrer?.referralUrl} />
                             </TabPanel>
                             <TabPanel value="linkedin">
-                                <SocialShare name="Linkedin" />
+                                <SocialShare name="Linkedin" referralUrl={referrer?.referralUrl} />
                             </TabPanel>
                             <TabPanel value="whatsapp">
-                                <SocialShare name="Whatsapp" />
+                                <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
                             </TabPanel>
-                            <TabPanel value="email"></TabPanel>
+                            {/* <TabPanel value="email"></TabPanel> */}
                         </TabContext>
                     </ShareBox>
                 </Grid>

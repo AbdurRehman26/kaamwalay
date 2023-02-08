@@ -4,10 +4,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
-
-interface props {
-    name: string;
-}
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const SocialShareDiv = styled(Grid)({
     '.SocialButton': {
@@ -33,13 +30,20 @@ const SocialShareDiv = styled(Grid)({
     },
 });
 
-export function SocialShare({ name }: props) {
+interface props {
+    name: string;
+    referralUrl: string;
+}
+
+export function SocialShare({ name, referralUrl }: props) {
     const [socialMessage, setSocialMessage] = useState('');
+    const { featureReferralDiscountPercentage } = useConfiguration();
 
     useEffect(() => {
         setSocialMessage(
-            'I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link www.robograding.com/referral/T902039 to get $15 OFF your first submission. ',
+            `I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link ${referralUrl} to get ${featureReferralDiscountPercentage}% OFF your first submission.`,
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -53,35 +57,19 @@ export function SocialShare({ name }: props) {
                 onChange={(e: any) => setSocialMessage(e.target.value)}
             />
             {name === 'Facebook' ? (
-                <FacebookShareButton
-                    url={'https://www.robograding.com'}
-                    title={socialMessage}
-                    className={'SocialButton'}
-                >
+                <FacebookShareButton url={referralUrl} title={socialMessage} className={'SocialButton'}>
                     <Typography sx={{ fontWeight: 500 }}>SHARE ON {name}</Typography>
                 </FacebookShareButton>
             ) : name === 'Twitter' ? (
-                <TwitterShareButton
-                    url={'https://www.robograding.com'}
-                    title={socialMessage}
-                    className={'SocialButton'}
-                >
+                <TwitterShareButton url={referralUrl} title={socialMessage} className={'SocialButton'}>
                     <Typography sx={{ fontWeight: 500 }}>SHARE ON {name}</Typography>
                 </TwitterShareButton>
             ) : name === 'Linkedin' ? (
-                <LinkedinShareButton
-                    url={'https://www.robograding.com'}
-                    title={socialMessage}
-                    className={'SocialButton'}
-                >
+                <LinkedinShareButton url={referralUrl} title={socialMessage} className={'SocialButton'}>
                     <Typography sx={{ fontWeight: 500 }}>SHARE ON {name}</Typography>
                 </LinkedinShareButton>
             ) : name === 'Whatsapp' ? (
-                <WhatsappShareButton
-                    url={'https://www.robograding.com'}
-                    title={socialMessage}
-                    className={'SocialButton'}
-                >
+                <WhatsappShareButton url={referralUrl} title={socialMessage} className={'SocialButton'}>
                     <Typography sx={{ fontWeight: 500 }}>SHARE ON {name}</Typography>
                 </WhatsappShareButton>
             ) : null}

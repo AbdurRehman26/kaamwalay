@@ -1,6 +1,6 @@
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
-import { useListReferralQuery } from '@shared/redux/hooks/useReferralQuery';
+import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useReferralCustomerSignUpsQuery';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
@@ -56,21 +56,24 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CustomerSignups() {
-    const customerSignup$ = useListReferralQuery({});
+    const customerSignup$ = useListReferralCustomerSignUpsQuery({});
 
     return (
         <>
-            <EmptyStates
-                heading={'No Customer Sign Ups'}
-                description={'You haven’t gotten any customers to sign up, yet.'}
-                icon={<AccountCircleTwoToneIcon />}
-            />
-            <ReferralTable
-                tableData={customerSignup$}
-                heading={'Customer Sign Ups'}
-                tableHeading={headings}
-                isCustomerSignup
-            />
+            {customerSignup$.data.length === 0 ? (
+                <EmptyStates
+                    heading={'No Customer Sign Ups'}
+                    description={'You haven’t gotten any customers to sign up, yet.'}
+                    icon={<AccountCircleTwoToneIcon />}
+                />
+            ) : (
+                <ReferralTable
+                    tableData={customerSignup$}
+                    heading={'Customer Sign Ups'}
+                    tableHeading={headings}
+                    isCustomerSignup
+                />
+            )}
         </>
     );
 }

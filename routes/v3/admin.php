@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
+use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
 
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+    });
+
+    Route::prefix('referral-program')->group(function () {
+        Route::post('get-stat', [ReferralProgramController::class, 'getStat'])
+            ->name('referral-program.get-stat');
     });
 });

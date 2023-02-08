@@ -9,12 +9,13 @@ class ReferralController extends Controller
 {
     public function getReferralPage(string $referralCode)
     {
-        $referral = Referrer::where('referral_code', $referralCode)->first();  
-        if($referral) {
+        $referral = Referrer::where('referral_code', $referralCode)->first();
+        if ($referral) {
             $referBy = $referral->user->name;
 
             return view('landings.referralhome.view', ['referBy' => $referBy, 'referralCode' => $referralCode]);
         }
+
         return redirect('/');
     }
 }

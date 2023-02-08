@@ -7,13 +7,13 @@ use App\Models\Referrer;
 
 class ReferralController extends Controller
 {
-    public function getReferralPage(string $code): string
+    public function getReferralPage(string $referralCode)
     {
-        $referral = Referrer::where('referral_code', $code)->first();  
+        $referral = Referrer::where('referral_code', $referralCode)->first();  
         if($referral) {
             $referBy = $referral->user->name;
 
-            return view('landings.referralhome.view', ['referBy' => $referBy]);
+            return view('landings.referralhome.view', ['referBy' => $referBy, 'referralCode' => $referralCode]);
         }
         return redirect('/');
     }

@@ -19,6 +19,7 @@ interface AuthViewProps {
     subtitle?: string;
     redirectPath?: string;
     onAuthSuccess?: (authenticatedUser: AuthenticatedUserEntity) => void;
+    content?: string;
 }
 
 const Root = styled('div')({
@@ -47,7 +48,12 @@ const Header = styled('div')(({ theme }) => ({
     },
 }));
 
-export function AuthView({ subtitle = 'to claim your 30% discount.', redirectPath, onAuthSuccess }: AuthViewProps) {
+export function AuthView({
+    subtitle = 'to claim your 30% discount.',
+    redirectPath = '/dashboard/referee-coupon-code',
+    onAuthSuccess,
+    content,
+}: AuthViewProps) {
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
     const dispatch = useSharedDispatch();
@@ -93,7 +99,12 @@ export function AuthView({ subtitle = 'to claim your 30% discount.', redirectPat
                     <img src={AuthHeaderLogo} alt="Robograding" />
                 </div>
             </Header>
-            <SignUpContent onAuthSuccess={handleAuthSuccess} onViewChange={() => {}} fromReferralHome={true} />
+            <SignUpContent
+                referralCode={content}
+                onAuthSuccess={handleAuthSuccess}
+                onViewChange={() => {}}
+                fromReferralHome={true}
+            />
         </Root>
     );
 }

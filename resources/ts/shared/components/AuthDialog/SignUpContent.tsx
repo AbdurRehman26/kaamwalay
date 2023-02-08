@@ -36,7 +36,7 @@ const useStyles = makeStyles(
     { name: 'SignUpContent' },
 );
 
-export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome }: AuthDialogContentProps) {
+export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome, referralCode }: AuthDialogContentProps) {
     const classes = useStyles();
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
@@ -48,15 +48,15 @@ export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome }:
             password: '',
             passwordConfirmation: '',
             isMarketingNotificationsEnabled: true,
+            referralCode: '',
         }),
         [],
     );
 
     const handleSignInClick = useCallback(() => onViewChange(AuthDialogView.SignIn), [onViewChange]);
-
     const handleSubmit = useCallback(
         async (values: SignUpRequestDto) => {
-            values = { ...values, passwordConfirmation: values.password };
+            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode };
             try {
                 const authenticatedUser = await authenticationRepository.postRegister(values);
                 ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
@@ -67,7 +67,7 @@ export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome }:
                 NotificationsService.exception(e);
             }
         },
-        [authenticationRepository, onAuthSuccess],
+        [authenticationRepository, onAuthSuccess, referralCode],
     );
 
     return (

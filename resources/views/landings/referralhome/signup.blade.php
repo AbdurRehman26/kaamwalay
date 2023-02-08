@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="ReferralHome-mainRight">
-            <div data-atom="auth-views" data-aos="fade-left"data-aos-delay="200">
+            <div data-atom="auth-views" data-aos="fade-left"data-aos-delay="200" data-content="{{$referralCode}}">
                 {{-- JS runtime actions --}}
             </div>
         </div>

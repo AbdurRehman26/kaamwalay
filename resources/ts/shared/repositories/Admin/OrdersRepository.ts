@@ -20,6 +20,7 @@ import { Repository } from '../Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'admin/orders/:orderId';
     readonly model = OrderEntity;
+    readonly endpointConfig = { version: 'v3' };
 
     async addOrderStatusHistory(input: AddOrderStatusHistoryDto): Promise<OrderStatusHistoryEntity> {
         const { orderId, orderStatusId } = input;

@@ -35,7 +35,6 @@ export function SubmissionsView() {
                     'orderCertificate',
                     'orderStatusHistory.orderStatus',
                     'coupon',
-                    'referredBy',
                 ],
             },
         },

@@ -30,5 +30,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix('referral-program')->group(function () {
         Route::post('get-stat', [ReferralProgramController::class, 'getStat'])
             ->name('referral-program.get-stat');
+        Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
     });
 });

@@ -6,9 +6,13 @@ use App\Models\Order;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
 use App\Services\StatsService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferralProgramService
 {
+    protected const PER_PAGE = 20;
+
     protected function getTotalOrders(string $startDate, string $endDate): int
     {
         return Order::paid()
@@ -63,5 +67,18 @@ class ReferralProgramService
            default:
                 return 0;
         }
+    }
+
+    // @phpstan-ignore-next-line
+    public function getReferees(): LengthAwarePaginator
+    {
+        return QueryBuilder::for(User::customer())
+            ->whereNotNull('referred_by')
+            ->allowedFilters(User::getAllowedAdminFilters())
+            ->allowedSorts(User::getAllowedAdminSorts())
+            ->defaultSort('-created_at')
+            ->with('salesman')
+            ->with('referredBy')
+            ->paginate(request('per_page', self::PER_PAGE));
     }
 }

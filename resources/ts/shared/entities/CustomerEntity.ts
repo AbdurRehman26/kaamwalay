@@ -10,4 +10,5 @@ export class CustomerEntity extends UserEntity {
 
     @Type(() => SalesRepEntity)
     public salesman!: SalesRepEntity;
+    public referredBy!: UserEntity;
 }

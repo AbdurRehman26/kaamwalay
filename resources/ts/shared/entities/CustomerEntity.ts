@@ -13,6 +13,9 @@ export class CustomerEntity extends UserEntity {
     public unpaidCommission?: number;
     public unpaidCommissionTillLastMonth?: number;
     public paidCommission?: number;
+    public submissionTotal?: number;
+    public commission?: number;
+    public totalSpent?: number;
 
     @Type(() => SalesRepEntity)
     public salesman!: SalesRepEntity;

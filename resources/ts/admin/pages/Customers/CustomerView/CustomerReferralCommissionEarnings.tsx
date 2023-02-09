@@ -5,14 +5,12 @@ import Grid from '@mui/material/Grid';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminCustomerReferralCommissionQuery } from '@shared/redux/hooks/useAdminCustomerReferralCommissionQuery';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { CustomerReferralListing } from './CustomerReferralListing';
 
 const Root = styled(Grid)({
@@ -68,45 +66,18 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CustomerReferralCommissionEarnings() {
-    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-    const [ordersCount, setOrdersCount] = useState(0);
     const { id } = useParams<'id'>();
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
-    const [sortFilter, setSortFilter] = useState('-created_at');
 
-    const commissionEarnings = useAdminCustomerReferralCommissionQuery({
-        resourceId: Number(id),
-    });
-    console.log('commissionEarnings ', commissionEarnings);
-
-    const orders$ = useListAdminOrdersQuery({
+    const referralcommissionEarnings = useAdminCustomerReferralCommissionQuery({
         params: {
-            include: [
-                'orderStatus',
-                'customer',
-                'customer.wallet',
-                'invoice',
-                'orderShipment',
-                'orderLabel',
-                'shippingMethod',
-            ],
-            sort: sortFilter,
-            filter: {
-                customerId: id,
-            },
+            customerId: id,
+            perPage: 24,
         },
         ...bracketParams(),
     });
-
-    useEffect(() => {
-        if (!orders$.isLoading && isSearchEnabled) {
-            // noinspection JSIgnoredPromiseFromCall
-            orders$.searchSortedWithPagination({ sort: sortFilter }, toApiPropertiesObject({}), 1);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSearchEnabled, sortFilter]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
@@ -114,42 +85,28 @@ export function CustomerReferralCommissionEarnings() {
         setOrderBy(property);
     };
 
-    useEffect(() => {
-        setSortFilter((orderDirection === 'desc' ? '-' : '') + orderBy);
-    }, [orderDirection, orderBy]);
-
-    useEffect(() => {
-        setIsSearchEnabled(true);
-    }, []);
-
-    useEffect(() => {
-        if (orders$.data.length !== 0) {
-            setOrdersCount(orders$.data.length);
-        }
-    }, [orders$.isLoading, orders$.data.length]);
-
     return (
         <Root container>
             <Grid container item xs className={'CustomerSubmissionListingBox'}>
-                {orders$.isLoading ? (
+                {referralcommissionEarnings.isLoading ? (
                     <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                         <CircularProgress />
                     </Box>
                 ) : (
                     <>
-                        {orders$.data.length !== 0 || ordersCount !== 0 ? (
+                        {referralcommissionEarnings?.data.length !== 0 ? (
                             <>
                                 <TableContainer>
                                     <Box p={2}>
                                         <Typography fontSize={'16px'} fontWeight={'400'}>
                                             {' '}
-                                            Cummissions Earnings <span> ({orders$.data.length}) </span>{' '}
+                                            Cummissions Earnings{' '}
+                                            <span> ({referralcommissionEarnings?.data.length}) </span>{' '}
                                         </Typography>
                                     </Box>
                                     <CustomerReferralListing
-                                        orders={orders$.data}
-                                        paginationProp={orders$.paginationProps}
-                                        isCustomerDetailPage={true}
+                                        customers={referralcommissionEarnings?.data}
+                                        paginationProp={referralcommissionEarnings?.paginationProps}
                                         headings={headings}
                                         handleRequestSort={handleRequestSort}
                                         orderBy={orderBy}

@@ -25,8 +25,8 @@ export { adminSalesRepCommissionPaymentsSlice as adminSalesRepCommissionPayments
 export { adminSurfacesSlice as adminSurfaces } from './adminSurfacesSlice';
 export { pageSlice as page } from './pageSlice';
 export { submissionGradesSlice } from './submissionGradeSlice';
-export { adminCustomerReferralSignUpSlice as adminCustomersReferralSignUp } from './adminCustomerReferralSignUpSlice';
-export { adminCustomerReferralSlice as adminCustomersReferral } from './adminCustomerReferralSlice';
+export { adminCustomerReferralSignUpSlice as adminCustomerReferralSignUp } from './adminCustomerReferralSignUpSlice';
+export { adminCustomerReferralCommissionSlice as adminCustomerReferralCommission } from './adminCustomerReferralCommissionSlice';
 
 /*
  *

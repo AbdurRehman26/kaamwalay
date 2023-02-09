@@ -93,6 +93,8 @@ export function CustomerView() {
     //     resourceId: Number(id),
     // });
 
+    // http://robograding.test/api/v3/admin/customers/{user_id}/referral/get-stat
+
     const handleReloadCustomerData = useCallback(() => {
         customer$.request();
     }, [customer$]);

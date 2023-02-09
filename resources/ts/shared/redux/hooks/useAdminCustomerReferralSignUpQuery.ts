@@ -1,13 +1,13 @@
+import { AxiosRequestConfig } from 'axios';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { ThunkShowActionArg } from '@shared/types/ThunkShowActionArg';
-import { useShowQuery } from '../../hooks/useShowQuery';
-import { showAdminCustomersReferralAction } from '../slices/adminCustomerReferralSlice';
+import { useListQuery } from '../../hooks/useListQuery';
+import { listAdminCustomersReferralSignUpAction } from '../slices/adminCustomerReferralSignUpSlice';
 
-export function useAdminCustomerReferralSignUpQuery(options: ThunkShowActionArg) {
-    return useShowQuery(
-        showAdminCustomersReferralAction,
+export function useAdminCustomerReferralSignUpQuery(config?: AxiosRequestConfig) {
+    return useListQuery(
+        listAdminCustomersReferralSignUpAction,
         CustomerEntity,
-        (state) => state.adminCustomersReferralSignUp,
-        options,
+        (state) => state.adminCustomerReferralSignUp,
+        config,
     );
 }

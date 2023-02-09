@@ -10,17 +10,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
-import { OrderEntity } from '@shared/entities/OrderEntity';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { font } from '@shared/styles/utils';
 
 interface CustomerReferralListingProps {
-    tabFilter?: OrderStatusEnum;
-    orders: OrderEntity[];
+    customers: CustomerEntity[];
     paginationProp?: any;
-    isCustomerDetailPage?: boolean;
     headings: Array<any>;
     orderDirection?: TableSortType;
     orderBy?: string;
@@ -29,10 +26,8 @@ interface CustomerReferralListingProps {
 }
 
 export function CustomerReferralListing({
-    tabFilter,
-    orders,
+    customers,
     paginationProp,
-    isCustomerDetailPage,
     headings,
     orderBy = '',
     orderDirection = 'desc',
@@ -48,24 +43,26 @@ export function CustomerReferralListing({
                 headCells={headings}
             />
             <TableBody>
-                {orders?.length > 0 ? (
-                    orders.map((order) => (
+                {customers?.length > 0 ? (
+                    customers.map((customer) => (
                         <TableRow>
                             <TableCell>
                                 <MuiLink
                                     component={Link}
                                     color={'primary'}
-                                    to={`/submissions/${order.id}/view`}
+                                    to={`/submissions/${customer.id}/view`}
                                     className={font.fontWeightMedium}
                                 >
-                                    {order.orderNumber}
+                                    {customer.fullName}
                                 </MuiLink>
                             </TableCell>
-                            <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                            <TableCell>{order.numberOfCards}</TableCell>
-                            <TableCell>{order.grandTotal}</TableCell>
-                            <TableCell>{order.grandTotal}</TableCell>
-                            {isSignUp ? <TableCell>APAP</TableCell> : null}
+                            <TableCell>
+                                {customer.createdAt ? formatDate(customer.createdAt, 'MM/DD/YYYY') : 'N/A'}
+                            </TableCell>
+                            <TableCell>{customer.cards}</TableCell>
+                            <TableCell>{customer.submissionTotal}</TableCell>
+                            {isSignUp ? <TableCell>{customer.totalSpent}</TableCell> : null}
+                            <TableCell>{customer.commission}</TableCell>
                         </TableRow>
                     ))
                 ) : (

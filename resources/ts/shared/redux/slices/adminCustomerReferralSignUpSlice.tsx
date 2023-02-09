@@ -1,25 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { AdminCustomerReferralRepository } from '@shared/repositories/Admin/AdminCustomerReferralRepository';
+import { AdminCustomerReferralSignUpRepository } from '@shared/repositories/Admin/AdminCustomerReferralSignUpRepository';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<CustomerEntity> {}
 const adminCustomersReferralSignUpThunk = createRepositoryThunk(
-    'adminCustomersReferralSignUp',
-    AdminCustomerReferralRepository,
+    'adminCustomerReferralSignUp',
+    AdminCustomerReferralSignUpRepository,
 );
 
 export const adminCustomerReferralSignUpSlice = createSlice({
-    name: 'adminCustomersReferralSignUp',
+    name: 'adminCustomerReferralSignUp',
     initialState: {
         ...adminCustomersReferralSignUpThunk.initialState,
     } as StateType,
-    reducers: {
-        invalidateAdminCustomerReferralSignUp: adminCustomersReferralSignUpThunk.invalidateEntities,
+    reducers: {},
+    extraReducers(builder) {
+        adminCustomersReferralSignUpThunk.buildReducers(builder);
     },
 });
 
-export const { invalidateAdminCustomerReferralSignUp } = adminCustomerReferralSignUpSlice.actions;
-export const { listAction: listAdminCustomersReferralAction, showAction: showAdminCustomersReferralAction } =
-    adminCustomersReferralSignUpThunk;
+export const { listAction: listAdminCustomersReferralSignUpAction } = adminCustomersReferralSignUpThunk;

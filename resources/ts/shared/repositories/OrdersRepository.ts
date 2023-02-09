@@ -10,6 +10,7 @@ import { Repository } from './Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'customer/orders';
     readonly model = OrderEntity;
+    readonly endpointConfig = { version: 'v3' };
 
     public async setCustomerShipment(input: ChangeOrderShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;

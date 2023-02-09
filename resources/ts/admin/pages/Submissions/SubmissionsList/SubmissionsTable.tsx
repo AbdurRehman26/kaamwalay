@@ -206,7 +206,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'orderShipment',
                 'orderLabel',
                 'shippingMethod',
-                'referredBy',
             ],
             sort: sortFilter,
             filter: {

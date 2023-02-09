@@ -152,8 +152,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
-            AllowedInclude::relationship('orderCertificate'),
-            AllowedInclude::relationship('referredBy', 'user')
+            AllowedInclude::relationship('orderCertificate')
         ];
     }
 

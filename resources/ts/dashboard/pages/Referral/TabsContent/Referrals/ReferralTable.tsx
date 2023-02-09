@@ -54,7 +54,7 @@ const StyledTableContainer = styled(TableContainer)({
         lineHeight: '24px',
         letterSpacing: '0.15px',
         color: 'rgba(0, 0, 0, 0.87)',
-        padding: '15px 15px',
+        padding: '20px 15px',
     },
 });
 
@@ -90,9 +90,11 @@ export function ReferralTable({ tableData, heading, tableHeadings, isCustomerSig
 
     return (
         <StyledTableContainer>
-            <Typography className={'TableHeading'}>
-                {heading} ({data?.length})
-            </Typography>
+            <Grid sx={{ minWidth: 800 }}>
+                <Typography className={'TableHeading'}>
+                    {heading} ({data?.length})
+                </Typography>
+            </Grid>
             <Table sx={{ minWidth: 800 }}>
                 <EnhancedTableHead
                     onRequestSort={handleRequestSort}

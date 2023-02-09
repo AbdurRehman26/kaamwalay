@@ -75,7 +75,7 @@ export function CustomerSignups() {
                 <ReferralTable
                     tableData={customerSignup$}
                     heading={'Customer Sign Ups'}
-                    tableHeading={headings}
+                    tableHeadings={headings}
                     isCustomerSignup
                 />
             )}

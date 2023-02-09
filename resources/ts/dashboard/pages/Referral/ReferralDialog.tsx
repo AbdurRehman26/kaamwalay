@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Banner from '@shared/assets/banner.png';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const ReferralDialogBox = styled(Dialog)({
     '& .MuiPaper-root': {
@@ -77,6 +78,7 @@ const ReferralDialogBox = styled(Dialog)({
 
 export function ReferralDialog() {
     const [open, setOpen] = useState(true);
+    const { featureReferralDiscountPercentage } = useConfiguration();
 
     const handleClose = () => {
         setOpen(false);
@@ -108,9 +110,9 @@ export function ReferralDialog() {
                 </div>
                 <div>
                     <Typography className={'DialogDescription'}>
-                        Refer your friends/followers and give them 35% OFF their first RoboGrading submission. You will
-                        get commission as soon as they pay as well as when someone they refer pays. Not store credit,
-                        you’ll earn cold hard cash!
+                        Refer your friends/followers and give them {featureReferralDiscountPercentage}% OFF their first
+                        RoboGrading submission. You will get commission as soon as they pay as well as when someone they
+                        refer pays. Not store credit, you’ll earn cold hard cash!
                     </Typography>
                 </div>
                 <div className={'DialogActions'}>

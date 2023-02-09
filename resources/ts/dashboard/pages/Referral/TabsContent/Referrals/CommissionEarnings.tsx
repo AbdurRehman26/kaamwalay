@@ -15,7 +15,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
-        id: 'created_at',
+        id: 'paid_at',
         numeric: false,
         disablePadding: false,
         label: 'Date Paid',
@@ -67,7 +67,7 @@ export function CommissionEarnings() {
                 <ReferralTable
                     tableData={commissionEarnings$}
                     heading={'Commission Earnings'}
-                    tableHeading={headings}
+                    tableHeadings={headings}
                 />
             )}
         </>

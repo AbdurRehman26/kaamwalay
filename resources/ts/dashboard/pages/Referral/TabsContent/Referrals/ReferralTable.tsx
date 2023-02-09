@@ -58,11 +58,11 @@ const StyledTableContainer = styled(TableContainer)({
 interface props {
     tableData: any;
     heading: string;
-    tableHeading: any;
+    tableHeadings: any;
     isCustomerSignup?: boolean;
 }
 
-export function ReferralTable({ tableData, heading, tableHeading, isCustomerSignup }: props) {
+export function ReferralTable({ tableData, heading, tableHeadings, isCustomerSignup }: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const { data, paginationProps } = tableData;
@@ -83,7 +83,7 @@ export function ReferralTable({ tableData, heading, tableHeading, isCustomerSign
                     onRequestSort={handleRequestSort}
                     order={order}
                     orderBy={orderBy}
-                    headCells={tableHeading}
+                    headCells={tableHeadings}
                     isReferral
                 />
                 <TableBody>

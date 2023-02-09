@@ -93,15 +93,39 @@ const ShareBox = styled(Grid)({
         borderLeft: '1px solid #E0E0E0',
         borderRight: '1px solid #E0E0E0',
         background: '#fff',
+        zIndex: 2,
     },
     '.MuiTabPanel-root': {
         padding: '24px 0px 0px 0px',
+    },
+    '.TabList div:nth-of-type(2)::before': {
+        content: '""',
+        display: 'block',
+        width: '100%',
+        background: '#E0E0E0',
+        position: 'absolute',
+        top: '47px',
+        left: 0,
+        zIndex: 1,
+        height: '1px',
+    },
+    '.TabList div:nth-of-type(3)::before': {
+        content: '""',
+        display: 'block',
+        width: '150%',
+        background: '#E0E0E0',
+        position: 'absolute',
+        top: '47px',
+        left: 0,
+        zIndex: 1,
+        height: '1px',
     },
 });
 
 const useStyle = makeStyles({
     indicator: {
         top: '0px',
+        zIndex: 2,
     },
 });
 
@@ -205,6 +229,7 @@ export function Main() {
                                     classes={{
                                         indicator: classes.indicator,
                                     }}
+                                    className={'TabList'}
                                 >
                                     <Tab
                                         className={'Tab'}

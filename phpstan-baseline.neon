@@ -246,6 +246,11 @@ parameters:
 			path: app/Http/Filters/VaultShipmentSearchFilter.php
 
 		-
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\) of method App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderReferByFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php

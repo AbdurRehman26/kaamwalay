@@ -6,12 +6,14 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
@@ -20,6 +22,7 @@ import { useConfiguration } from '@shared/hooks/useConfiguration';
 import theme from '@shared/styles/theme';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
+import ReferralDeactivateBanner from '../../ReferralDeactivateBanner';
 import Copylink from './CopyLink';
 import SocialShare from './SocialShare';
 import WithdrawBox from './WithdrawBox';
@@ -171,14 +174,19 @@ export function Main() {
         setValue(newValue);
     };
 
+    if (_.isEmpty(referrer)) {
+        return <CircularProgress />;
+    }
+
     return (
         <>
             {!isSm ? (
                 <Grid maxWidth={661}>
                     <Typography sx={styles.MainText}>
                         Share your unique link to refer people to RoboGrading. They will get{' '}
-                        {featureReferralDiscountPercentage}% off their first submission and you will earn commission
-                        every time they pay & anytime someone they refer pays.{' '}
+                        {featureReferralDiscountPercentage}% off their first submission and you will{' '}
+                        <strong style={{ color: '#20BFB8', textDecoration: 'underline' }}>earn commission</strong> every
+                        time they pay & anytime someone they refer pays.{' '}
                     </Typography>
                 </Grid>
             ) : (
@@ -186,52 +194,71 @@ export function Main() {
             )}
             <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Grid width={'100%'}>
-                    <ShareBox>
-                        <Typography className={'ShareLinkText'}>Share Link</Typography>
-                        <TabContext value={value}>
-                            <TabList
-                                variant="scrollable"
-                                onChange={handleChange}
-                                aria-label="share-tabs"
-                                classes={{
-                                    indicator: classes.indicator,
-                                }}
-                            >
-                                <Tab
-                                    className={'Tab'}
-                                    icon={<InsertLinkOutlinedIcon />}
-                                    value="share-link"
-                                    aria-label="share-link"
-                                />
-                                <Tab
-                                    className={'Tab'}
-                                    icon={<FacebookOutlinedIcon />}
-                                    value="facebook"
-                                    aria-label="facebook"
-                                />
-                                <Tab className={'Tab'} icon={<TwitterIcon />} value="twitter" aria-label="twitter" />
-                                <Tab className={'Tab'} icon={<LinkedInIcon />} value="linkedin" aria-label="linkedin" />
-                                <Tab className={'Tab'} icon={<WhatsAppIcon />} value="whatsapp" aria-label="whatsapp" />
-                                {/* <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" /> */}
-                            </TabList>
-                            <TabPanel value="share-link">
-                                <Copylink referralUrl={referrer?.referralUrl} />
-                            </TabPanel>
-                            <TabPanel value="facebook">
-                                <SocialShare name="Facebook" referralUrl={referrer?.referralUrl} />
-                            </TabPanel>
-                            <TabPanel value="twitter">
-                                <SocialShare name="Twitter" referralUrl={referrer?.referralUrl} />
-                            </TabPanel>
-                            <TabPanel value="linkedin">
-                                <SocialShare name="Linkedin" referralUrl={referrer?.referralUrl} />
-                            </TabPanel>
-                            <TabPanel value="whatsapp">
-                                <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
-                            </TabPanel>
-                            {/* <TabPanel value="email"></TabPanel> */}
-                        </TabContext>
-                    </ShareBox>
+                    {referrer?.isReferralActive ? (
+                        <ShareBox>
+                            <Typography className={'ShareLinkText'}>Share Link</Typography>
+                            <TabContext value={value}>
+                                <TabList
+                                    variant="scrollable"
+                                    onChange={handleChange}
+                                    aria-label="share-tabs"
+                                    classes={{
+                                        indicator: classes.indicator,
+                                    }}
+                                >
+                                    <Tab
+                                        className={'Tab'}
+                                        icon={<InsertLinkOutlinedIcon />}
+                                        value="share-link"
+                                        aria-label="share-link"
+                                    />
+                                    <Tab
+                                        className={'Tab'}
+                                        icon={<FacebookOutlinedIcon />}
+                                        value="facebook"
+                                        aria-label="facebook"
+                                    />
+                                    <Tab
+                                        className={'Tab'}
+                                        icon={<TwitterIcon />}
+                                        value="twitter"
+                                        aria-label="twitter"
+                                    />
+                                    <Tab
+                                        className={'Tab'}
+                                        icon={<LinkedInIcon />}
+                                        value="linkedin"
+                                        aria-label="linkedin"
+                                    />
+                                    <Tab
+                                        className={'Tab'}
+                                        icon={<WhatsAppIcon />}
+                                        value="whatsapp"
+                                        aria-label="whatsapp"
+                                    />
+                                    {/* <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" /> */}
+                                </TabList>
+                                <TabPanel value="share-link">
+                                    <Copylink referralUrl={referrer?.referralUrl} />
+                                </TabPanel>
+                                <TabPanel value="facebook">
+                                    <SocialShare name="Facebook" referralUrl={referrer?.referralUrl} />
+                                </TabPanel>
+                                <TabPanel value="twitter">
+                                    <SocialShare name="Twitter" referralUrl={referrer?.referralUrl} />
+                                </TabPanel>
+                                <TabPanel value="linkedin">
+                                    <SocialShare name="Linkedin" referralUrl={referrer?.referralUrl} />
+                                </TabPanel>
+                                <TabPanel value="whatsapp">
+                                    <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
+                                </TabPanel>
+                                {/* <TabPanel value="email"></TabPanel> */}
+                            </TabContext>
+                        </ShareBox>
+                    ) : (
+                        <ReferralDeactivateBanner />
+                    )}
                 </Grid>
                 {!isSm ? <WithdrawBox referrer={referrer} /> : null}
             </Grid>

@@ -1,4 +1,5 @@
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
+import CircularProgress from '@mui/material/CircularProgress';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useReferralCustomerSignUpsQuery';
 import EmptyStates from './EmptyStates';
@@ -57,6 +58,10 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function CustomerSignups() {
     const customerSignup$ = useListReferralCustomerSignUpsQuery({});
+
+    if (customerSignup$.isLoading) {
+        return <CircularProgress />;
+    }
 
     return (
         <>

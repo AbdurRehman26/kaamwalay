@@ -1,4 +1,5 @@
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
+import CircularProgress from '@mui/material/CircularProgress';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
 import EmptyStates from './EmptyStates';
@@ -49,6 +50,10 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function CommissionEarnings() {
     const commissionEarnings$ = useListReferralCommissionEarningsQuery({});
+
+    if (commissionEarnings$.isLoading) {
+        return <CircularProgress />;
+    }
 
     return (
         <>

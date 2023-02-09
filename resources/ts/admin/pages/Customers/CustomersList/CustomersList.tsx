@@ -319,7 +319,6 @@ export function CustomersList() {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-        console.log(isAsc, property);
     };
 
     const calculateSortFilterValue = useCallback((order, orderBy) => {

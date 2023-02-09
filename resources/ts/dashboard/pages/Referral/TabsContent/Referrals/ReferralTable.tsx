@@ -12,10 +12,13 @@ import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import moment from 'moment';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { ReferralCommissionEarningsEntity } from '@shared/entities/ReferralCommissionEarningsEntity';
 import { ReferralCustomerSignUpsEntity } from '@shared/entities/ReferralCustomerSignUpsEntity';
+import { useAppSelector } from '@dashboard/redux/hooks';
+import { setCommissionEarningsFilter, setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -66,11 +69,23 @@ export function ReferralTable({ tableData, heading, tableHeadings, isCustomerSig
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const { data, paginationProps } = tableData;
+    const sortCustomerSignUpFilter = useAppSelector(
+        (state) => state.referralProgramSlice.customerSignUpsFilter.signUpsfilter,
+    );
+    const sortCommissionEarningsFilter = useAppSelector(
+        (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
+    );
+    const dispatch = useDispatch();
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
+        if (isCustomerSignup) {
+            dispatch(setCustomerSignUpsFilter(!sortCustomerSignUpFilter));
+        } else {
+            dispatch(setCommissionEarningsFilter(!sortCommissionEarningsFilter));
+        }
     };
 
     return (

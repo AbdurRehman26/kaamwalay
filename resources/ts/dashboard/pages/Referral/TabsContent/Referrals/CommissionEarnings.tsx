@@ -1,7 +1,10 @@
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
+import { useAppSelector } from '@dashboard/redux/hooks';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
@@ -15,7 +18,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
-        id: 'paid_at',
+        id: 'created_at',
         numeric: false,
         disablePadding: false,
         label: 'Date Paid',
@@ -49,15 +52,34 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CommissionEarnings() {
-    const commissionEarnings$ = useListReferralCommissionEarningsQuery({});
+    const sortCommissionFilter = useAppSelector(
+        (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
+    );
 
-    if (commissionEarnings$.isLoading) {
-        return <CircularProgress />;
-    }
+    const commissionEarnings$ = useListReferralCommissionEarningsQuery({
+        params: {
+            sort: '-created_at',
+        },
+
+        ...bracketParams(),
+    });
+    useEffect(
+        () => {
+            if (!commissionEarnings$.isLoading) {
+                commissionEarnings$.searchSortedWithPagination(
+                    { sort: sortCommissionFilter ? 'created_at' : '-created_at' },
+                    toApiPropertiesObject({}),
+                    1,
+                );
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sortCommissionFilter],
+    );
 
     return (
         <>
-            {commissionEarnings$.data.length === 0 ? (
+            {commissionEarnings$.data.length === 0 && !commissionEarnings$.isLoading ? (
                 <EmptyStates
                     heading={'No Commission Earnings'}
                     description={'You haven’t earned any commission, yet.'}

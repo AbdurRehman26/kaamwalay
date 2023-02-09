@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ReferrerEntity } from '@shared/entities/ReferrerEntity';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
@@ -8,13 +8,29 @@ export interface ReferrerDetail {
     referrer: ReferrerEntity;
 }
 
+export interface CustomerSignUpsFilter {
+    signUpsfilter: boolean;
+}
+
+export interface CommissionEarningsFilter {
+    commissionEarningFilter: boolean;
+}
+
 export interface referralProgramSliceState {
     referrerDetail: ReferrerDetail;
+    customerSignUpsFilter: CustomerSignUpsFilter;
+    commissionEarningsFilter: CommissionEarningsFilter;
 }
 
 const initialState: referralProgramSliceState = {
     referrerDetail: {
         referrer: {} as ReferrerEntity,
+    },
+    customerSignUpsFilter: {
+        signUpsfilter: false,
+    },
+    commissionEarningsFilter: {
+        commissionEarningFilter: false,
     },
 };
 
@@ -32,10 +48,19 @@ export const getReferrerDetail = createAsyncThunk('referrer/getReferrerDetail', 
 export const referralProgramSlice = createSlice({
     name: 'referralProgramSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setCustomerSignUpsFilter: (state, action: PayloadAction<boolean>) => {
+            state.customerSignUpsFilter.signUpsfilter = action.payload;
+        },
+        setCommissionEarningsFilter: (state, action: PayloadAction<boolean>) => {
+            state.commissionEarningsFilter.commissionEarningFilter = action.payload;
+        },
+    },
     extraReducers: {
         [getReferrerDetail.fulfilled as any]: (state, action) => {
             state.referrerDetail.referrer = action.payload;
         },
     },
 });
+
+export const { setCustomerSignUpsFilter, setCommissionEarningsFilter } = referralProgramSlice.actions;

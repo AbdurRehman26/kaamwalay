@@ -1,7 +1,10 @@
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useReferralCustomerSignUpsQuery';
+import { useAppSelector } from '@dashboard/redux/hooks';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
@@ -57,15 +60,33 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CustomerSignups() {
-    const customerSignup$ = useListReferralCustomerSignUpsQuery({});
+    const sortSignUpsFilter = useAppSelector((state) => state.referralProgramSlice.customerSignUpsFilter.signUpsfilter);
 
-    if (customerSignup$.isLoading) {
-        return <CircularProgress />;
-    }
+    const customerSignup$ = useListReferralCustomerSignUpsQuery({
+        params: {
+            sort: '-created_at',
+        },
+
+        ...bracketParams(),
+    });
+
+    useEffect(
+        () => {
+            if (!customerSignup$.isLoading) {
+                customerSignup$.searchSortedWithPagination(
+                    { sort: sortSignUpsFilter ? 'created_at' : '-created_at' },
+                    toApiPropertiesObject({}),
+                    1,
+                );
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sortSignUpsFilter],
+    );
 
     return (
         <>
-            {customerSignup$.data.length === 0 ? (
+            {customerSignup$.data.length === 0 && !customerSignup$.isLoading ? (
                 <EmptyStates
                     heading={'No Customer Sign Ups'}
                     description={'You haven’t gotten any customers to sign up, yet.'}

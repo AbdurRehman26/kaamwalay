@@ -405,8 +405,12 @@ export function BasicInfo() {
                 afterSaveCallback={passwordConfirmCallback}
             />
             <ChangeUserPictureDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
-            <ReferralDialog />
-            <ReferralBanner />
+            {user$?.showReferralPromotionalPopup ? (
+                <>
+                    <ReferralDialog />
+                    <ReferralBanner />
+                </>
+            ) : null}
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>

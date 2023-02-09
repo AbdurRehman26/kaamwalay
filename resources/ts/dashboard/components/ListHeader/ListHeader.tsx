@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { ChangeEvent, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
+import { useAuth } from '@shared/hooks/useAuth';
 import { font } from '@shared/styles/utils';
 import ReferralBanner from '@dashboard/pages/Referral/ReferralBanner';
 import ReferralDialog from '@dashboard/pages/Referral/ReferralDialog';
@@ -83,6 +84,7 @@ export function ListHeader({
 }: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
+    const user$ = useAuth().user;
 
     const handleSearch = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +99,7 @@ export function ListHeader({
 
     return (
         <>
-            {!isReferral ? (
+            {!isReferral && user$?.showReferralPromotionalPopup ? (
                 <>
                     <ReferralBanner />
                     <ReferralDialog />

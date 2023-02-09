@@ -17,15 +17,15 @@ class AdminOrderReferByFilter implements Filter
 
     public function __invoke(Builder $query, $value, string $property)
     {
-        if($value){
+        if ($value) {
             $query->whereHas(
-                    'user',
-                    fn ($query) => $query->whereNotNull('referred_by')
+                'user',
+                fn ($query) => $query->whereNotNull('referred_by')
             );
         } else {
             $query->whereHas(
-                    'user',
-                    fn ($query) => $query->whereNull('referred_by')
+                'user',
+                fn ($query) => $query->whereNull('referred_by')
             );
         }
     }

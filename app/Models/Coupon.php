@@ -147,9 +147,11 @@ class Coupon extends Model
             return $query;
         }
 
-        $query = $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
-            $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
-        })->orDoesntHave('couponAble');
+        if (! empty($couponParams['couponables_id'])) {
+            $query = $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
+                $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
+            })->orDoesntHave('couponAble');
+        }
 
         if (! empty($couponParams['user_id'])) {
             $query = $query->orWhereHas('couponAble', function ($subQuery) use ($couponParams) {

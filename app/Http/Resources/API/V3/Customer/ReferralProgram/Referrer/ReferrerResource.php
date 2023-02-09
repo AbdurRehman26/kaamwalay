@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer;
 
 use App\Models\Referrer;
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\ReferralProgram\ReferrerService;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Referrer */
 class ReferrerResource extends JsonResource

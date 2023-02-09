@@ -245,6 +245,6 @@ class Coupon extends Model
 
     public static function getRefereeCouponDiscount(): float
     {
-        return config('robograding.feature_referee_coupon_discount');
+        return config('robograding.feature_referral_discount_percentage');
     }
 }

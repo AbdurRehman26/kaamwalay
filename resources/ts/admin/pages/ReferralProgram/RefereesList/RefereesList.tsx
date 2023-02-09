@@ -31,12 +31,12 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { useAdminRefereesQuery } from '@shared/redux/hooks/useRefereesQuery';
 import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
+import { ListPageHeader, ListPageSelector } from '@admin/components/ListPage';
 import { useAppDispatch } from '@admin/redux/hooks';
-import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { RefereeTableRow } from './RefereeTableRow';
 
 type InitialValues = {
@@ -100,6 +100,14 @@ const headings: EnhancedTableHeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: 'Owners',
+        align: 'left',
+        sortable: false,
+    },
+    {
+        id: 'referrer',
+        numeric: false,
+        disablePadding: false,
+        label: 'Referrer',
         align: 'left',
         sortable: false,
     },
@@ -218,7 +226,7 @@ export function RefereesList() {
         ],
     );
 
-    const customers = useAdminCustomersQuery({
+    const customers = useAdminRefereesQuery({
         params: {
             include: ['salesman'],
             sort: sortFilter,

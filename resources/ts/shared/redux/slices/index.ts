@@ -35,3 +35,11 @@ export { salesRepOrdersSlice as salesRepOrders } from './salesRepOrdersSlice';
 export { salesRepCommissionPaymentsSlice as salesRepCommissionPayments } from './salesRepCommissionPaymentsSlice';
 export { salesRepCreateOrderSlice } from './salesRepCreateOrderSlice';
 export { salesRepCustomersSlice as salesRepCustomers } from './salesRepCustomersSlice';
+
+/**
+ *
+ * Referral Program
+ *
+ */
+
+export { adminRefereesSlice as adminReferees } from './adminRefereesSlice';

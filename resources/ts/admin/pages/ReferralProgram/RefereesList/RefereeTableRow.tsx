@@ -191,6 +191,11 @@ export function RefereeTableRow({ customer, salesReps }: props) {
                             })}
                     </Select>
                 </TableCell>
+                <TableCell variant={'body'} align={'left'}>
+                    <Typography variant={'body2'} sx={{ color: '#20BFB8', fontWeight: 500 }}>
+                        {customer.referredBy.fullName}
+                    </Typography>
+                </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
                         sx={{ height: '40px !important' }}

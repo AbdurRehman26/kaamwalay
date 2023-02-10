@@ -50,9 +50,9 @@ class AssociateContactToCorruptedDeals extends Command
             // @phpstan-ignore-next-line
             $deals = collect($fetchedDealsResponse->getData()->results)
                 ->filter(function ($deal) {
-                    return !empty($deal->properties->pipeline->value)
+                    return ! empty($deal->properties->pipeline->value)
                         && $deal->properties->pipeline->value === config('services.hubspot.pipeline_id')
-                        && !empty($deal->properties->dealstage->value)
+                        && ! empty($deal->properties->dealstage->value)
                         && $deal->properties->dealstage->value === config('services.hubspot.pipline_stage_id_new_signup')
                         && $deal->properties->num_associated_contacts->value === '0'; // @phpstan-ignore-line
                 });

@@ -5,7 +5,10 @@ namespace App\Console\Commands\Hubspot;
 use App\Models\HubspotDeal;
 use App\Models\User;
 use App\Services\HubspotService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use SevenShores\Hubspot\Exceptions\BadRequest;
+use SevenShores\Hubspot\Exceptions\HubspotException;
 use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
@@ -60,17 +63,25 @@ class AssociateContactToCorruptedDeals extends Command
             $this->info('Number of matched deals: '.$deals->count());
             $this->info('Processing matched deals ...');
 
-            $deals->each(function ($deal) use ($hubspotClient) {
+            $deals->each(function ($deal) use ($hubspotClient, $since) {
                 $this->info('Processing deal: ' . $deal->properties->dealname->value);
 
+                $sinceDateTimeString = Carbon::createFromTimestamp($since)->toDateTimeString();
                 $dealNameArray = explode(' ', $deal->properties->dealname->value);
 
                 if (count($dealNameArray) === 3) {
-                    $user = User::where('first_name', $dealNameArray[0])->where('last_name', $dealNameArray[1] . ' ' . $dealNameArray[2])->first();
+                    $user = User::where('first_name', $dealNameArray[0])
+                        ->where('last_name', $dealNameArray[1] . ' ' . $dealNameArray[2])
+                        ->where('created_at', '>=', $sinceDateTimeString)
+                        ->first();
                 } elseif (count($dealNameArray) === 2) {
-                    $user = User::where('first_name', $dealNameArray[0])->where('last_name', $dealNameArray[1])->first();
+                    $user = User::where('first_name', $dealNameArray[0])->where('last_name', $dealNameArray[1])
+                        ->where('created_at', '>=', $sinceDateTimeString)
+                        ->first();
                 } else {
-                    $user = User::where('first_name', $dealNameArray[0])->first();
+                    $user = User::where('first_name', $dealNameArray[0])
+                        ->where('created_at', '>=', $sinceDateTimeString)
+                        ->first();
                 }
 
                 if ($user) {
@@ -96,29 +107,35 @@ class AssociateContactToCorruptedDeals extends Command
 
     protected function createAndAssociateContact(Client $hubspotClient, stdClass $deal, User $user): void
     {
-        $contactResponse = (new Contacts($hubspotClient))->create([
-            [
-                'property' => 'email',
-                'value' => $user->email ?: '',
-            ],
-            [
-                'property' => 'firstname',
-                'value' => $user->first_name ?: '',
-            ],
-            [
-                'property' => 'lastname',
-                'value' => $user->last_name ?: '',
-            ],
-            [
-                'property' => 'phone',
-                'value' => $user->phone ?: '',
-            ],
-        ]);
+        try {
+            $contactResponse = (new Contacts($hubspotClient))->create([
+                [
+                    'property' => 'email',
+                    'value' => $user->email ?: '',
+                ],
+                [
+                    'property' => 'firstname',
+                    'value' => $user->first_name ?: '',
+                ],
+                [
+                    'property' => 'lastname',
+                    'value' => $user->last_name ?: '',
+                ],
+                [
+                    'property' => 'phone',
+                    'value' => $user->phone ?: '',
+                ],
+            ]);
+
+            // @phpstan-ignore-next-line
+            $vid = $contactResponse->vid;
+        } catch (BadRequest $e) {
+            $vid = (json_decode($e->getMessage()))->identityProfile->vid;
+        }
 
         $associateContact = new CrmAssociations($hubspotClient);
         $associateContact->create([
-            // @phpstan-ignore-next-line
-            'fromObjectId' => $contactResponse->vid,
+            'fromObjectId' => $vid,
             'toObjectId' => $deal->dealId,
             'category' => 'HUBSPOT_DEFINED',
             'definitionId' => 4,

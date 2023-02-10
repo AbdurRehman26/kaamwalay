@@ -6,7 +6,6 @@ use App\Models\HubspotDeal;
 use App\Models\User;
 use App\Services\HubspotService;
 use Illuminate\Console\Command;
-use SevenShores\Hubspot\Exceptions\BadRequest;
 use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;

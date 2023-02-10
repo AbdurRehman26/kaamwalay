@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.6.0 - 2023-02-02
+
+### What's Changed
+
+- Upgrade to PHP 8.2 by @thenabeel in https://github.com/woozard/robograding/pull/890
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/894
+- Release v3.6.0 by @thenabeel in https://github.com/woozard/robograding/pull/895
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.5.1...v3.6.0
+
 ## v3.5.1 - 2023-02-02
 
 ### What's Changed

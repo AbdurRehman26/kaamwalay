@@ -8,7 +8,6 @@ use App\Services\HubspotService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use SevenShores\Hubspot\Exceptions\BadRequest;
-use SevenShores\Hubspot\Exceptions\HubspotException;
 use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
@@ -130,7 +129,7 @@ class AssociateContactToCorruptedDeals extends Command
             // @phpstan-ignore-next-line
             $vid = $contactResponse->vid;
         } catch (BadRequest $e) {
-            $vid = (json_decode($e->getMessage()))->identityProfile->vid;
+            $vid = (json_decode($e->getResponse()->getBody()))->identityProfile->vid;
         }
 
         $associateContact = new CrmAssociations($hubspotClient);

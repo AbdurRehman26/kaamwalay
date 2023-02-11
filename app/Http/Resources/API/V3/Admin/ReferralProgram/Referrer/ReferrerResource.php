@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referee;
+namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Salesman\SalesmanResource;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 /**
  * @mixin User
  */
-class RefereeResource extends BaseResource
+class ReferrerResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -30,12 +30,13 @@ class RefereeResource extends BaseResource
             'customer_number' => $this->customer_number,
             'email' => $this->email,
             'phone' => $this->phone,
-            'submissions' => $this->orders()->paid()->count(),
-            'cards_count' => $this->cardsCount(),
-            'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
-            'salesman' => new SalesmanResource($this->salesman),
-            'referred_by' => new UserResource($this->referredBy),
+            'submissions' => $this->getReferrerSubmissions(),
+            'cards_count' => $this->getReferrerCardsCount(),
+            'sign_ups' => $this->referrer->successful_signups,
+            'is_referral_active' => $this->referrer->is_referral_active,
+            'sales' => $this->getReferrerSales(),
+            'commission' => $this->getReferrerCommission(),
         ];
     }
 }

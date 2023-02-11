@@ -22,4 +22,4 @@ export const adminRefereesSlice = createSlice({
 });
 
 export const { invalidateAdminReferees } = adminRefereesSlice.actions;
-export const { listAction: listAdminRefereesAction, showAction: showAdminCustomerAction } = adminRefereesThunk;
+export const { listAction: listAdminRefereesAction } = adminRefereesThunk;

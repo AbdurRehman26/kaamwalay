@@ -70,13 +70,27 @@ class ReferralProgramService
     }
 
     // @phpstan-ignore-next-line
+    public function getReferrers(): LengthAwarePaginator
+    {
+        $query = User::join('referrers', 'referrers.user_id', 'users.id')
+                    ->where('successful_signups', '>', 0)
+                    ->select('users.*');
+
+        return QueryBuilder::for($query)
+            ->allowedFilters(User::getAllowedAdminReferrerFilters())
+            ->allowedSorts(User::getAllowedAdminReferrerSorts())
+            ->defaultSort('-users.created_at')
+            ->paginate(request('per_page', self::PER_PAGE));
+    }
+
+    // @phpstan-ignore-next-line
     public function getReferees(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::customer())
-            ->whereNotNull('referred_by')
             ->allowedFilters(User::getAllowedAdminFilters())
             ->allowedSorts(User::getAllowedAdminSorts())
             ->defaultSort('-created_at')
+            ->whereNotNull('referred_by')
             ->with('salesman')
             ->with('referredBy')
             ->paginate(request('per_page', self::PER_PAGE));

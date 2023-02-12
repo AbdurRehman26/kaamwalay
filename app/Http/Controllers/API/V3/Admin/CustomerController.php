@@ -25,5 +25,4 @@ class CustomerController extends Controller
 
         return new CustomerResource($customer);
     }
-  
 }

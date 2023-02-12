@@ -92,8 +92,8 @@ class ReferrerService
             $referrer = Referrer::where('user_id', $referrerId)->first();
             $referrer->is_referral_active = $data['is_referral_active'];
             $referrer->save();
-            return $referrer;
 
+            return $referrer;
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

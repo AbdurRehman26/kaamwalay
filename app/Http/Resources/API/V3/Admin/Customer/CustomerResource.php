@@ -25,8 +25,8 @@ class CustomerResource extends V2CustomerResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            'referral_info' => $this->whenLoaded('referralInfo', UserResource::class),
-            'referral_status' => $this->whenLoaded('referralStatus', ReferrerResource::class),
+            'referred_by' => $this->whenLoaded('referredBy', UserResource::class),
+            'referrer' => $this->whenLoaded('referrer', ReferrerResource::class),
         ]);
     }
 }

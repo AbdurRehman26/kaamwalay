@@ -89,14 +89,9 @@ class ReferrerService
     public function setReferrersStatus(int $referrerId, array $data): Referrer
     {
         try {
-            $referrer = Referrer::updateOrCreate(
-                [
-                    'user_id' => $referrerId,
-                ],
-                [
-                    'is_referral_active' => $data['is_referral_active'],
-                ]
-            );
+            $referrer = Referrer::where('user_id', $referrerId)->first();
+            $referrer->is_referral_active = $data['is_referral_active'];
+            $referrer->save();
 
             return $referrer;
         } catch (Exception $e) {

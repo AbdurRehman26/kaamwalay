@@ -20,6 +20,13 @@ const Root = styled(Grid)({
         borderRadius: '4px',
         margin: '20px',
     },
+    '.tableTitle': {
+        fontSize: '16px',
+        lineHeight: '24px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        marginTop: '16px',
+        fontWeight: 400,
+    },
 });
 
 const headings: EnhancedTableHeadCell[] = [
@@ -32,7 +39,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: true,
     },
     {
-        id: 'signed_at',
+        id: 'signed_up_at',
         numeric: false,
         disablePadding: false,
         label: 'SIGNED UP',
@@ -77,7 +84,7 @@ export function CustomerReferralSignUp() {
     const { id } = useParams<'id'>();
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
-    const [orderBy, setOrderBy] = useState<string>('created_at');
+    const [orderBy, setOrderBy] = useState<string>('signed_up_at');
 
     const referralSignUp = useAdminCustomerReferralSignUpQuery({
         params: {
@@ -86,7 +93,6 @@ export function CustomerReferralSignUp() {
         },
         ...bracketParams(),
     });
-    console.log('referralSignUp ', referralSignUp);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
@@ -105,7 +111,13 @@ export function CustomerReferralSignUp() {
                     <>
                         {referralSignUp?.data.length !== 0 ? (
                             <>
-                                <TableContainer>
+                                <TableContainer sx={{ background: '#F9F9F9' }}>
+                                    <Box p={2}>
+                                        <Typography className={'tableTitle'}>
+                                            {' '}
+                                            Customer Sign Ups <span> ({referralSignUp?.data.length}) </span>{' '}
+                                        </Typography>
+                                    </Box>
                                     <CustomerReferralListing
                                         customers={referralSignUp?.data}
                                         paginationProp={referralSignUp?.paginationProps}

@@ -1,28 +1,14 @@
-// import { useCallback } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
-// import CustomerDetail from './CustomerDetail';
-import { CustomerReferralCommissionEarnings } from './CustomerReferralCommissionEarnings';
-import { CustomerReferralSignUp } from './CustomerReferralSignUp';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import CustomerDetail from './CustomerDetail';
 
-export function CustomerViewOverViewTab() {
-    // const { id } = useParams<'id'>();
+interface CustomerViewOverViewTabProps {
+    customer: CustomerEntity;
+}
 
-    // const customer$ = useAdminCustomerQuery({
-    //     resourceId: Number(id),
-    // });
-
-    // const { data } = customer$;
-
-    // const handleReloadCustomerData = useCallback(() => {
-    //     customer$.request();
-    // }, [customer$]);
-
+export function CustomerViewOverViewTab({ customer }: CustomerViewOverViewTabProps) {
     return (
         <>
-            {/* <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} /> */}
-            <CustomerReferralCommissionEarnings />
-            <CustomerReferralSignUp />
+            <CustomerDetail customer={customer} />
         </>
     );
 }

@@ -20,6 +20,13 @@ const Root = styled(Grid)({
         borderRadius: '4px',
         margin: '20px',
     },
+    '.tableTitle': {
+        fontSize: '16px',
+        lineHeight: '24px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        marginTop: '16px',
+        fontWeight: 400,
+    },
 });
 
 const headings: EnhancedTableHeadCell[] = [
@@ -69,7 +76,7 @@ export function CustomerReferralCommissionEarnings() {
     const { id } = useParams<'id'>();
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
-    const [orderBy, setOrderBy] = useState<string>('created_at');
+    const [orderBy, setOrderBy] = useState<string>('paid_at');
 
     const referralcommissionEarnings = useAdminCustomerReferralCommissionQuery({
         params: {
@@ -96,9 +103,9 @@ export function CustomerReferralCommissionEarnings() {
                     <>
                         {referralcommissionEarnings?.data.length !== 0 ? (
                             <>
-                                <TableContainer>
+                                <TableContainer sx={{ background: '#F9F9F9' }}>
                                     <Box p={2}>
-                                        <Typography fontSize={'16px'} fontWeight={'400'}>
+                                        <Typography className={'tableTitle'}>
                                             {' '}
                                             Cummissions Earnings{' '}
                                             <span> ({referralcommissionEarnings?.data.length}) </span>{' '}

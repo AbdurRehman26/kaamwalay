@@ -183,10 +183,16 @@ export function CustomersList() {
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
     const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '', salesmanId: '' });
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
     const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
         label: '',
         value: '',
     });
+
+    const ReferralStatus = [
+        { label: 'Yes', value: 1 },
+        { label: 'No', value: 0 },
+    ];
 
     const navigate = useNavigate();
 
@@ -206,7 +212,7 @@ export function CustomersList() {
 
     const redirectToCustomerProfile = useCallback(
         (customer: CustomerEntity) => {
-            navigate(`/customers/${customer.id}/view`);
+            navigate(`/customers/${customer.id}/view/overview`);
         },
         [navigate],
     );
@@ -421,6 +427,29 @@ export function CustomersList() {
         [salesRepFilter, handleSubmit],
     );
 
+    const handleClearReferrerStatus = useCallback(async () => {
+        setReferrerStatus({ label: '', value: 0 });
+        // orders$.searchSortedWithPagination(
+        //     { sort: sortFilter },
+        //     toApiPropertiesObject({
+        //         search,
+        //     }),
+        //     1,
+        // );
+    }, []);
+
+    const handleReferrerStatus = useCallback(async (values) => {
+        // setReferrerStatus({ value: values.value, label: values.label });
+        // orders$.searchSortedWithPagination(
+        //     { sort: sortFilter },
+        //     toApiPropertiesObject({
+        //         referredBy: values.value,
+        //     }),
+        //     1,
+        // );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const headerActions = (
         <Button
             onClick={() => setAddCustomerDialog(true)}
@@ -564,6 +593,26 @@ export function CustomersList() {
                                             <Grid key={item.value}>
                                                 <MenuItem
                                                     onClick={() => handlePromotionalSubscribers(values, item)}
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
+                                </PageSelector>
+
+                                <PageSelector
+                                    label={'Referrer'}
+                                    value={referrerStatus.label}
+                                    onClear={handleClearReferrerStatus}
+                                >
+                                    {ReferralStatus?.map((item: any) => {
+                                        return (
+                                            <Grid key={item.value}>
+                                                <MenuItem
+                                                    onClick={() => handleReferrerStatus(item)}
                                                     key={item.value}
                                                     value={item.value}
                                                 >

@@ -9,14 +9,4 @@ export class AdminCustomerReferralCommissionRepository extends Repository<Custom
     readonly endpointConfig = {
         version: 'v3',
     };
-
-    public async getCustomerReferrals() {
-        const { data } = await this.endpoint.get('/');
-        return this.toEntity(data);
-    }
-
-    public async getCustomerReferralSignUp() {
-        const { data } = await this.endpoint.get('/');
-        return this.toEntity(data);
-    }
 }

@@ -1,5 +1,6 @@
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,13 +8,11 @@ import TableFooter from '@mui/material/TableFooter';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { font } from '@shared/styles/utils';
 
 interface CustomerReferralListingProps {
     customers: CustomerEntity[];
@@ -41,28 +40,31 @@ export function CustomerReferralListing({
                 order={orderDirection}
                 orderBy={orderBy}
                 headCells={headings}
+                hasStyling={true}
             />
-            <TableBody>
+            <TableBody sx={{ background: '#FFFFFF' }}>
                 {customers?.length > 0 ? (
                     customers.map((customer) => (
                         <TableRow>
                             <TableCell>
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={`/submissions/${customer.id}/view`}
-                                    className={font.fontWeightMedium}
-                                >
-                                    {customer.fullName}
-                                </MuiLink>
+                                <Grid container>
+                                    <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
+                                    <Grid item xs container justifyContent={'center'} direction={'column'} pl={2}>
+                                        <Typography variant={'body2'}>{customer.fullName}</Typography>
+                                    </Grid>
+                                </Grid>
                             </TableCell>
                             <TableCell>
-                                {customer.createdAt ? formatDate(customer.createdAt, 'MM/DD/YYYY') : 'N/A'}
+                                {isSignUp && customer?.signedUpAt
+                                    ? formatDate(customer?.signedUpAt, 'MM/DD/YYYY')
+                                    : formatDate(customer?.paidAt, 'MM/DD/YYYY')}
                             </TableCell>
-                            <TableCell>{customer.cards}</TableCell>
-                            <TableCell>{customer.submissionTotal}</TableCell>
+                            <TableCell>{isSignUp ? customer.cardsCount : customer.cards}</TableCell>
+                            <TableCell>{isSignUp ? customer.submissions : customer.submissionTotal}</TableCell>
                             {isSignUp ? <TableCell>{customer.totalSpent}</TableCell> : null}
-                            <TableCell>{customer.commission}</TableCell>
+                            <TableCell sx={{ color: '#20BFB8', fontWeight: '700', fontSize: '14px' }}>
+                                {isSignUp ? customer.totalCommissions : customer.commission}
+                            </TableCell>
                         </TableRow>
                     ))
                 ) : (

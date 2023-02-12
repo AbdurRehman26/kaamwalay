@@ -17,6 +17,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
+// import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -27,6 +28,7 @@ interface props {
 
 enum RowOption {
     CreditCustomer,
+    ChangeReferralProgram,
 }
 
 const CustomerType = [
@@ -61,6 +63,10 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [setAnchorEl],
     );
 
+    // const handleChangeReferralProgram = useCallback(async (status: boolean) => {
+    //     await dispatch(changeReferralStatus(customer.id, status));
+    // }, [customer.id, dispatch])
+
     const handleOption = useCallback(
         (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
@@ -68,6 +74,9 @@ export function CustomerTableRow({ customer, salesReps }: props) {
             switch (option) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
+                    break;
+                case RowOption.ChangeReferralProgram:
+                    // handleChangeReferralProgram(status);
                     break;
             }
         },
@@ -192,7 +201,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'center'}>
-                    Referrer
+                    {customer?.referrer ? customer?.referrer?.fullName : '-'}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
@@ -220,6 +229,14 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                        {/* {customer.referrer. === 'active' ? (
+                        <MenuItem onClick={handleOption(Options.Deactivate)}>Deactivate</MenuItem>
+                    ) : null}
+                    {customer.referrer.code === 'inactive' ? (
+                        <MenuItem onClick={handleOption(Options.Reactivate)}>Reactivate</MenuItem>
+                    ) : null} */}
+                        {/* <MenuItem onClick={handleOption(RowOption.ChangeReferralProgram)}>Activate Referral</MenuItem>
+                        <MenuItem onClick={handleOption(RowOption.ChangeReferralProgram)}>Activate Referral</MenuItem> */}
                     </Menu>
                 </TableCell>
             </TableRow>

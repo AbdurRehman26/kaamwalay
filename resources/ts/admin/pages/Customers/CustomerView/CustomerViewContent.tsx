@@ -39,7 +39,7 @@ export function CustomerViewContent({ customer }: CustomerViewContentProps) {
             <Grid container direction={'column'}>
                 <CustomerViewContentHeader />
                 <TabContent value={'overview'}>
-                    <CustomerViewOverViewTab />
+                    <CustomerViewOverViewTab customer={customer} />
                 </TabContent>
                 <Divider />
                 <TabContent value={'referrals'}>

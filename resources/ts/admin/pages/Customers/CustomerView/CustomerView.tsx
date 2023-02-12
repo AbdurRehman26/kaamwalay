@@ -13,7 +13,6 @@ import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
-import { CustomerDetail } from './CustomerDetail';
 import { CustomerViewContent } from './CustomerViewContent';
 
 enum RowOption {
@@ -88,12 +87,6 @@ export function CustomerView() {
     const customer$ = useAdminCustomerQuery({
         resourceId: Number(id),
     });
-
-    // const customerReferral$ = useAdminCustomerQuery({
-    //     resourceId: Number(id),
-    // });
-
-    // http://robograding.test/api/v3/admin/customers/{user_id}/referral/get-stat
 
     const handleReloadCustomerData = useCallback(() => {
         customer$.request();
@@ -174,7 +167,7 @@ export function CustomerView() {
                 {' '}
                 <CustomerViewContent customer={data} />{' '}
             </Grid>
-            <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
+            {/* <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} /> */}
         </>
     );
 }

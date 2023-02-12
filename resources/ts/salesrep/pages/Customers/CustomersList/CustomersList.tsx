@@ -142,7 +142,7 @@ export function CustomersList() {
 
     const redirectToCustomerProfile = useCallback(
         (customer: CustomerEntity) => {
-            navigate(`/customers/${customer.id}/view`);
+            navigate(`/customers/${customer.id}/view/overview`);
         },
         [navigate],
     );

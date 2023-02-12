@@ -11,10 +11,11 @@ interface EnhancedTableProps {
     order: TableSortType;
     orderBy: string;
     headCells: Array<any>;
+    hasStyling?: boolean;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, onRequestSort, headCells } = props;
+    const { order, orderBy, onRequestSort, headCells, hasStyling } = props;
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
@@ -29,6 +30,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         variant={'head'}
+                        sx={{
+                            color: hasStyling ? '#0000008A' : '',
+                            fontSize: hasStyling ? '10px' : '',
+                            fontWeight: hasStyling ? '500' : '',
+                        }}
                     >
                         {headCell.sortable ? (
                             <TableSortLabel

@@ -115,7 +115,12 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
     const customerInfo = useMemo(
         () =>
             [
-                ['Customer:', customerName],
+                [
+                    'Customer:',
+                    <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
+                        {customerName}
+                    </MuiLink>,
+                ],
                 customerEmail ? ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>] : null,
                 customerPhone ? ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>] : null,
                 [

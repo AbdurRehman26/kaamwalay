@@ -6,8 +6,6 @@ use App\Models\Referrer;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Referrer */
-/** @property mixed $referrer*/
-
 class ReferrerResource extends JsonResource
 {
     /**

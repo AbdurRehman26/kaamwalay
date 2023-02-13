@@ -21,7 +21,7 @@ export class CustomerEntity extends UserEntity {
     public commission!: number;
     public totalSpent!: number;
     public referrer?: ReferrerEntity;
-    public referredBy?: ReferrerEntity;
+    public referredBy?: UserEntity;
     @Type(() => SalesRepEntity)
     public salesman!: SalesRepEntity;
 }

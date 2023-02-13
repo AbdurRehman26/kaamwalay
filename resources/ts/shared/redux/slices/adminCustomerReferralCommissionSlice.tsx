@@ -3,6 +3,7 @@ import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { app } from '@shared/lib/app';
 import { AdminCustomerReferralCommissionRepository } from '@shared/repositories/Admin/AdminCustomerReferralCommissionRepository';
 import { APIService } from '@shared/services/APIService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -19,10 +20,15 @@ export const changeReferralStatus = createAsyncThunk(
         const endpoint = apiService.createEndpoint(`admin/customer/${DTO.customerId}/referral/set-referrers-status`, {
             version: 'v3',
         });
-        const referral = await endpoint.post('', {
-            isReferralActive: DTO.referralStatus,
-        });
-        return referral.data;
+        try {
+            const referral = await endpoint.post('', {
+                isReferralActive: DTO.referralStatus,
+            });
+            NotificationsService.success('Referral status changed successfully!');
+            return referral.data;
+        } catch (e: any) {
+            NotificationsService.exception(e);
+        }
     },
 );
 

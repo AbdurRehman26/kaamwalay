@@ -69,6 +69,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         async (customerId: number, referralStatus: boolean) => {
             const DTO = { customerId, referralStatus };
             await dispatch(changeReferralStatus(DTO));
+            window.location.reload();
         },
         [dispatch],
     );
@@ -242,15 +243,19 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
-                        {customer.referrer?.isReferralActive ? (
-                            <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
-                                Deactivate
-                            </MenuItem>
-                        ) : (
-                            <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
-                                Reactivate
-                            </MenuItem>
-                        )}
+                        {customer?.referrer ? (
+                            <>
+                                {customer?.referrer?.isReferralActive ? (
+                                    <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
+                                        Deactivate
+                                    </MenuItem>
+                                ) : (
+                                    <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
+                                        Reactivate
+                                    </MenuItem>
+                                )}
+                            </>
+                        ) : null}
                     </Menu>
                 </TableCell>
             </TableRow>

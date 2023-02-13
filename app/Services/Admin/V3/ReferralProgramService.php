@@ -95,4 +95,18 @@ class ReferralProgramService
             ->with('referredBy')
             ->paginate(request('per_page', self::PER_PAGE));
     }
+    public function getReferralOrders(): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page');
+
+        $query = Order::join('users', 'users.id', 'orders.user_id')->whereNotNull('users.referred_by');
+
+        return QueryBuilder::for($query)
+            ->excludeCancelled()
+            ->allowedFilters(Order::getAllowedAdminFilters())
+            ->allowedIncludes(Order::getAllowedAdminIncludes())
+            ->allowedSorts(Order::getAllowedAdminSorts())
+            ->defaultSort('-orders.created_at')
+            ->paginate($itemsPerPage);
+    }
 }

@@ -32,5 +32,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('referral-program.get-stat');
         Route::get('referrers', [ReferralProgramController::class, 'listReferrers'])->name('referral-program.referrers');
         Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
+        Route::get('orders', [ReferralProgramController::class, 'listReferralOrders'])->name('referral-program.orders');
     });
 });

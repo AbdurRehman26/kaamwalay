@@ -178,7 +178,7 @@ function LayoutSidebar() {
                         />
                         <LayoutSidebarItem
                             title={'Referral Orders'}
-                            href={'/referral-program/orders'}
+                            href={'/referral-program/submissions'}
                             collapseStyle={true}
                             collapseOpenedAction={handleReferralProgramOpened}
                             collapseClosedAction={handleReferralProgramClosed}

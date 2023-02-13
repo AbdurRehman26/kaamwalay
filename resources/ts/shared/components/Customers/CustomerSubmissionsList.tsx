@@ -19,6 +19,7 @@ interface CustomerSubmissionsListProps {
     orders: OrderEntity[];
     paginationProp?: any;
     isCustomerDetailPage?: boolean;
+    isReferralPage?: boolean;
     headings?: Array<any>;
     orderDirection?: TableSortType;
     orderBy?: string;
@@ -30,6 +31,7 @@ export function CustomerSubmissionsList({
     orders,
     paginationProp,
     isCustomerDetailPage,
+    isReferralPage = false,
     headings,
     orderBy = '',
     orderDirection = 'desc',
@@ -49,12 +51,10 @@ export function CustomerSubmissionsList({
                     <TableRow>
                         <TableCell variant={'head'}>Submission #</TableCell>
                         <TableCell variant={'head'}>{'Placed'}</TableCell>
-                        {!isCustomerDetailPage ? (
-                            <>
-                                <TableCell variant={'head'}>Reviewed</TableCell>
-                                <TableCell variant={'head'}>Customer</TableCell>
-                            </>
+                        {!isCustomerDetailPage && !isReferralPage ? (
+                            <TableCell variant={'head'}>Reviewed</TableCell>
                         ) : null}
+                        {!isCustomerDetailPage ? <TableCell variant={'head'}>Customer</TableCell> : null}
                         <TableCell variant={'head'}>Cards</TableCell>
                         <TableCell variant={'head'}>Status</TableCell>
                         <TableCell variant={'head'}>Payment</TableCell>
@@ -72,6 +72,7 @@ export function CustomerSubmissionsList({
                             order={order}
                             key={order.id}
                             isCustomerDetailPage={!isCustomerDetailPage}
+                            isReferralPage={isReferralPage}
                         />
                     ))
                 ) : (

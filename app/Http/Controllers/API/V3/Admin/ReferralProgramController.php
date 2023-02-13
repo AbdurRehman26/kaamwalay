@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralProgramStatRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\ListRefereesRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\ListReferrersRequest;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Order\OrderListCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referee\RefereeCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerCollection;
 use App\Services\Admin\V3\ReferralProgramService;
@@ -32,4 +33,8 @@ class ReferralProgramController extends Controller
         return new RefereeCollection($this->referralProgramService->getReferees());
     }
 
+    public function listReferralOrders(): OrderListCollection
+    {
+        return new OrderListCollection($this->referralProgramService->getReferralOrders());
+    }
 }

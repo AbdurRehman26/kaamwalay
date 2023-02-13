@@ -123,15 +123,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 ],
                 customerEmail ? ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>] : null,
                 customerPhone ? ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>] : null,
-                [
-                    '',
-                    <>
-                        Customer ID:&nbsp;
-                        <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
-                            {customerNumber}
-                        </MuiLink>
-                    </>,
-                ],
+                ['', <>Customer ID:&nbsp;{customerNumber}</>],
             ].filter(Boolean),
         [customerEmail, customerName, customerNumber, customerPhone, customerId],
     );

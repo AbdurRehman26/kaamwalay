@@ -28,11 +28,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
     });
 
-    Route::apiResource('customers', CustomerController::class)->only(['index', 'show'])
+    Route::apiResource('customers', CustomerController::class)->only(['index', 'store', 'show'])
         ->names([
             'index' => 'customers.index',
+            'store' => 'customers.store',
             'show' => 'customers.show',
         ]);
+    Route::post('customers/{user}/send-access-email', [CustomerController::class, 'sendAccessEmail'])->name('customers.send-access-email');
+    Route::post('customers/{user}/assign-salesman/{salesman}', [CustomerController::class, 'assignSalesman'])->name('customers.assign-salesman');
+    Route::post('customers/{user}/unassign-salesman', [CustomerController::class, 'unAssignSalesman'])->name('customers.unassign-salesman');
         
     Route::prefix('customer')->group(function () {
         Route::get('/{user}/referral/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');

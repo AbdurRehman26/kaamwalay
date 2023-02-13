@@ -16,11 +16,12 @@ export class CustomerEntity extends UserEntity {
     public unpaidCommission?: number;
     public unpaidCommissionTillLastMonth?: number;
     public paidCommission?: number;
-    public submissionTotal?: number;
-    public totalCommissions?: number;
-    public commission?: number;
-    public totalSpent?: number;
+    public submissionTotal!: number;
+    public totalCommissions!: number;
+    public commission!: number;
+    public totalSpent!: number;
     public referrer?: ReferrerEntity;
+    public referredBy?: ReferrerEntity;
     @Type(() => SalesRepEntity)
     public salesman!: SalesRepEntity;
 }

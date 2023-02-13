@@ -47,6 +47,7 @@ type InitialValues = {
     search: string;
     salesmanId: string;
     promotionalSubscribers?: string;
+    referredBy?: boolean | null;
 };
 
 const PromotionalSubscribersStatus = [
@@ -147,6 +148,7 @@ const getFilters = (values: InitialValues) => ({
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
     promotionalSubscribers: values.promotionalSubscribers,
+    referredBy: values.referredBy,
 });
 
 const useStyles = makeStyles(
@@ -226,6 +228,7 @@ export function CustomersList() {
             search: query.search ?? '',
             salesmanId: query.salesmanId ?? '',
             promotionalSubscribers: query.promotionalSubscribers ?? '',
+            referredBy: query.referredBy,
         }),
         [
             query.minSubmissions,
@@ -235,6 +238,7 @@ export function CustomersList() {
             query.search,
             query.salesmanId,
             query.promotionalSubscribers,
+            query.referredBy,
         ],
     );
 
@@ -429,24 +433,24 @@ export function CustomersList() {
 
     const handleClearReferrerStatus = useCallback(async () => {
         setReferrerStatus({ label: '', value: 0 });
-        // orders$.searchSortedWithPagination(
-        //     { sort: sortFilter },
-        //     toApiPropertiesObject({
-        //         search,
-        //     }),
-        //     1,
-        // );
-    }, []);
+        delQuery('referredBy');
+        await customers.searchSortedWithPagination(
+            { sort: sortFilter },
+            getFilters({
+                ...formikRef.current!.values,
+                referredBy: null,
+            }),
+            1,
+        );
+    }, [customers, delQuery, sortFilter]);
 
     const handleReferrerStatus = useCallback(async (values) => {
-        // setReferrerStatus({ value: values.value, label: values.label });
-        // orders$.searchSortedWithPagination(
-        //     { sort: sortFilter },
-        //     toApiPropertiesObject({
-        //         referredBy: values.value,
-        //     }),
-        //     1,
-        // );
+        values = {
+            ...values,
+            referredBy: values.value ? true : false,
+        };
+        setReferrerStatus({ value: values.value, label: values.label });
+        await handleSubmit(values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

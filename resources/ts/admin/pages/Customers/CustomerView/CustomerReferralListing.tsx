@@ -13,6 +13,7 @@ import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 
 interface CustomerReferralListingProps {
     customers: CustomerEntity[];
@@ -60,10 +61,14 @@ export function CustomerReferralListing({
                                     : formatDate(customer?.paidAt, 'MM/DD/YYYY')}
                             </TableCell>
                             <TableCell>{isSignUp ? customer.cardsCount : customer.cards}</TableCell>
-                            <TableCell>{isSignUp ? customer.submissions : customer.submissionTotal}</TableCell>
-                            {isSignUp ? <TableCell>{customer.totalSpent}</TableCell> : null}
+                            <TableCell>
+                                {isSignUp ? customer.submissions : formatCurrency(customer.submissionTotal)}
+                            </TableCell>
+                            {isSignUp ? <TableCell>{formatCurrency(customer.totalSpent)}</TableCell> : null}
                             <TableCell sx={{ color: '#20BFB8', fontWeight: '700', fontSize: '14px' }}>
-                                {isSignUp ? customer.totalCommissions : customer.commission}
+                                {isSignUp
+                                    ? formatCurrency(customer.totalCommissions)
+                                    : formatCurrency(customer.commission)}
                             </TableCell>
                         </TableRow>
                     ))

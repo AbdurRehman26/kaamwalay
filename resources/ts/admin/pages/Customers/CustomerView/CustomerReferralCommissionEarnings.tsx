@@ -1,20 +1,19 @@
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
-import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminCustomerReferralCommissionQuery } from '@shared/redux/hooks/useAdminCustomerReferralCommissionQuery';
 import { CustomerReferralListing } from './CustomerReferralListing';
 
 const Root = styled(Grid)({
-    '.CustomerSubmissionListingBox': {
+    '.CustomerReferralCommissionEarningBox': {
         boxSizing: 'border-box',
         border: '1px solid #E0E0E0',
         borderRadius: '4px',
@@ -39,7 +38,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: true,
     },
     {
-        id: 'paid_at',
+        id: 'created_at',
         numeric: false,
         disablePadding: false,
         label: 'DATE PAID',
@@ -74,27 +73,36 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function CustomerReferralCommissionEarnings() {
     const { id } = useParams<'id'>();
-
-    const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
-    const [orderBy, setOrderBy] = useState<string>('paid_at');
+    const [orderBy, setOrderBy] = useState<string>('created_at');
+    const [sortFilter, setSortFilter] = useState<boolean>(false);
 
     const referralcommissionEarnings = useAdminCustomerReferralCommissionQuery({
         params: {
             customerId: id,
             perPage: 24,
+            sort: orderBy,
         },
         ...bracketParams(),
     });
 
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
-        const isAsc = orderBy === property && orderDirection === 'asc';
-        setOrderDirection(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
+    useEffect(
+        () => {
+            if (!referralcommissionEarnings.isLoading) {
+                referralcommissionEarnings.sort({ sort: sortFilter ? 'created_at' : '-created_at' });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [orderBy],
+    );
+
+    const handleRequestSort = () => {
+        setSortFilter(!sortFilter);
+        setOrderBy(sortFilter ? 'created_at' : '-created_at');
     };
 
     return (
         <Root container>
-            <Grid container item xs className={'CustomerSubmissionListingBox'}>
+            <Grid container item xs className={'CustomerReferralCommissionEarningBox'}>
                 {referralcommissionEarnings.isLoading ? (
                     <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                         <CircularProgress />
@@ -117,7 +125,6 @@ export function CustomerReferralCommissionEarnings() {
                                         headings={headings}
                                         handleRequestSort={handleRequestSort}
                                         orderBy={orderBy}
-                                        orderDirection={orderDirection}
                                     />
                                 </TableContainer>
                             </>
@@ -130,7 +137,7 @@ export function CustomerReferralCommissionEarnings() {
                                 sx={{ padding: '40px 20px' }}
                             >
                                 <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
-                                    <Inventory2TwoToneIcon />
+                                    <PriceCheckIcon />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography

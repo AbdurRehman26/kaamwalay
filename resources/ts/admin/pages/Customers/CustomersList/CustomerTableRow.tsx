@@ -3,6 +3,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -16,8 +17,8 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
-// import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
@@ -28,7 +29,8 @@ interface props {
 
 enum RowOption {
     CreditCustomer,
-    ChangeReferralProgram,
+    Deactivate,
+    Reactivate,
 }
 
 const CustomerType = [
@@ -63,24 +65,29 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [setAnchorEl],
     );
 
-    // const handleChangeReferralProgram = useCallback(async (status: boolean) => {
-    //     await dispatch(changeReferralStatus(customer.id, status));
-    // }, [customer.id, dispatch])
+    const handleChangeReferralProgram = useCallback(
+        async (customerId: number, referralStatus: boolean) => {
+            const DTO = { customerId, referralStatus };
+            await dispatch(changeReferralStatus(DTO));
+        },
+        [dispatch],
+    );
 
     const handleOption = useCallback(
-        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
+        (option: RowOption, customerId?: number, status?: boolean) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
                     break;
-                case RowOption.ChangeReferralProgram:
-                    // handleChangeReferralProgram(status);
+                case RowOption.Reactivate:
+                case RowOption.Deactivate:
+                    handleChangeReferralProgram(customerId!!, status!!);
                     break;
             }
         },
-        [handleCloseOptions],
+        [handleCloseOptions, handleChangeReferralProgram],
     );
 
     const handleRowClick = useCallback<MouseEventHandler>(
@@ -201,7 +208,13 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'center'}>
-                    {customer?.referrer ? customer?.referrer?.fullName : '-'}
+                    {customer?.referredBy ? (
+                        <MuiLink>
+                            {customer?.referredBy?.firstName} {customer?.referredBy?.lastName}
+                        </MuiLink>
+                    ) : (
+                        '-'
+                    )}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
@@ -229,14 +242,15 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
-                        {/* {customer.referrer. === 'active' ? (
-                        <MenuItem onClick={handleOption(Options.Deactivate)}>Deactivate</MenuItem>
-                    ) : null}
-                    {customer.referrer.code === 'inactive' ? (
-                        <MenuItem onClick={handleOption(Options.Reactivate)}>Reactivate</MenuItem>
-                    ) : null} */}
-                        {/* <MenuItem onClick={handleOption(RowOption.ChangeReferralProgram)}>Activate Referral</MenuItem>
-                        <MenuItem onClick={handleOption(RowOption.ChangeReferralProgram)}>Activate Referral</MenuItem> */}
+                        {customer.referrer?.isReferralActive ? (
+                            <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
+                                Deactivate
+                            </MenuItem>
+                        ) : (
+                            <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
+                                Reactivate
+                            </MenuItem>
+                        )}
                     </Menu>
                 </TableCell>
             </TableRow>

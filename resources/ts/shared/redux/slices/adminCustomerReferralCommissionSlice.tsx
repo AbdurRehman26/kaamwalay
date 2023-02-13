@@ -14,14 +14,14 @@ const adminCustomersReferralCommissionThunk = createRepositoryThunk(
 
 export const changeReferralStatus = createAsyncThunk(
     'referral/changeReferralStatus',
-    async (userId: number, referralStatus: boolean) => {
+    async (DTO: { customerId: number; referralStatus: boolean }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/customer/${userId}/referral/set-referrers-status`, {
+        const endpoint = apiService.createEndpoint(`admin/customer/${DTO.customerId}/referral/set-referrers-status`, {
             version: 'v3',
         });
-        const referral = await endpoint.post('', referralStatus);
-        console.log('referral ', referral);
-
+        const referral = await endpoint.post('', {
+            isReferralActive: DTO.referralStatus,
+        });
         return referral.data;
     },
 );

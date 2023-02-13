@@ -167,7 +167,6 @@ export function CustomerView() {
                 {' '}
                 <CustomerViewContent customer={data} />{' '}
             </Grid>
-            {/* <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} /> */}
         </>
     );
 }

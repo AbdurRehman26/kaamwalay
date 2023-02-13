@@ -62,8 +62,8 @@ const WithDrawDiv = styled(Grid)({
         lineHeight: '20px',
         textAlign: 'center',
         letterSpacing: '0.35px',
-        color: 'rgba(0, 0, 0, 0.87)',
-        background: '#42E8E0',
+        color: 'rgba(0, 0, 0, 0.87) !important',
+        background: '#42E8E0 !important',
         borderRadius: '24px',
         padding: '15px 20px',
         width: '100%',
@@ -84,29 +84,29 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
             <Grid className={'HeadingDiv'}>
                 <Typography className={'Heading'}>Withdrawable Commission</Typography>
                 <Typography className={'TotalAmount'}>
-                    ${round(referrer?.withdrawableCommission, 2).toFixed(2)}
+                    ${round(referrer.withdrawableCommission, 2).toFixed(2)}
                 </Typography>
-                {referrer?.withdrawableCommission ? (
-                    <Button variant="contained" className={'WithDrawButton'}>
+                {referrer.withdrawableCommission ? (
+                    <Button variant="contained" className={'WithDrawButton'} disabled>
                         WITHDRAW FUNDS
                     </Button>
                 ) : null}
             </Grid>
             <div className={'StatsBreakDown'}>
                 <Typography className={'StatsBreakDownText'}>Link Clicks</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer?.linkClicks}</Typography>
+                <Typography className={'StatsBreakDownPrice'}>{referrer.linkClicks}</Typography>
             </div>
             <div className={'StatsBreakDown'}>
                 <Typography className={'StatsBreakDownText'}>Successful Sign Ups</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer?.successfulSignups}</Typography>
+                <Typography className={'StatsBreakDownPrice'}>{referrer.successfulSignups}</Typography>
             </div>
             <div className={'StatsBreakDown'}>
                 <Typography className={'StatsBreakDownText'}>Commission Earnings</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer?.referralOrders}</Typography>
+                <Typography className={'StatsBreakDownPrice'}>{referrer.referralOrders}</Typography>
             </div>
             <div className={'StatsBreakDown'}>
                 <Typography className={'StatsBreakDownText'}>Total Earned</Typography>
-                <Typography className={'StatsBreakDownPrice'}>${round(referrer?.totalEarned, 2).toFixed(2)}</Typography>
+                <Typography className={'StatsBreakDownPrice'}>${round(referrer.totalEarned, 2).toFixed(2)}</Typography>
             </div>
         </WithDrawDiv>
     );

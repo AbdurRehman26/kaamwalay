@@ -261,7 +261,6 @@ export function Main() {
                                         value="whatsapp"
                                         aria-label="whatsapp"
                                     />
-                                    {/* <Tab className={'Tab'} icon={<EmailOutlinedIcon />} value="email" aria-label="email" /> */}
                                 </TabList>
                                 <TabPanel value="share-link">
                                     <Copylink referralUrl={referrer?.referralUrl} />
@@ -278,7 +277,6 @@ export function Main() {
                                 <TabPanel value="whatsapp">
                                     <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
                                 </TabPanel>
-                                {/* <TabPanel value="email"></TabPanel> */}
                             </TabContext>
                         </ShareBox>
                     ) : (

@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import theme from '@shared/styles/theme';
+import ReferralDialog from './ReferralDialog';
 
 const ReferralBannerGrid = styled(Grid)({
     display: 'flex',
@@ -34,18 +35,21 @@ const ReferralBannerGrid = styled(Grid)({
 
 export function ReferralBanner() {
     return (
-        <ReferralBannerGrid>
-            <Grid>
-                <Typography className={'BannerText'}>
-                    Earn money by referring your friends & followers to RoboGrading!
-                </Typography>
-            </Grid>
-            <Grid className={'LearnMoreDiv'}>
-                <MuiLink className={'BannerText'} component={Link} to={`/referral-program/main`}>
-                    LEARN MORE
-                </MuiLink>
-            </Grid>
-        </ReferralBannerGrid>
+        <>
+            <ReferralDialog />
+            <ReferralBannerGrid>
+                <Grid>
+                    <Typography className={'BannerText'}>
+                        Earn money by referring your friends & followers to RoboGrading!
+                    </Typography>
+                </Grid>
+                <Grid className={'LearnMoreDiv'}>
+                    <MuiLink className={'BannerText'} component={Link} to={`/referral-program/main`}>
+                        LEARN MORE
+                    </MuiLink>
+                </Grid>
+            </ReferralBannerGrid>
+        </>
     );
 }
 

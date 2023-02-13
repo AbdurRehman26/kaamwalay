@@ -131,15 +131,9 @@ export function Referral() {
                     <TabPanel value={'referrals'} sx={styles.TabsPanel}>
                         <Referrals />
                     </TabPanel>
-                    {/* <TabPanel value={'with-drawals'} sx={styles.TabsPanel}>
-                        <Withdrawals />
-                    </TabPanel> */}
                     <TabPanel value={'commission-structure'} sx={styles.TabsPanel}>
                         <CommissionStructure />
                     </TabPanel>
-                    {/* <TabPanel value={'marketing-content'} sx={styles.TabsPanel}>
-                        <MarketingContent />
-                    </TabPanel> */}
                 </Grid>
             </TabContext>
         </>

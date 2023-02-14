@@ -33,8 +33,8 @@ class ReferralProgramController extends Controller
         return new ReferrerResource($this->referrerService->setReferrersStatus($user->id, $request->validated()));
     }
 
-    public function getStat(GetReferralStatRequest $request, User $user): JsonResponse
+    public function getReferrerStat(GetReferralStatRequest $request, User $user): JsonResponse
     {
-        return new JsonResponse([ 'data' => $this->referrerService->getStat($user, $request->validated())]);
+        return new JsonResponse([ 'data' => $this->referrerService->getReferrerStat($user, $request->validated())]);
     }
 }

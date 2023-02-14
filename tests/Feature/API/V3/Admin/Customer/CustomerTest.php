@@ -85,7 +85,7 @@ test('an admin can see commission details of single customer', function () {
         ]);
 });
 
-test('an admin can mark a referral program as inactive', function () {
+test('an admin can mark an user referral program as inactive', function () {
     actingAs($this->user);
 
     postJson(route('v3.admin.customer.referral.set-referrers-status', $this->customer->referred_by), [

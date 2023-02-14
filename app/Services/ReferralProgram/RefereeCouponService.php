@@ -88,7 +88,7 @@ class RefereeCouponService
             'discount_value' => Coupon::getRefereeCouponDiscount(),
             'usage_allowed_per_user' => 1,
             'max_usage_allowed' => 1,
-            'description' => 'Submission discount referred by a user',
+            'description' => 'Submission discount referred by an user',
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ];
     }

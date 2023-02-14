@@ -15,9 +15,6 @@ import { Repository } from './Repository';
 export class AuthenticationRepository extends Repository<AuthenticatedUserEntity> {
     readonly endpointPath: string = '/auth';
     readonly model = AuthenticatedUserEntity;
-    readonly endpointConfig = {
-        version: 'v3',
-    };
 
     constructor(@Inject() public authenticationService: AuthenticationService) {
         super();

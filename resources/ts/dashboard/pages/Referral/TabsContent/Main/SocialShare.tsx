@@ -2,7 +2,6 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 
@@ -36,26 +35,13 @@ interface props {
 }
 
 export function SocialShare({ name, referralUrl }: props) {
-    const [socialMessage, setSocialMessage] = useState('');
     const { featureReferralDiscountPercentage } = useConfiguration();
-
-    useEffect(() => {
-        setSocialMessage(
-            `I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link ${referralUrl} to get ${featureReferralDiscountPercentage}% OFF your first submission.`,
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const socialMessage = `I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link ${referralUrl} to get ${featureReferralDiscountPercentage}% OFF your first submission.`;
 
     return (
         <SocialShareDiv>
             <Typography className={'SocialHeading'}>Share on {name}</Typography>
-            <TextField
-                value={socialMessage}
-                fullWidth
-                multiline
-                variant={'outlined'}
-                onChange={(e: any) => setSocialMessage(e.target.value)}
-            />
+            <TextField value={socialMessage} fullWidth multiline variant={'outlined'} />
             {name === 'Facebook' ? (
                 <FacebookShareButton url={referralUrl} title={socialMessage} className={'SocialButton'}>
                     <Typography sx={{ fontWeight: 500 }}>SHARE ON {name}</Typography>

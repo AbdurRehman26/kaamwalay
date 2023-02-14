@@ -30,6 +30,7 @@ export { submissionGradesSlice } from './submissionGradeSlice';
 export { adminCustomerReferralSignUpSlice as adminCustomerReferralSignUp } from './adminCustomerReferralSignUpSlice';
 export { adminCustomerReferralCommissionSlice as adminCustomerReferralCommission } from './adminCustomerReferralCommissionSlice';
 export { adminCustomersListSlice as adminCustomersList } from './adminCustomersListSlice';
+export { adminOrdersListSlice as adminOrdersList } from './adminOrdersListSlice';
 
 /*
  *

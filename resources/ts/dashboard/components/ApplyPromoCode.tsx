@@ -11,7 +11,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -45,6 +47,9 @@ const useStyles = makeStyles(
 
 export function ApplyPromoCode() {
     const { id } = useParams<'id'>();
+    const { user } = useAuth();
+    const [query] = useLocationQuery<any>();
+
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const isCouponValid = useAppSelector((state) => state.newSubmission.couponState.isCouponValid);
@@ -63,11 +68,12 @@ export function ApplyPromoCode() {
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
     const totalCardItems = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
+    const coupon = query?.coupon;
 
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${originalServiceLevelId}&items_count=${totalCardItems}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${originalServiceLevelId}&items_count=${totalCardItems}&user_id=${user?.id}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -86,8 +92,14 @@ export function ApplyPromoCode() {
                 setShowInvalidState(true);
             }
         },
-        [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems],
+        [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems, user?.id],
     );
+
+    useEffect(() => {
+        if (coupon) {
+            checkCouponCode(coupon).then(() => dispatch(setCouponCode(coupon.toUpperCase())));
+        }
+    }, [checkCouponCode, coupon, dispatch]);
 
     const debounceCheckCoupon = useMemo(
         () => debounce((newCouponCode: string) => checkCouponCode(newCouponCode), 500),
@@ -158,8 +170,8 @@ export function ApplyPromoCode() {
         };
         try {
             const endpointUrl = id
-                ? `customer/orders/${id}/coupons/calculate-discount`
-                : `customer/coupons/calculate-discount`;
+                ? `customer/orders/${id}/coupons/calculate-discount?user_id=${user?.id}`
+                : `customer/coupons/calculate-discount?user_id=${user?.id}`;
             const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
             const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));

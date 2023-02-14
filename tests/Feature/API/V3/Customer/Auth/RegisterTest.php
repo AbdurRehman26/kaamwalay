@@ -227,3 +227,26 @@ test('customer cannot register with incorrect referral code', function () {
         'errors' => ['referral_code'],
     ]);
 });
+
+it('throws error when trying to sign up using a referral code from inactive referrer', function () {
+    $referrer = Referrer::factory()->create(['is_referral_active' => false]);
+
+    $email = $this->faker->safeEmail();
+    $response = $this->postJson('/api/v3/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
+        'app_generated_id' => $referrer->referral_code,
+        'referral_code' => 'Lorem Ipsum',
+    ]);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonStructure([
+        'errors' => ['referral_code'],
+    ]);
+});

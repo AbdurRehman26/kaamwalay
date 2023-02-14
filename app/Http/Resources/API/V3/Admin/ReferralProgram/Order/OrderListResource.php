@@ -3,6 +3,8 @@
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
@@ -32,9 +34,10 @@ class OrderListResource extends BaseResource
             'owner' => new UserResource($this->salesman),
             'referrer' => new UserResource($this->user->referredBy),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'payment_status' => $this->payment_status,
             'created_at' => $this->formatDate($this->created_at),
-            'promo_code' => $this->coupon?->code,
+            'coupon' => $this->whenLoaded('coupon', CouponResource::class),
         ];
     }
 }

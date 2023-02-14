@@ -37,6 +37,8 @@ export function CustomerSubmissionsList({
     orderDirection = 'desc',
     handleRequestSort,
 }: CustomerSubmissionsListProps) {
+    console.log('CustomerSubmissionsList', orders.length);
+
     return (
         <Table>
             {headings ? (
@@ -59,6 +61,7 @@ export function CustomerSubmissionsList({
                         <TableCell variant={'head'}>Status</TableCell>
                         <TableCell variant={'head'}>Payment</TableCell>
                         <TableCell variant={'head'}>Declared Value</TableCell>
+                        {isReferralPage ? <TableCell variant={'head'}>Promo Code</TableCell> : null}
                         <TableCell variant={'head'}>Order Total</TableCell>
                         <TableCell variant={'head'} />
                         <TableCell variant={'head'} />

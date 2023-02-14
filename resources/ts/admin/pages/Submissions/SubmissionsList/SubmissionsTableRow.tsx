@@ -81,8 +81,6 @@ export function SubmissionsTableRow({
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
-    console.log('isCustomerDetailPage', isCustomerDetailPage);
-    console.log('isReferralPage', isReferralPage);
     const handleOption = useCallback(
         (option: Options) => async () => {
             handleCloseOptions();
@@ -195,6 +193,22 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
+                {isReferralPage ? (
+                    <TableCell>
+                        {order?.referrer?.fullName ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.referrer?.id}/view`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.referrer.fullName}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />
@@ -207,6 +221,7 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                {isReferralPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
                 {!isSalesRepDetailPage && !isReferralPage ? (

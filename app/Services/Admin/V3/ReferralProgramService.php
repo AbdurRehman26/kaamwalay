@@ -95,17 +95,21 @@ class ReferralProgramService
             ->with('referredBy')
             ->paginate(request('per_page', self::PER_PAGE));
     }
+
+    // @phpstan-ignore-next-line
     public function getReferralOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');
 
-        $query = Order::join('users', 'users.id', 'orders.user_id')->whereNotNull('users.referred_by');
+        $query = Order::excludeCancelled()
+                ->join('users', 'users.id', 'orders.user_id')
+                ->whereNotNull('users.referred_by')
+                ->select('orders.*');
 
         return QueryBuilder::for($query)
-            ->excludeCancelled()
             ->allowedFilters(Order::getAllowedAdminFilters())
             ->allowedIncludes(Order::getAllowedAdminIncludes())
-            ->allowedSorts(Order::getAllowedAdminSorts())
+            ->allowedSorts(Order::allowedAdminReferralSorts())
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }

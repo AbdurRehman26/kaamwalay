@@ -30,12 +30,22 @@ export function SubmissionsList() {
 
     const tabs = (
         <TabList indicatorColor={'primary'} textColor={'primary'}>
-            <Tab component={Link} to={'/submissions/all/list'} value={'all'} label="All" />
-            <Tab component={Link} to={'/submissions/pending/list'} value={'pending'} label="Pending" />
-            <Tab component={Link} to={'/submissions/reviewed/list'} value={'reviewed'} label="Reviewed" />
-            <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
-            <Tab component={Link} to={'/submissions/assembled/list'} value={'assembled'} label="Assembled" />
-            <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
+            <Tab component={Link} to={'/referral-program/submissions/all/list'} value={'all'} label="All" />
+            <Tab component={Link} to={'/referral-program/submissions/pending/list'} value={'pending'} label="Pending" />
+            <Tab
+                component={Link}
+                to={'/referral-program/submissions/reviewed/list'}
+                value={'reviewed'}
+                label="Reviewed"
+            />
+            <Tab component={Link} to={'/referral-program/submissions/graded/list'} value={'graded'} label="Graded" />
+            <Tab
+                component={Link}
+                to={'/referral-program/submissions/assembled/list'}
+                value={'assembled'}
+                label="Assembled"
+            />
+            <Tab component={Link} to={'/referral-program/submissions/shipped/list'} value={'shipped'} label="Shipped" />
         </TabList>
     );
 

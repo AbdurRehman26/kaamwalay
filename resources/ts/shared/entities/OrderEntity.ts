@@ -113,6 +113,8 @@ export class OrderEntity extends Entity {
 
     @Type(() => OrderLabelEntity)
     public orderCertificate!: OrderLabelEntity | null;
+    @Type(() => UserEntity)
+    public referrer!: UserEntity;
 
     public get status() {
         return this.orderStatus?.code;

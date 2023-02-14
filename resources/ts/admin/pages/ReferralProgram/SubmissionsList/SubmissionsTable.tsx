@@ -20,7 +20,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useListAdminReferralOrdersQuery } from '@shared/redux/hooks/useReferralOrdersQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 
 interface SubmissionsTableProps {
@@ -61,8 +61,8 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
-    const [orderBy, setOrderBy] = useState<string>('created_at');
-    const [sortFilter, setSortFilter] = useState('-created_at');
+    const [orderBy, setOrderBy] = useState<string>('orders.created_at');
+    const [sortFilter, setSortFilter] = useState('-orders.created_at');
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
@@ -77,7 +77,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
-            id: 'created_at',
+            id: 'orders.created_at',
             numeric: false,
             disablePadding: false,
             label: 'Placed',
@@ -97,6 +97,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             numeric: false,
             disablePadding: false,
             label: 'Owner',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'referrer',
+            numeric: false,
+            disablePadding: false,
+            label: 'Referrer',
             align: 'left',
             sortable: true,
         },
@@ -133,6 +141,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
+            id: 'promo_code',
+            numeric: true,
+            disablePadding: false,
+            label: 'Promo Code',
+            align: 'left',
+            sortable: false,
+        },
+        {
             id: 'grand_total',
             numeric: true,
             disablePadding: false,
@@ -164,17 +180,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         );
     };
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useListAdminReferralOrdersQuery({
         params: {
-            include: [
-                'orderStatus',
-                'customer',
-                'customer.wallet',
-                'invoice',
-                'orderShipment',
-                'orderLabel',
-                'shippingMethod',
-            ],
+            include: ['orderStatus', 'customer', 'invoice', 'coupon'],
             sort: sortFilter,
             filter: {
                 search,
@@ -186,6 +194,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     });
 
     const totals = orders$.pagination?.meta?.total ?? 0;
+
+    console.log('SubmissionsTable', orders$);
+    console.log('SubmissionsTable meta', orders$.pagination?.meta?.total ?? 0);
 
     const handleExportData = useCallback(async () => {
         try {

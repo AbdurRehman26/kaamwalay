@@ -75,7 +75,7 @@
     display: flex;
     border: 2px solid #e1bbff;
     border-radius: 4px;
-    width: 35%;
+    width: 40%;
     height: 50px;
     margin-bottom: 24px;
     span {
@@ -84,9 +84,10 @@
         text-align: left;
         text-transform: uppercase;
         margin: auto;
+        padding: 16px 12px;
     }
     @media screen and (max-width: 767px) {
-        width: 60%;
+        width: 78%;
     }
 }
 

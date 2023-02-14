@@ -211,7 +211,7 @@
             padding: 0 24px;
         }
         @media screen and (max-width: 767px) {
-            width: 100%;
+            width: 50%;
             padding: 0;
         }
         @media screen and (max-width: 599px) {
@@ -228,6 +228,8 @@
     @media screen and (max-width: 767px) {
         width: 100%;
         padding-top: 5px;
+        width: 179px;
+        height: 179px;
     }
 }
 

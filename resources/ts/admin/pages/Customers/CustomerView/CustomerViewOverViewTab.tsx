@@ -6,11 +6,7 @@ interface CustomerViewOverViewTabProps {
 }
 
 export function CustomerViewOverViewTab({ customer }: CustomerViewOverViewTabProps) {
-    return (
-        <>
-            <CustomerDetail customer={customer} />
-        </>
-    );
+    return <CustomerDetail customer={customer} />;
 }
 
 export default CustomerViewOverViewTab;

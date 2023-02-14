@@ -115,7 +115,7 @@ export function CustomerReferralCommissionEarnings() {
                                     <Box p={2}>
                                         <Typography className={'tableTitle'}>
                                             {' '}
-                                            Cummissions Earnings{' '}
+                                            Cummission Earnings{' '}
                                             <span> ({referralcommissionEarnings?.data.length}) </span>{' '}
                                         </Typography>
                                     </Box>

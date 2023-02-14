@@ -96,7 +96,7 @@ export function SubmissionsView() {
                 owner={data?.owner}
                 referrer={data?.referrer}
                 salesmanCommission={data?.salesmanCommission}
-                referralCommission={data?.referrelCommission}
+                referralCommission={data?.referralCommission}
             />
             <Divider />
             <RefundsAndExtraCharges

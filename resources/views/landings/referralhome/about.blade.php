@@ -18,7 +18,7 @@
             <p class="ReferralHome-sectionContentText" data-aos="fade-left"data-aos-delay="100">AGS is the first card-grading company that uses 100% Artificial Intelligence to grade your cards. You’ll get consistent, accurate, and unbiased grades every time. Combine that with the fastest turnaround in the industry and the most affordable prices, you’ll find that AGS delivers an unrivaled grading experience for every collector.
             </p>
             <div class="container text-left">
-                <button onclick="(function(){window.scrollTo(0, 0)})()" class="ReferralHome-button">Sign Up</button>
+                <button onclick="(function(){window.scrollTo(0, 0)})()" class="ReferralHome-button ReferralHome-buttonAbout">Sign Up</button>
             </div>
         </div>
     </div>

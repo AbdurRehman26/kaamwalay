@@ -16,6 +16,10 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     readonly endpointPath: string = '/auth';
     readonly model = AuthenticatedUserEntity;
 
+    endpointConfig = {
+        version: 'v2',
+    };
+
     constructor(@Inject() public authenticationService: AuthenticationService) {
         super();
     }
@@ -37,6 +41,10 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     }
 
     public async whoami() {
+        this.endpointConfig = {
+            version: 'v3',
+        };
+
         const { data } = await this.endpoint.get('/me');
         return plainToInstance(UserEntity, data.user);
     }

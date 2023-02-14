@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Admin;
 
-use App\Http\Resources\API\V2\Admin\Order\OrderListResource as OrderOrderListResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderListResource as V2OrderOrderListResource;
 
-class OrderListResource extends OrderOrderListResource
+class OrderListResource extends V2OrderOrderListResource
 {
     /**
      * Transform the resource into an array.

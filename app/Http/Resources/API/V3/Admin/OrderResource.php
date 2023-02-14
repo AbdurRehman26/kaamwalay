@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Admin;
 
-use App\Http\Resources\API\V2\Admin\Order\OrderResource as OrderOrderResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderResource as V2OrderOrderResource;
 
-class OrderResource extends OrderOrderResource
+class OrderResource extends V2OrderOrderResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,7 @@ class OrderResource extends OrderOrderResource
 
         return array_merge($data, [
             'referrer' => $this->user->referredBy,
-            'referrel_commission' => $this->referral_total_commission,
+            'referral_commission' => $this->referral_total_commission,
         ]);
     }
 }

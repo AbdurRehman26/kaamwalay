@@ -542,7 +542,7 @@ class Order extends Model implements Exportable
             $row->order_number,
             $row->created_at,
             $row->arrived_at,
-            $row->user->customer_number,
+            $row->user?->customer_number,
             $row->orderItems->sum('quantity'),
             $row->orderStatus->name,
             $row->payment_status->toString(),

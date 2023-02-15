@@ -117,7 +117,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
-            id: 'referrer',
+            id: 'referred_by',
             numeric: false,
             disablePadding: false,
             label: 'Referrer',

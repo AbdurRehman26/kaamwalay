@@ -31,7 +31,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { useAdminCustomersListQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
 import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
@@ -242,7 +242,7 @@ export function CustomersList() {
         ],
     );
 
-    const customers = useAdminCustomersQuery({
+    const customers = useAdminCustomersListQuery({
         params: {
             include: ['salesman', 'referrer', 'referredBy'],
             sort: sortFilter,

@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
-import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { useAdminCustomersShowQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerViewContent } from './CustomerViewContent';
@@ -84,7 +84,7 @@ export function CustomerView() {
         navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
     };
 
-    const customer$ = useAdminCustomerQuery({
+    const customer$ = useAdminCustomersShowQuery({
         resourceId: Number(id),
     });
 

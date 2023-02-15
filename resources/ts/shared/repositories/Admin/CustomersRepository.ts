@@ -7,9 +7,6 @@ import { Repository } from '../Repository';
 export class CustomersRepository extends Repository<CustomerEntity> {
     readonly endpointPath: string = 'admin/customers';
     readonly model = CustomerEntity;
-    readonly endpointConfig = {
-        version: 'v3',
-    };
 
     public async storeCustomer(input: AddCustomerRequestDto) {
         const { data } = await this.endpoint.post('', input);

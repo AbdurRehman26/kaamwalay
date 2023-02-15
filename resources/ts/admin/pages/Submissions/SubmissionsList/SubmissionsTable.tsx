@@ -22,7 +22,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 
 interface SubmissionsTableProps {
@@ -196,7 +196,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         );
     };
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useAdminOrdersListQuery({
         params: {
             include: [
                 'orderStatus',

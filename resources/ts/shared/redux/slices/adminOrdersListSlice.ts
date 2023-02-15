@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { AdminOrdersRepository } from '@shared/repositories/Admin/AdminOrdersRepository';
-// import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -17,6 +16,9 @@ export const adminOrdersListSlice = createSlice({
     reducers: {
         invalidateAdminOrders: adminOrdersListThunk.invalidateEntities,
     },
+    extraReducers: (builder) => {
+        adminOrdersListThunk.buildReducers(builder);
+    },
 });
 
-export const { listAction: listAdminOrdersAction, showAction: showAdminOrderAction } = adminOrdersListThunk;
+export const { listAction: listAdminOrdersListAction, showAction: showAdminOrderShowAction } = adminOrdersListThunk;

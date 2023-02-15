@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Banner from '@shared/assets/banner.png';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -77,8 +77,16 @@ const ReferralDialogBox = styled(Dialog)({
 });
 
 export function ReferralDialog() {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const { featureReferralDiscountPercentage } = useConfiguration();
+
+    useEffect(() => {
+        const isModalShow = localStorage.getItem('show');
+        if (isModalShow !== 'hide') {
+            setOpen(true);
+            localStorage.setItem('show', 'hide');
+        }
+    }, []);
 
     const handleClose = () => {
         setOpen(false);

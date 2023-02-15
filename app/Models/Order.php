@@ -180,6 +180,7 @@ class Order extends Model implements Exportable
             AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
             AllowedSort::custom('status', new AdminSubmissionsStatusSort),
             AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            AllowedSort::custom('referred_by', new AdminSubmissionsPaymentStatusSort),
             'created_at',
             'order_number',
             'arrived_at',

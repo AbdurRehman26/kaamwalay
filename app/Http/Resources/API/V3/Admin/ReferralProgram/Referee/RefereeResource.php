@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referee;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Admin\Salesman\SalesmanResource;
-use App\Http\Resources\API\V2\Admin\User\UserResource;
+use App\Http\Resources\API\V3\Admin\Salesman\SalesmanResource;
+use App\Http\Resources\API\V3\Admin\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 

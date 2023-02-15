@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
-use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;

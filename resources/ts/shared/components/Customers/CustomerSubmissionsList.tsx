@@ -37,8 +37,6 @@ export function CustomerSubmissionsList({
     orderDirection = 'desc',
     handleRequestSort,
 }: CustomerSubmissionsListProps) {
-    console.log('CustomerSubmissionsList', orders.length);
-
     return (
         <Table>
             {headings ? (

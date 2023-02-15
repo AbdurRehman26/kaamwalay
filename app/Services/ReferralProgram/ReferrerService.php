@@ -101,7 +101,7 @@ class ReferrerService
         }
     }
 
-    public function getStat(User $user, array $data): float
+    public function getReferrerStat(User $user, array $data): float
     {
         $now = Carbon::now();
 
@@ -182,10 +182,9 @@ class ReferrerService
 
     protected function getTotalEarnedCommission(int $userId, string $startDate, string $endDate): float
     {
-        return ReferrerEarnedCommission::join('orders', 'orders.id', 'referrer_earned_commissions.order_id')
-            ->join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')
+        return ReferrerEarnedCommission::join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')
             ->where('referrers.user_id', $userId)
-            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->whereBetween('referrer_earned_commissions.created_at', [$startDate, $endDate])
             ->sum('commission');
     }
 

@@ -46,19 +46,19 @@ trait ReferrableTrait
 
     public function getReferrerSubmissions(): int
     {
-        return $this->referees()->join('orders','orders.user_id','users.id')->count();
+        return $this->referees()->join('orders', 'orders.user_id', 'users.id')->count();
     }
 
     public function getReferrerCardsCount(): int
     {
-        return $this->referees()->join('orders','orders.user_id','users.id')
-            ->join('order_items','order_items.order_id','orders.id')
+        return $this->referees()->join('orders', 'orders.user_id', 'users.id')
+            ->join('order_items', 'order_items.order_id', 'orders.id')
             ->sum('quantity');
     }
 
     public function getReferrerSales(): float
     {
-        return $this->referees()->join('orders','orders.user_id','users.id')->sum('grand_total');
+        return $this->referees()->join('orders', 'orders.user_id', 'users.id')->sum('grand_total');
     }
 
     public function getReferrerCommission(): float

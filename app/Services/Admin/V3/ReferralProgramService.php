@@ -64,7 +64,7 @@ class ReferralProgramService
                 return $this->getTotalCards($startDate, $endDate);
             case 'commission_earned':
                 return $this->getTotalEarnedCommission($startDate, $endDate);
-           default:
+            default:
                 return 0;
         }
     }

@@ -6,5 +6,4 @@ use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource as V2OrderStatusRe
 
 class OrderStatusResource extends V2OrderStatusResource
 {
-
 }

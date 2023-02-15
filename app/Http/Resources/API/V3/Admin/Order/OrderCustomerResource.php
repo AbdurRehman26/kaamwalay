@@ -6,5 +6,4 @@ use App\Http\Resources\API\V2\Admin\Order\OrderCustomerResource as V2OrderCustom
 
 class OrderCustomerResource extends V2OrderCustomerResource
 {
-
 }

@@ -83,8 +83,10 @@ export function ReferralDialog() {
     useEffect(() => {
         const isModalShow = localStorage.getItem('show');
         if (isModalShow !== 'hide') {
-            setOpen(true);
-            localStorage.setItem('show', 'hide');
+            setTimeout(() => {
+                setOpen(true);
+                localStorage.setItem('show', 'hide');
+            }, 2000);
         }
     }, []);
 

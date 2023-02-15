@@ -1,20 +1,20 @@
-import Check from '@mui/icons-material/Check';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import classNames from 'classnames';
+import { Formik, FormikProps } from 'formik';
 import { upperFirst } from 'lodash';
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -29,40 +29,34 @@ interface SubmissionsTableProps {
     search?: string;
 }
 
-interface Props {
-    label: string;
-    active?: boolean;
-    value?: string;
-    onClear?: () => void;
-}
+type InitialValues = {
+    paymentStatus?: string;
+};
 
-const StyledButton = styled(Button)(({ theme }) => ({
-    borderRadius: 20,
-    textTransform: 'capitalize',
-    fontSize: 14,
-    fontWeight: 400,
-    margin: theme.spacing(0, 1),
-    padding: '7px 14px',
-    borderColor: '#e0e0e0',
-    '.MuiSvgIcon-root': {
-        color: 'rgba(0, 0, 0, .54)',
-    },
-    '&.active': {
-        '&, .MuiSvgIcon-root': {
-            color: theme.palette.primary.main,
-        },
-    },
-}));
+const PaymentStatusOptions = [
+    { label: 'Pending', value: '0' },
+    { label: 'Payment Due', value: '1' },
+    { label: 'Paid', value: '2' },
+];
+
+const getFilters = (values: InitialValues) => ({
+    paymentStatus: values.paymentStatus,
+});
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
-    const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('orders.created_at');
     const [sortFilter, setSortFilter] = useState('-orders.created_at');
+    const [paymentStatusFilter, setPaymentStatusFilter] = useState({
+        label: '',
+        value: '',
+    });
+    const formikRef = useRef<FormikProps<InitialValues> | null>(null);
+    const [query, { setQuery, delQuery }] = useLocationQuery<InitialValues>();
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
@@ -166,19 +160,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         },
     ];
 
-    const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
-        return (
-            <StyledButton
-                variant={'outlined'}
-                color={'inherit'}
-                startIcon={active ? <Check onClick={() => setPaymentStatus(null)} /> : null}
-                onClick={() => handleApplyFilter(value)}
-                className={classNames({ active: active })}
-            >
-                {label}
-            </StyledButton>
-        );
-    };
+    const initialValues = useMemo<InitialValues>(
+        () => ({
+            paymentStatus: query.paymentStatus ?? '',
+        }),
+        [query.paymentStatus],
+    );
 
     const orders$ = useListAdminReferralOrdersQuery({
         params: {
@@ -187,16 +174,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,
-                paymentStatus,
+                paymentStatus: paymentStatusFilter.value,
             },
         },
         ...bracketParams(),
     });
 
     const totals = orders$.pagination?.meta?.total ?? 0;
-
-    console.log('SubmissionsTable', orders$);
-    console.log('SubmissionsTable meta', orders$.pagination?.meta?.total ?? 0);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -206,7 +190,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 filter: {
                     search,
                     status: all ? 'all' : tabFilter,
-                    paymentStatus,
+                    paymentStatus: paymentStatusFilter.value,
                 },
             });
 
@@ -214,7 +198,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [paymentStatus, dataExportRepository, search, all, tabFilter, notifications, sortFilter]);
+    }, [dataExportRepository, sortFilter, search, all, tabFilter, paymentStatusFilter.value, notifications]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
@@ -222,26 +206,47 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         setOrderBy(property);
     };
 
-    const handleApplyFilter = useCallback(
-        async (selectedPaymentStatus) => {
-            if (selectedPaymentStatus === paymentStatus) {
-                setPaymentStatus(null);
-            } else {
-                setPaymentStatus(selectedPaymentStatus);
-            }
+    const handleSubmit = useCallback(
+        async (values) => {
+            setQuery({
+                ...values,
+            });
 
-            orders$.searchSortedWithPagination(
-                { sort: sortFilter },
-                toApiPropertiesObject({
-                    search,
-                    paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
-                }),
-                1,
-            );
+            await orders$.searchSortedWithPagination({ sort: sortFilter }, getFilters(values), 1);
+
+            document.querySelector<HTMLDivElement>('.MuiBackdrop-root.MuiBackdrop-invisible')?.click();
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
+        [orders$, setQuery, sortFilter],
     );
+    const handleClearPaymentStatus = useCallback(async () => {
+        formikRef.current?.setFieldValue('paymentStatus', '');
+        delQuery('paymentStatus');
+        setPaymentStatusFilter({ value: '', label: '' });
+        await orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            getFilters({
+                ...formikRef.current!.values,
+                paymentStatus: '',
+            }),
+            1,
+        );
+    }, [delQuery, orders$, sortFilter]);
 
+    const handlePaymentStatus = useCallback(
+        async (values, status) => {
+            values = {
+                ...values,
+                paymentStatus: status.value,
+            };
+            setPaymentStatusFilter({
+                value: status.value,
+                label: status.label,
+            });
+            await handleSubmit(values);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [handleSubmit],
+    );
     useEffect(
         () => {
             if (!orders$.isLoading && isSearchEnabled) {
@@ -250,7 +255,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     { sort: sortFilter },
                     toApiPropertiesObject({
                         search,
-                        paymentStatus,
+                        paymentStatus: paymentStatusFilter.value,
                     }),
                     1,
                 );
@@ -262,7 +267,10 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     useEffect(() => {
         setIsSearchEnabled(true);
-    }, []);
+
+        const paymentStatus = PaymentStatusOptions?.filter((item) => item.value === query.paymentStatus);
+        setPaymentStatusFilter({ value: paymentStatus[0]?.value, label: paymentStatus[0]?.label });
+    }, [query.paymentStatus]);
 
     useEffect(() => {
         setSortFilter((orderDirection === 'desc' ? '-' : '') + orderBy);
@@ -279,27 +287,48 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     return (
         <Grid container direction={'column'}>
             <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
-                <Grid item xs container alignItems={'center'}>
-                    <Typography variant={'h6'}>
-                        {heading} {totals > 0 ? `(${totals})` : null}
-                    </Typography>
-                </Grid>
-                <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                    <Button
-                        variant={'outlined'}
-                        color={'primary'}
-                        sx={{ borderRadius: 20, padding: '7px 24px' }}
-                        onClick={handleExportData}
-                    >
-                        Export List
-                    </Button>
-                </Grid>
+                <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formikRef}>
+                    {({ values }) => (
+                        <>
+                            <Grid item xs container alignItems={'left'}>
+                                <Typography variant={'h6'} mr={2}>
+                                    {heading} {totals > 0 ? `(${totals})` : null}
+                                </Typography>
+                                <PageSelector
+                                    label={'Payment Status'}
+                                    value={paymentStatusFilter.label}
+                                    onClear={handleClearPaymentStatus}
+                                >
+                                    {PaymentStatusOptions?.map((item: any) => {
+                                        return (
+                                            <Grid key={item.value}>
+                                                <MenuItem
+                                                    onClick={() => handlePaymentStatus(values, item)}
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
+                                </PageSelector>
+                            </Grid>
+                            <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
+                                <Button
+                                    variant={'outlined'}
+                                    color={'primary'}
+                                    sx={{ borderRadius: 20, padding: '7px 24px' }}
+                                    onClick={handleExportData}
+                                >
+                                    Export List
+                                </Button>
+                            </Grid>
+                        </>
+                    )}
+                </Formik>
             </Grid>
-            <Grid alignItems={'left'}>
-                {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                    return <FilterButton label={status} active={paymentStatus === key} value={key} />;
-                })}
-            </Grid>
+
             <TableContainer>
                 <CustomerSubmissionsList
                     orders={orders$.data}

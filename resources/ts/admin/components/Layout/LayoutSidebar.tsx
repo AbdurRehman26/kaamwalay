@@ -183,13 +183,6 @@ function LayoutSidebar() {
                             collapseOpenedAction={handleReferralProgramOpened}
                             collapseClosedAction={handleReferralProgramClosed}
                         />
-                        <LayoutSidebarItem
-                            title={'Payouts'}
-                            href={'/referral-program/payouts'}
-                            collapseStyle={true}
-                            collapseOpenedAction={handleReferralProgramOpened}
-                            collapseClosedAction={handleReferralProgramClosed}
-                        />
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />

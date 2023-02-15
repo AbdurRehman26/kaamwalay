@@ -86,7 +86,7 @@ export function ReferralDialog() {
             setTimeout(() => {
                 setOpen(true);
                 localStorage.setItem('show', 'hide');
-            }, 2000);
+            }, 1000);
         }
     }, []);
 

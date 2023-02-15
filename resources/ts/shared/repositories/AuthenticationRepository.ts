@@ -15,11 +15,9 @@ import { Repository } from './Repository';
 export class AuthenticationRepository extends Repository<AuthenticatedUserEntity> {
     readonly endpointPath: string = '/auth';
     readonly model = AuthenticatedUserEntity;
-
     endpointConfig = {
         version: 'v2',
     };
-
     constructor(@Inject() public authenticationService: AuthenticationService) {
         super();
     }
@@ -33,6 +31,10 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     @ValidateMethodParamsAsync()
     public async postRegister(input: SignUpRequestDto) {
         const { fullName, ...rest } = input;
+        this.endpointConfig = {
+            version: 'v3',
+        };
+
         const { data } = await this.endpoint.post(
             '/register',
             toApiPropertiesObject({ ...rest, ...this.parseName(fullName) }),

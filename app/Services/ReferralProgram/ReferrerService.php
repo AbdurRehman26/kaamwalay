@@ -94,4 +94,9 @@ class ReferrerService
     {
         $referrer->increment('successful_signups', 1);
     }
+
+    public function increaseLinkClicks(Referrer $referrer): void
+    {
+        $referrer->increment('link_clicks', 1);
+    }
 }

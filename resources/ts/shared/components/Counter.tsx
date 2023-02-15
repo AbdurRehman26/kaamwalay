@@ -21,7 +21,7 @@ export function getRemainingTime(timestampMs: any) {
     }
 
     function getRemainingHours(nowMoment: any, timestamp: any) {
-        const hours = timestamp.diff(nowMoment, 'hours') % 24;
+        const hours = timestamp.diff(nowMoment, 'hours');
         return padWithZeros(hours, 2);
     }
 

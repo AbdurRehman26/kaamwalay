@@ -81,11 +81,11 @@ export function ReferralDialog() {
     const { featureReferralDiscountPercentage } = useConfiguration();
 
     useEffect(() => {
-        const isModalShow = localStorage.getItem('show');
-        if (isModalShow !== 'hide') {
+        const isModalShow = localStorage.getItem('referral-program-popup:show');
+        if (isModalShow !== 'false') {
             setTimeout(() => {
                 setOpen(true);
-                localStorage.setItem('show', 'hide');
+                localStorage.setItem('referral-program-popup:show', 'false');
             }, 1000);
         }
     }, []);

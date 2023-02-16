@@ -2,6 +2,7 @@
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
@@ -195,6 +196,19 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText
                         primary={'Address Book'}
+                        primaryTypographyProps={{ className: classes.listItemText }}
+                    />
+                </ListItem>
+                <ListItem
+                    selected={isItemActive('/referral-program')}
+                    onClick={handleItemPress('/referral-program/main')}
+                    button
+                >
+                    <StyledListItemIcon>
+                        <CampaignOutlinedIcon />
+                    </StyledListItemIcon>
+                    <ListItemText
+                        primary={'Referral Program'}
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>

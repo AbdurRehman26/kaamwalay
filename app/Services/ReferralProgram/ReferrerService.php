@@ -86,6 +86,13 @@ class ReferrerService
         return $this->getEarnedCommissionsByReferee($referrerId, $refereeId)->sum('commission');
     }
 
+    public function getTotalEarnedCommissionByReferrer(int $userId): float
+    {
+        return ReferrerEarnedCommission::join('referrers', 'referrers.id', 'referrer_earned_commissions.referrer_id')
+            ->where('referrers.user_id', $userId)
+            ->sum('commission');
+    }
+
     public function setReferrersStatus(int $referrerId, array $data): Referrer
     {
         try {

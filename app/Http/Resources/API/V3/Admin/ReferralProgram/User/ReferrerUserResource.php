@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 /**
  * @mixin User
  */
-class UserResource extends BaseResource
+class ReferrerUserResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

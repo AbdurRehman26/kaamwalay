@@ -13,7 +13,7 @@ use App\Http\Resources\API\V3\Admin\ReferralProgram\Referee\RefereeCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerResource;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerSignUpCollection;
-use App\Http\Resources\API\V3\Admin\ReferralProgram\User\UserCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\User\ReferrerUserCollection;
 use App\Models\User;
 use App\Services\Admin\V3\ReferralProgramService;
 use App\Services\ReferralProgram\ReferrerService;
@@ -30,9 +30,9 @@ class ReferralProgramController extends Controller
         return new JsonResponse([ 'data' => $this->referralProgramService->getStat($request->validated())]);
     }
 
-    public function listReferrers(ListReferrersRequest $request): UserCollection
+    public function listReferrers(ListReferrersRequest $request): ReferrerUserCollection
     {
-        return new UserCollection($this->referralProgramService->getReferrers());
+        return new ReferrerUserCollection($this->referralProgramService->getReferrers());
     }
 
     public function listReferees(ListRefereesRequest $request): RefereeCollection

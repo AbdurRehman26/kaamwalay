@@ -18,6 +18,6 @@ class AdminSubmissionsReferrerSort implements Sort
     {
         $direction = $descending ? 'DESC' : 'ASC';
 
-        $query->join('users', 'users.id', 'orders.user_id')->orderBy('users.referred_by', $direction)->select('orders.*');
+        $query->join('users', 'users.id', 'orders.user_id')->join('users as referrer',' referrer.id', 'users.referred_by')->orderBy('referrer.first_name', $direction)->orderBy('referrer.last_name',$direction)->select('orders.*');
     }
 }

@@ -100,7 +100,7 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async (inp
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
     const authenticationService = app(AuthenticationService);
     await authenticationService.removeAccessToken();
-    localStorage.clear();
+    localStorage.removeItem('referral-program-popup:show');
 });
 
 export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string, thunkAPI) => {

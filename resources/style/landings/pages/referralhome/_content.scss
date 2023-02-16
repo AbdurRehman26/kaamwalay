@@ -248,7 +248,7 @@
             padding: 0;
         }
         @media screen and (max-width: 599px) {
-            padding: 0 14px;
+            padding: 0 4px;
         }
     }
 }
@@ -257,16 +257,20 @@
     width: 348px;
     height: 348px;
     padding: 0px 4px 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     object-fit: cover;
     @media screen and (max-width: 767px) {
         width: 100%;
         width: 300px;
         height: 300px;
+        margin: 0;
     }
     @media screen and (max-width: 599px) {
-        width: 179px;
+        width: 120%;
         height: 179px;
-        padding: 2px 2px 0px;
+        padding: 4px 0px;
+        margin: 0;
     }
 }
 

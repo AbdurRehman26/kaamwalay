@@ -8,4 +8,6 @@ export class ReferrerEntity extends UserEntity {
     public successfulSignups!: number;
     public referralOrders!: number;
     public isReferralActive!: number;
+    public referralUrl!: string;
+    public totalEarned!: number;
 }

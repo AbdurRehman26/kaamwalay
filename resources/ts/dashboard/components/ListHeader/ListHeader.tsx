@@ -7,7 +7,9 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { ChangeEvent, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
+import { useAuth } from '@shared/hooks/useAuth';
 import { font } from '@shared/styles/utils';
+import ReferralBanner from '@dashboard/pages/Referral/ReferralBanner';
 
 interface ListHeaderProps {
     headline: string;
@@ -15,6 +17,7 @@ interface ListHeaderProps {
     noMargin?: boolean;
     onSearch?: (value: string) => void;
     actions?: ReactNode;
+    isReferral?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -74,11 +77,13 @@ export function ListHeader({
     headline,
     noSearch,
     noMargin,
+    isReferral,
     onSearch,
     actions,
 }: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
+    const user$ = useAuth().user;
 
     const handleSearch = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +98,7 @@ export function ListHeader({
 
     return (
         <>
+            {!isReferral && user$?.showReferralPromotionalPopup ? <ReferralBanner /> : null}
             <Grid component={'header'} container direction={'row'} alignItems={'center'} className={classes.root}>
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
@@ -118,7 +124,7 @@ export function ListHeader({
                     {children}
                 </Box>
             </Grid>
-            <Divider className={classes.divider} />
+            {!isReferral ? <Divider className={classes.divider} /> : null}
         </>
     );
 }

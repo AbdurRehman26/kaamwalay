@@ -43,6 +43,10 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     }
 
     public async whoami() {
+        this.endpointConfig = {
+            version: 'v3',
+        };
+
         const { data } = await this.endpoint.get('/me');
         return plainToInstance(UserEntity, data.user);
     }

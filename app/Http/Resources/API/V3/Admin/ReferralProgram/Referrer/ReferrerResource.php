@@ -2,39 +2,28 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
-use App\Http\Resources\API\BaseResource;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Referrer;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @mixin User
- */
-class ReferrerResource extends BaseResource
+/** @mixin Referrer */
+class ReferrerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
-            'profile_image' => $this->profile_image,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'full_name' => $this->getFullName(),
-            'customer_number' => $this->customer_number,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'created_at' => $this->formatDate($this->created_at),
-            'submissions' => $this->getReferrerSubmissions(),
-            'cards_count' => $this->getReferrerCardsCount(),
-            'sign_ups' => $this->referrer->successful_signups,
-            'is_referral_active' => $this->referrer->is_referral_active,
-            'sales' => $this->getReferrerSales(),
-            'commission' => $this->getReferrerCommission(),
+            'referral_code' => $this->referral_code,
+            'withdrawable_commission' => $this->withdrawable_commission,
+            'link_clicks' => $this->link_clicks,
+            'successful_signups' => $this->successful_signups,
+            'referral_orders' => $this->referral_orders,
+            'is_referral_active' => $this->is_referral_active,
         ];
     }
 }

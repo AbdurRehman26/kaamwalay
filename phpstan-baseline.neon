@@ -221,6 +221,11 @@ parameters:
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminUserReferredBy implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminUserReferredBy.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderSearchFilter.php
@@ -254,6 +259,11 @@ parameters:
 			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\CardRarity\\>\\) of method App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php
+
+		-
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\User\\>\\) of method App\\\\Http\\\\Filters\\\\AdminUserReferredBy\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/AdminUserReferredBy.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"

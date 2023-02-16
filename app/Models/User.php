@@ -9,6 +9,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerPromotionalSubscribersFilter;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Filters\AdminSalesmanSearchFilter;
+use App\Http\Filters\AdminUserReferredBy;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
@@ -148,6 +149,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             AllowedFilter::scope('submissions'),
             AllowedFilter::scope('salesman_id'),
             AllowedFilter::custom('promotional_subscribers', new AdminCustomerPromotionalSubscribersFilter),
+            AllowedFilter::custom('referred_by', new AdminUserReferredBy),
         ];
     }
 

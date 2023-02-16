@@ -226,7 +226,7 @@ export function CustomersList() {
 
     const customers = useAdminCustomersQuery({
         params: {
-            include: ['salesman'],
+            include: ['salesman', 'referrer', 'referredBy'],
             sort: sortFilter,
             filter: getFilters(query),
         },

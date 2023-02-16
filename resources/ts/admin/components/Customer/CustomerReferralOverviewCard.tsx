@@ -96,7 +96,9 @@ export function CustomerReferralOverviewCard({
     useEffect(() => {
         if (statName && timeFilter && timeFilter.value !== 'custom') {
             const apiService = app(APIService);
-            const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-stat`, { version: 'v3' });
+            const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-referrer-stat`, {
+                version: 'v3',
+            });
             endpoint
                 .post('', {
                     statName,
@@ -111,7 +113,9 @@ export function CustomerReferralOverviewCard({
     const handleSubmit = useCallback(
         async (values) => {
             const apiService = app(APIService);
-            const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-stat`, { version: 'v3' });
+            const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-referrer-stat`, {
+                version: 'v3',
+            });
 
             if (statName && timeFilter && timeFilter.value === 'custom') {
                 const startDateString = formatDate(values.startDate, 'YYYY-MM-DD');

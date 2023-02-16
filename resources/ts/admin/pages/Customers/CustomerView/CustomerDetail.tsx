@@ -149,11 +149,9 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                                     '-'
                                 )}
                             </Typography>
-                            {customer?.referredBy ? (
-                                <Typography className={'CustomerValue'}>
-                                    {customer?.referrer?.isReferralActive ? 'Active' : 'Not Active'}
-                                </Typography>
-                            ) : null}
+                            <Typography className={'CustomerValue'}>
+                                {customer?.referrer?.isReferralActive ? 'Active' : 'Not Active'}
+                            </Typography>
                         </div>
                     </Grid>
                 </Grid>

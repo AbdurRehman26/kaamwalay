@@ -21,6 +21,7 @@ import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferral
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
+import CustomerReferralActivationDialog from './CustomerReferralActivationDialog';
 
 interface props {
     customer: CustomerEntity;
@@ -50,11 +51,13 @@ const styles = {
 export function CustomerTableRow({ customer, salesReps }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [referralDialog, setReferralDialog] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const handleReferralDialogClose = useCallback(() => setReferralDialog(false), []);
     const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
@@ -84,11 +87,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     break;
                 case RowOption.Reactivate:
                 case RowOption.Deactivate:
-                    handleChangeReferralProgram(customerId!!, status!!);
+                    setReferralDialog(true);
                     break;
             }
         },
-        [handleCloseOptions, handleChangeReferralProgram],
+        [handleCloseOptions],
     );
 
     const handleRowClick = useCallback<MouseEventHandler>(
@@ -247,11 +250,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                             <>
                                 {customer?.referrer?.isReferralActive ? (
                                     <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
-                                        Deactivate
+                                        Deactivate Referral Program
                                     </MenuItem>
                                 ) : (
                                     <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
-                                        Reactivate
+                                        Reactivate Referral Program
                                     </MenuItem>
                                 )}
                             </>
@@ -264,6 +267,14 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 wallet={customer.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
+            />
+            <CustomerReferralActivationDialog
+                open={referralDialog}
+                onSubmit={() =>
+                    handleChangeReferralProgram(customer.id, customer?.referrer?.isReferralActive ? false : true)
+                }
+                status={customer?.referrer?.isReferralActive ? true : false}
+                onClose={handleReferralDialogClose}
             />
         </>
     );

@@ -24,7 +24,7 @@ const Root = styled(Grid)({
         lineHeight: '24px',
         color: 'rgba(0, 0, 0, 0.87)',
         marginTop: '16px',
-        fontWeight: 400,
+        fontWeight: '400 !important',
     },
 });
 
@@ -35,7 +35,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'CUSTOMER',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'created_at',
@@ -51,7 +51,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'CARDS',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'grand_total',
@@ -59,7 +59,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'SUBMISSION TOTAL',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'commission',
@@ -115,8 +115,11 @@ export function CustomerReferralCommissionEarnings() {
                                     <Box p={2}>
                                         <Typography className={'tableTitle'}>
                                             {' '}
-                                            Cummission Earnings{' '}
-                                            <span> ({referralcommissionEarnings?.data.length}) </span>{' '}
+                                            Commission Earnings{' '}
+                                            <span style={{ color: '#0000008A' }}>
+                                                {' '}
+                                                ({referralcommissionEarnings?.data.length}){' '}
+                                            </span>{' '}
                                         </Typography>
                                     </Box>
                                     <CustomerReferralListing

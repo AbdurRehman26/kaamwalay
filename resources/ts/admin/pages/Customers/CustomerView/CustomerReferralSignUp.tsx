@@ -24,7 +24,7 @@ const Root = styled(Grid)({
         lineHeight: '24px',
         color: 'rgba(0, 0, 0, 0.87)',
         marginTop: '16px',
-        fontWeight: 400,
+        fontWeight: '400 !important',
     },
 });
 
@@ -35,10 +35,10 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'CUSTOMER',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
-        id: 'signed_up_at',
+        id: 'created_at',
         numeric: false,
         disablePadding: false,
         label: 'SIGNED UP',
@@ -51,7 +51,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'TOTAL CARDS',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'submission',
@@ -59,7 +59,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'SUBMISSIONS',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'total_spent',
@@ -67,7 +67,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'TOT.SPENT',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'total_commission',
@@ -75,7 +75,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'TOT.COMMISSION',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
 ];
 
@@ -100,7 +100,7 @@ export function CustomerReferralSignUp() {
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortFilter],
+        [orderBy],
     );
 
     const handleRequestSort = () => {
@@ -123,7 +123,11 @@ export function CustomerReferralSignUp() {
                                     <Box p={2}>
                                         <Typography className={'tableTitle'}>
                                             {' '}
-                                            Customer Sign Ups <span> ({referralSignUp?.data.length}) </span>{' '}
+                                            Customer Sign Ups{' '}
+                                            <span style={{ color: '#0000008A' }}>
+                                                {' '}
+                                                ({referralSignUp?.data.length}){' '}
+                                            </span>{' '}
                                         </Typography>
                                     </Box>
                                     <CustomerReferralListing

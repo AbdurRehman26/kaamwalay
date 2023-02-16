@@ -1,4 +1,5 @@
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -8,6 +9,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
+import CircularProgress from '@mui/material/CircularProgress';
 const headings: EnhancedTableHeadCell[] = [
     {
         id: 'customer',
@@ -77,9 +79,13 @@ export function CommissionEarnings() {
         [sortCommissionFilter],
     );
 
+    if (commissionEarnings$.data.length === 0 && commissionEarnings$.isLoading) {
+        return <CircularProgress />;
+    }
+
     return (
         <>
-            {commissionEarnings$.data.length === 0 && !commissionEarnings$.isLoading ? (
+            {commissionEarnings$.data.length === 0 ? (
                 <EmptyStates
                     heading={'No Commission Earnings'}
                     description={'You haven’t earned any commission, yet.'}

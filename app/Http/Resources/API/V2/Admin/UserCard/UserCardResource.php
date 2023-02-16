@@ -29,6 +29,7 @@ class UserCardResource extends BaseResource
             'nickname' => $this->overall_grade_nickname,
             'card_name' => $cardProduct->name,
             'category_name' => $cardProduct->cardCategory?->name,
+            'category_type' => $cardProduct->cardCategory?->cardCategoryType?->name,
             'set_name' => $cardProduct->cardSet?->name,
             'set_cards_number' => $cardProduct->cardSet?->cards_number,
             'series_name' => $cardProduct->cardSet?->cardSeries?->name,

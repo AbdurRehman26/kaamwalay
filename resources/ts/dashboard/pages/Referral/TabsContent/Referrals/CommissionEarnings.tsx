@@ -9,7 +9,6 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 import EmptyStates from './EmptyStates';
 import ReferralTable from './ReferralTable';
 
-import CircularProgress from '@mui/material/CircularProgress';
 const headings: EnhancedTableHeadCell[] = [
     {
         id: 'customer',

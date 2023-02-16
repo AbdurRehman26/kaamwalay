@@ -5,6 +5,7 @@ use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\PushNotificationController;
 use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
+use App\Http\Controllers\API\V3\Customer\RefereeCouponController;
 use App\Http\Controllers\API\V3\Auth\RegisterController;
 
 Route::prefix('auth')->group(function () {
@@ -34,5 +35,10 @@ Route::prefix('customer')->group(function () {
             Route::get('/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');
             Route::get('commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('customer.referral.commission-earnings');
         });
+
+        Route::prefix('referee')->group(function () {
+            Route::get('/coupon', [RefereeCouponController::class, 'show'])->name('customer.referee.coupon');
+        });
     });
+
 });

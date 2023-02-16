@@ -30,11 +30,11 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
 
     @ValidateMethodParamsAsync()
     public async postRegister(input: SignUpRequestDto) {
-        const { fullName, ...rest } = input;
         this.endpointConfig = {
             version: 'v3',
         };
 
+        const { fullName, ...rest } = input;
         const { data } = await this.endpoint.post(
             '/register',
             toApiPropertiesObject({ ...rest, ...this.parseName(fullName) }),

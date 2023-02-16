@@ -16,10 +16,10 @@ import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
 interface AuthViewProps {
-    subtitle?: string;
     redirectPath?: string;
     onAuthSuccess?: (authenticatedUser: AuthenticatedUserEntity) => void;
     content?: string;
+    discount?: number;
 }
 
 const Root = styled('div')({
@@ -49,10 +49,10 @@ const Header = styled('div')(({ theme }) => ({
 }));
 
 export function AuthView({
-    subtitle = 'to claim your 30% discount.',
     redirectPath = '/dashboard/referee-coupon-code',
     onAuthSuccess,
     content,
+    discount,
 }: AuthViewProps) {
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
@@ -91,7 +91,7 @@ export function AuthView({
                             Sign up to AGS
                         </Typography>
                         <Typography variant={'body2'} color={'white'} align={'center'}>
-                            {subtitle}
+                            to claim your {discount}% discount.
                         </Typography>
                     </Grid>
                 </div>

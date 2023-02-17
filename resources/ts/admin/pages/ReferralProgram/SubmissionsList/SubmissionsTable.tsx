@@ -84,7 +84,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Customer',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'owner',
@@ -92,7 +92,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Owner',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'referrer',
@@ -100,7 +100,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Referrer',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'cards',
@@ -320,6 +320,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                                     color={'primary'}
                                     sx={{ borderRadius: 20, padding: '7px 24px' }}
                                     onClick={handleExportData}
+                                    disabled={true}
                                 >
                                     Export List
                                 </Button>

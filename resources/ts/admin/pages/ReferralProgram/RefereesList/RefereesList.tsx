@@ -85,7 +85,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'Submissions',
         align: 'center',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'cards',
@@ -93,7 +93,7 @@ const headings: EnhancedTableHeadCell[] = [
         disablePadding: false,
         label: 'Cards',
         align: 'center',
-        sortable: true,
+        sortable: false,
     },
     {
         id: 'owners',
@@ -578,7 +578,7 @@ export function RefereesList() {
                         sx={{ borderRadius: 20, padding: '7px 24px' }}
                         onClick={handleExportData}
                         loading={isExporting}
-                        disabled={isExporting}
+                        disabled={isExporting || true}
                     >
                         Export List
                     </LoadingButton>

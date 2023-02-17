@@ -6,4 +6,5 @@ export interface AuthDialogContentProps {
     onAuthSuccess(authenticatedUser: AuthenticatedUserEntity): void;
     fromReferralHome?: boolean;
     referralCode?: string;
+    isDisabled?: boolean;
 }

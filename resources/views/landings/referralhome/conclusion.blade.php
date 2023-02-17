@@ -4,7 +4,7 @@
             <h4 class="ReferralHome-sectionContentCaption text-center" data-aos="fade-up">Join the
                 Grading Revolution</h4>
             <h3 class="ReferralHome-sectionContentHeadline text-center" data-aos="fade-up"
-                data-aos-delay="50">Sign up & SAVE 50%, today.</h3>
+                data-aos-delay="50">Sign up & SAVE {{ config('robograding.feature_referral_discount_percentage') }}%, today.</h3>
             <button onclick="(function(){window.scrollTo(0, 0)})()" class="ReferralHome-button">Sign up</button>
         </div>
     </div>

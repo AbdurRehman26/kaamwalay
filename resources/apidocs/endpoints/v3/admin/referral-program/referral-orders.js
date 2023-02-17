@@ -73,8 +73,8 @@
  *                  },
  *            ],
  *            "links": {
- *                "first": "http://robograding.test/api/v2/customer/orders?page=1",
- *                "last": "http://robograding.test/api/v2/customer/orders?page=1",
+ *                "first": "http://robograding.test/api/v3/admin/referral-program/orderss?page=1",
+ *                "last": "http://robograding.test/api/v3/admin/referral-program/orderss?page=1",
  *                "prev": null,
  *                "next": null
  *            },
@@ -89,7 +89,7 @@
  *                        "active": false
  *                    },
  *                    {
- *                        "url": "http://robograding.test/api/v2/customer/orders?page=1",
+ *                        "url": "http://robograding.test/api/v3/admin/referral-program/orderss?page=1",
  *                        "label": "1",
  *                        "active": true
  *                    },
@@ -99,7 +99,7 @@
  *                        "active": false
  *                    }
  *                ],
- *                "path": "http://robograding.test/api/v2/customer/orders",
+ *                "path": "http://robograding.test/api/v3/admin/referral-program/orderss",
  *                "per_page": 15,
  *                "to": 15,
  *                "total": 15

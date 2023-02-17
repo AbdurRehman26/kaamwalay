@@ -1,6 +1,6 @@
 /**
- * @api {get} /v3/admin/referral-program/referees List Referees
- * @apiName List Referees
+ * @api {get} /v3/admin/referral-program/referrers List Referrers
+ * @apiName List Referrers
  * @apiGroup Admin Referral Program
  *
  * @apiVersion 3.0.0
@@ -48,8 +48,8 @@
  *                  },
  *            ],
  *            "links": {
- *                "first": "http://robograding.test/api/admin/customers?page=1",
- *                "last": "http://robograding.test/api/admin/customers?page=1",
+ *                "first": "http://robograding.test/api/v3/admin/referral-program/referrers?page=1",
+ *                "last": "http://robograding.test/api/v3/admin/referral-program/referrers?page=1",
  *                "prev": null,
  *                "next": null
  *            },
@@ -64,7 +64,7 @@
  *                        "active": false
  *                    },
  *                    {
- *                        "url": "http://robograding.test/api/admin/customers?page=1",
+ *                        "url": "http://robograding.test/api/v3/admin/referral-program/referrers?page=1",
  *                        "label": "1",
  *                        "active": true
  *                    },
@@ -74,7 +74,7 @@
  *                        "active": false
  *                    }
  *                ],
- *                "path": "http://robograding.test/api/admin/customers",
+ *                "path": "http://robograding.test/api/v3/admin/referral-program/referrers",
  *                "per_page": 15,
  *                "to": 15,
  *                "total": 15

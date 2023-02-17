@@ -32,11 +32,22 @@ const useStyles = makeStyles(
             marginBottom: '24px',
             alignItems: 'flex-start',
         },
+        deactivatedText: {
+            color: '#DD323B',
+            fontSize: '15px',
+            fontWeight: 'bolder',
+        },
     }),
     { name: 'SignUpContent' },
 );
 
-export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome, referralCode }: AuthDialogContentProps) {
+export function SignUpContent({
+    onViewChange,
+    onAuthSuccess,
+    fromReferralHome,
+    referralCode,
+    isDisabled = false,
+}: AuthDialogContentProps) {
     const classes = useStyles();
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
@@ -80,20 +91,32 @@ export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome, r
             {({ values, handleChange }) => (
                 <Form>
                     <Grid container marginTop={4} sx={{ padding: '24px 24px 0 24px' }}>
+                        {isDisabled ? (
+                            <Grid container justifyContent={'center'} mb={2}>
+                                <Typography className={classes.deactivatedText}>
+                                    Sign Up Deactivated. Looks like you've already signed up.
+                                </Typography>
+                            </Grid>
+                        ) : null}
                         <FormRoot>
-                            <FormInput type={'text'} label={'Full Name'} name={'fullName'} />
+                            <FormInput type={'text'} label={'Full Name'} name={'fullName'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'text'} label={'Email'} name={'email'} />
+                            <FormInput type={'text'} label={'Email'} name={'email'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
+                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'password'} label={'Create Password'} name={'password'} />
+                            <FormInput
+                                type={'password'}
+                                label={'Create Password'}
+                                name={'password'}
+                                disabled={isDisabled}
+                            />
                         </FormRoot>
 
                         <FormRoot>
@@ -108,11 +131,14 @@ export function SignUpContent({ onViewChange, onAuthSuccess, fromReferralHome, r
                                 }
                                 label={'Opt in to receive updates & promotions from AGS via email and text.'}
                                 className={classes.notificationsControlLabel}
+                                disabled={isDisabled}
                             />
                         </FormRoot>
 
                         <FormRoot>
-                            <SubmitButton isModal>Sign up</SubmitButton>
+                            <SubmitButton isModal isDisabled={isDisabled}>
+                                Sign up
+                            </SubmitButton>
                         </FormRoot>
                     </Grid>
                     {fromReferralHome ? null : (

@@ -7,6 +7,7 @@ import AuthHeaderLogo from '@shared/assets/authModalIcon.svg';
 import { SignUpContent } from '@shared/components/AuthDialog/SignUpContent';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
@@ -57,6 +58,8 @@ export function AuthView({
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
     const dispatch = useSharedDispatch();
+    const { authenticated } = useAuth();
+
     const { from: intendedRoute } = useMemo(() => {
         return queryString.parse(window.location.search.slice(1));
     }, []);
@@ -104,6 +107,7 @@ export function AuthView({
                 onAuthSuccess={handleAuthSuccess}
                 onViewChange={() => {}}
                 fromReferralHome={true}
+                isDisabled={authenticated}
             />
         </Root>
     );

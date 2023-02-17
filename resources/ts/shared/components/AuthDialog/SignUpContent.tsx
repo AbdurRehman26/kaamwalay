@@ -94,7 +94,7 @@ export function SignUpContent({
                         {isDisabled ? (
                             <Grid container justifyContent={'center'} mb={2}>
                                 <Typography className={classes.deactivatedText}>
-                                    Sign Up Deactivated. Looks like you've already signed up.
+                                    Sign Up Deactivated. Looks like you are already signed in.
                                 </Typography>
                             </Grid>
                         ) : null}

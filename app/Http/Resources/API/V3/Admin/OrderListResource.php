@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V3\Admin;
 
 use App\Http\Resources\API\V2\Admin\Order\OrderListResource as V2OrderOrderListResource;
 use Illuminate\Http\Request;
+
 class OrderListResource extends V2OrderOrderListResource
 {
     /**

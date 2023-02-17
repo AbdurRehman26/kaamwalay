@@ -19,9 +19,9 @@ class AdminSubmissionsReferrerSort implements Sort
         $direction = $descending ? 'DESC' : 'ASC';
 
         $query->leftJoin('users as order_user', 'order_user.id', '=', 'orders.user_id')
-        ->leftJoin('users as referrer','referrer.id','=', 'order_user.referred_by')
-        ->orderBy('referrer.first_name',$direction)
-        ->orderBy('referrer.last_name',$direction)
-        ->select('orders.*'); 
+        ->leftJoin('users as referrer', 'referrer.id', '=', 'order_user.referred_by')
+        ->orderBy('referrer.first_name', $direction)
+        ->orderBy('referrer.last_name', $direction)
+        ->select('orders.*');
     }
 }

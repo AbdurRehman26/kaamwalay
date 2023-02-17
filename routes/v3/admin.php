@@ -42,8 +42,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     Route::prefix('referral-program')->group(function () {
-        Route::post('get-stat', [ReferralProgramController::class, 'getStat'])
-            ->name('referral-program.get-stat');
+        Route::post('get-overview-stat', [ReferralProgramController::class, 'getOverviewStat'])
+            ->name('referral-program.get-overview-stat');
         Route::get('referrers', [ReferralProgramController::class, 'listReferrers'])->name('referral-program.referrers');
         Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
         Route::get('orders', [ReferralProgramController::class, 'listReferralOrders'])->name('referral-program.orders');

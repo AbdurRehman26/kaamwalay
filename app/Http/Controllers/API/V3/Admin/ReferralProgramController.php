@@ -25,7 +25,7 @@ class ReferralProgramController extends Controller
     {
     }
 
-    public function getStat(GetReferralProgramStatRequest $request): JsonResponse
+    public function getOverviewStat(GetReferralProgramStatRequest $request): JsonResponse
     {
         return new JsonResponse([ 'data' => $this->referralProgramService->getStat($request->validated())]);
     }

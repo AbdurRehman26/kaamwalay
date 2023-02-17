@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
+import { TimeFilters } from '@shared/filter/TimeFilter';
 import { app } from '@shared/lib/app';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -36,13 +37,6 @@ interface CustomerReferralOverviewCardProps {
     onAddButtonClick?: () => void;
 }
 
-const TimeFilters = [
-    { label: 'This Month', value: 'this_month' },
-    { label: 'Last Month', value: 'last_month' },
-    { label: 'This Year', value: 'this_year' },
-    { label: 'Last Year', value: 'last_year' },
-    { label: 'Custom Date Range', value: 'custom' },
-];
 const useStyles = makeStyles(
     {
         cardWrapper: {},
@@ -93,29 +87,13 @@ export function CustomerReferralOverviewCard({
         [endDate, startDate],
     );
 
-    useEffect(() => {
-        if (statName && timeFilter && timeFilter.value !== 'custom') {
+    const getSalesData = useCallback(
+        (values: InitialValues = initialValues) => {
             const apiService = app(APIService);
             const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-referrer-stat`, {
                 version: 'v3',
             });
-            endpoint
-                .post('', {
-                    statName,
-                    timeFilter: timeFilter.value,
-                })
-                .then((response) => {
-                    setCardValue(response.data);
-                });
-        }
-    }, [id, statName, timeFilter]);
-
-    const handleSubmit = useCallback(
-        async (values) => {
-            const apiService = app(APIService);
-            const endpoint = apiService.createEndpoint(`admin/customer/${id}/referral/get-referrer-stat`, {
-                version: 'v3',
-            });
+            let statsDTO = {};
 
             if (statName && timeFilter && timeFilter.value === 'custom') {
                 const startDateString = formatDate(values.startDate, 'YYYY-MM-DD');
@@ -123,20 +101,39 @@ export function CustomerReferralOverviewCard({
 
                 setStartDate(startDateString ?? '');
                 setEndDate(endDateString ?? '');
-
-                endpoint
-                    .post('', {
-                        statName,
-                        timeFilter: timeFilter.value,
-                        startDate: startDateString,
-                        endDate: endDateString,
-                    })
-                    .then((response) => {
-                        setCardValue(response.data);
-                    });
+                statsDTO = {
+                    statName,
+                    timeFilter: timeFilter.value,
+                    startDate: startDateString,
+                    endDate: endDateString,
+                };
+                endpoint.post('', statsDTO).then((response) => {
+                    setCardValue(response.data);
+                });
+            } else if (statName && timeFilter && timeFilter.value !== 'custom') {
+                statsDTO = {
+                    statName,
+                    timeFilter: timeFilter.value,
+                };
+                endpoint.post('', statsDTO).then((response) => {
+                    setCardValue(response.data);
+                });
             }
         },
-        [id, statName, timeFilter],
+        [initialValues, statName, id, timeFilter],
+    );
+
+    useEffect(() => {
+        getSalesData();
+    }, [getSalesData]);
+
+    const handleSubmit = useCallback(
+        async (values) => {
+            if (values.startDate && values.endDate) {
+                getSalesData(values);
+            }
+        },
+        [getSalesData],
     );
 
     const getPlainValue = useCallback((value: any) => {
@@ -182,6 +179,7 @@ export function CustomerReferralOverviewCard({
                 <Grid container item xs className={classes.cardActionsWrapper} justifyContent={'flex-end'}>
                     {timeFilters ? (
                         <FilterSelect
+                            fromCustomerReferral={true}
                             value={timeFilter.label}
                             customValueText={
                                 timeFilter.value === 'custom' && startDate && endDate ? startDate + ' - ' + endDate : ''

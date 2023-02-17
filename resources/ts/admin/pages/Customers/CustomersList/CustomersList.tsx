@@ -185,7 +185,9 @@ export function CustomersList() {
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
     const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '', salesmanId: '' });
-    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const referrerDefaultState = { label: '', value: 0 };
+    const [referrerStatus, setReferrerStatus] = useState(referrerDefaultState);
     const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
         label: '',
         value: '',
@@ -432,7 +434,7 @@ export function CustomersList() {
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
-        setReferrerStatus({ label: '', value: 0 });
+        setReferrerStatus(referrerDefaultState);
         delQuery('referredBy');
         await customers.searchSortedWithPagination(
             { sort: sortFilter },
@@ -442,7 +444,7 @@ export function CustomersList() {
             }),
             1,
         );
-    }, [customers, delQuery, sortFilter]);
+    }, [customers, delQuery, sortFilter, referrerDefaultState]);
 
     const handleReferrerStatus = useCallback(async (values) => {
         values = {

@@ -164,8 +164,7 @@ export function CustomerView() {
                 />
             </Root>
             <Grid container>
-                {' '}
-                <CustomerViewContent customer={data} />{' '}
+                <CustomerViewContent customer={data} />
             </Grid>
         </>
     );

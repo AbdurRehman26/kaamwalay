@@ -56,9 +56,9 @@ export function CustomerReferralListing({
                                 </Grid>
                             </TableCell>
                             <TableCell>
-                                {isSignUp && customer?.signedUpAt
-                                    ? formatDate(customer?.signedUpAt, 'MM/DD/YYYY')
-                                    : formatDate(customer?.paidAt, 'MM/DD/YYYY')}
+                                {isSignUp && customer.signedUpAt
+                                    ? formatDate(customer.signedUpAt, 'MM/DD/YYYY')
+                                    : formatDate(customer.paidAt, 'MM/DD/YYYY')}
                             </TableCell>
                             <TableCell>{isSignUp ? customer.cardsCount : customer.cards}</TableCell>
                             <TableCell>

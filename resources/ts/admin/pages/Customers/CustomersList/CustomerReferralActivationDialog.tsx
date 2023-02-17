@@ -75,7 +75,7 @@ function CustomerReferralActivationDialog(props: CustomerReferralActivationDialo
                                 className={classes.saveBtn}
                                 startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
                             >
-                                Delete
+                                {status ? 'Deactivate' : 'Reactivate'}
                             </Button>
                         </DialogActions>
                     </Form>

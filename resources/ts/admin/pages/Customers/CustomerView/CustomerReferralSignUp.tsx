@@ -1,4 +1,4 @@
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
+import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
@@ -118,28 +118,26 @@ export function CustomerReferralSignUp() {
                 ) : (
                     <>
                         {referralSignUp?.data.length !== 0 ? (
-                            <>
-                                <TableContainer sx={{ background: '#F9F9F9' }}>
-                                    <Box p={2}>
-                                        <Typography className={'tableTitle'}>
+                            <TableContainer sx={{ background: '#F9F9F9' }}>
+                                <Box p={2}>
+                                    <Typography className={'tableTitle'}>
+                                        {' '}
+                                        Customer Sign Ups{' '}
+                                        <span style={{ color: '#0000008A' }}>
                                             {' '}
-                                            Customer Sign Ups{' '}
-                                            <span style={{ color: '#0000008A' }}>
-                                                {' '}
-                                                ({referralSignUp?.data.length}){' '}
-                                            </span>{' '}
-                                        </Typography>
-                                    </Box>
-                                    <CustomerReferralListing
-                                        customers={referralSignUp?.data}
-                                        paginationProp={referralSignUp?.paginationProps}
-                                        headings={headings}
-                                        handleRequestSort={handleRequestSort}
-                                        orderBy={orderBy}
-                                        isSignUp={true}
-                                    />
-                                </TableContainer>
-                            </>
+                                            ({referralSignUp?.data.length}){' '}
+                                        </span>{' '}
+                                    </Typography>
+                                </Box>
+                                <CustomerReferralListing
+                                    customers={referralSignUp?.data}
+                                    paginationProp={referralSignUp?.paginationProps}
+                                    headings={headings}
+                                    handleRequestSort={handleRequestSort}
+                                    orderBy={orderBy}
+                                    isSignUp={true}
+                                />
+                            </TableContainer>
                         ) : (
                             <Grid
                                 container
@@ -149,7 +147,7 @@ export function CustomerReferralSignUp() {
                                 sx={{ padding: '40px 20px' }}
                             >
                                 <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
-                                    <Inventory2TwoToneIcon />
+                                    <AccountCircleTwoToneIcon />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography

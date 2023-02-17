@@ -127,9 +127,7 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerHeading'}>Accessed:</Typography>
                             <Typography className={'CustomerHeading'}>Paid Orders:</Typography>
                             <Typography className={'CustomerHeading'}>Referrer:</Typography>
-                            {customer?.referredBy ? (
-                                <Typography className={'CustomerHeading'}>Referral Status:</Typography>
-                            ) : null}
+                            <Typography className={'CustomerHeading'}>Referral Status:</Typography>
                         </div>
                         <div>
                             <Typography className={'CustomerValue'}>
@@ -143,14 +141,14 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerValue'}>
                                 {customer?.referredBy ? (
                                     <MuiLink component={Link} color={'primary'} to={''}>
-                                        {customer?.referredBy?.firstName} {customer?.referredBy?.lastName}
+                                        {customer.referredBy?.getFullName()}
                                     </MuiLink>
                                 ) : (
                                     '-'
                                 )}
                             </Typography>
                             <Typography className={'CustomerValue'}>
-                                {customer?.referrer?.isReferralActive ? 'Active' : 'Not Active'}
+                                {customer.referrer?.isReferralActive ? 'Active' : 'Not Active'}
                             </Typography>
                         </div>
                     </Grid>

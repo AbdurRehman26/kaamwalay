@@ -76,7 +76,7 @@ export function CustomerReferralCommissionEarnings() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState<boolean>(false);
 
-    const referralcommissionEarnings = useAdminCustomerReferralCommissionQuery({
+    const referralCommissionEarnings = useAdminCustomerReferralCommissionQuery({
         params: {
             customerId: id,
             perPage: 24,
@@ -87,8 +87,8 @@ export function CustomerReferralCommissionEarnings() {
 
     useEffect(
         () => {
-            if (!referralcommissionEarnings.isLoading) {
-                referralcommissionEarnings.sort({ sort: sortFilter ? 'created_at' : '-created_at' });
+            if (!referralCommissionEarnings.isLoading) {
+                referralCommissionEarnings.sort({ sort: sortFilter ? 'created_at' : '-created_at' });
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,34 +103,30 @@ export function CustomerReferralCommissionEarnings() {
     return (
         <Root container>
             <Grid container item xs className={'CustomerReferralCommissionEarningBox'}>
-                {referralcommissionEarnings.isLoading ? (
+                {referralCommissionEarnings.isLoading ? (
                     <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                         <CircularProgress />
                     </Box>
                 ) : (
                     <>
-                        {referralcommissionEarnings?.data.length !== 0 ? (
-                            <>
-                                <TableContainer sx={{ background: '#F9F9F9' }}>
-                                    <Box p={2}>
-                                        <Typography className={'tableTitle'}>
-                                            {' '}
-                                            Commission Earnings{' '}
-                                            <span style={{ color: '#0000008A' }}>
-                                                {' '}
-                                                ({referralcommissionEarnings?.data.length}){' '}
-                                            </span>{' '}
-                                        </Typography>
-                                    </Box>
-                                    <CustomerReferralListing
-                                        customers={referralcommissionEarnings?.data}
-                                        paginationProp={referralcommissionEarnings?.paginationProps}
-                                        headings={headings}
-                                        handleRequestSort={handleRequestSort}
-                                        orderBy={orderBy}
-                                    />
-                                </TableContainer>
-                            </>
+                        {referralCommissionEarnings.data.length !== 0 ? (
+                            <TableContainer sx={{ background: '#F9F9F9' }}>
+                                <Box p={2}>
+                                    <Typography className={'tableTitle'}>
+                                        Commission Earnings
+                                        <span style={{ color: '#0000008A' }}>
+                                            ({referralCommissionEarnings.data.length})
+                                        </span>
+                                    </Typography>
+                                </Box>
+                                <CustomerReferralListing
+                                    customers={referralCommissionEarnings?.data}
+                                    paginationProp={referralCommissionEarnings?.paginationProps}
+                                    headings={headings}
+                                    handleRequestSort={handleRequestSort}
+                                    orderBy={orderBy}
+                                />
+                            </TableContainer>
                         ) : (
                             <Grid
                                 container

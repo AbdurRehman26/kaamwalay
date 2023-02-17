@@ -9,6 +9,7 @@ const useStyles = makeStyles(
     (theme) => ({
         root: {
             backgroundColor: '#f9f9f9',
+            borderBottom: '1px solid #E0E0E0',
         },
     }),
     { name: 'CustomerViewContentHeader' },

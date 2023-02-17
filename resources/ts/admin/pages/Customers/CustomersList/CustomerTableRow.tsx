@@ -212,13 +212,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'center'}>
-                    {customer?.referredBy ? (
-                        <MuiLink>
-                            {customer?.referredBy?.firstName} {customer?.referredBy?.lastName}
-                        </MuiLink>
-                    ) : (
-                        '-'
-                    )}
+                    {customer.referredBy ? <MuiLink>{customer.referredBy?.getFullName()}</MuiLink> : '-'}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select

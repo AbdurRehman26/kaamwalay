@@ -43,12 +43,14 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
-    public referrer!: UserEntity;
     public referralCommission!: number;
     public paymentStatus!: PaymentStatusEnum;
     public estimatedDeliveryStartAt!: string;
     public estimatedDeliveryEndAt!: string;
     public salesmanCommission!: number;
+
+    @Type(() => UserEntity)
+    public referrer!: UserEntity;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

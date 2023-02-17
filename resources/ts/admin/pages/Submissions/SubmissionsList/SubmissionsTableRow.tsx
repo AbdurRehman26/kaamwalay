@@ -200,7 +200,7 @@ export function SubmissionsTableRow({
                                 to={`/customers/${order.customer?.id}/view`}
                                 className={font.fontWeightMedium}
                             >
-                                {order?.referrer?.firstName} {order?.referrer?.lastName}
+                                {order?.referrer?.getFullName()}
                             </MuiLink>
                         ) : (
                             '-'

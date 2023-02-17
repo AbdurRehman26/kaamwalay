@@ -369,7 +369,7 @@
                 </div>
                 <div class="info-box-content">
                     @if(!empty($billingAddress))
-                        @if($shippingAddress->id === $billingAddress->id)
+                        @if(!empty($shippingAddress) && $shippingAddress->id === $billingAddress->id)
                             Same as shipping
                         @else
                             {{$billingAddress->getFullName()}}

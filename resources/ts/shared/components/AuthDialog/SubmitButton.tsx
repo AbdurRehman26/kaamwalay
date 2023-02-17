@@ -5,6 +5,7 @@ import React, { PropsWithChildren } from 'react';
 
 interface Props {
     isModal?: boolean;
+    isDisabled?: boolean;
     handleClose?: (close: boolean) => void;
 }
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles(
  * @date: 09.08.2021
  * @time: 22:39
  */
-export function SubmitButton({ isModal, children }: PropsWithChildren<Props>) {
+export function SubmitButton({ isModal, isDisabled = false, children }: PropsWithChildren<Props>) {
     const classes = useStyles();
     const formik = useFormikContext();
 
@@ -39,7 +40,7 @@ export function SubmitButton({ isModal, children }: PropsWithChildren<Props>) {
             type={'submit'}
             color={'primary'}
             className={classes.root}
-            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty}
+            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty || isDisabled}
         >
             {children}
         </Button>

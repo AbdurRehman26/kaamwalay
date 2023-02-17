@@ -70,7 +70,6 @@ const styles = {
         background: '#20BFB8',
         borderRadius: '28px',
         padding: '15px 25px',
-        left: 'auto!important',
     },
     SnackBarTitle: {
         fontWeight: '500px',
@@ -118,7 +117,16 @@ export function Copylink({ referralUrl }: props) {
                     <CopyToClipboard text={referralUrl} onCopy={() => handleClick()}>
                         <Button sx={styles.CopyButton}>copy</Button>
                     </CopyToClipboard>
-                    <Snackbar open={open} onClose={handleClose} autoHideDuration={1000} sx={styles.SnackBarDiv}>
+                    <Snackbar
+                        open={open}
+                        onClose={handleClose}
+                        autoHideDuration={1000}
+                        sx={styles.SnackBarDiv}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                    >
                         <Grid sx={styles.SnackBarContentDiv}>
                             <CheckCircleRoundedIcon sx={styles.SnackBarIcon} />
                             <Typography sx={styles.SnackBarTitle}>Link Copied!</Typography>

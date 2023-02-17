@@ -1,5 +1,5 @@
 <section class="ReferralHome-section ReferralHome-about">
-    <div class="container ReferralHome-sectionContainer">
+    <div class="container ReferralHome-sectionContainerAbout">
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--half">
             <div style="position: relative;">
                 <video width="710" height="410">

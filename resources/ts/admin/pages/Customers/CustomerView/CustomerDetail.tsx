@@ -2,12 +2,14 @@ import AddIcon from '@mui/icons-material/Add';
 import DoneIcon from '@mui/icons-material/Done';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -124,6 +126,8 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerHeading'}>Created By:</Typography>
                             <Typography className={'CustomerHeading'}>Accessed:</Typography>
                             <Typography className={'CustomerHeading'}>Paid Orders:</Typography>
+                            <Typography className={'CustomerHeading'}>Referrer:</Typography>
+                            <Typography className={'CustomerHeading'}>Referral Status:</Typography>
                         </div>
                         <div>
                             <Typography className={'CustomerValue'}>
@@ -134,6 +138,18 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             </Typography>
                             <Typography className={'CustomerValue'}>{customer.lastLoginAt ? 'Yes' : 'No'}</Typography>
                             <Typography className={'CustomerValue'}>{customer?.submissions}</Typography>
+                            <Typography className={'CustomerValue'}>
+                                {customer?.referredBy ? (
+                                    <MuiLink component={Link} color={'primary'} to={''}>
+                                        {customer.referredBy?.getFullName()}
+                                    </MuiLink>
+                                ) : (
+                                    '-'
+                                )}
+                            </Typography>
+                            <Typography className={'CustomerValue'}>
+                                {customer.referrer?.isReferralActive ? 'Active' : 'Not Active'}
+                            </Typography>
                         </div>
                     </Grid>
                 </Grid>

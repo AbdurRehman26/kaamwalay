@@ -16,9 +16,11 @@ import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
+import CustomerReferralActivationDialog from './CustomerReferralActivationDialog';
 
 interface props {
     customer: CustomerEntity;
@@ -27,6 +29,8 @@ interface props {
 
 enum RowOption {
     CreditCustomer,
+    Deactivate,
+    Reactivate,
 }
 
 const CustomerType = [
@@ -46,11 +50,13 @@ const styles = {
 export function CustomerTableRow({ customer, salesReps }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [referralDialog, setReferralDialog] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const handleReferralDialogClose = useCallback(() => setReferralDialog(false), []);
     const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
@@ -61,13 +67,26 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [setAnchorEl],
     );
 
+    const handleChangeReferralProgram = useCallback(
+        async (customerId: number, referralStatus: boolean) => {
+            const DTO = { customerId, referralStatus };
+            await dispatch(changeReferralStatus(DTO));
+            window.location.reload();
+        },
+        [dispatch],
+    );
+
     const handleOption = useCallback(
-        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
+        (option: RowOption, customerId?: number, status?: boolean) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
+                    break;
+                case RowOption.Reactivate:
+                case RowOption.Deactivate:
+                    setReferralDialog(true);
                     break;
             }
         },
@@ -77,7 +96,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
             if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(`/customers/${customer.id}/view`);
+                navigate(`/customers/${customer.id}/view/overview`);
             }
         },
         [navigate, customer.id],
@@ -191,6 +210,11 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                             })}
                     </Select>
                 </TableCell>
+                <TableCell variant={'body'} align={'left'}>
+                    <Typography color={'primary'}>
+                        {customer.referredBy ? `${customer.referredBy?.getFullName()}` : '-'}
+                    </Typography>
+                </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
                         sx={{ height: '40px !important' }}
@@ -217,6 +241,19 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                        {customer?.referrer ? (
+                            <>
+                                {customer?.referrer?.isReferralActive ? (
+                                    <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
+                                        Deactivate Referral Program
+                                    </MenuItem>
+                                ) : (
+                                    <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
+                                        Reactivate Referral Program
+                                    </MenuItem>
+                                )}
+                            </>
+                        ) : null}
                     </Menu>
                 </TableCell>
             </TableRow>
@@ -225,6 +262,14 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 wallet={customer.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
+            />
+            <CustomerReferralActivationDialog
+                open={referralDialog}
+                onSubmit={() =>
+                    handleChangeReferralProgram(customer.id, customer?.referrer?.isReferralActive ? false : true)
+                }
+                status={customer?.referrer?.isReferralActive ? true : false}
+                onClose={handleReferralDialogClose}
             />
         </>
     );

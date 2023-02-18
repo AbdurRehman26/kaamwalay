@@ -1,6 +1,7 @@
-import { Entity } from './Entity';
+import { UserEntity } from './UserEntity';
 
-export class ReferrerEntity extends Entity {
+export class ReferrerEntity extends UserEntity {
+    public id!: number;
     public referralCode!: string;
     public withdrawableCommission!: number;
     public linkClicks!: number;

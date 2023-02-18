@@ -7,6 +7,7 @@ import AuthHeaderLogo from '@shared/assets/authModalIcon.svg';
 import { SignUpContent } from '@shared/components/AuthDialog/SignUpContent';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
@@ -16,10 +17,10 @@ import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
 interface AuthViewProps {
-    subtitle?: string;
     redirectPath?: string;
     onAuthSuccess?: (authenticatedUser: AuthenticatedUserEntity) => void;
     content?: string;
+    discount?: number;
 }
 
 const Root = styled('div')({
@@ -49,14 +50,16 @@ const Header = styled('div')(({ theme }) => ({
 }));
 
 export function AuthView({
-    subtitle = 'to claim your 30% discount.',
     redirectPath = '/dashboard/referee-coupon-code',
     onAuthSuccess,
     content,
+    discount,
 }: AuthViewProps) {
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
     const dispatch = useSharedDispatch();
+    const { authenticated } = useAuth();
+
     const { from: intendedRoute } = useMemo(() => {
         return queryString.parse(window.location.search.slice(1));
     }, []);
@@ -91,7 +94,7 @@ export function AuthView({
                             Sign up to AGS
                         </Typography>
                         <Typography variant={'body2'} color={'white'} align={'center'}>
-                            {subtitle}
+                            to claim your {discount}% discount.
                         </Typography>
                     </Grid>
                 </div>
@@ -104,6 +107,7 @@ export function AuthView({
                 onAuthSuccess={handleAuthSuccess}
                 onViewChange={() => {}}
                 fromReferralHome={true}
+                isDisabled={authenticated}
             />
         </Root>
     );

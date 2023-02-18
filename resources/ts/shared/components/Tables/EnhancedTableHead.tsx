@@ -11,6 +11,7 @@ interface EnhancedTableProps {
     order: TableSortType;
     orderBy: string;
     headCells: Array<any>;
+    hasStyling?: boolean;
     isReferral?: boolean;
 }
 
@@ -26,7 +27,8 @@ const styles = {
 };
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, onRequestSort, headCells, isReferral } = props;
+    const { order, orderBy, onRequestSort, headCells, isReferral, hasStyling } = props;
+
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
@@ -41,7 +43,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         variant={'head'}
-                        sx={isReferral ? styles.ReferralHead : null}
+                        sx={isReferral || hasStyling ? styles.ReferralHead : null}
                     >
                         {headCell.sortable ? (
                             <TableSortLabel

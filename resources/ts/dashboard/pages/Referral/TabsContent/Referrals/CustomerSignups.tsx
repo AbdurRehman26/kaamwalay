@@ -1,4 +1,5 @@
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -84,9 +85,13 @@ export function CustomerSignups() {
         [sortSignUpsFilter],
     );
 
+    if (customerSignup$.data.length === 0 && customerSignup$.isLoading) {
+        return <CircularProgress />;
+    }
+
     return (
         <>
-            {customerSignup$.data.length === 0 && !customerSignup$.isLoading ? (
+            {customerSignup$.data.length === 0 ? (
                 <EmptyStates
                     heading={'No Customer Sign Ups'}
                     description={'You haven’t gotten any customers to sign up, yet.'}

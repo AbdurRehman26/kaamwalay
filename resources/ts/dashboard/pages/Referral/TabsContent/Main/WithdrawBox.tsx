@@ -8,8 +8,6 @@ import theme from '@shared/styles/theme';
 
 const WithDrawDiv = styled(Grid)({
     background: '#FFFFFF',
-    border: '1px solid #E0E0E0',
-    borderRadius: '4px',
     width: '100%',
     marginLeft: '20px',
     [theme.breakpoints.down('sm')]: {
@@ -20,6 +18,7 @@ const WithDrawDiv = styled(Grid)({
     '.HeadingDiv': {
         background: '#5022A7',
         padding: '20px',
+        borderRadius: '4px 4px 0px 0px',
     },
     '.Heading': {
         fontWeight: 500,
@@ -40,6 +39,9 @@ const WithDrawDiv = styled(Grid)({
         justifyContent: 'space-between',
         border: '1px solid #E0E0E0',
         padding: '20px',
+        '&:last-child': {
+            borderRadius: '0px 0px 4px 4px',
+        },
     },
     '.StatsBreakDownText': {
         fontWeight: 400,
@@ -92,22 +94,26 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
                     </Button>
                 ) : null}
             </Grid>
-            <div className={'StatsBreakDown'}>
-                <Typography className={'StatsBreakDownText'}>Link Clicks</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer.linkClicks}</Typography>
-            </div>
-            <div className={'StatsBreakDown'}>
-                <Typography className={'StatsBreakDownText'}>Successful Sign Ups</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer.successfulSignups}</Typography>
-            </div>
-            <div className={'StatsBreakDown'}>
-                <Typography className={'StatsBreakDownText'}>Commission Earnings</Typography>
-                <Typography className={'StatsBreakDownPrice'}>{referrer.referralOrders}</Typography>
-            </div>
-            <div className={'StatsBreakDown'}>
-                <Typography className={'StatsBreakDownText'}>Total Earned</Typography>
-                <Typography className={'StatsBreakDownPrice'}>${round(referrer.totalEarned, 2).toFixed(2)}</Typography>
-            </div>
+            <Grid>
+                <div className={'StatsBreakDown'}>
+                    <Typography className={'StatsBreakDownText'}>Link Clicks</Typography>
+                    <Typography className={'StatsBreakDownPrice'}>{referrer.linkClicks}</Typography>
+                </div>
+                <div className={'StatsBreakDown'}>
+                    <Typography className={'StatsBreakDownText'}>Successful Sign Ups</Typography>
+                    <Typography className={'StatsBreakDownPrice'}>{referrer.successfulSignups}</Typography>
+                </div>
+                <div className={'StatsBreakDown'}>
+                    <Typography className={'StatsBreakDownText'}>Commission Earnings</Typography>
+                    <Typography className={'StatsBreakDownPrice'}>{referrer.referralOrders}</Typography>
+                </div>
+                <div className={'StatsBreakDown'}>
+                    <Typography className={'StatsBreakDownText'}>Total Earned</Typography>
+                    <Typography className={'StatsBreakDownPrice'}>
+                        ${round(referrer.totalEarned, 2).toFixed(2)}
+                    </Typography>
+                </div>
+            </Grid>
         </WithDrawDiv>
     );
 }

@@ -18,10 +18,10 @@ beforeEach(function () {
     ]);
 
     $this->referrers = Referrer::factory()->count(3)->state(new Sequence(
-            ['is_referral_active' => true],
-            ['is_referral_active' => false],
-            ['is_referral_active' => true]
-        ))->create();
+        ['is_referral_active' => true],
+        ['is_referral_active' => false],
+        ['is_referral_active' => true]
+    ))->create();
 
     $admin = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->user = User::factory()
@@ -54,7 +54,6 @@ beforeEach(function () {
 });
 
 test('an admin can get overview stats for referral program', function () {
-
     postJson(route('v3.admin.referral-program.get-overview-stat'), [
         'stat_name' => 'sales',
         'time_filter' => 'custom',

@@ -288,8 +288,8 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 }),
                 1,
             );
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [search, paymentStatus, sortFilter],
     );
 

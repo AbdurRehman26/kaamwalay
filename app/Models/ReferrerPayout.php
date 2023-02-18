@@ -38,4 +38,12 @@ class ReferrerPayout extends Model
     {
         return $this->belongsTo(User::class, 'paid_by');
     }
+
+    /**
+     * @return BelongsTo<PayoutStatus, ReferrerPayout>
+     */
+    public function payoutStatus(): BelongsTo
+    {
+        return $this->belongsTo(PayoutStatus::class);
+    }
 }

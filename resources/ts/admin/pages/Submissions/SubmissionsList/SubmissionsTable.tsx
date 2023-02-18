@@ -270,25 +270,32 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             { sort: sortFilter },
             toApiPropertiesObject({
                 search,
+                paymentStatus,
             }),
             1,
         );
-    }, [orders$, search, sortFilter]);
+    }, [orders$, search, paymentStatus, sortFilter]);
 
-    const handleReferrerStatus = useCallback(async (values) => {
-        setReferrerStatus({ value: values.value, label: values.label });
-        orders$.searchSortedWithPagination(
-            { sort: sortFilter },
-            toApiPropertiesObject({
-                referredBy: values.value,
-            }),
-            1,
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handleReferrerStatus = useCallback(
+        async (values) => {
+            setReferrerStatus({ value: values.value, label: values.label });
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                    referredBy: values.value,
+                }),
+                1,
+            );
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [search, paymentStatus, sortFilter],
+    );
 
     useEffect(
         () => {
+            // noinspection JSIgnoredPromiseFromCall
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.searchSortedWithPagination(

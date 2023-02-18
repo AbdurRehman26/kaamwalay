@@ -19,7 +19,7 @@ class ReferrerPayout extends Model
         'request_payload',
         'response_payload',
         'payout_status_id',
-        'paid_by_id',
+        'paid_by',
     ];
 
     /**
@@ -35,6 +35,6 @@ class ReferrerPayout extends Model
      */
     public function paidBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'paid_by_id');
+        return $this->belongsTo(User::class, 'paid_by');
     }
 }

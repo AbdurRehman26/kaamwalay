@@ -10,9 +10,10 @@ class PayoutStatus extends Model
 {
     use HasFactory;
 
-    const STATUS_PENDING = 0;
-    const STATUS_COMPLETED = 1;
-    const STATUS_FAILED = 2;
+    const STATUS_PENDING = 1;
+    const STATUS_PROCESSING = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_FAILED = 4;
 
     protected $fillable = [
         'code',

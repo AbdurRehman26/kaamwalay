@@ -12,7 +12,8 @@ class ReferrerPayout extends Model
 
     protected $fillable = [
         'user_id',
-        'email',
+        'payout_account',
+        'payment_method',
         'amount',
         'initiated_at',
         'completed_at',

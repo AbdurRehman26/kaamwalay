@@ -211,7 +211,9 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'left'}>
-                    {customer.referredBy ? `${customer.referredBy?.getFullName()}` : '-'}
+                    <Typography color={'primary'}>
+                        {customer.referredBy ? `${customer.referredBy?.getFullName()}` : '-'}
+                    </Typography>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select

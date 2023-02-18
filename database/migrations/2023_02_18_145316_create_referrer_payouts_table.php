@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('referrer_payouts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
             $table->string('email');
             $table->decimal('amount', 10);
             $table->timestamp('initiated_at')->nullable();

@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReferrerPayout extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'email',
         'amount',
         'initiated_at',
@@ -20,4 +22,19 @@ class ReferrerPayout extends Model
         'paid_by_id',
     ];
 
+    /**
+     * @return BelongsTo<User, ReferrerPayout>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return BelongsTo<User, ReferrerPayout>
+     */
+    public function paidBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'paid_by_id');
+    }
 }

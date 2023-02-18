@@ -24,14 +24,11 @@ export class CustomerEntity extends UserEntity {
     @Type(() => ReferrerEntity)
     public referrer!: ReferrerEntity;
 
-    @Type(() => ReferrerEntity)
+    @Type(() => UserEntity)
     public referredBy!: UserEntity;
 
     @Type(() => SalesRepEntity)
     public salesman!: SalesRepEntity;
-    public referredBy!: UserEntity;
     public signUps!: number;
     public isReferralActive!: number;
-    public sales!: number;
-    public commission!: number;
 }

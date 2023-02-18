@@ -11,6 +11,7 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use App\Services\ReferralProgram\ReferralCodeGeneratorService;
 
 beforeEach(function () {
     $this->seed([
@@ -18,9 +19,9 @@ beforeEach(function () {
     ]);
 
     $this->referrers = Referrer::factory()->count(3)->state(new Sequence(
-        ['is_referral_active' => true],
-        ['is_referral_active' => false],
-        ['is_referral_active' => true]
+        ['is_referral_active' => true, 'referral_code' => ReferralCodeGeneratorService::generate()],
+        ['is_referral_active' => false, 'referral_code' => ReferralCodeGeneratorService::generate()],
+        ['is_referral_active' => true, 'referral_code' => ReferralCodeGeneratorService::generate()]
     ))->create();
 
     $admin = User::factory()->withRole(config('permission.roles.admin'))->create();

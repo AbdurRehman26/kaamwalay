@@ -141,7 +141,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             [
                 [
                     'Customer:',
-                    <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
+                    <MuiLink component={Link} to={`/customers/${customerId}/view/overview`} color={'primary'}>
                         {customerName}
                     </MuiLink>,
                 ],

@@ -191,6 +191,22 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
+                {isCustomerDetailPage ? (
+                    <TableCell>
+                        {order.referrer ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.customer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.referrer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />

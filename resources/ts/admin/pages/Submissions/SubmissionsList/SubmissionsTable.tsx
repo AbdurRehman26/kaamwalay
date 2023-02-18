@@ -114,7 +114,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Owner',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'referred_by',
@@ -256,11 +256,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, referrerStatus.value],
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
@@ -295,6 +296,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
+                        referredBy: referrerStatus.value,
                     }),
                     1,
                 );

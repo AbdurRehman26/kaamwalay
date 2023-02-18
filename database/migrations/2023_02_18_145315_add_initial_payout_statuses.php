@@ -52,6 +52,6 @@ return new class extends Migration
      */
     public function down()
     {
-        DB::table('order_item_statuses')->truncate();
+        DB::table('payout_statuses')->truncate();
     }
 };

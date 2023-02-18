@@ -3,7 +3,6 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -211,8 +210,8 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                             })}
                     </Select>
                 </TableCell>
-                <TableCell variant={'body'} align={'center'}>
-                    {customer.referredBy ? <MuiLink>{customer.referredBy?.getFullName()}</MuiLink> : '-'}
+                <TableCell variant={'body'} align={'left'}>
+                    {customer.referredBy ? `${customer.referredBy?.getFullName()}` : '-'}
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select

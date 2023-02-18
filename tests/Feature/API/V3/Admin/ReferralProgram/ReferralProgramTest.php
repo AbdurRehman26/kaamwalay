@@ -126,7 +126,6 @@ it('filters referrers by referral status', function () {
 });
 
 it('returns referees list for admin', function () {
-//    dd(User::customer()->whereNotNull('referred_by')->count());
     getJson(route('v3.admin.referral-program.referees'))
         ->assertOk()
         ->assertJsonStructure([

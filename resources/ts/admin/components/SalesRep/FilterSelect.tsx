@@ -13,6 +13,7 @@ interface Props {
     value?: string;
     customValueText?: string;
     onClear?: () => void;
+    fromCustomerReferral?: boolean;
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -23,9 +24,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
     fontWeight: 400,
     margin: theme.spacing(0, 1),
     padding: '7px 14px',
-    backgroundColor: '#20BFB814',
-    borderColor: '#20BFB814',
-    color: '#20BFB8',
 }));
 
 const StyledPopover = styled(Popover)(({ theme }) => ({
@@ -44,6 +42,7 @@ export function FilterSelect({
     onClear,
     children,
     customValueText = '',
+    fromCustomerReferral,
 }: PropsWithChildren<Props>) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -61,6 +60,11 @@ export function FilterSelect({
     return (
         <>
             <StyledButton
+                sx={{
+                    backgroundColor: fromCustomerReferral ? '#FFFFFF' : '#20BFB814',
+                    borderColor: fromCustomerReferral ? '#FFFFFF' : '#20BFB814',
+                    color: fromCustomerReferral ? '#000000' : '#20BFB8',
+                }}
                 variant={'outlined'}
                 color={'inherit'}
                 endIcon={

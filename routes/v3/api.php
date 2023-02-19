@@ -45,8 +45,6 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index', 'store']);
         });
 
-
-
     });
 
 });

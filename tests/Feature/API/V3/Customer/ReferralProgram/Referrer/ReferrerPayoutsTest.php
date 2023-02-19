@@ -1,33 +1,94 @@
 <?php
 
-use App\Events\API\Auth\CustomerRegistered;
-use App\Listeners\API\ReferralProgram\Referrer\GenerateReferrerOnCustomerRegister;
-use App\Models\Order;
 use App\Models\Referrer;
-use App\Models\ReferrerEarnedCommission;
 use App\Models\ReferrerPayout;
 use App\Models\User;
-use App\Services\ReferralProgram\ReferrerService;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
+
+    $this->seed([
+        RolesSeeder::class,
+    ]);
+
     $this->user = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->referrerPayouts = ReferrerPayout::factory()->count(20)->create([
         'user_id' => $this->user->id
     ]);
+    $this->referrer = Referrer::factory()->create([
+        'user_id' => $this->user->id
+    ]);
 });
+
+it('creates referrer payout row', function () {
+    actingAs($this->user);
+
+    postJson(route('v3.payouts.store', [
+            'amount' => 40.00,
+            'payout_account' => $this->faker->email
+        ]))
+        ->assertSuccessful()
+        ->assertJsonStructure(['data' => [
+            'date_initiated',
+            'completed_at',
+            'payout_account',
+            'status',
+        ]]);
+});
+
+test('a referrer can withdraw his all withdrawable commission', function () {
+    actingAs($this->user);
+
+    postJson(route('v3.payouts.store', [
+        'amount' => $this->referrer->withdrawable_commission,
+        'payout_account' => $this->faker->email
+    ]))
+        ->assertSuccessful()
+        ->assertJsonStructure(['data' => [
+            'date_initiated',
+            'completed_at',
+            'payout_account',
+            'status',
+        ]]);
+});
+
+test('a referrer can not withdraw amount less than 1', function () {
+    actingAs($this->user);
+
+    postJson(route('v3.payouts.store', [
+        'amount' => 1,
+        'payout_account' => $this->faker->email
+    ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors([
+            'amount' => 'The amount must be greater than or equal to 1'
+        ]);
+});
+
+test('a referrer can not withdraw amount more than his withdrawable commission', function () {
+    actingAs($this->user);
+
+    postJson(route('v3.payouts.store', [
+        'amount' => 1001.00,
+        'payout_account' => $this->faker->email
+    ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors([
+            'amount' => 'The amount must be less than '.$this->referrer->withdrawable_commission.'.'
+        ]);
+});
+
 
 test('a referrer can get his own payouts', function () {
 
     actingAs($this->user);
-
     getJson(route('v3.payouts.index'))
         ->assertSuccessful()
         ->assertJsonCount(10, ['data'])

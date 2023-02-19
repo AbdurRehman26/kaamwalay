@@ -2,6 +2,7 @@
 
 namespace App\Services\ReferralProgram;
 
+use App\Models\PayoutStatus;
 use App\Models\ReferrerPayout;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -19,5 +20,17 @@ class ReferrerPayoutService
             ->allowedSorts(['initiated_at'])
             ->defaultSort('-initiated_at')
             ->paginate($itemsPerPage);
+    }
+
+    public function create(array $data): ReferrerPayout
+    {
+        return ReferrerPayout::create(
+            array_merge($data, [
+                    'user_id' => auth()->user()->id,
+                    'initiated_at' => now(),
+                    'payment_method' => ReferrerPayout::PAYMENT_METHODS[0],
+                    'payout_status_id' => PayoutStatus::STATUS_PENDING
+                ]
+            ));
     }
 }

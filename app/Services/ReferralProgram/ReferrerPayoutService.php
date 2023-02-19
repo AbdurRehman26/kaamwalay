@@ -29,12 +29,15 @@ class ReferrerPayoutService
     public function create(array $data): ReferrerPayout
     {
         return ReferrerPayout::create(
-            array_merge($data, [
+            array_merge(
+                $data,
+                [
                     'user_id' => auth()->user()->id,
                     'initiated_at' => now(),
                     'payment_method' => ReferrerPayout::PAYMENT_METHODS[0],
-                    'payout_status_id' => PayoutStatus::STATUS_PENDING
+                    'payout_status_id' => PayoutStatus::STATUS_PENDING,
                 ]
-            ));
+            )
+        );
     }
 }

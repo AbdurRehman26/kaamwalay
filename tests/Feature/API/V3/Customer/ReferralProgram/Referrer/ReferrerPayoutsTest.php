@@ -13,17 +13,16 @@ use function Pest\Laravel\postJson;
 uses(WithFaker::class);
 
 beforeEach(function () {
-
     $this->seed([
         RolesSeeder::class,
     ]);
 
     $this->user = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->referrerPayouts = ReferrerPayout::factory()->count(20)->create([
-        'user_id' => $this->user->id
+        'user_id' => $this->user->id,
     ]);
     $this->referrer = Referrer::factory()->create([
-        'user_id' => $this->user->id
+        'user_id' => $this->user->id,
     ]);
 });
 
@@ -32,7 +31,7 @@ it('creates referrer payout row', function () {
 
     postJson(route('v3.payouts.store', [
             'amount' => 40.00,
-            'payout_account' => $this->faker->email
+            'payout_account' => $this->faker->email,
         ]))
         ->assertSuccessful()
         ->assertJsonStructure(['data' => [
@@ -48,7 +47,7 @@ test('a referrer can withdraw his all withdrawable commission', function () {
 
     postJson(route('v3.payouts.store', [
         'amount' => $this->referrer->withdrawable_commission,
-        'payout_account' => $this->faker->email
+        'payout_account' => $this->faker->email,
     ]))
         ->assertSuccessful()
         ->assertJsonStructure(['data' => [
@@ -64,11 +63,11 @@ test('a referrer can not withdraw amount less than 1', function () {
 
     postJson(route('v3.payouts.store', [
         'amount' => 1,
-        'payout_account' => $this->faker->email
+        'payout_account' => $this->faker->email,
     ]))
         ->assertUnprocessable()
         ->assertJsonValidationErrors([
-            'amount' => 'The amount must be greater than or equal to 1'
+            'amount' => 'The amount must be greater than or equal to 1',
         ]);
 });
 
@@ -77,17 +76,16 @@ test('a referrer can not withdraw amount more than his withdrawable commission',
 
     postJson(route('v3.payouts.store', [
         'amount' => 1001.00,
-        'payout_account' => $this->faker->email
+        'payout_account' => $this->faker->email,
     ]))
         ->assertUnprocessable()
         ->assertJsonValidationErrors([
-            'amount' => 'The amount must be less than '.$this->referrer->withdrawable_commission.'.'
+            'amount' => 'The amount must be less than '.$this->referrer->withdrawable_commission.'.',
         ]);
 });
 
 
 test('a referrer can get his own payouts', function () {
-
     actingAs($this->user);
     getJson(route('v3.payouts.index'))
         ->assertSuccessful()

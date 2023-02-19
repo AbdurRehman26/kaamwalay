@@ -114,7 +114,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Owner',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'referred_by',
@@ -256,11 +256,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, referrerStatus.value],
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
@@ -269,25 +270,32 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             { sort: sortFilter },
             toApiPropertiesObject({
                 search,
+                paymentStatus,
             }),
             1,
         );
-    }, [orders$, search, sortFilter]);
+    }, [orders$, search, paymentStatus, sortFilter]);
 
-    const handleReferrerStatus = useCallback(async (values) => {
-        setReferrerStatus({ value: values.value, label: values.label });
-        orders$.searchSortedWithPagination(
-            { sort: sortFilter },
-            toApiPropertiesObject({
-                referredBy: values.value,
-            }),
-            1,
-        );
+    const handleReferrerStatus = useCallback(
+        async (values) => {
+            setReferrerStatus({ value: values.value, label: values.label });
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                    referredBy: values.value,
+                }),
+                1,
+            );
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        [search, paymentStatus, sortFilter],
+    );
 
     useEffect(
         () => {
+            // noinspection JSIgnoredPromiseFromCall
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.searchSortedWithPagination(
@@ -295,6 +303,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
+                        referredBy: referrerStatus.value,
                     }),
                     1,
                 );

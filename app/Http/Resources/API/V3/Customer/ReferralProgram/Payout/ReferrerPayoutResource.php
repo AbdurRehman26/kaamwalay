@@ -3,8 +3,10 @@
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Payout;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\ReferrerPayout;
 use Illuminate\Http\Request;
 
+/** @mixin ReferrerPayout */
 class ReferrerPayoutResource extends BaseResource
 {
     /**

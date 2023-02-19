@@ -23,6 +23,10 @@ class ReferrerPayout extends Model
         'paid_by',
     ];
 
+    CONST PAYMENT_METHODS = [
+        'PAYPAL',
+    ];
+
     /**
      * @return BelongsTo<User, ReferrerPayout>
      */
@@ -37,5 +41,13 @@ class ReferrerPayout extends Model
     public function paidBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'paid_by');
+    }
+
+    /**
+     * @return BelongsTo<PayoutStatus, ReferrerPayout>
+     */
+    public function payoutStatus(): BelongsTo
+    {
+        return $this->belongsTo(PayoutStatus::class, 'payout_status_id');
     }
 }

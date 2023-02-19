@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Customer\Order\OrderController;
 use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
+use App\Http\Controllers\API\V3\Customer\ReferrerPayoutController;
 use App\Http\Controllers\API\V3\Customer\PushNotificationController;
 use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
@@ -39,6 +40,13 @@ Route::prefix('customer')->group(function () {
         Route::prefix('referee')->group(function () {
             Route::get('/coupon', [RefereeCouponController::class, 'show'])->name('customer.referee.coupon');
         });
+
+        Route::prefix('referrer')->group(function () {
+            Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index', 'store']);
+        });
+
+
+
     });
 
 });

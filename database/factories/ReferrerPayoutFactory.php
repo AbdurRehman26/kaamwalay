@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\ReferrerPayout;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReferrerPayoutFactory extends Factory
@@ -15,19 +17,13 @@ class ReferrerPayoutFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'referral_code' => $this->faker->text(5),
-            'withdrawable_commission' => $this->faker->randomFloat(2, 100, 1000),
-            'link_clicks' => $this->faker->numberBetween(0, 100),
-            'successful_signups' => $this->faker->numberBetween(0, 50),
-            'referral_orders' => $this->faker->numberBetween(0, 20),
-            'is_referral_active' => true,
-
-            'date_initiated' => $this->faker->dateTime(),
-            'completed_at' => $this->completed_at,
-            'payout_account' => $this->payout_account,
-            'status' => $this->payoutStatus->name,
-            'amount' => $this->amount,
-
+            'paid_by' => User::factory(),
+            'initiated_at' => $this->faker->dateTime(),
+            'completed_at' => $this->faker->dateTime(),
+            'payout_account' => $this->faker->email(),
+            'payment_method' => ReferrerPayout::PAYMENT_METHODS[0],
+            'payout_status_id' => $this->faker->numberBetween(1, 4),
+            'amount' => $this->faker->numberBetween(0, 1500),
         ];
     }
 }

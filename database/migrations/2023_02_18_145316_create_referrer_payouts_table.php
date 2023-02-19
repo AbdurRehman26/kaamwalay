@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('response_payload')->nullable();
             $table->text('request_payload')->nullable();
             $table->foreignId('payout_status_id')->constrained();
-            $table->foreignId('paid_by')->constrained('users');
+            $table->foreignId('paid_by')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

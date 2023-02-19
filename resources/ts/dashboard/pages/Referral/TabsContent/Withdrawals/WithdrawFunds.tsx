@@ -6,6 +6,9 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import React, { useCallback, useState } from 'react';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 import theme from '@shared/styles/theme';
 
 const WithDrawDiv = styled(Grid)({
@@ -65,6 +68,29 @@ const WithDrawDiv = styled(Grid)({
     },
 });
 export function WithdrawFunds() {
+    const [payoutAccount, setPayoutAccount] = useState('');
+    const [isDisabled, setIsDisabled] = useState(true);
+    const apiService = useInjectable(APIService);
+
+    const onPayoutAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setPayoutAccount(e.target.value);
+        setIsDisabled(false);
+    }, []);
+
+    const handleSubmit = useCallback(async () => {
+        const endpoint = apiService.createEndpoint(`customer/referrer/payout`, {
+            version: 'v3',
+        });
+
+        try {
+            const response = await endpoint.post('', {
+                amount: 30,
+                payoutAccount: payoutAccount,
+            });
+            console.log(response);
+        } catch (error: any) {}
+    }, [apiService, payoutAccount]);
+
     return (
         <WithDrawDiv>
             <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
@@ -89,8 +115,8 @@ export function WithdrawFunds() {
                     className={'PayoutAccountInfoBox'}
                     placeholder="Enter Paypal Email"
                     fullWidth
-                    value={''}
-                    onChange={(e: any) => console.log('1')}
+                    value={payoutAccount}
+                    onChange={onPayoutAccountChange}
                     variant={'outlined'}
                     InputLabelProps={{
                         shrink: true,
@@ -105,7 +131,9 @@ export function WithdrawFunds() {
                     Withdrawable Commission, and you will be able to see the pending transaction in your Withdrawals
                     section. It can take 5-7 days for the funds to transfer to your payout account.
                 </Typography>
-                <Button className={'Button'}>START WITHDRAWAL</Button>
+                <Button disabled={isDisabled} onClick={handleSubmit} className={'Button'}>
+                    START WITHDRAWAL
+                </Button>
             </Grid>
         </WithDrawDiv>
     );

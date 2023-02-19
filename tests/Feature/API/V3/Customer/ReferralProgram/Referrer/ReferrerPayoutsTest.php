@@ -62,7 +62,7 @@ test('a referrer can not withdraw amount less than 1', function () {
     actingAs($this->user);
 
     postJson(route('v3.payouts.store', [
-        'amount' => 1,
+        'amount' => 0,
         'payout_account' => $this->faker->email,
     ]))
         ->assertUnprocessable()
@@ -80,7 +80,7 @@ test('a referrer can not withdraw amount more than his withdrawable commission',
     ]))
         ->assertUnprocessable()
         ->assertJsonValidationErrors([
-            'amount' => 'The amount must be less than '.$this->referrer->withdrawable_commission.'.',
+            'amount' => 'The amount must be less than or equal to '.$this->referrer->withdrawable_commission.'.',
         ]);
 });
 

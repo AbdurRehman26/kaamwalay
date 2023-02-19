@@ -6,10 +6,12 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import theme from '@shared/styles/theme';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
 
 const WithDrawDiv = styled(Grid)({
     background: '#FFFFFF',
@@ -71,6 +73,13 @@ export function WithdrawFunds() {
     const [payoutAccount, setPayoutAccount] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
     const apiService = useInjectable(APIService);
+    const dispatch = useAppDispatch();
+
+    const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
+
+    useEffect(() => {
+        dispatch(getReferrerDetail());
+    }, [dispatch]);
 
     const onPayoutAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setPayoutAccount(e.target.value);
@@ -78,18 +87,18 @@ export function WithdrawFunds() {
     }, []);
 
     const handleSubmit = useCallback(async () => {
-        const endpoint = apiService.createEndpoint(`customer/referrer/payout`, {
+        const endpoint = apiService.createEndpoint(`customer/referrer/payouts`, {
             version: 'v3',
         });
 
         try {
             const response = await endpoint.post('', {
-                amount: 30,
+                amount: referrer.withdrawableCommission,
                 payoutAccount: payoutAccount,
             });
             console.log(response);
         } catch (error: any) {}
-    }, [apiService, payoutAccount]);
+    }, [apiService, payoutAccount, referrer.withdrawableCommission]);
 
     return (
         <WithDrawDiv>
@@ -99,7 +108,7 @@ export function WithdrawFunds() {
             </Breadcrumbs>
             <Grid>
                 <Typography className={'AmountHeading'}>
-                    Withdrawal Amount: <span className={'AmountValue'}>$20.00</span>
+                    Withdrawal Amount: <span className={'AmountValue'}>${referrer.withdrawableCommission}</span>
                 </Typography>
                 <Typography className={'Caption'}>
                     It can take 5-7 days for the withdrawal to finalize. It will show up as “pending” until it’s

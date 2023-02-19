@@ -15,6 +15,7 @@ import { ListHeader } from '@dashboard/components/ListHeader';
 import CommissionStructure from './TabsContent/CommissionStructure';
 import Main from './TabsContent/Main/Main';
 import Referrals from './TabsContent/Referrals/Referrals';
+import Withdrawals from './TabsContent/Withdrawals/Withdrawals';
 
 const PayoutButton = styled(Button)({
     background: '#FFFFFF',
@@ -102,13 +103,13 @@ export function Referral() {
                                 label="Referrals"
                                 sx={styles.TabsLink}
                             />
-                            {/* <Tab
+                            <Tab
                                 component={Link}
-                                to={'/referral-program/with-drawals'}
-                                value={'with-drawals'}
+                                to={'/referral-program/withdrawals'}
+                                value={'withdrawals'}
                                 label="Withdrawals"
                                 sx={styles.TabsLink}
-                            /> */}
+                            />
                             <Tab
                                 component={Link}
                                 to={'/referral-program/commission-structure'}
@@ -130,6 +131,9 @@ export function Referral() {
                     </TabPanel>
                     <TabPanel value={'referrals'} sx={styles.TabsPanel}>
                         <Referrals />
+                    </TabPanel>
+                    <TabPanel value={'withdrawals'} sx={styles.TabsPanel}>
+                        <Withdrawals />
                     </TabPanel>
                     <TabPanel value={'commission-structure'} sx={styles.TabsPanel}>
                         <CommissionStructure />

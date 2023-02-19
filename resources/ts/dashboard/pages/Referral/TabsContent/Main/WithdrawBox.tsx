@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
+import { Link } from 'react-router-dom';
 import { ReferrerEntity } from '@shared/entities/ReferrerEntity';
 import theme from '@shared/styles/theme';
 
@@ -89,9 +90,11 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
                     ${round(referrer.withdrawableCommission, 2).toFixed(2)}
                 </Typography>
                 {referrer.withdrawableCommission ? (
-                    <Button variant="contained" className={'WithDrawButton'} disabled>
-                        WITHDRAW FUNDS
-                    </Button>
+                    <Link to={'/referral-program/withdraw-funds'}>
+                        <Button variant="contained" className={'WithDrawButton'}>
+                            WITHDRAW FUNDS
+                        </Button>
+                    </Link>
                 ) : null}
             </Grid>
             <Grid>

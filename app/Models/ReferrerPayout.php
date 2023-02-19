@@ -23,7 +23,7 @@ class ReferrerPayout extends Model
         'paid_by',
     ];
 
-    CONST PAYMENT_METHODS = [
+    const PAYMENT_METHODS = [
         'PAYPAL',
     ];
 

@@ -15,12 +15,6 @@ class StoreReferrerPayoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => [
-                'required',
-                'regex:/^\d+(\.\d{1,2})?$/',
-                'gte:1',
-                'lte:'. Referrer::whereUserId(auth()->user()->id)->first()->withdrawable_commission,
-            ],
             'payout_account' => ['required', 'string'],
         ];
     }

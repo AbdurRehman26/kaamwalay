@@ -26,11 +26,10 @@ beforeEach(function () {
     ]);
 });
 
-it('creates referrer payout row', function () {
+test('a referrer can withdraw his commission', function () {
     actingAs($this->user);
 
     postJson(route('v3.payouts.store', [
-            'amount' => 40.00,
             'payout_account' => $this->faker->email,
         ]))
         ->assertSuccessful()
@@ -41,49 +40,6 @@ it('creates referrer payout row', function () {
             'status',
         ]]);
 });
-
-test('a referrer can withdraw his all withdrawable commission', function () {
-    actingAs($this->user);
-
-    postJson(route('v3.payouts.store', [
-        'amount' => $this->referrer->withdrawable_commission,
-        'payout_account' => $this->faker->email,
-    ]))
-        ->assertSuccessful()
-        ->assertJsonStructure(['data' => [
-            'date_initiated',
-            'completed_at',
-            'payout_account',
-            'status',
-        ]]);
-});
-
-test('a referrer can not withdraw amount less than 1', function () {
-    actingAs($this->user);
-
-    postJson(route('v3.payouts.store', [
-        'amount' => 0,
-        'payout_account' => $this->faker->email,
-    ]))
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors([
-            'amount' => 'The amount must be greater than or equal to 1',
-        ]);
-});
-
-test('a referrer can not withdraw amount more than his withdrawable commission', function () {
-    actingAs($this->user);
-
-    postJson(route('v3.payouts.store', [
-        'amount' => 1001.00,
-        'payout_account' => $this->faker->email,
-    ]))
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors([
-            'amount' => 'The amount must be less than or equal to '.$this->referrer->withdrawable_commission.'.',
-        ]);
-});
-
 
 test('a referrer can get his own payouts', function () {
     actingAs($this->user);

@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -118,7 +119,17 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     <Grid container>
                         <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
-                            <Typography variant={'body2'}>{customer.fullName}</Typography>
+                            <Typography variant={'body2'}>
+                                {customer.fullName.length > 20 ? (
+                                    <Grid>
+                                        <Tooltip title={customer.fullName}>
+                                            <span>{customer.fullName.substring(0, 20) + '...'}</span>
+                                        </Tooltip>
+                                    </Grid>
+                                ) : (
+                                    customer.fullName
+                                )}
+                            </Typography>
                             <Typography variant={'caption'} color={'textSecondary'}>
                                 {customer.customerNumber}
                             </Typography>
@@ -127,7 +138,17 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 </TableCell>
                 <TableCell variant={'body'}>
                     <Grid item xs container direction={'column'}>
-                        <Typography variant={'body2'}>{customer.email}</Typography>
+                        <Typography variant={'body2'}>
+                            {customer.email.length > 20 ? (
+                                <Grid>
+                                    <Tooltip title={customer.email}>
+                                        <span>{customer.email.substring(0, 20) + '...'}</span>
+                                    </Tooltip>
+                                </Grid>
+                            ) : (
+                                customer.email
+                            )}
+                        </Typography>
                         <Typography variant={'caption'} color={'textSecondary'}>
                             {customer.phone ?? '-'}
                         </Typography>
@@ -211,8 +232,26 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </Select>
                 </TableCell>
                 <TableCell variant={'body'} align={'left'}>
-                    <Typography color={'primary'}>
-                        {customer.referredBy ? `${customer.referredBy?.getFullName()}` : '-'}
+                    <Typography sx={{ fontSize: '14px', fontWeight: '500' }} color={'primary'}>
+                        {customer.referredBy ? (
+                            <>
+                                <Typography variant={'body2'}>
+                                    {customer.referredBy?.getFullName().length > 20 ? (
+                                        <Grid>
+                                            <Tooltip title={customer.referredBy?.getFullName()}>
+                                                <span>
+                                                    {customer.referredBy?.getFullName().substring(0, 20) + '...'}
+                                                </span>
+                                            </Tooltip>
+                                        </Grid>
+                                    ) : (
+                                        customer.referredBy?.getFullName()
+                                    )}
+                                </Typography>
+                            </>
+                        ) : (
+                            '-'
+                        )}
                     </Typography>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>

@@ -48,5 +48,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->names([
                 'index' => 'referral.payouts.index',
             ]);
+        Route::post('payouts/pay', [ReferrerPayoutController::class, 'process'])->name('referral.payouts.pay');
     });
 });

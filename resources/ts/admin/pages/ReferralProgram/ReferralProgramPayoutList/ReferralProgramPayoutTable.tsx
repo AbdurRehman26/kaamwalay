@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import PayoutCommissionDialog from './PayoutCommissionDialog';
 
 interface ReferralProgramPayoutTableProps {
     tabFilter?: string;
@@ -31,6 +32,7 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
     const [exportAllStatus, setExportAllStatus] = useState(false);
     const [allSelected, setAllSelected] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [showPayoutCommission, setShowPayoutCommission] = useState(false);
 
     // uncomment when APIs ready
     setPaymentStatus(true);
@@ -95,118 +97,136 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
     const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
 
     return (
-        <Grid container direction={'column'}>
-            <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
-                <>
-                    <Grid item xs container alignItems={'center'}>
+        <>
+            <Grid container direction={'column'}>
+                <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
+                    <>
+                        <Grid item xs container alignItems={'center'}>
+                            {selectedIds.length === 0 ? (
+                                <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
+                                    {orders.data.length > 0 ? `${orders.data.length} Results` : null}
+                                </Typography>
+                            ) : (
+                                <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
+                                    {`${selectedIds.length} Selected `}
+                                </Typography>
+                            )}
+                            {selectedIds.length > 0 ? (
+                                <Grid xs ml={2} alignItems={'center'}>
+                                    <Button
+                                        sx={{ borderRadius: '25px' }}
+                                        variant={payAllStatus ? 'contained' : 'outlined'}
+                                    >
+                                        Pay Selected
+                                    </Button>
+                                    <Button
+                                        sx={{ marginLeft: '12px', borderRadius: '25px' }}
+                                        variant={archiveAllStatus ? 'contained' : 'outlined'}
+                                    >
+                                        Archieved Selected
+                                    </Button>
+                                    <Button
+                                        sx={{ marginLeft: '12px', borderRadius: '25px' }}
+                                        variant={exportAllStatus ? 'contained' : 'outlined'}
+                                    >
+                                        Export Selected
+                                    </Button>
+                                </Grid>
+                            ) : null}
+                        </Grid>
                         {selectedIds.length === 0 ? (
-                            <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                {orders.data.length > 0 ? `${orders.data.length} Results` : null}
-                            </Typography>
-                        ) : (
-                            <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                {`${selectedIds.length} Selected `}
-                            </Typography>
-                        )}
-                        {selectedIds.length > 0 ? (
-                            <Grid xs ml={2} alignItems={'center'}>
-                                <Button sx={{ borderRadius: '25px' }} variant={payAllStatus ? 'contained' : 'outlined'}>
-                                    Pay Selected
-                                </Button>
+                            <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
                                 <Button
-                                    sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                    variant={archiveAllStatus ? 'contained' : 'outlined'}
+                                    variant={'outlined'}
+                                    color={'primary'}
+                                    sx={{ borderRadius: 20, padding: '7px 24px' }}
+                                    // onClick={handleExportData}
                                 >
-                                    Archieved Selected
-                                </Button>
-                                <Button
-                                    sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                    variant={exportAllStatus ? 'contained' : 'outlined'}
-                                >
-                                    Export Selected
+                                    Export List
                                 </Button>
                             </Grid>
                         ) : null}
-                    </Grid>
-                    {selectedIds.length === 0 ? (
-                        <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                            <Button
-                                variant={'outlined'}
-                                color={'primary'}
-                                sx={{ borderRadius: 20, padding: '7px 24px' }}
-                                // onClick={handleExportData}
-                            >
-                                Export List
-                            </Button>
-                        </Grid>
-                    ) : null}
-                </>
-            </Grid>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell variant={'head'}>
-                            <Checkbox
-                                color="primary"
-                                checked={allSelected}
-                                indeterminate={selectedIds.length > 0}
-                                onClick={handleSelectAll}
-                            />
-                            Name / ID
-                        </TableCell>
-                        <TableCell variant={'head'}>Date Initiated</TableCell>
-                        <TableCell variant={'head'}>Date Completed</TableCell>
-                        <TableCell variant={'head'}>Payout Account</TableCell>
-                        <TableCell variant={'head'}>Status</TableCell>
-                        <TableCell variant={'head'}>Paid By</TableCell>
-                        <TableCell variant={'head'}>Amount</TableCell>
-                        <TableCell variant={'head'} />
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {orders?.data.length > 0 ? (
-                        orders.data.map((order) => (
-                            <TableRow>
-                                <TableCell>
-                                    <Checkbox
-                                        color="primary"
-                                        key={order.id}
-                                        checked={isSelected(order.id)}
-                                        onClick={(event) => handleClick(order.id)}
-                                    />
-                                    {order.id}
-                                </TableCell>
-                                <TableCell>
-                                    {' '}
-                                    {`${formatDate(order.createdAt, 'MMM D, YYYY')} at ${formatDate(
-                                        order.createdAt,
-                                        'h:mm:ss A',
-                                    )}`}{' '}
-                                </TableCell>
-                                <TableCell>Date P</TableCell>
-                                <TableCell>Account</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Paid By</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Action</TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
+                    </>
+                </Grid>
+                <Table>
+                    <TableHead>
                         <TableRow>
-                            <TableCell align={'center'} colSpan={9}>
-                                <Box padding={2}>
-                                    <Typography variant={'subtitle2'}>We couldn't found any payouts yet.</Typography>
-                                </Box>
+                            <TableCell variant={'head'}>
+                                <Checkbox
+                                    color="primary"
+                                    checked={allSelected}
+                                    indeterminate={selectedIds.length > 0}
+                                    onClick={handleSelectAll}
+                                />
+                                Name / ID
                             </TableCell>
+                            <TableCell variant={'head'}>Date Initiated</TableCell>
+                            <TableCell variant={'head'}>Date Completed</TableCell>
+                            <TableCell variant={'head'}>Payout Account</TableCell>
+                            <TableCell variant={'head'}>Status</TableCell>
+                            <TableCell variant={'head'}>Paid By</TableCell>
+                            <TableCell variant={'head'}>Amount</TableCell>
+                            <TableCell variant={'head'} />
                         </TableRow>
-                    )}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination {...orders.paginationProps} />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </Grid>
+                    </TableHead>
+                    <TableBody>
+                        {orders?.data.length > 0 ? (
+                            orders.data.map((order) => (
+                                <TableRow>
+                                    <TableCell>
+                                        <Checkbox
+                                            color="primary"
+                                            key={order.id}
+                                            checked={isSelected(order.id)}
+                                            onClick={(event) => handleClick(order.id)}
+                                        />
+                                        {order.id}
+                                    </TableCell>
+                                    <TableCell>
+                                        {' '}
+                                        {`${formatDate(order.createdAt, 'MMM D, YYYY')} at ${formatDate(
+                                            order.createdAt,
+                                            'h:mm:ss A',
+                                        )}`}{' '}
+                                    </TableCell>
+                                    <TableCell>Date P</TableCell>
+                                    <TableCell>Account</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Paid By</TableCell>
+                                    <TableCell>Amount</TableCell>
+                                    <TableCell>
+                                        <Button onClick={() => setShowPayoutCommission(true)} variant={'contained'}>
+                                            Pay
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell align={'center'} colSpan={9}>
+                                    <Box padding={2}>
+                                        <Typography variant={'subtitle2'}>
+                                            We couldn't found any payouts yet.
+                                        </Typography>
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination {...orders.paginationProps} />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+                <PayoutCommissionDialog
+                    onSubmit={() => setShowPayoutCommission(false)}
+                    onClose={() => setShowPayoutCommission(false)}
+                    open={showPayoutCommission}
+                    totalRecipient={2}
+                    totalPayout={5}
+                />
+            </Grid>
+        </>
     );
 }

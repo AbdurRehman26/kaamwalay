@@ -1,13 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
-import { ReferralCommissionEarningsEntity } from '@shared/entities/ReferralCommissionEarningsEntity';
+import { ReferralWithdrawEntity } from '@shared/entities/ReferralWithdrawEntity';
 import { useListQuery } from '@shared/hooks/useListQuery';
-import { listReferralCommissionEarningsAction } from '@shared/redux/slices/referralCommissionEarningsSlice';
+import { listReferralWithdrawAction } from '@shared/redux/slices/referralWithdrawSlice';
 
 export function useListReferralWithdrawQuery(config?: AxiosRequestConfig) {
-    return useListQuery(
-        listReferralCommissionEarningsAction,
-        ReferralCommissionEarningsEntity,
-        (state) => state.referralCommissionEarnings,
-        config,
-    );
+    return useListQuery(listReferralWithdrawAction, ReferralWithdrawEntity, (state) => state.referralWithdraw, config);
 }

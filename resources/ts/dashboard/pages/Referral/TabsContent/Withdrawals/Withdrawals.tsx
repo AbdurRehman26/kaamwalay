@@ -1,16 +1,13 @@
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
-import Avatar from '@mui/material/Avatar';
 import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
-import { ReferralCommissionEarningsEntity } from '@shared/entities/ReferralCommissionEarningsEntity';
+import { ReferralWithdrawEntity } from '@shared/entities/ReferralWithdrawEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralWithdrawQuery } from '@shared/redux/hooks/useReferralWithdrawQuery';
@@ -89,7 +86,7 @@ export function Withdrawals() {
 
     const withdraw$ = useListReferralWithdrawQuery({
         params: {
-            sort: '-created_at',
+            sort: '-initiated_at',
         },
 
         ...bracketParams(),
@@ -101,7 +98,7 @@ export function Withdrawals() {
         () => {
             if (!withdraw$.isLoading) {
                 withdraw$.searchSortedWithPagination(
-                    { sort: sortWithdrawFilter ? 'created_at' : '-created_at' },
+                    { sort: sortWithdrawFilter ? 'initiated_at' : '-initiated_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
@@ -114,20 +111,13 @@ export function Withdrawals() {
     if (withdraw$.data.length === 0 && withdraw$.isLoading) {
         return <CircularProgress />;
     }
-    const tableRows = data?.map((data: ReferralCommissionEarningsEntity) => (
+    const tableRows = data?.map((data: ReferralWithdrawEntity) => (
         <TableRow key={data?.id}>
-            <StyledTableCell>
-                <Grid container alignItems={'center'}>
-                    <Avatar src={data?.profileImage ?? ''}>{data?.getInitials()}</Avatar>
-                    <Grid item xs container pl={2}>
-                        <Typography sx={{ fontSize: '14px' }}>{data?.fullName}</Typography>
-                    </Grid>
-                </Grid>
-            </StyledTableCell>
-            <StyledTableCell>{data?.paidAt ? moment(data?.paidAt).format('lll') : '-'}</StyledTableCell>
-            <StyledTableCell align={'right'}>{data?.cards}</StyledTableCell>
-            <StyledTableCell align={'right'}>${round(data?.submissionTotal, 2).toFixed(2)}</StyledTableCell>
-            <StyledTableCell align={'right'}>${round(data?.commission, 2).toFixed(2)}</StyledTableCell>
+            <StyledTableCell>{data?.dateInitiated ? moment(data?.dateInitiated).format('lll') : '-'}</StyledTableCell>
+            <StyledTableCell>{data?.completedAt ? moment(data?.completedAt).format('lll') : '-'}</StyledTableCell>
+            <StyledTableCell align={'right'}>{data?.payoutAccount}</StyledTableCell>
+            <StyledTableCell align={'right'}>{data?.status}</StyledTableCell>
+            <StyledTableCell align={'right'}>${round(data?.amount, 2).toFixed(2)}</StyledTableCell>
         </TableRow>
     ));
     return (

@@ -28,6 +28,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
     });
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
 
     Route::apiResource('customers', CustomerController::class)->only(['index', 'show'])
         ->names([

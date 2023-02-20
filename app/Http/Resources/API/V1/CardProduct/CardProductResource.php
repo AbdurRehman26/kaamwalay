@@ -14,6 +14,7 @@ class CardProductResource extends BaseResource
             'short_name' => $this->getShortName(),
             'name' => $this->name,
             'card_category_name' => $this->cardCategory?->name,
+            'card_category_type' => $this->cardCategory?->cardCategoryType?->name,
             'card_set_name' => $this->cardSet?->name,
             'card_series_name' => $this->cardSet?->cardSeries?->name,
             'release_date' => $this->formatDate($this->cardSet?->release_date),

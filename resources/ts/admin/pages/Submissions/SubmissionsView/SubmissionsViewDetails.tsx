@@ -13,6 +13,7 @@ import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -46,7 +47,9 @@ interface SubmissionsViewDetailsProps {
     admin?: string;
     createdBy?: AdminUserEntity;
     owner?: SalesRepEntity;
+    referrer?: UserEntity;
     salesmanCommission?: number;
+    referralCommission?: number;
 }
 
 const useStyles = makeStyles(
@@ -87,7 +90,9 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         paymentStatus,
         admin,
         salesmanCommission,
+        referralCommission,
         owner,
+        referrer,
     } = props;
 
     const classes = useStyles();
@@ -107,9 +112,28 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                     </>,
                 ],
             }),
+            ...(referrer && {
+                'Referrer:': [
+                    <>
+                        <MuiLink component={Link} to={''}>
+                            {referrer?.firstName} {referrer?.lastName}
+                        </MuiLink>
+                    </>,
+                ],
+            }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
+            ...(referralCommission && { 'Referrer Commission:': formatCurrency(referralCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission],
+        [
+            declaredValue,
+            numberOfCards,
+            placedAt,
+            serviceLevelFee,
+            owner,
+            salesmanCommission,
+            referralCommission,
+            referrer,
+        ],
     );
 
     const customerInfo = useMemo(
@@ -117,7 +141,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             [
                 [
                     'Customer:',
-                    <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
+                    <MuiLink component={Link} to={`/customers/${customerId}/view/overview`} color={'primary'}>
                         {customerName}
                     </MuiLink>,
                 ],

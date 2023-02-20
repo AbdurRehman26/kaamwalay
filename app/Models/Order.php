@@ -7,10 +7,12 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Http\Filters\AdminOrderReferByFilter;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
 use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
 use App\Http\Sorts\AdminSubmissionsPaymentStatusSort;
+use App\Http\Sorts\AdminSubmissionsReferrerSort;
 use App\Http\Sorts\AdminSubmissionsStatusSort;
 use App\Http\Sorts\AdminSubmissionsTotalDeclaredValueSort;
 use Carbon\Carbon;
@@ -165,6 +167,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
+            AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
@@ -178,6 +181,7 @@ class Order extends Model implements Exportable
             AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
             AllowedSort::custom('status', new AdminSubmissionsStatusSort),
             AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            AllowedSort::custom('referred_by', new AdminSubmissionsReferrerSort),
             'created_at',
             'order_number',
             'arrived_at',

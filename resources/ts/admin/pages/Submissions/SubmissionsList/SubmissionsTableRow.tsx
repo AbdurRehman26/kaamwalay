@@ -193,16 +193,16 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
-                {isReferralPage ? (
+                {isCustomerDetailPage || isReferralPage ? (
                     <TableCell>
-                        {order?.referrer?.fullName ? (
+                        {order?.referrer ? (
                             <MuiLink
                                 component={Link}
                                 color={'primary'}
-                                to={`/customers/${order.referrer?.id}/view`}
+                                to={`/customers/${order.customer?.id}/view/overview`}
                                 className={font.fontWeightMedium}
                             >
-                                {order.referrer.fullName}
+                                {order.referrer?.getFullName()}
                             </MuiLink>
                         ) : (
                             '-'

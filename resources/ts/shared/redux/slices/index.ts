@@ -27,6 +27,7 @@ export { adminSalesRepCommissionPaymentsSlice as adminSalesRepCommissionPayments
 export { adminSurfacesSlice as adminSurfaces } from './adminSurfacesSlice';
 export { pageSlice as page } from './pageSlice';
 export { submissionGradesSlice } from './submissionGradeSlice';
+export { adminOrdersListSlice as adminOrdersList } from './adminOrdersListSlice';
 export { adminCustomerReferralSignUpSlice as adminCustomerReferralSignUp } from './adminCustomerReferralSignUpSlice';
 export { adminCustomerReferralCommissionSlice as adminCustomerReferralCommission } from './adminCustomerReferralCommissionSlice';
 export { adminCustomersListSlice as adminCustomersList } from './adminCustomersListSlice';

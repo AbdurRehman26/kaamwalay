@@ -21,6 +21,10 @@ class PayoutStatus extends Model
         'description',
     ];
 
+    /**
+     * @param  Builder <PayoutStatus> $query
+     * @return Builder <PayoutStatus>
+     */
     public function scopeForStatus(Builder $query, int|string $status): Builder
     {
         return $query

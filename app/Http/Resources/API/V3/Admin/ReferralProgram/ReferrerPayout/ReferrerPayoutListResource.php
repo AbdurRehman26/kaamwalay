@@ -23,7 +23,7 @@ class ReferrerPayoutListResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => new UserResource($this->user),
-            'created_at' => $this->created_at,
+            'initiated_at' => $this->initiated_at,
             'completed_at' => $this->completed_at,
             'payout_account' => $this->payout_account,
             'paid_by' => new UserResource($this->paidBy),

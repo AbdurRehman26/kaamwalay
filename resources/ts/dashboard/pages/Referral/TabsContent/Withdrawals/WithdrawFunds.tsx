@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 import theme from '@shared/styles/theme';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -16,19 +17,17 @@ import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice'
 const WithDrawDiv = styled(Grid)({
     background: '#FFFFFF',
     width: '100%',
-    marginLeft: '20px',
     [theme.breakpoints.down('sm')]: {
-        marginLeft: '0px',
         marginBottom: '15px',
     },
 
     '.AmountHeading': {
-        marginTop: '40px',
+        marginTop: '20px',
         fontWeight: '500',
         fontSize: '20px',
     },
     '.AmountValue': {
-        color: theme.palette.primary,
+        color: '#43A047',
     },
     '.Caption': {
         margin: '3px 0px',
@@ -53,9 +52,11 @@ const WithDrawDiv = styled(Grid)({
     },
     '.PayoutAccountInfoBox': {
         margin: '5px 0px',
+        width: '50%',
     },
     '.Divider': {
         margin: '5% 0px 2% 0',
+        width: '50%',
     },
     '.WithDrawalBtnDiv': {
         '.Caption': {
@@ -63,10 +64,42 @@ const WithDrawDiv = styled(Grid)({
         },
         '.Button': {
             marginTop: '20px',
-            padding: '15px',
+            padding: '15px 20px',
+            backgroundColor: '#20BFB8',
+            color: '#FFFFFF',
+        },
+        '.DisabledButton': {
+            marginTop: '20px',
+            padding: '15px 20px',
             backgroundColor: '#DDDDDD',
             color: 'rgba(0, 0, 0, 0.24)',
         },
+    },
+    '.BreadcrumDiv': {
+        padding: '10px 0px',
+    },
+    '.BreadcrumbText': {
+        fontWeight: 400,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
+    '.BreadcrumbTextHighlighted': {
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.1px',
+        color: '#20BFB8',
+    },
+    '.PayPalLink': {
+        color: '#20BFB8',
+        textDecoration: 'none',
+        fontWeight: 500,
+    },
+    '.PaymentMethodName': {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontWeight: 400,
     },
 });
 export function WithdrawFunds() {
@@ -74,6 +107,8 @@ export function WithdrawFunds() {
     const [isDisabled, setIsDisabled] = useState(true);
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
+    const notifications = useNotifications();
+    const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
 
@@ -83,7 +118,12 @@ export function WithdrawFunds() {
 
     const onPayoutAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setPayoutAccount(e.target.value);
-        setIsDisabled(false);
+        if (e.target.value === '' || !e.target.value.match(emailFormat)) {
+            setIsDisabled(true);
+        } else {
+            setIsDisabled(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = useCallback(async () => {
@@ -97,14 +137,17 @@ export function WithdrawFunds() {
                 payoutAccount: payoutAccount,
             });
             console.log(response);
-        } catch (error: any) {}
-    }, [apiService, payoutAccount, referrer.withdrawableCommission]);
+        } catch (error: any) {
+            notifications.exception(error);
+            return;
+        }
+    }, [apiService, payoutAccount, referrer.withdrawableCommission, notifications]);
 
     return (
         <WithDrawDiv>
-            <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
-                <Typography>Referral Program</Typography>
-                <Typography>Withdraw Funds</Typography>
+            <Breadcrumbs className={'BreadcrumDiv'} separator={<NavigateNextIcon fontSize="small" />}>
+                <Typography className={'BreadcrumbTextHighlighted'}>Referral Program</Typography>
+                <Typography className={'BreadcrumbText'}>Withdraw Funds</Typography>
             </Breadcrumbs>
             <Grid>
                 <Typography className={'AmountHeading'}>
@@ -116,14 +159,15 @@ export function WithdrawFunds() {
                 </Typography>
             </Grid>
             <Grid className={'AccountInfo'}>
-                <Typography className={'AccountInfoHeading'}>Payout Account (PayPal)</Typography>
+                <Typography className={'AccountInfoHeading'}>
+                    Payout Account <span className={'PaymentMethodName'}>(PayPal)</span>
+                </Typography>
                 <Typography className={'Caption'}>
                     Please enter the PayPal email where you would like to be paid out.
                 </Typography>
                 <TextField
                     className={'PayoutAccountInfoBox'}
                     placeholder="Enter Paypal Email"
-                    fullWidth
                     value={payoutAccount}
                     onChange={onPayoutAccountChange}
                     variant={'outlined'}
@@ -131,7 +175,16 @@ export function WithdrawFunds() {
                         shrink: true,
                     }}
                 />
-                <Typography className={'Caption'}>Don’t have one? Create a PayPal Account</Typography>
+                <Typography className={'Caption'}>
+                    Don’t have one?{' '}
+                    <a
+                        className={'PayPalLink'}
+                        href="https://www.paypal.com/us/webapps/mpp/account-selection"
+                        target="_blank" rel="noreferrer"
+                    >
+                        Create a PayPal Account
+                    </a>
+                </Typography>
             </Grid>
             <Divider className={'Divider'} />
             <Grid className={'WithDrawalBtnDiv'}>
@@ -140,7 +193,11 @@ export function WithdrawFunds() {
                     Withdrawable Commission, and you will be able to see the pending transaction in your Withdrawals
                     section. It can take 5-7 days for the funds to transfer to your payout account.
                 </Typography>
-                <Button disabled={isDisabled} onClick={handleSubmit} className={'Button'}>
+                <Button
+                    disabled={isDisabled}
+                    onClick={handleSubmit}
+                    className={isDisabled ? 'DisabledButton' : 'Button'}
+                >
                     START WITHDRAWAL
                 </Button>
             </Grid>

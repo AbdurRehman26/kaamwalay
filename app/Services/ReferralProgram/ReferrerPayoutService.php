@@ -33,12 +33,11 @@ class ReferrerPayoutService
     public function create(array $data): ReferrerPayout
     {
         try {
-
             DB::beginTransaction();
 
             $referrer = Referrer::where('user_id', auth()->user()->id)->first();
 
-            $referrerPayout =  ReferrerPayout::create(
+            $referrerPayout = ReferrerPayout::create(
                 array_merge(
                     $data,
                     [
@@ -57,10 +56,10 @@ class ReferrerPayoutService
             DB::commit();
 
             return $referrerPayout;
-
-        }catch (Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+
             throw $e;
         }
     }

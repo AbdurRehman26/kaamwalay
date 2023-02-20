@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\V3\Customer\ReferralProgram;
 
-use App\Models\Referrer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReferrerPayoutRequest extends FormRequest

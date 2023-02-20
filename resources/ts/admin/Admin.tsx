@@ -5,6 +5,7 @@ import { Cards } from './pages/Cards';
 import { Customers } from './pages/Customers';
 import { PromoCodes } from './pages/PromoCodes';
 import { Rarities } from './pages/Rarities';
+import { ReferralProgram } from './pages/ReferralProgram';
 import { SalesReps } from './pages/SalesReps';
 import { Submissions } from './pages/Submissions';
 import { Surfaces } from './pages/Surfaces';
@@ -23,6 +24,7 @@ export function Admin() {
                 <Route path={'/cards/*'} element={<Cards />} />
                 <Route path={'/rarities/*'} element={<Rarities />} />
                 <Route path={'/surfaces/*'} element={<Surfaces />} />
+                <Route path={'/referral-program/*'} element={<ReferralProgram />} />
             </Routes>
         </Layout>
     );

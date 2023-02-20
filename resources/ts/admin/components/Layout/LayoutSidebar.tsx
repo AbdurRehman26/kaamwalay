@@ -76,6 +76,7 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
                 <LayoutSidebarItem icon={Face} title={'Sales Reps'} href={'/salesreps'} />
+                <LayoutSidebarItem icon={Face} title={'Referral Payouts'} href={'/referral-program'} />
                 <LayoutSidebarItem
                     icon={SafeSquareOutline}
                     title={'Vault Storage'}

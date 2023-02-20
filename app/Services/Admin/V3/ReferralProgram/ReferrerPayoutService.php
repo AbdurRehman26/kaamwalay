@@ -31,6 +31,7 @@ class ReferrerPayoutService
     public function list(): LengthAwarePaginator
     {
         return QueryBuilder::for(ReferrerPayout::class)
+            ->allowedFilters(ReferrerPayout::allowedFilters())
             ->defaultSort('-created_at')
             ->with(['user', 'paidBy', 'payoutStatus'])
             ->paginate(request('per_page', self::PER_PAGE));

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class ReferrerPayout extends Model
 {
@@ -49,5 +50,12 @@ class ReferrerPayout extends Model
     public function payoutStatus(): BelongsTo
     {
         return $this->belongsTo(PayoutStatus::class, 'payout_status_id');
+    }
+
+    public static function allowedFilters(): array
+    {
+        return [
+            AllowedFilter::exact('user_id'),
+        ];
     }
 }

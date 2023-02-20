@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
@@ -101,6 +102,9 @@ const WithDrawDiv = styled(Grid)({
         color: 'rgba(0, 0, 0, 0.54)',
         fontWeight: 400,
     },
+    '.BreadcrumbLink': {
+        textDecoration: 'none',
+    },
 });
 export function WithdrawFunds() {
     const [payoutAccount, setPayoutAccount] = useState('');
@@ -115,6 +119,12 @@ export function WithdrawFunds() {
     useEffect(() => {
         dispatch(getReferrerDetail());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (referrer.withdrawableCommission === 0) {
+            window.location.href = '/dashboard/referral-program/main';
+        }
+    }, [referrer.withdrawableCommission]);
 
     const onPayoutAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setPayoutAccount(e.target.value);
@@ -136,7 +146,7 @@ export function WithdrawFunds() {
                 amount: referrer.withdrawableCommission,
                 payoutAccount: payoutAccount,
             });
-            console.log(response);
+            window.location.href = `/dashboard/referral-program/withdrawals?payoutAccount=${response.data.payoutAccount}`;
         } catch (error: any) {
             notifications.exception(error);
             return;
@@ -146,7 +156,9 @@ export function WithdrawFunds() {
     return (
         <WithDrawDiv>
             <Breadcrumbs className={'BreadcrumDiv'} separator={<NavigateNextIcon fontSize="small" />}>
-                <Typography className={'BreadcrumbTextHighlighted'}>Referral Program</Typography>
+                <Link to={'/referral-program/main'} className={'BreadcrumbLink'}>
+                    <Typography className={'BreadcrumbTextHighlighted'}>Referral Program</Typography>
+                </Link>
                 <Typography className={'BreadcrumbText'}>Withdraw Funds</Typography>
             </Breadcrumbs>
             <Grid>
@@ -180,7 +192,8 @@ export function WithdrawFunds() {
                     <a
                         className={'PayPalLink'}
                         href="https://www.paypal.com/us/webapps/mpp/account-selection"
-                        target="_blank" rel="noreferrer"
+                        target="_blank"
+                        rel="noreferrer"
                     >
                         Create a PayPal Account
                     </a>

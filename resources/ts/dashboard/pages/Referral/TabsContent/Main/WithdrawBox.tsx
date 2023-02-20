@@ -75,6 +75,9 @@ const WithDrawDiv = styled(Grid)({
             background: '#42E8E0',
         },
     },
+    '.ButtonLink': {
+        textDecoration: 'none',
+    },
 });
 
 interface withdrawBoxProps {
@@ -90,7 +93,7 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
                     ${round(referrer.withdrawableCommission, 2).toFixed(2)}
                 </Typography>
                 {referrer.withdrawableCommission ? (
-                    <Link to={'/referral-program/withdraw-funds'}>
+                    <Link to={'/referral-program/withdraw-funds'} className={'ButtonLink'}>
                         <Button variant="contained" className={'WithDrawButton'}>
                             WITHDRAW FUNDS
                         </Button>

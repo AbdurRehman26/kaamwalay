@@ -45,7 +45,6 @@ test('a referrer can get his own payouts', function () {
     actingAs($this->user);
     getJson(route('v3.payouts.index'))
         ->assertSuccessful()
-        ->dump()
         ->assertJsonCount(10, ['data'])
         ->assertJsonStructure(['data' => [
             '*' => [

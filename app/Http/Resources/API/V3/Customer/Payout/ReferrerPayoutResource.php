@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Payout;
+namespace App\Http\Resources\API\V3\Customer\Payout;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\ReferrerPayout;

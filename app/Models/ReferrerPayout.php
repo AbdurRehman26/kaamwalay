@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use FontLib\Table\Type\head;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,9 +24,7 @@ class ReferrerPayout extends Model
         'paid_by',
     ];
 
-    const PAYMENT_METHODS = [
-        'PAYPAL',
-    ];
+    public const DEFAULT_PAYMENT_METHOD = 'paypal';
 
     /**
      * @return BelongsTo<User, ReferrerPayout>
@@ -44,10 +43,10 @@ class ReferrerPayout extends Model
     }
 
     /**
-     * @return BelongsTo<PayoutStatus, ReferrerPayout>
+     * @return BelongsTo<ReferrerPayoutStatus, ReferrerPayout>
      */
-    public function payoutStatus(): BelongsTo
+    public function referrerPayoutStatus(): BelongsTo
     {
-        return $this->belongsTo(PayoutStatus::class, 'payout_status_id');
+        return $this->belongsTo(ReferrerPayoutStatus::class);
     }
 }

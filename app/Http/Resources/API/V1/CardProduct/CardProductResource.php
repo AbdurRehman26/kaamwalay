@@ -3,7 +3,9 @@
 namespace App\Http\Resources\API\V1\CardProduct;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\CardProduct;
 
+/** @mixin CardProduct */
 class CardProductResource extends BaseResource
 {
     public function toArray($request): array

@@ -8,10 +8,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TruncateTextWithToolTip } from '@shared/components/ToolTip/TruncateTextWithToolTip';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -119,39 +119,23 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     <Grid container>
                         <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
-                            <Typography variant={'body2'}>
-                                {customer.fullName.length > 20 ? (
-                                    <Grid>
-                                        <Tooltip title={customer.fullName}>
-                                            <span>{customer.fullName.substring(0, 20) + '...'}</span>
-                                        </Tooltip>
-                                    </Grid>
-                                ) : (
-                                    customer.fullName
-                                )}
-                            </Typography>
-                            <Typography variant={'caption'} color={'textSecondary'}>
-                                {customer.customerNumber}
-                            </Typography>
+                            <>
+                                <TruncateTextWithToolTip inputText={customer.fullName} lengthCheck={20} />
+                                <Typography variant={'caption'} color={'textSecondary'}>
+                                    {customer.customerNumber}
+                                </Typography>
+                            </>
                         </Grid>
                     </Grid>
                 </TableCell>
                 <TableCell variant={'body'}>
                     <Grid item xs container direction={'column'}>
-                        <Typography variant={'body2'}>
-                            {customer.email.length > 20 ? (
-                                <Grid>
-                                    <Tooltip title={customer.email}>
-                                        <span>{customer.email.substring(0, 20) + '...'}</span>
-                                    </Tooltip>
-                                </Grid>
-                            ) : (
-                                customer.email
-                            )}
-                        </Typography>
-                        <Typography variant={'caption'} color={'textSecondary'}>
-                            {customer.phone ?? '-'}
-                        </Typography>
+                        <>
+                            <TruncateTextWithToolTip inputText={customer.email} lengthCheck={20} />
+                            <Typography variant={'caption'} color={'textSecondary'}>
+                                {customer.phone ?? '-'}
+                            </Typography>
+                        </>
                     </Grid>
                 </TableCell>
                 <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
@@ -234,21 +218,7 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 <TableCell variant={'body'} align={'left'}>
                     <Typography sx={{ fontSize: '14px', fontWeight: '500' }} color={'primary'}>
                         {customer.referredBy ? (
-                            <>
-                                <Typography variant={'body2'}>
-                                    {customer.referredBy?.getFullName().length > 20 ? (
-                                        <Grid>
-                                            <Tooltip title={customer.referredBy?.getFullName()}>
-                                                <span>
-                                                    {customer.referredBy?.getFullName().substring(0, 20) + '...'}
-                                                </span>
-                                            </Tooltip>
-                                        </Grid>
-                                    ) : (
-                                        customer.referredBy?.getFullName()
-                                    )}
-                                </Typography>
-                            </>
+                            <TruncateTextWithToolTip inputText={customer.referredBy?.getFullName()} lengthCheck={20} />
                         ) : (
                             '-'
                         )}

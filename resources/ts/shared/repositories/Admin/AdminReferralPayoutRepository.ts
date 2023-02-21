@@ -4,7 +4,7 @@ import { Repository } from '../Repository';
 
 @Injectable('AdminReferralPayoutsRepository')
 export class AdminReferralPayoutsRepository extends Repository<PayoutEntity> {
-    readonly endpointPath: string = 'admin/referrer/payouts';
+    readonly endpointPath: string = 'admin/referral-program/payouts';
     readonly model = PayoutEntity;
     readonly endpointConfig = {
         version: 'v3',

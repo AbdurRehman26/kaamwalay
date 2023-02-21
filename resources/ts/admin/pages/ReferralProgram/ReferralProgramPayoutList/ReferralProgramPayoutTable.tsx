@@ -1,3 +1,4 @@
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -11,9 +12,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
+import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
 import PayoutCommissionDialog from './PayoutCommissionDialog';
 
 interface ReferralProgramPayoutTableProps {
@@ -42,7 +44,7 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
     setSearch(search);
     setSortFilter(search);
 
-    const orders = useListAdminOrdersQuery({
+    const payouts = useAdminReferralPayoutsQuery({
         params: {
             include: [
                 'orderStatus',
@@ -62,9 +64,11 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
         ...bracketParams(),
     });
 
+    console.log('payouts ', payouts);
+
     const handleSelectAll = () => {
         if (!allSelected) {
-            const newSelected = orders.data.map((order) => order.id);
+            const newSelected = payouts.data.map((payout) => payout.id);
             setSelectedIds(newSelected);
             setAllSelected(true);
             console.log('Selected ids ifff ', selectedIds);
@@ -104,7 +108,7 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                         <Grid item xs container alignItems={'center'}>
                             {selectedIds.length === 0 ? (
                                 <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                    {orders.data.length > 0 ? `${orders.data.length} Results` : null}
+                                    {payouts.data.length > 0 ? `${payouts.data.length} Results` : null}
                                 </Typography>
                             ) : (
                                 <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
@@ -170,30 +174,50 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orders?.data.length > 0 ? (
-                            orders.data.map((order) => (
+                        {payouts?.data.length > 0 ? (
+                            payouts.data.map((payout) => (
                                 <TableRow>
                                     <TableCell>
-                                        <Checkbox
-                                            color="primary"
-                                            key={order.id}
-                                            checked={isSelected(order.id)}
-                                            onClick={(event) => handleClick(order.id)}
-                                        />
-                                        {order.id}
+                                        <Grid container>
+                                            <Checkbox
+                                                color="primary"
+                                                key={payout.id}
+                                                checked={isSelected(payout.id)}
+                                                onClick={(event) => handleClick(payout.id)}
+                                            />
+                                            <Avatar src={payout.user.profileImage ?? ''}>
+                                                {payout.user.getInitials()}
+                                            </Avatar>
+                                            <Grid item xs container direction={'column'} pl={2}>
+                                                <Typography variant={'body2'}>{payout.user.fullName}</Typography>
+                                                <Typography variant={'caption'} color={'textSecondary'}>
+                                                    {payout.user.customerNumber}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
                                     </TableCell>
                                     <TableCell>
                                         {' '}
-                                        {`${formatDate(order.createdAt, 'MMM D, YYYY')} at ${formatDate(
-                                            order.createdAt,
+                                        {`${formatDate(payout.initiatedAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.initiatedAt,
                                             'h:mm:ss A',
                                         )}`}{' '}
                                     </TableCell>
-                                    <TableCell>Date P</TableCell>
-                                    <TableCell>Account</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Paid By</TableCell>
-                                    <TableCell>Amount</TableCell>
+                                    <TableCell>
+                                        {' '}
+                                        {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.completedAt,
+                                            'h:mm:ss A',
+                                        )}`}{' '}
+                                    </TableCell>
+                                    <TableCell>{payout.payoutAccount}</TableCell>
+                                    <TableCell>
+                                        {Object.entries(PayoutStatusEnum).map(([key, status]) => {
+                                            return <Typography>{/* { status[payout.payoutStatus] } */}</Typography>;
+                                        })}
+                                    </TableCell>
+                                    <TableCell>{payout.paidBy.getFullName()}</TableCell>
+                                    <TableCell>{payout.amount}</TableCell>
                                     <TableCell>
                                         <Button onClick={() => setShowPayoutCommission(true)} variant={'contained'}>
                                             Pay
@@ -215,7 +239,7 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TablePagination {...orders.paginationProps} />
+                            <TablePagination {...payouts.paginationProps} />
                         </TableRow>
                     </TableFooter>
                 </Table>

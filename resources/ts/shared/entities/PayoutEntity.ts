@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { Entity } from './Entity';
 import { UserEntity } from './UserEntity';
 
@@ -6,7 +7,7 @@ export class PayoutEntity extends Entity {
     public initiatedAt!: string;
     public completedAt!: string;
     public payoutAccount!: string;
-    public payoutStatus!: boolean;
+    public payoutStatus!: PayoutStatusEnum;
     public amount!: number;
 
     @Type(() => UserEntity)

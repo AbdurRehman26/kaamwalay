@@ -2,9 +2,9 @@
 
 namespace App\Services\ReferralProgram;
 
-use App\Models\ReferrerPayoutStatus;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +59,7 @@ class ReferrerPayoutService
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Payout creation error for customer', [
-                'user_id' => auth()->user()->id
+                'user_id' => auth()->user()->id,
             ]);
             Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 

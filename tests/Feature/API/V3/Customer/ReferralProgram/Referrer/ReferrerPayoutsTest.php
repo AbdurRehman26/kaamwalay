@@ -58,7 +58,6 @@ test('a referrer can get his own payouts', function () {
 });
 
 test('a referrer can not get another referrer`s payouts', function () {
-
     ReferrerPayout::factory()->count(5)->create([
         'user_id' => User::factory()->create(),
     ]);
@@ -80,7 +79,6 @@ test('a referrer can not get another referrer`s payouts', function () {
         ReferrerPayout::orderBy('initiated_at', 'DESC')->where('user_id', $this->user->id)->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
-
 });
 
 it('returns payouts order by ASC date initiated', function () {

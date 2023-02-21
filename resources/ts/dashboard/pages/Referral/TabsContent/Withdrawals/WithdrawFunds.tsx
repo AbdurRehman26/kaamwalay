@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
@@ -113,6 +113,7 @@ export function WithdrawFunds() {
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const navigate = useNavigate();
 
     const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
 
@@ -122,9 +123,9 @@ export function WithdrawFunds() {
 
     useEffect(() => {
         if (referrer.withdrawableCommission === 0) {
-            window.location.href = '/dashboard/referral-program/main';
+            navigate('/referral-program/main');
         }
-    }, [referrer.withdrawableCommission]);
+    }, [referrer.withdrawableCommission, navigate]);
 
     const onPayoutAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setPayoutAccount(e.target.value);
@@ -142,16 +143,18 @@ export function WithdrawFunds() {
         });
 
         try {
-            const response = await endpoint.post('', {
+            await endpoint.post('', {
                 amount: referrer.withdrawableCommission,
                 payoutAccount: payoutAccount,
             });
-            window.location.href = `/dashboard/referral-program/withdrawals?payoutAccount=${response.data.payoutAccount}`;
+
+            localStorage.setItem('referral-program-snackbar:show', 'true');
+            navigate('/referral-program/withdrawals');
         } catch (error: any) {
             notifications.exception(error);
             return;
         }
-    }, [apiService, payoutAccount, referrer.withdrawableCommission, notifications]);
+    }, [apiService, payoutAccount, referrer.withdrawableCommission, notifications, navigate]);
 
     return (
         <WithDrawDiv>

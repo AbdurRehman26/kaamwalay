@@ -1,4 +1,5 @@
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
@@ -8,8 +9,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ReferralWithdrawEntity } from '@shared/entities/ReferralWithdrawEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -48,18 +48,19 @@ const styles = {
         borderRadius: '4px',
         padding: '15px 25px',
         boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2)',
+        width: '360px',
+        top: '65px!important',
     },
     SnackBarTitle: {
-        fontWeight: '500px',
-        fontSize: '20px',
-        lineHeight: '24px',
-        letterSpacing: '0.15px',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.1px',
         color: '#FFFFFF',
-        marginLeft: '5px',
+        marginLeft: '10px',
     },
     SnackBarIcon: {
         color: '#fff',
-        fontSize: '25px',
     },
     SnackBarContentDiv: {
         display: 'flex',
@@ -111,7 +112,8 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function Withdrawals() {
     const sortWithdrawFilter = useAppSelector((state) => state.referralProgramSlice.withdrawFilter.withdraw);
-    const { payoutAccount } = useParams<{ payoutAccount: string }>();
+    const [isSnackbarShow, setIsSnackbarShow] = useState(localStorage.getItem('referral-program-snackbar:show'));
+
     const withdraw$ = useListReferralWithdrawQuery({
         params: {
             sort: '-initiated_at',
@@ -120,25 +122,16 @@ export function Withdrawals() {
         ...bracketParams(),
     });
 
-    const { data, paginationProps } = withdraw$;
-
     useEffect(() => {
-        if (payoutAccount) {
-            <Snackbar
-                open={true}
-                autoHideDuration={1000}
-                sx={styles.SnackBarDiv}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-            >
-                <Grid sx={styles.SnackBarContentDiv}>
-                    <Typography sx={styles.SnackBarTitle}>Withdrawal successfully initiated</Typography>
-                </Grid>
-            </Snackbar>;
+        if (isSnackbarShow === 'true') {
+            setTimeout(() => {
+                localStorage.setItem('referral-program-snackbar:show', 'false');
+                setIsSnackbarShow(localStorage.getItem('referral-program-snackbar:show'));
+            }, 1000);
         }
-    }, [payoutAccount]);
+    }, [isSnackbarShow]);
+
+    const { data, paginationProps } = withdraw$;
 
     useEffect(
         () => {
@@ -157,6 +150,7 @@ export function Withdrawals() {
     if (withdraw$.data.length === 0 && withdraw$.isLoading) {
         return <CircularProgress />;
     }
+
     const tableRows = data?.map((data: ReferralWithdrawEntity) => (
         <TableRow key={data?.id}>
             <StyledTableCell>{data?.dateInitiated ? moment(data?.dateInitiated).format('lll') : '-'}</StyledTableCell>
@@ -168,6 +162,19 @@ export function Withdrawals() {
     ));
     return (
         <>
+            <Snackbar
+                open={isSnackbarShow === 'true' ? true : false}
+                sx={styles.SnackBarDiv}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+            >
+                <Grid sx={styles.SnackBarContentDiv}>
+                    <DoneOutlinedIcon sx={styles.SnackBarIcon} />
+                    <Typography sx={styles.SnackBarTitle}>Withdrawal successfully initiated</Typography>
+                </Grid>
+            </Snackbar>
             {withdraw$.data.length === 0 ? (
                 <EmptyStates
                     heading={'No Withdrawals'}

@@ -53,7 +53,7 @@ export function ReferralDeactivateBanner() {
                 <Typography className={'Description'}>
                     The referral program on your account has been deactivated. Your referral link is no longer active.
                     Referral privileges can be taken away for various reasons including abuse or misuse of the program.
-                    If you think this is a mistake, please call us at +1 929-209-3925 or email us at hey@agscard.com.
+                    If you think this is a mistake, please call us at +1 929-209-3925 or email us ay hey@agscard.com.
                 </Typography>
             </Grid>
         </DeactivateBanner>

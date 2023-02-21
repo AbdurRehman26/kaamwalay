@@ -46,6 +46,16 @@ class ReferrerPayoutService
                 $response = resolve($this->providers[
                     $paymentMethod
                 ])->pay($payouts->toArray(), $data);
+
+                \Log::debug('Create Batch', $response);
+
+                $statusResponse = resolve($this->providers[
+                    $paymentMethod
+                ])->verify($response['payout_batch_id']);
+
+                \Log::debug('Get Batch Status', $statusResponse);
+
+                dd($response, $statusResponse);
             }
         }
     }

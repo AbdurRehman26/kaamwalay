@@ -39,7 +39,8 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
         }, $items));
 
         return [
-            "sender_batch_id" => "RefPayouts-".$idsString,
+//            "sender_batch_id" => "RefPayouts-".$idsString,
+            "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
             "email_subject" => "You have a payout!",
             "email_message" => "You have received a payout! Thanks for using our service!"
         ];
@@ -50,8 +51,34 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
             $itemsData = $this->getItemsRequestData($items);
             $senderBatchHeaderData = $this->getSenderBatchHeaderData($items);
 
-            dd($itemsData, $senderBatchHeaderData);
+            $requestData = [
+                "items" => $itemsData,
+                "sender_batch_header" => $senderBatchHeaderData,
+            ];
 
+            $response = $this->client->createBatchPayout($requestData);
+
+            return [
+                'request' => $requestData,
+                'response' => json_decode(json_encode($response), associative: true),
+                'payout_batch_id' => $response['batch_header']['payout_batch_id'],
+                'batch_status' => $response['batch_header']['batch_status'],
+            ];
+
+        } catch (RequestException $e) {
+            return ['message' => $e->getMessage()];
+        }
+    }
+
+    public function verify(string $payoutBatchId): array
+    {
+        try {
+            $response = $this->client->getBatchPayoutStatus($payoutBatchId);
+            return [
+                'response' => $response,
+                'payout_batch_id' => $response['batch_header']['payout_batch_id'],
+                'batch_status' => $response['batch_header']['batch_status'],
+            ];
         } catch (RequestException $e) {
             return ['message' => $e->getMessage()];
         }

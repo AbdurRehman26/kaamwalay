@@ -23,10 +23,10 @@ class ReferrerPayoutService
     {
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
-        return QueryBuilder::for(ReferrerPayout::class)
+        return QueryBuilder::for(ReferrerPayout::where('user_id', auth()->user()->id))
             ->allowedSorts(['initiated_at'])
             ->defaultSort('-initiated_at')
-            ->with('payoutStatus')
+            ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);
     }
 
@@ -45,7 +45,7 @@ class ReferrerPayoutService
                         'user_id' => auth()->user()->id,
                         'initiated_at' => now(),
                         'payment_method' => ReferrerPayout::DEFAULT_PAYMENT_METHOD,
-                        'payout_status_id' => ReferrerPayoutStatus::STATUS_PENDING,
+                        'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_PENDING,
                     ]
                 )
             );

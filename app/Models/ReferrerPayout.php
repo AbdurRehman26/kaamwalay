@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use FontLib\Table\Type\head;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,7 +19,7 @@ class ReferrerPayout extends Model
         'completed_at',
         'request_payload',
         'response_payload',
-        'payout_status_id',
+        'referrer_payout_status_id',
         'paid_by',
         'transaction_id',
         'transaction_status',

@@ -22,7 +22,7 @@ class ReferrerPayoutFactory extends Factory
             'completed_at' => $this->faker->dateTime(),
             'payout_account' => $this->faker->email(),
             'payment_method' => ReferrerPayout::DEFAULT_PAYMENT_METHOD,
-            'payout_status_id' => $this->faker->numberBetween(1, 4),
+            'referrer_payout_status_id' => $this->faker->numberBetween(1, 4),
             'amount' => $this->faker->numberBetween(0, 1500),
         ];
     }

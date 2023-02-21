@@ -3,6 +3,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -10,7 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TruncateTextWithToolTip } from '@shared/components/ToolTip/TruncateTextWithToolTip';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
@@ -218,7 +219,17 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 <TableCell variant={'body'} align={'left'}>
                     <Typography sx={{ fontSize: '14px', fontWeight: '500' }} color={'primary'}>
                         {customer.referredBy ? (
-                            <TruncateTextWithToolTip inputText={customer.referredBy?.getFullName()} lengthCheck={20} />
+                            <MuiLink
+                                onClick={(e: any) => e.stopPropagation()}
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${customer.referredBy?.id}/view/overview`}
+                            >
+                                <TruncateTextWithToolTip
+                                    inputText={customer.referredBy?.getFullName()}
+                                    lengthCheck={20}
+                                />
+                            </MuiLink>
                         ) : (
                             '-'
                         )}

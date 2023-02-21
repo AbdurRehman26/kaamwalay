@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 
 interface TruncateTextWithToolTipProps {
     inputText: string;
@@ -13,7 +14,7 @@ export function TruncateTextWithToolTip({ inputText, lengthCheck }: TruncateText
             {inputText.length > lengthCheck ? (
                 <Grid>
                     <Tooltip title={inputText}>
-                        <span>{inputText.substring(0, lengthCheck) + '...'}</span>
+                        <span>{getStringTruncated(inputText, lengthCheck)}</span>
                     </Tooltip>
                 </Grid>
             ) : (

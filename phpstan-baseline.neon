@@ -251,6 +251,16 @@ parameters:
 			path: app/Http/Filters/VaultShipmentSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderReferByFilter.php
+
+		-
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\) of method App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderReferByFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php
@@ -1024,71 +1034,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:getRoundedOverallValues\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardCategory\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardSet\\.$#"
-			count: 4
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$edition\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$image_path\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$language\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$surface\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$variant\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getFormattedCardNumber\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getLongName\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getShortName\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:isCardInformationComplete\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"

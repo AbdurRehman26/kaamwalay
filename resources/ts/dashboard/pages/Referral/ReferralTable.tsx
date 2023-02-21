@@ -12,7 +12,11 @@ import { useDispatch } from 'react-redux';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import { setCommissionEarningsFilter, setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
+import {
+    setCommissionEarningsFilter,
+    setCustomerSignUpsFilter,
+    setWithdrawFilter,
+} from '@dashboard/redux/slices/referralProgramSlice';
 
 const StyledTableContainer = styled(TableContainer)({
     margin: '20px 0px',
@@ -33,12 +37,21 @@ interface props {
     heading: string;
     tableHeadings: any;
     isCustomerSignup?: boolean;
+    isWithdrawl?: boolean;
     tableRows: any;
     count: number;
     paginationProps: any;
 }
 
-export function ReferralTable({ heading, tableHeadings, isCustomerSignup, tableRows, count, paginationProps }: props) {
+export function ReferralTable({
+    heading,
+    tableHeadings,
+    isCustomerSignup,
+    isWithdrawl,
+    tableRows,
+    count,
+    paginationProps,
+}: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
 
@@ -48,6 +61,7 @@ export function ReferralTable({ heading, tableHeadings, isCustomerSignup, tableR
     const sortCommissionEarningsFilter = useAppSelector(
         (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
     );
+    const sortWithdrawFilter = useAppSelector((state) => state.referralProgramSlice.withdrawFilter.withdraw);
     const dispatch = useDispatch();
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
@@ -56,6 +70,8 @@ export function ReferralTable({ heading, tableHeadings, isCustomerSignup, tableR
         setOrderBy(property);
         if (isCustomerSignup) {
             dispatch(setCustomerSignUpsFilter(!sortCustomerSignUpFilter));
+        } else if (isWithdrawl) {
+            dispatch(setWithdrawFilter(!sortWithdrawFilter));
         } else {
             dispatch(setCommissionEarningsFilter(!sortCommissionEarningsFilter));
         }

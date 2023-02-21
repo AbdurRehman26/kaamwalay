@@ -188,6 +188,7 @@ export function Withdrawals() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
+                    isWithdrawl={true}
                 />
             )}
         </>

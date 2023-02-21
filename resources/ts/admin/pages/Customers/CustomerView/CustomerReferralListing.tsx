@@ -57,8 +57,14 @@ export function CustomerReferralListing({
                             </TableCell>
                             <TableCell>
                                 {isSignUp && customer.signedUpAt
-                                    ? formatDate(customer.signedUpAt, 'MM/DD/YYYY')
-                                    : formatDate(customer.paidAt, 'MM/DD/YYYY')}
+                                    ? `${formatDate(customer.signedUpAt, 'MMM D, YYYY')} at ${formatDate(
+                                          customer.signedUpAt,
+                                          'h:mm A',
+                                      )}`
+                                    : `${formatDate(customer.paidAt, 'MMM D, YYYY')} at ${formatDate(
+                                          customer.paidAt,
+                                          'h:mm A',
+                                      )}`}
                             </TableCell>
                             <TableCell>{isSignUp ? customer.cardsCount : customer.cards}</TableCell>
                             <TableCell>

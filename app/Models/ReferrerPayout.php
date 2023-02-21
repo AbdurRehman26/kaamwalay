@@ -22,6 +22,8 @@ class ReferrerPayout extends Model
         'response_payload',
         'payout_status_id',
         'paid_by',
+        'transaction_id',
+        'transaction_status',
     ];
 
     public const DEFAULT_PAYMENT_METHOD = 'paypal';

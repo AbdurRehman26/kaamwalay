@@ -24,18 +24,24 @@ class ReferrerPayoutService
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
         return QueryBuilder::for(ReferrerPayout::where('user_id', auth()->user()->id))
-            ->allowedSorts(['initiated_at'])
-            ->defaultSort('-initiated_at')
+            ->allowedSorts(['created_at'])
+            ->defaultSort('-created_at')
             ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);
     }
 
+    /**
+     * @throws \Throwable
+     * @throws Exception
+     */
     public function create(array $data): ReferrerPayout
     {
-        try {
-            DB::beginTransaction();
+        $userId = auth()->user()->id;
 
-            $referrer = Referrer::where('user_id', auth()->user()->id)->first();
+        try {
+            $referrer = Referrer::where('user_id', $userId)->first();
+
+            DB::beginTransaction();
 
             $referrerPayout = ReferrerPayout::create(
                 array_merge(
@@ -58,10 +64,11 @@ class ReferrerPayoutService
             return $referrerPayout;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Payout creation error for customer', [
-                'user_id' => auth()->user()->id,
+
+            Log::error('Referrer payout creation failed for customer', [
+                'user_id' => $userId,
+                'message' => $e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine()
             ]);
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 
             throw $e;
         }

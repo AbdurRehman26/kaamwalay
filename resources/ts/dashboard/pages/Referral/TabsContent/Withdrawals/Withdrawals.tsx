@@ -5,7 +5,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ReferralWithdrawEntity } from '@shared/entities/ReferralWithdrawEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -84,6 +84,7 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function Withdrawals() {
     const sortWithdrawFilter = useAppSelector((state) => state.referralProgramSlice.withdrawFilter.withdraw);
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const withdraw$ = useListReferralWithdrawQuery({
         params: {
@@ -97,7 +98,7 @@ export function Withdrawals() {
 
     useEffect(
         () => {
-            if (!withdraw$.isLoading) {
+            if (!withdraw$.isLoading && isSearchEnabled) {
                 withdraw$.searchSortedWithPagination(
                     { sort: sortWithdrawFilter ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
@@ -108,6 +109,10 @@ export function Withdrawals() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [sortWithdrawFilter],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     if (withdraw$.data.length === 0 && withdraw$.isLoading) {
         return <CircularProgress />;

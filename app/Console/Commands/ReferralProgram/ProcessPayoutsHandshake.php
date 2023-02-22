@@ -6,6 +6,7 @@ use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
 class ProcessPayoutsHandshake extends Command
 {
@@ -36,7 +37,17 @@ class ProcessPayoutsHandshake extends Command
             ->whereNotNull('transaction_id')->get();
 
         foreach ($incompletePayouts as $payout) {
-            $referrerPayoutService->processPayoutHandshake($payout);
+            $limitDate = (new Carbon($incompletePayouts->initiated_at))->addDays(30)->endOfDay();
+
+            if(now() < $limitDate) {
+                $referrerPayoutService->processPayoutHandshake($payout);
+            } else {
+                $payout->update([
+                    'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_FAILED,
+                ]);
+
+                $payout->user->referrer->increment('withdrawable_commission', $payout->amount);
+            }
         }
     }
 }

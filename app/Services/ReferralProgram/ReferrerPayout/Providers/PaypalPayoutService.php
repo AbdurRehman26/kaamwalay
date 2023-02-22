@@ -5,11 +5,12 @@ namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 use App\Http\APIClients\PaypalClient;
 use App\Models\ReferrerPayoutStatus;
 use App\Models\ReferrerPayout;
+use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceHandshakeInterface;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 
-class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
+class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, ReferrerPayoutProviderServiceHandshakeInterface
 {
     public function __construct(protected PaypalClient $client)
     {
@@ -106,11 +107,35 @@ class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
                     'initiated_at' => now(),
                     'transaction_id' => $filtered[0]['payout_item_id'],
                     'transaction_status' => $transactionStatus,
-                    'paid_by' => $transactionStatus === 'SUCCESS' ? auth()->user()->id : null,
+                    'paid_by' => auth()->user()->id,
                     'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
             }
+        }
+    }
+
+    public function handshake(ReferrerPayout $payout, array $data = []): array
+    {
+        try {
+            $response = $this->client->getPayoutItemDetails($payout->transaction_id);
+            $transactionStatus = $response['transaction_status'];
+
+            $payout->update([
+                'response_payload' => json_encode($response),
+                'transaction_status' => $transactionStatus,
+                'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
+                'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
+            ]);
+
+            return [
+                'payout_id' => $payout->id,
+                'response' => json_encode($response),
+                'transaction_id' => $payout->transaction_id,
+                'transaction_status' => $transactionStatus,
+            ];
+        } catch (RequestException $e) {
+            return ['message' => $e->getMessage()];
         }
     }
 
@@ -128,4 +153,5 @@ class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
                 return ReferrerPayoutStatus::STATUS_PROCESSING;
         }
     }
+
 }

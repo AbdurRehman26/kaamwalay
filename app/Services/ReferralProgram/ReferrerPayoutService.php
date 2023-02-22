@@ -5,6 +5,7 @@ namespace App\Services\ReferralProgram;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -25,9 +26,8 @@ class ReferrerPayoutService
         /* @var User $user */
         $user = auth()->user();
 
-        return QueryBuilder::for(ReferrerPayout::class)
+        return QueryBuilder::for(ReferrerPayout::forUser($user))
             ->allowedSorts(['created_at'])
-            ->forUser($user)
             ->defaultSort('-created_at')
             ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);

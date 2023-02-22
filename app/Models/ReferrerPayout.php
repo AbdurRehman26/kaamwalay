@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,5 +50,14 @@ class ReferrerPayout extends Model
     public function referrerPayoutStatus(): BelongsTo
     {
         return $this->belongsTo(ReferrerPayoutStatus::class);
+    }
+
+    /**
+     * @param  Builder <ReferrerPayout> $query
+     * @return Builder <ReferrerPayout>
+     */
+    public function scopeForUser(Builder $query, User $user): Builder
+    {
+        return $query->where('user_id', $user->id);
     }
 }

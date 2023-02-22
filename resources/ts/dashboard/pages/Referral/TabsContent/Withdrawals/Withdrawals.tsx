@@ -77,7 +77,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: true,
     },
     {
-        id: 'date_created',
+        id: 'completed_at',
         numeric: false,
         disablePadding: false,
         label: 'DATE COMPLETED',
@@ -116,7 +116,7 @@ export function Withdrawals() {
 
     const withdraw$ = useListReferralWithdrawQuery({
         params: {
-            sort: '-initiated_at',
+            sort: '-created_at',
         },
 
         ...bracketParams(),
@@ -137,7 +137,7 @@ export function Withdrawals() {
         () => {
             if (!withdraw$.isLoading) {
                 withdraw$.searchSortedWithPagination(
-                    { sort: sortWithdrawFilter ? 'initiated_at' : '-initiated_at' },
+                    { sort: sortWithdrawFilter ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
@@ -153,7 +153,7 @@ export function Withdrawals() {
 
     const tableRows = data?.map((data: ReferralWithdrawEntity) => (
         <TableRow key={data?.id}>
-            <StyledTableCell>{data?.dateInitiated ? moment(data?.dateInitiated).format('lll') : '-'}</StyledTableCell>
+            <StyledTableCell>{data?.createdAt ? moment(data?.createdAt).format('lll') : '-'}</StyledTableCell>
             <StyledTableCell>{data?.completedAt ? moment(data?.completedAt).format('lll') : '-'}</StyledTableCell>
             <StyledTableCell align={'left'}>{data?.payoutAccount}</StyledTableCell>
             <StyledTableCell align={'left'}>{data?.status}</StyledTableCell>

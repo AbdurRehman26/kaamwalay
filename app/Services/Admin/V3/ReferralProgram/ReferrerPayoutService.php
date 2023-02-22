@@ -21,7 +21,7 @@ class ReferrerPayoutService
     /**
      * @param  array  $ids
      * @param  string  $paymentMethod
-     * @return Collection<ReferrerPayout>
+     * @return Collection<int, ReferrerPayout>
      */
     protected function getPayoutsByIdArray(array $ids, string $paymentMethod = ''): Collection
     {
@@ -36,7 +36,7 @@ class ReferrerPayoutService
 
     /**
      * @param  string  $paymentMethod
-     * @return Collection<ReferrerPayout>
+     * @return Collection<int, ReferrerPayout>
      */
     protected function getAllPendingPayouts(string $paymentMethod = ''): Collection
     {
@@ -110,6 +110,11 @@ class ReferrerPayoutService
         \Log::debug('PAYOUT_HANDSHAKE', $response);
     }
 
+    /**
+     * @param  Collection<int, ReferrerPayout>  $payouts
+     * @param  array  $data
+     * @return void
+     */
     protected function processFailedBatchPayouts(Collection $payouts, array $data): void
     {
         ReferrerPayout::whereIn('id', $payouts->pluck('id'))->update([

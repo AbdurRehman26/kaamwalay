@@ -37,7 +37,7 @@ class ProcessPayoutsHandshake extends Command
             ->whereNotNull('transaction_id')->get();
 
         foreach ($incompletePayouts as $payout) {
-            $limitDate = (new Carbon($incompletePayouts->initiated_at))->addDays(30)->endOfDay();
+            $limitDate = (new Carbon($payout))->addDays(30)->endOfDay();
 
             if (now() < $limitDate) {
                 $referrerPayoutService->processPayoutHandshake($payout);
@@ -49,5 +49,7 @@ class ProcessPayoutsHandshake extends Command
                 $payout->user->referrer->increment('withdrawable_commission', $payout->amount);
             }
         }
+
+        return 0;
     }
 }

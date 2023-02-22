@@ -22,9 +22,12 @@ class ReferrerPayoutService
     public function getReferrerPayouts(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
+        /* @var User $user */
+        $user = auth()->user();
 
-        return QueryBuilder::for(ReferrerPayout::where('user_id', auth()->user()->id))
+        return QueryBuilder::for(ReferrerPayout::class)
             ->allowedSorts(['created_at'])
+            ->forUser($user)
             ->defaultSort('-created_at')
             ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);

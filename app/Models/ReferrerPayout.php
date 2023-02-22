@@ -21,15 +21,13 @@ class ReferrerPayout extends Model
         'completed_at',
         'request_payload',
         'response_payload',
-        'payout_status_id',
+        'referrer_payout_status_id',
         'paid_by',
         'transaction_id',
         'transaction_status',
     ];
 
-    const PAYMENT_METHODS = [
-        'PAYPAL',
-    ];
+    public const DEFAULT_PAYMENT_METHOD = 'paypal';
 
     /**
      * @return BelongsTo<User, ReferrerPayout>
@@ -48,11 +46,11 @@ class ReferrerPayout extends Model
     }
 
     /**
-     * @return BelongsTo<PayoutStatus, ReferrerPayout>
+     * @return BelongsTo<ReferrerPayoutStatus, ReferrerPayout>
      */
-    public function payoutStatus(): BelongsTo
+    public function referrerPayoutStatus(): BelongsTo
     {
-        return $this->belongsTo(PayoutStatus::class, 'payout_status_id');
+        return $this->belongsTo(ReferrerPayoutStatus::class);
     }
 
     public static function allowedFilters(): array

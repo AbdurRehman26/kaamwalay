@@ -115,8 +115,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(referrer && {
                 'Referrer:': [
                     <>
-                        <MuiLink component={Link} to={''}>
-                            {referrer?.firstName} {referrer?.lastName}
+                        <MuiLink component={Link} to={`/customers/${referrer?.id}/view/overview`}>
+                            {referrer?.getFullName()}
                         </MuiLink>
                     </>,
                 ],

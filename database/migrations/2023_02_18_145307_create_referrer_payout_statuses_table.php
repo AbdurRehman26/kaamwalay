@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payout_statuses', function (Blueprint $table) {
+        Schema::create('referrer_payout_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('code');
             $table->string('name');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payout_statuses');
+        Schema::dropIfExists('referrer_payout_statuses');
     }
 };

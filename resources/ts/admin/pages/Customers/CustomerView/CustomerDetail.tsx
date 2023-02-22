@@ -140,7 +140,12 @@ export function CustomerDetail({ customer, handleResendCall }: CustomerDetailPro
                             <Typography className={'CustomerValue'}>{customer?.submissions}</Typography>
                             <Typography className={'CustomerValue'}>
                                 {customer?.referredBy ? (
-                                    <MuiLink component={Link} color={'primary'} to={''}>
+                                    <MuiLink
+                                        component={Link}
+                                        color={'primary'}
+                                        reloadDocument
+                                        to={`/customers/${customer.referredBy.id}/view/overview`}
+                                    >
                                         {customer.referredBy?.getFullName()}
                                     </MuiLink>
                                 ) : (

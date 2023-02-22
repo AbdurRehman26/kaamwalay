@@ -8,7 +8,7 @@ class StoreReferrerPayoutRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->user()->isCustomer();
+        return true;
     }
 
     public function rules(): array

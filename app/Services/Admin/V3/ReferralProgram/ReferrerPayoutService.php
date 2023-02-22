@@ -42,10 +42,16 @@ class ReferrerPayoutService
         foreach (array_keys($this->providers) as $paymentMethod) {
             $payouts = $this->getPayoutsByIdArray($data['items'], $paymentMethod);
 
+            $paymentMethodService = resolve($this->providers[
+                $paymentMethod
+            ]);
             if (count($payouts) > 0) {
-                $response = resolve($this->providers[
-                    $paymentMethod
-                ])->pay($payouts->toArray(), $data);
+                $response = $paymentMethodService->pay($payouts->toArray(), $data);
+
+                \Log::debug('Create Batch', $response);
+
+                $paymentMethodService->storeItemsResponse($payouts, $response);
+                dd($response);
             }
         }
     }

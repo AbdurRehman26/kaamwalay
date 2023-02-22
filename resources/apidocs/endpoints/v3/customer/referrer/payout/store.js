@@ -10,7 +10,6 @@
  *
  * @apiParamExample {json} Request-Example:
  *      {
- *          "amount": 100,
  *          "payout_account": 'something@gmail.com',
  *      }
  *

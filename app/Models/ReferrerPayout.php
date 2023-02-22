@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,13 +20,13 @@ class ReferrerPayout extends Model
         'completed_at',
         'request_payload',
         'response_payload',
-        'payout_status_id',
+        'referrer_payout_status_id',
         'paid_by',
+        'transaction_id',
+        'transaction_status',
     ];
 
-    const PAYMENT_METHODS = [
-        'PAYPAL',
-    ];
+    public const DEFAULT_PAYMENT_METHOD = 'paypal';
 
     /**
      * @return BelongsTo<User, ReferrerPayout>
@@ -44,10 +45,19 @@ class ReferrerPayout extends Model
     }
 
     /**
-     * @return BelongsTo<PayoutStatus, ReferrerPayout>
+     * @return BelongsTo<ReferrerPayoutStatus, ReferrerPayout>
      */
-    public function payoutStatus(): BelongsTo
+    public function referrerPayoutStatus(): BelongsTo
     {
-        return $this->belongsTo(PayoutStatus::class, 'payout_status_id');
+        return $this->belongsTo(ReferrerPayoutStatus::class);
+    }
+
+    /**
+     * @param  Builder <ReferrerPayout> $query
+     * @return Builder <ReferrerPayout>
+     */
+    public function scopeForUser(Builder $query, User $user): Builder
+    {
+        return $query->where('user_id', $user->id);
     }
 }

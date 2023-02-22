@@ -44,10 +44,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     Route::prefix('referral-program')->group(function () {
-        Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index'])
+        Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index','store'])
             ->names([
                 'index' => 'referral.payouts.index',
+                'store' => 'referral.payouts.store',
             ]);
-        Route::post('payouts/pay', [ReferrerPayoutController::class, 'process'])->name('referral.payouts.pay');
     });
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Payout;
+namespace App\Http\Resources\API\V3\Customer\Payout;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\ReferrerPayout;
@@ -22,7 +22,7 @@ class ReferrerPayoutResource extends BaseResource
             'date_initiated' => $this->initiated_at,
             'completed_at' => $this->completed_at,
             'payout_account' => $this->payout_account,
-            'status' => $this->payoutStatus->name,
+            'status' => $this->referrerPayoutStatus->name,
             'amount' => $this->amount,
         ];
     }

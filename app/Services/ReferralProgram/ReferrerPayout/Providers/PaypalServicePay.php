@@ -3,13 +3,13 @@
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
 use App\Http\APIClients\PaypalClient;
-use App\Models\PayoutStatus;
+use App\Models\ReferrerPayoutStatus;
 use App\Models\ReferrerPayout;
-use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceInterface;
+use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 
-class PaypalService implements ReferrerPayoutProviderServiceInterface
+class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
 {
     public function __construct(protected PaypalClient $client)
     {
@@ -99,6 +99,7 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
             if (count($filtered) > 0)
             {
                 $transactionStatus = $filtered[0]['transaction_status'];
+
                 $payout->update([
                     'request_payload' => $data['request'],
                     'response_payload' => json_encode($filtered[0]),
@@ -106,7 +107,7 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
                     'transaction_id' => $filtered[0]['payout_item_id'],
                     'transaction_status' => $transactionStatus,
                     'paid_by' => $transactionStatus === 'SUCCESS' ? auth()->user()->id : null,
-                    'payout_status_id' => $this->getPayoutStatusId($transactionStatus),
+                    'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
             }
@@ -117,17 +118,14 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
     {
         switch ($transactionStatus) {
             case 'SUCCESS':
-                return PayoutStatus::STATUS_COMPLETED;
+                return ReferrerPayoutStatus::STATUS_COMPLETED;
             case 'FAILED':
             case 'RETURNED':
             case 'ONHOLD':
-                return PayoutStatus::STATUS_FAILED;
-            case 'PENDING':
-            case 'UNCLAIMED':
-            case 'BLOCKED':
-            case 'REFUNDED':
-            case 'REVERSED':
-                return PayoutStatus::STATUS_PROCESSING;
+                return ReferrerPayoutStatus::STATUS_FAILED;
+            default:
+                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED) will be in process
+                return ReferrerPayoutStatus::STATUS_PROCESSING;
         }
     }
 }

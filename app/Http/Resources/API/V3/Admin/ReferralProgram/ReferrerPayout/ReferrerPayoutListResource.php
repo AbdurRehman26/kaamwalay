@@ -27,7 +27,7 @@ class ReferrerPayoutListResource extends JsonResource
             'completed_at' => $this->completed_at,
             'payout_account' => $this->payout_account,
             'paid_by' => new UserResource($this->paidBy),
-            'status' => new ReferrerPayoutStatusResource($this->payoutStatus),
+            'status' => new ReferrerPayoutStatusResource($this->referrerPayoutStatus),
             'amount' => $this->amount,
         ];
     }

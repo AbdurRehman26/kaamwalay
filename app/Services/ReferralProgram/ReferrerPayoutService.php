@@ -2,9 +2,9 @@
 
 namespace App\Services\ReferralProgram;
 
-use App\Models\PayoutStatus;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -23,10 +23,10 @@ class ReferrerPayoutService
     {
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
 
-        return QueryBuilder::for(ReferrerPayout::query())
+        return QueryBuilder::for(ReferrerPayout::where('user_id', auth()->user()->id))
             ->allowedSorts(['initiated_at'])
             ->defaultSort('-initiated_at')
-            ->with('payoutStatus')
+            ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);
     }
 
@@ -44,8 +44,8 @@ class ReferrerPayoutService
                         'amount' => $referrer->withdrawable_commission,
                         'user_id' => auth()->user()->id,
                         'initiated_at' => now(),
-                        'payment_method' => ReferrerPayout::PAYMENT_METHODS[0],
-                        'payout_status_id' => PayoutStatus::STATUS_PENDING,
+                        'payment_method' => ReferrerPayout::DEFAULT_PAYMENT_METHOD,
+                        'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_PENDING,
                     ]
                 )
             );
@@ -58,6 +58,9 @@ class ReferrerPayoutService
             return $referrerPayout;
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Payout creation error for customer', [
+                'user_id' => auth()->user()->id,
+            ]);
             Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 
             throw $e;

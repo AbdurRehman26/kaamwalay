@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PayoutStatus extends Model
+class ReferrerPayoutStatus extends Model
 {
     use HasFactory;
 
@@ -22,8 +22,8 @@ class PayoutStatus extends Model
     ];
 
     /**
-     * @param  Builder <PayoutStatus> $query
-     * @return Builder <PayoutStatus>
+     * @param  Builder <ReferrerPayoutStatus> $query
+     * @return Builder <ReferrerPayoutStatus>
      */
     public function scopeForStatus(Builder $query, int|string $status): Builder
     {

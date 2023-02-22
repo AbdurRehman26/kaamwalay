@@ -4,19 +4,19 @@ namespace App\Http\Controllers\API\V3\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Customer\ReferralProgram\StoreReferrerPayoutRequest;
-use App\Http\Resources\API\V3\Customer\ReferralProgram\Payout\ReferrerPayoutCollection;
-use App\Http\Resources\API\V3\Customer\ReferralProgram\Payout\ReferrerPayoutResource;
+use App\Http\Resources\API\V3\Customer\Payout\ReferrerPayoutResource;
 use App\Services\ReferralProgram\ReferrerPayoutService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ReferrerPayoutController extends Controller
 {
-    public function index(ReferrerPayoutService $referrerPayoutService): JsonResponse|ReferrerPayoutCollection
+    public function index(ReferrerPayoutService $referrerPayoutService): AnonymousResourceCollection | JsonResponse
     {
         try {
-            return new ReferrerPayoutCollection($referrerPayoutService->getReferrerPayouts());
+            return ReferrerPayoutResource::collection($referrerPayoutService->getReferrerPayouts());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

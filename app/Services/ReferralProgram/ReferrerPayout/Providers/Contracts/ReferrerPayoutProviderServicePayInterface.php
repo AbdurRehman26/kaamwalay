@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use Illuminate\Support\Collection;
 
-interface ReferrerPayoutProviderServiceInterface
+interface ReferrerPayoutProviderServicePayInterface
 {
     public function pay(array $items, array $data = []): array;
 }

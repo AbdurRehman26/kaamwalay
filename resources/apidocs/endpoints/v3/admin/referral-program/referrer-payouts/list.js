@@ -8,6 +8,10 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {Array} [filter[search]] For payouts list based on: user first name, last name, customer_number and email. E.g. filter[search]=john
+ * @apiParam {Array} [filter[user_id]] For filtering records by user ID. E.g. filter[user_id]=1
+ * @apiParam {Array} [filter[referrer_payout_status_id]] For filtering records by status code. E.g. filter[payment_status]=1, filter[payment_status]=2, filter[payment_status]=3
+ *
  * @apiSuccess {Object} data User data
  *
  * @apiSuccessExample Success-Response:

@@ -14,7 +14,7 @@ import { useListReferralWithdrawQuery } from '@shared/redux/hooks/useReferralWit
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { setWithdrawFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
-import ReferralTable from '../../ReferralTable';
+import ListingTable from '../../ListingTable';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -133,7 +133,7 @@ export function Withdrawals() {
                     icon={<CurrencyExchangeOutlinedIcon />}
                 />
             ) : (
-                <ReferralTable
+                <ListingTable
                     heading={'Withdrawals'}
                     tableHeadings={headings}
                     tableRows={tableRows}

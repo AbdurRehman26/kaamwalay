@@ -17,7 +17,7 @@ import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useRefe
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
-import ReferralTable from '../../ReferralTable';
+import ListingTable from '../../ListingTable';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -153,7 +153,7 @@ export function CustomerSignups() {
                     icon={<AccountCircleTwoToneIcon />}
                 />
             ) : (
-                <ReferralTable
+                <ListingTable
                     heading={'Customer Sign Ups'}
                     tableHeadings={headings}
                     tableRows={tableRows}

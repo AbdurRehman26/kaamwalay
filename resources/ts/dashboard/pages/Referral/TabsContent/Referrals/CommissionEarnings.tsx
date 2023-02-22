@@ -17,7 +17,7 @@ import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useR
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { setCommissionEarningsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
-import ReferralTable from '../../ReferralTable';
+import ListingTable from '../../ListingTable';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -146,7 +146,7 @@ export function CommissionEarnings() {
                     icon={<MonetizationOnTwoToneIcon />}
                 />
             ) : (
-                <ReferralTable
+                <ListingTable
                     heading={'Commission Earnings'}
                     tableHeadings={headings}
                     tableRows={tableRows}

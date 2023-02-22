@@ -39,7 +39,7 @@ interface props {
     dispatchData?: any;
 }
 
-export function ReferralTable({ heading, tableHeadings, tableRows, count, paginationProps, dispatchData }: props) {
+export function ListingTable({ heading, tableHeadings, tableRows, count, paginationProps, dispatchData }: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const dispatch = useDispatch();
@@ -83,4 +83,4 @@ export function ReferralTable({ heading, tableHeadings, tableRows, count, pagina
     );
 }
 
-export default ReferralTable;
+export default ListingTable;

@@ -36,7 +36,7 @@ interface props {
 
 export function SocialShare({ name, referralUrl }: props) {
     const { featureReferralDiscountPercentage } = useConfiguration();
-    const socialMessage = `I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link ${referralUrl} to get ${featureReferralDiscountPercentage}% OFF your first submission.`;
+    const socialMessage = `I’ve been using AGS Grading to grade my cards. They use artificial intelligence to give you the most accurate grades possible. Sign up using this link to get ${featureReferralDiscountPercentage}% OFF your first submission.`;
 
     return (
         <SocialShareDiv>

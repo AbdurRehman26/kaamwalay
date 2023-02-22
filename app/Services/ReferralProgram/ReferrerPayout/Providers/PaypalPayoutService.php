@@ -146,10 +146,9 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 return ReferrerPayoutStatus::STATUS_COMPLETED;
             case 'FAILED':
             case 'RETURNED':
-            case 'ONHOLD':
                 return ReferrerPayoutStatus::STATUS_FAILED;
             default:
-                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED) will be in process
+                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED, ONHOLD) will be in process
                 return ReferrerPayoutStatus::STATUS_PROCESSING;
         }
     }

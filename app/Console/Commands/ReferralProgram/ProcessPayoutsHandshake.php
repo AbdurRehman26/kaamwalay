@@ -4,9 +4,10 @@ namespace App\Console\Commands\ReferralProgram;
 
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
+use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use Illuminate\Console\Command;
 
-class ProcessPayoutsHanshake extends Command
+class ProcessPayoutsHandshake extends Command
 {
     /**
      * The name and signature of the console command.
@@ -29,8 +30,12 @@ class ProcessPayoutsHanshake extends Command
      */
     public function handle()
     {
+        $referrerPayoutService = new ReferrerPayoutService();
+
         $incompletePayouts = ReferrerPayout::where('referrer_payout_status_id', '<=', ReferrerPayoutStatus::STATUS_PROCESSING)->get();
 
-        \Log::debug(count($incompletePayouts));
+        foreach ($incompletePayouts as $payout) {
+            $referrerPayoutService->processPayoutHandshake($payout);
+        }
     }
 }

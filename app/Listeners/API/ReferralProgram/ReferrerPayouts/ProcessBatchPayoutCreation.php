@@ -16,6 +16,6 @@ class ProcessBatchPayoutCreation implements ShouldQueue, ShouldBeEncrypted
 
     public function handle(BatchPayoutCreated $event): void
     {
-        $this->referrerPayoutService->process($event->data);
+        $this->referrerPayoutService->processBatchPayout($event->data);
     }
 }

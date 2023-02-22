@@ -2,7 +2,7 @@
 namespace App\Services\Admin\V3\ReferralProgram;
 
 use App\Models\ReferrerPayout;
-use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalServicePay;
+use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -14,7 +14,7 @@ class ReferrerPayoutService
      * Payment Providers available for the application
      **/
     protected array $providers = [
-        'PAYPAL' => PaypalServicePay::class,
+        'paypal' => PaypalPayoutService::class,
     ];
 
     /**
@@ -37,7 +37,7 @@ class ReferrerPayoutService
             ->paginate(request('per_page', self::PER_PAGE));
     }
 
-    public function process(array $data): void
+    public function processBatchPayout(array $data): void
     {
         foreach (array_keys($this->providers) as $paymentMethod) {
             $payouts = $this->getPayoutsByIdArray($data['items'], $paymentMethod);
@@ -53,5 +53,15 @@ class ReferrerPayoutService
                 $paymentMethodService->storeItemsResponse($payouts, $response);
             }
         }
+    }
+
+    public function processPayoutHandshake(ReferrerPayout $payout): void
+    {
+        $response = resolve($this->providers[
+            $payout->payment_method
+        ])->handshake($payout);
+
+        \Log::debug('Handshake', $response);
+
     }
 }

@@ -62,8 +62,7 @@ class ReferrerPayoutService
 
     public function initiateBatchPayout(array $data): void
     {
-
-        if(array_key_exists('all_pending',$data)) {
+        if (array_key_exists('all_pending', $data)) {
             $query = ReferrerPayout::where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING)
                 ->whereNull('transaction_id');
         } else {
@@ -79,7 +78,7 @@ class ReferrerPayoutService
     public function processBatchPayout(array $data): void
     {
         foreach (array_keys($this->providers) as $paymentMethod) {
-            if(array_key_exists('all_pending',$data)) {
+            if (array_key_exists('all_pending', $data)) {
                 $payouts = $this->getAllPendingPayouts($paymentMethod);
             } else {
                 $payouts = $this->getPayoutsByIdArray($data['items'], $paymentMethod);
@@ -98,7 +97,6 @@ class ReferrerPayoutService
                     \Log::debug('CREATE_BATCH_PAYOUT', $response);
                     $paymentMethodService->storeItemsResponse($payouts, $response);
                 }
-
             }
         }
     }
@@ -114,7 +112,7 @@ class ReferrerPayoutService
 
     protected function processFailedBatchPayouts(Collection $payouts, array $data): void
     {
-        ReferrerPayout::whereIn('id',$payouts->pluck('id'))->update([
+        ReferrerPayout::whereIn('id', $payouts->pluck('id'))->update([
             'request_payload' => $data['request'],
             'response_payload' => json_encode($data['response']),
             'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_FAILED,

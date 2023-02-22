@@ -3,8 +3,8 @@
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
 use App\Http\APIClients\PaypalClient;
-use App\Models\ReferrerPayoutStatus;
 use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceHandshakeInterface;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
@@ -38,7 +38,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
     protected function getSenderBatchHeaderData(array $items): array
     {
-        $idsString = implode('|', array_map(function($item) {
+        $idsString = implode('|', array_map(function ($item) {
             return $item['id'];
         }, $items));
 
@@ -46,7 +46,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 //            "sender_batch_id" => "RefPayouts-".$idsString,
             "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
             "email_subject" => "You have a payout!",
-            "email_message" => "You have received a payout! Thanks for using our service!"
+            "email_message" => "You have received a payout! Thanks for using our service!",
         ];
     }
     public function pay(array $items, array $data = []): array
@@ -62,7 +62,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
             $response = $this->client->createBatchPayout($requestData);
 
-            if($response['batch_header']['batch_status'] === 'DENIED') {
+            if ($response['batch_header']['batch_status'] === 'DENIED') {
                 return [
                     'result' => 'FAILED',
                     'request' => $requestData,
@@ -78,7 +78,6 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'result' => 'OK',
                 'request' => $requestData,
             ], $detailsResponse);
-
         } catch (RequestException $e) {
             return ['message' => $e->getMessage()];
         }
@@ -88,6 +87,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
     {
         try {
             $response = $this->client->getBatchPayoutStatus($payoutBatchId);
+
             return [
                 'response' => $response,
                 'payout_batch_id' => $response['batch_header']['payout_batch_id'],
@@ -103,13 +103,12 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         $responseItems = $data['response']['items'];
 
         // Match the payouts collection items with the response items, assuming that they could not always be in order
-        foreach($payouts as $payout) {
+        foreach ($payouts as $payout) {
             $filtered = array_values(array_filter($responseItems, function ($item) use ($payout) {
                 return str_ends_with($item['payout_item']['sender_item_id'], '-'.$payout->id);
             }));
 
-            if (count($filtered) > 0)
-            {
+            if (count($filtered) > 0) {
                 $transactionStatus = $filtered[0]['transaction_status'];
 
                 $payout->update([
@@ -121,7 +120,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
 
-                if($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+                if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
                     $this->processFailedPayout($payout);
                 }
             }
@@ -141,7 +140,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
             ]);
 
-            if($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+            if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
                 $this->processFailedPayout($payout);
             }
 

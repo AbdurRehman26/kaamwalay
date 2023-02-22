@@ -5,8 +5,8 @@ namespace App\Console\Commands\ReferralProgram;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
-use Illuminate\Console\Command;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class ProcessPayoutsHandshake extends Command
 {
@@ -39,7 +39,7 @@ class ProcessPayoutsHandshake extends Command
         foreach ($incompletePayouts as $payout) {
             $limitDate = (new Carbon($incompletePayouts->initiated_at))->addDays(30)->endOfDay();
 
-            if(now() < $limitDate) {
+            if (now() < $limitDate) {
                 $referrerPayoutService->processPayoutHandshake($payout);
             } else {
                 $payout->update([

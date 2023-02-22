@@ -29,5 +29,4 @@ class ReferrerPayoutController extends Controller
 
         return new JsonResponse(['success' => true], Response::HTTP_CREATED);
     }
-
 }

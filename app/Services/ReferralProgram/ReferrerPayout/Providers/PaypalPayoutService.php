@@ -62,9 +62,20 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
             $response = $this->client->createBatchPayout($requestData);
 
+            if($response['batch_header']['batch_status'] === 'DENIED') {
+                return [
+                    'result' => 'FAILED',
+                    'request' => $requestData,
+                    'response' => $response,
+                    'payout_batch_id' => $response['batch_header']['payout_batch_id'],
+                    'batch_status' => $response['batch_header']['batch_status'],
+                ];
+            }
+
             $detailsResponse = $this->getBatchDetails($response['batch_header']['payout_batch_id']);
 
             return array_merge([
+                'result' => 'OK',
                 'request' => $requestData,
             ], $detailsResponse);
 
@@ -87,8 +98,8 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         }
     }
 
-    public function storeItemsResponse(Collection $payouts, array $data): void {
-
+    public function storeItemsResponse(Collection $payouts, array $data): void
+    {
         $responseItems = $data['response']['items'];
 
         // Match the payouts collection items with the response items, assuming that they could not always be in order
@@ -104,13 +115,15 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 $payout->update([
                     'request_payload' => $data['request'],
                     'response_payload' => json_encode($filtered[0]),
-                    'initiated_at' => now(),
                     'transaction_id' => $filtered[0]['payout_item_id'],
                     'transaction_status' => $transactionStatus,
-                    'paid_by' => auth()->user()->id,
                     'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
+
+                if($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+                    $this->processFailedPayout($payout);
+                }
             }
         }
     }
@@ -127,6 +140,10 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                 'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
             ]);
+
+            if($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+                $this->processFailedPayout($payout);
+            }
 
             return [
                 'payout_id' => $payout->id,
@@ -153,4 +170,8 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         }
     }
 
+    protected function processFailedPayout(ReferrerPayout $payout): void
+    {
+        $payout->user->referrer->increment('withdrawable_commission', $payout->amount);
+    }
 }

@@ -23,6 +23,8 @@ class ReferrerPayoutController extends Controller
 
     public function store(ProcessReferrerPayoutsRequest $request): JsonResponse
     {
+        $this->referrerPayoutService->initiateBatchPayout($request->validated());
+
         BatchPayoutCreated::dispatch($request->validated());
 
         return new JsonResponse(['success' => true], Response::HTTP_CREATED);

@@ -84,7 +84,7 @@ test('a referrer can not get another referrer`s payouts', function () {
 it('returns payouts order by ASC created_at', function () {
     actingAs($this->user);
 
-    $response = getJson('/api/v3/customer/referrer/payouts?sort=created_at')->assertOk();
+    $response = getJson(route('v3.payouts.index', ['sort' => 'created_at']))->assertOk();
 
     $this->assertEquals(
         ReferrerPayout::orderBy('created_at')->limit(10)->pluck('id')->toArray(),
@@ -95,7 +95,7 @@ it('returns payouts order by ASC created_at', function () {
 it('returns payouts order by DESC created_at', function () {
     actingAs($this->user);
 
-    $response = getJson('/api/v3/customer/referrer/payouts?sort=-created_at')->assertOk();
+    $response = getJson(route('v3.payouts.index', ['sort' => '-created_at']))->assertOk();
 
     $this->assertEquals(
         ReferrerPayout::orderBy('created_at', 'DESC')->limit(5)->pluck('id')->toArray(),

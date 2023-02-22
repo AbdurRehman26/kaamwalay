@@ -2,7 +2,7 @@
 namespace App\Services\Admin\V3\ReferralProgram;
 
 use App\Models\ReferrerPayout;
-use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalService;
+use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalServicePay;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -14,7 +14,7 @@ class ReferrerPayoutService
      * Payment Providers available for the application
      **/
     protected array $providers = [
-        'PAYPAL' => PaypalService::class,
+        'PAYPAL' => PaypalServicePay::class,
     ];
 
     /**

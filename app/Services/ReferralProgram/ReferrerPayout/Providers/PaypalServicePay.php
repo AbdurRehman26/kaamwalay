@@ -5,11 +5,11 @@ namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 use App\Http\APIClients\PaypalClient;
 use App\Models\PayoutStatus;
 use App\Models\ReferrerPayout;
-use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceInterface;
+use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 
-class PaypalService implements ReferrerPayoutProviderServiceInterface
+class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
 {
     public function __construct(protected PaypalClient $client)
     {

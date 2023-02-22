@@ -67,7 +67,7 @@ class ReferrerPayoutService
 
             Log::error('Referrer payout creation failed for customer', [
                 'user_id' => $userId,
-                'message' => $e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine()
+                'message' => $e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine(),
             ]);
 
             throw $e;

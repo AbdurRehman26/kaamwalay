@@ -3,7 +3,7 @@
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
 use App\Http\APIClients\PaypalClient;
-use App\Models\PayoutStatus;
+use App\Models\ReferrerPayoutStatus;
 use App\Models\ReferrerPayout;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
@@ -107,7 +107,7 @@ class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
                     'transaction_id' => $filtered[0]['payout_item_id'],
                     'transaction_status' => $transactionStatus,
                     'paid_by' => $transactionStatus === 'SUCCESS' ? auth()->user()->id : null,
-                    'payout_status_id' => $this->getPayoutStatusId($transactionStatus),
+                    'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
             }
@@ -118,14 +118,14 @@ class PaypalServicePay implements ReferrerPayoutProviderServicePayInterface
     {
         switch ($transactionStatus) {
             case 'SUCCESS':
-                return PayoutStatus::STATUS_COMPLETED;
+                return ReferrerPayoutStatus::STATUS_COMPLETED;
             case 'FAILED':
             case 'RETURNED':
             case 'ONHOLD':
-                return PayoutStatus::STATUS_FAILED;
+                return ReferrerPayoutStatus::STATUS_FAILED;
             default:
                 // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED) will be in process
-                return PayoutStatus::STATUS_PROCESSING;
+                return ReferrerPayoutStatus::STATUS_PROCESSING;
         }
     }
 }

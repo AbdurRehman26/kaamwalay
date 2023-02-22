@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands\ReferralProgram;
 
-use App\Models\PayoutStatus;
 use App\Models\ReferrerPayout;
-use App\Models\User;
-use App\Services\ReferralProgram\ReferrerService;
+use App\Models\ReferrerPayoutStatus;
 use Illuminate\Console\Command;
 
 class ProcessPayoutsHanshake extends Command
@@ -22,7 +20,7 @@ class ProcessPayoutsHanshake extends Command
      *
      * @var string
      */
-    protected $description = 'It generates Referrer objects for all User objects in the system.';
+    protected $description = 'Search for incomplete payouts and checks their current status through provider.';
 
     /**
      * Execute the console command.
@@ -31,7 +29,7 @@ class ProcessPayoutsHanshake extends Command
      */
     public function handle()
     {
-        $incompletePayouts = ReferrerPayout::where('payout_status_id', '<=', PayoutStatus::STATUS_PROCESSING)->get();
+        $incompletePayouts = ReferrerPayout::where('referrer_payout_status_id', '<=', ReferrerPayoutStatus::STATUS_PROCESSING)->get();
 
         \Log::debug(count($incompletePayouts));
     }

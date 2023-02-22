@@ -57,7 +57,7 @@ class ReferrerPayout extends Model
     {
         return [
             AllowedFilter::exact('user_id'),
-            AllowedFilter::exact('payout_status_id'),
+            AllowedFilter::exact('referrer_payout_status_id'),
             AllowedFilter::custom('search', new AdminReferrerPayoutSearchFilter),
         ];
     }

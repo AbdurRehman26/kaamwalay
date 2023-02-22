@@ -19,11 +19,11 @@ class ReferrerPayoutResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'date_initiated' => $this->initiated_at,
-            'completed_at' => $this->completed_at,
             'payout_account' => $this->payout_account,
             'status' => $this->referrerPayoutStatus->name,
             'amount' => $this->amount,
+            'created_at' => $this->formatDate($this->created_at),
+            'completed_at' => $this->formatDate($this->completed_at),
         ];
     }
 }

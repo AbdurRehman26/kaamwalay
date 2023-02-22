@@ -5,6 +5,7 @@ namespace App\Services\ReferralProgram;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -22,20 +23,28 @@ class ReferrerPayoutService
     public function getReferrerPayouts(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?? self::DEFAULT_PAGE_SIZE;
+        /* @var User $user */
+        $user = auth()->user();
 
-        return QueryBuilder::for(ReferrerPayout::where('user_id', auth()->user()->id))
-            ->allowedSorts(['initiated_at'])
-            ->defaultSort('-initiated_at')
+        return QueryBuilder::for(ReferrerPayout::forUser($user))
+            ->allowedSorts(['created_at'])
+            ->defaultSort('-created_at')
             ->with('referrerPayoutStatus')
             ->paginate($itemsPerPage);
     }
 
+    /**
+     * @throws \Throwable
+     * @throws Exception
+     */
     public function create(array $data): ReferrerPayout
     {
-        try {
-            DB::beginTransaction();
+        $userId = auth()->user()->id;
 
-            $referrer = Referrer::where('user_id', auth()->user()->id)->first();
+        try {
+            $referrer = Referrer::where('user_id', $userId)->first();
+
+            DB::beginTransaction();
 
             $referrerPayout = ReferrerPayout::create(
                 array_merge(
@@ -58,10 +67,11 @@ class ReferrerPayoutService
             return $referrerPayout;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Payout creation error for customer', [
-                'user_id' => auth()->user()->id,
+
+            Log::error('Referrer payout creation failed for customer', [
+                'user_id' => $userId,
+                'message' => $e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine(),
             ]);
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
 
             throw $e;
         }

@@ -74,6 +74,9 @@ const ReferralDialogBox = styled(Dialog)({
         padding: '10px 0px',
         cursor: 'pointer',
     },
+    '.DollarSign': {
+        color: '#20BFB8',
+    },
 });
 
 export function ReferralDialog() {
@@ -115,7 +118,7 @@ export function ReferralDialog() {
                 </div>
                 <div>
                     <Typography className={'DialogTitle'}>
-                        Earn $$$ by referring your friends to RoboGrading.{' '}
+                        Earn <span className={'DollarSign'}>$$$</span> by referring your friends to RoboGrading.{' '}
                     </Typography>
                 </div>
                 <div>

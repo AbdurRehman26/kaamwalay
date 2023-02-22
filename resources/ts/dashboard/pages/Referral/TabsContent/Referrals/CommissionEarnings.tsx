@@ -15,6 +15,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
+import { setCommissionEarningsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ReferralTable from '../../ReferralTable';
 
@@ -117,6 +118,8 @@ export function CommissionEarnings() {
         return <CircularProgress />;
     }
 
+    const dispatchData = setCommissionEarningsFilter(!sortCommissionFilter);
+
     const tableRows = data?.map((data: ReferralCommissionEarningsEntity) => (
         <TableRow key={data?.id}>
             <StyledTableCell>
@@ -149,6 +152,7 @@ export function CommissionEarnings() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
+                    dispatchData={dispatchData}
                 />
             )}
         </>

@@ -15,6 +15,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useReferralCustomerSignUpsQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
+import { setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ReferralTable from '../../ReferralTable';
 
@@ -123,6 +124,8 @@ export function CustomerSignups() {
         return <CircularProgress />;
     }
 
+    const dispatchData = setCustomerSignUpsFilter(!sortSignUpsFilter);
+
     const tableRows = data?.map((data: ReferralCustomerSignUpsEntity) => (
         <TableRow key={data?.id}>
             <StyledTableCell>
@@ -153,10 +156,10 @@ export function CustomerSignups() {
                 <ReferralTable
                     heading={'Customer Sign Ups'}
                     tableHeadings={headings}
-                    isCustomerSignup
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
+                    dispatchData={dispatchData}
                 />
             )}
         </>

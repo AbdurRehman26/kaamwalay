@@ -12,6 +12,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralWithdrawQuery } from '@shared/redux/hooks/useReferralWithdrawQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
+import { setWithdrawFilter } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ReferralTable from '../../ReferralTable';
 
@@ -112,6 +113,8 @@ export function Withdrawals() {
         return <CircularProgress />;
     }
 
+    const dispatchData = setWithdrawFilter(!sortWithdrawFilter);
+
     const tableRows = data?.map((data: ReferralWithdrawEntity) => (
         <TableRow key={data?.id}>
             <StyledTableCell>{data?.createdAt ? moment(data?.createdAt).format('lll') : '-'}</StyledTableCell>
@@ -136,7 +139,7 @@ export function Withdrawals() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
-                    isWithdrawl={true}
+                    dispatchData={dispatchData}
                 />
             )}
         </>

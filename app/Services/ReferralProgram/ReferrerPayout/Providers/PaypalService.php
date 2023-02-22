@@ -99,6 +99,7 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
             if (count($filtered) > 0)
             {
                 $transactionStatus = $filtered[0]['transaction_status'];
+
                 $payout->update([
                     'request_payload' => $data['request'],
                     'response_payload' => json_encode($filtered[0]),
@@ -122,11 +123,8 @@ class PaypalService implements ReferrerPayoutProviderServiceInterface
             case 'RETURNED':
             case 'ONHOLD':
                 return PayoutStatus::STATUS_FAILED;
-            case 'PENDING':
-            case 'UNCLAIMED':
-            case 'BLOCKED':
-            case 'REFUNDED':
-            case 'REVERSED':
+            default:
+                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED) will be in process
                 return PayoutStatus::STATUS_PROCESSING;
         }
     }

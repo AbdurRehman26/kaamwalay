@@ -51,7 +51,6 @@ class ReferrerPayoutService
                 \Log::debug('Create Batch', $response);
 
                 $paymentMethodService->storeItemsResponse($payouts, $response);
-                dd($response);
             }
         }
     }

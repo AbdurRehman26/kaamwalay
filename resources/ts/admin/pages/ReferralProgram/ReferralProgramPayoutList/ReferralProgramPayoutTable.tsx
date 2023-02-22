@@ -19,86 +19,75 @@ import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferr
 import PayoutCommissionDialog from './PayoutCommissionDialog';
 
 interface ReferralProgramPayoutTableProps {
-    tabFilter?: string;
+    tabFilter?: PayoutStatusEnum;
     all?: boolean;
     search?: string;
 }
 
-export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) {
-    const [paymentStatus, setPaymentStatus] = useState(false);
-    const [search, setSearch] = useState('');
-    const [sortFilter, setSortFilter] = useState('created_at');
+type selectedDataProps = [payoutId: number, amount: number];
+
+export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
+    // const [paymentStatus, setPaymentStatus] = useState(false);
+    // const [userId, setUserId] = useState(212);
+    // const [sortFilter, setSortFilter] = useState('created_at');
 
     const [payAllStatus, setPayAllStatus] = useState(true);
-    const [archiveAllStatus, setArchiveAllStatus] = useState(false);
-    const [exportAllStatus, setExportAllStatus] = useState(false);
     const [allSelected, setAllSelected] = useState(false);
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [selectedData, setSelectedData] = useState<selectedDataProps[]>([]);
     const [showPayoutCommission, setShowPayoutCommission] = useState(false);
 
     // uncomment when APIs ready
-    setPaymentStatus(true);
+    // setPaymentStatus(true);
     setPayAllStatus(false);
-    setArchiveAllStatus(true);
-    setExportAllStatus(true);
-    setSearch(search);
-    setSortFilter(search);
+    // setSearch(search);
+    setAllSelected(true);
+    setSelectedData([]);
+    // setSortFilter('search');
 
     const payouts = useAdminReferralPayoutsQuery({
         params: {
-            include: [
-                'orderStatus',
-                'customer',
-                'customer.wallet',
-                'invoice',
-                'orderShipment',
-                'orderLabel',
-                'shippingMethod',
-            ],
-            sort: sortFilter,
+            include: [],
             filter: {
-                search,
-                paymentStatus,
+                // userId
+                // search,
+                // tabFilter,
             },
         },
         ...bracketParams(),
     });
 
-    console.log('payouts ', payouts);
-
     const handleSelectAll = () => {
-        if (!allSelected) {
-            const newSelected = payouts.data.map((payout) => payout.id);
-            setSelectedIds(newSelected);
-            setAllSelected(true);
-            console.log('Selected ids ifff ', selectedIds);
-            return;
-        }
-        setSelectedIds([]);
-        console.log('Selected ids else', selectedIds);
-        setAllSelected(false);
+        // if (!allSelected) {
+        //     const newSelected = payouts.data.map((payout) => payout.id);
+        //     setSelectedData(newSelected);
+        //     setAllSelected(true);
+        //     console.log('Selected ids ifff ', selectedIds);
+        //     return;
+        // }
+        // setSelectedData([]);
+        // console.log('Selected ids else', selectedIds);
+        // setAllSelected(false);
     };
 
-    const handleClick = (id: number) => {
-        const selectedIndex = selectedIds.indexOf(id);
-        let newSelected: number[] = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selectedIds, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selectedIds.slice(1));
-        } else if (selectedIndex === selectedIds.length - 1) {
-            newSelected = newSelected.concat(selectedIds.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(selectedIds.slice(0, selectedIndex), selectedIds.slice(selectedIndex + 1));
-        }
-
-        setSelectedIds(newSelected);
-        console.log('newSelected ', newSelected);
-        console.log('aa aa selectedIds', selectedIds);
+    const handleClick = (id: number, amount: number) => {
+        // const selectedIndex = selectedIds.indexOf(id);
+        // let newSelected: number[] = [];
+        // if (selectedIndex === -1) {
+        //     newSelected = newSelected.concat(selectedIds, id);
+        // } else if (selectedIndex === 0) {
+        //     newSelected = newSelected.concat(selectedIds.slice(1));
+        // } else if (selectedIndex === selectedIds.length - 1) {
+        //     newSelected = newSelected.concat(selectedIds.slice(0, -1));
+        // } else if (selectedIndex > 0) {
+        //     newSelected = newSelected.concat(selectedIds.slice(0, selectedIndex), selectedIds.slice(selectedIndex + 1));
+        // }
+        // setSelectedData(newSelected);
+        // console.log('newSelected ', newSelected);
+        // console.log('aa aa selectedIds', selectedIds);
     };
 
-    const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
+    // const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
+    // const isSelected = (selectedRowId: number) => selectedData.filter((selectedRow) => selectedRow[selectedRowId] === -1) ;
 
     return (
         <>
@@ -106,16 +95,16 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                 <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
                     <>
                         <Grid item xs container alignItems={'center'}>
-                            {selectedIds.length === 0 ? (
+                            {selectedData.length === 0 ? (
                                 <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
                                     {payouts.data.length > 0 ? `${payouts.data.length} Results` : null}
                                 </Typography>
                             ) : (
                                 <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                    {`${selectedIds.length} Selected `}
+                                    {`${selectedData.length} Selected `}
                                 </Typography>
                             )}
-                            {selectedIds.length > 0 ? (
+                            {selectedData.length > 0 ? (
                                 <Grid xs ml={2} alignItems={'center'}>
                                     <Button
                                         sx={{ borderRadius: '25px' }}
@@ -125,26 +114,28 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                                     </Button>
                                     <Button
                                         sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                        variant={archiveAllStatus ? 'contained' : 'outlined'}
+                                        variant={'outlined'}
+                                        disabled
                                     >
                                         Archieved Selected
                                     </Button>
                                     <Button
                                         sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                        variant={exportAllStatus ? 'contained' : 'outlined'}
+                                        variant={'outlined'}
+                                        disabled
                                     >
                                         Export Selected
                                     </Button>
                                 </Grid>
                             ) : null}
                         </Grid>
-                        {selectedIds.length === 0 ? (
+                        {selectedData.length === 0 ? (
                             <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
                                 <Button
                                     variant={'outlined'}
                                     color={'primary'}
                                     sx={{ borderRadius: 20, padding: '7px 24px' }}
-                                    // onClick={handleExportData}
+                                    disabled
                                 >
                                     Export List
                                 </Button>
@@ -159,7 +150,7 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                                 <Checkbox
                                     color="primary"
                                     checked={allSelected}
-                                    indeterminate={selectedIds.length > 0}
+                                    indeterminate={selectedData.length > 0}
                                     onClick={handleSelectAll}
                                 />
                                 Name / ID
@@ -182,8 +173,8 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                                             <Checkbox
                                                 color="primary"
                                                 key={payout.id}
-                                                checked={isSelected(payout.id)}
-                                                onClick={(event) => handleClick(payout.id)}
+                                                // checked={isSelected(payout.id)}
+                                                onClick={(event) => handleClick(payout.id, payout.amount)}
                                             />
                                             <Avatar src={payout.user.profileImage ?? ''}>
                                                 {payout.user.getInitials()}
@@ -200,21 +191,20 @@ export function ReferralProgramPayoutTable({}: ReferralProgramPayoutTableProps) 
                                         {' '}
                                         {`${formatDate(payout.initiatedAt, 'MMM D, YYYY')} at ${formatDate(
                                             payout.initiatedAt,
-                                            'h:mm:ss A',
+                                            'h:mm:s A',
                                         )}`}{' '}
                                     </TableCell>
                                     <TableCell>
                                         {' '}
                                         {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
                                             payout.completedAt,
-                                            'h:mm:ss A',
+                                            'h:mm:s A',
                                         )}`}{' '}
                                     </TableCell>
                                     <TableCell>{payout.payoutAccount}</TableCell>
                                     <TableCell>
-                                        {Object.entries(PayoutStatusEnum).map(([key, status]) => {
-                                            return <Typography>{/* { status[payout.payoutStatus] } */}</Typography>;
-                                        })}
+                                        {' '}
+                                        <Typography> {payout?.status?.name} </Typography>
                                     </TableCell>
                                     <TableCell>{payout.paidBy.getFullName()}</TableCell>
                                     <TableCell>{payout.amount}</TableCell>

@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { ReferralProgramPayoutHeader } from './ReferralProgramPayoutHeader';
 import { ReferralProgramPayoutTable } from './ReferralProgramPayoutTable';
 
@@ -34,13 +35,13 @@ export function ReferralProgramPayoutList() {
             <Grid container direction={'column'}>
                 <ReferralProgramPayoutHeader tabs={tabs} onSearch={setSearch} />
                 <TabContent value={'pending'}>
-                    <ReferralProgramPayoutTable search={search} tabFilter={'pending'} />
+                    <ReferralProgramPayoutTable search={search} tabFilter={PayoutStatusEnum.PENDING} />
                 </TabContent>
                 <TabContent value={'completed'}>
-                    <ReferralProgramPayoutTable search={search} tabFilter={'completed'} />
+                    <ReferralProgramPayoutTable search={search} tabFilter={PayoutStatusEnum.COMPLETED} />
                 </TabContent>
                 <TabContent value={'archived'}>
-                    <ReferralProgramPayoutTable search={search} tabFilter={'archived'} />
+                    <ReferralProgramPayoutTable search={search} tabFilter={PayoutStatusEnum.PROCESSING} />
                 </TabContent>
             </Grid>
         </TabContext>

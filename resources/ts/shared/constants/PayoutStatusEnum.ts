@@ -6,8 +6,8 @@ export enum PayoutStatusEnum {
 }
 
 export const PaymentStatusMap = {
-    [PayoutStatusEnum.PENDING]: 'pending',
-    [PayoutStatusEnum.PROCESSING]: 'processing',
-    [PayoutStatusEnum.COMPLETED]: 'completed',
-    [PayoutStatusEnum.FAILED]: 'failed',
+    [PayoutStatusEnum.PENDING]: { label: 'Pending', value: 'pending' },
+    [PayoutStatusEnum.PROCESSING]: { label: 'Processing', value: 'processing' },
+    [PayoutStatusEnum.COMPLETED]: { label: 'Completed', value: 'completed' },
+    [PayoutStatusEnum.FAILED]: { label: 'Failed', value: 'failed' },
 };

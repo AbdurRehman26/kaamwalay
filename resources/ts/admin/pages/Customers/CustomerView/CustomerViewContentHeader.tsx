@@ -28,7 +28,7 @@ export function CustomerViewContentHeader() {
                     value={'referrals'}
                     label="Referrals"
                 />
-                <Tab component={Link} to={''} disabled value={'payouts'} label="Payouts" />
+                <Tab component={Link} to={'/customers/' + id + '/view/payouts'} value={'payouts'} label="Payouts" />
             </TabList>
         </Grid>
     );

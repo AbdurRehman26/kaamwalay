@@ -90,6 +90,9 @@ const useStyles = makeStyles(
             margin: 30,
             borderRadius: 24,
             padding: '12px 78px',
+            [theme.breakpoints.down('sm')]: {
+                padding: '12px 43px',
+            },
         },
         checkMark: {
             height: 56,

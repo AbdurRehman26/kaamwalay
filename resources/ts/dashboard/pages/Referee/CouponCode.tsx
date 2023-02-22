@@ -89,7 +89,10 @@ const useStyles = makeStyles(
         newSubmissionBtn: {
             margin: 30,
             borderRadius: 24,
-            padding: '12px 58px',
+            padding: '12px 78px',
+            [theme.breakpoints.down('sm')]: {
+                padding: '12px 43px',
+            },
         },
         checkMark: {
             height: 56,

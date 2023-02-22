@@ -31,6 +31,9 @@ const StyledTableContainer = styled(TableContainer)({
         color: 'rgba(0, 0, 0, 0.87)',
         padding: '20px 15px',
     },
+    '.Count': {
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
 });
 
 interface props {
@@ -81,7 +84,7 @@ export function ReferralTable({
         <StyledTableContainer>
             <Grid sx={{ minWidth: 800 }}>
                 <Typography className={'TableHeading'}>
-                    {heading} ({count})
+                    {heading} <span className={'Count'}>({count})</span>
                 </Typography>
             </Grid>
             <Table sx={{ minWidth: 800 }}>

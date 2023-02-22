@@ -1,15 +1,11 @@
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
-import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid';
-import Snackbar from '@mui/material/Snackbar';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { round } from 'lodash';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ReferralWithdrawEntity } from '@shared/entities/ReferralWithdrawEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -41,31 +37,6 @@ const StyledTableCell = styled(TableCell)({
         },
     },
 });
-
-const styles = {
-    SnackBarDiv: {
-        background: '#43A047',
-        borderRadius: '4px',
-        padding: '15px 25px',
-        boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2)',
-        width: '360px',
-        top: '65px!important',
-    },
-    SnackBarTitle: {
-        fontWeight: 500,
-        fontSize: '14px',
-        lineHeight: '20px',
-        letterSpacing: '0.1px',
-        color: '#FFFFFF',
-        marginLeft: '10px',
-    },
-    SnackBarIcon: {
-        color: '#fff',
-    },
-    SnackBarContentDiv: {
-        display: 'flex',
-    },
-};
 
 const headings: EnhancedTableHeadCell[] = [
     {
@@ -112,7 +83,6 @@ const headings: EnhancedTableHeadCell[] = [
 
 export function Withdrawals() {
     const sortWithdrawFilter = useAppSelector((state) => state.referralProgramSlice.withdrawFilter.withdraw);
-    const [isSnackbarShow, setIsSnackbarShow] = useState(localStorage.getItem('referral-program-snackbar:show'));
 
     const withdraw$ = useListReferralWithdrawQuery({
         params: {
@@ -121,15 +91,6 @@ export function Withdrawals() {
 
         ...bracketParams(),
     });
-
-    useEffect(() => {
-        if (isSnackbarShow === 'true') {
-            setTimeout(() => {
-                localStorage.setItem('referral-program-snackbar:show', 'false');
-                setIsSnackbarShow(localStorage.getItem('referral-program-snackbar:show'));
-            }, 1000);
-        }
-    }, [isSnackbarShow]);
 
     const { data, paginationProps } = withdraw$;
 
@@ -162,19 +123,6 @@ export function Withdrawals() {
     ));
     return (
         <>
-            <Snackbar
-                open={isSnackbarShow === 'true' ? true : false}
-                sx={styles.SnackBarDiv}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Grid sx={styles.SnackBarContentDiv}>
-                    <DoneOutlinedIcon sx={styles.SnackBarIcon} />
-                    <Typography sx={styles.SnackBarTitle}>Withdrawal successfully initiated</Typography>
-                </Grid>
-            </Snackbar>
             {withdraw$.data.length === 0 ? (
                 <EmptyStates
                     heading={'No Withdrawals'}

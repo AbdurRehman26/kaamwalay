@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { round } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -24,7 +25,7 @@ const WithDrawDiv = styled(Grid)({
 
     '.AmountHeading': {
         marginTop: '20px',
-        fontWeight: '500',
+        fontWeight: 500,
         fontSize: '20px',
     },
     '.AmountValue': {
@@ -147,9 +148,10 @@ export function WithdrawFunds() {
                 amount: referrer.withdrawableCommission,
                 payoutAccount: payoutAccount,
             });
-
-            localStorage.setItem('referral-program-snackbar:show', 'true');
             navigate('/referral-program/withdrawals');
+            setTimeout(() => {
+                notifications.success('Withdrawal successfully initiated');
+            }, 2000);
         } catch (error: any) {
             notifications.exception(error);
             return;
@@ -166,7 +168,8 @@ export function WithdrawFunds() {
             </Breadcrumbs>
             <Grid>
                 <Typography className={'AmountHeading'}>
-                    Withdrawal Amount: <span className={'AmountValue'}>${referrer.withdrawableCommission}</span>
+                    Withdrawal Amount:{' '}
+                    <span className={'AmountValue'}>${round(referrer.withdrawableCommission, 2).toFixed(2)}</span>
                 </Typography>
                 <Typography className={'Caption'}>
                     It can take 5-7 days for the withdrawal to finalize. It will show up as “pending” until it’s

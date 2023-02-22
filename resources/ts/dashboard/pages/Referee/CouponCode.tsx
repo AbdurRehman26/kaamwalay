@@ -89,7 +89,7 @@ const useStyles = makeStyles(
         newSubmissionBtn: {
             margin: 30,
             borderRadius: 24,
-            padding: '12px 78px',
+            padding: '12px 58px',
         },
         checkMark: {
             height: 56,

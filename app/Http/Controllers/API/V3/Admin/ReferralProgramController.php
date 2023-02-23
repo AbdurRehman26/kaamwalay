@@ -8,16 +8,17 @@ use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralStatRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\ListRefereesRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\ListReferrersRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\SetReferrerStatusRequest;
-use App\Http\Resources\API\V3\Admin\ReferralProgram\Order\OrderListCollection;
-use App\Http\Resources\API\V3\Admin\ReferralProgram\Referee\RefereeCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Order\OrderListResource;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referee\RefereeResource;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerResource;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerSignUpCollection;
-use App\Http\Resources\API\V3\Admin\ReferralProgram\User\ReferrerUserCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\User\ReferrerUserResource;
 use App\Models\User;
 use App\Services\Admin\V3\ReferralProgramService;
 use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ReferralProgramController extends Controller
 {
@@ -30,19 +31,19 @@ class ReferralProgramController extends Controller
         return new JsonResponse([ 'data' => $this->referralProgramService->getStat($request->validated())]);
     }
 
-    public function listReferrers(ListReferrersRequest $request): ReferrerUserCollection
+    public function listReferrers(ListReferrersRequest $request): AnonymousResourceCollection
     {
-        return new ReferrerUserCollection($this->referralProgramService->getReferrers());
+        return ReferrerUserResource::collection($this->referralProgramService->getReferrers());
     }
 
-    public function listReferees(ListRefereesRequest $request): RefereeCollection
+    public function listReferees(ListRefereesRequest $request): AnonymousResourceCollection
     {
-        return new RefereeCollection($this->referralProgramService->getReferees());
+        return RefereeResource::collection($this->referralProgramService->getReferees());
     }
 
-    public function listReferralOrders(): OrderListCollection
+    public function listReferralOrders(): AnonymousResourceCollection
     {
-        return new OrderListCollection($this->referralProgramService->getReferralOrders());
+        return OrderListResource::collection($this->referralProgramService->getReferralOrders());
     }
 
     public function getSignUps(User $user): ReferrerSignUpCollection

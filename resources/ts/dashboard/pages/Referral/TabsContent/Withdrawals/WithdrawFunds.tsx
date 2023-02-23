@@ -1,7 +1,6 @@
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -111,7 +110,6 @@ const WithDrawDiv = styled(Grid)({
 export function WithdrawFunds() {
     const [payoutAccount, setPayoutAccount] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
-    const [isLoading, setLoading] = useState(false);
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
@@ -145,16 +143,19 @@ export function WithdrawFunds() {
             version: 'v3',
         });
 
+        setIsDisabled(true);
+
         try {
             await endpoint.post('', {
                 payoutAccount: payoutAccount,
             });
-            setLoading(true);
+            notifications.success('Withdrawal successfully initiated');
             setTimeout(() => {
-                notifications.success('Withdrawal successfully initiated');
+                setIsDisabled(false);
+                navigate('/referral-program/withdrawals');
             }, 1000);
-            navigate('/referral-program/withdrawals');
         } catch (error: any) {
+            setIsDisabled(false);
             notifications.exception(error);
             return;
         }
@@ -219,7 +220,7 @@ export function WithdrawFunds() {
                     onClick={handleSubmit}
                     className={isDisabled ? 'DisabledButton' : 'Button'}
                 >
-                    {isLoading ? <CircularProgress /> : 'START WITHDRAWAL'}
+                    {'START WITHDRAWAL'}
                 </Button>
             </Grid>
         </WithDrawDiv>

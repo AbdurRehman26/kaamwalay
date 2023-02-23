@@ -25,6 +25,8 @@ class ReferrerPayoutController extends Controller
     {
         $this->referrerPayoutService->initiateBatchPayout($request->validated());
 
+        \Log::info('BATCH_PAYOUT_INITIATED', $request->validated());
+
         BatchPayoutCreated::dispatch($request->validated());
 
         return new JsonResponse(['success' => true], Response::HTTP_CREATED);

@@ -47,7 +47,7 @@ test('an admin can get a list of payouts in the system', function () {
         ->assertJsonStructure(['data' => [
             '*' => [
                 'user',
-                'initiated_at',
+                'created_at',
                 'completed_at',
                 'payout_account',
                 'paid_by',
@@ -67,6 +67,66 @@ it('can filter payouts list by status', function () {
     getJson(route('v3.admin.referral.payouts.index', ['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PENDING]))
         ->assertSuccessful()
         ->assertJsonCount(1, ['data']);
+});
+
+it('sorts payouts list by created_at DESC', function () {
+    $response = getJson(route('v3.admin.referral.payouts.index', ['sort' => '-created_at']))
+        ->assertSuccessful();
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('created_at', 'DESC')->first()->id,
+        $response->getData()->data[0]->id
+    );
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('created_at', 'DESC')->get()[1]->id,
+        $response->getData()->data[1]->id
+    );
+});
+
+it('sorts payouts list by created_at ASC', function () {
+    $response = getJson(route('v3.admin.referral.payouts.index', ['sort' => 'created_at']))
+        ->assertSuccessful();
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('created_at', 'ASC')->first()->id,
+        $response->getData()->data[0]->id
+    );
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('created_at', 'ASC')->get()[1]->id,
+        $response->getData()->data[1]->id
+    );
+});
+
+it('sorts payouts list by amount DESC', function () {
+    $response = getJson(route('v3.admin.referral.payouts.index', ['sort' => '-amount']))
+        ->assertSuccessful();
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('amount', 'DESC')->first()->id,
+        $response->getData()->data[0]->id
+    );
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('amount', 'DESC')->get()[1]->id,
+        $response->getData()->data[1]->id
+    );
+});
+
+it('sorts payouts list by amount ASC', function () {
+    $response = getJson(route('v3.admin.referral.payouts.index', ['sort' => 'amount']))
+        ->assertSuccessful();
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('amount', 'ASC')->first()->id,
+        $response->getData()->data[0]->id
+    );
+
+    $this->assertEquals(
+        ReferrerPayout::orderBy('amount', 'ASC')->get()[1]->id,
+        $response->getData()->data[1]->id
+    );
 });
 
 it('can search payouts by customer information', function () {

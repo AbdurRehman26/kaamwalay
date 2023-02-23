@@ -85,7 +85,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
     public function getBatchDetails(string $payoutBatchId): array
     {
         try {
-            $response = $this->client->getBatchPayoutStatus($payoutBatchId);
+            $response = $this->client->getBatchPayoutStatus($payoutBatchId, ['page_size' => 1000]);
 
             return [
                 'response' => $response,

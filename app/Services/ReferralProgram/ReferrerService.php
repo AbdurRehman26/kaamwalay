@@ -5,6 +5,8 @@ namespace App\Services\ReferralProgram;
 use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
+use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -154,6 +156,10 @@ class ReferrerService
                 return $this->getTotalCardsOfReferees($user->id, $startDate, $endDate);
             case 'commission_earned':
                 return $this->getTotalEarnedCommission($user->id, $startDate, $endDate);
+            case 'withdrawable_commission':
+                return $this->getTotalWithdrawableCommission($user->id);
+            case 'commission_paid':
+                return $this->getTotalCommissionPaid($user->id, $startDate, $endDate);
             default:
                 return 0;
         }
@@ -193,6 +199,18 @@ class ReferrerService
             ->where('referrers.user_id', $userId)
             ->whereBetween('referrer_earned_commissions.created_at', [$startDate, $endDate])
             ->sum('commission');
+    }
+
+    protected function getTotalWithdrawableCommission(int $userId): float{
+        return Referrer::where('user_id', $userId)->sum('withdrawable_commission');
+    }
+
+    protected function getTotalCommissionPaid(int $userId, string $startDate, string $endDate): float
+    {
+        return ReferrerPayout::where('user_id', $userId)
+            ->where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_COMPLETED)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
     }
 
     public function increaseSuccessfulSignups(Referrer $referrer): void

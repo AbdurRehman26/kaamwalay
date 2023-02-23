@@ -2,6 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -65,17 +66,8 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
 
     const handlePayCommission = () => {
         calculateTotal();
-        console.log('aaaa ', payoutTotal);
         setShowPayoutCommission(true);
     };
-
-    // useEffect(() => {
-    //     payouts.data.filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
-    //         .map((payout: PayoutEntity) => {
-    //             setPayoutTotal(payoutTotal + Number(payout.amount));
-    //         });
-    //         // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     }, [selectedIds]);
 
     useEffect(
         () => {
@@ -162,194 +154,201 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
 
     return (
         <>
-            <Grid container direction={'column'}>
-                <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
-                    <>
-                        <Grid item xs container alignItems={'center'}>
+            {payouts.isLoading ? (
+                <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <Grid container direction={'column'}>
+                    <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
+                        <>
+                            <Grid item xs container alignItems={'center'}>
+                                {selectedIds.length === 0 ? (
+                                    <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
+                                        {payouts.data.length > 0 ? `${payouts.data.length} Results` : null}
+                                    </Typography>
+                                ) : (
+                                    <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
+                                        {`${selectedIds.length} Selected `}
+                                    </Typography>
+                                )}
+                                {(!isPayOne && selectedIds.length) > 0 ? (
+                                    <Grid xs ml={2} alignItems={'center'}>
+                                        <Button
+                                            sx={{ borderRadius: '25px' }}
+                                            variant={'contained'}
+                                            onClick={handlePayCommission}
+                                        >
+                                            Pay Selected
+                                        </Button>
+                                        <Button
+                                            sx={{ marginLeft: '12px', borderRadius: '25px' }}
+                                            variant={'outlined'}
+                                            disabled
+                                        >
+                                            Archieved Selected
+                                        </Button>
+                                        <Button
+                                            sx={{ marginLeft: '12px', borderRadius: '25px' }}
+                                            variant={'outlined'}
+                                            disabled
+                                        >
+                                            Export Selected
+                                        </Button>
+                                    </Grid>
+                                ) : null}
+                            </Grid>
                             {selectedIds.length === 0 ? (
-                                <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                    {payouts.data.length > 0 ? `${payouts.data.length} Results` : null}
-                                </Typography>
-                            ) : (
-                                <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                    {`${selectedIds.length} Selected `}
-                                </Typography>
-                            )}
-                            {(!isPayOne && selectedIds.length) > 0 ? (
-                                <Grid xs ml={2} alignItems={'center'}>
+                                <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
                                     <Button
-                                        sx={{ borderRadius: '25px' }}
-                                        variant={'contained'}
-                                        onClick={handlePayCommission}
-                                    >
-                                        Pay Selected
-                                    </Button>
-                                    <Button
-                                        sx={{ marginLeft: '12px', borderRadius: '25px' }}
                                         variant={'outlined'}
+                                        color={'primary'}
+                                        sx={{ borderRadius: 20, padding: '7px 24px' }}
                                         disabled
                                     >
-                                        Archieved Selected
-                                    </Button>
-                                    <Button
-                                        sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                        variant={'outlined'}
-                                        disabled
-                                    >
-                                        Export Selected
+                                        Export List
                                     </Button>
                                 </Grid>
                             ) : null}
-                        </Grid>
-                        {selectedIds.length === 0 ? (
-                            <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                                <Button
-                                    variant={'outlined'}
-                                    color={'primary'}
-                                    sx={{ borderRadius: 20, padding: '7px 24px' }}
-                                    disabled
-                                >
-                                    Export List
-                                </Button>
-                            </Grid>
-                        ) : null}
-                    </>
-                </Grid>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                <Checkbox
-                                    color="primary"
-                                    checked={allSelected}
-                                    indeterminate={selectedIds.length > 0}
-                                    onClick={handleSelectAll}
-                                />
-                                Name / ID
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Date Initiated
-                                <TableSortLabel
-                                    onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
-                                    direction={!sortCreatedAt ? 'desc' : 'asc'}
-                                    active={true}
-                                ></TableSortLabel>
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Date Completed
-                                <TableSortLabel
-                                    onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
-                                    direction={!sortCompletedAt ? 'desc' : 'asc'}
-                                    active={true}
-                                ></TableSortLabel>
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Payout Account
-                                <TableSortLabel
-                                    onClick={() => handleSortAmount(!sortAccount, 'payout_account')}
-                                    direction={!sortAccount ? 'desc' : 'asc'}
-                                    active={true}
-                                ></TableSortLabel>
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Status
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Paid By
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
-                                Amount
-                                <TableSortLabel
-                                    onClick={() => handleSortAccount(!sortAmount, 'amount')}
-                                    direction={!sortAmount ? 'desc' : 'asc'}
-                                    active={true}
-                                ></TableSortLabel>
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px' }} variant={'head'} />
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {payouts?.data.length > 0 ? (
-                            payouts.data.map((payout) => (
-                                <TableRow>
-                                    <TableCell>
-                                        <Grid container>
-                                            <Checkbox
-                                                color="primary"
-                                                key={payout.id}
-                                                checked={isSelected(payout.id)}
-                                                onClick={() => handleRowClick(payout.id, payout.amount)}
-                                            />
-                                            <Avatar src={payout.user.profileImage ?? ''}>
-                                                {payout.user.getInitials()}
-                                            </Avatar>
-                                            <Grid item xs container direction={'column'} pl={2}>
-                                                <Typography variant={'body2'}>{payout.user.fullName}</Typography>
-                                                <Typography variant={'caption'} color={'textSecondary'}>
-                                                    {payout.user.customerNumber}
-                                                </Typography>
+                        </>
+                    </Grid>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    <Checkbox
+                                        color="primary"
+                                        checked={allSelected}
+                                        indeterminate={selectedIds.length > 0}
+                                        onClick={handleSelectAll}
+                                    />
+                                    Name / ID
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Date Initiated
+                                    <TableSortLabel
+                                        onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
+                                        direction={!sortCreatedAt ? 'desc' : 'asc'}
+                                        active={true}
+                                    ></TableSortLabel>
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Date Completed
+                                    <TableSortLabel
+                                        onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
+                                        direction={!sortCompletedAt ? 'desc' : 'asc'}
+                                        active={true}
+                                    ></TableSortLabel>
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Payout Account
+                                    <TableSortLabel
+                                        onClick={() => handleSortAmount(!sortAccount, 'payout_account')}
+                                        direction={!sortAccount ? 'desc' : 'asc'}
+                                        active={true}
+                                    ></TableSortLabel>
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Status
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Paid By
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                    Amount
+                                    <TableSortLabel
+                                        onClick={() => handleSortAccount(!sortAmount, 'amount')}
+                                        direction={!sortAmount ? 'desc' : 'asc'}
+                                        active={true}
+                                    ></TableSortLabel>
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '12px' }} variant={'head'} />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {payouts?.data.length > 0 ? (
+                                payouts.data.map((payout) => (
+                                    <TableRow>
+                                        <TableCell>
+                                            <Grid container>
+                                                <Checkbox
+                                                    color="primary"
+                                                    key={payout.id}
+                                                    checked={isSelected(payout.id)}
+                                                    onClick={() => handleRowClick(payout.id, payout.amount)}
+                                                />
+                                                <Avatar src={payout.user.profileImage ?? ''}>
+                                                    {payout.user.getInitials()}
+                                                </Avatar>
+                                                <Grid item xs container direction={'column'} pl={2}>
+                                                    <Typography variant={'body2'}>{payout.user.fullName}</Typography>
+                                                    <Typography variant={'caption'} color={'textSecondary'}>
+                                                        {payout.user.customerNumber}
+                                                    </Typography>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                    <TableCell>
-                                        {' '}
-                                        {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
-                                            payout.createdAt,
-                                            'h:mm:s A',
-                                        )}`}{' '}
-                                    </TableCell>
-                                    <TableCell>
-                                        {' '}
-                                        {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
-                                            payout.completedAt,
-                                            'h:mm:s A',
-                                        )}`}{' '}
-                                    </TableCell>
-                                    <TableCell>{payout.payoutAccount}</TableCell>
-                                    <TableCell>{payout.status?.name}</TableCell>
-                                    <TableCell>{payout.paidBy.getFullName()}</TableCell>
-                                    <TableCell>{payout.amount}</TableCell>
-                                    <TableCell>
-                                        {payout.status?.id === PayoutStatusEnum.PENDING && selectedIds.length < 2 ? (
-                                            <Button
-                                                onClick={() => handlePay(payout.id, payout.amount)}
-                                                variant={'contained'}
-                                            >
-                                                Pay
-                                            </Button>
-                                        ) : null}
+                                        </TableCell>
+                                        <TableCell>
+                                            {' '}
+                                            {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
+                                                payout.createdAt,
+                                                'h:mm:s A',
+                                            )}`}{' '}
+                                        </TableCell>
+                                        <TableCell>
+                                            {' '}
+                                            {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
+                                                payout.completedAt,
+                                                'h:mm:s A',
+                                            )}`}{' '}
+                                        </TableCell>
+                                        <TableCell>{payout.payoutAccount}</TableCell>
+                                        <TableCell>{payout.status?.name}</TableCell>
+                                        <TableCell>{payout.paidBy.getFullName()}</TableCell>
+                                        <TableCell>{payout.amount}</TableCell>
+                                        <TableCell>
+                                            {payout.status?.id === PayoutStatusEnum.PENDING &&
+                                            selectedIds.length < 2 ? (
+                                                <Button
+                                                    onClick={() => handlePay(payout.id, payout.amount)}
+                                                    variant={'contained'}
+                                                >
+                                                    Pay
+                                                </Button>
+                                            ) : null}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell align={'center'} colSpan={9}>
+                                        <Box padding={2}>
+                                            <Typography variant={'subtitle2'}>
+                                                We couldn't found any payouts yet.
+                                            </Typography>
+                                        </Box>
                                     </TableCell>
                                 </TableRow>
-                            ))
-                        ) : (
+                            )}
+                        </TableBody>
+                        <TableFooter>
                             <TableRow>
-                                <TableCell align={'center'} colSpan={9}>
-                                    <Box padding={2}>
-                                        <Typography variant={'subtitle2'}>
-                                            We couldn't found any payouts yet.
-                                        </Typography>
-                                    </Box>
-                                </TableCell>
+                                <TablePagination {...payouts.paginationProps} />
                             </TableRow>
-                        )}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination {...payouts.paginationProps} />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-                <PayoutCommissionDialog
-                    onSubmit={() => handleCommissions()}
-                    onClose={() => {
-                        setShowPayoutCommission(false);
-                        setIsPayOne(false);
-                    }}
-                    open={showPayoutCommission}
-                    totalRecipient={selectedIds.length}
-                    totalPayout={payoutTotal}
-                />
-            </Grid>
+                        </TableFooter>
+                    </Table>
+                    <PayoutCommissionDialog
+                        onSubmit={() => handleCommissions()}
+                        onClose={() => {
+                            setShowPayoutCommission(false);
+                            setIsPayOne(false);
+                        }}
+                        open={showPayoutCommission}
+                        totalRecipient={selectedIds.length}
+                        totalPayout={payoutTotal}
+                    />
+                </Grid>
+            )}
         </>
     );
 }

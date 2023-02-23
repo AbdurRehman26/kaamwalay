@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
@@ -12,7 +13,7 @@ import { Theme } from '@mui/material/styles';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 
 interface PayoutCommissionDialogProps extends Omit<DialogProps, 'onSubmit'> {
@@ -49,6 +50,7 @@ const useStyles = makeStyles(
 function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
     const { onClose, onSubmit, totalPayout, totalRecipient, ...rest } = props;
     const classes = useStyles();
+    const [loading, setLoading] = useState(false);
 
     const handleClose = useCallback(
         (...args) => {
@@ -60,6 +62,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
     );
 
     const handleSubmit = useCallback(async () => {
+        setLoading(true);
         await onSubmit();
         handleClose();
     }, [handleClose, onSubmit]);
@@ -105,7 +108,8 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                             <Button color={'inherit'} disabled={isSubmitting} onClick={handleClose}>
                                 close
                             </Button>
-                            <Button
+                            <LoadingButton
+                                loading={loading}
                                 type={'submit'}
                                 color={'primary'}
                                 variant={'contained'}
@@ -114,7 +118,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                                 startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
                             >
                                 Confirm Payout
-                            </Button>
+                            </LoadingButton>
                         </DialogActions>
                     </Form>
                 )}

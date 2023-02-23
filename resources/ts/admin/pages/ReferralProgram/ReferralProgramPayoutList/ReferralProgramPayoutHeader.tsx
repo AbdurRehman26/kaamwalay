@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -59,6 +59,7 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
     const classes = useStyles();
     const [search, setSearch] = useState('');
     const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
 
     const handleSearch = useCallback(
         (e) => {
@@ -73,7 +74,9 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
     );
 
     const handlePayReferralCommissions = async () => {
+        setLoading(true);
         await dispatch(payReferralCommissions({ items: [], allPending: true }));
+        setLoading(false);
     };
 
     return (
@@ -104,14 +107,15 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
                         />
                     ) : null}
                 </Grid>
-                <Button
+                <LoadingButton
+                    loading={loading}
                     variant={'contained'}
                     color={'primary'}
                     sx={{ borderRadius: '24px', padding: '12px 24px', marginLeft: '10px' }}
                     onClick={() => handlePayReferralCommissions()}
                 >
                     Pay All Pending
-                </Button>
+                </LoadingButton>
             </Grid>
             {tabs}
         </Grid>

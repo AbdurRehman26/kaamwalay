@@ -51,5 +51,7 @@
         <env name="SHIPSTATION_API_KEY" value="12345"/>
         <env name="SHIPSTATION_API_SECRET" value="12345"/>
         <env name="PAYPAL_API_BASE_URL" value="https://paypal.api" />
+        <env name="PAYPAL_CLIENT_ID" value="12345" />
+        <env name="PAYPAL_CLIENT_SECRET" value="12345" />
     </php>
 </phpunit>

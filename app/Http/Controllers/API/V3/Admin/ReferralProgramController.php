@@ -3,19 +3,46 @@
 namespace App\Http\Controllers\API\V3\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralProgramStatRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\GetReferralStatRequest;
+use App\Http\Requests\API\V3\Admin\ReferralProgram\ListRefereesRequest;
+use App\Http\Requests\API\V3\Admin\ReferralProgram\ListReferrersRequest;
 use App\Http\Requests\API\V3\Admin\ReferralProgram\SetReferrerStatusRequest;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Order\OrderListCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\Referee\RefereeCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\CommissionEarningCollection;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerResource;
 use App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer\ReferrerSignUpCollection;
+use App\Http\Resources\API\V3\Admin\ReferralProgram\User\ReferrerUserCollection;
 use App\Models\User;
+use App\Services\Admin\V3\ReferralProgramService;
 use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Http\JsonResponse;
 
 class ReferralProgramController extends Controller
 {
-    public function __construct(protected ReferrerService $referrerService)
+    public function __construct(protected ReferrerService $referrerService, protected ReferralProgramService $referralProgramService)
     {
+    }
+
+    public function getOverviewStat(GetReferralProgramStatRequest $request): JsonResponse
+    {
+        return new JsonResponse([ 'data' => $this->referralProgramService->getStat($request->validated())]);
+    }
+
+    public function listReferrers(ListReferrersRequest $request): ReferrerUserCollection
+    {
+        return new ReferrerUserCollection($this->referralProgramService->getReferrers());
+    }
+
+    public function listReferees(ListRefereesRequest $request): RefereeCollection
+    {
+        return new RefereeCollection($this->referralProgramService->getReferees());
+    }
+
+    public function listReferralOrders(): OrderListCollection
+    {
+        return new OrderListCollection($this->referralProgramService->getReferralOrders());
     }
 
     public function getSignUps(User $user): ReferrerSignUpCollection

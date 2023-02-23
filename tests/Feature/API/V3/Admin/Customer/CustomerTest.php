@@ -89,7 +89,7 @@ test('an admin can mark an user referral program as inactive', function () {
     actingAs($this->user);
 
     postJson(route('v3.admin.customer.referral.set-referrers-status', $this->customer->referred_by), [
-        'is_referral_active' => 0,
+        'is_referral_active' => false,
     ])
         ->assertSuccessful()
         ->assertJsonFragment([

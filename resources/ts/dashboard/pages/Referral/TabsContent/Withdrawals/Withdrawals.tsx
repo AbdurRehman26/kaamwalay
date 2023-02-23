@@ -121,12 +121,12 @@ export function Withdrawals() {
     const sortData = setWithdrawSort(!withdrawSort);
 
     const tableRows = data?.map((data: ReferralWithdrawEntity) => (
-        <TableRow key={data?.id}>
-            <StyledTableCell>{data?.createdAt ? moment(data?.createdAt).format('lll') : '-'}</StyledTableCell>
-            <StyledTableCell>{data?.completedAt ? moment(data?.completedAt).format('lll') : '-'}</StyledTableCell>
-            <StyledTableCell align={'left'}>{data?.payoutAccount}</StyledTableCell>
-            <StyledTableCell align={'left'}>{data?.status}</StyledTableCell>
-            <StyledTableCell align={'right'}>${round(data?.amount, 2).toFixed(2)}</StyledTableCell>
+        <TableRow key={data.id}>
+            <StyledTableCell>{data.createdAt ? moment(data?.createdAt).format('lll') : '-'}</StyledTableCell>
+            <StyledTableCell>{data.completedAt ? moment(data?.completedAt).format('lll') : '-'}</StyledTableCell>
+            <StyledTableCell align={'left'}>{data.payoutAccount}</StyledTableCell>
+            <StyledTableCell align={'left'}>{data.status}</StyledTableCell>
+            <StyledTableCell align={'right'}>${round(data.amount, 2).toFixed(2)}</StyledTableCell>
         </TableRow>
     ));
     return (

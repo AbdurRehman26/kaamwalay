@@ -71,4 +71,14 @@ class ReferrerPayout extends Model
             AllowedFilter::custom('search', new AdminReferrerPayoutSearchFilter),
         ];
     }
+
+    public static function allowedSorts(): array
+    {
+        return [
+            'created_at',
+            'completed_at',
+            'amount',
+            'payout_account',
+        ];
+    }
 }

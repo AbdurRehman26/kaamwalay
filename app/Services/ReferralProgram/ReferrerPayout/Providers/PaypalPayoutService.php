@@ -43,7 +43,6 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         }, $items));
 
         return [
-//            "sender_batch_id" => "RefPayouts-".$idsString,
             "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
             "email_subject" => "You have a payout!",
             "email_message" => "You have received a payout! Thanks for using our service!",

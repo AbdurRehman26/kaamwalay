@@ -50,5 +50,6 @@
         <env name="SHIPSTATION_BASE_URL" value="https://ssapi.shipstation.com"/>
         <env name="SHIPSTATION_API_KEY" value="12345"/>
         <env name="SHIPSTATION_API_SECRET" value="12345"/>
+        <env name="PAYPAL_API_BASE_URL" value="https://paypal.api" />
     </php>
 </phpunit>

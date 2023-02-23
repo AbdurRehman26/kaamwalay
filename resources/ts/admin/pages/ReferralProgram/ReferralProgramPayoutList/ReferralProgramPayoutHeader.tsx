@@ -72,8 +72,8 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
         [setSearch, onSearch],
     );
 
-    const handlePayReferralCommissions = () => {
-        dispatch(payReferralCommissions({ items: [], allPending: true }));
+    const handlePayReferralCommissions = async () => {
+        await dispatch(payReferralCommissions({ items: [], allPending: true }));
     };
 
     return (

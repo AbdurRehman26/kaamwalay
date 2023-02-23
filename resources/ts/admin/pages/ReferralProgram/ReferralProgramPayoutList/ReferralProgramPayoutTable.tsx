@@ -28,6 +28,7 @@ interface ReferralProgramPayoutTableProps {
     all?: boolean;
     search?: string;
 }
+
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
     const [sortFilter, setSortFilter] = useState('-created_at');
     const [sortCreatedAt, setSortCreatedAt] = useState(false);
@@ -54,18 +55,27 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         ...bracketParams(),
     });
 
+    const calculateTotal = () => {
+        payouts.data
+            .filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
+            .map((payout: PayoutEntity) => {
+                setPayoutTotal(payoutTotal + payout.amount);
+            });
+    };
+
     const handlePayCommission = () => {
+        calculateTotal();
+        console.log('aaaa ', payoutTotal);
         setShowPayoutCommission(true);
     };
 
-    useEffect(() => {
-        payouts.data
-            ?.filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
-            .map((payout: PayoutEntity) => {
-                setPayoutTotal(payoutTotal + Number(payout.amount));
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedIds.length]);
+    // useEffect(() => {
+    //     payouts.data.filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
+    //         .map((payout: PayoutEntity) => {
+    //             setPayoutTotal(payoutTotal + Number(payout.amount));
+    //         });
+    //         // eslint-disable-next-line react-hooks/exhaustive-deps
+    //     }, [selectedIds]);
 
     useEffect(
         () => {
@@ -98,18 +108,17 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
             return;
         }
         setSelectedIds([]);
-        setPayoutTotal(0);
         setAllSelected(false);
     };
 
     const handleCommissions = async () => {
         await dispatch(payReferralCommissions({ items: selectedIds }));
+        window.location.reload();
     };
 
     const handleRowClick = (id: number, amount: number) => {
         const selectedIndex = selectedIds.indexOf(id);
         let newSelected: number[] = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selectedIds, id);
         } else if (selectedIndex === 0) {
@@ -301,7 +310,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     <TableCell>{payout.paidBy.getFullName()}</TableCell>
                                     <TableCell>{payout.amount}</TableCell>
                                     <TableCell>
-                                        {payout.status?.id === PayoutStatusEnum.PENDING ? (
+                                        {payout.status?.id === PayoutStatusEnum.PENDING && selectedIds.length < 2 ? (
                                             <Button
                                                 onClick={() => handlePay(payout.id, payout.amount)}
                                                 variant={'contained'}
@@ -332,7 +341,10 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                 </Table>
                 <PayoutCommissionDialog
                     onSubmit={() => handleCommissions()}
-                    onClose={() => setShowPayoutCommission(false)}
+                    onClose={() => {
+                        setShowPayoutCommission(false);
+                        setIsPayOne(false);
+                    }}
                     open={showPayoutCommission}
                     totalRecipient={selectedIds.length}
                     totalPayout={payoutTotal}

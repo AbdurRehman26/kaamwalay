@@ -44,8 +44,9 @@ export function CustomerReferralListing({
     isPayout,
 }: CustomerReferralListingProps) {
     const dispatch = useAppDispatch();
-    const handlePayCommission = (payoutId: number) => {
-        dispatch(payReferralCommissions({ items: [payoutId] }));
+
+    const handlePayCommission = async (payoutId: number) => {
+        await dispatch(payReferralCommissions({ items: [payoutId] }));
     };
 
     return (

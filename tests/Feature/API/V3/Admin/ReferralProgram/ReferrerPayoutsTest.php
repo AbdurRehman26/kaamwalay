@@ -1,21 +1,20 @@
 <?php
 
+use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Events\API\Admin\ReferralProgram\BatchPayoutCreated;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Models\User;
-use Database\Seeders\RolesSeeder;
-use Illuminate\Foundation\Testing\WithFaker;
-use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
+use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use App\Services\ReferralProgram\ReferralCodeGeneratorService;
+use Database\Seeders\RolesSeeder;
 
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\WithFaker;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
-use function PHPUnit\Framework\assertEquals;
-use Illuminate\Database\Eloquent\Factories\Sequence;
-use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 
 uses(WithFaker::class);
 
@@ -39,7 +38,6 @@ beforeEach(function () {
     ))->create();
 
     actingAs($this->user);
-
 });
 
 test('an admin can get a list of payouts in the system', function () {
@@ -60,43 +58,42 @@ test('an admin can get a list of payouts in the system', function () {
 });
 
 it('can filter payouts list by user id', function () {
-
-    getJson(route('v3.admin.referral.payouts.index',['filter[user_id]' => $this->customers[0]->id]))
+    getJson(route('v3.admin.referral.payouts.index', ['filter[user_id]' => $this->customers[0]->id]))
         ->assertSuccessful()
         ->assertJsonCount(1, ['data']);
 });
 
 it('can filter payouts list by status', function () {
-    getJson(route('v3.admin.referral.payouts.index',['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PENDING]))
+    getJson(route('v3.admin.referral.payouts.index', ['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PENDING]))
         ->assertSuccessful()
         ->assertJsonCount(1, ['data']);
 });
 
 it('can search payouts by customer information', function () {
-    getJson(route('v3.admin.referral.payouts.index',['filter[search]' => $this->customers[0]->email]))
+    getJson(route('v3.admin.referral.payouts.index', ['filter[search]' => $this->customers[0]->email]))
         ->assertSuccessful()
         ->assertJsonCount(1, ['data']);
 });
 
-test('an admin can approve and create a batch payout with item ids', function (){
+test('an admin can approve and create a batch payout with item ids', function () {
     Event::fake();
     postJson(route('v3.admin.referral.payouts.store'), [
-        'items' => [$this->referrerPayouts[0]->id]
+        'items' => [$this->referrerPayouts[0]->id],
     ])->assertSuccessful();
 
     Event::assertDispatched(BatchPayoutCreated::class);
 });
 
-test('an admin can approve and create a batch payout for all pending elements', function (){
+test('an admin can approve and create a batch payout for all pending elements', function () {
     Event::fake();
     postJson(route('v3.admin.referral.payouts.store'), [
-        'all_pending' => true
+        'all_pending' => true,
     ])->assertSuccessful();
 
     Event::assertDispatched(BatchPayoutCreated::class);
 });
 
-test('batch payout creation needs params', function(){
+test('batch payout creation needs params', function () {
     postJson(route('v3.admin.referral.payouts.store'))->assertStatus(422);
 });
 //
@@ -121,7 +118,7 @@ it('process payouts handshake', function () {
         ->assertExitCode(0);
 });
 
-test('if batch fails, the amounts are returned to referrer withdrawable commission', function(){
+test('if batch fails, the amounts are returned to referrer withdrawable commission', function () {
     Http::fake(['*/v1/payments/*' => Http::response(json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_create_batch_payout_fails_response.json'
     ), associative: true))]);

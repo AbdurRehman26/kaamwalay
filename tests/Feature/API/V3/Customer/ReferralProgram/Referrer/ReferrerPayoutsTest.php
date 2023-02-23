@@ -35,10 +35,10 @@ test('a referrer can withdraw his commission', function () {
         ]))
         ->assertSuccessful()
         ->assertJsonStructure(['data' => [
-            'date_initiated',
-            'completed_at',
             'payout_account',
             'status',
+            'created_at',
+            'completed_at',
         ]]);
 });
 
@@ -49,10 +49,10 @@ test('a referrer can get his own payouts', function () {
         ->assertJsonCount(5, ['data'])
         ->assertJsonStructure(['data' => [
             '*' => [
-                'date_initiated',
-                'completed_at',
                 'payout_account',
                 'status',
+                'created_at',
+                'completed_at',
             ],
         ]]);
 });
@@ -68,37 +68,37 @@ test('a referrer can not get another referrer`s payouts', function () {
         ->assertJsonCount(5, ['data'])
         ->assertJsonStructure(['data' => [
             '*' => [
-                'date_initiated',
-                'completed_at',
                 'payout_account',
                 'status',
+                'created_at',
+                'completed_at',
             ],
         ]]);
 
     assertEquals(
-        ReferrerPayout::orderBy('initiated_at', 'DESC')->where('user_id', $this->user->id)->pluck('id')->toArray(),
+        ReferrerPayout::orderBy('created_at', 'DESC')->where('user_id', $this->user->id)->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
 });
 
-it('returns payouts order by ASC date initiated', function () {
+it('returns payouts order by ASC created_at', function () {
     actingAs($this->user);
 
-    $response = getJson('/api/v3/customer/referrer/payouts?sort=initiated_at')->assertOk();
+    $response = getJson(route('v3.payouts.index', ['sort' => 'created_at']))->assertOk();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('initiated_at')->limit(10)->pluck('id')->toArray(),
+        ReferrerPayout::orderBy('created_at')->limit(10)->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
 });
 
-it('returns payouts order by DESC date initiated', function () {
+it('returns payouts order by DESC created_at', function () {
     actingAs($this->user);
 
-    $response = getJson('/api/v3/customer/referrer/payouts?sort=-initiated_at')->assertOk();
+    $response = getJson(route('v3.payouts.index', ['sort' => '-created_at']))->assertOk();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('initiated_at', 'DESC')->limit(5)->pluck('id')->toArray(),
+        ReferrerPayout::orderBy('created_at', 'DESC')->limit(5)->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
 });

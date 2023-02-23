@@ -10,8 +10,8 @@ export class AdminReferralPayoutsRepository extends Repository<PayoutEntity> {
         version: 'v3',
     };
 
-    async payReferralCommissions() {
-        const { data } = await this.endpoint.post(``);
+    async payReferralCommissions(input: any) {
+        const { data } = await this.endpoint.post('', input);
         return data;
     }
 }

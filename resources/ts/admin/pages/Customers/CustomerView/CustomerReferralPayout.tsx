@@ -1,4 +1,4 @@
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
@@ -30,23 +30,23 @@ const Root = styled(Grid)({
 
 const headings: EnhancedTableHeadCell[] = [
     {
-        id: 'customer',
+        id: 'created_at',
         numeric: false,
         disablePadding: false,
         label: 'DATE INITIATED',
         align: 'left',
-        sortable: false,
+        sortable: true,
     },
     {
-        id: 'created_at',
+        id: 'completed_at',
         numeric: false,
         disablePadding: false,
         label: 'DATE COMPLETED',
         align: 'left',
-        sortable: true,
+        sortable: false,
     },
     {
-        id: 'cards',
+        id: 'account',
         numeric: true,
         disablePadding: false,
         label: 'PAYOUT ACCOUNT',
@@ -62,7 +62,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
-        id: 'total_spent',
+        id: 'paid_by',
         numeric: false,
         disablePadding: false,
         label: 'PAID BY',
@@ -70,7 +70,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
-        id: 'total_commission',
+        id: 'amount',
         numeric: true,
         disablePadding: false,
         label: 'AMOUNT',
@@ -147,7 +147,7 @@ export function CustomerReferralPayout() {
                                 sx={{ padding: '40px 20px' }}
                             >
                                 <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
-                                    <AccountCircleTwoToneIcon />
+                                    <PriceCheckIcon />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography

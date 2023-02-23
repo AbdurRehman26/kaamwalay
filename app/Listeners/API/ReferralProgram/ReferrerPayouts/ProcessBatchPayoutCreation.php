@@ -4,7 +4,6 @@ namespace App\Listeners\API\ReferralProgram\ReferrerPayouts;
 
 use App\Events\API\Admin\ReferralProgram\BatchPayoutCreated;
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
-use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

@@ -30,6 +30,7 @@ const useStyles = makeStyles(
             },
             contentContainer: {
                 width: '457px',
+                height: '140px',
                 [theme.breakpoints.down('sm')]: {
                     width: '100%',
                 },
@@ -65,8 +66,15 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
 
     return (
         <Dialog onClose={handleClose} {...rest}>
-            {/* <DialogTitle>Payout Commissions</DialogTitle> */}
-            <Grid container alignItems={'center'} justifyContent={'space-between'} py={2} pl={3} pr={2}>
+            <Grid
+                sx={{ background: '#F9F9F9' }}
+                container
+                alignItems={'center'}
+                justifyContent={'space-between'}
+                py={2}
+                pl={3}
+                pr={2}
+            >
                 <Grid item xs container alignItems={'center'} justifyContent={'flex-start'}>
                     <Typography variant={'h6'} fontWeight={'500'}>
                         Payout Commissions
@@ -74,7 +82,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                 </Grid>
 
                 <Grid item xs container alignItems={'center'} justifyContent={'flex-end'}>
-                    <IconButton onClick={handleClose}>
+                    <IconButton sx={{ color: '#000000' }} onClick={handleClose}>
                         <CloseIcon />
                     </IconButton>
                 </Grid>
@@ -84,7 +92,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                 {({ isSubmitting }) => (
                     <Form>
                         <DialogContent className={classes.contentContainer}>
-                            <Grid item container alignItems={'center'}>
+                            <Grid item container alignItems={'center'} sx={{ height: '95px' }}>
                                 <Typography>
                                     Payout a total of{' '}
                                     <span className={classes.paymentText}>{formatCurrency(totalPayout)}</span> to{' '}
@@ -93,7 +101,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                             </Grid>
                         </DialogContent>
                         <Divider />
-                        <DialogActions className={classes.dialogActions}>
+                        <DialogActions className={classes.dialogActions} sx={{ background: '#F9F9F9' }}>
                             <Button color={'inherit'} disabled={isSubmitting} onClick={handleClose}>
                                 close
                             </Button>

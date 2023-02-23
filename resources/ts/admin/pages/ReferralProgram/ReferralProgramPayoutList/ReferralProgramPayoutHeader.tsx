@@ -7,7 +7,9 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
+import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
 import theme from '@shared/styles/theme';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface HeaderProps {
     onSearch?: (query: string) => void;
@@ -56,6 +58,7 @@ const debouncedFunc = debounce((func: any) => {
 export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist, tabs }: HeaderProps) {
     const classes = useStyles();
     const [search, setSearch] = useState('');
+    const dispatch = useAppDispatch();
 
     const handleSearch = useCallback(
         (e) => {
@@ -68,6 +71,10 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
         },
         [setSearch, onSearch],
     );
+
+    const handlePayReferralCommissions = () => {
+        dispatch(payReferralCommissions(true));
+    };
 
     return (
         <Grid component={'header'} container sx={{ backgroundColor: '#f9f9f9', borderBottom: '1px solid #E0E0E0' }}>
@@ -101,7 +108,7 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
                     variant={'contained'}
                     color={'primary'}
                     sx={{ borderRadius: '24px', padding: '12px 24px', marginLeft: '10px' }}
-                    // onClick={() => setCreateSubmission(true)}
+                    onClick={() => handlePayReferralCommissions()}
                 >
                     Pay All Pending
                 </Button>

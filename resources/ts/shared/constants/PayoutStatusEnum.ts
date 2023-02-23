@@ -1,8 +1,8 @@
 export enum PayoutStatusEnum {
-    PENDING = 0,
-    PROCESSING,
-    COMPLETED,
-    FAILED,
+    PENDING = 1,
+    PROCESSING = 2,
+    COMPLETED = 3,
+    FAILED = 4,
 }
 
 export const PaymentStatusMap = {

@@ -3,8 +3,8 @@
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
 use App\Http\APIClients\PaypalClient;
-use App\Models\ReferrerPayoutStatus;
 use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceHandshakeInterface;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
@@ -38,15 +38,14 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
     protected function getSenderBatchHeaderData(array $items): array
     {
-        $idsString = implode('|', array_map(function($item) {
+        $idsString = implode('|', array_map(function ($item) {
             return $item['id'];
         }, $items));
 
         return [
-//            "sender_batch_id" => "RefPayouts-".$idsString,
             "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
             "email_subject" => "You have a payout!",
-            "email_message" => "You have received a payout! Thanks for using our service!"
+            "email_message" => "You have received a payout! Thanks for using our service!",
         ];
     }
     public function pay(array $items, array $data = []): array
@@ -62,12 +61,22 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
             $response = $this->client->createBatchPayout($requestData);
 
+            if ($response['batch_header']['batch_status'] === 'DENIED') {
+                return [
+                    'result' => 'FAILED',
+                    'request' => $requestData,
+                    'response' => $response,
+                    'payout_batch_id' => $response['batch_header']['payout_batch_id'],
+                    'batch_status' => $response['batch_header']['batch_status'],
+                ];
+            }
+
             $detailsResponse = $this->getBatchDetails($response['batch_header']['payout_batch_id']);
 
             return array_merge([
+                'result' => 'OK',
                 'request' => $requestData,
             ], $detailsResponse);
-
         } catch (RequestException $e) {
             return ['message' => $e->getMessage()];
         }
@@ -77,6 +86,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
     {
         try {
             $response = $this->client->getBatchPayoutStatus($payoutBatchId);
+
             return [
                 'response' => $response,
                 'payout_batch_id' => $response['batch_header']['payout_batch_id'],
@@ -87,30 +97,36 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         }
     }
 
-    public function storeItemsResponse(Collection $payouts, array $data): void {
-
+    /**
+     * @param  Collection<int, ReferrerPayout>  $payouts
+     * @param  array  $data
+     * @return void
+     */
+    public function storeItemsResponse(Collection $payouts, array $data): void
+    {
         $responseItems = $data['response']['items'];
 
         // Match the payouts collection items with the response items, assuming that they could not always be in order
-        foreach($payouts as $payout) {
+        foreach ($payouts as $payout) {
             $filtered = array_values(array_filter($responseItems, function ($item) use ($payout) {
                 return str_ends_with($item['payout_item']['sender_item_id'], '-'.$payout->id);
             }));
 
-            if (count($filtered) > 0)
-            {
+            if (count($filtered) > 0) {
                 $transactionStatus = $filtered[0]['transaction_status'];
 
                 $payout->update([
                     'request_payload' => $data['request'],
                     'response_payload' => json_encode($filtered[0]),
-                    'initiated_at' => now(),
                     'transaction_id' => $filtered[0]['payout_item_id'],
                     'transaction_status' => $transactionStatus,
-                    'paid_by' => auth()->user()->id,
                     'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
+
+                if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+                    $this->processFailedPayout($payout);
+                }
             }
         }
     }
@@ -127,6 +143,10 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                 'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
             ]);
+
+            if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+                $this->processFailedPayout($payout);
+            }
 
             return [
                 'payout_id' => $payout->id,
@@ -146,12 +166,15 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 return ReferrerPayoutStatus::STATUS_COMPLETED;
             case 'FAILED':
             case 'RETURNED':
-            case 'ONHOLD':
                 return ReferrerPayoutStatus::STATUS_FAILED;
             default:
-                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED) will be in process
+                // Everything else (PENDING, UNCLAIMED, BLOCKED, REFUNDED, REVERSED, ONHOLD) will be in process
                 return ReferrerPayoutStatus::STATUS_PROCESSING;
         }
     }
 
+    protected function processFailedPayout(ReferrerPayout $payout): void
+    {
+        $payout->user->referrer->increment('withdrawable_commission', $payout->amount);
+    }
 }

@@ -4,7 +4,6 @@ namespace App\Events\API\Admin\ReferralProgram;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Tymon\JWTAuth\Claims\Collection;
 
 class BatchPayoutCreated
 {

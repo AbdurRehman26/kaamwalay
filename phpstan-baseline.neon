@@ -261,6 +261,11 @@ parameters:
 			path: app/Http/Filters/AdminOrderReferByFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerPayoutSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminReferrerPayoutSearchFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php

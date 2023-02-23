@@ -26,7 +26,7 @@ export function ReferralProgramPayoutList() {
         <TabList indicatorColor={'primary'} textColor={'primary'}>
             <Tab component={Link} to={'/referral-program/pending/list'} value={'pending'} label="Pending" />
             <Tab component={Link} to={'/referral-program/completed/list'} value={'completed'} label="Completed" />
-            <Tab component={Link} to={'/referral-program/archived/list'} value={'archived'} label="Archived" />
+            <Tab component={Link} disabled to={'/referral-program/archived/list'} value={'archived'} label="Archived" />
         </TabList>
     );
 
@@ -41,7 +41,7 @@ export function ReferralProgramPayoutList() {
                     <ReferralProgramPayoutTable search={search} tabFilter={PayoutStatusEnum.COMPLETED} />
                 </TabContent>
                 <TabContent value={'archived'}>
-                    <ReferralProgramPayoutTable search={search} tabFilter={PayoutStatusEnum.PROCESSING} />
+                    <ReferralProgramPayoutTable search={search} />
                 </TabContent>
             </Grid>
         </TabContext>

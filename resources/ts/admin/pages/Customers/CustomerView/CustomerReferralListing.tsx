@@ -55,8 +55,18 @@ export function CustomerReferralListing({
                         {payouts?.length > 0 ? (
                             payouts?.map((payout) => (
                                 <TableRow>
-                                    <TableCell>{payout.initiatedAt}</TableCell>
-                                    <TableCell>{payout.completedAt}</TableCell>
+                                    <TableCell>
+                                        {`${formatDate(payout.initiatedAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.initiatedAt,
+                                            'h:mm:s A',
+                                        )}`}
+                                    </TableCell>
+                                    <TableCell>
+                                        {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.completedAt,
+                                            'h:mm:s A',
+                                        )}`}
+                                    </TableCell>
                                     <TableCell>{payout.payoutAccount}</TableCell>
                                     <TableCell>{payout.status.name}</TableCell>
                                     <TableCell>{payout.paidBy.getFullName()}</TableCell>

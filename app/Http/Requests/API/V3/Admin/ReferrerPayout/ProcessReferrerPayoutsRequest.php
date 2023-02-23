@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\API\V3\Admin\ReferrerPayout;
 
+use App\Models\ReferrerPayoutStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProcessReferrerPayoutsRequest extends FormRequest
 {
@@ -13,10 +15,14 @@ class ProcessReferrerPayoutsRequest extends FormRequest
      */
     public function rules()
     {
-        //TODO: Validate payout status as well
         return [
-            'items' => 'required|array',
-            'items.*' => 'exists:referrer_payouts,id'
+            'items' => 'required_without:all_pending|array',
+            'items.*' => [
+                Rule::exists('referrer_payouts', 'id')->where(function ($query) {
+                    return $query->where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING);
+                }),
+            ],
+            'all_pending' => 'required_without:items|boolean',
         ];
     }
 }

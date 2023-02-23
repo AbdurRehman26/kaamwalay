@@ -96,11 +96,11 @@ class PaypalClient
     /**
      * @throws RequestException
      */
-    public function getBatchPayoutStatus(string $payoutBatchId): array
+    public function getBatchPayoutStatus(string $payoutBatchId, array $data): array
     {
         return $this->getInstance()->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->get('/v1/payments/payouts/'. $payoutBatchId)
+            ->get('/v1/payments/payouts/'. $payoutBatchId, $data)
             ->throw()
             ->json();
     }

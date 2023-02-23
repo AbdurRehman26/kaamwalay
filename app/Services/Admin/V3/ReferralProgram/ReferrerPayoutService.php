@@ -55,6 +55,7 @@ class ReferrerPayoutService
     {
         return QueryBuilder::for(ReferrerPayout::class)
             ->allowedFilters(ReferrerPayout::allowedFilters())
+            ->allowedSorts(ReferrerPayout::allowedSorts())
             ->defaultSort('-created_at')
             ->with(['user', 'paidBy', 'referrerPayoutStatus'])
             ->paginate(request('per_page', self::PER_PAGE));

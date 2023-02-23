@@ -6,8 +6,8 @@ use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Spatie\QueryBuilder\QueryBuilder;
 use Log;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerPayoutService
 {

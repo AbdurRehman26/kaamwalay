@@ -161,7 +161,7 @@ test('batch payout creation needs params', function () {
     postJson(route('v3.admin.referral.payouts.store'))->assertStatus(422);
 });
 
-test('a batch payout is processed and stores data into DB', function(){
+test('a batch payout is processed and stores data into DB', function () {
     Http::fake(['*/v1/payments/payouts?*' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
@@ -197,7 +197,7 @@ test('if batch fails, the amounts are returned to referrer withdrawable commissi
     expect($referrer->fresh()->withdrawable_commission)->toBe($withdrawableCommission + $payout->amount);
 });
 
-test('if batch call is successful but item fails, the amount is returned to referrer', function(){
+test('if batch call is successful but item fails, the amount is returned to referrer', function () {
     Http::fake(['*/v1/payments/payouts?*' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
@@ -228,7 +228,7 @@ it('process payouts handshake', function () {
         ->assertExitCode(0);
 });
 
-test('handshake cron is handled and stores data into DB', function(){
+test('handshake cron is handled and stores data into DB', function () {
     $baseResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_payout_item_details_response.json'
     ), associative: true);
@@ -245,7 +245,7 @@ test('handshake cron is handled and stores data into DB', function(){
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_COMPLETED);
 });
 
-test('if item transaction fails in handshake, the amount is returned to referrer', function(){
+test('if item transaction fails in handshake, the amount is returned to referrer', function () {
     $baseResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_payout_item_details_fail_response.json'
     ), associative: true);

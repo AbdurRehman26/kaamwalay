@@ -7,6 +7,7 @@ use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
+use Log;
 
 class ReferrerPayoutService
 {
@@ -85,17 +86,19 @@ class ReferrerPayoutService
                 $payouts = $this->getPayoutsByIdArray($data['items'], $paymentMethod);
             }
 
+            Log::info('BATCH_PAYOUT_ITEMS', $payouts->pluck('id')->toArray());
+
             $paymentMethodService = resolve($this->providers[
                 $paymentMethod
             ]);
 
             if (count($payouts) > 0) {
                 $response = $paymentMethodService->pay($payouts->toArray(), $data);
+                Log::info('CREATE_BATCH_PAYOUT', $response);
 
                 if ($response['result'] === 'FAILED') {
                     $this->processFailedBatchPayouts($payouts, $response);
                 } else {
-                    \Log::debug('CREATE_BATCH_PAYOUT', $response);
                     $paymentMethodService->storeItemsResponse($payouts, $response);
                 }
             }
@@ -108,7 +111,7 @@ class ReferrerPayoutService
             $payout->payment_method
         ])->handshake($payout);
 
-        \Log::debug('PAYOUT_HANDSHAKE', $response);
+        Log::info('PAYOUT_HANDSHAKE', $response);
     }
 
     /**

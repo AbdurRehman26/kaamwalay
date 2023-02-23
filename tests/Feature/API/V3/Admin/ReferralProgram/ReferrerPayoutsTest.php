@@ -29,13 +29,17 @@ beforeEach(function () {
 
     $this->referrerPayouts = ReferrerPayout::factory()->count(2)->state(new Sequence(
         ['user_id' => $this->customers[0]->id, 'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_PENDING, 'payment_method' => 'paypal'],
-        ['user_id' => $this->customers[1]->id, 'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_PROCESSING, 'payment_method' => 'paypal'],
+        ['user_id' => $this->customers[1]->id, 'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_PROCESSING, 'payment_method' => 'paypal', 'paid_by' => $this->user->id, 'transaction_id' => 'LOREM'],
     ))->create();
 
     $this->referrer = Referrer::factory()->count(2)->state(new Sequence(
         ['user_id' => $this->customers[0]->id, 'referral_code' => ReferralCodeGeneratorService::generate()],
         ['user_id' => $this->customers[1]->id, 'referral_code' => ReferralCodeGeneratorService::generate()],
     ))->create();
+
+    $this->batchPayoutSuccessfulResponse = Http::response(json_decode(file_get_contents(
+        base_path() . '/tests/stubs/Paypal_create_batch_payout_response.json'
+    ), associative: true));
 
     actingAs($this->user);
 });
@@ -156,31 +160,31 @@ test('an admin can approve and create a batch payout for all pending elements', 
 test('batch payout creation needs params', function () {
     postJson(route('v3.admin.referral.payouts.store'))->assertStatus(422);
 });
-//
-//test('a batch payout is processed and stores data into DB', function(){
-//    Http::fake(['*/v1/payments/payouts?*' => Http::response(json_decode(file_get_contents(
-//        base_path() . '/tests/stubs/Paypal_create_batch_payout_response.json'
-//    ), associative: true))]);
-//
-//    Http::fake(['*/v1/payments/payouts/*' => Http::response(json_decode(file_get_contents(
-//        base_path() . '/tests/stubs/Paypal_batch_payout_details_response.json'
-//    ), associative: true))]);
-//
-//    $referrerPayoutService = resolve(ReferrerPayoutService::class);
-//    $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
-//
-//    $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
-//    dd($payout);
-//});
 
-it('process payouts handshake', function () {
-    $this->artisan(ProcessPayoutsHandshake::class)
-        ->assertExitCode(0);
+test('a batch payout is processed and stores data into DB', function(){
+    Http::fake(['*/v1/payments/payouts?*' => $this->batchPayoutSuccessfulResponse]);
+
+    $baseResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/Paypal_batch_payout_details_response.json'
+    ), associative: true);
+
+    $baseResponse['items'][0]['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[0]->id;
+
+    Http::fake(['*/v1/payments/payouts/*' => Http::response($baseResponse)]);
+
+    $referrerPayoutService = resolve(ReferrerPayoutService::class);
+    $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
+
+    $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
+
+    expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_COMPLETED)
+        ->and($payout->transaction_id)->toBe($baseResponse['items'][0]['payout_item_id'])
+        ->and($payout->transaction_status)->toBe($baseResponse['items'][0]['transaction_status']);
 });
 
 test('if batch fails, the amounts are returned to referrer withdrawable commission', function () {
     Http::fake(['*/v1/payments/*' => Http::response(json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_create_batch_payout_fails_response.json'
+        base_path() . '/tests/stubs/Paypal_create_batch_payout_fail_response.json'
     ), associative: true))]);
 
     $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
@@ -191,4 +195,75 @@ test('if batch fails, the amounts are returned to referrer withdrawable commissi
     $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
 
     expect($referrer->fresh()->withdrawable_commission)->toBe($withdrawableCommission + $payout->amount);
+});
+
+test('if batch call is successful but item fails, the amount is returned to referrer', function(){
+    Http::fake(['*/v1/payments/payouts?*' => $this->batchPayoutSuccessfulResponse]);
+
+    $baseResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/Paypal_batch_payout_details_fail_response.json'
+    ), associative: true);
+
+    $baseResponse['items'][0]['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[0]->id;
+
+    Http::fake(['*/v1/payments/payouts/*' => Http::response($baseResponse)]);
+
+    $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
+    $referrer = $payout->user->referrer;
+    $withdrawableCommission = $referrer->withdrawable_commission;
+
+    $referrerPayoutService = resolve(ReferrerPayoutService::class);
+    $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
+
+    $payout = $payout->fresh();
+
+    expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
+        ->and($payout->transaction_id)->toBe($baseResponse['items'][0]['payout_item_id'])
+        ->and($payout->transaction_status)->toBe($baseResponse['items'][0]['transaction_status'])
+        ->and($referrer->fresh()->withdrawable_commission)->toBe($withdrawableCommission + $payout->amount);
+});
+
+it('process payouts handshake', function () {
+    $this->artisan(ProcessPayoutsHandshake::class)
+        ->assertExitCode(0);
+});
+
+test('handshake cron is handled and stores data into DB', function(){
+    $baseResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/Paypal_payout_item_details_response.json'
+    ), associative: true);
+
+    $baseResponse['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[1]->id;
+
+    Http::fake(['*/v1/payments/*' => Http::response($baseResponse)]);
+
+    $referrerPayoutService = resolve(ReferrerPayoutService::class);
+    $referrerPayoutService->processPayoutHandshake($this->referrerPayouts[1]);
+
+    $payout = ReferrerPayout::find($this->referrerPayouts[1]->id);
+
+    expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_COMPLETED);
+});
+
+test('if item transaction fails in handshake, the amount is returned to referrer', function(){
+    $baseResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/Paypal_payout_item_details_fail_response.json'
+    ), associative: true);
+
+    $baseResponse['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[1]->id;
+
+    Http::fake(['*/v1/payments/*' => Http::response($baseResponse)]);
+
+    $payout = ReferrerPayout::find($this->referrerPayouts[1]->id);
+    $referrer = $payout->user->referrer;
+    $withdrawableCommission = $referrer->withdrawable_commission;
+
+    $referrerPayoutService = resolve(ReferrerPayoutService::class);
+    $referrerPayoutService->processPayoutHandshake($this->referrerPayouts[1]);
+
+    $payout = $payout->fresh();
+
+    expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
+        ->and($payout->transaction_status)->toBe($baseResponse['transaction_status'])
+        ->and($referrer->fresh()->withdrawable_commission)->toBe($withdrawableCommission + $payout->amount);
 });

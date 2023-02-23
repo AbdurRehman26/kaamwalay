@@ -77,7 +77,7 @@ export function RefereeTableRow({ customer, salesReps }: props) {
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
             if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(`/customers/${customer.id}/view`);
+                navigate(`/customers/${customer.id}/view/overview`);
             }
         },
         [navigate, customer.id],

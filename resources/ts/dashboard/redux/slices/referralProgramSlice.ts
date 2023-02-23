@@ -8,21 +8,22 @@ export interface ReferrerDetail {
     referrer: ReferrerEntity;
 }
 
-export interface CustomerSignUpsSort {
-    signUpsSort: boolean;
+export interface CustomerSignUpsFilter {
+    signUpsfilter: boolean;
 }
 
-export interface CommissionEarningsSort {
-    commissionEarningSort: boolean;
+export interface CommissionEarningsFilter {
+    commissionEarningFilter: boolean;
 }
+
 export interface WithdrawSort {
     withdraw: boolean;
 }
 
 export interface referralProgramSliceState {
     referrerDetail: ReferrerDetail;
-    customerSignUpsSort: CustomerSignUpsSort;
-    commissionEarningsSort: CommissionEarningsSort;
+    customerSignUpsFilter: CustomerSignUpsFilter;
+    commissionEarningsFilter: CommissionEarningsFilter;
     withdrawSort: WithdrawSort;
 }
 
@@ -30,11 +31,11 @@ const initialState: referralProgramSliceState = {
     referrerDetail: {
         referrer: {} as ReferrerEntity,
     },
-    customerSignUpsSort: {
-        signUpsSort: false,
+    customerSignUpsFilter: {
+        signUpsfilter: false,
     },
-    commissionEarningsSort: {
-        commissionEarningSort: false,
+    commissionEarningsFilter: {
+        commissionEarningFilter: false,
     },
     withdrawSort: {
         withdraw: false,
@@ -56,11 +57,11 @@ export const referralProgramSlice = createSlice({
     name: 'referralProgramSlice',
     initialState,
     reducers: {
-        setCustomerSignUpsSort: (state, action: PayloadAction<boolean>) => {
-            state.customerSignUpsSort.signUpsSort = action.payload;
+        setCustomerSignUpsFilter: (state, action: PayloadAction<boolean>) => {
+            state.customerSignUpsFilter.signUpsfilter = action.payload;
         },
-        setCommissionEarningsSort: (state, action: PayloadAction<boolean>) => {
-            state.commissionEarningsSort.commissionEarningSort = action.payload;
+        setCommissionEarningsFilter: (state, action: PayloadAction<boolean>) => {
+            state.commissionEarningsFilter.commissionEarningFilter = action.payload;
         },
         setWithdrawSort: (state, action: PayloadAction<boolean>) => {
             state.withdrawSort.withdraw = action.payload;
@@ -73,4 +74,4 @@ export const referralProgramSlice = createSlice({
     },
 });
 
-export const { setCustomerSignUpsSort, setCommissionEarningsSort, setWithdrawSort } = referralProgramSlice.actions;
+export const { setCustomerSignUpsFilter, setCommissionEarningsFilter, setWithdrawSort } = referralProgramSlice.actions;

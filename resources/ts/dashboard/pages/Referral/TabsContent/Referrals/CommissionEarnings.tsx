@@ -53,8 +53,8 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CommissionEarnings() {
-    const sortCommissionEarnings = useAppSelector(
-        (state) => state.referralProgramSlice.commissionEarningsSort.commissionEarningSort,
+    const sortCommissionFilter = useAppSelector(
+        (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
     );
 
     const commissionEarnings$ = useListReferralCommissionEarningsQuery({
@@ -68,14 +68,14 @@ export function CommissionEarnings() {
         () => {
             if (!commissionEarnings$.isLoading) {
                 commissionEarnings$.searchSortedWithPagination(
-                    { sort: sortCommissionEarnings ? 'created_at' : '-created_at' },
+                    { sort: sortCommissionFilter ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortCommissionEarnings],
+        [sortCommissionFilter],
     );
 
     if (commissionEarnings$.data.length === 0 && commissionEarnings$.isLoading) {

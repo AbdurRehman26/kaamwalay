@@ -18,7 +18,7 @@ import { TableSortType } from '@shared/constants/TableSortType';
 import { ReferralCommissionEarningsEntity } from '@shared/entities/ReferralCommissionEarningsEntity';
 import { ReferralCustomerSignUpsEntity } from '@shared/entities/ReferralCustomerSignUpsEntity';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import { setCommissionEarningsSort, setCustomerSignUpsSort } from '@dashboard/redux/slices/referralProgramSlice';
+import { setCommissionEarningsFilter, setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
@@ -69,9 +69,11 @@ export function ReferralTable({ tableData, heading, tableHeadings, isCustomerSig
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const { data, paginationProps } = tableData;
-    const sortCustomerSignUp = useAppSelector((state) => state.referralProgramSlice.customerSignUpsSort.signUpsSort);
-    const sortCommissionEarnings = useAppSelector(
-        (state) => state.referralProgramSlice.commissionEarningsSort.commissionEarningSort,
+    const sortCustomerSignUpFilter = useAppSelector(
+        (state) => state.referralProgramSlice.customerSignUpsFilter.signUpsfilter,
+    );
+    const sortCommissionEarningsFilter = useAppSelector(
+        (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
     );
     const dispatch = useDispatch();
 
@@ -80,9 +82,9 @@ export function ReferralTable({ tableData, heading, tableHeadings, isCustomerSig
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
         if (isCustomerSignup) {
-            dispatch(setCustomerSignUpsSort(!sortCustomerSignUp));
+            dispatch(setCustomerSignUpsFilter(!sortCustomerSignUpFilter));
         } else {
-            dispatch(setCommissionEarningsSort(!sortCommissionEarnings));
+            dispatch(setCommissionEarningsFilter(!sortCommissionEarningsFilter));
         }
     };
 

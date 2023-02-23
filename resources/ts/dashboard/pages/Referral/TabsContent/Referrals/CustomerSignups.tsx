@@ -61,7 +61,7 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CustomerSignups() {
-    const sortCustomerSignUps = useAppSelector((state) => state.referralProgramSlice.customerSignUpsSort.signUpsSort);
+    const sortSignUpsFilter = useAppSelector((state) => state.referralProgramSlice.customerSignUpsFilter.signUpsfilter);
 
     const customerSignup$ = useListReferralCustomerSignUpsQuery({
         params: {
@@ -75,14 +75,14 @@ export function CustomerSignups() {
         () => {
             if (!customerSignup$.isLoading) {
                 customerSignup$.searchSortedWithPagination(
-                    { sort: sortCustomerSignUps ? 'created_at' : '-created_at' },
+                    { sort: sortSignUpsFilter ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortCustomerSignUps],
+        [sortSignUpsFilter],
     );
 
     if (customerSignup$.data.length === 0 && customerSignup$.isLoading) {

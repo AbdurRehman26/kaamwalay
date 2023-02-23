@@ -32,7 +32,7 @@ class Referrer extends Model
         'link_clicks' => 'integer',
         'successful_signups' => 'integer',
         'referral_orders' => 'integer',
-        'is_referral_active' => 'boolean',
+        'is_referral_active' => 'integer',
     ];
 
     /**

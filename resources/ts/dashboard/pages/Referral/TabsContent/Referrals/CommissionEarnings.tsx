@@ -15,7 +15,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import { setCommissionEarningsFilter } from '@dashboard/redux/slices/referralProgramSlice';
+import { setCommissionEarningsSort } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ListingTable from '../../ListingTable';
 
@@ -86,8 +86,8 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CommissionEarnings() {
-    const sortCommissionFilter = useAppSelector(
-        (state) => state.referralProgramSlice.commissionEarningsFilter.commissionEarningFilter,
+    const sortCommissionEarnings = useAppSelector(
+        (state) => state.referralProgramSlice.commissionEarningsSort.commissionEarningSort,
     );
 
     const commissionEarnings$ = useListReferralCommissionEarningsQuery({
@@ -104,21 +104,21 @@ export function CommissionEarnings() {
         () => {
             if (!commissionEarnings$.isLoading) {
                 commissionEarnings$.searchSortedWithPagination(
-                    { sort: sortCommissionFilter ? 'created_at' : '-created_at' },
+                    { sort: sortCommissionEarnings ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortCommissionFilter],
+        [sortCommissionEarnings],
     );
 
     if (data.length === 0 && commissionEarnings$.isLoading) {
         return <CircularProgress />;
     }
 
-    const dispatchData = setCommissionEarningsFilter(!sortCommissionFilter);
+    const sortData = setCommissionEarningsSort(!sortCommissionEarnings);
 
     const tableRows = data?.map((data: ReferralCommissionEarningsEntity) => (
         <TableRow key={data?.id}>
@@ -152,7 +152,7 @@ export function CommissionEarnings() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
-                    dispatchData={dispatchData}
+                    sortData={sortData}
                 />
             )}
         </>

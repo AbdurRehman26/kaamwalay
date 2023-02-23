@@ -12,7 +12,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralWithdrawQuery } from '@shared/redux/hooks/useReferralWithdrawQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import { setWithdrawFilter } from '@dashboard/redux/slices/referralProgramSlice';
+import { setWithdrawSort } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ListingTable from '../../ListingTable';
 
@@ -83,7 +83,7 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function Withdrawals() {
-    const sortWithdrawFilter = useAppSelector((state) => state.referralProgramSlice.withdrawFilter.withdraw);
+    const withdrawSort = useAppSelector((state) => state.referralProgramSlice.withdrawSort.withdraw);
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const withdraw$ = useListReferralWithdrawQuery({
@@ -100,14 +100,14 @@ export function Withdrawals() {
         () => {
             if (!withdraw$.isLoading && isSearchEnabled) {
                 withdraw$.searchSortedWithPagination(
-                    { sort: sortWithdrawFilter ? 'created_at' : '-created_at' },
+                    { sort: withdrawSort ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortWithdrawFilter],
+        [withdrawSort],
     );
 
     useEffect(() => {
@@ -118,7 +118,7 @@ export function Withdrawals() {
         return <CircularProgress />;
     }
 
-    const dispatchData = setWithdrawFilter(!sortWithdrawFilter);
+    const sortData = setWithdrawSort(!withdrawSort);
 
     const tableRows = data?.map((data: ReferralWithdrawEntity) => (
         <TableRow key={data?.id}>
@@ -144,7 +144,7 @@ export function Withdrawals() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
-                    dispatchData={dispatchData}
+                    sortData={sortData}
                 />
             )}
         </>

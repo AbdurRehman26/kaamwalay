@@ -15,7 +15,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCustomerSignUpsQuery } from '@shared/redux/hooks/useReferralCustomerSignUpsQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import { setCustomerSignUpsFilter } from '@dashboard/redux/slices/referralProgramSlice';
+import { setCustomerSignUpsSort } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
 import ListingTable from '../../ListingTable';
 
@@ -94,7 +94,7 @@ const headings: EnhancedTableHeadCell[] = [
 ];
 
 export function CustomerSignups() {
-    const sortSignUpsFilter = useAppSelector((state) => state.referralProgramSlice.customerSignUpsFilter.signUpsfilter);
+    const sortCustomerSignUps = useAppSelector((state) => state.referralProgramSlice.customerSignUpsSort.signUpsSort);
 
     const customerSignup$ = useListReferralCustomerSignUpsQuery({
         params: {
@@ -110,21 +110,21 @@ export function CustomerSignups() {
         () => {
             if (!customerSignup$.isLoading) {
                 customerSignup$.searchSortedWithPagination(
-                    { sort: sortSignUpsFilter ? 'created_at' : '-created_at' },
+                    { sort: sortCustomerSignUps ? 'created_at' : '-created_at' },
                     toApiPropertiesObject({}),
                     1,
                 );
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortSignUpsFilter],
+        [sortCustomerSignUps],
     );
 
     if (data.length === 0 && customerSignup$.isLoading) {
         return <CircularProgress />;
     }
 
-    const dispatchData = setCustomerSignUpsFilter(!sortSignUpsFilter);
+    const sortData = setCustomerSignUpsSort(!sortCustomerSignUps);
 
     const tableRows = data?.map((data: ReferralCustomerSignUpsEntity) => (
         <TableRow key={data?.id}>
@@ -159,7 +159,7 @@ export function CustomerSignups() {
                     tableRows={tableRows}
                     count={data.length}
                     paginationProps={paginationProps}
-                    dispatchData={dispatchData}
+                    sortData={sortData}
                 />
             )}
         </>

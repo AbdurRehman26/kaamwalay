@@ -36,10 +36,10 @@ interface props {
     tableRows: any;
     count: number;
     paginationProps: any;
-    dispatchData?: any;
+    sortData: any;
 }
 
-export function ListingTable({ heading, tableHeadings, tableRows, count, paginationProps, dispatchData }: props) {
+export function ListingTable({ heading, tableHeadings, tableRows, count, paginationProps, sortData }: props) {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export function ListingTable({ heading, tableHeadings, tableRows, count, paginat
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-        dispatch(dispatchData);
+        dispatch(sortData);
     };
 
     return (

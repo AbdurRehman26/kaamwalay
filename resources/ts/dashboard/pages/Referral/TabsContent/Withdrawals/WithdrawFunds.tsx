@@ -145,7 +145,6 @@ export function WithdrawFunds() {
 
         try {
             await endpoint.post('', {
-                amount: referrer.withdrawableCommission,
                 payoutAccount: payoutAccount,
             });
             navigate('/referral-program/withdrawals');
@@ -156,7 +155,7 @@ export function WithdrawFunds() {
             notifications.exception(error);
             return;
         }
-    }, [apiService, payoutAccount, referrer.withdrawableCommission, notifications, navigate]);
+    }, [apiService, payoutAccount, notifications, navigate]);
 
     return (
         <WithDrawDiv>

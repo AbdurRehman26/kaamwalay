@@ -74,12 +74,12 @@ it('sorts payouts list by created_at DESC', function () {
         ->assertSuccessful();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('created_at','DESC')->first()->id,
+        ReferrerPayout::orderBy('created_at', 'DESC')->first()->id,
         $response->getData()->data[0]->id
     );
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('created_at','DESC')->get()[1]->id,
+        ReferrerPayout::orderBy('created_at', 'DESC')->get()[1]->id,
         $response->getData()->data[1]->id
     );
 });
@@ -89,12 +89,12 @@ it('sorts payouts list by created_at ASC', function () {
         ->assertSuccessful();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('created_at','ASC')->first()->id,
+        ReferrerPayout::orderBy('created_at', 'ASC')->first()->id,
         $response->getData()->data[0]->id
     );
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('created_at','ASC')->get()[1]->id,
+        ReferrerPayout::orderBy('created_at', 'ASC')->get()[1]->id,
         $response->getData()->data[1]->id
     );
 });
@@ -104,12 +104,12 @@ it('sorts payouts list by amount DESC', function () {
         ->assertSuccessful();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('amount','DESC')->first()->id,
+        ReferrerPayout::orderBy('amount', 'DESC')->first()->id,
         $response->getData()->data[0]->id
     );
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('amount','DESC')->get()[1]->id,
+        ReferrerPayout::orderBy('amount', 'DESC')->get()[1]->id,
         $response->getData()->data[1]->id
     );
 });
@@ -119,12 +119,12 @@ it('sorts payouts list by amount ASC', function () {
         ->assertSuccessful();
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('amount','ASC')->first()->id,
+        ReferrerPayout::orderBy('amount', 'ASC')->first()->id,
         $response->getData()->data[0]->id
     );
 
     $this->assertEquals(
-        ReferrerPayout::orderBy('amount','ASC')->get()[1]->id,
+        ReferrerPayout::orderBy('amount', 'ASC')->get()[1]->id,
         $response->getData()->data[1]->id
     );
 });

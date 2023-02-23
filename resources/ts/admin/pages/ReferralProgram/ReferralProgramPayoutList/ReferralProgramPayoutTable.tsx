@@ -10,6 +10,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
 import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
@@ -18,6 +19,8 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
+import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 import PayoutCommissionDialog from './PayoutCommissionDialog';
 
 interface ReferralProgramPayoutTableProps {
@@ -26,14 +29,21 @@ interface ReferralProgramPayoutTableProps {
     search?: string;
 }
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
-    const [sortFilter, setSortFilter] = useState('created_at');
+    const [sortFilter, setSortFilter] = useState('-created_at');
+    const [sortCreatedAt, setSortCreatedAt] = useState(false);
+    const [sortCompletedAt, setSortCompletedAt] = useState(false);
+    const [sortAccount, setSortAccount] = useState(false);
+    const [sortAmount, setSortAmount] = useState(false);
+
     const [payoutTotal, setPayoutTotal] = useState(0);
     const [isPayOne, setIsPayOne] = useState(false);
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [allSelected, setAllSelected] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showPayoutCommission, setShowPayoutCommission] = useState(false);
-    setSortFilter('');
+
+    const dispatch = useAppDispatch();
+
     const payouts = useAdminReferralPayoutsQuery({
         params: {
             filter: {
@@ -88,7 +98,12 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
             return;
         }
         setSelectedIds([]);
+        setPayoutTotal(0);
         setAllSelected(false);
+    };
+
+    const handleCommissions = async () => {
+        await dispatch(payReferralCommissions({ items: selectedIds }));
     };
 
     const handleRowClick = (id: number, amount: number) => {
@@ -112,6 +127,26 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         handleRowClick(id, amount);
         setIsPayOne(true);
         handlePayCommission();
+    };
+
+    const handleSortAccount = (value: boolean, property: string) => {
+        setSortAccount(value);
+        setSortFilter(value ? `${property}` : `-${property}`);
+    };
+
+    const handleSortAmount = (value: boolean, property: string) => {
+        setSortAmount(value);
+        setSortFilter(value ? `${property}` : `-${property}`);
+    };
+
+    const handleSortCreatedAt = (value: boolean, property: string) => {
+        setSortCreatedAt(value);
+        setSortFilter(value ? `${property}` : `-${property}`);
+    };
+
+    const handleSortCompletedAt = (value: boolean, property: string) => {
+        setSortCompletedAt(value);
+        setSortFilter(value ? `${property}` : `-${property}`);
     };
 
     const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
@@ -185,12 +220,27 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                 Date Initiated
+                                <TableSortLabel
+                                    onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
+                                    direction={!sortCreatedAt ? 'desc' : 'asc'}
+                                    active={true}
+                                ></TableSortLabel>
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                 Date Completed
+                                <TableSortLabel
+                                    onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
+                                    direction={!sortCompletedAt ? 'desc' : 'asc'}
+                                    active={true}
+                                ></TableSortLabel>
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                 Payout Account
+                                <TableSortLabel
+                                    onClick={() => handleSortAmount(!sortAccount, 'payout_account')}
+                                    direction={!sortAccount ? 'desc' : 'asc'}
+                                    active={true}
+                                ></TableSortLabel>
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                 Status
@@ -200,6 +250,11 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
                                 Amount
+                                <TableSortLabel
+                                    onClick={() => handleSortAccount(!sortAmount, 'amount')}
+                                    direction={!sortAmount ? 'desc' : 'asc'}
+                                    active={true}
+                                ></TableSortLabel>
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px' }} variant={'head'} />
                         </TableRow>
@@ -229,8 +284,8 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     </TableCell>
                                     <TableCell>
                                         {' '}
-                                        {`${formatDate(payout.initiatedAt, 'MMM D, YYYY')} at ${formatDate(
-                                            payout.initiatedAt,
+                                        {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.createdAt,
                                             'h:mm:s A',
                                         )}`}{' '}
                                     </TableCell>
@@ -276,7 +331,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                     </TableFooter>
                 </Table>
                 <PayoutCommissionDialog
-                    onSubmit={() => setShowPayoutCommission(false)}
+                    onSubmit={() => handleCommissions()}
                     onClose={() => setShowPayoutCommission(false)}
                     open={showPayoutCommission}
                     totalRecipient={selectedIds.length}

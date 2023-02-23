@@ -4,7 +4,6 @@ import { PayoutStatusEntity } from './PayoutStatusEntity';
 import { UserEntity } from './UserEntity';
 
 export class PayoutEntity extends Entity {
-    public initiatedAt!: string;
     public completedAt!: string;
     public payoutAccount!: string;
     public amount!: number;

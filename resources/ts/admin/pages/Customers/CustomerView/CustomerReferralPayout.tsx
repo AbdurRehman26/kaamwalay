@@ -77,6 +77,14 @@ const headings: EnhancedTableHeadCell[] = [
         align: 'left',
         sortable: false,
     },
+    {
+        id: 'actions',
+        numeric: true,
+        disablePadding: false,
+        label: '',
+        align: 'left',
+        sortable: false,
+    },
 ];
 
 export function CustomerReferralPayout() {

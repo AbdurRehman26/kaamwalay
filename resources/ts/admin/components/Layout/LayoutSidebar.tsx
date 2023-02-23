@@ -1,5 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import CampaignOutlined from '@mui/icons-material/CampaignOutlined';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Face from '@mui/icons-material/Face';
@@ -57,11 +58,16 @@ function LayoutSidebar() {
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
     const cardsManagementState = useAppSelector((state) => state.page.cardsManagementSelected);
     const [open, setOpen] = useState(false);
+    const [openReferral, setOpenReferral] = useState(false);
 
     const classes = useStyles({ drawerState, cardsManagementState, open });
 
     const handleClick = () => {
         setOpen(!open);
+    };
+
+    const handleReferralClick = () => {
+        setOpenReferral(!openReferral);
     };
 
     return (
@@ -76,7 +82,6 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
                 <LayoutSidebarItem icon={Face} title={'Sales Reps'} href={'/salesreps'} />
-                <LayoutSidebarItem icon={Face} title={'Referral Payouts'} href={'/referral-program'} />
                 <LayoutSidebarItem
                     icon={SafeSquareOutline}
                     title={'Vault Storage'}
@@ -95,6 +100,18 @@ function LayoutSidebar() {
                         <LayoutSidebarItem title={'Cards'} href={'/cards'} cardsManagementStyle={true} />
                         <LayoutSidebarItem title={'Rarities'} href={'/rarities'} cardsManagementStyle={true} />
                         <LayoutSidebarItem title={'Surfaces'} href={'/surfaces'} cardsManagementStyle={true} />
+                    </List>
+                </Collapse>
+                <ListItemButton onClick={handleReferralClick} className={classes.cardManagementButton}>
+                    <CampaignOutlined className={classes.iconHolder}>
+                        <StyleIcon sx={{ color: cardsManagementState ? '#20BFB8' : 'rgba(0, 0, 0, 0.54)' }} />
+                    </CampaignOutlined>
+                    <ListItemText primary="Referral Program" className={classes.title} />
+                    {openReferral ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={openReferral} timeout="auto" className={classes.collapse}>
+                    <List component="div" className={classes.list}>
+                        <LayoutSidebarItem title={'Referral Payouts'} href={'/referral-program'} />
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />

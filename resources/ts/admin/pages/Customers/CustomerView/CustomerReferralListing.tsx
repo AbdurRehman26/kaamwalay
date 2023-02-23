@@ -11,11 +11,14 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
+import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { PayoutEntity } from '@shared/entities/PayoutEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface CustomerReferralListingProps {
     customers?: CustomerEntity[];
@@ -40,6 +43,11 @@ export function CustomerReferralListing({
     isSignUp,
     isPayout,
 }: CustomerReferralListingProps) {
+    const dispatch = useAppDispatch();
+    const handlePayCommission = (payoutId: number) => {
+        dispatch(payReferralCommissions({ items: [payoutId] }));
+    };
+
     return (
         <Table>
             <EnhancedTableHead
@@ -56,8 +64,8 @@ export function CustomerReferralListing({
                             payouts?.map((payout) => (
                                 <TableRow>
                                     <TableCell>
-                                        {`${formatDate(payout.initiatedAt, 'MMM D, YYYY')} at ${formatDate(
-                                            payout.initiatedAt,
+                                        {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
+                                            payout.createdAt,
                                             'h:mm:s A',
                                         )}`}
                                     </TableCell>
@@ -72,7 +80,14 @@ export function CustomerReferralListing({
                                     <TableCell>{payout.paidBy.getFullName()}</TableCell>
                                     <TableCell>{payout.amount}</TableCell>
                                     <TableCell>
-                                        <Button>Pay</Button>
+                                        {payout.status.id === PayoutStatusEnum.PENDING ? (
+                                            <Button
+                                                variant={'contained'}
+                                                onClick={() => handlePayCommission(payout.id)}
+                                            >
+                                                Pay
+                                            </Button>
+                                        ) : null}
                                     </TableCell>
                                 </TableRow>
                             ))

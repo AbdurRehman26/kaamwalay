@@ -73,7 +73,7 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
     );
 
     const handlePayReferralCommissions = () => {
-        dispatch(payReferralCommissions(true));
+        dispatch(payReferralCommissions({ items: [], allPending: true }));
     };
 
     return (

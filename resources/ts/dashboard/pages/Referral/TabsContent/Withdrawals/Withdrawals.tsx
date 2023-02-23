@@ -14,7 +14,7 @@ import { useListReferralWithdrawQuery } from '@shared/redux/hooks/useReferralWit
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { setWithdrawSort } from '@dashboard/redux/slices/referralProgramSlice';
 import EmptyStates from '../../EmptyStates';
-import ListingTable from '../../ListingTable';
+import ListingTable from './ListingTable';
 
 const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {

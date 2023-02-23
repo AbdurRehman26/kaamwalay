@@ -201,7 +201,8 @@ class ReferrerService
             ->sum('commission');
     }
 
-    protected function getTotalWithdrawableCommission(int $userId): float{
+    protected function getTotalWithdrawableCommission(int $userId): float
+    {
         return Referrer::where('user_id', $userId)->sum('withdrawable_commission');
     }
 

@@ -51,7 +51,8 @@ class ReferralProgramService
             ->sum('commission');
     }
 
-    protected function getTotalWithdrawableCommission(): float{
+    protected function getTotalWithdrawableCommission(): float
+    {
         return Referrer::sum('withdrawable_commission');
     }
 

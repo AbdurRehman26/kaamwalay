@@ -12,7 +12,7 @@ export function ReferralProgramOverview() {
                 </Typography>
             </Grid>
             <Grid container p={3} wrap={'nowrap'} spacing={2}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <ReferralProgramOverviewCard
                         title={'Orders'}
                         value={0}
@@ -21,19 +21,19 @@ export function ReferralProgramOverview() {
                         formatAsCurrency={false}
                     />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <ReferralProgramOverviewCard title={'Sales'} value={0} timeFilters={true} statName={'sales'} />
                 </Grid>
-                {/* <Grid item container md={4}>*/}
-                {/*    <ReferralProgramOverviewCard*/}
-                {/*            title={'Withdrawable Commission'}*/}
-                {/*            value={0}*/}
-                {/*            statName={'withdrawable_commission'}*/}
-                {/*    />*/}
-                {/* </Grid>*/}
+                <Grid item container md={4}>
+                    <ReferralProgramOverviewCard
+                        title={'Withdrawable Commission'}
+                        value={0}
+                        statName={'withdrawable_commission'}
+                    />
+                </Grid>
             </Grid>
             <Grid container p={3} wrap={'nowrap'} spacing={2}>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <ReferralProgramOverviewCard
                         title={'Cards'}
                         value={0}
@@ -42,7 +42,7 @@ export function ReferralProgramOverview() {
                         formatAsCurrency={false}
                     />
                 </Grid>
-                <Grid item container md={6}>
+                <Grid item container md={4}>
                     <ReferralProgramOverviewCard
                         title={'Commission Earned'}
                         value={0}
@@ -50,14 +50,14 @@ export function ReferralProgramOverview() {
                         statName={'commission_earned'}
                     />
                 </Grid>
-                {/* <Grid item container md={4}>*/}
-                {/*    <ReferralProgramOverviewCard*/}
-                {/*            title={'Commission Paid'}*/}
-                {/*            value={0}*/}
-                {/*            timeFilters={true}*/}
-                {/*            statName={'commission_paid'}*/}
-                {/*    />*/}
-                {/* </Grid>*/}
+                <Grid item container md={4}>
+                    <ReferralProgramOverviewCard
+                        title={'Commission Paid'}
+                        value={0}
+                        timeFilters={true}
+                        statName={'commission_paid'}
+                    />
+                </Grid>
             </Grid>
         </Grid>
     );

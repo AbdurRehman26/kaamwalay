@@ -16,10 +16,15 @@ export interface CommissionEarningsFilter {
     commissionEarningFilter: boolean;
 }
 
+export interface WithdrawSort {
+    withdraw: boolean;
+}
+
 export interface referralProgramSliceState {
     referrerDetail: ReferrerDetail;
     customerSignUpsFilter: CustomerSignUpsFilter;
     commissionEarningsFilter: CommissionEarningsFilter;
+    withdrawSort: WithdrawSort;
 }
 
 const initialState: referralProgramSliceState = {
@@ -31,6 +36,9 @@ const initialState: referralProgramSliceState = {
     },
     commissionEarningsFilter: {
         commissionEarningFilter: false,
+    },
+    withdrawSort: {
+        withdraw: false,
     },
 };
 
@@ -55,6 +63,9 @@ export const referralProgramSlice = createSlice({
         setCommissionEarningsFilter: (state, action: PayloadAction<boolean>) => {
             state.commissionEarningsFilter.commissionEarningFilter = action.payload;
         },
+        setWithdrawSort: (state, action: PayloadAction<boolean>) => {
+            state.withdrawSort.withdraw = action.payload;
+        },
     },
     extraReducers: {
         [getReferrerDetail.fulfilled as any]: (state, action) => {
@@ -63,4 +74,4 @@ export const referralProgramSlice = createSlice({
     },
 });
 
-export const { setCustomerSignUpsFilter, setCommissionEarningsFilter } = referralProgramSlice.actions;
+export const { setCustomerSignUpsFilter, setCommissionEarningsFilter, setWithdrawSort } = referralProgramSlice.actions;

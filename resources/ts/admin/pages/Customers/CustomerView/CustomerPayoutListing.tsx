@@ -48,7 +48,6 @@ export function CustomerPayoutListing({
         setLoading(true);
         await dispatch(payReferralCommissions({ items: [payoutId] }));
         window.location.reload();
-        setLoading(false);
     };
 
     return (
@@ -61,7 +60,7 @@ export function CustomerPayoutListing({
                 hasStyling={true}
             />
             <TableBody sx={styles.tableBody}>
-                {payouts!.length > 0 ? (
+                {payouts.length > 0 ? (
                     payouts?.map((payout) => (
                         <TableRow>
                             <TableCell>
@@ -80,7 +79,7 @@ export function CustomerPayoutListing({
                             </TableCell>
                             <TableCell>{payout.payoutAccount}</TableCell>
                             <TableCell>{payout.status.name}</TableCell>
-                            <TableCell>{payout?.paidBy?.getFullName()}</TableCell>
+                            <TableCell>{payout.paidBy?.getFullName()}</TableCell>
                             <TableCell>{formatCurrency(payout.amount)}</TableCell>
                             <TableCell>
                                 {payout.status.id === PayoutStatusEnum.PENDING ? (

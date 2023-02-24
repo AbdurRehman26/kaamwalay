@@ -12,20 +12,17 @@ import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
-import { PayoutEntity } from '@shared/entities/PayoutEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 
 interface CustomerReferralListingProps {
-    customers?: CustomerEntity[];
-    payouts?: PayoutEntity[];
+    customers: CustomerEntity[];
     paginationProp?: any;
     headings: Array<any>;
     orderDirection?: TableSortType;
     orderBy?: string;
     handleRequestSort?: any | null;
     isSignUp?: boolean;
-    isPayout?: boolean;
 }
 
 const styles = {
@@ -58,7 +55,7 @@ export function CustomerReferralListing({
                 hasStyling={true}
             />
             <TableBody sx={styles.tableBody}>
-                {customers!.length > 0 ? (
+                {customers.length > 0 ? (
                     customers?.map((customer) => (
                         <TableRow>
                             <TableCell>

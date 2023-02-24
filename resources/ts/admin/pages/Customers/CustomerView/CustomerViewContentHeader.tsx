@@ -21,14 +21,9 @@ export function CustomerViewContentHeader() {
     return (
         <Grid component={'header'} container className={classes.root}>
             <TabList indicatorColor={'primary'} textColor={'primary'}>
-                <Tab component={Link} to={'/customers/' + id + '/view/overview'} value={'overview'} label="Overview" />
-                <Tab
-                    component={Link}
-                    to={'/customers/' + id + '/view/referrals'}
-                    value={'referrals'}
-                    label="Referrals"
-                />
-                <Tab component={Link} to={'/customers/' + id + '/view/payouts'} value={'payouts'} label="Payouts" />
+                <Tab component={Link} to={`/customers/${id}/view/overview`} value={'overview'} label="Overview" />
+                <Tab component={Link} to={`/customers/${id}/view/referrals`} value={'referrals'} label="Referrals" />
+                <Tab component={Link} to={`/customers/${id}/view/payouts`} value={'payouts'} label="Payouts" />
             </TabList>
         </Grid>
     );

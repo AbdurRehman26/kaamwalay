@@ -12,9 +12,7 @@ import theme from '@shared/styles/theme';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface HeaderProps {
-    onSearch?: (query: string) => void;
-    dataLength?: number;
-    ordersExist?: boolean;
+    onSearch: (query: string) => void;
     tabs?: React.ReactNode;
 }
 
@@ -64,7 +62,7 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist, tabs }: HeaderProps) {
+export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
     const classes = useStyles();
     const [search, setSearch] = useState('');
     const dispatch = useAppDispatch();
@@ -85,7 +83,7 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
     const handlePayReferralCommissions = async () => {
         setLoading(true);
         await dispatch(payReferralCommissions({ allPending: true }));
-        setLoading(false);
+        window.location.reload();
     };
 
     return (
@@ -95,26 +93,24 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
                     <Typography variant={'h4'} sx={styles.title}>
                         Payouts
                     </Typography>
-                    {dataLength !== 0 || ordersExist ? (
-                        <TextField
-                            variant={'outlined'}
-                            onChange={handleSearch}
-                            value={search}
-                            placeholder={'Search...'}
-                            sx={styles.searchField}
-                            InputProps={{
-                                classes: {
-                                    input: classes.searchFieldInput,
-                                    notchedOutline: classes.searchFieldNotch,
-                                },
-                                startAdornment: (
-                                    <InputAdornment position={'start'}>
-                                        <SearchIcon color={'inherit'} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    ) : null}
+                    <TextField
+                        variant={'outlined'}
+                        onChange={handleSearch}
+                        value={search}
+                        placeholder={'Search...'}
+                        sx={styles.searchField}
+                        InputProps={{
+                            classes: {
+                                input: classes.searchFieldInput,
+                                notchedOutline: classes.searchFieldNotch,
+                            },
+                            startAdornment: (
+                                <InputAdornment position={'start'}>
+                                    <SearchIcon color={'inherit'} />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
                 </Grid>
                 <LoadingButton
                     loading={loading}

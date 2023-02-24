@@ -35,6 +35,15 @@ const styles = {
         fontSize: '32px',
         lineHeight: '44px',
     },
+    headerStyle: {
+        backgroundColor: '#f9f9f9',
+        borderBottom: '1px solid #E0E0E0',
+    },
+    payoutButton: {
+        borderRadius: '24px',
+        padding: '12px 24px',
+        marginLeft: '10px',
+    },
 };
 
 const useStyles = makeStyles(
@@ -75,12 +84,12 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
 
     const handlePayReferralCommissions = async () => {
         setLoading(true);
-        await dispatch(payReferralCommissions({ items: [], allPending: true }));
+        await dispatch(payReferralCommissions({ allPending: true }));
         setLoading(false);
     };
 
     return (
-        <Grid component={'header'} container sx={{ backgroundColor: '#f9f9f9', borderBottom: '1px solid #E0E0E0' }}>
+        <Grid component={'header'} container sx={styles.headerStyle}>
             <Grid container alignItems={'center'} sx={styles.header}>
                 <Grid item container xs alignItems={'center'}>
                     <Typography variant={'h4'} sx={styles.title}>
@@ -111,7 +120,7 @@ export function ReferralProgramPayoutHeader({ onSearch, dataLength, ordersExist,
                     loading={loading}
                     variant={'contained'}
                     color={'primary'}
-                    sx={{ borderRadius: '24px', padding: '12px 24px', marginLeft: '10px' }}
+                    sx={styles.payoutButton}
                     onClick={() => handlePayReferralCommissions()}
                 >
                     Pay All Pending

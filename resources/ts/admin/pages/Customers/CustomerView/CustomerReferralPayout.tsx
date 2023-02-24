@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
-import { CustomerReferralListing } from './CustomerReferralListing';
+import { CustomerPayoutListing } from './CustomerPayoutListing';
 
 const Root = styled(Grid)({
     '.CustomerReferralPayoutBox': {
@@ -19,12 +19,18 @@ const Root = styled(Grid)({
         borderRadius: '4px',
         margin: '20px',
     },
-    '.tableTitle': {
+    '.TableTitle': {
         fontSize: '16px',
         lineHeight: '24px',
         color: 'rgba(0, 0, 0, 0.87)',
         marginTop: '16px',
         fontWeight: '400 !important',
+    },
+    '.ContainerBackground': {
+        background: '#F9F9F9',
+    },
+    '.HeadingText': {
+        color: '#0000008A',
     },
 });
 
@@ -46,7 +52,7 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
-        id: 'account',
+        id: 'payout_account',
         numeric: true,
         disablePadding: false,
         label: 'PAYOUT ACCOUNT',
@@ -126,24 +132,19 @@ export function CustomerReferralPayout() {
                 ) : (
                     <>
                         {referralPayout?.data.length !== 0 ? (
-                            <TableContainer sx={{ background: '#F9F9F9' }}>
+                            <TableContainer className={'ContainerBackground'}>
                                 <Box p={2}>
-                                    <Typography className={'tableTitle'}>
-                                        {' '}
+                                    <Typography className={'TableTitle'}>
                                         Customer Payouts{' '}
-                                        <span style={{ color: '#0000008A' }}>
-                                            {' '}
-                                            ({referralPayout?.data.length}){' '}
-                                        </span>{' '}
+                                        <span className={'HeadingText'}> ({referralPayout?.data.length})</span>
                                     </Typography>
                                 </Box>
-                                <CustomerReferralListing
+                                <CustomerPayoutListing
                                     payouts={referralPayout?.data}
                                     paginationProp={referralPayout?.paginationProps}
                                     headings={headings}
                                     handleRequestSort={handleRequestSort}
                                     orderBy={orderBy}
-                                    isPayout={true}
                                 />
                             </TableContainer>
                         ) : (

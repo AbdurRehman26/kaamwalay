@@ -15,9 +15,9 @@ export const payReferralCommissions = createAsyncThunk(
     async (DTO: { items?: number[]; allPending?: boolean }, thunkAPI) => {
         const payoutRepository = app(AdminReferralPayoutsRepository);
         try {
-            const salesRep: PayoutEntity = await payoutRepository.payReferralCommissions(DTO);
+            const payout: PayoutEntity = await payoutRepository.payReferralCommissions(DTO);
             NotificationsService.success('Payout request send Successfully!');
-            return instanceToPlain(salesRep);
+            return instanceToPlain(payout);
         } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
@@ -36,4 +36,4 @@ export const adminReferralPayoutSlice = createSlice({
     },
 });
 
-export const { listAction: listAdmineferralPayoutAction } = adminReferralPayoutSliceThunk;
+export const { listAction: listAdminReferralPayoutAction } = adminReferralPayoutSliceThunk;

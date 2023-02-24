@@ -30,6 +30,25 @@ interface ReferralProgramPayoutTableProps {
     search?: string;
 }
 
+const styles = {
+    headingText: {
+        color: '#000000DE',
+        fontWeight: 400,
+        fontSize: '16px',
+    },
+    buttonStyle: {
+        marginLeft: '12px',
+        borderRadius: '25px',
+    },
+    exportButton: {
+        borderRadius: 20,
+        padding: '7px 24px',
+    },
+    tableCellText: {
+        fontSize: '12px',
+    },
+};
+
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
     const [sortFilter, setSortFilter] = useState('-created_at');
     const [sortCreatedAt, setSortCreatedAt] = useState(false);
@@ -57,11 +76,14 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
     });
 
     const calculateTotal = () => {
+        const data: number[] = [];
+        console.log('data ', selectedIds);
         payouts.data
             .filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
             .map((payout: PayoutEntity) => {
-                setPayoutTotal(payoutTotal + payout.amount);
+                data.push(parseFloat(payout.amount.toString()));
             });
+        setPayoutTotal(data.reduce((a, b) => a + b, 0));
     };
 
     const handlePayCommission = () => {
@@ -71,9 +93,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
 
     useEffect(
         () => {
-            // noinspection JSIgnoredPromiseFromCall
             if (!payouts.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
                 payouts.searchSortedWithPagination(
                     { sort: sortFilter },
                     toApiPropertiesObject({
@@ -108,6 +128,13 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         window.location.reload();
     };
 
+    const handleDialogClose = () => {
+        setPayoutTotal(0);
+        setSelectedIds([]);
+        setShowPayoutCommission(false);
+        setIsPayOne(false);
+    };
+
     const handleRowClick = (id: number, amount: number) => {
         const selectedIndex = selectedIds.indexOf(id);
         let newSelected: number[] = [];
@@ -127,7 +154,8 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
     const handlePay = (id: number, amount: number) => {
         handleRowClick(id, amount);
         setIsPayOne(true);
-        handlePayCommission();
+        setPayoutTotal(amount);
+        setShowPayoutCommission(true);
     };
 
     const handleSortAccount = (value: boolean, property: string) => {
@@ -164,35 +192,25 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                         <>
                             <Grid item xs container alignItems={'center'}>
                                 {selectedIds.length === 0 ? (
-                                    <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
+                                    <Typography sx={styles.headingText}>
                                         {payouts.data.length > 0 ? `${payouts.data.length} Results` : null}
                                     </Typography>
                                 ) : (
-                                    <Typography sx={{ color: '#000000DE', fontWeight: 400, fontSize: '16px' }}>
-                                        {`${selectedIds.length} Selected `}
-                                    </Typography>
+                                    <Typography sx={styles.headingText}>{`${selectedIds.length} Selected `}</Typography>
                                 )}
                                 {(!isPayOne && selectedIds.length) > 0 ? (
                                     <Grid xs ml={2} alignItems={'center'}>
                                         <Button
-                                            sx={{ borderRadius: '25px' }}
+                                            sx={styles.buttonStyle}
                                             variant={'contained'}
                                             onClick={handlePayCommission}
                                         >
                                             Pay Selected
                                         </Button>
-                                        <Button
-                                            sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                            variant={'outlined'}
-                                            disabled
-                                        >
+                                        <Button sx={styles.buttonStyle} variant={'outlined'} disabled>
                                             Archieved Selected
                                         </Button>
-                                        <Button
-                                            sx={{ marginLeft: '12px', borderRadius: '25px' }}
-                                            variant={'outlined'}
-                                            disabled
-                                        >
+                                        <Button sx={styles.buttonStyle} variant={'outlined'} disabled>
                                             Export Selected
                                         </Button>
                                     </Grid>
@@ -200,12 +218,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                             </Grid>
                             {selectedIds.length === 0 ? (
                                 <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                                    <Button
-                                        variant={'outlined'}
-                                        color={'primary'}
-                                        sx={{ borderRadius: 20, padding: '7px 24px' }}
-                                        disabled
-                                    >
+                                    <Button variant={'outlined'} color={'primary'} sx={styles.exportButton} disabled>
                                         Export List
                                     </Button>
                                 </Grid>
@@ -215,7 +228,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     <Checkbox
                                         color="primary"
                                         checked={allSelected}
@@ -224,7 +237,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     />
                                     Name / ID
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Date Initiated
                                     <TableSortLabel
                                         onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
@@ -232,7 +245,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Date Completed
                                     <TableSortLabel
                                         onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
@@ -240,7 +253,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Payout Account
                                     <TableSortLabel
                                         onClick={() => handleSortAmount(!sortAccount, 'payout_account')}
@@ -248,13 +261,13 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Status
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Paid By
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'}>
+                                <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Amount
                                     <TableSortLabel
                                         onClick={() => handleSortAccount(!sortAmount, 'amount')}
@@ -262,7 +275,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '12px' }} variant={'head'} />
+                                <TableCell sx={styles.tableCellText} variant={'head'} />
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -281,7 +294,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                                     {payout.user.getInitials()}
                                                 </Avatar>
                                                 <Grid item xs container direction={'column'} pl={2}>
-                                                    <Typography variant={'body2'}>{payout.user.fullName}</Typography>
+                                                    <Typography variant={'body2'}>{payout.user?.fullName}</Typography>
                                                     <Typography variant={'caption'} color={'textSecondary'}>
                                                         {payout.user.customerNumber}
                                                     </Typography>
@@ -289,22 +302,22 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                             </Grid>
                                         </TableCell>
                                         <TableCell>
-                                            {' '}
                                             {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
                                                 payout.createdAt,
-                                                'h:mm:s A',
-                                            )}`}{' '}
+                                                'h:mm: A',
+                                            )}`}
                                         </TableCell>
                                         <TableCell>
-                                            {' '}
-                                            {`${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
-                                                payout.completedAt,
-                                                'h:mm:s A',
-                                            )}`}{' '}
+                                            {payout.completedAt
+                                                ? `${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
+                                                      payout.completedAt,
+                                                      'h:mm: A',
+                                                  )}`
+                                                : '-'}
                                         </TableCell>
                                         <TableCell>{payout.payoutAccount}</TableCell>
                                         <TableCell>{payout.status?.name}</TableCell>
-                                        <TableCell>{payout.paidBy.getFullName()}</TableCell>
+                                        <TableCell>{payout?.paidBy?.getFullName()}</TableCell>
                                         <TableCell>{payout.amount}</TableCell>
                                         <TableCell>
                                             {payout.status?.id === PayoutStatusEnum.PENDING &&
@@ -340,10 +353,9 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                     <PayoutCommissionDialog
                         onSubmit={() => handleCommissions()}
                         onClose={() => {
-                            setShowPayoutCommission(false);
-                            setIsPayOne(false);
+                            handleDialogClose();
                         }}
-                        open={showPayoutCommission}
+                        open={showPayoutCommission && selectedIds.length > 0}
                         totalRecipient={selectedIds.length}
                         totalPayout={payoutTotal}
                     />

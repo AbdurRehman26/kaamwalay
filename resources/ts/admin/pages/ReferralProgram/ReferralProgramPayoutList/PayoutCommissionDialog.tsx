@@ -28,6 +28,7 @@ const useStyles = makeStyles(
             dialogActions: {
                 marginBottom: '12px',
                 marginRight: '18px',
+                background: '#F9F9F9',
             },
             contentContainer: {
                 width: '457px',
@@ -35,6 +36,12 @@ const useStyles = makeStyles(
                 [theme.breakpoints.down('sm')]: {
                     width: '100%',
                 },
+            },
+            bodyContainer: {
+                height: '95px',
+            },
+            headerBackground: {
+                background: '#F9F9F9',
             },
             paymentText: {
                 fontWeight: '700',
@@ -70,7 +77,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
     return (
         <Dialog onClose={handleClose} {...rest}>
             <Grid
-                sx={{ background: '#F9F9F9' }}
+                className={classes.headerBackground}
                 container
                 alignItems={'center'}
                 justifyContent={'space-between'}
@@ -95,7 +102,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                 {({ isSubmitting }) => (
                     <Form>
                         <DialogContent className={classes.contentContainer}>
-                            <Grid item container alignItems={'center'} sx={{ height: '95px' }}>
+                            <Grid item container alignItems={'center'}>
                                 <Typography>
                                     Payout a total of{' '}
                                     <span className={classes.paymentText}>{formatCurrency(totalPayout)}</span> to{' '}
@@ -104,7 +111,7 @@ function PayoutCommissionDialog(props: PayoutCommissionDialogProps) {
                             </Grid>
                         </DialogContent>
                         <Divider />
-                        <DialogActions className={classes.dialogActions} sx={{ background: '#F9F9F9' }}>
+                        <DialogActions className={classes.dialogActions}>
                             <Button color={'inherit'} disabled={isSubmitting} onClick={handleClose}>
                                 close
                             </Button>

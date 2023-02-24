@@ -32,7 +32,6 @@ export { adminCustomerReferralSignUpSlice as adminCustomerReferralSignUp } from 
 export { adminCustomerReferralCommissionSlice as adminCustomerReferralCommission } from './adminCustomerReferralCommissionSlice';
 export { adminCustomersListSlice as adminCustomersList } from './adminCustomersListSlice';
 export { adminReferralPayoutSlice as adminReferralPayout } from './adminReferralPayoutSlice';
-export { adminCustomerReferralPayoutSlice as adminCustomerReferralPayout } from './adminCustomerReferralPayoutSlice';
 
 /*
  *

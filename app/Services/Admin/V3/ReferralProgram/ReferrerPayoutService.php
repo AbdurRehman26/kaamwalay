@@ -127,7 +127,7 @@ class ReferrerPayoutService
             'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_FAILED,
         ]);
 
-        $payouts->loadMissing('user','user.referrer');
+        $payouts->loadMissing('user', 'user.referrer');
 
         foreach ($payouts as $payout) {
             $payout->user->referrer->increment('withdrawable_commission', $payout->amount);

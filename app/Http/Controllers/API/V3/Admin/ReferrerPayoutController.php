@@ -9,8 +9,8 @@ use App\Http\Resources\API\V3\Admin\ReferralProgram\ReferrerPayout\ReferrerPayou
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Symfony\Component\HttpFoundation\Response;
 use Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReferrerPayoutController extends Controller
 {

@@ -219,6 +219,19 @@ class Order extends Model implements Exportable
         return self::allowedSorts();
     }
 
+    public static function allowedAdminReferralSorts(): array
+    {
+        return [
+            AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
+            AllowedSort::custom('total_declared_value', new AdminSubmissionsTotalDeclaredValueSort),
+            AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
+            AllowedSort::custom('status', new AdminSubmissionsStatusSort),
+            AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            'orders.created_at',
+            'order_number',
+            'grand_total',
+        ];
+    }
     public static function getAllowedIncludes(): array
     {
         return [

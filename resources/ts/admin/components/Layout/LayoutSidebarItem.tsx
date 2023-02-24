@@ -6,9 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { transparentize } from 'polished';
 import React, { ElementType, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, matchPath, useLocation } from 'react-router-dom';
-import { setCardsManagementState } from '@shared/redux/slices/pageSlice';
 
 type SidebarMenuItemProps = {
     icon?: ElementType;
@@ -16,7 +14,9 @@ type SidebarMenuItemProps = {
     href: string;
     exact?: boolean;
     comingSoon?: boolean;
-    cardsManagementStyle?: boolean;
+    collapseStyle?: boolean;
+    collapseOpenedAction?: any;
+    collapseClosedAction?: any;
 };
 
 const useStyles = makeStyles(
@@ -67,8 +67,16 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact, comingSoon, cardsManagementStyle } = props;
-    const dispatch = useDispatch();
+    const {
+        icon: Icon,
+        title,
+        href,
+        exact,
+        comingSoon,
+        collapseStyle,
+        collapseClosedAction,
+        collapseOpenedAction,
+    } = props;
     const location = useLocation();
     const classes = useStyles();
 
@@ -77,7 +85,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
             itemClasses.selected === classes.notSelected &&
             !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname)
         ) {
-            dispatch(setCardsManagementState(true));
+            collapseOpenedAction();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -85,9 +93,9 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     const itemClasses = useMemo(
         () => ({
             root: classes.root,
-            selected: cardsManagementStyle ? classes.notSelected : classes.selected,
+            selected: collapseStyle ? classes.notSelected : classes.selected,
         }),
-        [classes.root, classes.selected, classes.notSelected, cardsManagementStyle],
+        [classes.root, classes.selected, classes.notSelected, collapseStyle],
     );
 
     const isActive = useMemo(
@@ -107,11 +115,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
             selected={isActive}
             {...(rest as any)}
             classes={itemClasses}
-            onClick={() =>
-                cardsManagementStyle
-                    ? dispatch(setCardsManagementState(true))
-                    : dispatch(setCardsManagementState(false))
-            }
+            onClick={() => (collapseStyle ? collapseOpenedAction() : collapseClosedAction())}
         >
             <ListItemIcon className={classes.iconHolder}>
                 {Icon ? <Icon className={classes.icon} /> : null}

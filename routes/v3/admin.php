@@ -34,11 +34,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'index' => 'customers.index',
             'show' => 'customers.show',
         ]);
-        
+
     Route::prefix('customer')->group(function () {
         Route::get('/{user}/referral/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');
         Route::get('/{user}/referral/commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');
         Route::post('/{user}/referral/get-referrer-stat', [ReferralProgramController::class, 'getReferrerStat'])->name('customer.referral.get-referrer-stat');
         Route::post('/{user}/referral/set-referrers-status', [ReferralProgramController::class, 'setReferrersStatus'])->name('customer.referral.set-referrers-status');
+    });
+
+    Route::prefix('referral-program')->group(function () {
+        Route::post('get-overview-stat', [ReferralProgramController::class, 'getOverviewStat'])
+            ->name('referral-program.get-overview-stat');
+        Route::get('referrers', [ReferralProgramController::class, 'listReferrers'])->name('referral-program.referrers');
+        Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
+        Route::get('orders', [ReferralProgramController::class, 'listReferralOrders'])->name('referral-program.orders');
     });
 });

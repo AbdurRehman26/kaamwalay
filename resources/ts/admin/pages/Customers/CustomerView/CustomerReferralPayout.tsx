@@ -97,6 +97,7 @@ export function CustomerReferralPayout() {
     const { id } = useParams<'id'>();
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState<boolean>(false);
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const referralPayout = useAdminReferralPayoutsQuery({
         params: {
@@ -107,9 +108,13 @@ export function CustomerReferralPayout() {
         ...bracketParams(),
     });
 
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
+
     useEffect(
         () => {
-            if (!referralPayout.isLoading) {
+            if (!referralPayout.isLoading && isSearchEnabled) {
                 referralPayout.sort({ sort: sortFilter ? 'created_at' : '-created_at' });
             }
         },

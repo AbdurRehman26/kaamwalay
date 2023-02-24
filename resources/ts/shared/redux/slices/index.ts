@@ -2,6 +2,7 @@ export { notificationsSlice as notifications } from './notificationsSlice';
 export { ordersSlice as orders } from './ordersSlice';
 export { referralCustomerSignUpsSlice as referralCustomerSignUps } from './referralCustomerSignUpsSlice';
 export { referralCommissionEarningsSlice as referralCommissionEarnings } from './referralCommissionEarningsSlice';
+export { referralWithdrawSlice as referralWithdraw } from './referralWithdrawSlice';
 export { userCardsSlice as userCards } from './userCardsSlice';
 export { adminOrdersSlice as adminOrders } from './adminOrdersSlice';
 export { adminPromoCodesSlice as adminPromoCodes } from './adminPromoCodesSlice';

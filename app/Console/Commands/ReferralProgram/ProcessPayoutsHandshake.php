@@ -33,7 +33,7 @@ class ProcessPayoutsHandshake extends Command
     {
         $referrerPayoutService = new ReferrerPayoutService();
 
-        $incompletePayouts = ReferrerPayout::with(['referrerPayoutStatus','user','user.referrer'])
+        $incompletePayouts = ReferrerPayout::with(['user','user.referrer'])
             ->where('referrer_payout_status_id', '<=', ReferrerPayoutStatus::STATUS_PROCESSING)
             ->whereNotNull('transaction_id')->get();
 

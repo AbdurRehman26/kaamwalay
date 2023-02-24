@@ -10,6 +10,7 @@ use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Log;
 
 class ReferrerPayoutController extends Controller
 {
@@ -26,7 +27,7 @@ class ReferrerPayoutController extends Controller
     {
         $this->referrerPayoutService->initiateBatchPayout($request->validated());
 
-        \Log::info('BATCH_PAYOUT_INITIATED', $request->validated());
+        Log::info('BATCH_PAYOUT_INITIATED', $request->validated());
 
         BatchPayoutCreated::dispatch($request->validated());
 

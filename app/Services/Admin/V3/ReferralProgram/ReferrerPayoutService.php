@@ -26,7 +26,7 @@ class ReferrerPayoutService
      */
     protected function getPayoutsByIdArray(array $ids, string $paymentMethod = ''): Collection
     {
-        $query = ReferrerPayout::whereIn('id', $ids);
+        $query = ReferrerPayout::with(['user', 'user.referrer'])->whereIn('id', $ids);
 
         if ($paymentMethod) {
             $query->where('payment_method', $paymentMethod);
@@ -41,7 +41,8 @@ class ReferrerPayoutService
      */
     protected function getAllPendingPayouts(string $paymentMethod = ''): Collection
     {
-        $query = ReferrerPayout::where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING)
+        $query = ReferrerPayout::with(['user', 'user.referrer'])
+            ->where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING)
             ->whereNull('transaction_id');
 
         if ($paymentMethod) {
@@ -126,8 +127,6 @@ class ReferrerPayoutService
             'response_payload' => json_encode($data['response']),
             'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_FAILED,
         ]);
-
-        $payouts->loadMissing('user', 'user.referrer');
 
         foreach ($payouts as $payout) {
             $payout->user->referrer->increment('withdrawable_commission', $payout->amount);

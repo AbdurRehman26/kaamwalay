@@ -77,7 +77,6 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
 
     const calculateTotal = () => {
         const data: number[] = [];
-        console.log('data ', selectedIds);
         payouts.data
             .filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
             .map((payout: PayoutEntity) => {
@@ -256,7 +255,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Payout Account
                                     <TableSortLabel
-                                        onClick={() => handleSortAmount(!sortAccount, 'payout_account')}
+                                        onClick={() => handleSortAccount(!sortAccount, 'payout_account')}
                                         direction={!sortAccount ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>
@@ -270,7 +269,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Amount
                                     <TableSortLabel
-                                        onClick={() => handleSortAccount(!sortAmount, 'amount')}
+                                        onClick={() => handleSortAmount(!sortAmount, 'amount')}
                                         direction={!sortAmount ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>

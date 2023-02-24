@@ -58,7 +58,7 @@ class ReferrerPayoutService
             ->allowedFilters(ReferrerPayout::allowedFilters())
             ->allowedSorts(ReferrerPayout::allowedSorts())
             ->defaultSort('-created_at')
-            ->with(['user', 'paidBy', 'referrerPayoutStatus'])
+            ->with(['user', 'user.referrer', 'paidBy', 'referrerPayoutStatus'])
             ->paginate(request('per_page', self::PER_PAGE));
     }
 
@@ -126,6 +126,8 @@ class ReferrerPayoutService
             'response_payload' => json_encode($data['response']),
             'referrer_payout_status_id' => ReferrerPayoutStatus::STATUS_FAILED,
         ]);
+
+        $payouts->loadMissing('user','user.referrer');
 
         foreach ($payouts as $payout) {
             $payout->user->referrer->increment('withdrawable_commission', $payout->amount);

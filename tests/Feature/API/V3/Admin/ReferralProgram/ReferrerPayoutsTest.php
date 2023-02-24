@@ -196,7 +196,7 @@ test('if batch fails, the amounts are returned to referrer withdrawable commissi
     $referrerPayoutService = resolve(ReferrerPayoutService::class);
     $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
 
-    expect($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount,2));
+    expect($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount, 2));
 });
 
 test('if batch call is successful but item fails, the amount is returned to referrer', function () {
@@ -222,7 +222,7 @@ test('if batch call is successful but item fails, the amount is returned to refe
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
         ->and($payout->transaction_id)->toBe($baseResponse['items'][0]['payout_item_id'])
         ->and($payout->transaction_status)->toBe($baseResponse['items'][0]['transaction_status'])
-        ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount,2));
+        ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount, 2));
 });
 
 it('process payouts handshake', function () {
@@ -267,5 +267,5 @@ test('if item transaction fails in handshake, the amount is returned to referrer
 
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
         ->and($payout->transaction_status)->toBe($baseResponse['transaction_status'])
-        ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount,2));
+        ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount, 2));
 });

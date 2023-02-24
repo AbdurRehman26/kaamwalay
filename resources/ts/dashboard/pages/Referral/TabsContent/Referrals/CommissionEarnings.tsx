@@ -6,7 +6,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListReferralCommissionEarningsQuery } from '@shared/redux/hooks/useReferralCommissionEarningsQuery';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import EmptyStates from './EmptyStates';
+import EmptyStates from '../../EmptyStates';
 import ReferralTable from './ReferralTable';
 
 const headings: EnhancedTableHeadCell[] = [

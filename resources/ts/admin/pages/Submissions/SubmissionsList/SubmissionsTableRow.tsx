@@ -33,6 +33,7 @@ interface SubmissionsTableRowProps {
     order: OrderEntity;
     isCustomerDetailPage: boolean;
     isSalesRepDetailPage?: boolean;
+    isReferralPage?: boolean;
 }
 
 enum Options {
@@ -64,6 +65,7 @@ export function SubmissionsTableRow({
     order,
     isCustomerDetailPage,
     isSalesRepDetailPage = false,
+    isReferralPage = false,
 }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
@@ -156,26 +158,26 @@ export function SubmissionsTableRow({
                     </MuiLink>
                 </TableCell>
                 <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                {isCustomerDetailPage ? (
-                    <>
-                        <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                        <TableCell>
-                            {order.customer?.id && order.customer?.customerNumber ? (
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={`/customers/${order.customer?.id}/view/overview`}
-                                    className={font.fontWeightMedium}
-                                >
-                                    {order.customer?.getFullName()}
-                                </MuiLink>
-                            ) : (
-                                '-'
-                            )}
-                        </TableCell>
-                    </>
+                {isCustomerDetailPage && !isReferralPage ? (
+                    <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
                 ) : null}
-                {isCustomerDetailPage ? (
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order.customer?.id && order.customer?.customerNumber ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.customer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.customer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
                     <TableCell>
                         {order?.owner?.fullName ? (
                             <MuiLink
@@ -191,9 +193,9 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
-                {isCustomerDetailPage ? (
+                {isCustomerDetailPage || isReferralPage ? (
                     <TableCell>
-                        {order.referrer ? (
+                        {order?.referrer ? (
                             <MuiLink
                                 component={Link}
                                 color={'primary'}
@@ -219,10 +221,10 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                {isReferralPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
-                {isSalesRepDetailPage ? (
-                    <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
-                ) : (
+                {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
+                {!isSalesRepDetailPage && !isReferralPage ? (
                     <TableCell align={'right'}>
                         <SubmissionActionButton
                             orderId={order.id}
@@ -233,7 +235,7 @@ export function SubmissionsTableRow({
                             shippingProvider={order.orderShipment?.shippingProvider}
                         />
                     </TableCell>
-                )}
+                ) : null}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}

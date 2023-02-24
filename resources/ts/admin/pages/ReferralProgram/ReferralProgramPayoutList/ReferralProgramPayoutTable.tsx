@@ -132,6 +132,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         setSelectedIds([]);
         setShowPayoutCommission(false);
         setIsPayOne(false);
+        setAllSelected(false);
     };
 
     const handleRowClick = (id: number, amount: number) => {
@@ -236,26 +237,35 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     />
                                     Name / ID
                                 </TableCell>
-                                <TableCell sx={styles.tableCellText} variant={'head'}>
+                                <TableCell
+                                    onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
+                                    sx={styles.tableCellText}
+                                    variant={'head'}
+                                >
                                     Date Initiated
                                     <TableSortLabel
-                                        onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
                                         direction={!sortCreatedAt ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={styles.tableCellText} variant={'head'}>
+                                <TableCell
+                                    onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
+                                    sx={styles.tableCellText}
+                                    variant={'head'}
+                                >
                                     Date Completed
                                     <TableSortLabel
-                                        onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
                                         direction={!sortCompletedAt ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={styles.tableCellText} variant={'head'}>
+                                <TableCell
+                                    onClick={() => handleSortAccount(!sortAccount, 'payout_account')}
+                                    sx={styles.tableCellText}
+                                    variant={'head'}
+                                >
                                     Payout Account
                                     <TableSortLabel
-                                        onClick={() => handleSortAccount(!sortAccount, 'payout_account')}
                                         direction={!sortAccount ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>
@@ -266,10 +276,13 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 <TableCell sx={styles.tableCellText} variant={'head'}>
                                     Paid By
                                 </TableCell>
-                                <TableCell sx={styles.tableCellText} variant={'head'}>
+                                <TableCell
+                                    onClick={() => handleSortAmount(!sortAmount, 'amount')}
+                                    sx={styles.tableCellText}
+                                    variant={'head'}
+                                >
                                     Amount
                                     <TableSortLabel
-                                        onClick={() => handleSortAmount(!sortAmount, 'amount')}
                                         direction={!sortAmount ? 'desc' : 'asc'}
                                         active={true}
                                     ></TableSortLabel>

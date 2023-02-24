@@ -58,7 +58,7 @@ class ReferrerPayoutService
             ->allowedFilters(ReferrerPayout::allowedFilters())
             ->allowedSorts(ReferrerPayout::allowedSorts())
             ->defaultSort('-created_at')
-            ->with(['user', 'paidBy', 'referrerPayoutStatus'])
+            ->with(['user', 'user.referrer', 'paidBy', 'referrerPayoutStatus'])
             ->paginate(request('per_page', self::PER_PAGE));
     }
 

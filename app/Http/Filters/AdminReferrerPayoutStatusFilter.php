@@ -12,8 +12,7 @@ class AdminReferrerPayoutStatusFilter implements Filter
     {
         $values = [$value];
 
-        if(intval($value) === ReferrerPayoutStatus::STATUS_PENDING)
-        {
+        if (intval($value) === ReferrerPayoutStatus::STATUS_PENDING) {
             $values = [ReferrerPayoutStatus::STATUS_PENDING, ReferrerPayoutStatus::STATUS_PROCESSING];
         }
 

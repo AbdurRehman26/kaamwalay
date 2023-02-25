@@ -6,7 +6,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
+import { PayoutEntity } from '@shared/entities/PayoutEntity';
+import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
 import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
 import theme from '@shared/styles/theme';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -65,8 +68,16 @@ const debouncedFunc = debounce((func: any) => {
 export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
     const classes = useStyles();
     const [search, setSearch] = useState('');
+    const [pendingPayouts, setPendingPayouts] = useState<PayoutEntity[]>([]);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
+
+    const payouts = useAdminReferralPayoutsQuery({});
+
+    useEffect(() => {
+        const data = payouts.data.filter((payout: PayoutEntity) => payout.status.id === PayoutStatusEnum.PENDING);
+        setPendingPayouts(data);
+    }, [payouts.data]);
 
     const handleSearch = useCallback(
         (e) => {
@@ -117,6 +128,7 @@ export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
                     variant={'contained'}
                     color={'primary'}
                     sx={styles.payoutButton}
+                    disabled={pendingPayouts.length === 0}
                     onClick={() => handlePayReferralCommissions()}
                 >
                     Pay All Pending

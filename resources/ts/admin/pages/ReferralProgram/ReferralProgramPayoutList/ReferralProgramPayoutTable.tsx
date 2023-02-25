@@ -336,7 +336,12 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                                 : '-'}
                                         </TableCell>
                                         <TableCell>{payout.payoutAccount}</TableCell>
-                                        <TableCell>{payout.status?.name}</TableCell>
+                                        <TableCell>
+                                            {payout.status?.id === PayoutStatusEnum.PENDING ||
+                                            payout.status?.id === PayoutStatusEnum.PROCESSING
+                                                ? 'Pending'
+                                                : payout.status?.name}
+                                        </TableCell>
                                         <TableCell>{payout?.paidBy?.getFullName()}</TableCell>
                                         <TableCell>{payout.amount}</TableCell>
                                         <TableCell>

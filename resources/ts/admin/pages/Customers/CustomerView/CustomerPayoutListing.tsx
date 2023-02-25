@@ -78,7 +78,12 @@ export function CustomerPayoutListing({
                                     : '-'}
                             </TableCell>
                             <TableCell>{payout.payoutAccount}</TableCell>
-                            <TableCell>{payout.status.name}</TableCell>
+                            <TableCell>
+                                {payout.status?.id === PayoutStatusEnum.PENDING ||
+                                payout.status?.id === PayoutStatusEnum.PROCESSING
+                                    ? 'Pending'
+                                    : payout.status?.name}
+                            </TableCell>
                             <TableCell>{payout.paidBy?.getFullName()}</TableCell>
                             <TableCell>{formatCurrency(payout.amount)}</TableCell>
                             <TableCell>

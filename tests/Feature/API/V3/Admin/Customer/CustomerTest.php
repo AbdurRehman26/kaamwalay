@@ -93,6 +93,6 @@ test('an admin can mark an user referral program as inactive', function () {
     ])
         ->assertSuccessful()
         ->assertJsonFragment([
-            'is_referral_active' => false,
+            'is_referral_active' => 0,
         ]);
 });

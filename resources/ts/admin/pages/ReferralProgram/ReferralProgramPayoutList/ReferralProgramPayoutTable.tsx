@@ -47,6 +47,11 @@ const styles = {
     tableCellText: {
         fontSize: '12px',
     },
+    sortHoverState: {
+        '&:hover': {
+            cursor: 'pointer',
+        },
+    },
 };
 
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
@@ -78,7 +83,9 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
     const calculateTotal = () => {
         const data: number[] = [];
         payouts.data
-            .filter((payout: PayoutEntity) => selectedIds.find((id) => id === payout.id))
+            .filter((payout: PayoutEntity) =>
+                selectedIds.find((id) => id === payout.id && payout.status.id === PayoutStatusEnum.PENDING),
+            )
             .map((payout: PayoutEntity) => {
                 data.push(parseFloat(payout.amount.toString()));
             });
@@ -201,6 +208,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 {(!isPayOne && selectedIds.length) > 0 ? (
                                     <Grid xs ml={2} alignItems={'center'}>
                                         <Button
+                                            disabled={tabFilter !== PayoutStatusEnum.PENDING}
                                             sx={styles.buttonStyle}
                                             variant={'contained'}
                                             onClick={handlePayCommission}
@@ -239,7 +247,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 </TableCell>
                                 <TableCell
                                     onClick={() => handleSortCreatedAt(!sortCreatedAt, 'created_at')}
-                                    sx={styles.tableCellText}
+                                    sx={[styles.tableCellText, styles.sortHoverState]}
                                     variant={'head'}
                                 >
                                     Date Initiated
@@ -250,7 +258,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 </TableCell>
                                 <TableCell
                                     onClick={() => handleSortCompletedAt(!sortCompletedAt, 'completed_at')}
-                                    sx={styles.tableCellText}
+                                    sx={[styles.tableCellText, styles.sortHoverState]}
                                     variant={'head'}
                                 >
                                     Date Completed
@@ -261,7 +269,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 </TableCell>
                                 <TableCell
                                     onClick={() => handleSortAccount(!sortAccount, 'payout_account')}
-                                    sx={styles.tableCellText}
+                                    sx={[styles.tableCellText, styles.sortHoverState]}
                                     variant={'head'}
                                 >
                                     Payout Account
@@ -278,7 +286,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 </TableCell>
                                 <TableCell
                                     onClick={() => handleSortAmount(!sortAmount, 'amount')}
-                                    sx={styles.tableCellText}
+                                    sx={[styles.tableCellText, styles.sortHoverState]}
                                     variant={'head'}
                                 >
                                     Amount
@@ -316,14 +324,14 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         <TableCell>
                                             {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
                                                 payout.createdAt,
-                                                'h:mm: A',
+                                                'h:mm A',
                                             )}`}
                                         </TableCell>
                                         <TableCell>
                                             {payout.completedAt
                                                 ? `${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
                                                       payout.completedAt,
-                                                      'h:mm: A',
+                                                      'h:mm A',
                                                   )}`
                                                 : '-'}
                                         </TableCell>

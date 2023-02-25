@@ -6,6 +6,7 @@ use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ReferrerPayoutService
@@ -25,7 +26,7 @@ class ReferrerPayoutService
      */
     protected function getPayoutsByIdArray(array $ids, string $paymentMethod = ''): Collection
     {
-        $query = ReferrerPayout::whereIn('id', $ids);
+        $query = ReferrerPayout::with(['user', 'user.referrer'])->whereIn('id', $ids);
 
         if ($paymentMethod) {
             $query->where('payment_method', $paymentMethod);
@@ -40,7 +41,8 @@ class ReferrerPayoutService
      */
     protected function getAllPendingPayouts(string $paymentMethod = ''): Collection
     {
-        $query = ReferrerPayout::where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING)
+        $query = ReferrerPayout::with(['user', 'user.referrer'])
+            ->where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING)
             ->whereNull('transaction_id');
 
         if ($paymentMethod) {
@@ -57,7 +59,7 @@ class ReferrerPayoutService
             ->allowedFilters(ReferrerPayout::allowedFilters())
             ->allowedSorts(ReferrerPayout::allowedSorts())
             ->defaultSort('-created_at')
-            ->with(['user', 'paidBy', 'referrerPayoutStatus'])
+            ->with(['user', 'user.referrer', 'paidBy', 'referrerPayoutStatus'])
             ->paginate(request('per_page', self::PER_PAGE));
     }
 
@@ -85,17 +87,19 @@ class ReferrerPayoutService
                 $payouts = $this->getPayoutsByIdArray($data['items'], $paymentMethod);
             }
 
+            Log::info('BATCH_PAYOUT_ITEMS', $payouts->pluck('id')->toArray());
+
             $paymentMethodService = resolve($this->providers[
                 $paymentMethod
             ]);
 
             if (count($payouts) > 0) {
                 $response = $paymentMethodService->pay($payouts->toArray(), $data);
+                Log::info('CREATE_BATCH_PAYOUT', $response);
 
                 if ($response['result'] === 'FAILED') {
                     $this->processFailedBatchPayouts($payouts, $response);
                 } else {
-                    \Log::debug('CREATE_BATCH_PAYOUT', $response);
                     $paymentMethodService->storeItemsResponse($payouts, $response);
                 }
             }
@@ -108,7 +112,7 @@ class ReferrerPayoutService
             $payout->payment_method
         ])->handshake($payout);
 
-        \Log::debug('PAYOUT_HANDSHAKE', $response);
+        Log::info('PAYOUT_HANDSHAKE', $response);
     }
 
     /**

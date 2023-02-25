@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { ReferralProgram } from '@admin/pages/ReferralProgram';
 import { Layout } from './components/Layout';
 import { Cards } from './pages/Cards';
 import { Customers } from './pages/Customers';
 import { PromoCodes } from './pages/PromoCodes';
 import { Rarities } from './pages/Rarities';
-import { ReferralProgram } from './pages/ReferralProgram';
 import { SalesReps } from './pages/SalesReps';
 import { Submissions } from './pages/Submissions';
 import { Surfaces } from './pages/Surfaces';

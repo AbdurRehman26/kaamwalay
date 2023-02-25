@@ -24,9 +24,20 @@ export function ReferralProgramPayoutList() {
 
     const tabs = (
         <TabList indicatorColor={'primary'} textColor={'primary'}>
-            <Tab component={Link} to={'/referral-program/pending/list'} value={'pending'} label="Pending" />
-            <Tab component={Link} to={'/referral-program/completed/list'} value={'completed'} label="Completed" />
-            <Tab component={Link} disabled to={'/referral-program/archived/list'} value={'archived'} label="Archived" />
+            <Tab component={Link} to={'/referral-program/payouts/pending/list'} value={'pending'} label="Pending" />
+            <Tab
+                component={Link}
+                to={'/referral-program/payouts/completed/list'}
+                value={'completed'}
+                label="Completed"
+            />
+            <Tab
+                component={Link}
+                disabled
+                to={'/referral-program/payouts/archived/list'}
+                value={'archived'}
+                label="Archived"
+            />
         </TabList>
     );
 

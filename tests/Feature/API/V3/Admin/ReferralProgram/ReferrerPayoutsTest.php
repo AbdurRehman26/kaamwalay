@@ -70,9 +70,15 @@ it('can filter payouts list by user id', function () {
 });
 
 it('can filter payouts list by status', function () {
-    getJson(route('v3.admin.referral.payouts.index', ['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PENDING]))
+    getJson(route('v3.admin.referral.payouts.index', ['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PROCESSING]))
         ->assertSuccessful()
         ->assertJsonCount(1, ['data']);
+});
+
+test('filtering by pending status also returns payouts in process', function () {
+    getJson(route('v3.admin.referral.payouts.index', ['filter[referrer_payout_status_id]' => ReferrerPayoutStatus::STATUS_PENDING]))
+        ->assertSuccessful()
+        ->assertJsonCount(2, ['data']);
 });
 
 it('sorts payouts list by created_at DESC', function () {

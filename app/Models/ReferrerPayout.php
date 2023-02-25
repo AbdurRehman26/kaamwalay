@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\AdminReferrerPayoutSearchFilter;
+use App\Http\Filters\AdminReferrerPayoutStatusFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -67,7 +68,7 @@ class ReferrerPayout extends Model
     {
         return [
             AllowedFilter::exact('user_id'),
-            AllowedFilter::exact('referrer_payout_status_id'),
+            AllowedFilter::custom('referrer_payout_status_id', new AdminReferrerPayoutStatusFilter),
             AllowedFilter::custom('search', new AdminReferrerPayoutSearchFilter),
         ];
     }

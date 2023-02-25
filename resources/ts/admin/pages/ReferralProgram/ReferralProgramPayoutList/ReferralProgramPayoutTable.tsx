@@ -56,7 +56,7 @@ const styles = {
 
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
     const [sortFilter, setSortFilter] = useState('-created_at');
-    const [sortCreatedAt, setSortCreatedAt] = useState(false);
+    const [sortCreatedAt, setSortCreatedAt] = useState(true);
     const [sortCompletedAt, setSortCompletedAt] = useState(false);
     const [sortAccount, setSortAccount] = useState(false);
     const [sortAmount, setSortAmount] = useState(false);
@@ -253,7 +253,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Date Initiated
                                     <TableSortLabel
                                         direction={!sortCreatedAt ? 'desc' : 'asc'}
-                                        active={true}
+                                        active={sortCreatedAt}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell
@@ -264,7 +264,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Date Completed
                                     <TableSortLabel
                                         direction={!sortCompletedAt ? 'desc' : 'asc'}
-                                        active={true}
+                                        active={sortCompletedAt}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell
@@ -275,7 +275,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Payout Account
                                     <TableSortLabel
                                         direction={!sortAccount ? 'desc' : 'asc'}
-                                        active={true}
+                                        active={sortAccount}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={styles.tableCellText} variant={'head'}>
@@ -292,7 +292,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Amount
                                     <TableSortLabel
                                         direction={!sortAmount ? 'desc' : 'asc'}
-                                        active={true}
+                                        active={sortAmount}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={styles.tableCellText} variant={'head'} />

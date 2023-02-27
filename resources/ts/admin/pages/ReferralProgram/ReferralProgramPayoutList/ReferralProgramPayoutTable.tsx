@@ -67,6 +67,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
     const [allSelected, setAllSelected] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showPayoutCommission, setShowPayoutCommission] = useState(false);
+    const [isAllPayed, setIsAllPayed] = useState(false);
 
     const dispatch = useAppDispatch();
 
@@ -118,9 +119,16 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         setIsSearchEnabled(true);
     }, []);
 
+    useEffect(() => {
+        const data = payouts.data.filter((payout: PayoutEntity) => payout.status.id === PayoutStatusEnum.PENDING);
+        data.length > 0 ? setIsAllPayed(false) : setIsAllPayed(true);
+    }, [payouts.data]);
+
     const handleSelectAll = () => {
         if (!allSelected) {
-            const newSelected = payouts.data.map((payout) => payout.id);
+            const newSelected = payouts.data
+                .filter((payout: PayoutEntity) => payout.status.id === PayoutStatusEnum.PENDING)
+                .map((payout) => payout.id);
             setSelectedIds(newSelected);
             setAllSelected(true);
             return;
@@ -208,7 +216,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                 {(!isPayOne && selectedIds.length) > 0 ? (
                                     <Grid xs ml={2} alignItems={'center'}>
                                         <Button
-                                            disabled={tabFilter !== PayoutStatusEnum.PENDING}
+                                            disabled={isAllPayed}
                                             sx={styles.buttonStyle}
                                             variant={'contained'}
                                             onClick={handlePayCommission}
@@ -305,6 +313,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                         <TableCell>
                                             <Grid container>
                                                 <Checkbox
+                                                    disabled={payout.status?.id !== PayoutStatusEnum.PENDING}
                                                     color="primary"
                                                     key={payout.id}
                                                     checked={isSelected(payout.id)}

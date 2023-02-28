@@ -35,6 +35,7 @@ class ReferrerUserResource extends BaseResource
             'is_referral_active' => $this->referrer->is_referral_active,
             'sales' => $this->getReferrerSales(),
             'commission' => $this->getReferrerCommission(),
+            'wallet' => $this->wallet,
         ];
     }
 }

@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import CustomerSubmissionsList from '@salesrep/components/Customers/CustomerSubmissionsList';
 import { useAppDispatch } from '@salesrep/redux/hooks';
 import { upperFirst } from 'lodash';
+import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
@@ -172,10 +173,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         );
     }, [orders$, paymentStatus, search, sortFilter]);
 
+    const debouncedFunc = debounce((func: any) => {
+        func();
+    }, 300);
+
     const handlePromoCodeSearch = useCallback(
         (event: any) => {
-            setSearchPromoCode(event.target.value);
-            setTimeout(async () => {
+            debouncedFunc(async () => {
+                setSearchPromoCode(event.target.value);
                 const result = await dispatch(getPromoCodes(event.target.value));
                 await setPromoCodes(
                     result.payload.data.map((item: PromoCodeEntity) => {
@@ -185,9 +190,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         };
                     }),
                 );
-            }, 1500);
+            });
         },
-        [dispatch],
+        [dispatch, debouncedFunc],
     );
 
     const clearPaymentStatus = useCallback(() => {

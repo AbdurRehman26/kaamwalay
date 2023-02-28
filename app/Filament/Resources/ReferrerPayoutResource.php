@@ -4,10 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReferrerPayoutResource\Pages;
 use App\Models\ReferrerPayout;
+use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Forms;
 use Filament\Tables;
 
 class ReferrerPayoutResource extends Resource
@@ -90,5 +90,4 @@ class ReferrerPayoutResource extends Resource
                 Forms\Components\TextInput::make('transaction_status')->maxLength(255),
             ]);
     }
-
 }

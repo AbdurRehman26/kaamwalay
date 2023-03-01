@@ -15,7 +15,10 @@ import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
+import CustomerReferralActivationDialog from '@admin/pages/Customers/CustomersList/CustomerReferralActivationDialog';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface props {
     customer: CustomerEntity;
@@ -24,6 +27,8 @@ interface props {
 
 enum RowOption {
     CreditCustomer,
+    Deactivate,
+    Reactivate,
 }
 
 const styles = {
@@ -41,6 +46,9 @@ export function ReferrerTableRow({ customer, salesReps }: props) {
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const [referralDialog, setReferralDialog] = useState(false);
+    const handleReferralDialogClose = useCallback(() => setReferralDialog(false), []);
+    const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
         (e) => {
@@ -51,12 +59,16 @@ export function ReferrerTableRow({ customer, salesReps }: props) {
     );
 
     const handleOption = useCallback(
-        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
+        (option: RowOption, customerId?: number, status?: boolean) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
+                    break;
+                case RowOption.Reactivate:
+                case RowOption.Deactivate:
+                    setReferralDialog(true);
                     break;
             }
         },
@@ -70,6 +82,15 @@ export function ReferrerTableRow({ customer, salesReps }: props) {
             }
         },
         [navigate, customer.id],
+    );
+
+    const handleChangeReferralProgram = useCallback(
+        async (customerId: number, referralStatus: boolean) => {
+            const DTO = { customerId, referralStatus };
+            await dispatch(changeReferralStatus(DTO));
+            window.location.reload();
+        },
+        [dispatch],
     );
 
     return (
@@ -122,6 +143,15 @@ export function ReferrerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                        {customer?.isReferralActive ? (
+                            <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
+                                Deactivate Referral Program
+                            </MenuItem>
+                        ) : (
+                            <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
+                                Reactivate Referral Program
+                            </MenuItem>
+                        )}
                     </Menu>
                 </TableCell>
             </TableRow>
@@ -130,6 +160,12 @@ export function ReferrerTableRow({ customer, salesReps }: props) {
                 wallet={customer.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
+            />
+            <CustomerReferralActivationDialog
+                open={referralDialog}
+                onSubmit={() => handleChangeReferralProgram(customer.id, !customer?.isReferralActive)}
+                status={!!customer?.isReferralActive}
+                onClose={handleReferralDialogClose}
             />
         </>
     );

@@ -48,6 +48,7 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
     const [notCreatedBy, setNotCreatedBy] = useState(null);
     const classes = useStyles({ value: createdBy ?? notCreatedBy });
     const { user } = useAuth();
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const promoCodes$ = useListSalesmanPromoCodesQuery({
         params: {
@@ -111,7 +112,7 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
 
     useEffect(
         () => {
-            if (!promoCodes$.isLoading) {
+            if (!promoCodes$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 promoCodes$.search(toApiPropertiesObject({ search }));
             }
@@ -119,6 +120,10 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     if (promoCodes$.isLoading) {
         return (

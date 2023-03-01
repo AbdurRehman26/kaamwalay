@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -43,6 +43,7 @@ interface SubmissionsTableProps {
 
 export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
     const orders$ = useListOrdersQuery({
         params: {
@@ -54,7 +55,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
 
     useEffect(
         () => {
-            if (!orders$.isLoading) {
+            if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.search({ orderNumber: search });
             }
@@ -62,6 +63,10 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     if (orders$.isLoading || orders$.isError) {
         return (

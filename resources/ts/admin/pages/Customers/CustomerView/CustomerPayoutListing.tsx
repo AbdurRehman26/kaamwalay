@@ -66,14 +66,14 @@ export function CustomerPayoutListing({
                             <TableCell>
                                 {`${formatDate(payout.createdAt, 'MMM D, YYYY')} at ${formatDate(
                                     payout.createdAt,
-                                    'h:mm: A',
+                                    'h:mm A',
                                 )}`}
                             </TableCell>
                             <TableCell>
                                 {payout.completedAt
                                     ? `${formatDate(payout.completedAt, 'MMM D, YYYY')} at ${formatDate(
                                           payout.completedAt,
-                                          'h:mm: A',
+                                          'h:mm A',
                                       )}`
                                     : '-'}
                             </TableCell>
@@ -84,7 +84,7 @@ export function CustomerPayoutListing({
                                     ? 'Pending'
                                     : payout.status?.name}
                             </TableCell>
-                            <TableCell>{payout.paidBy?.getFullName()}</TableCell>
+                            <TableCell>{payout.paidBy?.getFullName() ?? '-'}</TableCell>
                             <TableCell>{formatCurrency(payout.amount)}</TableCell>
                             <TableCell>
                                 {payout.status.id === PayoutStatusEnum.PENDING ? (

@@ -85,6 +85,8 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+
     const userCards$ = useListUserCardsQuery({
         params: {
             sort: sortFilter,
@@ -100,7 +102,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     // Fetch sorted cards based on the selected sort option
     useEffect(
         () => {
-            if (!userCards$.isLoading) {
+            if (!userCards$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 userCards$.sort({ sort: sortFilter });
             }
@@ -112,7 +114,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     // Search cards based on the user input & return them sorted based on the selected sort option
     useEffect(
         () => {
-            if (!userCards$.isLoading) {
+            if (!userCards$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 userCards$.searchSorted({ sort: sortFilter }, { search });
             }
@@ -120,6 +122,10 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     function handleOnClick() {
         ReactGA.event({

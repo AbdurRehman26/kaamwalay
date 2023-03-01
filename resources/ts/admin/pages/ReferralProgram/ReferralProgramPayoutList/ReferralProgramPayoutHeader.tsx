@@ -9,6 +9,7 @@ import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { PayoutEntity } from '@shared/entities/PayoutEntity';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
 import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
 import theme from '@shared/styles/theme';
@@ -72,7 +73,14 @@ export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
 
-    const payouts = useAdminReferralPayoutsQuery({});
+    const payouts = useAdminReferralPayoutsQuery({
+        params: {
+            filter: {
+                referrerPayoutStatusId: 1,
+            },
+        },
+        ...bracketParams(),
+    });
 
     useEffect(() => {
         const data = payouts.data.filter((payout: PayoutEntity) => payout.status.id === PayoutStatusEnum.PENDING);

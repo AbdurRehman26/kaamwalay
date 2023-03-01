@@ -4,6 +4,7 @@ use App\Http\Controllers\API\V3\Admin\CustomerController;
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
+use App\Http\Controllers\API\V3\Admin\ReferrerPayoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     Route::prefix('referral-program')->group(function () {
+        Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index','store'])
+            ->names([
+                'index' => 'referral.payouts.index',
+                'store' => 'referral.payouts.store',
+            ]);
         Route::post('get-overview-stat', [ReferralProgramController::class, 'getOverviewStat'])
             ->name('referral-program.get-overview-stat');
         Route::get('referrers', [ReferralProgramController::class, 'listReferrers'])->name('referral-program.referrers');

@@ -24,7 +24,7 @@ const Root = styled(Grid)({
         lineHeight: '24px',
         color: 'rgba(0, 0, 0, 0.87)',
         marginTop: '16px',
-        fontWeight: '400 !important',
+        fontWeight: '500 !important',
     },
     '.ContainerBackground': {
         background: '#F9F9F9',
@@ -140,8 +140,7 @@ export function CustomerReferralPayout() {
                             <TableContainer className={'ContainerBackground'}>
                                 <Box p={2}>
                                     <Typography className={'TableTitle'}>
-                                        Customer Payouts{' '}
-                                        <span className={'HeadingText'}> ({referralPayout?.data.length})</span>
+                                        Payouts <span className={'HeadingText'}> ({referralPayout?.data.length})</span>
                                     </Typography>
                                 </Box>
                                 <CustomerPayoutListing

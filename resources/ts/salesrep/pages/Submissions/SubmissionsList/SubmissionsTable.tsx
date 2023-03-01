@@ -107,7 +107,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Promo Code',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'grand_total',

@@ -11,6 +11,7 @@ class CouponHasInvalidMinThreshold extends Exception
 {
     public function __construct(protected int $itemsCount)
     {
+        $this->message = sprintf($this->message, $this->itemsCount);
     }
 
     /**

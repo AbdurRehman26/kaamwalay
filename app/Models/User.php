@@ -9,6 +9,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminCustomerPromotionalSubscribersFilter;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Filters\AdminSalesmanSearchFilter;
+use App\Http\Filters\AdminUserReferredBy;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
@@ -17,6 +18,7 @@ use App\Http\Sorts\AdminSalesmanSalesSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
+use App\Traits\ReferrableTrait;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -47,7 +49,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes, ReferrableTrait;
 
     public string $pushNotificationType = 'users';
 
@@ -56,7 +58,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'is_marketing_notifications_enabled'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'is_marketing_notifications_enabled', 'referred_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -77,6 +79,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
         'is_marketing_notifications_enabled' => 'boolean',
+        'referred_by' => 'integer',
     ];
 
     /**
@@ -103,6 +106,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
         $user->assignCustomerRole();
         $user->assignCustomerNumber();
+        $user->assignReferrer($data);
 
         (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
@@ -145,6 +149,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             AllowedFilter::scope('submissions'),
             AllowedFilter::scope('salesman_id'),
             AllowedFilter::custom('promotional_subscribers', new AdminCustomerPromotionalSubscribersFilter),
+            AllowedFilter::custom('referred_by', new AdminUserReferredBy),
         ];
     }
 
@@ -352,6 +357,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         }
 
         return $this;
+    }
+
+    public function assignReferrer(array $data): void
+    {
+        if (array_key_exists('referral_code', $data) && $data['referral_code']) {
+            $this->referred_by = Referrer::where('referral_code', $data['referral_code'])->first()->user_id;
+            $this->save();
+        }
     }
 
     public static function generateUserName(): string

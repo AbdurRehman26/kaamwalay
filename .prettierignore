@@ -8,3 +8,4 @@ resources/docs/frontend.md
 docker-compose.yml
 composer.lock
 /.github/workflows
+CHANGELOG.md

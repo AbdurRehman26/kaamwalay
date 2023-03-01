@@ -24,7 +24,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
 import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -35,6 +35,11 @@ interface SubmissionsTableProps {
     search?: string;
 }
 
+const ReferralStatus = [
+    { label: 'Yes', value: 1 },
+    { label: 'No', value: 0 },
+];
+
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
@@ -44,6 +49,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [searchPromoCode, setSearchPromoCode] = useState('');
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
     const [promoCode, setPromoCode] = useState<PromoCodeEntity | null>(null);
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -92,6 +98,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Owner',
             align: 'left',
+            sortable: false,
+        },
+        {
+            id: 'referred_by',
+            numeric: false,
+            disablePadding: false,
+            label: 'Referrer',
+            align: 'left',
             sortable: true,
         },
         {
@@ -132,7 +146,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             disablePadding: false,
             label: 'Promo Code',
             align: 'left',
-            sortable: true,
+            sortable: false,
         },
         {
             id: 'grand_total',
@@ -160,7 +174,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         },
     ];
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useAdminOrdersListQuery({
         params: {
             include: [
                 'orderStatus',
@@ -290,15 +304,46 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     search,
                     paymentStatus: paymentStatus,
                     promoCode: promoCode.code,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, paymentStatus, sortFilter, search],
+        [orders$, search, paymentStatus, sortFilter, referrerStatus.value],
+    );
+
+    const handleClearReferrerStatus = useCallback(async () => {
+        setReferrerStatus({ label: '', value: 0 });
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus,
+            }),
+            1,
+        );
+    }, [orders$, search, paymentStatus, sortFilter]);
+
+    const handleReferrerStatus = useCallback(
+        async (values) => {
+            setReferrerStatus({ value: values.value, label: values.label });
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                    referredBy: values.value,
+                }),
+                1,
+            );
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search, paymentStatus, sortFilter],
     );
 
     useEffect(
         () => {
+            // noinspection JSIgnoredPromiseFromCall
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.searchSortedWithPagination(
@@ -306,6 +351,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
+                        referredBy: referrerStatus.value,
                     }),
                     1,
                 );
@@ -362,6 +408,21 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                                     value={key}
                                 >
                                     {status}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
+                <PageSelector label={'Referrer'} value={referrerStatus.label} onClear={handleClearReferrerStatus}>
+                    {ReferralStatus?.map((item: any) => {
+                        return (
+                            <Grid key={item.value}>
+                                <MenuItem
+                                    onClick={() => handleReferrerStatus(item)}
+                                    key={item.value}
+                                    value={item.value}
+                                >
+                                    {item.label}
                                 </MenuItem>
                             </Grid>
                         );

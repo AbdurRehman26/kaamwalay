@@ -128,7 +128,6 @@ class CouponService
 
     protected function getNewCouponStatus(Coupon $coupon): int
     {
-        /** @phpstan-ignore-next-line  */
         if ($coupon->available_from->isPast()) {
             return CouponStatus::STATUS_ACTIVE;
         }

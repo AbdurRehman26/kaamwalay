@@ -59,9 +59,18 @@ class CouponController extends Controller
 
     public function verify(string $couponCode, VerifyCouponRequest $request): JsonResponse|VerifyCouponResource
     {
-        $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
+        try {
+            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id', 'items_count'));
 
-        return new VerifyCouponResource($coupon);
+            return new VerifyCouponResource($coupon);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
     }
 
     public function calculateDiscountForOrder(CalculateCouponDiscountForOrderRequest $request, Order $order): JsonResponse

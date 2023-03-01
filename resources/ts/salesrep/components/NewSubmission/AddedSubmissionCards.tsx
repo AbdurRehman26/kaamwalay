@@ -303,8 +303,11 @@ export function AddedSubmissionCards() {
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
             dispatch(markCardAsUnselected(row));
+            if (isCouponApplied) {
+                dispatch(setIsCouponApplied(false));
+            }
         },
-        [dispatch],
+        [dispatch, isCouponApplied],
     );
 
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {

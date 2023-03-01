@@ -14,6 +14,7 @@ export class ConfigurationEntity {
     public searchCardCategoriesAdmin!: string;
     public featureOrderWalletCreditEnabled!: boolean;
     public featureOrderWalletCreditPercentage!: number;
+    public featureReferralDiscountPercentage!: number;
     public featureOrderCleaningFeePerCard!: number;
     public featureOrderCleaningFeeMaxCap!: number;
 }

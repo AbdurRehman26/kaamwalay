@@ -3,7 +3,10 @@
 namespace App\Services\Admin\V3;
 
 use App\Models\Order;
+use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
+use App\Models\ReferrerPayout;
+use App\Models\ReferrerPayoutStatus;
 use App\Models\User;
 use App\Services\StatsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -47,7 +50,18 @@ class ReferralProgramService
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->sum('commission');
     }
-    
+
+    protected function getTotalWithdrawableCommission(): float
+    {
+        return Referrer::sum('withdrawable_commission');
+    }
+
+    protected function getTotalCommissionPaid(string $startDate, string $endDate): float
+    {
+        return ReferrerPayout::where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_COMPLETED)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
+    }
     public function getStat(array $data): float
     {
         $statsService = new StatsService();
@@ -64,6 +78,10 @@ class ReferralProgramService
                 return $this->getTotalCards($startDate, $endDate);
             case 'commission_earned':
                 return $this->getTotalEarnedCommission($startDate, $endDate);
+            case 'withdrawable_commission':
+                return $this->getTotalWithdrawableCommission();
+            case 'commission_paid':
+                return $this->getTotalCommissionPaid($startDate, $endDate);
             default:
                 return 0;
         }

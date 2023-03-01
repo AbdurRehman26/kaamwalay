@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
         $schedule->command(ProcessPaymentHandshake::class, ['--email=platform@robograding.com'])->everyFiveMinutes();
         $schedule->command(SendAdminReports::class)->dailyAt('00:20')->environments(['production', 'local', 'testing']);
-        $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes();
+        $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**

@@ -20,7 +20,7 @@ class UserResource extends V2UserResource
 
         return array_merge($data, [
             'show_referral_promotional_popup' => $this->referrer->referral_orders <= 0 &&
-                $this->referrer->is_referral_active
+                $this->referrer->is_referral_active,
         ]);
     }
 }

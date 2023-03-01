@@ -18,6 +18,7 @@ import { PayoutStatusEnum } from '@shared/constants/PayoutStatusEnum';
 import { PayoutEntity } from '@shared/entities/PayoutEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferralPayoutsQuery';
 import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
@@ -56,7 +57,7 @@ const styles = {
 
 export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralProgramPayoutTableProps) {
     const [sortFilter, setSortFilter] = useState('-created_at');
-    const [sortCreatedAt, setSortCreatedAt] = useState(true);
+    const [sortCreatedAt, setSortCreatedAt] = useState(false);
     const [sortCompletedAt, setSortCompletedAt] = useState(false);
     const [sortAccount, setSortAccount] = useState(false);
     const [sortAmount, setSortAmount] = useState(false);
@@ -193,6 +194,10 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
         setSortFilter(value ? `${property}` : `-${property}`);
     };
 
+    const isSortActive = (property: string) => {
+        return sortFilter.indexOf(property) > -1;
+    };
+
     const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
 
     return (
@@ -261,7 +266,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Date Initiated
                                     <TableSortLabel
                                         direction={!sortCreatedAt ? 'desc' : 'asc'}
-                                        active={sortCreatedAt}
+                                        active={isSortActive('created_at')}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell
@@ -272,7 +277,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Date Completed
                                     <TableSortLabel
                                         direction={!sortCompletedAt ? 'desc' : 'asc'}
-                                        active={sortCompletedAt}
+                                        active={isSortActive('completed_at')}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell
@@ -283,7 +288,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Payout Account
                                     <TableSortLabel
                                         direction={!sortAccount ? 'desc' : 'asc'}
-                                        active={sortAccount}
+                                        active={isSortActive('payout_account')}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={styles.tableCellText} variant={'head'}>
@@ -300,7 +305,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                     Amount
                                     <TableSortLabel
                                         direction={!sortAmount ? 'desc' : 'asc'}
-                                        active={sortAmount}
+                                        active={isSortActive('amount')}
                                     ></TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={styles.tableCellText} variant={'head'} />
@@ -352,7 +357,7 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                                 : payout.status?.name}
                                         </TableCell>
                                         <TableCell>{payout?.paidBy?.getFullName()}</TableCell>
-                                        <TableCell>{payout.amount}</TableCell>
+                                        <TableCell>{formatCurrency(payout.amount ?? 0)}</TableCell>
                                         <TableCell>
                                             {payout.status?.id === PayoutStatusEnum.PENDING &&
                                             selectedIds.length < 2 ? (

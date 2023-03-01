@@ -169,7 +169,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const orders$ = useListAdminReferralOrdersQuery({
         params: {
-            include: ['orderStatus', 'customer', 'invoice', 'coupon'],
+            include: ['orderStatus', 'customer', 'invoice', 'coupon', 'customer.wallet'],
             sort: sortFilter,
             filter: {
                 search,

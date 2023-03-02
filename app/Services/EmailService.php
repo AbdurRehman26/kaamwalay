@@ -45,6 +45,11 @@ class EmailService
     public const TEMPLATE_SLUG_MARKETING_ORDER_LIKE_GRADING_WITH_US = 'robograding-ordered-like-grading-with-us';
     /* Marketing End */
 
+    /* Referral Start */
+    public const TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE = 'referee-discount-code';
+
+    /* Referral End */
+
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_PLACED => 'Submission Placed!',
@@ -77,6 +82,8 @@ class EmailService
         self::TEMPLATE_SLUG_MARKETING_ORDER_FAIR_VALUE_GRADE => 'Not sure if you\'ll get the fair value for your cards?',
         self::TEMPLATE_SLUG_MARKETING_ORDER_GOT_VALUEABLE_CARDS => 'Got valuable cards?',
         self::TEMPLATE_SLUG_MARKETING_ORDER_LIKE_GRADING_WITH_US => 'What is it like grading with AGS?',
+
+        self::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE => 'Your Discount Code',
     ];
 
     /**

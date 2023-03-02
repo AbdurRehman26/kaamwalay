@@ -17,16 +17,12 @@ class CustomerWalletCreditedListener implements ShouldQueue
 
     public function handle(CustomerWalletCredited $event): void
     {
-        $wallet = $event->wallet;
-        $user = $wallet->user;
+        $user = $event->wallet->user;
 
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],
-            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED],
-            $this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED,
-            [
-                'REFUNDED_AMOUNT' => number_format($event->data['amount'], 2),
-            ],
+            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_WALLET_CREDITED],
+            $this->emailService::TEMPLATE_SLUG_WALLET_CREDITED,
         );
     }
 }

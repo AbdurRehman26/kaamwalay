@@ -4,8 +4,9 @@ import Grid from '@mui/material/Grid';
 import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import EditOrderAddressDialog from '@shared/components/EditOrderAddressDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
@@ -38,6 +39,21 @@ export const useStyles = makeStyles(
                 display: 'column',
             },
         },
+        editAddressButton: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.35px',
+            color: '#20BFB8',
+            cursor: 'pointer',
+            marginLeft: '7px',
+            marginTop: '2px',
+            '&:hover': {
+                color: '#288480',
+            },
+        },
     }),
     {
         name: 'SubmissionViewBilling',
@@ -65,6 +81,7 @@ export function SubmissionViewBilling({
     const hasPayment = ['stripe', 'paypal', 'collector_coin', 'manual'].includes(paymentMethodCode); // Checking if one of our supported payment methods is on the order
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
+    const [isEditAddressDialogOpen, setIsEditAddressDialogOpen] = useState(false);
 
     const { cardIcon, cardBrand } = useMemo(() => {
         if (paymentMethodCode === 'stripe') {
@@ -130,17 +147,38 @@ export function SubmissionViewBilling({
         return null;
     }, [card?.expMonth, card?.expYear, paymentMethodCode, payer?.email, payment?.transaction?.hash]);
 
+    const handleAddressEdit = useCallback(() => {
+        setIsEditAddressDialogOpen(true);
+    }, []);
+
+    const onAddressEditSubmit = useCallback(() => {
+        setIsEditAddressDialogOpen(false);
+    }, []);
     const columnWidth = coupon?.code ? 3 : 4;
     return (
         <Grid container direction={'row'} spacing={4} className={classes.root}>
             <Grid item xs={12} sm={columnWidth}>
-                <Typography variant={'body1'} className={font.fontWeightMedium}>
-                    Shipping Address
-                </Typography>
+                <Grid item container>
+                    <Typography variant={'body1'} className={font.fontWeightMedium}>
+                        Shipping Address
+                    </Typography>
+                    {mode === 'admin' ? (
+                        <Typography className={classes.editAddressButton} onClick={handleAddressEdit}>
+                            Edit
+                        </Typography>
+                    ) : null}
+                </Grid>
                 <Typography variant={'body2'}>{shippingAddress?.getFullName()}</Typography>
                 <Typography variant={'body2'}>{shippingAddress?.getAddress()}</Typography>
                 <Typography variant={'body2'}>{shippingAddress?.getAddressLine2()}</Typography>
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
+                <EditOrderAddressDialog
+                    onSubmit={onAddressEditSubmit}
+                    open={isEditAddressDialogOpen}
+                    onClose={() => setIsEditAddressDialogOpen(false)}
+                    addressId={shippingAddress?.id}
+                    address={shippingAddress}
+                />
             </Grid>
             <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
@@ -165,7 +203,7 @@ export function SubmissionViewBilling({
                 {hasPayment ? (
                     <>
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
-                            Payment Method
+                            Payment Methods
                         </Typography>
 
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>

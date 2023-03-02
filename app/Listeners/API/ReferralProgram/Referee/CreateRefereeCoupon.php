@@ -16,8 +16,7 @@ class CreateRefereeCoupon implements ShouldBeEncrypted
     public function handle(CustomerRegistered $event): void
     {
         if ($event->user->referredBy) {
-            $this->refereeCouponService->createRefereeCoupon($event->user);
-
+            $coupon = $this->refereeCouponService->createRefereeCoupon($event->user);
 
             $this->emailService->sendEmail(
                 [[$event->user->email => $event->user->first_name ?? '']],
@@ -26,7 +25,7 @@ class CreateRefereeCoupon implements ShouldBeEncrypted
                 [
                     'REDIRECT_URL' => config('app.url') . '/dashboard/referee-coupon-code',
                     'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
-                    // 'DISCOUNT_PROMO_CODE' => '',
+                    'DISCOUNT_PROMO_CODE' => $coupon->code,
                 ]
             );
         }

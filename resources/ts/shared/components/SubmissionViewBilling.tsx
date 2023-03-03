@@ -153,7 +153,9 @@ export function SubmissionViewBilling({
 
     const onAddressEditSubmit = useCallback(() => {
         setIsEditAddressDialogOpen(false);
+        window.location.reload();
     }, []);
+
     const columnWidth = coupon?.code ? 3 : 4;
     return (
         <Grid container direction={'row'} spacing={4} className={classes.root}>
@@ -176,8 +178,9 @@ export function SubmissionViewBilling({
                     onSubmit={onAddressEditSubmit}
                     open={isEditAddressDialogOpen}
                     onClose={() => setIsEditAddressDialogOpen(false)}
-                    addressId={shippingAddress?.id}
                     address={shippingAddress}
+                    endpointUrl={`admin/orders/${id}/update-shipping-address`}
+                    endpointVersion={'v3'}
                 />
             </Grid>
             <Grid item xs={12} sm={columnWidth}>

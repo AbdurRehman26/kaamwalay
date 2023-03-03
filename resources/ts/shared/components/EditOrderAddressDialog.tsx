@@ -18,8 +18,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { getCountriesList, getStatesList } from '@shared/redux/slices/addressEditSlice';
+import { APIService } from '@shared/services/APIService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 type InitialValues = {
     countryId: string;
@@ -33,8 +36,9 @@ type InitialValues = {
 };
 export interface EditOrderAddressDialogProps extends Omit<DialogProps, 'onSubmit'> {
     dialogTitle?: string;
-    addressId?: number;
     address?: AddressEntity;
+    endpointUrl: string;
+    endpointVersion: string;
     onSubmit(): Promise<void> | void;
 }
 
@@ -128,12 +132,13 @@ const useStyles = makeStyles(
 );
 
 export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
-    const { onClose, onSubmit, dialogTitle, address, addressId, ...rest } = props;
+    const { onClose, onSubmit, dialogTitle, address, endpointUrl = '', endpointVersion = 'v2', ...rest } = props;
     const classes = useStyles();
     const availableCountries = useAppSelector((state) => state.addressEditSlice.availableCountriesList);
     const availableStates = useAppSelector((state) => state.addressEditSlice.availableStatesList);
     const [isLoading, setIsLoading] = useState(false);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
 
@@ -172,18 +177,53 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
         return true;
     }, []);
 
+    const getCountryCode = useCallback(
+        (id: number) => {
+            const countryLookup = availableCountries.find((country: any) => country.id === id);
+            if (countryLookup) {
+                return countryLookup.code;
+            } else {
+                return id;
+            }
+        },
+        [availableCountries],
+    );
+
+    const parseName = (fullName: any) => {
+        const value = fullName.trim();
+        const firstSpace = value.indexOf(' ');
+        if (firstSpace === -1) {
+            return { firstName: value, lastName: null };
+        }
+
+        const firstName = value.slice(0, firstSpace);
+        const lastName = value.slice(firstSpace + 1);
+
+        return { firstName, lastName };
+    };
+
     const handleEditAddress = async (values: InitialValues) => {
-        console.log(values);
-        // const endpoint = apiService.createEndpoint(`admin/address`);
-        //
+        const endpoint = apiService.createEndpoint(endpointUrl, { version: endpointVersion });
+        const parsedName = parseName(values.fullName);
+
         setIsLoading(true);
-        // try {
-        //     await endpoint.post('', {});
-        //     NotificationsService.success('Address Updated successfully!');
-        //     onSubmit();
-        // } catch (e: any) {
-        //     NotificationsService.exception(e);
-        // }
+        try {
+            await endpoint.put('', {
+                countryCode: getCountryCode(parseInt(values.countryId)),
+                firstName: parsedName?.firstName,
+                lastName: parsedName?.lastName,
+                address: values.address,
+                address2: values.address2,
+                city: values.city,
+                state: values.state,
+                phone: values.phone,
+                zip: values.zip,
+            });
+            NotificationsService.success('Address Updated successfully!');
+            onSubmit();
+        } catch (e: any) {
+            NotificationsService.exception(e);
+        }
         setIsLoading(false);
     };
 
@@ -221,10 +261,6 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             fullWidth
                                             native
                                             name={'countryId'}
-                                            // onChange={(e) => {
-                                            //     updateField('phoneNumber', '');
-                                            //     updateShippingCountry(e.target.value);
-                                            // }}
                                             placeholder={'Select Country'}
                                             variant={'outlined'}
                                             style={{ height: '43px', marginTop: 6 }}

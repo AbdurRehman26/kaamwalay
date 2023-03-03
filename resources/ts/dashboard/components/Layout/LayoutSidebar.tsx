@@ -106,7 +106,7 @@ export function LayoutSidebar() {
                     href={'/payment-cards'}
                 />
                 <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/address-book'} />
-                <LayoutSidebarItem icon={CampaignOutlinedIcon} title={'Referral Program'} href={'/referral-program'} />
+                <LayoutSidebarItem icon={CampaignOutlinedIcon} title={'Partner Program'} href={'/referral-program'} />
             </List>
         </Paper>
     );

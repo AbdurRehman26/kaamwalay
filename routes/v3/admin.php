@@ -27,6 +27,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
 
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+
+        Route::prefix('{order}')->group(function () {
+            Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress']);
+        });
+
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
 

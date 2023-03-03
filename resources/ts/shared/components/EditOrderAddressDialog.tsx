@@ -132,14 +132,6 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
     const classes = useStyles();
     const availableCountries = useAppSelector((state) => state.addressEditSlice.availableCountriesList);
     const availableStates = useAppSelector((state) => state.addressEditSlice.availableStatesList);
-    // const fullName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.fullName);
-    // const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.address);
-    // const address2 = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.address2);
-    // const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.country);
-    // const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.city);
-    // const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.state);
-    // const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.zipCode);
-    // const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress.phoneNumber);
     const [isLoading, setIsLoading] = useState(false);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 

@@ -58,6 +58,16 @@ export function AuthControls() {
         return null;
     }
 
+    if (authenticated) {
+        if (user.hasRole(RolesEnum.Admin)) {
+            window.location.assign('/admin');
+        } else if (user.hasRole(RolesEnum.Salesman)) {
+            window.location.assign('/salesrep');
+        } else {
+            window.location.assign('/dashboard');
+        }
+    }
+
     return (
         <>
             <SubmissionButton

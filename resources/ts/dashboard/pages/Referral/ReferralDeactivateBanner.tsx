@@ -43,7 +43,7 @@ export function ReferralDeactivateBanner() {
         <DeactivateBanner>
             <Grid className={'HeadingDiv'}>
                 <div>
-                    <Typography className={'Heading'}>Referral Program Deactivated</Typography>
+                    <Typography className={'Heading'}>Partner Program Deactivated</Typography>
                 </div>
                 <div>
                     <ErrorOutlinedIcon className={'Icon'} />
@@ -51,7 +51,7 @@ export function ReferralDeactivateBanner() {
             </Grid>
             <Grid className={'DescriptionDiv'}>
                 <Typography className={'Description'}>
-                    The referral program on your account has been deactivated. Your referral link is no longer active.
+                    The partner program on your account has been deactivated. Your referral link is no longer active.
                     Referral privileges can be taken away for various reasons including abuse or misuse of the program.
                     If you think this is a mistake, please call us at +1 929-209-3925 or email us at hey@agscard.com.
                 </Typography>

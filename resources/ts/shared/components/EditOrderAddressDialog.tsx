@@ -16,6 +16,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import NumberFormat from 'react-number-format';
+import * as yup from 'yup';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -131,6 +132,17 @@ const useStyles = makeStyles(
     { name: 'EditOrderAddressDialog' },
 );
 
+const schema = yup.object().shape({
+    fullName: yup.string().required(),
+    address: yup.string().required(),
+    address2: yup.string().optional().nullable(),
+    city: yup.string().required(),
+    state: yup.string().required(),
+    zip: yup.string().required(),
+    countryId: yup.string().required(),
+    phone: yup.string().optional().nullable(),
+});
+
 export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
     const { onClose, onSubmit, dialogTitle, address, endpointUrl = '', endpointVersion = 'v2', ...rest } = props;
     const classes = useStyles();
@@ -141,6 +153,19 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
     const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
+
+    const [hasChanged, setHasChanged] = useState(false);
+
+    const [currentValues, setCurrentValues] = useState<InitialValues>({
+        countryId: address?.country?.id.toString() ?? '',
+        fullName: address?.getFullName() ?? '',
+        address: address?.address ?? '',
+        address2: address?.address2 ?? '',
+        city: address?.city ?? '',
+        state: address?.state ?? '',
+        phone: address?.phone ?? '',
+        zip: address?.zip ?? '',
+    });
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -173,10 +198,6 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
         [],
     );
 
-    const showSaveButton = useMemo(() => {
-        return true;
-    }, []);
-
     const getCountryCode = useCallback(
         (id: number) => {
             const countryLookup = availableCountries.find((country: any) => country.id === id);
@@ -200,6 +221,29 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
         const lastName = value.slice(firstSpace + 1);
 
         return { firstName, lastName };
+    };
+
+    const updateCurrentValues = async (key: string, value: string) => {
+        const updatedValues = {
+            ...currentValues,
+            [key]: value,
+        };
+        await setCurrentValues(updatedValues);
+
+        checkChanges(updatedValues);
+    };
+
+    const checkChanges = (values: InitialValues) => {
+        const initialKeys = Object.keys(initialValues);
+        const currentKeys = Object.keys(values);
+
+        // @ts-ignore
+        setHasChanged(
+            !(
+                initialKeys.length === currentKeys.length &&
+                initialKeys.every((key) => initialValues[key] === values[key])
+            ),
+        );
     };
 
     const handleEditAddress = async (values: InitialValues) => {
@@ -244,8 +288,13 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
     return (
         <>
             <Dialog onClose={handleClose} {...rest} fullWidth scroll={'body'}>
-                <Formik initialValues={initialValues} onSubmit={handleEditAddress}>
-                    {({ values, handleChange, submitForm }) => (
+                <Formik
+                    initialValues={initialValues}
+                    onSubmit={handleEditAddress}
+                    validationSchema={schema}
+                    validateOnChange={true}
+                >
+                    {({ values, handleChange, submitForm, errors, isValidating }) => (
                         <>
                             <DialogTitle>
                                 {'Edit Address'}
@@ -265,9 +314,12 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             variant={'outlined'}
                                             style={{ height: '43px', marginTop: 6 }}
                                             value={values.countryId}
-                                            onChange={handleChange}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                                updateCurrentValues('countryId', e.target.value);
+                                            }}
                                         >
-                                            <option value="none">Select a country</option>
+                                            <option value="">Select a country</option>
                                             {availableCountries.map((item: any) => (
                                                 <option key={item.id} value={item.id}>
                                                     {item?.name}
@@ -283,7 +335,10 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                 placeholder="Enter Full Name"
                                                 name={'fullName'}
                                                 value={values.fullName}
-                                                onChange={handleChange}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    updateCurrentValues('fullName', e.target.value);
+                                                }}
                                                 fullWidth
                                                 size={'small'}
                                                 variant={'outlined'}
@@ -398,7 +453,7 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                     variant={'outlined'}
                                                     style={{ height: '43px' }}
                                                 >
-                                                    <option value="none">Select a state</option>
+                                                    <option value="">Select a state</option>
                                                     {availableStates.map((item: any) => (
                                                         <option key={item.id} value={item.code}>
                                                             {item?.code}
@@ -482,10 +537,19 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                         <Button
                                             variant="contained"
                                             color={'primary'}
-                                            disabled={!showSaveButton || isLoading}
+                                            disabled={
+                                                isValidating ||
+                                                isLoading ||
+                                                Object.keys(errors).length > 0 ||
+                                                !hasChanged
+                                            }
                                             onClick={submitForm}
                                         >
-                                            {isLoading ? <CircularProgress color={'primary'} /> : 'Save Changes'}
+                                            {isValidating || isLoading ? (
+                                                <CircularProgress color={'primary'} />
+                                            ) : (
+                                                'Save Changes'
+                                            )}
                                         </Button>
                                     </Box>
                                 </Box>

@@ -81,6 +81,42 @@ class PaypalClient
             ->json();
     }
 
+    /**
+     * @throws RequestException
+     */
+    public function createBatchPayout(array $data): array
+    {
+        return $this->getInstance()->withToken($this->getAccessToken())
+            ->withHeaders($this->headers())
+            ->post('/v1/payments/payouts?', $data)
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getBatchPayoutStatus(string $payoutBatchId, array $data): array
+    {
+        return $this->getInstance()->withToken($this->getAccessToken())
+            ->withHeaders($this->headers())
+            ->get('/v1/payments/payouts/'. $payoutBatchId, $data)
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getPayoutItemDetails(string $payoutItemId): array
+    {
+        return $this->getInstance()->withToken($this->getAccessToken())
+            ->withHeaders($this->headers())
+            ->get('/v1/payments/payouts-item/'. $payoutItemId)
+            ->throw()
+            ->json();
+    }
+
     protected function userAgent(): string
     {
         return "RG-PHP HTTP/1.1";

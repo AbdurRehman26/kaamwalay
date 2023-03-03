@@ -17,6 +17,7 @@ class CouponService
     protected array $couponApplicables = [
         'service_level' => ServiceLevelCoupon::class,
         'service_fee' => ServiceFeeCoupon::class,
+        'user' => ServiceFeeCoupon::class,
     ];
 
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon

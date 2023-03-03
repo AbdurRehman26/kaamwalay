@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Coupon\ActivateCoupons;
 use App\Console\Commands\Coupon\ExpireCoupons;
 use App\Console\Commands\Orders\ProcessPaymentHandshake;
+use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Console\Commands\RevenueStats\SendUnpaidOrdersStats;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\SendAdminReports;
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
         $schedule->command(ProcessPaymentHandshake::class, ['--email=platform@robograding.com'])->everyFiveMinutes();
         $schedule->command(SendAdminReports::class)->dailyAt('00:20')->environments(['production', 'local', 'testing']);
+        $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**

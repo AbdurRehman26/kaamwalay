@@ -6,6 +6,7 @@ use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
+use App\Services\ReferralProgram\ReferrerCommissionService;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -31,6 +32,7 @@ class OrderPaidListener implements ShouldQueue
     {
         $this->processEmails($event);
         $this->processSalesmanCommission($event);
+        $this->processReferrerCommission($event);
     }
 
     protected function processEmails(OrderPaid $event): void
@@ -48,5 +50,10 @@ class OrderPaidListener implements ShouldQueue
         if ($event->order->salesman()->exists()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_CREATED);
         }
+    }
+
+    protected function processReferrerCommission(OrderPaid $event): void
+    {
+        ReferrerCommissionService::processOrderReferralCommissions($event->order);
     }
 }

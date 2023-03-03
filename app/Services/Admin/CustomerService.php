@@ -25,7 +25,7 @@ class CustomerService
             ->allowedFilters(User::getAllowedAdminFilters())
             ->allowedSorts(User::getAllowedAdminSorts())
             ->defaultSort('-created_at')
-            ->with('salesman')
+            ->with(['salesman', 'referrer', 'referredBy'])
             ->paginate(request('per_page', self::PER_PAGE));
     }
 

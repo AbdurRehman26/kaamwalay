@@ -9,7 +9,9 @@ import { Link, useParams } from 'react-router-dom';
 import EditOrderAddressDialog from '@shared/components/EditOrderAddressDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { useAuth } from '@shared/hooks/useAuth';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
@@ -82,6 +84,13 @@ export function SubmissionViewBilling({
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
     const [isEditAddressDialogOpen, setIsEditAddressDialogOpen] = useState(false);
+    const { user } = useAuth();
+
+    const editShippingEndpointUrlPrefix = user.hasRole(RolesEnum.Admin)
+        ? 'admin'
+        : user.hasRole(RolesEnum.Salesman)
+        ? 'salesman'
+        : '';
 
     const { cardIcon, cardBrand } = useMemo(() => {
         if (paymentMethodCode === 'stripe') {
@@ -179,7 +188,7 @@ export function SubmissionViewBilling({
                     open={isEditAddressDialogOpen}
                     onClose={() => setIsEditAddressDialogOpen(false)}
                     address={shippingAddress}
-                    endpointUrl={`admin/orders/${id}/update-shipping-address`}
+                    endpointUrl={editShippingEndpointUrlPrefix + `/orders/${id}/update-shipping-address`}
                     endpointVersion={'v3'}
                 />
             </Grid>

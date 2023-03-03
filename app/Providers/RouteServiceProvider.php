@@ -65,6 +65,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->as('v3.admin.')
                 ->group(base_path('routes/v3/admin.php'));
 
+            Route::prefix('api/v3/salesman')
+                ->middleware('api')
+                ->as('v3.salesman')
+                ->group(base_path('routes/v3/salesman.php'));
+
             Route::prefix('webhooks')
                 ->group(base_path('routes/webhooks.php'));
 

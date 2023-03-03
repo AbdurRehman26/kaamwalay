@@ -26,6 +26,7 @@ class EmailService
     public const TEMPLATE_SLUG_SUBMISSION_IN_VAULT = 'customer-stored-in-vault';
     public const TEMPLATE_SLUG_SHIPPED_FROM_VAULT = 'shipped-from-vault';
     public const TEMPLATE_CREATED_USER_ACCESS_ACCOUNT = 'access-account';
+    public const TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE = 'referee-discount-code';
     /* Transactional End */
 
     /* Marketing Start */
@@ -45,11 +46,6 @@ class EmailService
     public const TEMPLATE_SLUG_MARKETING_ORDER_LIKE_GRADING_WITH_US = 'robograding-ordered-like-grading-with-us';
     /* Marketing End */
 
-    /* Referral Start */
-    public const TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE = 'referee-discount-code';
-
-    /* Referral End */
-
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_PLACED => 'Submission Placed!',
@@ -67,6 +63,7 @@ class EmailService
         self::TEMPLATE_SLUG_SUBMISSION_IN_VAULT => 'Your cards are in AGS Vault!',
         self::TEMPLATE_SLUG_SHIPPED_FROM_VAULT => 'Your cards have shipped from AGS Vault!',
         self::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT => 'Access Account',
+        self::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE => 'Your Discount Code',
 
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_WHAT_HAPPENED => 'What happened?',
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_NOT_SURE_YET => 'Not sure yet?',
@@ -82,8 +79,6 @@ class EmailService
         self::TEMPLATE_SLUG_MARKETING_ORDER_FAIR_VALUE_GRADE => 'Not sure if you\'ll get the fair value for your cards?',
         self::TEMPLATE_SLUG_MARKETING_ORDER_GOT_VALUEABLE_CARDS => 'Got valuable cards?',
         self::TEMPLATE_SLUG_MARKETING_ORDER_LIKE_GRADING_WITH_US => 'What is it like grading with AGS?',
-
-        self::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE => 'Your Discount Code',
     ];
 
     /**

@@ -23,7 +23,7 @@ class CreateRefereeCoupon implements ShouldBeEncrypted
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE],
                 EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE,
                 [
-                    'REDIRECT_URL' => config('app.url') . '/dashboard/referee-coupon-code',
+                    'REDIRECT_URL' => config('app.url') . '/submissions/new?coupon=' . $coupon->code,
                     'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
                     'DISCOUNT_PROMO_CODE' => $coupon->code,
                 ]

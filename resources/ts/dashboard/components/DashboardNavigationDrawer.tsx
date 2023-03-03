@@ -208,7 +208,7 @@ export function DashboardNavigationDrawer() {
                         <CampaignOutlinedIcon />
                     </StyledListItemIcon>
                     <ListItemText
-                        primary={'Referral Program'}
+                        primary={'Partner Program'}
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>

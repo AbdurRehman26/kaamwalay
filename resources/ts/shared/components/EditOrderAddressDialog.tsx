@@ -45,24 +45,50 @@ export interface EditOrderAddressDialogProps extends Omit<DialogProps, 'onSubmit
 
 const useStyles = makeStyles(
     (theme) => ({
-        root: {},
-        topDivider: {
-            marginTop: theme.spacing(2),
-        },
-        swapButton: {
-            marginTop: 19,
-            height: 38,
-        },
         dialog: {
             padding: 1,
         },
-        label: {
-            color: '#0000008A',
+        fullWidth: {
+            width: '100%',
         },
-        methodDescription: {
+        dialogTitle: {
+            borderBottom: '1px solid #E0E0E0',
+            padding: '1.25rem 1.5rem',
+            lineHeight: '1.5rem',
+        },
+        dialogActions: {
+            borderTop: '1px solid #E0E0E0',
+            padding: '1.25rem 1.5rem',
+        },
+        formContainer: {
+            padding: '2.25rem 1.5rem',
+        },
+        cancelButton: {
+            padding: '14px 20px',
+            lineHeight: '1.25rem',
+            color: 'black',
+        },
+        submitButton: {
+            padding: '14px 20px',
+            lineHeight: '1.25rem',
+        },
+        formField: {
+            margin: '0',
+        },
+        formInput: {
+            padding: '14px 12px',
+            lineHeight: '20px',
             fontFamily: 'Roboto',
             fontStyle: 'normal',
-            fontWeight: 'normal',
+            fontSize: '14px',
+            fontWeight: 400,
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        inputTitle: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: '400',
             fontSize: '12px',
             lineHeight: '16px',
             letterSpacing: '0.1px',
@@ -73,18 +99,7 @@ const useStyles = makeStyles(
             display: 'flex',
             alignItems: 'start',
             flexDirection: 'column',
-        },
-        addressFieldContainer: {
-            width: '80%',
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
-        },
-        aptFieldContainer: {
-            width: '18%',
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
+            margin: '0px 0px 20px 0px',
         },
         cityFieldContainer: {
             width: '30%',
@@ -94,7 +109,6 @@ const useStyles = makeStyles(
         },
         stateFieldContainer: {
             width: '32%',
-            marginTop: '6px',
             [theme.breakpoints.down('sm')]: {
                 width: '47%',
             },
@@ -105,25 +119,7 @@ const useStyles = makeStyles(
                 width: '47%',
             },
         },
-        inputsRow01: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-        },
-        inputsRow02: {
-            marginTop: '6px',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-        },
-        inputsRow03: {
-            marginTop: '6px',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-        },
-        inputsRow04: {
-            marginTop: '6px',
+        inputsRow: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -235,15 +231,13 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
 
     const checkChanges = (values: InitialValues) => {
         const initialKeys = Object.keys(initialValues);
-        const currentKeys = Object.keys(values);
 
-        // @ts-ignore
-        setHasChanged(
-            !(
-                initialKeys.length === currentKeys.length &&
-                initialKeys.every((key) => initialValues[key] === values[key])
-            ),
-        );
+        const objectsAreEqual = initialKeys.every((key) => {
+            // @ts-ignore
+            return initialValues[key] === values[key];
+        });
+
+        setHasChanged(!objectsAreEqual);
     };
 
     const handleEditAddress = async (values: InitialValues) => {
@@ -276,7 +270,7 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
             sx={{
                 position: 'absolute',
                 right: 8,
-                top: 8,
+                top: 13,
                 color: 'black',
             }}
             onClick={handleClose}
@@ -296,27 +290,28 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                 >
                     {({ values, handleChange, submitForm, errors, isValidating }) => (
                         <>
-                            <DialogTitle>
+                            <DialogTitle className={classes.dialogTitle}>
                                 {'Edit Address'}
                                 {closeIcon}
                             </DialogTitle>
                             <DialogContent className={classes.dialog}>
-                                <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
-                                    <div className={classes.fieldContainer} style={{ width: '100%' }}>
-                                        <Typography className={classes.methodDescription}>
-                                            Country {typeof values.countryId}
-                                        </Typography>
+                                <Box display={'flex'} flexDirection={'column'} className={classes.formContainer}>
+                                    <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
+                                        <Typography className={classes.inputTitle}>Country</Typography>
                                         <Select
+                                            className={classes.formField}
                                             fullWidth
                                             native
                                             name={'countryId'}
                                             placeholder={'Select Country'}
                                             variant={'outlined'}
-                                            style={{ height: '43px', marginTop: 6 }}
                                             value={values.countryId}
                                             onChange={(e) => {
                                                 handleChange(e);
                                                 updateCurrentValues('countryId', e.target.value);
+                                            }}
+                                            inputProps={{
+                                                className: classes.formInput,
                                             }}
                                         >
                                             <option value="">Select a country</option>
@@ -327,11 +322,11 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             ))}
                                         </Select>
                                     </div>
-                                    <div className={classes.inputsRow02}>
-                                        <div className={classes.fieldContainer} style={{ width: '100%' }}>
-                                            <Typography className={classes.methodDescription}>Full Name</Typography>
+                                    <div className={classes.inputsRow}>
+                                        <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
+                                            <Typography className={classes.inputTitle}>Full Name</Typography>
                                             <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
+                                                className={classes.formField}
                                                 placeholder="Enter Full Name"
                                                 name={'fullName'}
                                                 value={values.fullName}
@@ -343,6 +338,9 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                 size={'small'}
                                                 variant={'outlined'}
                                                 margin="normal"
+                                                inputProps={{
+                                                    className: classes.formInput,
+                                                }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
@@ -350,46 +348,52 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                         </div>
                                     </div>
 
-                                    <div className={classes.inputsRow02}>
-                                        <div
-                                            className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
-                                            style={{ width: '100%' }}
-                                        >
-                                            <Typography className={classes.methodDescription}>Address</Typography>
+                                    <div className={classes.inputsRow}>
+                                        <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
+                                            <Typography className={classes.inputTitle}>Address</Typography>
                                             <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
+                                                className={classes.formField}
                                                 placeholder="Enter Street Address"
                                                 fullWidth
                                                 name={'address'}
                                                 value={values.address}
-                                                onChange={handleChange}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    updateCurrentValues('address', e.target.value);
+                                                }}
                                                 size={'small'}
                                                 variant={'outlined'}
                                                 margin="normal"
+                                                inputProps={{
+                                                    className: classes.formInput,
+                                                }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                             />
                                         </div>
                                     </div>
-                                    <div className={'inputsRow02'}>
-                                        <div
-                                            className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
-                                            style={{ width: '100%' }}
-                                        >
-                                            <Typography className={classes.methodDescription}>
+                                    <div className={classes.inputsRow}>
+                                        <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
+                                            <Typography className={classes.inputTitle}>
                                                 Address Line #2 (Optional)
                                             </Typography>
                                             <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
+                                                className={classes.formField}
                                                 placeholder="Enter apt, suite, building, floor etc."
                                                 fullWidth
                                                 name={'address2'}
                                                 value={values.address2}
-                                                onChange={handleChange}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    updateCurrentValues('address2', e.target.value);
+                                                }}
                                                 size={'small'}
                                                 variant={'outlined'}
                                                 margin="normal"
+                                                inputProps={{
+                                                    className: classes.formInput,
+                                                }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
@@ -398,19 +402,25 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                     </div>
 
                                     {isMobile ? (
-                                        <div className={classes.inputsRow03}>
+                                        <div className={classes.inputsRow}>
                                             <div className={`${classes.fieldContainer} ${classes.cityFieldContainer} `}>
-                                                <Typography className={classes.methodDescription}>City</Typography>
+                                                <Typography className={classes.inputTitle}>City</Typography>
                                                 <TextField
-                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    className={classes.formField}
                                                     name={'city'}
                                                     value={values.city}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        updateCurrentValues('city', e.target.value);
+                                                    }}
                                                     placeholder="Enter City"
                                                     fullWidth
                                                     size={'small'}
                                                     variant={'outlined'}
                                                     margin="normal"
+                                                    inputProps={{
+                                                        className: classes.formInput,
+                                                    }}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -419,20 +429,26 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                         </div>
                                     ) : null}
 
-                                    <div className={classes.inputsRow03}>
+                                    <div className={classes.inputsRow}>
                                         {!isMobile ? (
                                             <div className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}>
-                                                <Typography className={classes.methodDescription}>City</Typography>
+                                                <Typography className={classes.inputTitle}>City</Typography>
                                                 <TextField
-                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    className={classes.formField}
                                                     name={'city'}
                                                     value={values.city}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        updateCurrentValues('city', e.target.value);
+                                                    }}
                                                     placeholder="Enter City"
                                                     fullWidth
                                                     size={'small'}
                                                     variant={'outlined'}
                                                     margin="normal"
+                                                    inputProps={{
+                                                        className: classes.formInput,
+                                                    }}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -441,17 +457,23 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                         ) : null}
 
                                         <div className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}>
-                                            <Typography className={classes.methodDescription}>State</Typography>
+                                            <Typography className={classes.inputTitle}>State</Typography>
                                             {values.countryId === '1' || !values.countryId ? (
                                                 <Select
+                                                    className={classes.formField}
                                                     fullWidth
                                                     native
                                                     name={'state'}
                                                     value={values.state}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        updateCurrentValues('state', e.target.value);
+                                                    }}
                                                     placeholder={'Select State'}
                                                     variant={'outlined'}
-                                                    style={{ height: '43px' }}
+                                                    inputProps={{
+                                                        className: classes.formInput,
+                                                    }}
                                                 >
                                                     <option value="">Select a state</option>
                                                     {availableStates.map((item: any) => (
@@ -462,15 +484,21 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                 </Select>
                                             ) : (
                                                 <TextField
-                                                    style={{ marginTop: 2 }}
+                                                    className={classes.formField}
                                                     placeholder="Enter State"
                                                     fullWidth
                                                     value={values.state}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        updateCurrentValues('state', e.target.value);
+                                                    }}
                                                     name={'state'}
                                                     size={'small'}
                                                     variant={'outlined'}
                                                     margin="normal"
+                                                    inputProps={{
+                                                        className: classes.formInput,
+                                                    }}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -478,26 +506,32 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             )}
                                         </div>
                                         <div className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}>
-                                            <Typography className={classes.methodDescription}>Zip Code</Typography>
+                                            <Typography className={classes.inputTitle}>Zip Code</Typography>
                                             <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
+                                                className={classes.formField}
                                                 placeholder="Enter Zip Code"
                                                 fullWidth
                                                 name={'zip'}
                                                 value={values.zip}
-                                                onChange={handleChange}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    updateCurrentValues('zip', e.target.value);
+                                                }}
                                                 size={'small'}
                                                 variant={'outlined'}
                                                 margin="normal"
+                                                inputProps={{
+                                                    className: classes.formInput,
+                                                }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                             />
                                         </div>
                                     </div>
-                                    <div className={'inputsRow04'}>
-                                        <div className={'fieldContainer'} style={{ width: '100%', marginTop: '4px' }}>
-                                            <Typography className={classes.methodDescription}>
+                                    <div className={classes.inputsRow}>
+                                        <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
+                                            <Typography className={classes.inputTitle}>
                                                 Phone Number (Optional)
                                             </Typography>
                                             <NumberFormat
@@ -508,12 +542,18 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                         : '+' + availableCountries[0]?.phoneCode + ' (###) #   ##-####'
                                                 }
                                                 mask=""
-                                                style={{ margin: 8, marginLeft: 0 }}
+                                                className={classes.formField}
                                                 placeholder="Enter Phone Number"
                                                 name={'phone'}
                                                 value={values.phone}
-                                                onChange={handleChange}
+                                                onChange={(e: { target: { value: string } }) => {
+                                                    handleChange(e);
+                                                    updateCurrentValues('phone', e.target.value);
+                                                }}
                                                 fullWidth
+                                                inputProps={{
+                                                    className: classes.formInput,
+                                                }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
@@ -522,16 +562,15 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                     </div>
                                 </Box>
                             </DialogContent>
-                            <DialogActions sx={{ margin: '16px' }}>
+                            <DialogActions className={classes.dialogActions}>
                                 <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
                                     <Box
                                         display={'flex'}
                                         flexDirection={'row'}
                                         justifyContent={'space-between'}
                                         minWidth={'150px'}
-                                        marginRight={'13px'}
                                     >
-                                        <Button variant="text" sx={{ color: '#000' }} onClick={handleClose}>
+                                        <Button variant="text" className={classes.cancelButton} onClick={handleClose}>
                                             Cancel
                                         </Button>
                                         <Button
@@ -544,6 +583,7 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                 !hasChanged
                                             }
                                             onClick={submitForm}
+                                            className={classes.submitButton}
                                         >
                                             {isValidating || isLoading ? (
                                                 <CircularProgress color={'primary'} />

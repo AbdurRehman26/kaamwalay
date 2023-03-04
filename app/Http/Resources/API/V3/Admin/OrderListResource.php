@@ -18,7 +18,7 @@ class OrderListResource extends V2OrderOrderListResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            'referrer' => $this->user->referredBy,
+            'referrer' => $this->user?->referredBy,
         ]);
     }
 }

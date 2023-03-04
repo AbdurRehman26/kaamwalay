@@ -25,6 +25,5 @@ class AdminOrderSearchFilter implements Filter
                 $value
             );
         }
-        
     }
 }

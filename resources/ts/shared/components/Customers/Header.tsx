@@ -15,6 +15,7 @@ interface HeaderProps {
     ordersExist?: boolean;
     tabs?: React.ReactNode;
     headerActions?: React.ReactNode;
+    referralOrder?: boolean;
 }
 const styles = {
     header: {
@@ -53,7 +54,15 @@ const debouncedFunc = debounce((func: any) => {
     func();
 }, 300);
 
-export function Header({ onSearch, dataLength, ordersExist, headerActions, tabs, headerStyles }: HeaderProps) {
+export function Header({
+    onSearch,
+    dataLength,
+    ordersExist,
+    headerActions,
+    tabs,
+    referralOrder,
+    headerStyles,
+}: HeaderProps) {
     const [search, setSearch] = useState('');
     const classes = useStyles();
 
@@ -74,7 +83,7 @@ export function Header({ onSearch, dataLength, ordersExist, headerActions, tabs,
             <Grid container alignItems={'center'} sx={headerStyles?.header ?? styles.header}>
                 <Grid item container xs alignItems={'center'}>
                     <Typography variant={'h4'} sx={headerStyles?.title ?? styles.title}>
-                        Submissions
+                        {referralOrder ? 'Referral Orders' : 'Submissions'}
                     </Typography>
                     {dataLength !== 0 || ordersExist ? (
                         <TextField

@@ -67,7 +67,7 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::prefix('api/v3/salesman')
                 ->middleware('api')
-                ->as('v3.salesman')
+                ->as('v3.salesman.')
                 ->group(base_path('routes/v3/salesman.php'));
 
             Route::prefix('webhooks')

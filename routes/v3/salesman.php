@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:salesman'])->group(function () {
     Route::prefix('orders')->group(function () {
         Route::prefix('{order}')->group(function () {
-            Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress']);
+            Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
         });
     });
 

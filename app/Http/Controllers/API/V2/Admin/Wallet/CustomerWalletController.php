@@ -16,7 +16,7 @@ class CustomerWalletController extends V1CustomerWalletController
     //
     public function creditToWallet(CustomerWalletCreditRequest $request, Wallet $wallet): JsonResponse
     {
-        try{
+        try {
             $wallet->makeTransaction(
                 amount: $request->input('amount'),
                 reason: WalletTransactionReason::WALLET_CREDIT,
@@ -26,8 +26,7 @@ class CustomerWalletController extends V1CustomerWalletController
             CustomerWalletCredited::dispatch($wallet->refresh());
 
             return new JsonResponse(['success' => true], Response::HTTP_CREATED);
-
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

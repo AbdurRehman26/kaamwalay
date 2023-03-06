@@ -17,8 +17,8 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 
 uses(WithFaker::class);
 
@@ -396,5 +396,4 @@ test('if shipping and billing addresses are different only shipping address is u
     $order = $order->fresh();
     $this->assertNotEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
-
 });

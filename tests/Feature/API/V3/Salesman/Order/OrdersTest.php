@@ -96,5 +96,4 @@ test('if shipping and billing addresses are different only shipping address is u
     $order = $order->fresh();
     $this->assertNotEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
-
 });

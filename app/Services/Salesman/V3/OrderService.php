@@ -9,7 +9,6 @@ use App\Services\Salesman\V2\Order\OrderService as V2OrderService;
 
 class OrderService extends V2OrderService
 {
-
     public function updateShippingAddress(Order $order, array $data): Order
     {
         $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;

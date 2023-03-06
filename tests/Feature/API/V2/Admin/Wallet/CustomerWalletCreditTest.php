@@ -7,7 +7,6 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
-
     Event::fake();
 
     $this->seed([RolesSeeder::class]);

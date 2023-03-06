@@ -32,7 +32,7 @@ class OrderListResource extends BaseResource
             'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'owner' => new UserResource($this->salesman),
-            'referrer' => new UserResource($this->user->referredBy),
+            'referrer' => new UserResource($this->user?->referredBy),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'payment_status' => $this->payment_status,

@@ -18,7 +18,7 @@ class OrderResource extends V2OrderOrderResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            'referrer' => $this->user->referredBy,
+            'referrer' => $this->user?->referredBy,
             'referral_commission' => $this->referral_total_commission,
         ]);
     }

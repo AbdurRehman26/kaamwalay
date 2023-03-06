@@ -27,6 +27,7 @@ class EmailService
     public const TEMPLATE_SLUG_SHIPPED_FROM_VAULT = 'shipped-from-vault';
     public const TEMPLATE_CREATED_USER_ACCESS_ACCOUNT = 'access-account';
     public const TEMPLATE_SLUG_WALLET_CREDITED = 'credit-added';
+    public const TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE = 'referee-discount-code';
     /* Transactional End */
 
     /* Marketing Start */
@@ -64,6 +65,7 @@ class EmailService
         self::TEMPLATE_SLUG_SHIPPED_FROM_VAULT => 'Your cards have shipped from AGS Vault!',
         self::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT => 'Access Account',
         self::TEMPLATE_SLUG_WALLET_CREDITED => 'Robograding Wallet Credited',
+        self::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE => 'Your Discount Code',
 
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_WHAT_HAPPENED => 'What happened?',
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_NOT_SURE_YET => 'Not sure yet?',

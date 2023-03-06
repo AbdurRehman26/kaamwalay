@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Filters\AdminReferrerPayoutSearchFilter;
+use App\Http\Filters\AdminReferrerPayoutStatusFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class ReferrerPayout extends Model
 {
@@ -59,5 +62,24 @@ class ReferrerPayout extends Model
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->id);
+    }
+
+    public static function allowedFilters(): array
+    {
+        return [
+            AllowedFilter::exact('user_id'),
+            AllowedFilter::custom('referrer_payout_status_id', new AdminReferrerPayoutStatusFilter),
+            AllowedFilter::custom('search', new AdminReferrerPayoutSearchFilter),
+        ];
+    }
+
+    public static function allowedSorts(): array
+    {
+        return [
+            'created_at',
+            'completed_at',
+            'amount',
+            'payout_account',
+        ];
     }
 }

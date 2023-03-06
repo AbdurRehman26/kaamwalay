@@ -8,8 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CustomerWalletCreditedListener implements ShouldQueue
 {
-    public bool $afterCommit = true;
-
     public function __construct(protected EmailService $emailService)
     {
         //

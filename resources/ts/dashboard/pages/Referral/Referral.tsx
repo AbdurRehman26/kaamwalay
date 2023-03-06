@@ -45,7 +45,7 @@ export function Referral() {
 
     return (
         <>
-            <ListHeader headline={'Referral Program'} noMargin noSearch isReferral></ListHeader>
+            <ListHeader headline={'Partner Program'} noMargin noSearch isReferral></ListHeader>
             <TabContext value={tab ?? 'main'}>
                 <Grid container direction={'column'} sx={styles.TabContextDiv}>
                     <Box sx={styles.TabsBox}>

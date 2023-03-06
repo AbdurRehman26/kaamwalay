@@ -13,7 +13,9 @@ class OrderStatusChangedNotification extends PushNotification
         OrderStatus::PLACED => 'placed',
         OrderStatus::CONFIRMED => 'confirmed',
         OrderStatus::GRADED => 'graded',
+        OrderStatus::ASSEMBLED => 'assembled',
         OrderStatus::SHIPPED => 'shipped',
+        OrderStatus::CANCELLED => 'assembled',
     ];
 
     /**
@@ -40,6 +42,15 @@ class OrderStatusChangedNotification extends PushNotification
         return [
             'intent' => self::INTENT,
             'object_id' => $this->order->id,
+        ];
+    }
+
+    protected function getDatabaseContent(): array
+    {
+        return [
+            'title' => $this->getTitle(),
+            'body' => $this->getBody(),
+            'intent' => $this->getIntent(),
         ];
     }
 }

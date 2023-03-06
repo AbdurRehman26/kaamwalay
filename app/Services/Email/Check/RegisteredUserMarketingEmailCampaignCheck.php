@@ -12,6 +12,17 @@ class RegisteredUserMarketingEmailCampaignCheck implements ShouldStillSendCheckI
     {
         $extraData = unserialize($scheduledEmail->extra_data);
 
-        return User::find($extraData['user_id'])->orders()->placed()->count() === 0;
+        $user = User::find($extraData['user_id']);
+
+        // User does not exist anymore
+        if (! $user) {
+            return false;
+        }
+
+        if (! $user->wantsToReceiveMarketingContent()) {
+            return false;
+        }
+
+        return $user->orders()->placed()->count() === 0;
     }
 }

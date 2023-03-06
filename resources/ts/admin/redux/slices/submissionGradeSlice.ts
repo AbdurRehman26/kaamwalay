@@ -6,10 +6,14 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (id: number | string) => {
+    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${id}/grades`);
-        const cardsResponse = await endpoint.get('');
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const cardsResponse = await endpoint.get('', {
+            params: {
+                fromAgs: DTO.fromAgs,
+            },
+        });
         return cardsResponse.data;
     },
 );
@@ -71,6 +75,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
         itemIndex: number;
@@ -88,6 +93,7 @@ export interface SubmissionsGrades {
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
     viewModes: [],
+    hasLoadedAllRobogrades: true,
 };
 
 export const submissionGradesSlice = createSlice({
@@ -219,7 +225,26 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
-            state.allSubmissions = action.payload;
+            // This API uses a background sync, but as this data is responsible for the whole page items,
+            // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we
+            // are checking the grades data to ensure if they are loaded, and only then update the state.
+            const areGradesLoaded =
+                action.payload.filter(
+                    (card: Record<string, any>) =>
+                        card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
+                ).length === action.payload.length;
+
+            if (
+                // This will be true when the API is called first time, and the robogrades are not available.
+                (state.hasLoadedAllRobogrades && !areGradesLoaded) ||
+                // This will be true when the API is called more than once, and the robogrades are now available.
+                (!state.hasLoadedAllRobogrades && areGradesLoaded) ||
+                // This will be true when the API is called first time and the grades are available instantly.
+                (state.hasLoadedAllRobogrades && areGradesLoaded)
+            ) {
+                state.allSubmissions = action.payload;
+            }
+            state.hasLoadedAllRobogrades = areGradesLoaded;
         },
     },
 });

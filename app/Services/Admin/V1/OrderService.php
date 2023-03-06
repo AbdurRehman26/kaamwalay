@@ -33,11 +33,14 @@ use Throwable;
 class OrderService
 {
     public function __construct(
-        private OrderItemService $orderItemService,
-        private AgsService $agsService
+        protected OrderItemService $orderItemService,
+        protected AgsService $agsService
     ) {
     }
 
+    /**
+     * @return LengthAwarePaginator<Order>
+     */
     public function getOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');

@@ -36,7 +36,6 @@ export function SubmissionsList() {
             <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
             <Tab component={Link} to={'/submissions/assembled/list'} value={'assembled'} label="Assembled" />
             <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
-            <Tab component={Link} to={'/submissions/incomplete/list'} value={'incomplete'} label="Incomplete" />
         </TabList>
     );
 
@@ -70,7 +69,11 @@ export function SubmissionsList() {
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
                 <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
-                <SelectAndCreateCustomerDialog onClose={() => setCreateSubmission(false)} open={createSubmission} />
+                <SelectAndCreateCustomerDialog
+                    btnText={'Create a new Customer'}
+                    onClose={() => setCreateSubmission(false)}
+                    open={createSubmission}
+                />
                 <Divider />
                 <TabContent value={'all'}>
                     <SubmissionsTable search={search} all />
@@ -89,9 +92,6 @@ export function SubmissionsList() {
                 </TabContent>
                 <TabContent value={'shipped'}>
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.SHIPPED} />
-                </TabContent>
-                <TabContent value={'incomplete'}>
-                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.INCOMPLETE} />
                 </TabContent>
             </Grid>
         </TabContext>

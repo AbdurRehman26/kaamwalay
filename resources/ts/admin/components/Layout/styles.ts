@@ -12,11 +12,11 @@ export const Content = styled('div')({
 
 export const SidebarHolder = styled('aside')({
     display: 'inline-flex',
-    maxWidth: 240,
+    maxWidth: 260,
 });
 
 export const useLayoutHeaderStyles = makeStyles(
-    {
+    (theme) => ({
         root: {
             backgroundColor: '#f9f9f9',
             maxHeight: 64,
@@ -37,9 +37,14 @@ export const useLayoutHeaderStyles = makeStyles(
             display: 'block',
             height: 54,
         },
-    },
+        hiddenOnMobile: {
+            [theme.breakpoints.down('sm')]: {
+                display: 'none',
+            },
+        },
+    }),
     {
-        name: 'DashboardHeader',
+        name: 'LayoutHeader',
     },
 );
 

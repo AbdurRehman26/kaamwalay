@@ -11,7 +11,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -45,6 +47,9 @@ const useStyles = makeStyles(
 
 export function ApplyPromoCode() {
     const { id } = useParams<'id'>();
+    const { user } = useAuth();
+    const [query] = useLocationQuery<any>();
+
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const isCouponValid = useAppSelector((state) => state.newSubmission.couponState.isCouponValid);
@@ -56,18 +61,19 @@ export function ApplyPromoCode() {
     );
     const validCouponId = useAppSelector((state) => state.newSubmission.couponState.validCouponId);
     const apiService = useInjectable(APIService);
-    const selectedServiceLevelID = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel.id);
+    const originalServiceLevelId = useAppSelector((state) => state.newSubmission.step01Data.originalServiceLevel.id);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const selectedPaymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
     const totalCardItems = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
+    const coupon = query?.coupon;
 
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
-                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}&items_count=${totalCardItems}`,
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${originalServiceLevelId}&items_count=${totalCardItems}&user_id=${user?.id}`,
             );
             try {
                 const response = await checkCouponEndpoint.get('');
@@ -83,10 +89,17 @@ export function ApplyPromoCode() {
                 dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));
                 dispatch(setValidCouponId(-1));
+                setShowInvalidState(true);
             }
         },
-        [apiService, dispatch, selectedServiceLevelID, showInvalidState, totalCardItems],
+        [apiService, dispatch, originalServiceLevelId, showInvalidState, totalCardItems, user?.id],
     );
+
+    useEffect(() => {
+        if (coupon) {
+            checkCouponCode(coupon).then(() => dispatch(setCouponCode(coupon.toUpperCase())));
+        }
+    }, [checkCouponCode, coupon, dispatch]);
 
     const debounceCheckCoupon = useMemo(
         () => debounce((newCouponCode: string) => checkCouponCode(newCouponCode), 500),
@@ -104,6 +117,18 @@ export function ApplyPromoCode() {
         [debounceCheckCoupon, dispatch],
     );
 
+    const handleCouponDismiss = useCallback(async () => {
+        if (id) {
+            const endpointUrl = `customer/orders/${id}/coupons/remove`;
+            const removeCouponEndpoint = apiService.createEndpoint(endpointUrl);
+            await removeCouponEndpoint.post('');
+            dispatch(setCouponCode(''));
+        }
+
+        dispatch(setIsCouponApplied(false));
+        dispatch(setIsCouponValid(true));
+    }, [apiService, dispatch, id]);
+
     useEffect(() => {
         handleChange({ target: { value: couponCode } });
     }, [couponCode, handleChange, isCouponValid, showInvalidState]);
@@ -119,7 +144,7 @@ export function ApplyPromoCode() {
     const handleApplyCoupon = async () => {
         const DTO = {
             paymentPlan: {
-                id: selectedServiceLevelID,
+                id: originalServiceLevelId,
             },
             items: selectedCards.map((selectedCard: any) => ({
                 cardProduct: {
@@ -145,8 +170,8 @@ export function ApplyPromoCode() {
         };
         try {
             const endpointUrl = id
-                ? `customer/orders/${id}/coupons/calculate-discount`
-                : `customer/coupons/calculate-discount`;
+                ? `customer/orders/${id}/coupons/calculate-discount?user_id=${user?.id}`
+                : `customer/coupons/calculate-discount?user_id=${user?.id}`;
             const applyCouponEndpoint = apiService.createEndpoint(endpointUrl);
             const appliedCouponResponse = await applyCouponEndpoint.post('', DTO);
             dispatch(setIsCouponApplied(true));
@@ -173,9 +198,12 @@ export function ApplyPromoCode() {
                     <Typography variant={'caption'} sx={{ marginTop: '3px' }}>
                         {discountStatement}
                     </Typography>
+                    <Typography variant={'caption'} color={'red'} sx={{ marginTop: '3px' }}>
+                        {!isCouponValid && couponInvalidMessage}
+                    </Typography>
                 </Box>
                 <Box>
-                    <IconButton onClick={() => dispatch(setIsCouponApplied(false))}>
+                    <IconButton onClick={handleCouponDismiss}>
                         <CloseIcon />
                     </IconButton>
                 </Box>
@@ -200,7 +228,7 @@ export function ApplyPromoCode() {
                         <InputAdornment position="end">
                             {showInvalidState ? (
                                 <ErrorOutlineIcon />
-                            ) : isCouponValid ? (
+                            ) : isCouponValid && couponCode !== '' ? (
                                 <Button variant="text" onClick={handleApplyCoupon}>
                                     Apply Coupon
                                 </Button>

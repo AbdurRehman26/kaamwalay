@@ -17,6 +17,7 @@ import { OrderStatusEntity } from './OrderStatusEntity';
 import { OrderStatusHistoryEntity } from './OrderStatusHistoryEntity';
 import { PaymentMethodEntity } from './PaymentMethodEntity';
 import { PaymentPlanEntity } from './PaymentPlanEntity';
+import { SalesRepEntity } from './SalesRepEntity';
 import { ShipmentEntity } from './ShipmentEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
@@ -42,9 +43,14 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
+    public referralCommission!: number;
     public paymentStatus!: PaymentStatusEnum;
     public estimatedDeliveryStartAt!: string;
     public estimatedDeliveryEndAt!: string;
+    public salesmanCommission!: number;
+
+    @Type(() => UserEntity)
+    public referrer!: UserEntity;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;
@@ -57,6 +63,9 @@ export class OrderEntity extends Entity {
 
     @Type(() => AdminUserEntity)
     public createdBy!: AdminUserEntity;
+
+    @Type(() => SalesRepEntity)
+    public owner!: SalesRepEntity;
 
     @Type(() => PaymentPlanEntity)
     public paymentPlan!: PaymentPlanEntity;

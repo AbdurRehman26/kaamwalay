@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -10,6 +11,7 @@ import classNames from 'classnames';
 import { upperFirst } from 'lodash';
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
@@ -20,7 +22,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 
 interface SubmissionsTableProps {
@@ -35,6 +37,11 @@ interface Props {
     value?: string;
     onClear?: () => void;
 }
+
+const ReferralStatus = [
+    { label: 'Yes', value: 1 },
+    { label: 'No', value: 0 },
+];
 
 const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: 20,
@@ -55,10 +62,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -80,7 +88,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             id: 'created_at',
             numeric: false,
             disablePadding: false,
-            label: tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed',
+            label: 'Placed',
             align: 'left',
             sortable: true,
         },
@@ -97,6 +105,22 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             numeric: false,
             disablePadding: false,
             label: 'Customer',
+            align: 'left',
+            sortable: true,
+        },
+        {
+            id: 'owner',
+            numeric: false,
+            disablePadding: false,
+            label: 'Owner',
+            align: 'left',
+            sortable: false,
+        },
+        {
+            id: 'referred_by',
+            numeric: false,
+            disablePadding: false,
+            label: 'Referrer',
             align: 'left',
             sortable: true,
         },
@@ -172,7 +196,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         );
     };
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useAdminOrdersListQuery({
         params: {
             include: [
                 'orderStatus',
@@ -232,15 +256,46 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, referrerStatus.value],
+    );
+
+    const handleClearReferrerStatus = useCallback(async () => {
+        setReferrerStatus({ label: '', value: 0 });
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus,
+            }),
+            1,
+        );
+    }, [orders$, search, paymentStatus, sortFilter]);
+
+    const handleReferrerStatus = useCallback(
+        async (values) => {
+            setReferrerStatus({ value: values.value, label: values.label });
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus,
+                    referredBy: values.value,
+                }),
+                1,
+            );
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search, paymentStatus, sortFilter],
     );
 
     useEffect(
         () => {
+            // noinspection JSIgnoredPromiseFromCall
             if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.searchSortedWithPagination(
@@ -248,6 +303,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
+                        referredBy: referrerStatus.value,
                     }),
                     1,
                 );
@@ -296,6 +352,21 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 {Object.entries(PaymentStatusMap).map(([key, status]) => {
                     return <FilterButton label={status} active={paymentStatus === key} value={key} />;
                 })}
+                <PageSelector label={'Referrer'} value={referrerStatus.label} onClear={handleClearReferrerStatus}>
+                    {ReferralStatus?.map((item: any) => {
+                        return (
+                            <Grid key={item.value}>
+                                <MenuItem
+                                    onClick={() => handleReferrerStatus(item)}
+                                    key={item.value}
+                                    value={item.value}
+                                >
+                                    {item.label}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
             </Grid>
             <TableContainer>
                 <CustomerSubmissionsList

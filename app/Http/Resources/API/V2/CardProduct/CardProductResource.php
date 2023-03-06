@@ -3,11 +3,12 @@
 namespace App\Http\Resources\API\V2\CardProduct;
 
 use App\Http\Resources\API\V1\CardProduct\CardProductResource as V1CardProductResource;
+use App\Http\Resources\API\V2\Admin\CardCategory\CardCategoryResource;
+use App\Http\Resources\API\V2\CardSet\CardSetResource;
+use App\Models\CardProduct;
 
 /**
- * @property-read int $population
- * @property mixed $rarity
- * @property mixed $card_number
+ * @mixin CardProduct
 */
 class CardProductResource extends V1CardProductResource
 {
@@ -19,6 +20,8 @@ class CardProductResource extends V1CardProductResource
             'population' => $this->population ?? 0,
             'rarity' => $this->rarity,
             'card_number' => $this->card_number,
+            'card_category' => $this->whenLoaded('cardCategory', CardCategoryResource::class),
+            'card_set' => $this->whenLoaded('cardSet', CardSetResource::class),
         ]);
     }
 }

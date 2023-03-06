@@ -196,8 +196,8 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
-
+    const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
+    const isCouponValid = useAppSelector((state) => state.newSubmission?.couponState.isCouponValid);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -244,19 +244,23 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     };
 
     function getPreviewTotal() {
-        const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice -
-            Number(
-                paymentMethodID === 3
-                    ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
-                    : 0,
-            ) +
-            shippingFee -
-            Number(isCouponApplied ? discountedValue : 0) -
-            refundTotal +
-            Number(cleaningFee) +
-            extraChargesTotal -
-            appliedCredit;
+        const previewTotal = Number(
+            (
+                numberOfSelectedCards * serviceLevelPrice -
+                Number(
+                    paymentMethodID === 3
+                        ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
+                        : 0,
+                ) +
+                shippingFee -
+                Number(isCouponApplied ? discountedValue : 0) -
+                refundTotal +
+                Number(cleaningFee) +
+                extraChargesTotal -
+                appliedCredit
+            ).toFixed(2),
+        );
+
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }
@@ -281,10 +285,10 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 },
                 ...(couponCode && {
                     coupon: {
-                        code: couponCode,
+                        code: isCouponApplied ? couponCode : -1,
                     },
                     paymentPlan: {
-                        id: serviceLevelId,
+                        id: originalPaymentPlanId,
                     },
                 }),
             });
@@ -359,7 +363,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                disabled={isStripePaymentLoading}
+                                disabled={isStripePaymentLoading || !isCouponValid}
                                 onClick={handleConfirmStripePayment}
                                 sx={{ height: 48 }}
                             >

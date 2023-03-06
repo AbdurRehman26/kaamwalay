@@ -77,10 +77,11 @@ class AgsService
         return $this->client->createCertificates($this->prepareDataForCertificate(data: $data));
     }
 
-    public function getGrades(array $certificateIds): array
+    public function getGrades(array $certificateIds, int $limit = 10): array
     {
         return $this->client->getGrades([
             'certificate_ids' => implode(',', $certificateIds),
+            'limit' => $limit,
         ]);
     }
 
@@ -239,10 +240,10 @@ class AgsService
     protected function prepareFrontScanGradesForPublicPage(array $data): array
     {
         return [
-            'centering' => $data['front_centering_human_grade'] ?? $data['front_scan']['centering_grade']['grade'] ?? null,
-            'surface' => $data['front_surface_human_grade'] ?? $data['front_scan']['surface_grade']['grade'] ?? null,
-            'edges' => $data['front_edges_human_grade'] ?? $data['front_scan']['edges_grade']['grade'] ?? null,
-            'corners' => $data['front_corners_human_grade'] ?? $data['front_scan']['corners_grade']['grade'] ?? null,
+            'centering' => $data['front_centering_human_grade'] ?? $data['laser_front_scan']['centering_grade']['grade'] ?? null,
+            'surface' => $data['front_surface_human_grade'] ?? $data['laser_front_scan']['surface_grade']['grade'] ?? null,
+            'edges' => $data['front_edges_human_grade'] ?? $data['laser_front_scan']['edges_grade']['grade'] ?? null,
+            'corners' => $data['front_corners_human_grade'] ?? $data['laser_front_scan']['corners_grade']['grade'] ?? null,
         ];
     }
 
@@ -254,10 +255,10 @@ class AgsService
     protected function prepareBackScanGradesForPublicPage(array $data): array
     {
         return [
-            'centering' => $data['back_centering_human_grade'] ?? $data['back_scan']['centering_grade']['grade'] ?? null,
-            'surface' => $data['back_surface_human_grade'] ?? $data['back_scan']['surface_grade']['grade'] ?? null,
-            'edges' => $data['back_edges_human_grade'] ?? $data['back_scan']['edges_grade']['grade'] ?? null,
-            'corners' => $data['back_corners_human_grade'] ?? $data['back_scan']['corners_grade']['grade'] ?? null,
+            'centering' => $data['back_centering_human_grade'] ?? $data['laser_back_scan']['centering_grade']['grade'] ?? null,
+            'surface' => $data['back_surface_human_grade'] ?? $data['laser_back_scan']['surface_grade']['grade'] ?? null,
+            'edges' => $data['back_edges_human_grade'] ?? $data['laser_back_scan']['edges_grade']['grade'] ?? null,
+            'corners' => $data['back_corners_human_grade'] ?? $data['laser_back_scan']['corners_grade']['grade'] ?? null,
         ];
     }
 

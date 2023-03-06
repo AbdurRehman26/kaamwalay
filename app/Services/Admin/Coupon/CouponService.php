@@ -18,8 +18,8 @@ use App\Models\Order;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
-use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;
-use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
+use App\Services\Coupon\V2\CouponApplicable\ServiceFeeCoupon;
+use App\Services\Coupon\V2\CouponApplicable\ServiceLevelCoupon;
 use Countable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -47,9 +47,10 @@ class CouponService
     ) {
     }
 
+    // @phpstan-ignore-next-line
     public function getCoupons(): LengthAwarePaginator
     {
-        return QueryBuilder::for(Coupon::class)
+        return QueryBuilder::for(Coupon::excludeSystemGeneratedCoupons())
             ->allowedFilters([
                 'code',
                 AllowedFilter::scope('status'),
@@ -125,7 +126,6 @@ class CouponService
 
     protected function getNewCouponStatus(Coupon $coupon): int
     {
-        /** @phpstan-ignore-next-line  */
         if ($coupon->available_from->isPast()) {
             return CouponStatus::STATUS_ACTIVE;
         }

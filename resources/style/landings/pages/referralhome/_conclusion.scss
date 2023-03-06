@@ -1,0 +1,38 @@
+.ReferralHome-conclusion {
+    background-color: #fff;
+    padding-top: 136px;
+    padding-bottom: 0;
+    .ReferralHome-sectionContentHeadline {
+        margin-bottom: 40px;
+    }
+}
+
+.ReferralHome-cardColumn {
+    width: 25%;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 14px;
+    @media screen and (max-width: 768px) {
+        padding: 0 4px;
+    }
+}
+
+.ReferralHome-cardImages {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 64px;
+    flex-wrap: wrap;
+    @media screen and (max-width: 768px) {
+        margin-top: 54px;
+    }
+}
+
+.ReferralHome-cardImage {
+    max-width: 80%;
+    @media screen and (max-width: 768px) {
+        max-width: 100%;
+    }
+}

@@ -39,7 +39,11 @@ export const deleteCard = createAsyncThunk('newCard/deleteCard', async (cardId: 
 export const getCardData = createAsyncThunk('newCard/getCardData', async (cardId: number) => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`admin/cards/${cardId}`);
-    return await endpoint.get('');
+    return await endpoint.get('', {
+        params: {
+            include: ['cardCategory', 'cardSet'],
+        },
+    });
 });
 
 export const adminCardsSlice = createSlice({

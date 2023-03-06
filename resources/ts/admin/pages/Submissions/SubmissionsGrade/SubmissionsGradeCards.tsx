@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -34,6 +35,7 @@ export function SubmissionsGradeCards() {
     const navigate = useNavigate();
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
+    const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -56,11 +58,22 @@ export function SubmissionsGradeCards() {
         navigate(`/submissions/${id}/view`);
     }
 
-    const loadGrades = useCallback(() => {
-        dispatch(getAllSubmissions(Number(id)))
-            .unwrap()
-            .then(() => dispatch(matchExistingOrderItemsToViewModes()));
-    }, [dispatch, id]);
+    const loadGrades = useCallback(
+        (fromAgs = true) => {
+            dispatch(getAllSubmissions({ fromAgs, id: Number(id) }))
+                .unwrap()
+                .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
+        },
+        [dispatch, id],
+    );
+
+    useRetry(
+        () => {
+            loadGrades(false);
+        },
+        () => !hasLoadedAllRobogrades,
+        { windowTime: 5000 },
+    );
 
     const handleOnEditCard = useCallback(
         async (data) => {
@@ -74,7 +87,7 @@ export function SubmissionsGradeCards() {
                         value: declaredValue,
                     }),
                 );
-                await loadGrades();
+                await loadGrades(false);
             }
         },
         [dispatch, loadGrades, id],

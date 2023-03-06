@@ -4,6 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +24,22 @@ const CardImageDiv = styled(Grid)({
                 display: 'flex',
                 justifyContent: 'center',
             },
+        },
+        '.SwiperToolTip': {
+            background: '#D9D9D9',
+            borderRadius: '4px',
+            textAlign: 'center',
+            padding: '10px 10px',
+            width: '120px',
+            margin: '30px 110px',
+            color: '#000',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '12px',
+            lineHeight: '16px',
+        },
+        '.SwiperToolTipHide': {
+            display: 'none',
         },
         '.react-transform-wrapper': {
             width: '100%',
@@ -79,6 +96,7 @@ interface props {
 export function CardImageModal({ imagesJson }: props) {
     const labelDialog = useSelector((state: RootState) => state.modal.openLabelDialog.labelDialog);
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+    const [toolTipClass, setToolTipClass] = useState('SwiperToolTip');
     const dispatch = useDispatch();
 
     const handleModal = useCallback(() => {
@@ -88,6 +106,7 @@ export function CardImageModal({ imagesJson }: props) {
     useEffect(() => {
         if (!labelDialog) {
             setThumbsSwiper(null);
+            setToolTipClass('SwiperToolTip');
         }
     }, [labelDialog]);
 
@@ -138,9 +157,15 @@ export function CardImageModal({ imagesJson }: props) {
                         {Object.keys(imagesJson).map((key) => {
                             return (
                                 <SwiperSlide>
-                                    <TransformWrapper centerOnInit={true}>
+                                    <TransformWrapper
+                                        centerOnInit={true}
+                                        onZoomStart={() => setToolTipClass('SwiperToolTipHide')}
+                                    >
                                         <TransformComponent>
-                                            <img src={imagesJson[key]} alt={''} />
+                                            <div>
+                                                <img src={imagesJson[key]} alt={''} />
+                                                <Typography className={toolTipClass}>Pinch/Scroll to Zoom</Typography>
+                                            </div>
                                         </TransformComponent>
                                     </TransformWrapper>
                                 </SwiperSlide>

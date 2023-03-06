@@ -11,8 +11,8 @@ import FeedMobileCategories from './FeedMobileCategories';
 import FeedSortBy from './FeedSortBy';
 
 export function FeedAccordion() {
-    const categoryTeal = useSelector((state: RootState) => state.feed.categoryTeal.teal);
-    const gradeTeal = useSelector((state: RootState) => state.feed.gradeTeal.teal);
+    const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
+    const category: Array<string> = useSelector((state: RootState) => state.feed.categoryValue.category);
 
     return (
         <div>
@@ -42,7 +42,7 @@ export function FeedAccordion() {
                     id="panel2a-header"
                 >
                     <Typography>
-                        Category {categoryTeal ? <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} /> : null}
+                        Category {category.length > 0 && <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} />}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -56,9 +56,7 @@ export function FeedAccordion() {
                     aria-controls="panel3a-content"
                     id="panel3a-header"
                 >
-                    <Typography>
-                        Grade {gradeTeal ? <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} /> : null}
-                    </Typography>
+                    <Typography>Grade {grade && <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} />}</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ marginBottom: '60px' }}>
                     <FeedGrade />

@@ -114,6 +114,14 @@ class CardProduct extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
+    /**
+     * @return HasOne<PopReportsCard>
+     */
+    public function popReportsCard(): HasOne
+    {
+        return $this->hasOne(PopReportsCard::class);
+    }
+
     public function isCardInformationComplete(): bool
     {
         return $this->card_category_id && $this->card_set_id && ! is_null($this->card_number_order);
@@ -296,5 +304,19 @@ class CardProduct extends Model
                 'orderItem.order',
                 fn ($query) => ($query->where('order_status_id', '>=', OrderStatus::SHIPPED))
             );
+    }
+
+    /**
+     * @param  Builder<CardProduct> $query
+     * @return Builder<CardProduct>
+     */
+    public function scopeExcludeAddedManually(Builder $query): Builder
+    {
+        return $query->where('added_manually', 0)
+            ->orWhere(fn ($query) => (
+                $query->whereNotNull('card_products.card_category_id')
+                    ->whereNotNull('card_products.card_set_id')
+                    ->whereNotNull('card_products.card_number_order')
+            ));
     }
 }

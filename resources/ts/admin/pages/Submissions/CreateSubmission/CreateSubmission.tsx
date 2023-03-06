@@ -119,6 +119,9 @@ export function CreateSubmission() {
             turnaround: selectedServiceLevel[0].turnaround,
             type: selectedServiceLevel[0].type,
             maxProtectionAmount: selectedServiceLevel[0].maxProtectionAmount,
+            minPrice: selectedServiceLevel[0].minPrice,
+            maxPrice: selectedServiceLevel[0].maxPrice,
+            priceRanges: selectedServiceLevel[0].priceRanges,
         };
 
         dispatch(setServiceLevel(level));
@@ -175,6 +178,7 @@ export function CreateSubmission() {
             ) : (
                 <>
                     <SelectAndCreateCustomerDialog
+                        btnText={'Create a new Customer'}
                         changeCustomer={true}
                         onClose={() => setCreateSubmission(false)}
                         open={createSubmission}
@@ -317,7 +321,8 @@ export function CreateSubmission() {
                                                             <div style={{ display: 'flex', fontSize: '14px' }}>
                                                                 <span style={{ fontWeight: 500 }}>
                                                                     {' '}
-                                                                    {`$${item?.price} / Card`} &nbsp;
+                                                                    {`$${item?.minPrice} - ${item?.maxPrice} / Card`}{' '}
+                                                                    &nbsp;
                                                                 </span>
                                                                 <span style={{ color: '#0000008A' }}>
                                                                     {' '}

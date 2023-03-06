@@ -19,7 +19,7 @@ use App\Models\PaymentPlan;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\CleaningFee\CleaningFeeService;
-use App\Services\Coupon\CouponService;
+use App\Services\Coupon\V2\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CouponAppliedValidator;
@@ -72,7 +72,7 @@ class CreateOrderService
     {
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
-        CouponAppliedValidator::validate($this->data);
+        CouponAppliedValidator::validate(array_merge($this->data, ['user_id' => auth()->user()->id]));
         WalletCreditAppliedValidator::validate($this->data);
     }
 
@@ -271,6 +271,7 @@ class CreateOrderService
             $couponParams = [
                 'items_count' => $this->order->orderItems()->count(),
                 'couponables_id' => $couponData['couponables_id'] ?? $this->data['payment_plan']['id'],
+                'user_id' => $this->order->user_id,
             ];
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'], $couponParams)->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);

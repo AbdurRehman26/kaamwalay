@@ -41,6 +41,7 @@ class Coupon extends Model
         'type',
         'discount_value',
         'is_capped',
+        'is_system_generated',
         'capped_amount',
         'available_from',
         'available_till',
@@ -60,6 +61,15 @@ class Coupon extends Model
         'available_till' => CouponDateRange::class,
         'min_threshold_type' => CouponMinThresholdTypeEnum::class,
     ];
+
+    /**
+     * @param  Builder <Coupon> $query
+     * @return Builder <Coupon>
+     */
+    public function scopeExcludeSystemGeneratedCoupons(Builder $query): Builder
+    {
+        return $query->where('is_system_generated', '=', 0);
+    }
 
     public function couponStatusHistories(): HasMany
     {
@@ -137,9 +147,20 @@ class Coupon extends Model
             return $query;
         }
 
-        return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
-            $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
-        })->orDoesntHave('couponAble');
+        if (! empty($couponParams['couponables_id'])) {
+            $query = $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
+                $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
+            })->orDoesntHave('couponAble');
+        }
+
+        if (! empty($couponParams['user_id'])) {
+            $query = $query->orWhereHas('couponAble', function ($subQuery) use ($couponParams) {
+                $subQuery->where('couponables_id', '=', $couponParams['user_id'])
+                    ->where('couponables_type', '=', Couponable::COUPONABLE_TYPES['user']);
+            });
+        }
+
+        return $query;
     }
 
     public function scopeValidForUserLimit(Builder $query, string $couponCode, User $user):  Builder
@@ -169,6 +190,15 @@ class Coupon extends Model
         );
     }
 
+    /**
+     * @param  Builder <Coupon> $query
+     * @return Builder <Coupon>
+     */
+    public function scopeNotCreatedBy(Builder $query, string|int $id): Builder
+    {
+        return $query->where('created_by', '!=', $id);
+    }
+
     public function getCodeAttribute(string $value): string
     {
         return Str::upper($value);
@@ -192,11 +222,29 @@ class Coupon extends Model
         ];
     }
 
+    public static function getAllowedSalesmanIncludes(): array
+    {
+        return [
+            'couponStatus',
+            'couponApplicable',
+            'couponStats',
+            'couponLogs',
+            'users',
+            'paymentPlans',
+            'createdBy',
+        ];
+    }
+
     public function hasInvalidMinThreshold(int $itemsCount = 0): bool
     {
         return match ($this->min_threshold_type) {
             CouponMinThresholdTypeEnum::CARD_COUNT => $itemsCount < $this->min_threshold_value,
             default => false,
         };
+    }
+
+    public static function getRefereeCouponDiscount(): float
+    {
+        return config('robograding.feature_referral_discount_percentage');
     }
 }

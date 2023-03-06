@@ -48,14 +48,14 @@ class CustomerProfileService
     {
         $response = $this->agsService->deleteProfile($user);
 
-        if (! isset($response['app_status']) || ! $response['app_status']) {
+        if (! isset($response['success'])) {
             throw new UserAccountCannotBeDeletedException();
         }
 
         UserAccountDeletedEvent::dispatch($user->id);
 
         $this->update($user, [
-            'email' => '',
+            'email' => null,
             'email_verified_at' => null,
             'first_name' => null,
             'last_name' => null,

@@ -18,10 +18,12 @@
  *                  "id": 18,
  *                  "first_name": "Jane",
  *                  "last_name": "Doe",
+ *                  "full_name": "Jane Doe",
  *                  "email": "test@test.test",
  *                  "username": "test",
  *                  "phone": null,
  *                  "stripe_id": "cus_K0651IOZjCy9Wa",
+ *                  "is_marketing_notifications_enabled": true,
  *                  "roles": [
  *                      {
  *                          "id": 2,

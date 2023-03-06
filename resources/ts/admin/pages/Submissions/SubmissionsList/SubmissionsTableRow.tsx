@@ -32,6 +32,8 @@ import MarkAsPaidDialog from '../SubmissionsView/MarkAsPaidDialog';
 interface SubmissionsTableRowProps {
     order: OrderEntity;
     isCustomerDetailPage: boolean;
+    isSalesRepDetailPage?: boolean;
+    isReferralPage?: boolean;
 }
 
 enum Options {
@@ -59,7 +61,12 @@ const useStyles = makeStyles(
  * @date: 15.09.2021
  * @time: 04:42
  */
-export function SubmissionsTableRow({ order, isCustomerDetailPage }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({
+    order,
+    isCustomerDetailPage,
+    isSalesRepDetailPage = false,
+    isReferralPage = false,
+}: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
@@ -151,24 +158,56 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     </MuiLink>
                 </TableCell>
                 <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                {isCustomerDetailPage ? (
-                    <>
-                        <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                        <TableCell>
-                            {order.customer?.id && order.customer?.customerNumber ? (
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={`/customers/${order.customer?.id}/view`}
-                                    className={font.fontWeightMedium}
-                                >
-                                    {order.customer?.customerNumber}
-                                </MuiLink>
-                            ) : (
-                                '-'
-                            )}
-                        </TableCell>
-                    </>
+                {isCustomerDetailPage && !isReferralPage ? (
+                    <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
+                ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order.customer?.id && order.customer?.customerNumber ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.customer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.customer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order?.owner?.fullName ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/salesreps/${order.owner?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.owner.fullName}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}{' '}
+                    </TableCell>
+                ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order?.referrer ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.referrer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.referrer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
                 ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
@@ -182,19 +221,21 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                <TableCell>
-                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
-                </TableCell>
-                <TableCell align={'right'}>
-                    <SubmissionActionButton
-                        orderId={order.id}
-                        orderStatus={order.orderStatus}
-                        size={'small'}
-                        buttonOnly
-                        trackingNumber={order.orderShipment?.trackingNumber}
-                        shippingProvider={order.orderShipment?.shippingProvider}
-                    />
-                </TableCell>
+                {isReferralPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
+                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
+                {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
+                {!isSalesRepDetailPage && !isReferralPage ? (
+                    <TableCell align={'right'}>
+                        <SubmissionActionButton
+                            orderId={order.id}
+                            orderStatus={order.orderStatus}
+                            size={'small'}
+                            buttonOnly
+                            trackingNumber={order.orderShipment?.trackingNumber}
+                            shippingProvider={order.orderShipment?.shippingProvider}
+                        />
+                    </TableCell>
+                ) : null}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}
@@ -204,43 +245,33 @@ export function SubmissionsTableRow({ order, isCustomerDetailPage }: Submissions
                     </Grid>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (
-                            <>
-                                <MenuItem onClick={() => navigate(`/submissions/${order.id}/view`)}>
-                                    View Submission
-                                </MenuItem>
+                        <>
+                            <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
+                                {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                            </MenuItem>
 
-                                <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
-                            </>
-                        ) : (
-                            <>
-                                <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
-                                    {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                </MenuItem>
+                            <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                            {order.paymentStatus !== PaymentStatusEnum.PAID ? (
+                                <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
+                            ) : null}
 
-                                <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
-                                {order.paymentStatus !== PaymentStatusEnum.PAID ? (
-                                    <MenuItem onClick={handleOption(Options.MarkAsPaid)}>Mark As Paid</MenuItem>
-                                ) : null}
-
-                                {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
-                                order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
-                                order?.orderStatus.is(OrderStatusEnum.SHIPPED)
-                                    ? [
-                                          <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
-                                              View Grades
-                                          </MenuItem>,
-                                          <MenuItem
-                                              key={Options.DownloadOrderLabel}
-                                              onClick={handleOption(Options.DownloadOrderLabel)}
-                                              disabled={!order.orderLabel}
-                                          >
-                                              Export Labels
-                                          </MenuItem>,
-                                      ]
-                                    : null}
-                            </>
-                        )}
+                            {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
+                            order?.orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
+                            order?.orderStatus.is(OrderStatusEnum.SHIPPED)
+                                ? [
+                                      <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
+                                          View Grades
+                                      </MenuItem>,
+                                      <MenuItem
+                                          key={Options.DownloadOrderLabel}
+                                          onClick={handleOption(Options.DownloadOrderLabel)}
+                                          disabled={!order.orderLabel}
+                                      >
+                                          Export Labels
+                                      </MenuItem>,
+                                  ]
+                                : null}
+                        </>
                     </Menu>
                 </TableCell>
             </TableRow>

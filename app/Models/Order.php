@@ -7,11 +7,12 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
-use App\Events\API\Order\V2\GenerateOrderInvoice;
+use App\Http\Filters\AdminOrderReferByFilter;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
 use App\Http\Sorts\AdminSubmissionsCustomerNumberSort;
 use App\Http\Sorts\AdminSubmissionsPaymentStatusSort;
+use App\Http\Sorts\AdminSubmissionsReferrerSort;
 use App\Http\Sorts\AdminSubmissionsStatusSort;
 use App\Http\Sorts\AdminSubmissionsTotalDeclaredValueSort;
 use Carbon\Carbon;
@@ -74,6 +75,7 @@ class Order extends Model implements Exportable
         'estimated_delivery_start_at',
         'estimated_delivery_end_at',
         'created_by',
+        'referral_total_commission',
     ];
 
     /**
@@ -116,6 +118,8 @@ class Order extends Model implements Exportable
         'estimated_delivery_start_at' => 'datetime',
         'estimated_delivery_end_at' => 'datetime',
         'created_by' => 'integer',
+        'discounted_amount' => 'float',
+        'referral_total_commission' => 'float',
     ];
 
     protected $appends = [
@@ -128,7 +132,7 @@ class Order extends Model implements Exportable
         'cleaning_fee' => 0,
     ];
 
-    public static function getAllowedAdminIncludes(): array
+    private static function allowedIncludes(): array
     {
         return [
             AllowedInclude::relationship('invoice'),
@@ -153,7 +157,7 @@ class Order extends Model implements Exportable
         ];
     }
 
-    public static function getAllowedAdminFilters(): array
+    private static function allowedFilters(): array
     {
         return [
             AllowedFilter::exact('order_id', 'id'),
@@ -162,12 +166,14 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::scope('salesman_id'),
+            AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
 
-    public static function getAllowedAdminSorts(): array
+    private static function allowedSorts(): array
     {
         return [
             AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
@@ -175,6 +181,7 @@ class Order extends Model implements Exportable
             AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
             AllowedSort::custom('status', new AdminSubmissionsStatusSort),
             AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            AllowedSort::custom('referred_by', new AdminSubmissionsReferrerSort),
             'created_at',
             'order_number',
             'arrived_at',
@@ -182,6 +189,49 @@ class Order extends Model implements Exportable
         ];
     }
 
+    public static function getAllowedAdminIncludes(): array
+    {
+        return self::allowedIncludes();
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return self::allowedFilters();
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return self::allowedSorts();
+    }
+
+    public static function getAllowedSalesmanIncludes(): array
+    {
+        return self::allowedIncludes();
+    }
+
+    public static function getAllowedSalesmanFilters(): array
+    {
+        return self::allowedFilters();
+    }
+
+    public static function getAllowedSalesmanSorts(): array
+    {
+        return self::allowedSorts();
+    }
+
+    public static function allowedAdminReferralSorts(): array
+    {
+        return [
+            AllowedSort::custom('customer_number', new AdminSubmissionsCustomerNumberSort),
+            AllowedSort::custom('total_declared_value', new AdminSubmissionsTotalDeclaredValueSort),
+            AllowedSort::custom('cards', new AdminSubmissionsCardsSort),
+            AllowedSort::custom('status', new AdminSubmissionsStatusSort),
+            AllowedSort::custom('payment_status', new AdminSubmissionsPaymentStatusSort),
+            'orders.created_at',
+            'order_number',
+            'grand_total',
+        ];
+    }
     public static function getAllowedIncludes(): array
     {
         return [
@@ -299,6 +349,15 @@ class Order extends Model implements Exportable
         return $query->where('orders.user_id', $user->id);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeForSalesman(Builder $query, User $user): Builder
+    {
+        return $query->where('orders.salesman_id', $user->id);
+    }
+
     public function isPayable(string $version = 'v1'): bool
     {
         if ($version === 'v1') {
@@ -333,7 +392,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalToBePaidAttribute(): float
     {
-        return $this->grand_total - $this->amount_paid_from_wallet;
+        return (float) bcsub((string) $this->grand_total, (string) $this->amount_paid_from_wallet, 2);
     }
 
     public function getTotalGradedItems(): int
@@ -380,6 +439,16 @@ class Order extends Model implements Exportable
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
+
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string|int  $salesmanId
+     * @return Builder<Order>
+     */
+    public function scopeSalesmanId(Builder $query, string|int $salesmanId): Builder
+    {
+        return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
     }
 
     public function missingItemsCount(): int
@@ -490,7 +559,7 @@ class Order extends Model implements Exportable
             $row->order_number,
             $row->created_at,
             $row->arrived_at,
-            $row->user->customer_number,
+            $row->user?->customer_number,
             $row->orderItems->sum('quantity'),
             $row->orderStatus->name,
             $row->payment_status->toString(),
@@ -514,8 +583,6 @@ class Order extends Model implements Exportable
         $this->payment_status = OrderPaymentStatusEnum::PAID;
         $this->paid_at = now();
         $this->save();
-
-        GenerateOrderInvoice::dispatch($this);
     }
 
     public function hasInvoice(): bool
@@ -618,5 +685,21 @@ class Order extends Model implements Exportable
     public function orderCertificate(): HasOne
     {
         return $this->hasOne(OrderCertificate::class);
+    }
+
+    public function canBeGraded(): bool
+    {
+        return in_array(
+            $this->order_status_id,
+            [OrderStatus::CONFIRMED, OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
+        );
+    }
+
+    public function isGradedOrShipped(): bool
+    {
+        return in_array(
+            $this->order_status_id,
+            [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
+        );
     }
 }

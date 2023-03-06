@@ -25,7 +25,7 @@ class ChangeDealStageForPaidOrderHubspot implements ShouldQueue, ShouldBeEncrypt
             return;
         }
 
-        if (! config('services.hubspot.api_key')) {
+        if (! config('services.hubspot.access_token')) {
             return;
         }
 

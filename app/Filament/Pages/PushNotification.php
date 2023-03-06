@@ -38,12 +38,14 @@ class PushNotification extends Page
                                     'body' => $data['message'],
                                 ],
                             ],
+                            'data' => ['intent' => $data['intent']],
                         ],
                         'fcm' => [
                             'notification' => [
                                 'title' => $data['title'],
                                 'body' => $data['message'],
                             ],
+                            'data' => ['intent' => $data['intent']],
                         ],
                     ]);
                 })
@@ -56,6 +58,10 @@ class PushNotification extends Page
                             'debug-general' => 'debug-general',
                         ])
                         ->required(),
+                    Forms\Components\Select::make('intent')
+                        ->options([
+                            'SUBMISSION_NEW' => 'New Submission',
+                        ]),
                     Forms\Components\TextInput::make('title')
                         ->required(),
                     Forms\Components\Textarea::make('message')

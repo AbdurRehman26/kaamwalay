@@ -14,11 +14,15 @@ export interface SubmissionService {
     price: number;
     priceBeforeDiscount?: string;
     discountPercentage?: string;
+    priceRanges?: any;
+    maxPrice?: number;
+    minPrice?: number;
 }
 
 export interface Step01Data {
     availableServiceLevels: SubmissionService[];
     selectedServiceLevel: SubmissionService;
+    originalServiceLevel: SubmissionService;
     status: any;
 }
 
@@ -107,6 +111,7 @@ export interface NewSubmissionSliceState {
     previewTotal: number;
     availableCredit: number;
     appliedCredit: number;
+    amountPaidFromWallet: number;
     step01Status: any;
     orderID: number;
     grandTotal: number;
@@ -133,8 +138,8 @@ export interface NewSubmissionSliceState {
     paymentStatus: PaymentStatusEnum;
     shippingAddress: any;
     billingAddress: any;
-
     stepValidations: boolean[];
+    dialog: boolean;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -148,6 +153,7 @@ const initialState: NewSubmissionSliceState = {
     availableCredit: 0,
     previewTotal: 0,
     appliedCredit: 0,
+    amountPaidFromWallet: 0,
     orderNumber: '',
     paymentMethodDiscountedAmount: 0,
     isNextDisabled: false,
@@ -176,6 +182,40 @@ const initialState: NewSubmissionSliceState = {
                 maxProtectionAmount: 200,
                 turnaround: '20 Business Days',
                 price: 18,
+                priceRanges: [
+                    {
+                        id: 1,
+                        minCards: 1,
+                        maxCards: 20,
+                        price: 18,
+                    },
+                    {
+                        id: 2,
+                        minCards: 21,
+                        maxCards: 50,
+                        price: 17,
+                    },
+                    {
+                        id: 3,
+                        minCards: 51,
+                        maxCards: 100,
+                        price: 16,
+                    },
+                    {
+                        id: 4,
+                        minCards: 101,
+                        maxCards: 200,
+                        price: 15,
+                    },
+                    {
+                        id: 5,
+                        minCards: 201,
+                        maxCards: null,
+                        price: 14,
+                    },
+                ],
+                maxPrice: 18,
+                minPrice: 14,
             },
         ],
         selectedServiceLevel: {
@@ -184,8 +224,83 @@ const initialState: NewSubmissionSliceState = {
             maxProtectionAmount: 200,
             turnaround: '20 Business Days',
             price: 18,
+            priceRanges: [
+                {
+                    id: 1,
+                    minCards: 1,
+                    maxCards: 20,
+                    price: 18,
+                },
+                {
+                    id: 2,
+                    minCards: 21,
+                    maxCards: 50,
+                    price: 17,
+                },
+                {
+                    id: 3,
+                    minCards: 51,
+                    maxCards: 100,
+                    price: 16,
+                },
+                {
+                    id: 4,
+                    minCards: 101,
+                    maxCards: 200,
+                    price: 15,
+                },
+                {
+                    id: 5,
+                    minCards: 201,
+                    maxCards: null,
+                    price: 14,
+                },
+            ],
+            maxPrice: 18,
+            minPrice: 14,
         },
         status: 'success',
+        originalServiceLevel: {
+            id: 1,
+            type: 'card',
+            maxProtectionAmount: 200,
+            turnaround: '20 Business Days',
+            price: 18,
+            priceRanges: [
+                {
+                    id: 1,
+                    minCards: 1,
+                    maxCards: 20,
+                    price: 18,
+                },
+                {
+                    id: 2,
+                    minCards: 21,
+                    maxCards: 50,
+                    price: 17,
+                },
+                {
+                    id: 3,
+                    minCards: 51,
+                    maxCards: 100,
+                    price: 16,
+                },
+                {
+                    id: 4,
+                    minCards: 101,
+                    maxCards: 200,
+                    price: 15,
+                },
+                {
+                    id: 5,
+                    minCards: 201,
+                    maxCards: null,
+                    price: 14,
+                },
+            ],
+            maxPrice: 18,
+            minPrice: 14,
+        },
     },
     step02Data: {
         searchValue: '',
@@ -312,11 +427,12 @@ const initialState: NewSubmissionSliceState = {
     shippingAddress: [],
     billingAddress: [],
     stepValidations: [true, false, false, false, false],
+    dialog: false,
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/', { version: 'v3' });
     const serviceLevels = await endpoint.get('');
     return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
@@ -326,6 +442,9 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
         price: serviceLevel.price,
         priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
         discountPercentage: serviceLevel.discountPercentage,
+        priceRanges: serviceLevel.priceRanges,
+        minPrice: serviceLevel.minPrice,
+        maxPrice: serviceLevel.maxPrice,
     }));
 });
 
@@ -346,7 +465,7 @@ export const getTotalInAGS = createAsyncThunk(
     async (input: { orderID: number; chainID: number; paymentByWallet: number; discountedAmount: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}&discounted_amount=${input.discountedAmount}`,
+            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}`,
         );
         const response = await endpoint.get('');
         return response.data.value;
@@ -566,7 +685,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             : false,
     };
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders');
+    const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });
@@ -646,6 +765,9 @@ export const newSubmissionSlice = createSlice({
                 state.currentStep -= 1;
             }
         },
+        setDialog: (state, action: PayloadAction<boolean>) => {
+            state.dialog = action.payload;
+        },
         setCustomStep: (state, action: PayloadAction<number>) => {
             state.currentStep = action.payload;
         },
@@ -654,6 +776,9 @@ export const newSubmissionSlice = createSlice({
         },
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
+        },
+        setOriginalServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
+            state.step01Data.originalServiceLevel = action.payload;
         },
         setRequiresCleaning: (state, action: PayloadAction<boolean>) => {
             state.step02Data.requiresCleaning = action.payload;
@@ -771,6 +896,12 @@ export const newSubmissionSlice = createSlice({
         },
         setCouponCode: (state, action: PayloadAction<string>) => {
             state.couponState.couponCode = action.payload;
+            if (action.payload === '') {
+                state.couponState.isCouponApplied = false;
+                // This is to clear the error being shown if the text field is empty. It will enable the submit button
+                // and will process the transaction.
+                state.couponState.isCouponValid = true;
+            }
         },
         SetCouponInvalidMessage: (state, action: PayloadAction<string>) => {
             state.couponState.couponInvalidMessage = action.payload;
@@ -834,6 +965,10 @@ export const newSubmissionSlice = createSlice({
 
             state.step01Data.selectedServiceLevel = {
                 type: 'card',
+                ...action.payload.paymentPlan,
+            };
+            state.step01Data.originalServiceLevel = {
+                type: 'card',
                 ...action.payload.originalPaymentPlan,
             };
             state.step02Data = {
@@ -869,9 +1004,10 @@ export const newSubmissionSlice = createSlice({
                     !action.payload.billingAddress,
                 selectedBillingAddress: {
                     id: billingAddress?.id,
-                    fullName: billingAddress?.firstName,
+                    fullName: billingAddress ? billingAddress?.firstName + ' ' + billingAddress?.lastName : '',
                     lastName: billingAddress?.lastName,
                     address: billingAddress?.address,
+                    address2: billingAddress?.address2,
                     city: billingAddress?.city,
                     state: {
                         id: 0,
@@ -885,6 +1021,7 @@ export const newSubmissionSlice = createSlice({
                 },
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;
+            state.amountPaidFromWallet = +action.payload.amountPaidFromWallet;
             state.paymentStatus = action.payload.paymentStatus;
         },
         setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
@@ -993,6 +1130,7 @@ export const newSubmissionSlice = createSlice({
                 : '';
             state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
             state.appliedCredit = action.payload.amountPaidFromWallet;
+            state.amountPaidFromWallet = action.payload.amountPaidFromWallet;
         },
     },
 });
@@ -1002,6 +1140,7 @@ export const {
     backStep,
     setCustomStep,
     setServiceLevel,
+    setOriginalServiceLevel,
     setIsNextDisabled,
     setCardsSearchValue,
     setSaveShippingAddress,
@@ -1016,6 +1155,7 @@ export const {
     setSaveCardForLater,
     setUseShippingAddressAsBilling,
     updatePaymentMethodField,
+    setDialog,
     updateBillingAddressField,
     saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,

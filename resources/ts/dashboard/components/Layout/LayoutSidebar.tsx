@@ -1,5 +1,6 @@
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
@@ -105,6 +106,7 @@ export function LayoutSidebar() {
                     href={'/payment-cards'}
                 />
                 <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/address-book'} />
+                <LayoutSidebarItem icon={CampaignOutlinedIcon} title={'Partner Program'} href={'/referral-program'} />
             </List>
         </Paper>
     );

@@ -271,6 +271,7 @@ class PopReportService
         $this->updateMultipleSeriesReports($orderSeries);
     }
 
+    // @phpstan-ignore-next-line
     public function getSeriesReport(CardCategory $cardCategory): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -286,6 +287,7 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
+    // @phpstan-ignore-next-line
     public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -301,6 +303,7 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
+    // @phpstan-ignore-next-line
     public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -331,6 +334,20 @@ class PopReportService
     public function getCardProductsTotalPopulation(CardSet $cardSet): mixed
     {
         return $this->getTotalPopulation(PopReportsCard::where('card_set_id', $cardSet->id));
+    }
+
+    /**
+     * @return Collection<int, CardProduct>
+     */
+    public function searchCardsWithMissingPopReports(): Collection
+    {
+        return CardProduct::join('order_items', 'order_items.card_product_id', 'card_products.id')
+            ->join('orders', 'orders.id', 'order_items.order_id')
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->whereIn('orders.order_status_id', [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED])
+            ->doesntHave('popReportsCard')
+            ->select('card_products.*')
+            ->distinct()->get();
     }
 
     protected function accumulateReportRow(Collection $userCards): array

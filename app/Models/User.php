@@ -5,14 +5,20 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
 use App\Contracts\ExportableWithSort;
+use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Http\Filters\AdminCustomerPromotionalSubscribersFilter;
 use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Filters\AdminSalesmanSearchFilter;
+use App\Http\Filters\AdminUserReferredBy;
 use App\Http\Sorts\AdminCustomerCardsSort;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Http\Sorts\AdminCustomerSubmissionsSort;
 use App\Http\Sorts\AdminCustomerWalletSort;
+use App\Http\Sorts\AdminSalesmanSalesSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
+use App\Traits\ReferrableTrait;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -27,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -36,9 +43,13 @@ use TaylorNetwork\UsernameGenerator\FindSimilarUsernames;
 use TaylorNetwork\UsernameGenerator\Generator;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property-read int $paid_orders_count
+ * @property-read int $order_items_sum_quantity
+ */
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes, ReferrableTrait;
 
     public string $pushNotificationType = 'users';
 
@@ -47,7 +58,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id', 'last_login_at', 'created_by', 'is_marketing_notifications_enabled', 'referred_by'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -67,6 +78,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'ags_access_token' => 'encrypted',
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
+        'is_marketing_notifications_enabled' => 'boolean',
+        'referred_by' => 'integer',
     ];
 
     /**
@@ -93,6 +106,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
         $user->assignCustomerRole();
         $user->assignCustomerNumber();
+        $user->assignReferrer($data);
 
         (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
@@ -112,16 +126,34 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $user;
     }
 
-    public static function getAllowedAdminFilters(): array
+    public static function createSalesman(array $data): self
+    {
+        $data['password'] = Str::random(8);
+        $data['created_by'] = auth()->user()->id;
+        $data['username'] = self::generateUserName();
+
+        /* @var User $user */
+        $user = self::create($data);
+
+        $user->assignSalesmanRole();
+
+
+        return $user;
+    }
+
+    public static function getAllowedFilters(): array
     {
         return [
             AllowedFilter::custom('search', new AdminCustomerSearchFilter),
             AllowedFilter::scope('signed_up_between'),
             AllowedFilter::scope('submissions'),
+            AllowedFilter::scope('salesman_id'),
+            AllowedFilter::custom('promotional_subscribers', new AdminCustomerPromotionalSubscribersFilter),
+            AllowedFilter::custom('referred_by', new AdminUserReferredBy),
         ];
     }
 
-    public static function getAllowedAdminSorts(): array
+    public static function getAllowedSorts(): array
     {
         return [
             AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
@@ -131,6 +163,53 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             'email',
             'customer_number',
             'created_at',
+        ];
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return self::getAllowedSorts();
+    }
+
+    public static function getAllowedSalesmanFilters(): array
+    {
+        return self::getAllowedFilters();
+    }
+
+    public static function getAllowedSalesmanSorts(): array
+    {
+        return self::getAllowedSorts();
+    }
+
+    public static function getAllowedAdminSalesmanFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminSalesmanSearchFilter),
+            AllowedFilter::scope('signed_up_between', 'salesmanSignedUpBetween'),
+            AllowedFilter::scope('is_active', 'isActiveSalesman'),
+        ];
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeIsActiveSalesman(Builder $query, bool $value): Builder
+    {
+        return $query->whereHas('salesmanProfile', function ($subQuery) use ($value) {
+            $subQuery->where('is_active',  $value);
+        });
+    }
+
+    public static function getAllowedAdminSalesmanSorts(): array
+    {
+        return [
+            AllowedSort::custom('sales', new AdminSalesmanSalesSort),
         ];
     }
 
@@ -197,9 +276,33 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->getFullName();
     }
 
+    public function assignSalesmanRole(): void
+    {
+        $this->assignRole(Role::findByName(config('permission.roles.salesman')));
+    }
+
+    public function removeSalesmanRole(): void
+    {
+        $this->removeRole(Role::findByName(config('permission.roles.salesman')));
+    }
+    
     public function assignCustomerRole(): void
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
+    }
+
+    public function assignSalesman(User $salesman): bool
+    {
+        $this->salesman_id = $salesman->id;
+
+        return $this->save();
+    }
+
+    public function unAssignSalesman(): bool
+    {
+        $this->salesman_id = null;
+
+        return $this->save();
     }
 
     /**
@@ -241,9 +344,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     */
     public function cardsCount(): int
     {
-        return Order::paid()
+        return $this->orders()->paid()
             ->join('order_items', 'order_id', '=', 'orders.id')
-            ->where('user_id', '=', $this->id)
             ->sum('order_items.quantity');
     }
 
@@ -257,9 +359,28 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this;
     }
 
+    public function assignReferrer(array $data): void
+    {
+        if (array_key_exists('referral_code', $data) && $data['referral_code']) {
+            $this->referred_by = Referrer::where('referral_code', $data['referral_code'])->first()->user_id;
+            $this->save();
+        }
+    }
+
     public static function generateUserName(): string
     {
         return (new Generator())->generate();
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeSalesmanSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereHas('salesmanProfile', function ($subQuery) use ($startDate, $endDate) {
+            $subQuery->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]);
+        });
     }
 
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
@@ -289,12 +410,43 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     /**
+     * @param  Builder<User>  $query
+     * @param  string|int  $salesmanId
+     * @return Builder<User>
+     */
+    public function scopeSalesmanId(Builder $query, int|string $salesmanId): Builder
+    {
+        return $query->whereHas('salesman', fn ($query) => $query->where('id', $salesmanId));
+    }
+
+    /**
+     * @return HasOne<Salesman>
+     */
+    public function salesmanProfile(): HasOne
+    {
+        return $this->hasOne(Salesman::class, 'user_id', 'id');
+    }
+
+    /**
      * @param  Builder <User> $query
      * @return Builder <User>
      */
-    public function scopeSalesman(Builder $query): Builder
+    public function scopeSalesmen(Builder $query): Builder
     {
         return $query->role(Role::findByName(config('permission.roles.salesman'), 'api'));
+    }
+
+    /**
+     * @return HasMany<Order>
+     */
+    public function salesmanOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'salesman_id', 'id');
+    }
+
+    public function salesmanCustomersCount(): int
+    {
+        return $this->hasMany(User::class, 'salesman_id', 'id')->count();
     }
 
     public function sendPasswordResetNotification($token)
@@ -329,7 +481,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      */
     public function exportQuery(): Builder
     {
-        return self::query();
+        return self::query()
+            ->withCount(['orders as paid_orders_count' => fn ($query) => ($query->paid())])
+            ->withSum([
+                'orderItems' => fn (Builder $query) => (
+                    $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)
+                ),
+            ], 'quantity')
+            ->with('wallet:id,user_id,balance');
     }
 
     public function exportHeadings(): array
@@ -359,8 +518,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->email,
             $row->phone,
             $row->created_at,
-            $row->orders()->paid()->count(),
-            $row->cardsCount(),
+            $row->paid_orders_count,
+            $row->order_items_sum_quantity,
             $row->wallet?->balance,
         ];
     }
@@ -378,5 +537,34 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->profile_image;
+    }
+
+    /**
+     * @return HasMany<SalesmanCommissionPayment>
+     */
+    public function salesmanCommissionPayments(): HasMany
+    {
+        return $this->hasMany(SalesmanCommissionPayment::class, 'salesman_id');
+    }
+
+    public function receivedCommissionTotal(): float
+    {
+        return $this->salesmanCommissionPayments()->sum('amount');
+    }
+
+    public function wantsToReceiveMarketingContent(): bool
+    {
+        return $this->is_marketing_notifications_enabled;
+    }
+
+    public function getSalesmanCardsCount(string $startDate = '', string $endDate = ''): int
+    {
+        $query = $this->salesmanOrders()->paid()->join('order_items', 'order_items.order_id', 'orders.id');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+
+        return $query->sum('order_items.quantity');
     }
 }

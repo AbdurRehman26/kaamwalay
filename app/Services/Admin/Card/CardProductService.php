@@ -134,23 +134,27 @@ class CardProductService
 
     protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
-        return $this->agsService->getCardSeries(['name' => $seriesName, 'category_name' => $categoryName])['results'][0]['id'];
+        return $this->agsService->getCardSeries(['exact_name' => $seriesName, 'exact_category_name' => $categoryName])['results'][0]['id'];
     }
 
     protected function getSetFromAgs(int $seriesId, string $setName): int | null
     {
         return $this->agsService->getCardSet([
-            'name' => $setName,
+            'exact_name' => $setName,
             'serie' => $seriesId,
         ])['results'][0]['id'];
     }
 
+    /**
+     * @return LengthAwarePaginator<CardProduct>
+     */
     public function getCards(): LengthAwarePaginator
     {
         // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
             ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
-            ->addSelect(DB::raw('card_products.*, (pop_reports_cards.total + pop_reports_cards.total_plus) as population'))
+            ->addSelect(DB::raw('card_products.*, pop_reports_cards.population'))
+            ->excludeAddedManually()
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),
                 AllowedFilter::scope('release_date'),

@@ -199,8 +199,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function AddedSubmissionCards() {
-    const [showQuantity, setShowQuantity] = useState<boolean>(true);
-    const [onChangeValue, setOnChangeValue] = useState<number>(0);
     const [isClearCard, setIsClearCard] = useState<boolean>(false);
     const [isCreateSubmission, setIsCreateSubmission] = useState<boolean>(false);
     const dispatch = useAppDispatch();
@@ -213,6 +211,9 @@ export function AddedSubmissionCards() {
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
     const serviceLevelPrice = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
+    );
+    const priceRanges = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.priceRanges,
     );
     const protectionLimit = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
@@ -259,7 +260,8 @@ export function AddedSubmissionCards() {
             (isNextDisabled ||
                 selectedExistingAddress.address !== '' ||
                 shippingMethod.code === ShippingMethodType.VaultStorage) &&
-            areSelectedCardsValuesValid()
+            areSelectedCardsValuesValid() &&
+            selectedCards.filter((card: Record<string, any>) => card.qty === 0).length === 0
         ) {
             setIsCreateSubmission(true);
             dispatch(getShippingFee(selectedCards));
@@ -285,24 +287,32 @@ export function AddedSubmissionCards() {
               }, 0)
             : 0;
 
+    let finalPrice =
+        priceRanges?.filter((item: any) => {
+            if (
+                (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) ||
+                (numberOfSelectedCards >= item.minCards && item.maxCards === null)
+            ) {
+                return item;
+            }
+        }) ?? null;
+
+    finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPrice;
+
     const handleDeselectCard = useCallback(
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
             dispatch(markCardAsUnselected(row));
+            if (isCouponApplied) {
+                dispatch(setIsCouponApplied(false));
+            }
         },
-        [dispatch],
+        [dispatch, isCouponApplied],
     );
 
-    function handleChange(card: SearchResultItemCardProps, qty: any) {
-        const value = qty.replace(/[^\d]/, '');
-        setOnChangeValue(value);
-        setShowQuantity(false);
-        dispatch(changeSelectedCardQty({ card, qty: value }));
-    }
-
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {
-        setShowQuantity(true);
-        const newValue = Math.min(Math.max(qty, 1), 100);
+        const value = String(qty).replace(/[^\d]/, '');
+        const newValue = Math.min(Number(value), 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
         if (isCouponApplied) {
             dispatch(setIsCouponApplied(false));
@@ -342,7 +352,7 @@ export function AddedSubmissionCards() {
 
     function getPreviewTotal() {
         const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice +
+            numberOfSelectedCards * finalPrice +
             Number(cleaningFee) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
@@ -420,13 +430,12 @@ export function AddedSubmissionCards() {
                                             Qty
                                         </Typography>
                                         <TextField
-                                            onChange={(e) => handleChange(row, e.target.value)}
-                                            onBlur={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                            onChange={(e) => handleChangeCardQty(row, e.target.value)}
                                             type="number"
                                             size={'small'}
-                                            value={showQuantity ? row.qty : onChangeValue}
+                                            value={row.qty === 0 ? '' : row.qty}
                                             InputProps={{
-                                                inputProps: { min: 0 },
+                                                inputProps: { min: 1, max: 100 },
                                             }}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -474,7 +483,7 @@ export function AddedSubmissionCards() {
                         <span style={{ fontWeight: 400, color: '#757575' }}>
                             (
                             <NumberFormat
-                                value={serviceLevelPrice}
+                                value={finalPrice}
                                 displayType={'text'}
                                 thousandSeparator
                                 decimalSeparator={'.'}
@@ -483,7 +492,7 @@ export function AddedSubmissionCards() {
                             &nbsp; x {numberOfSelectedCards}) =&nbsp;
                         </span>
                         <NumberFormat
-                            value={numberOfSelectedCards * serviceLevelPrice}
+                            value={numberOfSelectedCards * finalPrice}
                             displayType={'text'}
                             thousandSeparator
                             decimalSeparator={'.'}

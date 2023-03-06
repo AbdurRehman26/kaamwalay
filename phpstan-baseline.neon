@@ -211,14 +211,34 @@ parameters:
 			path: app/Http/Filters/AdminCardProductSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCustomerPromotionalSubscribersFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminCustomerPromotionalSubscribersFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCustomerSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminUserReferredBy implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminUserReferredBy.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderSearchFilter.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerStatusFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminReferrerStatusFilter.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminSalesmanSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminSalesmanSearchFilter.php
 
 		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\UserCardSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
@@ -236,6 +256,26 @@ parameters:
 			path: app/Http/Filters/VaultShipmentSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderReferByFilter.php
+
+		-
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\) of method App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderReferByFilter.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerPayoutSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminReferrerPayoutSearchFilter.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerPayoutStatusFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminReferrerPayoutStatusFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php
@@ -244,6 +284,11 @@ parameters:
 			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\CardRarity\\>\\) of method App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
 			count: 1
 			path: app/Http/Filters/AdminCardRaritySearchFilter.php
+
+		-
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\User\\>\\) of method App\\\\Http\\\\Filters\\\\AdminUserReferredBy\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/AdminUserReferredBy.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"
@@ -571,6 +616,21 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
@@ -586,14 +646,39 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_item_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$id\\.$#"
@@ -636,6 +721,21 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
@@ -649,6 +749,21 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$created_at\\.$#"
@@ -934,71 +1049,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:getRoundedOverallValues\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardCategory\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardSet\\.$#"
-			count: 4
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$edition\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$image_path\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$language\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$surface\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$variant\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getFormattedCardNumber\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getLongName\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getShortName\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:isCardInformationComplete\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
@@ -1751,11 +1801,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
 
 		-
-			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
-
-		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Imports/CardProductAttributesUpdate.php
@@ -1844,21 +1889,6 @@ parameters:
 			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
-
-		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
-
-		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has parameter \\$exception with no type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
-
-		-
-			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:\\$tries has no type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/GenerateOrderInvoice.php
 
 		-
 			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no type specified\\.$#"
@@ -2821,16 +2851,6 @@ parameters:
 			path: app/Services/Admin/Card/CardSetService.php
 
 		-
-			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'CN'\\} given\\.$#"
-			count: 1
-			path: app/Services/Admin/Card/CreateCardLabelService.php
-
-		-
-			message: "#^Parameter \\#2 \\$needles of static method Illuminate\\\\Support\\\\Str\\:\\:contains\\(\\) expects \\(Illuminate\\\\Support\\\\Enumerable\\<\\(int\\|string\\), string\\>&iterable\\<string\\>\\)\\|string, array\\{'DECK', 'BOX TOPPER', 'PIN CLUB'\\} given\\.$#"
-			count: 2
-			path: app/Services/Admin/Card/CreateCardLabelService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/CardGradingService.php
@@ -2879,6 +2899,11 @@ parameters:
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
 			path: app/Services/Admin/V1/OrderService.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Salesman/V2/Order/OrderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
@@ -2979,11 +3004,6 @@ parameters:
 			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\ItemsDeclaredValueValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
-
-		-
-			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
-			count: 1
-			path: app/Services/Payment/V1/Providers/PaypalService.php
 
 		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"

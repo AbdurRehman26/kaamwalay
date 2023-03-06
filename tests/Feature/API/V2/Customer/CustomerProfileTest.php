@@ -3,10 +3,11 @@
 use App\Jobs\ProcessImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
-
 use function Pest\Laravel\getJson;
+
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
+use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -122,7 +123,7 @@ test('a customer can delete their account', function () {
             "app_message" => [
                 "Removed successfully",
             ],
-        ]),
+        ], Response::HTTP_NO_CONTENT),
     ]);
 
     $this->actingAs($this->user);
@@ -180,5 +181,37 @@ test('deleting profile returns password error if ags token is null', function ()
     $this->actingAs($this->user);
     postJson(route('v2.customer.profile.delete'))->assertStatus(400)->assertJson([
         'error' => 'Please enter your AGS password.',
+    ]);
+});
+
+test('a customer can opt out of marketing notifications from their profile', function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    $this->actingAs($this->user);
+
+    putJson(route('v2.customer.profile.toggleMarketingNotifications'), [
+        'is_marketing_notifications_enabled' => false,
+    ])->assertSuccessful()->assertStatus(200)->assertJsonFragment([
+        'is_marketing_notifications_enabled' => false,
+    ]);
+});
+
+test('a customer can opt in of marketing notifications from their profile', function () {
+    $user = User::factory()->create([
+        'is_marketing_notifications_enabled' => false,
+    ]);
+
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+    $this->actingAs($user);
+
+    putJson(route('v2.customer.profile.toggleMarketingNotifications'), [
+        'is_marketing_notifications_enabled' => true,
+    ])->assertSuccessful()->assertStatus(200)->assertJsonFragment([
+        'is_marketing_notifications_enabled' => true,
     ]);
 });

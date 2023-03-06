@@ -10,10 +10,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
-import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { useAdminCustomersShowQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
-import { CustomerDetail } from './CustomerDetail';
+import { CustomerViewContent } from './CustomerViewContent';
 
 enum RowOption {
     CreditCustomer,
@@ -25,7 +25,8 @@ const Root = styled(Grid)({
     padding: '20px',
 
     '.ImageDiv': {
-        maxWidth: '10%!important',
+        maxWidth: '120px!important',
+        maxHeight: '120px!important',
     },
     '.Avatar': {
         background: '#B5CBED',
@@ -83,7 +84,7 @@ export function CustomerView() {
         navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
     };
 
-    const customer$ = useAdminCustomerQuery({
+    const customer$ = useAdminCustomersShowQuery({
         resourceId: Number(id),
     });
 
@@ -162,7 +163,9 @@ export function CustomerView() {
                     onSubmit={handleReloadCustomerData}
                 />
             </Root>
-            <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
+            <Grid container>
+                <CustomerViewContent customer={data} />
+            </Grid>
         </>
     );
 }

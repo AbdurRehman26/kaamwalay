@@ -8,21 +8,27 @@ use Illuminate\Support\Str;
 
 class CouponCodeService
 {
-    protected const COUPON_CODE_PREFIX = 'AGS';
-    protected const COUPON_CODE_MAX_LENGTH = 12;
     protected const COUPON_LENGTH_WITHOUT_PREFIX = 9;
+    protected int $couponLength = self::COUPON_LENGTH_WITHOUT_PREFIX;
 
     public function exists(string $code): bool
     {
         return Coupon::where('code', $code)->exists();
     }
 
+    private function setCouponLength(int $length = -1): void
+    {
+        $this->couponLength = $length > 0 ? $length : $this->couponLength;
+    }
+
     /**
      * @throws CouponCodeAlreadyExistsException
      */
-    public function newCoupon(string $code, bool $shouldSystemGenerate = false): string
+    public function newCoupon(string $code, bool $shouldSystemGenerate = false, int $length = -1): string
     {
         if ($shouldSystemGenerate) {
+            $this->setCouponLength($length);
+
             return $this->generateValidCoupon();
         }
         if ($this->exists($code)) {
@@ -34,7 +40,7 @@ class CouponCodeService
 
     private function generate(): string
     {
-        return self::COUPON_CODE_PREFIX . Str::upper(Str::random(self::COUPON_LENGTH_WITHOUT_PREFIX));
+        return Str::upper(Str::random($this->couponLength));
     }
 
     private function generateValidCoupon(): string
@@ -42,7 +48,7 @@ class CouponCodeService
         do {
             $code = $this->generate();
             $exists = $this->exists($code);
-        } while (! $exists);
+        } while ($exists);
 
         return $code;
     }

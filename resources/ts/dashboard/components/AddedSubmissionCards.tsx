@@ -26,6 +26,7 @@ import {
     changeSelectedCardValue,
     markCardAsUnselected,
     setCustomStep,
+    setIsCouponApplied,
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -139,10 +140,9 @@ type AddedSubmissionCardsProps = {
 function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const { reviewMode, mobileMode } = props;
     const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
-    const [showQuantity, setShowQuantity] = useState<boolean>(true);
-    const [onChangeValue, setOnChangeValue] = useState<number>(0);
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const dispatch = useAppDispatch();
 
     const selectedCardEntities = useMemo(
@@ -163,21 +163,21 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
             dispatch(markCardAsUnselected(row));
+            if (isCouponApplied) {
+                dispatch(setIsCouponApplied(false));
+            }
         },
-        [dispatch],
+        [dispatch, isCouponApplied],
     );
 
-    function handleChange(card: SearchResultItemCardProps, qty: any) {
-        const value = qty.replace(/[^\d]/, '');
-        setOnChangeValue(value);
-        setShowQuantity(false);
-        dispatch(changeSelectedCardQty({ card, qty: value }));
-    }
-
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {
-        setShowQuantity(true);
-        const newValue = Math.min(Math.max(qty, 1), 100);
+        const receivedValue = String(qty).replace(/[^\d]/, '');
+        const valueAsInt = parseInt(receivedValue);
+        const newValue = Math.min(valueAsInt, 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
+        if (isCouponApplied) {
+            dispatch(setIsCouponApplied(false));
+        }
     }
 
     function handleChangeCardValue(card: SearchResultItemCardProps, newValue: any) {
@@ -283,13 +283,12 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                                 Qty
                                             </Typography>
                                             <TextField
-                                                onChange={(e) => handleChange(row, e.target.value)}
-                                                onBlur={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                                onChange={(e) => handleChangeCardQty(row, e.target.value)}
                                                 type="number"
                                                 size={'small'}
-                                                value={showQuantity ? row.qty : onChangeValue}
+                                                value={row.qty === 0 ? '' : row.qty}
                                                 InputProps={{
-                                                    inputProps: { min: 0 },
+                                                    inputProps: { min: 1, max: 100 },
                                                 }}
                                                 InputLabelProps={{
                                                     shrink: true,
@@ -343,13 +342,12 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         <TableCell component="th" scope="row" align={'left'}>
                                             {!reviewMode ? (
                                                 <TextField
-                                                    onChange={(e) => handleChange(row, e.target.value)}
-                                                    onBlur={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                                    onChange={(e) => handleChangeCardQty(row, Number(e.target.value))}
                                                     type="number"
                                                     size={'small'}
-                                                    value={showQuantity ? row.qty : onChangeValue}
+                                                    value={row.qty === 0 ? '' : row.qty}
                                                     InputProps={{
-                                                        inputProps: { min: 0 },
+                                                        inputProps: { min: 1, max: 100 },
                                                     }}
                                                     InputLabelProps={{
                                                         shrink: true,

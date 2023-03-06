@@ -27,9 +27,9 @@ class CardRarityController extends Controller
         return new CardRarityResource(CardRarity::create($request->validated()));
     }
 
-    public function show(CardRarity $cardRarity): CardRarityResource
+    public function show(CardRarity $rarity): CardRarityResource
     {
-        return new CardRarityResource($cardRarity);
+        return new CardRarityResource($rarity);
     }
 
     public function update(int $cardRarityId, UpdateCardRarityRequest $request): JsonResponse

@@ -33,6 +33,14 @@ class CardLabelService
 
     public function updateCardLabel(CardLabel $cardLabel, array $data): CardLabel
     {
+        if (empty($data['line_three'])) {
+            $data['line_three'] = '';
+        }
+
+        if (empty($data['line_four'])) {
+            $data['line_four'] = '';
+        }
+
         $cardLabel->update($data);
 
         return $cardLabel->fresh();
@@ -51,17 +59,17 @@ class CardLabelService
             if ($certificateData['persist_changes']) {
                 $cardLabel->line_one = $certificateData['line_one'];
                 $cardLabel->line_two = $certificateData['line_two'];
-                $cardLabel->line_three = $certificateData['line_three'];
-                $cardLabel->line_four = $certificateData['line_four'];
+                $cardLabel->line_three = $certificateData['line_three'] ?? '';
+                $cardLabel->line_four = $certificateData['line_four'] ?? '';
                 $cardLabel->save();
             }
 
             $exportLabels[] = [
                 'label_line_one' => $certificateData['line_one'],
                 'label_line_two' => $certificateData['line_two'],
-                'label_line_three' => $certificateData['line_three'],
-                'label_line_four' => $certificateData['line_four'],
-                'card_number' => $certificateData['line_four'],
+                'label_line_three' => $certificateData['line_three'] ?? '',
+                'label_line_four' => $certificateData['line_four'] ?? '',
+                'card_number' => $certificateData['line_four'] ?? '',
                 'certificate_id' => $orderItem->userCard->certificate_number,
                 'final_grade' => $orderItem->userCard->overall_grade,
                 'grade_nickname' => $orderItem->userCard->overall_grade_nickname,

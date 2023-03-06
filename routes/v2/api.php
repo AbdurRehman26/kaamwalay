@@ -92,6 +92,7 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
             Route::post('{order}/coupons/calculate-discount', [CouponController::class, 'calculateDiscountForOrder'])->name('orders.coupon.discount');
+            Route::post('{order}/coupons/remove', [CouponController::class, 'removeCouponFromOrder'])->name('orders.coupon.remove');
 
             Route::apiResource('', OrderController::class)
                 ->only(['index', 'store'])
@@ -112,6 +113,7 @@ Route::prefix('customer')->group(function () {
             Route::post('/', [CardProductController::class, 'store']);
         });
         Route::put('profile', [ProfileController::class, 'update'])->name('customer.profile');
+        Route::put('profile/toggle-marketing-notifications', [ProfileController::class, 'toggleMarketingNotifications'])->name('customer.profile.toggleMarketingNotifications');
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {

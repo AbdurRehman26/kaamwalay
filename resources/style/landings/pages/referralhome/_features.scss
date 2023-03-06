@@ -1,0 +1,135 @@
+.ReferralHome-features {
+    background-color: #f4f4fb;
+    padding-top: 114px;
+    padding-bottom: 0px;
+    @media screen and (max-width: 767px) {
+        padding-top: 50px;
+    }
+    .ReferralHome-sectionContentHeadline {
+        font-size: 40px;
+        line-height: 28px;
+        margin-bottom: 0;
+        @media screen and (max-width: 767px) {
+            font-size: 28px;
+        }
+    }
+    .ReferralHome-sectionColumn {
+        align-items: center;
+        justify-content: center;
+        @media screen and (max-width: 959px) {
+            width: 100%;
+        }
+    }
+}
+
+.ReferralHome-steps {
+    background-color: #f4f4fb;
+    padding-top: 114px;
+    padding-bottom: 120px;
+    @media screen and (max-width: 767px) {
+        padding-top: 72px;
+        padding-bottom: 74px;
+    }
+}
+
+.Numbering-section {
+    padding: 15px;
+}
+
+.Numbering {
+    margin: auto;
+    border: 2px solid #5022a7;
+    border-radius: 50%;
+    padding: 8px;
+    height: 40px;
+    width: 40px;
+    display: block;
+    text-align: center;
+    color: #5022a7;
+}
+
+.Numbering-title {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    font-size: 24px;
+    font-weight: 500;
+    color: #000000de;
+    text-align: center;
+    line-height: 24px;
+}
+
+.Numbering-subtitle {
+    margin-top: 10%;
+    font-size: 16px;
+    font-weight: 400;
+    width: 260px !important;
+    line-height: 24px;
+    text-align: center;
+    color: #000000de;
+}
+
+.ReferralHome-featuresGrid {
+    margin-top: 50px;
+}
+
+.ReferralHome-featureColumnSteps {
+    padding: 50px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    @media screen and (max-width: 959px) {
+        padding: 24px;
+    }
+}
+
+.ReferralHome-featureIcon {
+    min-width: 235px;
+    height: 225px;
+    object-fit: cover;
+}
+
+.ReferralHome-featureColumn {
+    margin-bottom: 10px;
+    width: 348px;
+    height: 348px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: inline-block;
+    @media screen and (max-width: 767px) {
+        margin-bottom: 2px;
+        padding: 0;
+        display: block;
+        width: 300px;
+        max-height: 300px;
+    }
+    @media screen and (max-width: 599px) {
+        width: 179px;
+        height: 179px;
+        margin: 4px;
+    }
+}
+
+.Home-featureTitle,
+.Home-featureText {
+    max-width: 328px;
+}
+
+.Home-featureTitle {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.15px;
+    color: rgba(0, 0, 0, 0.87);
+    margin: 12px 0;
+}
+
+.Home-featureText {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.8);
+}

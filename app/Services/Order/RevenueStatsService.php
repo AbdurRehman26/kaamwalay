@@ -119,8 +119,10 @@ class RevenueStatsService
             return $payment;
         });
 
-        $revenue->increment('profit', $calculatedProfit);
-        $revenue->increment('revenue', $calculatedRevenue);
+        $revenue->update([
+            'profit' => $calculatedProfit,
+            'revenue' => $calculatedRevenue,
+        ]);
 
         return $revenue;
     }

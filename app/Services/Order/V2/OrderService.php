@@ -3,6 +3,8 @@
 namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\Country;
+use App\Models\Coupon;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -99,36 +101,35 @@ class OrderService extends V1OrderService
         Order $order,
         int $paymentBlockchainNetwork,
         float $walletAmount = 0.0,
-        float $discountedAmount = 0.0,
     ): float {
-        Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
-            'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
-            'orderTotal' => $order->grand_total_before_discount,
-            'ccDiscount' => $this->getCollectorCoinDiscount($order),
-            'walletAmount' => $walletAmount,
-            'discountedAmount' => $discountedAmount,
-            'refund' => $order->refund_total,
-            'extraCharge' => $order->extra_charge_total,
-            'usdPrice' => $order->grand_total_before_discount -
-                $this->getCollectorCoinDiscount($order) -
-                $walletAmount -
-                $discountedAmount -
-                $order->refund_total +
-                $order->extra_charge_total,
-        ]);
+        $orderPayable = $this->getOrderPayable(
+            $order,
+            $walletAmount,
+        );
+        $collectorCoinDiscountAmount = $this->getCollectorCoinDiscount($order, $orderPayable);
 
+        // Final amount payable in USD
+        $orderPayableWithCollectorCoinDiscount = ($orderPayable - $collectorCoinDiscountAmount);
+
+        // Final amount payable in AGS coins
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
-            $order->grand_total_before_discount -
-            $this->getCollectorCoinDiscount($order) -
-            $walletAmount -
-            $discountedAmount -
-            $order->refund_total +
-            $order->extra_charge_total
+            $orderPayableWithCollectorCoinDiscount
         );
         if ($collectorCoinPrice <= 0) {
             return 0.0;
         }
+
+        Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
+            'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
+            'orderTotal' => $order->grand_total_before_discount,
+            'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderPayable),
+            'walletAmount' => $walletAmount,
+            'refund' => $order->refund_total,
+            'extraCharge' => $order->extra_charge_total,
+            'usdPrice' => $order->grand_total_before_discount -
+                $this->getCollectorCoinDiscount($order, $orderPayable),
+        ]);
 
         Cache::put(
             'cc-payment-' . $order->id,
@@ -139,16 +140,27 @@ class OrderService extends V1OrderService
         return $collectorCoinPrice;
     }
 
-    protected function getCollectorCoinDiscount(Order $order): float
+    /**
+     * With collector coin, we can have 2 types of discounts.
+     * 1. Promo code discount
+     * 2. Collector coin discount
+     * In the case where we have both discounts, the coupon code will have the higher precedence. So we will apply that
+     * first and then go for the collector coin discount. Sometimes, both discounts together can make the order total
+     * negative. This method will not apply the collector coin discount if the order total becomes negative after the
+     * collector coin discount.
+     */
+    protected function getCollectorCoinDiscount(Order $order, float $orderPayable): float
     {
-        return round(
-            $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100,
-            2
-        );
+        $discountedAmount = $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100;
+
+        return ($orderPayable - $discountedAmount) > 0 ? round($discountedAmount, 2) : 0;
     }
 
     public function updateBillingAddress(Order $order, array $data): Order
     {
+        $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;
+        $data['phone'] = $data['phone'] ?? '';
+
         if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
             $orderAddress = OrderAddress::create($data);
             $order->billingAddress()->associate($orderAddress);
@@ -253,5 +265,24 @@ class OrderService extends V1OrderService
             ],
             'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
         ];
+    }
+
+    protected function getOrderPayable(
+        Order $order,
+        float $walletAmount = 0,
+    ): float {
+        return $order->grand_total_before_discount -
+            $walletAmount -
+            $order->discounted_amount -
+            $order->refund_total +
+            $order->extra_charge_total;
+    }
+
+    public function attachCouponToOrder(Order $order, Coupon $coupon, float $discountedAmount): void
+    {
+        $order->coupon()->associate($coupon);
+        $order->discounted_amount = $discountedAmount;
+
+        $this->recalculateGrandTotal($order)->saveOrder($order);
     }
 }

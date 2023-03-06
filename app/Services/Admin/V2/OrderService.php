@@ -7,6 +7,7 @@ use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
 use App\Events\API\Admin\Order\UnpaidOrderRefund;
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
@@ -182,6 +183,7 @@ class OrderService extends V1OrderService
         $order->orderPayments()->create([
             'payment_method_id' => $manualPaymentMethodId,
             'user_id' => $user->id,
+            'response' => json_encode(['processed' => false]),
         ]);
 
         return $order;
@@ -219,5 +221,34 @@ class OrderService extends V1OrderService
             ->where('order_id', $order->id)
             ->where('order_items.order_item_status_id', $status)
             ->select('user_cards.*')->get();
+    }
+
+    /**
+     * @return Collection <int, UserCard>
+     * @throws IncorrectOrderStatus
+     */
+    public function getGrades(Order $order): Collection
+    {
+        $grades = $this->agsService->getGrades($this->getOrderCertificates($order), $order->orderItems()->count());
+
+        $cards = $this->getCardsForGrading($order);
+
+        $this->updateLocalGrades($grades['results'] ?? [], $cards);
+
+        return $cards;
+    }
+
+    /**
+     * @throws IncorrectOrderStatus
+     * @return Collection<int, UserCard>
+     */
+    public function getCardsForGrading(Order $order): Collection
+    {
+        if (! $order->canBeGraded()) {
+            throw new IncorrectOrderStatus;
+        }
+
+        return UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->where('order_items.order_id', $order->id)->select('user_cards.*')->get();
     }
 }

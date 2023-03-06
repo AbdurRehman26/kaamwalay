@@ -12,6 +12,8 @@ import { AddressEntity } from '@shared/entities/AddressEntity';
 import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
+import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -44,6 +46,10 @@ interface SubmissionsViewDetailsProps {
     walletPayment: string;
     admin?: string;
     createdBy?: AdminUserEntity;
+    owner?: SalesRepEntity;
+    referrer?: UserEntity;
+    salesmanCommission?: number;
+    referralCommission?: number;
 }
 
 const useStyles = makeStyles(
@@ -83,7 +89,10 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         walletPayment,
         paymentStatus,
         admin,
-        createdBy,
+        salesmanCommission,
+        referralCommission,
+        owner,
+        referrer,
     } = props;
 
     const classes = useStyles();
@@ -94,26 +103,51 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            'Created By:': createdBy?.id !== customerId ? `Admin (${createdBy?.fullName})` : customerName,
+            ...(owner?.fullName && {
+                'Owner:': [
+                    <>
+                        <MuiLink component={Link} to={`/salesreps/${owner?.id}/view/overview`}>
+                            {owner?.fullName}
+                        </MuiLink>
+                    </>,
+                ],
+            }),
+            ...(referrer && {
+                'Referrer:': [
+                    <>
+                        <MuiLink component={Link} to={`/customers/${referrer?.id}/view/overview`}>
+                            {referrer?.getFullName()}
+                        </MuiLink>
+                    </>,
+                ],
+            }),
+            ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
+            ...(referralCommission && { 'Referrer Commission:': formatCurrency(referralCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, customerName, createdBy, customerId],
+        [
+            declaredValue,
+            numberOfCards,
+            placedAt,
+            serviceLevelFee,
+            owner,
+            salesmanCommission,
+            referralCommission,
+            referrer,
+        ],
     );
 
     const customerInfo = useMemo(
         () =>
             [
-                ['Customer:', customerName],
+                [
+                    'Customer:',
+                    <MuiLink component={Link} to={`/customers/${customerId}/view/overview`} color={'primary'}>
+                        {customerName}
+                    </MuiLink>,
+                ],
                 customerEmail ? ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>] : null,
                 customerPhone ? ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>] : null,
-                [
-                    '',
-                    <>
-                        Customer ID:&nbsp;
-                        <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
-                            {customerNumber}
-                        </MuiLink>
-                    </>,
-                ],
+                ['', <>Customer ID:&nbsp;{customerNumber}</>],
             ].filter(Boolean),
         [customerEmail, customerName, customerNumber, customerPhone, customerId],
     );

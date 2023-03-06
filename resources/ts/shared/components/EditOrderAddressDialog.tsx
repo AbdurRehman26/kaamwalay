@@ -140,7 +140,7 @@ const schema = yup.object().shape({
 });
 
 export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
-    const { onClose, onSubmit, dialogTitle, address, endpointUrl = '', endpointVersion = 'v2', ...rest } = props;
+    const { onClose, onSubmit, dialogTitle, address, endpointUrl = '', endpointVersion = 'v3', ...rest } = props;
     const classes = useStyles();
     const availableCountries = useAppSelector((state) => state.addressEditSlice.availableCountriesList);
     const availableStates = useAppSelector((state) => state.addressEditSlice.availableStatesList);

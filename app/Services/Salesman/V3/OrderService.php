@@ -2,6 +2,7 @@
 
 namespace App\Services\Salesman\V3;
 
+use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\Country;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -23,6 +24,8 @@ class OrderService extends V2OrderService
         $order->shippingAddress()->associate($orderAddress);
 
         $order->save();
+
+        OrderShippingAddressChangedEvent::dispatch($order);
 
         return $order;
     }

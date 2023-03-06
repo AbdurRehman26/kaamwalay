@@ -9,7 +9,7 @@ export class SalesmanPromoCodesRepository extends Repository<PromoCodeEntity> {
     readonly model = PromoCodeEntity;
 
     public async getPromoCodes(input: string) {
-        const { data } = await this.endpoint.get(`?page=1&per_page=24&filter[search]=${input}`);
+        const { data } = await this.endpoint.get(`?filter[search]=${input}`);
         return this.toEntity(data);
     }
 

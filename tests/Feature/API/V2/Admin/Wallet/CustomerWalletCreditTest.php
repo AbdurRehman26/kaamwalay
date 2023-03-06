@@ -8,9 +8,8 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
-
     Event::fake([
-        CustomerWalletCredited::class
+        CustomerWalletCredited::class,
     ]);
 
     $this->seed([RolesSeeder::class]);

@@ -1,5 +1,4 @@
 import LoadingButton from '@mui/lab/LoadingButton';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
@@ -8,11 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
@@ -21,7 +18,6 @@ import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktop
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
-import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -33,7 +29,6 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { useAdminRefereesQuery } from '@shared/redux/hooks/useRefereesQuery';
 import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
 import { ListPageHeader, ListPageSelector } from '@admin/components/ListPage';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { RefereeTableRow } from './RefereeTableRow';
@@ -141,27 +136,9 @@ const getFilters = (values: InitialValues) => ({
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
 
-const useStyles = makeStyles(
-    (theme) => ({
-        newCustomerBtn: {
-            borderRadius: 24,
-            padding: '12px 24px',
-            [theme.breakpoints.down('sm')]: {
-                marginLeft: 'auto',
-                padding: '9px 16px',
-            },
-        },
-    }),
-    {
-        name: 'ListPageHeader',
-    },
-);
-
 export function RefereesList() {
-    const classes = useStyles();
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
-    const [addCustomerDialog, setAddCustomerDialog] = useState(false);
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
@@ -169,8 +146,6 @@ export function RefereesList() {
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
     const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '', salesmanId: '' });
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -182,13 +157,6 @@ export function RefereesList() {
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
-
-    const redirectToCustomerProfile = useCallback(
-        (customer: CustomerEntity) => {
-            navigate(`/customers/${customer.id}/view`);
-        },
-        [navigate],
-    );
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -354,31 +322,9 @@ export function RefereesList() {
         );
     }, [customers, delQuery]);
 
-    const headerActions = (
-        <Button
-            onClick={() => setAddCustomerDialog(true)}
-            variant={'contained'}
-            color={'primary'}
-            className={classes.newCustomerBtn}
-        >
-            Add Customer
-        </Button>
-    );
-
     return (
         <Grid container>
-            <ListPageHeader
-                searchField
-                title={'Referees'}
-                value={initialValues.search}
-                onSearch={handleSearch}
-                headerActions={headerActions}
-            />
-            <CustomerAddDialog
-                customerAdded={redirectToCustomerProfile}
-                open={addCustomerDialog}
-                onClose={() => setAddCustomerDialog(!addCustomerDialog)}
-            />
+            <ListPageHeader searchField title={'Referees'} value={initialValues.search} onSearch={handleSearch} />
             <Grid container p={2.5} alignItems={'center'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'subtitle1'}>{customers.pagination.meta.total} Result(s)</Typography>

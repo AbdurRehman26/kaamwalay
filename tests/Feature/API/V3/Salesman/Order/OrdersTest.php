@@ -43,7 +43,6 @@ test('a salesman can update order shipping address', function () {
         ->assertOk();
 
     Event::assertDispatched(OrderShippingAddressChangedEvent::class);
-
 });
 
 test('if shipping and billing addresses are equal both get updated on update of shipping address ', function () {

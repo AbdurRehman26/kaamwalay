@@ -4,9 +4,10 @@ namespace App\Listeners\API\ReferralProgram\ReferrerPayouts;
 
 use App\Events\API\Admin\ReferralProgram\BatchPayoutCreated;
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProcessBatchPayoutCreation implements ShouldQueue
+class ProcessBatchPayoutCreation implements ShouldQueue, ShouldBeEncrypted
 {
     public function __construct(protected ReferrerPayoutService $referrerPayoutService)
     {

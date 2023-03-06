@@ -35,7 +35,6 @@ test('admin can credit amount in customer\'s wallet that doesnt have balance', f
     expect($this->customer->wallet->refresh()->balance)->toBe($amount);
 
     Event::assertDispatched(CustomerWalletCredited::class);
-
 });
 
 test('admin can credit amount in customer\'s wallet that has balance', function () {
@@ -56,5 +55,4 @@ test('admin can credit amount in customer\'s wallet that has balance', function 
     expect($newCustomer->wallet->lastTransaction->amount)->toBe($amount);
     expect($newCustomer->wallet->refresh()->balance)->toBe($amount + $oldBalance);
     Event::assertDispatched(CustomerWalletCredited::class);
-
 });

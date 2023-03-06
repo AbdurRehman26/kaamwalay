@@ -15,7 +15,7 @@ interface HeaderProps {
     ordersExist?: boolean;
     tabs?: React.ReactNode;
     headerActions?: React.ReactNode;
-    referralOrder?: boolean;
+    title?: string;
 }
 const styles = {
     header: {
@@ -60,7 +60,7 @@ export function Header({
     ordersExist,
     headerActions,
     tabs,
-    referralOrder,
+    title = 'Submissions',
     headerStyles,
 }: HeaderProps) {
     const [search, setSearch] = useState('');
@@ -83,7 +83,7 @@ export function Header({
             <Grid container alignItems={'center'} sx={headerStyles?.header ?? styles.header}>
                 <Grid item container xs alignItems={'center'}>
                     <Typography variant={'h4'} sx={headerStyles?.title ?? styles.title}>
-                        {referralOrder ? 'Referral Orders' : 'Submissions'}
+                        {title}
                     </Typography>
                     {dataLength !== 0 || ordersExist ? (
                         <TextField

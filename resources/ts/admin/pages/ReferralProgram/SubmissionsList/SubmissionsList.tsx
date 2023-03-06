@@ -47,7 +47,7 @@ export function SubmissionsList() {
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <Header onSearch={setSearch} tabs={tabs} referralOrder={true} />
+                <Header onSearch={setSearch} tabs={tabs} title={'Referral Orders'} />
                 <Divider />
                 <TabContent value={'all'}>
                     <SubmissionsTable search={search} all />

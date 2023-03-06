@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -325,6 +326,7 @@ test('correct service level price is assigned according to price ranges', functi
     ]);
 
 test('an admin can update order shipping address', function () {
+    Event::fake();
     $order = Order::factory()->create();
 
     $this->actingAs($this->user);
@@ -341,9 +343,13 @@ test('an admin can update order shipping address', function () {
         'phone' => $this->faker->phoneNumber(),
     ])
         ->assertOk();
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
 });
 
 test('if shipping and billing addresses are equal both get updated on update of shipping address ', function () {
+    Event::fake();
+
     $orderAddress = OrderAddress::factory()->create();
     $order = Order::factory()->create([
         'shipping_order_address_id' => $orderAddress->id,
@@ -369,9 +375,13 @@ test('if shipping and billing addresses are equal both get updated on update of 
     $order = $order->fresh();
     $this->assertEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
 });
 
 test('if shipping and billing addresses are different only shipping address is updated ', function () {
+    Event::fake();
+
     $orderAddress = OrderAddress::factory()->create();
     $order = Order::factory()->create([
         'shipping_order_address_id' => $orderAddress->id,
@@ -396,4 +406,6 @@ test('if shipping and billing addresses are different only shipping address is u
     $order = $order->fresh();
     $this->assertNotEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
 });

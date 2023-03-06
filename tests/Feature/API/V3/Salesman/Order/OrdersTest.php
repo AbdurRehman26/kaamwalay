@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\User;
@@ -12,6 +13,7 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
     ]);
+    Event::fake();
 
     $this->user = User::factory()->withRole(config('permission.roles.salesman'))->create();
 
@@ -39,6 +41,9 @@ test('a salesman can update order shipping address', function () {
         'phone' => $this->faker->phoneNumber(),
     ])
         ->assertOk();
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
+
 });
 
 test('if shipping and billing addresses are equal both get updated on update of shipping address ', function () {
@@ -68,6 +73,8 @@ test('if shipping and billing addresses are equal both get updated on update of 
     $order = $order->fresh();
     $this->assertEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
 });
 
 test('if shipping and billing addresses are different only shipping address is updated ', function () {
@@ -96,4 +103,29 @@ test('if shipping and billing addresses are different only shipping address is u
     $order = $order->fresh();
     $this->assertNotEquals($order->shipping_order_address_id, $order->billing_order_address_id);
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
+
+    Event::assertDispatched(OrderShippingAddressChangedEvent::class);
+});
+
+test('a salesman can not update order shipping address if they don\'t own the order', function () {
+    $newUser = User::factory()->withRole(config('permission.roles.salesman'))->create();
+
+    $order = Order::factory()->create([
+        'salesman_id' => $newUser->id,
+    ]);
+
+    $this->actingAs($this->user);
+
+    $this->putJson(route('v3.salesman.orders.update-shipping-address', ['order' => $order]), [
+        'country_code' => 'US',
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->address(),
+        'address_2' => $this->faker->address(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'phone' => $this->faker->phoneNumber(),
+    ])
+        ->assertForbidden();
 });

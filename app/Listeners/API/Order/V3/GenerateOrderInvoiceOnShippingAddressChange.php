@@ -2,7 +2,6 @@
 
 namespace App\Listeners\API\Order\V3;
 
-use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Services\Payment\V3\InvoiceService;
@@ -37,11 +36,11 @@ class GenerateOrderInvoiceOnShippingAddressChange implements ShouldQueue
 
 
     /**
-     * @param  OrderPaid  $event
+     * @param  OrderShippingAddressChangedEvent  $event
      * @param \Throwable $exception
      * @return void
      */
-    public function failed(OrderPaid $event, $exception): void
+    public function failed(OrderShippingAddressChangedEvent $event, $exception): void
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

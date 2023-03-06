@@ -6,6 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateShippingAddressRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        $order = $this->route('order');
+
+        return auth()->user()->isSalesman() && $order->salesman()->exists() && $order->salesman()->is(auth()->user());
+    }
     /**
      * Get the validation rules that apply to the request.
      *

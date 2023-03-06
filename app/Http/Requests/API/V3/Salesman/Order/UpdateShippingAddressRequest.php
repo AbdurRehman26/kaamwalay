@@ -12,7 +12,7 @@ class UpdateShippingAddressRequest extends FormRequest
         /** @var Order $order */
         $order = $this->route('order');
 
-        return auth()->user()->isSalesman() && $order->salesman()->exists() && $order->salesman()->is(auth()->user());
+        return $order->salesman()->exists() && $order->salesman()->is(auth()->user());
     }
     /**
      * Get the validation rules that apply to the request.

@@ -8,6 +8,7 @@ use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Log;
+use Throwable;
 
 class GenerateOrderInvoiceOnShippingAddressChange implements ShouldQueue
 {
@@ -36,9 +37,7 @@ class GenerateOrderInvoiceOnShippingAddressChange implements ShouldQueue
 
 
     /**
-     * @param  OrderShippingAddressChangedEvent  $event
-     * @param \Throwable $exception
-     * @return void
+     * @param Throwable $exception
      */
     public function failed(OrderShippingAddressChangedEvent $event, $exception): void
     {

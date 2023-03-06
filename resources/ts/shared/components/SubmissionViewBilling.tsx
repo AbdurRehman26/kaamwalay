@@ -215,7 +215,7 @@ export function SubmissionViewBilling({
                 {hasPayment ? (
                     <>
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
-                            Payment Methods
+                            Payment Method
                         </Typography>
 
                         <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>

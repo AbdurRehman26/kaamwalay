@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\Wallet\CustomerWalletCredited;
 use App\Models\User;
 use App\Models\Wallet;
 use Database\Seeders\RolesSeeder;
@@ -8,7 +9,9 @@ use function Pest\Laravel\postJson;
 
 beforeEach(function () {
 
-    Event::fake();
+    Event::fake([
+        CustomerWalletCredited::class
+    ]);
 
     $this->seed([RolesSeeder::class]);
 

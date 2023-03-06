@@ -206,6 +206,18 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
         [availableCountries],
     );
 
+    const getCountryPhoneCode = useCallback(
+        (id: number) => {
+            const countryLookup = availableCountries.find((country: any) => country.id === id);
+            if (countryLookup) {
+                return countryLookup.phoneCode;
+            } else {
+                return '';
+            }
+        },
+        [availableCountries],
+    );
+
     const parseName = (fullName: any) => {
         const value = fullName.trim();
         const firstSpace = value.indexOf(' ');
@@ -288,7 +300,7 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                     validationSchema={schema}
                     validateOnChange={true}
                 >
-                    {({ values, handleChange, submitForm, errors, isValidating }) => (
+                    {({ values, handleChange, submitForm, errors, isValidating, setValues }) => (
                         <>
                             <DialogTitle className={classes.dialogTitle}>
                                 {'Edit Address'}
@@ -307,7 +319,11 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             variant={'outlined'}
                                             value={values.countryId}
                                             onChange={(e) => {
-                                                handleChange(e);
+                                                setValues({
+                                                    ...values,
+                                                    countryId: e.target.value,
+                                                    phone: '',
+                                                });
                                                 updateCurrentValues('countryId', e.target.value);
                                             }}
                                             inputProps={{
@@ -537,9 +553,11 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             <NumberFormat
                                                 customInput={TextField}
                                                 format={
-                                                    address?.country?.phoneCode
-                                                        ? '+' + address?.country?.phoneCode + ' (###) ###-####'
-                                                        : '+' + availableCountries[0]?.phoneCode + ' (###) #   ##-####'
+                                                    values.countryId
+                                                        ? '+' +
+                                                          getCountryPhoneCode(parseInt(values.countryId)) +
+                                                          ' (###) ###-####'
+                                                        : '+' + availableCountries[0]?.phoneCode + ' (###) ###-####'
                                                 }
                                                 mask=""
                                                 className={classes.formField}

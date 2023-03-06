@@ -7,6 +7,7 @@ import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { AuthDialog } from '@shared/components/AuthDialog';
+import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
@@ -66,11 +67,11 @@ export function AuthControls() {
 
     if (authenticated && isRedirect !== 'false') {
         if (user.hasRole(RolesEnum.Admin)) {
-            redirection('admin');
+            redirection(AuthenticationEnum.AdminRoute);
         } else if (user.hasRole(RolesEnum.Salesman)) {
-            redirection('salesrep');
+            redirection(AuthenticationEnum.SalesRepDashboardRoute);
         } else {
-            redirection('dashboard');
+            redirection(AuthenticationEnum.DashboardRoute);
         }
     }
     if (!authenticated) {

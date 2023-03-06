@@ -53,19 +53,28 @@ const useStyles = makeStyles(
 export function AuthControls() {
     const { checking, authenticated, openAuthDialog, authDialogProps, user } = useAuth();
     const classes = useStyles();
+    const isRedirect = localStorage.getItem('logged-in-user:redirect');
+
+    function redirection(redirectUrl: string) {
+        window.location.assign(redirectUrl);
+        localStorage.setItem('logged-in-user:redirect', 'false');
+    }
 
     if (checking) {
         return null;
     }
 
-    if (authenticated) {
+    if (authenticated && isRedirect !== 'false') {
         if (user.hasRole(RolesEnum.Admin)) {
-            window.location.assign('/admin');
+            redirection('admin');
         } else if (user.hasRole(RolesEnum.Salesman)) {
-            window.location.assign('/salesrep');
+            redirection('salesrep');
         } else {
-            window.location.assign('/dashboard');
+            redirection('dashboard');
         }
+    }
+    if (!authenticated) {
+        localStorage.removeItem('logged-in-user:redirect');
     }
 
     return (

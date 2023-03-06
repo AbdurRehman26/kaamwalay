@@ -25,6 +25,17 @@ interface CustomerReferralListingProps {
     isSignUp?: boolean;
 }
 
+const styles = {
+    tableBody: {
+        background: '#FFFFFF',
+    },
+    paymentText: {
+        color: '#20BFB8',
+        fontWeight: '700',
+        fontSize: '14px',
+    },
+};
+
 export function CustomerReferralListing({
     customers,
     paginationProp,
@@ -43,9 +54,9 @@ export function CustomerReferralListing({
                 headCells={headings}
                 hasStyling={true}
             />
-            <TableBody sx={{ background: '#FFFFFF' }}>
-                {customers?.length > 0 ? (
-                    customers.map((customer) => (
+            <TableBody sx={styles.tableBody}>
+                {customers.length > 0 ? (
+                    customers?.map((customer) => (
                         <TableRow>
                             <TableCell>
                                 <Grid container>
@@ -57,21 +68,15 @@ export function CustomerReferralListing({
                             </TableCell>
                             <TableCell>
                                 {isSignUp && customer.signedUpAt
-                                    ? `${formatDate(customer.signedUpAt, 'MMM D, YYYY')} at ${formatDate(
-                                          customer.signedUpAt,
-                                          'h:mm A',
-                                      )}`
-                                    : `${formatDate(customer.paidAt, 'MMM D, YYYY')} at ${formatDate(
-                                          customer.paidAt,
-                                          'h:mm A',
-                                      )}`}
+                                    ? formatDate(customer.signedUpAt, 'MM/DD/YYYY')
+                                    : formatDate(customer.paidAt, 'MM/DD/YYYY')}
                             </TableCell>
                             <TableCell>{isSignUp ? customer.cardsCount : customer.cards}</TableCell>
                             <TableCell>
                                 {isSignUp ? customer.submissions : formatCurrency(customer.submissionTotal)}
                             </TableCell>
                             {isSignUp ? <TableCell>{formatCurrency(customer.totalSpent)}</TableCell> : null}
-                            <TableCell sx={{ color: '#20BFB8', fontWeight: '700', fontSize: '14px' }}>
+                            <TableCell sx={styles.paymentText}>
                                 {isSignUp
                                     ? formatCurrency(customer.totalCommissions)
                                     : formatCurrency(customer.commission)}

@@ -96,6 +96,7 @@ function LayoutSidebar() {
     const handleReferralProgramClosed = () => {
         dispatch(setReferralProgramState(false));
     };
+
     return (
         <Drawer
             open={drawerState}
@@ -179,6 +180,13 @@ function LayoutSidebar() {
                         <LayoutSidebarItem
                             title={'Referral Orders'}
                             href={'/referral-program/submissions'}
+                            collapseStyle={true}
+                            collapseOpenedAction={handleReferralProgramOpened}
+                            collapseClosedAction={handleReferralProgramClosed}
+                        />
+                        <LayoutSidebarItem
+                            title={'Payouts'}
+                            href={'/referral-program/payouts'}
                             collapseStyle={true}
                             collapseOpenedAction={handleReferralProgramOpened}
                             collapseClosedAction={handleReferralProgramClosed}

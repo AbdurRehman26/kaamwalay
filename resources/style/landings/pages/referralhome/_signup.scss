@@ -78,10 +78,11 @@
 .ReferralHome-referralName {
     display: flex;
     border: 2px solid #e1bbff;
-    border-radius: 4px;
-    width: 45%;
+    border-radius: 7px;
+    max-width: 85%;
     height: 50px;
     margin-bottom: 24px;
+    width: fit-content;
     span {
         color: #e1bbff;
         font-size: 12px;
@@ -94,7 +95,7 @@
         }
     }
     @media screen and (max-width: 767px) {
-        width: 78%;
+        max-width: 100%;
     }
 }
 

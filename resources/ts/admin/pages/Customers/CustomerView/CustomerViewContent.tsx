@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { CustomerViewContentHeader } from './CustomerViewContentHeader';
 import { CustomerViewOverViewTab } from './CustomerViewOverViewTab';
+import { CustomerViewPayoutTab } from './CustomerViewPayoutTab';
 import { CustomerViewReferralTab } from './CustomerViewReferralTab';
 
 interface CustomerViewContentProps {
@@ -44,6 +45,9 @@ export function CustomerViewContent({ customer }: CustomerViewContentProps) {
                 <Divider />
                 <TabContent value={'referrals'}>
                     <CustomerViewReferralTab customer={customer} />
+                </TabContent>
+                <TabContent value={'payouts'}>
+                    <CustomerViewPayoutTab />
                 </TabContent>
             </Grid>
         </TabContext>

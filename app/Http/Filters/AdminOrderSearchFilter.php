@@ -11,7 +11,9 @@ class AdminOrderSearchFilter implements Filter
     {
         $fullNameArray = explode(' ', $value);
         if (count($fullNameArray) === 2) {
-            $query->whereLike('user.first_name', $fullNameArray[0])->whereLike('user.last_name', $fullNameArray[1]);
+            $query->whereHas('user', function ($query) use ($fullNameArray) {
+                $query->where('first_name', $fullNameArray[0])->where('last_name', $fullNameArray[1]);
+            });
         } else {
             $query->whereLike(
                 [

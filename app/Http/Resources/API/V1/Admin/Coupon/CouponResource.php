@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V1\Admin\Coupon;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Admin\Coupon\Couponable\CustomerCollection;
 use App\Http\Resources\API\V1\Admin\Coupon\Couponable\PaymentPlanCollection;
+use Illuminate\Http\Request;
 
 class CouponResource extends BaseResource
 {

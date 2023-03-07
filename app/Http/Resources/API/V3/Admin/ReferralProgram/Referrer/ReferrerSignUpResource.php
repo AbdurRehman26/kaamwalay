@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
 use App\Services\ReferralProgram\ReferrerService;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class ReferrerSignUpResource extends BaseResource

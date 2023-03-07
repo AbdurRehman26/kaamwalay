@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\Services\AGS;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 class CardGradeResource extends BaseResource
 {

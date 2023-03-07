@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V2\Customer\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 /**
  * @mixin OrderPayment

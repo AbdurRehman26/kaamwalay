@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer;
 
-use Illuminate\Http\Request;
 use App\Models\Referrer;
 use App\Services\ReferralProgram\ReferrerService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Referrer */

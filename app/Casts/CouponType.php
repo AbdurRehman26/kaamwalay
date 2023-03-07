@@ -2,9 +2,9 @@
 
 namespace App\Casts;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Coupon;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Database\Eloquent\Model;
 
 class CouponType implements CastsAttributes
 {

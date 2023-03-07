@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V1\Customer\CardCategory;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\CardCategory;
+use Illuminate\Http\Request;
 
 /**
  * @mixin CardCategory

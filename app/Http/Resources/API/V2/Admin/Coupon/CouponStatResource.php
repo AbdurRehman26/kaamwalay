@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @property int $times_used

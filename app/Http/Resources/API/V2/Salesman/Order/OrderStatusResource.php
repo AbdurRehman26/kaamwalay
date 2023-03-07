@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\OrderStatus;
+use Illuminate\Http\Request;
 
 /** @mixin OrderStatus */
 class OrderStatusResource extends BaseResource

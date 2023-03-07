@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V1\Admin\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 class OrderPaymentResource extends BaseResource
 {

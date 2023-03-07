@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Coupon;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Salesman\Coupon\Couponable\CustomerCollection;
 use App\Http\Resources\API\V2\Salesman\Coupon\Couponable\PaymentPlanCollection;
 use App\Models\Coupon;
+use Illuminate\Http\Request;
 
 /** @mixin Coupon */
 class CouponResource extends BaseResource

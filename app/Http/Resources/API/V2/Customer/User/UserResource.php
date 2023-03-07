@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V2\Customer\User;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\V2\Customer\Role\RoleCollection;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin User */

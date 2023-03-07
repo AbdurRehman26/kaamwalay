@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V2\Admin\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\PaymentMethod\PaymentMethodResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 /** @mixin OrderPayment */
 class OrderPaymentResource extends BaseResource

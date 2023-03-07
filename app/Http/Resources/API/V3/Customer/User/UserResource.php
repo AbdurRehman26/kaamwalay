@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Customer\User;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\V2\Customer\User\UserResource as V2UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class UserResource extends V2UserResource

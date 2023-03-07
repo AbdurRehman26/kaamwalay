@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Customer\VaultShipment;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\VaultShipment;
+use Illuminate\Http\Request;
 
 /** @mixin VaultShipment */
 class VaultShipmentResource extends BaseResource

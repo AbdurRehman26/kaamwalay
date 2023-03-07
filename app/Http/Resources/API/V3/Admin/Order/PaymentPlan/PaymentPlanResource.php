@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Admin\Order\PaymentPlan;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\V3\Admin\Order\PaymentPlanRange\PaymentPlanRangeCollection;
 use App\Models\PaymentPlan;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin PaymentPlan */

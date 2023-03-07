@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed $id

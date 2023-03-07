@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
-use Illuminate\Http\Request;
 use App\Models\Referrer;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Referrer */

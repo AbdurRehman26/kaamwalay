@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\Order;
+use Illuminate\Http\Request;
 
 /**
  * @mixin Order

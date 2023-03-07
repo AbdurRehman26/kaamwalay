@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon\Couponable;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @property int $id

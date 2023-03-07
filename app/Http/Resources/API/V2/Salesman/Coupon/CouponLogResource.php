@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Coupon;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Salesman\Coupon\Couponable\CustomerResource;
 use App\Http\Resources\API\V2\Salesman\Order\OrderResource;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed $user

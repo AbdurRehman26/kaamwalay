@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V1\Admin\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 class OrderStatusResource extends BaseResource
 {

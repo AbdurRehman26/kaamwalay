@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V1\Customer\Order;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 class OrderPaymentResource extends BaseResource
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Customer\Address;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Country\CountryResource;
 use App\Models\CustomerAddress;
+use Illuminate\Http\Request;
 
 /**
  * @mixin CustomerAddress

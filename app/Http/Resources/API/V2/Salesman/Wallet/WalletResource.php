@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Wallet;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\Wallet;
+use Illuminate\Http\Request;
 
 /**
  * @mixin Wallet

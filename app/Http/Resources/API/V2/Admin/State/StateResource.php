@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Admin\State;
 
-use Illuminate\Http\Request;
 use App\Models\State;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin State */

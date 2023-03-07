@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed $id

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\Order;
 
@@ -18,7 +19,7 @@ class CommissionEarningResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

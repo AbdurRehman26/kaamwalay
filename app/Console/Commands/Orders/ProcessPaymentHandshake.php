@@ -28,7 +28,7 @@ class ProcessPaymentHandshake extends Command
      *
      * @return int
      */
-    public function handle(PaymentHandshakeService $paymentHandshakeService)
+    public function handle(PaymentHandshakeService $paymentHandshakeService): int
     {
         $email = $this->option('email');
         $user = User::whereEmail($email)->first();

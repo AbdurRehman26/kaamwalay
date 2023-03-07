@@ -12,7 +12,7 @@ class CustomerAddressSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         CustomerAddress::factory()
             ->count(5)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\Order;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\OrderPayment;
@@ -14,7 +15,7 @@ class OrderPaymentResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         if (! $this->response) {
             return [];

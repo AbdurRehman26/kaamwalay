@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Customer\Address;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\V1\Country\CountryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class CustomerAddressResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

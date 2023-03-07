@@ -16,7 +16,7 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'first_name' => $this->faker->firstName(),
@@ -50,7 +50,7 @@ class UserFactory extends Factory
      * @param string $role
      * @return  $this
      */
-    public function withRole(string $role)
+    public function withRole(string $role): static
     {
         return $this->afterCreating(function (User $user) use ($role) {
             $role = Role::where('name', $role)->first();

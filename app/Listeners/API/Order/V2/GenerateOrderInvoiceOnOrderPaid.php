@@ -40,7 +40,7 @@ class GenerateOrderInvoiceOnOrderPaid implements ShouldQueue
      * @param \Throwable $exception
      * @return void
      */
-    public function failed(OrderPaid $event, $exception): void
+    public function failed(OrderPaid $event, Throwable $exception): void
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

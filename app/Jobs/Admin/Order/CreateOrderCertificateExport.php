@@ -29,7 +29,7 @@ class CreateOrderCertificateExport implements ShouldQueue
      * @param  OrderCertificateService $orderCertificateService
      * @return void
      */
-    public function handle(OrderCertificateService $orderCertificateService)
+    public function handle(OrderCertificateService $orderCertificateService): void
     {
         $orderCertificateService->generateCertificateExport($this->order);
     }

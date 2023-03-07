@@ -16,7 +16,7 @@ class WalletTransactionFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $reason = $this->faker->randomElement([
             WalletTransactionReason::WALLET_CREDIT,

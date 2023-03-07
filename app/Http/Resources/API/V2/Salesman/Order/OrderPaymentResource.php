@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Order;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Http\Resources\API\V2\Salesman\Order\PaymentMethod\PaymentMethodResource;
@@ -16,7 +17,7 @@ class OrderPaymentResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         if (! $this->order->isPaid()) {
             return $this->getUnpaidOrderPaymentResponse();

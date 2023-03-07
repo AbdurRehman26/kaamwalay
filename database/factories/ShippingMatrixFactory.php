@@ -12,7 +12,7 @@ class ShippingMatrixFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'country_id' => Country::factory(),

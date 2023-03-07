@@ -14,7 +14,7 @@ class OrderPaymentFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'order_id' => Order::factory(),
@@ -29,7 +29,7 @@ class OrderPaymentFactory extends Factory
      *
      * @return Factory
      */
-    public function stripe()
+    public function stripe(): Factory
     {
         return $this->state(function (array $attributes) {
             return [
@@ -46,7 +46,7 @@ class OrderPaymentFactory extends Factory
      *
      * @return Factory
      */
-    public function paypal()
+    public function paypal(): Factory
     {
         return $this->state(function (array $attributes) {
             return [

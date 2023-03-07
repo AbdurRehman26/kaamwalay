@@ -13,7 +13,7 @@ class CouponStatusFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $status = Arr::random(['queued', 'active', 'inactive', 'expired']);
 

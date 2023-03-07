@@ -12,7 +12,7 @@ class OrderItemSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         OrderItem::factory()
             ->count(5)

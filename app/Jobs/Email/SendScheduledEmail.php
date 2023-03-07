@@ -41,7 +41,7 @@ class SendScheduledEmail implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function handle(MandrillClient $mandrillClient)
+    public function handle(MandrillClient $mandrillClient): void
     {
         $this->processEmail($mandrillClient);
         $this->rescheduleEmail();

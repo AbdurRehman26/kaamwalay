@@ -11,7 +11,7 @@ class SetActiveRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'is_active' => ['required', 'boolean'],

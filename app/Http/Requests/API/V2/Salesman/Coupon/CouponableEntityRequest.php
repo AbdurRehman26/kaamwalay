@@ -11,7 +11,7 @@ class CouponableEntityRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->isSalesman();
     }
@@ -21,7 +21,7 @@ class CouponableEntityRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],

@@ -11,7 +11,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('order_statuses', function (Blueprint $table) {
             DB::table('order_statuses')->where('code', 'reviewed')->update([
@@ -26,7 +26,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('order_statuses', function (Blueprint $table) {
             DB::table('order_statuses')->where('code', 'assembled')->update([

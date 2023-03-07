@@ -12,7 +12,7 @@ class ShippingMethodSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         ShippingMethod::factory()
             ->count(5)

@@ -15,7 +15,7 @@ class PaymentPlanFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'price' => $this->faker->numberBetween(20, 5000),
@@ -31,7 +31,7 @@ class PaymentPlanFactory extends Factory
      * @param string $role
      * @return  $this
      */
-    public function withPaymentPlanRanges(int $price = 18)
+    public function withPaymentPlanRanges(int $price = 18): static
     {
         return $this->afterCreating(function (PaymentPlan $paymentPlan) use ($price) {
             PaymentPlanRange::factory()->count(5)->state(new Sequence(

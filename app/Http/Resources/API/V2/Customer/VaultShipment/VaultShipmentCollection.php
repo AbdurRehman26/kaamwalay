@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Customer\VaultShipment;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class VaultShipmentCollection extends ResourceCollection
@@ -12,7 +13,7 @@ class VaultShipmentCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

@@ -31,7 +31,7 @@ class CloseOldDeals extends Command
      *
      * @return int
      */
-    public function handle(HubspotService $hubspotService)
+    public function handle(HubspotService $hubspotService): int
     {
         $offset = 0;
         $hasMore = true;

@@ -12,7 +12,7 @@ class NewImportedCardProductSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('card_products')->insert([
             [

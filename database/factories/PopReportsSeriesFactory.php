@@ -12,7 +12,7 @@ class PopReportsSeriesFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'card_series_id' => CardSeries::factory(),

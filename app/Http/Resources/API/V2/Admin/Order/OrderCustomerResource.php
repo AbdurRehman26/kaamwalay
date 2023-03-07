@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\Order;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
 use App\Models\User;
@@ -15,7 +16,7 @@ class OrderCustomerResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

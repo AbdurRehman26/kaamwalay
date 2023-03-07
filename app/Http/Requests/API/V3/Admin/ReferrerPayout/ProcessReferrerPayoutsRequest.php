@@ -13,7 +13,7 @@ class ProcessReferrerPayoutsRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'items' => 'required_without:all_pending|array',

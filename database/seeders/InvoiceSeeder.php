@@ -12,7 +12,7 @@ class InvoiceSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Invoice::factory()
             ->count(5)

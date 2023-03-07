@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('card_products', function (Blueprint $table) {
             $table->string('variant_category')->default('Edition')->after('card_number_order');
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('card_products', function (Blueprint $table) {
             $table->dropColumn('variant_category');

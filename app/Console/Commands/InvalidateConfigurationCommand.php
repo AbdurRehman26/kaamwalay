@@ -26,7 +26,7 @@ class InvalidateConfigurationCommand extends Command
      *
      * @return int
      */
-    public function handle(ConfigurationService $configurationService)
+    public function handle(ConfigurationService $configurationService): int
     {
         $this->info("Invalidate configurations...");
         $configurationService->invalidateConfigurations();

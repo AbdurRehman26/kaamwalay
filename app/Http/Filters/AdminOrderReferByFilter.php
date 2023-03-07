@@ -15,7 +15,7 @@ class AdminOrderReferByFilter implements Filter
      * @return void
      */
 
-    public function __invoke(Builder $query, $value, string $property)
+    public function __invoke(Builder $query, string $value, string $property): void
     {
         $query->whereHas('user', function ($query) use ($value) {
             $operand = ! empty($value) ? '!=' : '=';

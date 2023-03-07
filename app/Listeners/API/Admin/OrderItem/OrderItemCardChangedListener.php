@@ -25,7 +25,7 @@ class OrderItemCardChangedListener implements ShouldQueue
      * @param  OrderItemCardChangedEvent  $event
      * @return void
      */
-    public function handle(OrderItemCardChangedEvent $event)
+    public function handle(OrderItemCardChangedEvent $event): void
     {
         switch ($event->orderItem->order_item_status_id) {
             case OrderItemStatus::GRADED:

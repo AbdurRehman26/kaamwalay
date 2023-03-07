@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('order_items', function (Blueprint $table) {
             $table->foreignId('order_item_customer_shipment_id')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('order_items', function (Blueprint $table) {
             $table->dropColumn('order_item_customer_shipment_id');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CouponLogCollection extends ResourceCollection
@@ -12,7 +13,7 @@ class CouponLogCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable<int,mixed>|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

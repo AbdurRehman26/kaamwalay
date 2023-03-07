@@ -12,7 +12,7 @@ class WalletSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         WalletTransaction::factory(10)->create();
     }

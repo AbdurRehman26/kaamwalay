@@ -26,7 +26,7 @@ class CreateListsOnMailchimp extends Command
      *
      * @return int
      */
-    public function handle(MailchimpService $mailchimpService)
+    public function handle(MailchimpService $mailchimpService): int
     {
         $lists = [
             MailchimpService::LIST_NAME_SIGN_UP_USERS,

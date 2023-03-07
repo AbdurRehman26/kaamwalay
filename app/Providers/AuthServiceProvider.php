@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // Implicitly grant "Super Admin" role all permissions
         Gate::before(function (User $user, $ability) {

@@ -73,7 +73,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         $data = collect(self::STATES_LIST)->map(function ($name, $code) {
             return [
@@ -92,7 +92,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::table('states')->truncate();
     }

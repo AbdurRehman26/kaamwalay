@@ -19,7 +19,7 @@ class UserCardLabelResource extends BaseResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         /** @var CardProduct $cardProduct */
         $cardProduct = $this->orderItem->cardProduct;

@@ -10,7 +10,7 @@ class AdminCustomerSearchFilter implements Filter
     /**
      * @param string $value
      */
-    public function __invoke(Builder $query, $value, string $property): void
+    public function __invoke(Builder $query, string $value, string $property): void
     {
         // If searching for both first and last name together, search exact
         $fullNameArray = explode(' ', $value);

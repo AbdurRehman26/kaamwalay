@@ -11,7 +11,7 @@ class UserCardGradeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->isAdmin();
     }
@@ -21,7 +21,7 @@ class UserCardGradeRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'grade_delta' => ['sometimes', 'nullable', 'regex:/^(-)?\d(\.[0|5])?$/', 'numeric'],
@@ -55,7 +55,7 @@ class UserCardGradeRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         $message = 'can only have maximum of 2 decimal places.';
 

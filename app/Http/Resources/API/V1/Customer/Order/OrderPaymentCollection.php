@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Customer\Order;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class OrderPaymentCollection extends ResourceCollection
@@ -12,7 +13,7 @@ class OrderPaymentCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

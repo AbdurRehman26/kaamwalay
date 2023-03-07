@@ -13,7 +13,7 @@ class UserCardCertificateFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'user_card_id' => UserCard::factory(),

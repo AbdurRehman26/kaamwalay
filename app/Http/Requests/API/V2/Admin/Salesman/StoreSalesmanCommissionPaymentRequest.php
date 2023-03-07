@@ -12,7 +12,7 @@ class StoreSalesmanCommissionPaymentRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         /** @var User $user */
         $user = $this->user();
@@ -25,7 +25,7 @@ class StoreSalesmanCommissionPaymentRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'amount' => ['required', 'numeric'],

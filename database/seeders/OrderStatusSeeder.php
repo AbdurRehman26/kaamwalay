@@ -12,7 +12,7 @@ class OrderStatusSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         OrderStatus::factory()
             ->count(5)

@@ -12,7 +12,7 @@ class CardSetsSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         \DB::table('card_sets')->insert([
             [

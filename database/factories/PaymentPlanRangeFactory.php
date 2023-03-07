@@ -12,7 +12,7 @@ class PaymentPlanRangeFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $min = $this->faker->numberBetween(1, 50);
 

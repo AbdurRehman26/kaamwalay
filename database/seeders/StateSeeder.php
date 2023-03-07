@@ -12,7 +12,7 @@ class StateSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         State::factory()
             ->count(5)

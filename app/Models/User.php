@@ -221,7 +221,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     /**
      * @return BelongsTo<User, User>
      */
-    public function salesman()
+    public function salesman(): BelongsTo
     {
         return $this->belongsTo(User::class, 'salesman_id');
     }
@@ -241,7 +241,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }

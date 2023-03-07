@@ -22,7 +22,7 @@ class DataExportController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function __invoke(ExportDataRequest $request)
+    public function __invoke(ExportDataRequest $request): JsonResponse
     {
         $url = $this->dataExportService->process(
             $this->getModelInstance($request->validated('model'))

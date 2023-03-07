@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('order_payments', function (Blueprint $table) {
             $table->foreignId('payment_method_id')->nullable()->change();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('order_payments', function (Blueprint $table) {
             $table->foreignId('payment_method_id')->nullable(false)->change();

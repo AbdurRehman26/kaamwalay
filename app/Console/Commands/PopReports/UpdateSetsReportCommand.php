@@ -26,7 +26,7 @@ class UpdateSetsReportCommand extends Command
      *
      * @return int
      */
-    public function handle(PopReportService $popReportService)
+    public function handle(PopReportService $popReportService): int
     {
         $popReportService->updateAllSetsReport();
 

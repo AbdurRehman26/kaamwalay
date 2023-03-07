@@ -14,7 +14,7 @@ class AdminCardRaritySearchFilter implements Filter
      * @param  string  $property
      * @return void
      */
-    public function __invoke(Builder $query, $value, string $property)
+    public function __invoke(Builder $query, string $value, string $property): void
     {
         $query->whereLike(
             [

@@ -12,7 +12,7 @@ class RolesSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach (config('permission.roles') as $role) {
             Role::updateOrCreate([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\Services\AGS;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 
 class CardGradeResource extends BaseResource
@@ -21,7 +22,7 @@ class CardGradeResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'grading_id' => $this->resource['id'],

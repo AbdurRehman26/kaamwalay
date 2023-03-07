@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
 use App\Services\ReferralProgram\ReferrerService;
@@ -15,7 +16,7 @@ class ReferrerSignUpResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $referrerService = new ReferrerService();
 

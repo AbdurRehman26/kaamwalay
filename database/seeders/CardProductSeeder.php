@@ -11,7 +11,7 @@ class CardProductSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         \DB::table('order_items')->delete();
         \DB::table('card_products')->delete();

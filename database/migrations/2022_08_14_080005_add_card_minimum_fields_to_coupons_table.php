@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
             $table->integer('min_threshold_value')
@@ -30,7 +30,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
             $table->dropColumn(['min_threshold_value', 'min_threshold_type']);

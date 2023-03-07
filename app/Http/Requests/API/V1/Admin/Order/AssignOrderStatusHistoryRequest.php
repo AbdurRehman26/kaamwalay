@@ -14,7 +14,7 @@ class AssignOrderStatusHistoryRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->isAdmin();
     }
@@ -24,7 +24,7 @@ class AssignOrderStatusHistoryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'order_status_id' => 'exists:order_statuses,id',

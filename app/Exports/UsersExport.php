@@ -27,7 +27,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
      * @param User $row
      * @return array
      */
-    public function map($row): array
+    public function map(User $row): array
     {
         return [
             $row->name,

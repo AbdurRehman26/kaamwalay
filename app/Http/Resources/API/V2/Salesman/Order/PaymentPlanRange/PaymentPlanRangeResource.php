@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Salesman\Order\PaymentPlanRange;
 
+use Illuminate\Http\Request;
 use App\Models\PaymentPlanRange;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,7 @@ class PaymentPlanRangeResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

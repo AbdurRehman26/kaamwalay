@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 
 /**
@@ -19,7 +20,7 @@ class VaultShipmentPaymentResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         if (! $this->response) {
             return [];

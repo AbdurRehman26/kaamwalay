@@ -14,7 +14,7 @@ class OrderItemShipmentFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'shipment_date' => $this->faker->dateTime(),

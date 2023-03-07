@@ -29,7 +29,7 @@ class LinkCustomersToSalesman extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $fileName = $this->ask('Filename (ExcelFile.xlsx)');
         $salesmanEmail = $this->ask('SalesMan Email');

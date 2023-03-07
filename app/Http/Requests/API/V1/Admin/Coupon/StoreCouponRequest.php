@@ -14,7 +14,7 @@ class StoreCouponRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->isAdmin();
     }
@@ -24,7 +24,7 @@ class StoreCouponRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         // The design does not have a date picker when is_permanent is selected
         if ($this->get('is_permanent')) {
@@ -39,7 +39,7 @@ class StoreCouponRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'code' => ['required'],

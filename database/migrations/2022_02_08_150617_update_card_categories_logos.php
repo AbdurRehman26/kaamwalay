@@ -9,7 +9,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         $categories = [
             ['name' => 'Pokemon', 'url' => 'https://robograding-live.s3.us-west-2.amazonaws.com/platform/categories/Pokemon.png',],
@@ -31,7 +31,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         //
     }

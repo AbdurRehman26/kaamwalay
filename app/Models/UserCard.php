@@ -52,7 +52,7 @@ class UserCard extends Model
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'id' => $this->order_item_id,

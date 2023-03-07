@@ -15,7 +15,7 @@ class OrderStatusHistoryFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'order_id' => Order::factory(),

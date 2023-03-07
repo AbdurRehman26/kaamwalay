@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('states', function (Blueprint $table) {
             $table->foreignId('country_id')->after('name')->nullable()->constrained();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('states', function (Blueprint $table) {
             $table->dropForeign(['country_id']);

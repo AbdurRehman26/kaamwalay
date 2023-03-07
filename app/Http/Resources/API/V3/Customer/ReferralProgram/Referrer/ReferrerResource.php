@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer;
 
+use Illuminate\Http\Request;
 use App\Models\Referrer;
 use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,7 +16,7 @@ class ReferrerResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $referrerService = new ReferrerService();
 

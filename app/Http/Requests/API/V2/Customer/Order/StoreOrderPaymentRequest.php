@@ -13,7 +13,7 @@ class StoreOrderPaymentRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         /** @var Order $order */
         $order = $this->route('order');
@@ -26,7 +26,7 @@ class StoreOrderPaymentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'payment_method' => [

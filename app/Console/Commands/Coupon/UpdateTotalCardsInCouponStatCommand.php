@@ -29,7 +29,7 @@ class UpdateTotalCardsInCouponStatCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         CouponLog::select('coupon_id')->distinct()->get()->each(function (CouponLog $couponLog) {
             $totalCards = 0;

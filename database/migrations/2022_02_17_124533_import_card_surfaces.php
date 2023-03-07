@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         //Pokemon
         $pokemonCategory = DB::table('card_categories')->where('name', 'Pokemon')->first();
@@ -212,7 +212,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         //
     }

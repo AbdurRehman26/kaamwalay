@@ -16,7 +16,7 @@ class VaultShipmentItemCollection extends ResourceCollection
      * @param  Request  $request
      * @return array|Arrayable<int, VaultShipment>|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

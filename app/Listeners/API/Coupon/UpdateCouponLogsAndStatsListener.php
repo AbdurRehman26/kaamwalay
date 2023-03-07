@@ -26,7 +26,7 @@ class UpdateCouponLogsAndStatsListener implements ShouldQueue
      * @param  OrderPaid  $event
      * @return void
      */
-    public function handle(OrderPaid $event)
+    public function handle(OrderPaid $event): void
     {
         if (! $event->order->coupon || ! $event->order->discounted_amount) {
             return;

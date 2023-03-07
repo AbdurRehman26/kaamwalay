@@ -28,7 +28,7 @@ class AddAssembledStatusToOrderStatusHistory extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (
             $this->confirm('This action will add Assembled status to all the previous orders\' status history. Do you want to continue?')

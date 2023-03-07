@@ -12,7 +12,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         DB::table('card_products')->where('variant_name', '!=', 'Reverse Holo')->update([
             'edition' => DB::raw('variant_name'),
@@ -38,7 +38,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('card_products', function (Blueprint $table) {
             //

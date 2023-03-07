@@ -20,7 +20,7 @@ class CustomerResource extends V2CustomerResource
      * @param  Request  $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
 

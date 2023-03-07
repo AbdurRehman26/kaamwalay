@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Files;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 
 class PresignUploadResource extends BaseResource
@@ -12,7 +13,7 @@ class PresignUploadResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'size' => $this->getSize(),

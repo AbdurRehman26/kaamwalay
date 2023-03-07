@@ -29,7 +29,7 @@ class CreateSocialPreviewsForUserCard implements ShouldQueue
      *
      * @return void
      */
-    public function handle(UserCardService $userCardService)
+    public function handle(UserCardService $userCardService): void
     {
         $userCardService->generateSocialPreview($this->userCard);
     }

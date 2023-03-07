@@ -14,7 +14,7 @@ class UserCardFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'order_item_id' => OrderItem::factory(),

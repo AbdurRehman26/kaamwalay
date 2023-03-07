@@ -16,7 +16,7 @@ class PaymentServiceProvider extends ServiceProvider implements DeferrableProvid
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->resolveStripe();
     }
@@ -26,7 +26,7 @@ class PaymentServiceProvider extends ServiceProvider implements DeferrableProvid
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

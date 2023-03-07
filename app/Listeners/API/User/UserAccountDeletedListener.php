@@ -30,7 +30,7 @@ class UserAccountDeletedListener implements ShouldQueue
      * @param  UserAccountDeletedEvent  $event
      * @return void
      */
-    public function handle(UserAccountDeletedEvent $event)
+    public function handle(UserAccountDeletedEvent $event): void
     {
         $userId = $event->userId;
 

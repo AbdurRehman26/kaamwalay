@@ -16,7 +16,7 @@ class RefundAmountRule implements Rule, DataAwareRule
      * @param  string  $attribute
      * @param  mixed  $value
      */
-    public function passes($attribute, $value): bool
+    public function passes(string $attribute, $value): bool
     {
         if ((float) $value > $this->maxRefundableAmount()) {
             return false;
@@ -36,7 +36,7 @@ class RefundAmountRule implements Rule, DataAwareRule
      * @param  array  $data
      * @return self
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
 

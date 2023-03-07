@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Country;
 
+use Illuminate\Http\Request;
 use App\Models\Country;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class CountryResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

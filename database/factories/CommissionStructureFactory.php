@@ -11,7 +11,7 @@ class CommissionStructureFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'level' => rand(1, 5),

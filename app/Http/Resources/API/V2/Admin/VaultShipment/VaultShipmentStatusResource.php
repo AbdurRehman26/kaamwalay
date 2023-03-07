@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\API\BaseResource;
 
 /**
@@ -18,7 +19,7 @@ class VaultShipmentStatusResource extends BaseResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

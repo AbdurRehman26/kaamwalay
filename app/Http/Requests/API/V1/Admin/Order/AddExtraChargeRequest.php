@@ -12,7 +12,7 @@ class AddExtraChargeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         /* @var User $user */
         $user = $this->user();
@@ -25,7 +25,7 @@ class AddExtraChargeRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'amount' => ['required', 'numeric', 'min:1'],

@@ -12,7 +12,7 @@ class CalculateOrderCollectorCoinPriceRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class CalculateOrderCollectorCoinPriceRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'payment_blockchain_network' => ['required', 'integer', Rule::in(explode(',', config('robograding.web3.supported_networks')))],

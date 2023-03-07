@@ -18,7 +18,7 @@ class SalesmanResource extends BaseResource
      * @param  Request  $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $paidCommission = $this->receivedCommissionTotal();
 

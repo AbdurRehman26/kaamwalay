@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\State;
 
+use Illuminate\Http\Request;
 use App\Models\State;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,7 @@ class StateResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

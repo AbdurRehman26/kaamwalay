@@ -3,6 +3,7 @@
 
 namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CommissionEarningCollection extends ResourceCollection
@@ -13,7 +14,7 @@ class CommissionEarningCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

@@ -12,7 +12,7 @@ class VerifyCouponRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class VerifyCouponRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'couponables_type' => [ 'sometimes', Rule::in(['service_level'])],

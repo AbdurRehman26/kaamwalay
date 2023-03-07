@@ -12,7 +12,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('countries', function (Blueprint $table) {
             $table->boolean('is_enabled')->after('name')->default(false);
@@ -24,7 +24,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('countries', function (Blueprint $table) {
             $table->dropColumn('is_enabled');

@@ -14,7 +14,7 @@ class AdminUserReferredBy implements Filter
      * @param  string  $property
      * @return void
      */
-    public function __invoke(Builder $query, $value, string $property): void
+    public function __invoke(Builder $query, string $value, string $property): void
     {
         if ($value) {
             $query->whereNotNull('referred_by');

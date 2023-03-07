@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
-    public function addDailyStats(string $currentDate): RevenueStatsDaily
+    public function addDailyStats(string $currentDate): array
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forDate($currentDate)
@@ -30,10 +30,10 @@ class RevenueStatsService
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Daily Stats Completed");
 
-        return $revenue;
+        return $this->addStats($currentDate, $orderPayments, $revenue);
     }
 
-    public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
+    public function addMonthlyStats(string $currentDate): array
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)
@@ -52,7 +52,7 @@ class RevenueStatsService
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Monthly Stats Completed");
 
-        return $revenue;
+        return $this->addStats($currentDate, $orderPayments, $revenue);
     }
 
     protected function addStats($currentDate, $orderPayments, $revenue)
@@ -81,11 +81,10 @@ class RevenueStatsService
 
             $revenue->profit = $revenueData['profit'];
             $revenue->revenue = $revenueData['revenue'];
-            $revenue->total_cards = $revenueData['total_cards'];
         }
         $revenue->save();
 
-        return $revenue;
+        return $revenueData;
     }
 
     public function updateStats(string $currentDate, Order $order): RevenueStatsDaily

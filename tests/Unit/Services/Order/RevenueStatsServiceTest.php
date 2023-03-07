@@ -74,7 +74,7 @@ it('adds daily revenue stats', function () {
     $revenueStats = $this->revenueStatsService->addDailyStats($getRandomOrder->created_at->toDateString());
     expect(round($revenue, 2))->toBe(round($revenueStats['revenue'], 2));
     expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
-    expect($toatalCards)->toBe($revenueStats->total_cards);
+    expect($toatalCards)->toBe($revenueStats['total_cards']);
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
@@ -102,7 +102,7 @@ it('adds monthly revenue stats for the current month', function () {
     
     $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 
-    expect($revenue)->toBe($revenueStats->revenue);
-    expect(round($profit, 2))->toBe(round($revenueStats->profit, 2));
-    expect($toatalCards)->toBe($revenueStats->total_cards);
+    expect($revenue)->toBe($revenueStats['revenue']);
+    expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
+    expect($toatalCards)->toBe($revenueStats['total_cards']);
 })->group('revenue-stats');

@@ -2,6 +2,7 @@
 
 namespace App\Casts;
 
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
@@ -11,7 +12,7 @@ class CouponDateRange implements CastsAttributes
      * @inheritDoc
      * @retrun Carbon
      */
-    public function get($model, string $key, $value, array $attributes)
+    public function get(Model $model, string $key, mixed $value, array $attributes)
     {
         return is_null($value) ? null : Carbon::parse($value);
     }
@@ -19,7 +20,7 @@ class CouponDateRange implements CastsAttributes
     /**
      * @inheritDoc
      */
-    public function set($model, string $key, $value, array $attributes)
+    public function set(Model $model, string $key, mixed $value, array $attributes)
     {
         return match ($key) {
             'available_from' => Carbon::parse($value)->startOfDay()->toDateTimeString(),

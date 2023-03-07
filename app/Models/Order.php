@@ -165,7 +165,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('status'),
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
-            AllowedFilter::scope('promo_code'),
+            AllowedFilter::scope('coupon_code'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
@@ -441,7 +441,7 @@ class Order extends Model implements Exportable
      * @param  string  $coupon
      * @return Builder<Order>
      */
-    public function scopePromoCode(Builder $query, string $coupon): Builder
+    public function scopeCouponCode(Builder $query, string $coupon): Builder
     {
         return $query->whereHas(
             'coupon',

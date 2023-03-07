@@ -12,8 +12,6 @@ class PaymentPlanFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
@@ -29,7 +27,6 @@ class PaymentPlanFactory extends Factory
      * Attach role to the newly created user.
      *
      * @param string $role
-     * @return  $this
      */
     public function withPaymentPlanRanges(int $price = 18): static
     {

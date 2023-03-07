@@ -64,9 +64,6 @@ class OrderResource extends V1OrderResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array
      */
     public function toArray(Request $request): array
     {

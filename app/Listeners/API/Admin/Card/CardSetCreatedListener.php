@@ -20,9 +20,6 @@ class CardSetCreatedListener
 
     /**
      * Handle the event.
-     *
-     * @param  CardSetCreatedEvent  $event
-     * @return void
      */
     public function handle(CardSetCreatedEvent $event): void
     {

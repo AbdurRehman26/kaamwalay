@@ -549,10 +549,6 @@ class Order extends Model implements Exportable
         return self::getAllowedAdminIncludes();
     }
 
-    /**
-     * @param  Order  $row
-     * @return array
-     */
     public function exportRowMap(Order $row): array
     {
         return [

@@ -24,9 +24,6 @@ class VaultShipmentStatusChangedListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  VaultShipmentStatusChangedEvent  $event
-     * @return void
      */
     public function handle(VaultShipmentStatusChangedEvent $event): void
     {

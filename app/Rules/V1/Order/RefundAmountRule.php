@@ -13,7 +13,6 @@ class RefundAmountRule implements Rule, DataAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
      * @param  mixed  $value
      */
     public function passes(string $attribute, $value): bool
@@ -32,9 +31,6 @@ class RefundAmountRule implements Rule, DataAwareRule
 
     /**
      * Set the data under validation.
-     *
-     * @param  array  $data
-     * @return self
      */
     public function setData(array $data): self
     {

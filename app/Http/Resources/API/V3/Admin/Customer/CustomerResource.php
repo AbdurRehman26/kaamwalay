@@ -16,9 +16,6 @@ class CustomerResource extends V2CustomerResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
      */
     public function toArray(Request $request): array
     {

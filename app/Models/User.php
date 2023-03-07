@@ -238,8 +238,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
      */
     public function getJWTCustomClaims(): array
     {
@@ -339,9 +337,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->hasManyThrough(OrderItem::class, Order::class);
     }
 
-    /**
-     * @return int
-    */
     public function cardsCount(): int
     {
         return $this->orders()->paid()
@@ -506,10 +501,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return [];
     }
 
-    /**
-     * @param  User  $row
-     * @return array
-     */
     public function exportRowMap(Model $row): array
     {
         return [

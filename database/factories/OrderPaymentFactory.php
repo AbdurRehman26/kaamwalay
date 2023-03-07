@@ -11,8 +11,6 @@ class OrderPaymentFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
@@ -26,8 +24,6 @@ class OrderPaymentFactory extends Factory
 
     /**
      * Indicate that the stripe request/response will be added.
-     *
-     * @return Factory
      */
     public function stripe(): Factory
     {
@@ -43,8 +39,6 @@ class OrderPaymentFactory extends Factory
 
     /**
      * Indicate that the paypal request/response will be added.
-     *
-     * @return Factory
      */
     public function paypal(): Factory
     {

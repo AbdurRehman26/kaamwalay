@@ -10,9 +10,6 @@ class VaultShipmentSearchFilter implements Filter
 {
     /**
      * @param  Builder<VaultShipment>  $query
-     * @param  string $value
-     * @param  string  $property
-     * @return void
      */
     public function __invoke(Builder $query, string $value, string $property): void
     {

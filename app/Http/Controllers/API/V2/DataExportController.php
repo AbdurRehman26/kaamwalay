@@ -16,8 +16,6 @@ class DataExportController extends Controller
     }
 
     /**
-     * @param  ExportDataRequest  $request
-     * @return JsonResponse
      * @throws ModelNotExportableException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception

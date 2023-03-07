@@ -28,8 +28,6 @@ class CloseOldDeals extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(HubspotService $hubspotService): int
     {

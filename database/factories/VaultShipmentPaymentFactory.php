@@ -29,8 +29,6 @@ class VaultShipmentPaymentFactory extends Factory
 
     /**
      * Indicate that the stripe request/response will be added.
-     *
-     * @return Factory
      */
     public function stripe(): Factory
     {
@@ -46,8 +44,6 @@ class VaultShipmentPaymentFactory extends Factory
 
     /**
      * Indicate that the paypal request/response will be added.
-     *
-     * @return Factory
      */
     public function paypal(): Factory
     {

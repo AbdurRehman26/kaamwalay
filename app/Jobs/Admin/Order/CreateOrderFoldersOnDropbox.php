@@ -32,7 +32,6 @@ class CreateOrderFoldersOnDropbox implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws OrderFoldersOnDropboxNotCreated|Throwable
      */
     public function handle(OrderService $orderService, DropboxService $dropboxService): void

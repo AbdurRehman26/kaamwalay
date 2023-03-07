@@ -23,9 +23,6 @@ class UserCardGradeRevisedListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  UserCardGradeRevisedEvent  $event
-     * @return void
      */
     public function handle(UserCardGradeRevisedEvent $event): void
     {

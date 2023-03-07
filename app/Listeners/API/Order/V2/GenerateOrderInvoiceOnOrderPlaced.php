@@ -28,11 +28,6 @@ class GenerateOrderInvoiceOnOrderPlaced implements ShouldQueue
         $this->invoiceService->saveInvoicePDF($event->order);
     }
 
-    /**
-     * @param  OrderPlaced  $event
-     * @param \Throwable $exception
-     * @return void
-     */
     public function failed(OrderPlaced $event, Throwable $exception): void
     {
         Log::error($exception->getMessage(), [

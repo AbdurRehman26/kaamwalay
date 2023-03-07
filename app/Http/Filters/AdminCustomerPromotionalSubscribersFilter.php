@@ -10,9 +10,6 @@ use Spatie\QueryBuilder\Filters\Filter;
  */
 class AdminCustomerPromotionalSubscribersFilter implements Filter
 {
-    /**
-     * @param string $value
-     */
     public function __invoke(Builder $query, string $value, string $property): void
     {
         $query->where(

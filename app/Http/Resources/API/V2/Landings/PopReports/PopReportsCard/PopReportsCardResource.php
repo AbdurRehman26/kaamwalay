@@ -13,9 +13,6 @@ class PopReportsCardResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
      */
     public function toArray(Request $request): array
     {

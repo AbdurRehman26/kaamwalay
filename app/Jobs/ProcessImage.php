@@ -37,7 +37,6 @@ class ProcessImage implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws FileExistsException
      * @throws FileNotFoundException
      * @throws InvalidManipulation

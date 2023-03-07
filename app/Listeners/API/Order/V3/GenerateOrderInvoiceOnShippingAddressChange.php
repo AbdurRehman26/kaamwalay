@@ -36,9 +36,6 @@ class GenerateOrderInvoiceOnShippingAddressChange implements ShouldQueue
     }
 
 
-    /**
-     * @param Throwable $exception
-     */
     public function failed(OrderShippingAddressChangedEvent $event, Throwable $exception): void
     {
         Log::error($exception->getMessage(), [

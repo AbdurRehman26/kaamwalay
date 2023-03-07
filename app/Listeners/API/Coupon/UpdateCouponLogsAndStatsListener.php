@@ -22,9 +22,6 @@ class UpdateCouponLogsAndStatsListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  OrderPaid  $event
-     * @return void
      */
     public function handle(OrderPaid $event): void
     {

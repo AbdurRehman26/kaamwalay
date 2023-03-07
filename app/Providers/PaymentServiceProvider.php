@@ -13,8 +13,6 @@ class PaymentServiceProvider extends ServiceProvider implements DeferrableProvid
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -23,8 +21,6 @@ class PaymentServiceProvider extends ServiceProvider implements DeferrableProvid
 
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
     public function boot(): void
     {

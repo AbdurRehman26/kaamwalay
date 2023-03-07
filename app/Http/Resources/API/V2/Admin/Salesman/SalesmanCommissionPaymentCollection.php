@@ -12,7 +12,6 @@ class SalesmanCommissionPaymentCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  Request  $request
      * @return array<int, SalesmanCommissionPaymentResource>|Arrayable<int, SalesmanCommissionPaymentResource>|JsonSerializable
      */
     public function toArray(Request $request): array

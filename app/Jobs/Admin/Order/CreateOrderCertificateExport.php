@@ -25,9 +25,6 @@ class CreateOrderCertificateExport implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @param  OrderCertificateService $orderCertificateService
-     * @return void
      */
     public function handle(OrderCertificateService $orderCertificateService): void
     {

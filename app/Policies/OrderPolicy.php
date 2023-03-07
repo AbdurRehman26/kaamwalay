@@ -35,9 +35,6 @@ class OrderPolicy
         return $user->isAdmin();
     }
 
-    /**
-     * @return bool
-     */
     public function calculateCollectorCoin(User $user, Order $order): bool
     {
         return ($user->isAdmin() || $order->user()->is($user))

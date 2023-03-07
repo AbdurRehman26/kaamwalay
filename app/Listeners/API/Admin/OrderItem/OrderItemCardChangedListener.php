@@ -21,9 +21,6 @@ class OrderItemCardChangedListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  OrderItemCardChangedEvent  $event
-     * @return void
      */
     public function handle(OrderItemCardChangedEvent $event): void
     {

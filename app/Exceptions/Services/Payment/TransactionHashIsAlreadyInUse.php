@@ -17,7 +17,6 @@ class TransactionHashIsAlreadyInUse extends Exception
 
     /**
      * @param Request|array $request
-     * @return JsonResponse
      */
     public function render($request): JsonResponse
     {

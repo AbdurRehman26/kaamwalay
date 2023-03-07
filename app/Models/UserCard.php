@@ -49,8 +49,6 @@ class UserCard extends Model
 
     /**
      * Get the indexable data array for the model.
-     *
-     * @return array
      */
     public function toSearchableArray(): array
     {

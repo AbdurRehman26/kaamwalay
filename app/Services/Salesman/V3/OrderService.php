@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Admin\V3;
+namespace App\Services\Salesman\V3;
 
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\Country;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Services\Admin\V2\OrderService as V2OrderService;
+use App\Services\Salesman\V2\Order\OrderService as V2OrderService;
 
 class OrderService extends V2OrderService
 {

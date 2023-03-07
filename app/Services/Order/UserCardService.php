@@ -157,10 +157,10 @@ class UserCardService
         ];
     }
 
-     /**
-     * @param  array  $data
-     * @return array
-     */
+    /**
+    * @param  array  $data
+    * @return array
+    */
     public function pepareScannedImagesForPublicCardPage(array $data): array
     {
         if (
@@ -261,10 +261,10 @@ class UserCardService
         ];
     }
 
-     /**
-     * @param  UserCard  $userCard
-     * @return array
-     */
+    /**
+    * @param  UserCard  $userCard
+    * @return array
+    */
     protected function getAgsPopulationData(UserCard $userCard): array
     {
         $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
@@ -301,10 +301,10 @@ class UserCardService
         return $data;
     }
 
-     /**
-     * @param  string  $nickname
-     * @return string
-     */
+    /**
+    * @param  string  $nickname
+    * @return string
+    */
     protected function convertGradeNicknameToColumn(string $nickname): string
     {
         return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));

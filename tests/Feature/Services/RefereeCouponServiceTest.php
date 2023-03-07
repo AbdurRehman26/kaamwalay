@@ -24,5 +24,5 @@ test('a coupon is assigned to referee when they sign up with a referral code', f
 
     expect(Coupon::whereCode($response->code)->exists())->toBe(true);
     expect((bool)$response->is_system_generated)->toBe(true);
-    expect($response->couponable->couponables_type)->toBe('App\Models\User');
+    expect($response->couponable->couponables_type)->toBe(\App\Models\User::class);
 });

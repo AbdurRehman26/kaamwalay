@@ -25,8 +25,8 @@ class DatabaseNotificationFactory extends Factory
 
         return [
             'id' => $this->faker->uuid(),
-            'type' => 'App\Notifications\Order\OrderStatusChangedNotification',
-            'notifiable_type' => 'App\Models\User',
+            'type' => \App\Notifications\Order\OrderStatusChangedNotification::class,
+            'notifiable_type' => \App\Models\User::class,
             'notifiable_id' => User::factory(),
             'data' => $data,
             'read_at' => null,

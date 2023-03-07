@@ -31,10 +31,10 @@ test('admin can credit amount in customer\'s wallet that doesnt have balance', f
     )->assertCreated();
 
     assertDatabaseCount('wallet_transactions', 1);
-    expect($this->customer->wallet->lastTransaction->amount)->toBe($amount);
-    expect($this->customer->wallet->refresh()->balance)->toBe($amount);
+    expect($this->customer->wallet->lastTransaction->amount)->toBe($amount)
+        ->and($this->customer->wallet->refresh()->balance)->toBe($amount);
 
-    Event::assertDispatched(CustomerWalletCredited::class);
+    Event::assertDispatchedTimes(CustomerWalletCredited::class);
 });
 
 test('admin can credit amount in customer\'s wallet that has balance', function () {
@@ -52,7 +52,7 @@ test('admin can credit amount in customer\'s wallet that has balance', function 
     )->assertCreated();
 
     assertDatabaseCount('wallet_transactions', 1);
-    expect($newCustomer->wallet->lastTransaction->amount)->toBe($amount);
-    expect($newCustomer->wallet->refresh()->balance)->toBe($amount + $oldBalance);
-    Event::assertDispatched(CustomerWalletCredited::class);
+    expect($newCustomer->wallet->lastTransaction->amount)->toBe($amount)
+        ->and($newCustomer->wallet->refresh()->balance)->toBe($amount + $oldBalance);
+    Event::assertDispatchedTimes(CustomerWalletCredited::class);
 });

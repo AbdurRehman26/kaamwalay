@@ -14,7 +14,6 @@
         "doctrine/dbal": "^3.3",
         "filament/filament": "^2.0",
         "flowframe/laravel-trend": "^0.1.0",
-        "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.3",
         "hubspot/hubspot-php": "^4.0",
         "laravel-notification-channels/pusher-push-notifications": "^3.0",

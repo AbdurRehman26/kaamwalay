@@ -66,13 +66,13 @@ export function AuthControls() {
     }
 
     if (authenticated && isRedirect !== 'false') {
-        if (user.hasRole(RolesEnum.Admin)) {
-            redirection(AuthenticationEnum.AdminRoute);
-        } else if (user.hasRole(RolesEnum.Salesman)) {
-            redirection(AuthenticationEnum.SalesRepDashboardRoute);
-        } else {
-            redirection(AuthenticationEnum.DashboardRoute);
-        }
+        const redirectUrl = user.hasRole(RolesEnum.Admin)
+            ? AuthenticationEnum.AdminRoute
+            : user.hasRole(RolesEnum.Salesman)
+            ? AuthenticationEnum.SalesRepDashboardRoute
+            : AuthenticationEnum.DashboardRoute;
+
+        redirection(redirectUrl);
     }
     if (!authenticated) {
         localStorage.removeItem('logged-in-user:redirect');

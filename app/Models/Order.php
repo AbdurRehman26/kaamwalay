@@ -549,7 +549,7 @@ class Order extends Model implements Exportable
         return self::getAllowedAdminIncludes();
     }
 
-    public function exportRowMap(Order $row): array
+    public function exportRowMap(Model $row): array
     {
         return [
             $row->order_number,

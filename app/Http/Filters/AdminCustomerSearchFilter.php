@@ -7,7 +7,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminCustomerSearchFilter implements Filter
 {
-    public function __invoke(Builder $query, string $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         // If searching for both first and last name together, search exact
         $fullNameArray = explode(' ', $value);

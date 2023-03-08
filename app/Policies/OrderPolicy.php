@@ -27,10 +27,10 @@ class OrderPolicy
 
     public function update(User $user, Order $order): bool
     {
-        //
+        return $user->isAdmin() || $order->user()->is($user);
     }
 
-    public function review(User $user)
+    public function review(User $user): bool
     {
         return $user->isAdmin();
     }

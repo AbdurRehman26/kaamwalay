@@ -23,7 +23,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
         return ['name', 'email', 'phone', 'created_at'];
     }
 
-    public function map(User $row): array
+    public function map(mixed $row): array
     {
         return [
             $row->name,

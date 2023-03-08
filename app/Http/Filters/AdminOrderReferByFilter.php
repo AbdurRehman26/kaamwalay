@@ -8,11 +8,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminOrderReferByFilter implements Filter
 {
-    /**
-     * @param  Builder<Order>  $query
-     */
-
-    public function __invoke(Builder $query, string $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query->whereHas('user', function ($query) use ($value) {
             $operand = ! empty($value) ? '!=' : '=';

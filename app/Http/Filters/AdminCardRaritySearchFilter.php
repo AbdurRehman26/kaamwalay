@@ -8,10 +8,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminCardRaritySearchFilter implements Filter
 {
-    /**
-     * @param  Builder<CardRarity>  $query
-     */
-    public function __invoke(Builder $query, string $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query->whereLike(
             [

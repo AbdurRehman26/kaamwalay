@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V3\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V3\Admin\Customer\UpdateCustomerDetailsRequest;
 use App\Http\Resources\API\V3\Admin\Customer\CustomerCollection;
 use App\Http\Resources\API\V3\Admin\Customer\CustomerResource;
 use App\Models\User;
@@ -26,10 +25,4 @@ class CustomerController extends Controller
 
         return new CustomerResource($customer);
     }
-
-    public function update(UpdateCustomerDetailsRequest $request, User $user): CustomerResource
-    {
-        return new CustomerResource($this->customerService->updateCustomer($user, $request->validated()));
-    }
-
 }

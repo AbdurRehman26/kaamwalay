@@ -8,7 +8,6 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomersShowQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
@@ -19,7 +18,6 @@ import { CustomerViewContent } from './CustomerViewContent';
 enum RowOption {
     CreditCustomer,
     ResendAccessEmail,
-    EditCustomerDetails,
 }
 
 const Root = styled(Grid)({
@@ -75,21 +73,11 @@ const Root = styled(Grid)({
 export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
-    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
-    }, []);
-
-    const handleEditCustomerDialogClose = useCallback(() => {
-        setEditCustomerDialog(false);
-    }, []);
-
-    const handleEditCustomerSubmit = useCallback(() => {
-        setEditCustomerDialog(false);
-        window.location.reload();
     }, []);
 
     const createCustomerSubmission = () => {
@@ -115,9 +103,6 @@ export function CustomerView() {
 
                 case RowOption.ResendAccessEmail:
                     dispatch(resendAccessEmail(id));
-                    break;
-                case RowOption.EditCustomerDetails:
-                    setEditCustomerDialog(true);
                     break;
             }
         },
@@ -168,7 +153,6 @@ export function CustomerView() {
                         {data.createdBy && !data.lastLoginAt ? (
                             <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
                         ) : null}
-                        <OptionsMenuItem action={RowOption.EditCustomerDetails}>Edit Customer Details</OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog
@@ -177,14 +161,6 @@ export function CustomerView() {
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
                     onSubmit={handleReloadCustomerData}
-                />
-                <EditCustomerDetailsDialog
-                    customer={data}
-                    endpointUrl={`admin/customer/${id}`}
-                    endpointVersion={'v3'}
-                    open={editCustomerDialog}
-                    onSubmit={handleEditCustomerSubmit}
-                    onClose={handleEditCustomerDialogClose}
                 />
             </Root>
             <Grid container>

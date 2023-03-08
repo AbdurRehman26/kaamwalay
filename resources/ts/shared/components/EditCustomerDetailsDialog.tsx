@@ -9,12 +9,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Formik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
+import MaterialUiPhoneNumber from 'material-ui-phone-number';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { UserEntity } from '@shared/entities/UserEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { getCountriesList } from '@shared/redux/slices/addressEditSlice';
 import { APIService } from '@shared/services/APIService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
@@ -25,11 +30,31 @@ type InitialValues = {
     phone: string;
 };
 export interface EditCustomerDetailsDialogProps extends Omit<DialogProps, 'onSubmit'> {
-    customer: UserEntity;
+    customer?: UserEntity;
     endpointUrl: string;
     endpointVersion: string;
     onSubmit(): Promise<void> | void;
 }
+const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
+    '&': {
+        padding: '0px 14px !important',
+        width: '100%',
+        border: '1px solid lightgray',
+        fontWeight: 400,
+        fontSize: '1rem',
+        borderRadius: 4,
+    },
+    '.MuiInput-input': {
+        borderLeft: '1px solid lightgray',
+        padding: '7px 5px !important',
+    },
+    '.MuiInput-root:before': {
+        border: '0 !important',
+    },
+    '.MuiInput-root:after': {
+        border: '0 !important',
+    },
+}));
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -108,10 +133,13 @@ const schema = yup.object().shape({
 });
 
 export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps) => {
-    const { customer, onClose, onSubmit, endpointUrl = '', endpointVersion = 'v3', ...rest } = props;
+    const { onClose, onSubmit, endpointUrl = '', endpointVersion = 'v3', ...rest } = props;
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
     const apiService = useInjectable(APIService);
+    const availableCountries = useAppSelector((state) => state.addressEditSlice.availableCountriesList);
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
+    const dispatch = useSharedDispatch();
 
     const [hasChanged, setHasChanged] = useState(false);
 
@@ -130,6 +158,22 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
             phone: customer?.phone ?? '',
         }),
         [customer],
+    );
+
+    useEffect(() => {
+        setCurrentValues(initialValues);
+    }, [initialValues]);
+
+    useEffect(
+        () => {
+            (async () => {
+                if (availableCountries.length === 1 && availableCountries[0].id === 0) {
+                    await dispatch(getCountriesList());
+                }
+            })();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
     );
 
     const handleClose = useCallback(() => {
@@ -200,7 +244,7 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
                     validationSchema={schema}
                     validateOnChange={true}
                 >
-                    {({ values, handleChange, submitForm, errors, isValidating, setValues }) => (
+                    {({ values, handleChange, submitForm, errors, isValidating, setValues, setFieldValue }) => (
                         <>
                             <DialogTitle className={classes.dialogTitle}>
                                 {'Edit Customer'}
@@ -281,24 +325,17 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
                                     <div className={classes.inputsRow}>
                                         <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
                                             <Typography className={classes.inputTitle}>Phone Number</Typography>
-                                            <TextField
-                                                className={classes.formField}
-                                                placeholder="Enter phone number"
-                                                fullWidth
-                                                name={'phone'}
+                                            <StyledPhoneNumber
+                                                countryCodeEditable={false}
+                                                defaultCountry="us"
+                                                disableAreaCodes
+                                                onlyCountries={availableCountries.map((country) =>
+                                                    country.code.toLowerCase(),
+                                                )}
                                                 value={values.phone}
                                                 onChange={(e) => {
-                                                    handleChange(e);
-                                                    updateCurrentValues('phone', e.target.value);
-                                                }}
-                                                size={'small'}
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                inputProps={{
-                                                    className: classes.formInput,
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
+                                                    setFieldValue('phone', e);
+                                                    updateCurrentValues('phone', e.toString());
                                                 }}
                                             />
                                         </div>

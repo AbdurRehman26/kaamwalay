@@ -12,6 +12,7 @@ import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDia
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useAdminCustomersShowQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
 import { CustomerViewContent } from './CustomerViewContent';
@@ -118,10 +119,11 @@ export function CustomerView() {
                     break;
                 case RowOption.EditCustomerDetails:
                     setEditCustomerDialog(true);
+                    dispatch(setCustomer(data));
                     break;
             }
         },
-        [dispatch, id],
+        [dispatch, id, data],
     );
 
     if (isLoading || !data) {
@@ -179,7 +181,7 @@ export function CustomerView() {
                     onSubmit={handleReloadCustomerData}
                 />
                 <EditCustomerDetailsDialog
-                    customer={data}
+                    // customer={data}
                     endpointUrl={`admin/customer/${id}`}
                     endpointVersion={'v3'}
                     open={editCustomerDialog}

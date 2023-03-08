@@ -13,6 +13,7 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -174,10 +175,21 @@ export default function SubmissionHeaderMoreButton({
                     break;
                 case Options.EditCustomerDetails:
                     setEditCustomerDialog(true);
+                    if (customer) {
+                        dispatch(setCustomer(customer));
+                    }
                     break;
             }
         },
-        [setCancelDialog, handleClose, handleViewGrades, setShowMarkPaidDialog, setGenerateLabelDialog],
+        [
+            setCancelDialog,
+            handleClose,
+            handleViewGrades,
+            setShowMarkPaidDialog,
+            setGenerateLabelDialog,
+            customer,
+            dispatch,
+        ],
     );
 
     return (
@@ -215,7 +227,6 @@ export default function SubmissionHeaderMoreButton({
                         onClose={handleCreditDialogClose}
                     />
                     <EditCustomerDetailsDialog
-                        customer={customer}
                         endpointUrl={`admin/customer/${customer.id}`}
                         endpointVersion={'v3'}
                         open={editCustomerDialog}

@@ -12,7 +12,6 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import React, { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { TruncateTextWithToolTip } from '@shared/components/ToolTip/TruncateTextWithToolTip';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
@@ -21,6 +20,7 @@ import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 import CustomerReferralActivationDialog from './CustomerReferralActivationDialog';
@@ -28,6 +28,7 @@ import CustomerReferralActivationDialog from './CustomerReferralActivationDialog
 interface props {
     customer: CustomerEntity;
     salesReps: SalesRepEntity[];
+    onEditCustomer?: any;
 }
 
 enum RowOption {
@@ -51,11 +52,10 @@ const styles = {
     },
 };
 
-export function CustomerTableRow({ customer, salesReps }: props) {
+export function CustomerTableRow({ customer, salesReps, onEditCustomer }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const [referralDialog, setReferralDialog] = useState(false);
-    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
@@ -81,15 +81,6 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [dispatch],
     );
 
-    const handleEditCustomerDialogClose = useCallback(() => {
-        setEditCustomerDialog(false);
-    }, []);
-
-    const handleEditCustomerSubmit = useCallback(() => {
-        setEditCustomerDialog(false);
-        window.location.reload();
-    }, []);
-
     const handleOption = useCallback(
         (option: RowOption, customerId?: number, status?: boolean) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
@@ -103,11 +94,12 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     setReferralDialog(true);
                     break;
                 case RowOption.EditCustomerDetails:
-                    setEditCustomerDialog(true);
+                    dispatch(setCustomer(customer));
+                    onEditCustomer();
                     break;
             }
         },
-        [handleCloseOptions],
+        [handleCloseOptions, dispatch, customer, onEditCustomer],
     );
 
     const handleRowClick = useCallback<MouseEventHandler>(
@@ -306,14 +298,6 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 }
                 status={customer?.referrer?.isReferralActive ? true : false}
                 onClose={handleReferralDialogClose}
-            />
-            <EditCustomerDetailsDialog
-                customer={customer}
-                endpointUrl={`admin/customer/${customer.id}`}
-                endpointVersion={'v3'}
-                open={editCustomerDialog}
-                onSubmit={handleEditCustomerSubmit}
-                onClose={handleEditCustomerDialogClose}
             />
         </>
     );

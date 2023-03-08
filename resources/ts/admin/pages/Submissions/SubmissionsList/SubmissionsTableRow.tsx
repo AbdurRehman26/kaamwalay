@@ -9,7 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
@@ -22,6 +21,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { deleteOrder } from '@shared/redux/slices/ordersSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
@@ -35,6 +35,7 @@ interface SubmissionsTableRowProps {
     isCustomerDetailPage: boolean;
     isSalesRepDetailPage?: boolean;
     isReferralPage?: boolean;
+    onEditCustomer?: any;
 }
 
 enum Options {
@@ -66,6 +67,7 @@ const useStyles = makeStyles(
 export function SubmissionsTableRow({
     order,
     isCustomerDetailPage,
+    onEditCustomer,
     isSalesRepDetailPage = false,
     isReferralPage = false,
 }: SubmissionsTableRowProps) {
@@ -74,7 +76,6 @@ export function SubmissionsTableRow({
     const [creditDialog, setCreditDialog] = useState(false);
     const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
-    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -118,7 +119,10 @@ export function SubmissionsTableRow({
                     setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
                 case Options.EditCustomerDetails:
-                    setEditCustomerDialog(true);
+                    if (onEditCustomer) {
+                        dispatch(setCustomer(order.customer));
+                        onEditCustomer();
+                    }
                     break;
             }
         },
@@ -132,6 +136,9 @@ export function SubmissionsTableRow({
             order.orderLabel,
             order.orderNumber,
             showMarkPaidDialog,
+            dispatch,
+            order.customer,
+            onEditCustomer,
         ],
     );
 
@@ -147,15 +154,6 @@ export function SubmissionsTableRow({
         },
         [dispatch],
     );
-
-    const handleEditCustomerDialogClose = useCallback(() => {
-        setEditCustomerDialog(false);
-    }, []);
-
-    const handleEditCustomerSubmit = useCallback(() => {
-        setEditCustomerDialog(false);
-        window.location.reload();
-    }, []);
 
     const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
 
@@ -286,7 +284,7 @@ export function SubmissionsTableRow({
                                       </MenuItem>,
                                   ]
                                 : null}
-                            {order?.customer ? (
+                            {order?.customer && onEditCustomer ? (
                                 <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>
                                     Edit Customer Details
                                 </MenuItem>
@@ -316,16 +314,6 @@ export function SubmissionsTableRow({
                 open={showMarkPaidDialog}
                 onClose={() => setShowMarkPaidDialog(false)}
             />
-            {order?.customer ? (
-                <EditCustomerDetailsDialog
-                    customer={order.customer}
-                    endpointUrl={`admin/customer/${order.customer.id}`}
-                    endpointVersion={'v3'}
-                    open={editCustomerDialog}
-                    onSubmit={handleEditCustomerSubmit}
-                    onClose={handleEditCustomerDialogClose}
-                />
-            ) : null}
         </>
     );
 }

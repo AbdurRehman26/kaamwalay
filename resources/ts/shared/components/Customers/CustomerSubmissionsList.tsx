@@ -24,6 +24,7 @@ interface CustomerSubmissionsListProps {
     orderDirection?: TableSortType;
     orderBy?: string;
     handleRequestSort?: any | null;
+    onEditCustomer?: any;
 }
 
 export function CustomerSubmissionsList({
@@ -36,6 +37,7 @@ export function CustomerSubmissionsList({
     orderBy = '',
     orderDirection = 'desc',
     handleRequestSort,
+    onEditCustomer,
 }: CustomerSubmissionsListProps) {
     return (
         <Table>
@@ -74,6 +76,7 @@ export function CustomerSubmissionsList({
                             key={order.id}
                             isCustomerDetailPage={!isCustomerDetailPage}
                             isReferralPage={isReferralPage}
+                            onEditCustomer={onEditCustomer}
                         />
                     ))
                 ) : (

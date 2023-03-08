@@ -3,7 +3,8 @@ import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useCallback, useState } from 'react';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
@@ -19,6 +20,7 @@ import marketingContentImage8 from '@shared/assets/marketingContentImage8.jpg';
 import marketingContentImage9 from '@shared/assets/marketingContentImage9.jpg';
 import marketingContentImage10 from '@shared/assets/marketingContentImage10.jpg';
 import marketingContentImage11 from '@shared/assets/marketingContentImage11.jpg';
+import theme from '@shared/styles/theme';
 
 const images = [
     {
@@ -91,14 +93,29 @@ const MarketingContentDiv = styled(Grid)({
     '.ImagesDiv': {
         display: 'flex',
         alignItems: 'center',
+        [theme.breakpoints.down('sm')]: {
+            flexWrap: 'wrap',
+        },
     },
     '.MarketingContentImageDiv': {
         width: '210px',
         margin: '4px',
         cursor: 'pointer',
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '47%',
+        },
+        [theme.breakpoints.between(768, 1024)]: {
+            maxWidth: '140px',
+        },
     },
     '.MarketingContentImage': {
-        width: '210px',
+        maxWidth: '210px',
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
+        [theme.breakpoints.between(768, 1024)]: {
+            maxWidth: '100%',
+        },
     },
     '.SeeAllButton': {
         background: '#F5F5F5',
@@ -119,7 +136,42 @@ const MarketingContentDiv = styled(Grid)({
     '.ButtonLink': {
         textDecoration: 'none',
     },
+    '.SeeAllButtonDiv': {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
 });
+
+const styles = {
+    DownloadButton: {
+        zIndex: 600000,
+        position: 'fixed',
+        top: '93%',
+        right: '45%',
+        background: '#42E8E0',
+        borderRadius: '24px',
+        padding: '15px 50px',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        textAlign: 'center',
+        letterSpacing: '0.35px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        '&:hover': {
+            background: '#42E8E0',
+        },
+        [theme.breakpoints.down('sm')]: {
+            top: '80%',
+            right: '25%',
+        },
+        [theme.breakpoints.between(768, 1024)]: {
+            top: '85%',
+            right: '35%',
+        },
+    },
+};
 
 interface props {
     isMain?: boolean;
@@ -128,11 +180,14 @@ interface props {
 export function MarketingContent({ isMain }: props) {
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0);
+    const [imageToDownload, setImageToDownload] = useState('');
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    function handleClick(value: number) {
+    function handleClick(value: number, image: string) {
         setOpen(true);
         setIndex(value);
+        setImageToDownload(image);
     }
 
     return (
@@ -144,7 +199,7 @@ export function MarketingContent({ isMain }: props) {
                         Downloadable content you can use to refer your friends and followers.
                     </Typography>
                 </div>
-                {isMain ? (
+                {isMain && !isSm ? (
                     <div>
                         <Link to={'/referral-program/marketing-content'} className={'ButtonLink'}>
                             <Button variant="contained" className={'SeeAllButton'}>
@@ -154,10 +209,10 @@ export function MarketingContent({ isMain }: props) {
                     </div>
                 ) : null}
             </Grid>
-            <Grid>
+            <Grid container>
                 <Grid className={'ImagesDiv'}>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(0)}>
+                        <ButtonBase onClick={() => handleClick(0, marketingContentImage1)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage1}
@@ -166,7 +221,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(1)}>
+                        <ButtonBase onClick={() => handleClick(1, marketingContentImage2)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage2}
@@ -175,7 +230,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(2)}>
+                        <ButtonBase onClick={() => handleClick(2, marketingContentImage3)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage3}
@@ -184,7 +239,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(3)}>
+                        <ButtonBase onClick={() => handleClick(3, marketingContentImage4)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage4}
@@ -195,7 +250,7 @@ export function MarketingContent({ isMain }: props) {
                 </Grid>
                 <Grid className={'ImagesDiv'}>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(4)}>
+                        <ButtonBase onClick={() => handleClick(4, marketingContentImage5)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage5}
@@ -204,7 +259,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(5)}>
+                        <ButtonBase onClick={() => handleClick(5, marketingContentImage6)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage6}
@@ -213,7 +268,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(6)}>
+                        <ButtonBase onClick={() => handleClick(6, marketingContentImage7)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage7}
@@ -222,7 +277,7 @@ export function MarketingContent({ isMain }: props) {
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(7)}>
+                        <ButtonBase onClick={() => handleClick(7, marketingContentImage8)}>
                             <img
                                 className={'MarketingContentImage'}
                                 src={marketingContentImage8}
@@ -234,7 +289,7 @@ export function MarketingContent({ isMain }: props) {
                 {!isMain ? (
                     <Grid className={'ImagesDiv'}>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(8)}>
+                            <ButtonBase onClick={() => handleClick(8, marketingContentImage9)}>
                                 <img
                                     className={'MarketingContentImage'}
                                     src={marketingContentImage9}
@@ -243,7 +298,7 @@ export function MarketingContent({ isMain }: props) {
                             </ButtonBase>
                         </div>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(9)}>
+                            <ButtonBase onClick={() => handleClick(9, marketingContentImage10)}>
                                 <img
                                     className={'MarketingContentImage'}
                                     src={marketingContentImage10}
@@ -252,7 +307,7 @@ export function MarketingContent({ isMain }: props) {
                             </ButtonBase>
                         </div>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(10)}>
+                            <ButtonBase onClick={() => handleClick(10, marketingContentImage11)}>
                                 <img
                                     className={'MarketingContentImage'}
                                     src={marketingContentImage11}
@@ -263,31 +318,23 @@ export function MarketingContent({ isMain }: props) {
                     </Grid>
                 ) : null}
             </Grid>
+            {isMain && isSm ? (
+                <Grid className={'SeeAllButtonDiv'}>
+                    <Link to={'/referral-program/marketing-content'} className={'ButtonLink'}>
+                        <Button variant="contained" className={'SeeAllButton'}>
+                            See All
+                        </Button>
+                    </Link>
+                </Grid>
+            ) : null}
             {open ? (
                 <>
                     <Lightbox onClose={handleClose} startIndex={index} images={images} />
-                    <Button
-                        sx={{
-                            zIndex: 600000,
-                            position: 'fixed',
-                            right: '700px',
-                            top: '100px',
-                            background: '#42E8E0',
-                            borderRadius: '24px',
-                            padding: '15px 50px',
-                            fontWeight: 500,
-                            fontSize: '14px',
-                            lineHeight: '20px',
-                            textAlign: 'center',
-                            letterSpacing: '0.35px',
-                            color: 'rgba(0, 0, 0, 0.87)',
-                            '&:hover': {
-                                background: '#42E8E0',
-                            },
-                        }}
-                    >
-                        <FileDownloadOutlinedIcon /> DOWNLOAD
-                    </Button>
+                    <a style={{ textDecoration: 'none' }} href={imageToDownload} download>
+                        <Button sx={styles.DownloadButton}>
+                            <FileDownloadOutlinedIcon /> DOWNLOAD
+                        </Button>
+                    </a>
                 </>
             ) : null}
         </MarketingContentDiv>

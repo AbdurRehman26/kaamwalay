@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { StatusChip } from '@shared/components/StatusChip';
@@ -43,6 +44,7 @@ enum Options {
     CreditCustomer,
     Delete,
     MarkAsPaid,
+    EditCustomerDetails,
 }
 
 const useStyles = makeStyles(
@@ -72,6 +74,7 @@ export function SubmissionsTableRow({
     const [creditDialog, setCreditDialog] = useState(false);
     const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
     const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -114,6 +117,9 @@ export function SubmissionsTableRow({
                 case Options.MarkAsPaid:
                     setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
+                case Options.EditCustomerDetails:
+                    setEditCustomerDialog(true);
+                    break;
             }
         },
         [
@@ -141,6 +147,15 @@ export function SubmissionsTableRow({
         },
         [dispatch],
     );
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
 
     const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
 
@@ -271,6 +286,11 @@ export function SubmissionsTableRow({
                                       </MenuItem>,
                                   ]
                                 : null}
+                            {order?.customer ? (
+                                <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>
+                                    Edit Customer Details
+                                </MenuItem>
+                            ) : null}
                         </>
                     </Menu>
                 </TableCell>
@@ -296,6 +316,16 @@ export function SubmissionsTableRow({
                 open={showMarkPaidDialog}
                 onClose={() => setShowMarkPaidDialog(false)}
             />
+            {order?.customer ? (
+                <EditCustomerDetailsDialog
+                    customer={order.customer}
+                    endpointUrl={`admin/customer/${order.customer.id}`}
+                    endpointVersion={'v3'}
+                    open={editCustomerDialog}
+                    onSubmit={handleEditCustomerSubmit}
+                    onClose={handleEditCustomerDialogClose}
+                />
+            ) : null}
         </>
     );
 }

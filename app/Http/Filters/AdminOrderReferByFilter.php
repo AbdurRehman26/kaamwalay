@@ -2,7 +2,6 @@
 
 namespace App\Http\Filters;
 
-use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;
 

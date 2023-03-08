@@ -2,7 +2,6 @@
 
 namespace App\Http\Filters;
 
-use App\Models\VaultShipment;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;
 

@@ -77,6 +77,10 @@ class OrderPaymentProcessedNotification extends Notification
             $message = "$message, Cleaning Required";
         }
 
+        if ($this->order->user?->referredBy) {
+            $message = $message . "\nReferral: {$this->order->user->referredBy->email}";
+        }
+
         if ($this->order->salesman) {
             $message = $message . "\nSalesman: {$this->order->salesman->email}";
         }

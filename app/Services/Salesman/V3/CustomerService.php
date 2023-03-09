@@ -2,8 +2,8 @@
 
 namespace App\Services\Salesman\V3;
 
-use App\Services\Salesman\V2\CustomerService as V2CustomerService;
 use App\Models\User;
+use App\Services\Salesman\V2\CustomerService as V2CustomerService;
 
 class CustomerService extends V2CustomerService
 {

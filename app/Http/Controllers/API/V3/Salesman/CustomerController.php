@@ -33,5 +33,4 @@ class CustomerController extends Controller
 
         return new CustomerResource($this->customerService->updateCustomer($user, $request->validated()));
     }
-
 }

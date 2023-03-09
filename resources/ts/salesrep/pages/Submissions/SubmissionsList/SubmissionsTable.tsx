@@ -10,10 +10,12 @@ import CustomerSubmissionsList from '@salesrep/components/Customers/CustomerSubm
 import classNames from 'classnames';
 import { upperFirst } from 'lodash';
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListSalesRepOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
@@ -58,6 +60,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
+
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
 
     const headings: EnhancedTableHeadCell[] = [
         {
@@ -223,6 +228,19 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         [search, isSearchEnabled, sortFilter],
     );
 
+    const handleEditCustomerOption = useCallback(() => {
+        setEditCustomerDialog(true);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
+
     useEffect(() => {
         setIsSearchEnabled(true);
     }, []);
@@ -261,8 +279,16 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     handleRequestSort={handleRequestSort}
                     orderBy={orderBy}
                     orderDirection={orderDirection}
+                    onEditCustomer={handleEditCustomerOption}
                 />
             </TableContainer>
+            <EditCustomerDetailsDialog
+                endpointUrl={`salesman/customer/${customer.id}`}
+                endpointVersion={'v3'}
+                open={editCustomerDialog}
+                onSubmit={handleEditCustomerSubmit}
+                onClose={handleEditCustomerDialogClose}
+            />
         </Grid>
     );
 }

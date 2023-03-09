@@ -181,7 +181,6 @@ export function CustomerView() {
                     onSubmit={handleReloadCustomerData}
                 />
                 <EditCustomerDetailsDialog
-                    // customer={data}
                     endpointUrl={`admin/customer/${id}`}
                     endpointVersion={'v3'}
                     open={editCustomerDialog}

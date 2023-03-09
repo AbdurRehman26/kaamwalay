@@ -131,6 +131,7 @@ const MarketingContentDiv = styled(Grid)({
         padding: '15px',
         '&:hover': {
             background: '#F5F5F5',
+            boxShadow: 'none',
         },
     },
     '.ButtonLink': {
@@ -142,10 +143,10 @@ const MarketingContentDiv = styled(Grid)({
         alignItems: 'center',
         marginTop: 20,
     },
-});
-
-const styles = {
-    DownloadButton: {
+    '.AnchorLink': {
+        textDecoration: 'none',
+    },
+    '.DownloadButton': {
         zIndex: 600000,
         position: 'fixed',
         top: '93%',
@@ -171,7 +172,7 @@ const styles = {
             right: '35%',
         },
     },
-};
+});
 
 interface props {
     isMain?: boolean;
@@ -330,8 +331,8 @@ export function MarketingContent({ isMain }: props) {
             {open ? (
                 <>
                     <Lightbox onClose={handleClose} startIndex={index} images={images} />
-                    <a style={{ textDecoration: 'none' }} href={imageToDownload} download>
-                        <Button sx={styles.DownloadButton}>
+                    <a className={'AnchorLink'} href={imageToDownload} download>
+                        <Button className={'DownloadButton'}>
                             <FileDownloadOutlinedIcon /> DOWNLOAD
                         </Button>
                     </a>

@@ -8,6 +8,7 @@ use App\Services\Payment\V2\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Log;
+use Throwable;
 
 class GenerateOrderInvoiceOnOrderPaid implements ShouldQueue
 {

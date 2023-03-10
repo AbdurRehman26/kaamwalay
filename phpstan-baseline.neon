@@ -1936,16 +1936,6 @@ parameters:
 			path: app/Jobs/ProcessImage.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/Order/RefundSuccessfulListener.php
@@ -1994,36 +1984,6 @@ parameters:
 			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
-
-		-
-			message: "#^Call to method getMessage\\(\\) on an unknown class App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPaid.php
-
-		-
-			message: "#^Call to method getTraceAsString\\(\\) on an unknown class App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPaid.php
-
-		-
-			message: "#^Parameter \\$exception of method App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\GenerateOrderInvoiceOnOrderPaid\\:\\:failed\\(\\) has invalid type App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPaid.php
-
-		-
-			message: "#^Call to method getMessage\\(\\) on an unknown class App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPlaced.php
-
-		-
-			message: "#^Call to method getTraceAsString\\(\\) on an unknown class App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPlaced.php
-
-		-
-			message: "#^Parameter \\$exception of method App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\GenerateOrderInvoiceOnOrderPlaced\\:\\:failed\\(\\) has invalid type App\\\\Listeners\\\\API\\\\Order\\\\V2\\\\Throwable\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/V2/GenerateOrderInvoiceOnOrderPlaced.php
 
 		-
 			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no type specified\\.$#"

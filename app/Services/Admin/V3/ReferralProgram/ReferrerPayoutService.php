@@ -3,6 +3,7 @@ namespace App\Services\Admin\V3\ReferralProgram;
 
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
+use App\Services\EmailService;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -12,6 +13,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerPayoutService
 {
     protected const PER_PAGE = 10;
+    protected EmailService $emailService;
     /**
      * Payment Providers available for the application
      **/
@@ -111,6 +113,17 @@ class ReferrerPayoutService
         $response = resolve($this->providers[
             $payout->payment_method
         ])->handshake($payout);
+
+        if($response['transaction_status'] === 'SUCCESS') {
+            $this->emailService->sendEmail(
+                [[$payout->user->email => $$payout->user->first_name ?? '']],
+                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],
+                EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED,
+                [
+                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
+                ]
+            );
+        }
 
         Log::info('PAYOUT_HANDSHAKE', $response);
     }

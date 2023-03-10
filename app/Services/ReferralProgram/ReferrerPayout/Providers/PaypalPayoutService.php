@@ -5,6 +5,7 @@ namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 use App\Http\APIClients\PaypalClient;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
+use App\Services\EmailService;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServiceHandshakeInterface;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayoutProviderServicePayInterface;
 use Illuminate\Http\Client\RequestException;
@@ -12,7 +13,7 @@ use Illuminate\Support\Collection;
 
 class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, ReferrerPayoutProviderServiceHandshakeInterface
 {
-    public function __construct(protected PaypalClient $client)
+    public function __construct(protected PaypalClient $client, protected EmailService $emailService)
     {
     }
 
@@ -124,6 +125,17 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
 
+                if ($transactionStatus === 'SUCCESS') {
+                    $this->emailService->sendEmail(
+                        [[$payout->user->email => $$payout->user->first_name ?? '']],
+                        EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],
+                        EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED,
+                        [
+                            'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
+                        ]
+                    );
+                }
+
                 if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
                     $this->processFailedPayout($payout);
                 }
@@ -144,7 +156,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
             ]);
 
-            if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
+            if ($transactionStatus === ReferrerPayoutStatus::STATUS_FAILED) {
                 $this->processFailedPayout($payout);
             }
 

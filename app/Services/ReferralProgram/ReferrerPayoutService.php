@@ -6,6 +6,7 @@ use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Models\User;
+use App\Services\EmailService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerPayoutService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
+    protected EmailService $emailService;
 
     /**
      * @return LengthAwarePaginator<Model>
@@ -63,6 +65,15 @@ class ReferrerPayoutService
             $referrer->save();
 
             DB::commit();
+
+            $this->emailService->sendEmail(
+                [[$referrer->email => $referrer->first_name ?? '']],
+                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE],
+                EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE,
+                [
+                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
+                ]
+            );
 
             return $referrerPayout;
         } catch (Exception $e) {

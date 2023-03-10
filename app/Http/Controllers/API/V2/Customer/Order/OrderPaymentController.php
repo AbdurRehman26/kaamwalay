@@ -7,6 +7,7 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderPaymentRequest;
 use App\Models\Order;
+use App\Services\EmailService;
 use App\Services\Order\V2\OrderPaymentService;
 use App\Services\Payment\V2\PaymentService;
 use Exception;
@@ -18,7 +19,7 @@ use Throwable;
 
 class OrderPaymentController extends Controller
 {
-    public function __construct(protected PaymentService $paymentService)
+    public function __construct(protected PaymentService $paymentService, protected EmailService $emailService)
     {
     }
 
@@ -44,6 +45,18 @@ class OrderPaymentController extends Controller
             $response = $this->paymentService->charge($order, $request->all());
 
             DB::commit();
+            //    //    // 
+            if($order->user->referredBy) {
+                $this->emailService->sendEmail(
+                    [[$order->user->email => $order->user->first_name ?? '']],
+                        EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
+                        EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
+                    [
+                        'REFERRER_NAME' => $order->user->getFullName(),
+                        'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/main',
+                    ]
+                );
+            }
 
             if (! empty($response['data'])) {
                 return new JsonResponse($response);

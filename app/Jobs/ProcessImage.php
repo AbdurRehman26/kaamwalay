@@ -37,12 +37,11 @@ class ProcessImage implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws FileExistsException
      * @throws FileNotFoundException
      * @throws InvalidManipulation
      */
-    public function handle()
+    public function handle(): void
     {
         (new ImageService)->process(
             $this->model,

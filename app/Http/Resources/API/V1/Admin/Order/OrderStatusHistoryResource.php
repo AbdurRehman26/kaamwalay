@@ -10,11 +10,8 @@ class OrderStatusHistoryResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

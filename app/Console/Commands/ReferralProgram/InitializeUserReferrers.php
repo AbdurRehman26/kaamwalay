@@ -24,10 +24,8 @@ class InitializeUserReferrers extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $users = User::all();
         $referrerService = new ReferrerService();

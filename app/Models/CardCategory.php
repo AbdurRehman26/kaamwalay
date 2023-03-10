@@ -64,17 +64,11 @@ class CardCategory extends Model
         return $this->hasMany(CardSurface::class);
     }
 
-    /**
-     * @return bool
-     */
     public function isTCG(): bool
     {
         return $this->cardCategoryType->name === 'TCG';
     }
 
-    /**
-     * @return bool
-     */
     public function isSports(): bool
     {
         return $this->cardCategoryType->name === 'Sports';

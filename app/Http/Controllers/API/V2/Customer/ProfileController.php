@@ -48,8 +48,6 @@ class ProfileController extends V1ProfileController
     }
 
     /**
-     * @param  ToggleMarketingNotificationsRequest  $request
-     * @param  CustomerProfileService  $customerProfileService
      * @return JsonResponse|UserResource
      */
     public function toggleMarketingNotifications(ToggleMarketingNotificationsRequest $request, CustomerProfileService $customerProfileService): JsonResponse|UserResource

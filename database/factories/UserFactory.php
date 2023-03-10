@@ -13,10 +13,8 @@ class UserFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'first_name' => $this->faker->firstName(),
@@ -48,9 +46,8 @@ class UserFactory extends Factory
      * Attach role to the newly created user.
      *
      * @param string $role
-     * @return  $this
      */
-    public function withRole(string $role)
+    public function withRole(string $role): static
     {
         return $this->afterCreating(function (User $user) use ($role) {
             $role = Role::where('name', $role)->first();
@@ -62,7 +59,6 @@ class UserFactory extends Factory
      * Attach role to the newly created user.
      *
      * @param string $role
-     * @return  $this
      */
     public function withSalesmanRole(): static
     {

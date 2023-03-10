@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('card_categories', function (Blueprint $table) {
             $table->unsignedBigInteger('card_category_type_id')->nullable()->after('is_enabled');
@@ -21,10 +19,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('card_categories', function (Blueprint $table) {
             $table->dropForeign(['card_category_type_id']);

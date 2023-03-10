@@ -23,9 +23,6 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  ExtraChargeSuccessful  $event
-     * @return void
      */
     public function handle(ExtraChargeSuccessful $event): void
     {

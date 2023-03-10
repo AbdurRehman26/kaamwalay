@@ -9,7 +9,6 @@ class CustomersImport implements ToCollection
 {
     /**
     * @param Collection<int,array> $collection
-    * @return array
     */
     public function collection(Collection $collection): array
     {

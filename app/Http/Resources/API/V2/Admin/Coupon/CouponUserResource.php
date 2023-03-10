@@ -4,17 +4,15 @@ namespace App\Http\Resources\API\V2\Admin\Coupon;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class CouponUserResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

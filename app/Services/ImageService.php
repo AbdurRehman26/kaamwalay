@@ -17,14 +17,6 @@ class ImageService
     protected const TEMPORARY_FILE_PATH = 'images/';
 
     /**
-     * @param  Model  $model
-     * @param  string  $columnName
-     * @param  string  $directory
-     * @param  string  $outputExt
-     * @param  int  $outputWidth
-     * @param  int  $outputHeight
-     * @param  int  $outputQuality
-     * @param  bool  $removeExif
      * @throws FileExistsException
      * @throws FileNotFoundException
      * @throws InvalidManipulation

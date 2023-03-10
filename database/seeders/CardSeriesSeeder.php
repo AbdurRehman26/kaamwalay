@@ -9,10 +9,8 @@ class CardSeriesSeeder extends Seeder
 
     /**
      * Auto generated seed file
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         \DB::table('card_series')->insert([
             [

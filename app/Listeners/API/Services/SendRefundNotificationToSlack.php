@@ -17,9 +17,6 @@ class SendRefundNotificationToSlack implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  RefundSuccessful  $event
-     * @return void
      */
     public function handle(RefundSuccessful $event): void
     {

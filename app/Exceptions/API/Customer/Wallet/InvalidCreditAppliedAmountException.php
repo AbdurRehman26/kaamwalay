@@ -19,10 +19,6 @@ class InvalidCreditAppliedAmountException extends Exception
      */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
-    /**
-     * @param  Request  $request
-     * @return JsonResponse
-     */
     public function render(Request $request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);

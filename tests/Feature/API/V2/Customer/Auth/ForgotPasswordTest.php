@@ -11,7 +11,7 @@ test('user can request forgot password', function () {
     ]);
 
     $response->assertStatus(200);
-    $this->assertDatabaseHas('password_resets', [
+    $this->assertDatabaseHas('password_reset_tokens', [
         'email' => $user->email,
     ]);
 })->group('auth');

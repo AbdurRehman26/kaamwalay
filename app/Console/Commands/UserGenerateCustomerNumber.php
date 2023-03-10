@@ -24,10 +24,8 @@ class UserGenerateCustomerNumber extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $result = User::query()->whereNull('customer_number')->update([
             'customer_number' => SerialNumberService::customer()->toSql(),

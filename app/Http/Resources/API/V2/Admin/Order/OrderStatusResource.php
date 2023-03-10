@@ -4,17 +4,15 @@ namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\OrderStatus;
+use Illuminate\Http\Request;
 
 /** @mixin OrderStatus */
 class OrderStatusResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

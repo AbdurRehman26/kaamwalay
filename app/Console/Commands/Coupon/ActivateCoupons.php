@@ -34,10 +34,8 @@ class ActivateCoupons extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $queuedCoupons = $this->couponService->getQueuedCouponsNearingActivation();
 

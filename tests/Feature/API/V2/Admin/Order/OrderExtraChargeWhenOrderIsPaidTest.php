@@ -65,8 +65,8 @@ test('admin can create extra charge for order', function () {
         ->assertJsonFragment(['type' => 'extra_charge']);
 
     Event::assertDispatched(ExtraChargeSuccessful::class);
-    expect($this->order->extraCharges()->count())->toEqual(1);
-    expect($this->order->orderPayments()->count())->toEqual(2);
+    expect($this->order->extraCharges()->count())->toEqual(1)
+        ->and($this->order->orderPayments()->count())->toEqual(2);
 });
 
 it('does not perform extra charge when service is disabled', function () {

@@ -32,10 +32,9 @@ class CreateOrderFoldersOnDropbox implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws OrderFoldersOnDropboxNotCreated|Throwable
      */
-    public function handle(OrderService $orderService, DropboxService $dropboxService)
+    public function handle(OrderService $orderService, DropboxService $dropboxService): void
     {
         // It creates a folder with order number, and certificates folders inside it
         $folders = [$this->order->order_number];

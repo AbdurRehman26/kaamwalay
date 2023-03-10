@@ -4,17 +4,15 @@ namespace App\Http\Resources\API\V3\Customer\User;
 
 use App\Http\Resources\API\V2\Customer\User\UserResource as V2UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class UserResource extends V2UserResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
 

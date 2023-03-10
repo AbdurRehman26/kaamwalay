@@ -23,10 +23,8 @@ class UpdateSetsReportCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(PopReportService $popReportService)
+    public function handle(PopReportService $popReportService): int
     {
         $popReportService->updateAllSetsReport();
 

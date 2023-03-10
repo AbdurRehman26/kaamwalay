@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('cache:prune-stale-tags')->hourly();
         $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
             ->dailyAt('00:20');
         $schedule->command(SendUnpaidOrdersStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])

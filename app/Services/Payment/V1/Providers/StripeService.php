@@ -195,6 +195,7 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
                     'User Email' => $order->user->email,
                     'Type' => 'Extra Charge',
                 ],
+                'expand' => ['latest_charge'],
             ],
         ];
 

@@ -49,7 +49,6 @@ class UpdateCardReportCommand extends Command
     }
 
     /**
-     * @param  PopReportService  $popReportService
      * @return Collection<int, CardProduct>
      */
     protected function searchCardsWithMissingPopReports(PopReportService $popReportService): Collection

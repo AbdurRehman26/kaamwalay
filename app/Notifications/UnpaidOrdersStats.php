@@ -20,11 +20,8 @@ class UnpaidOrdersStats extends Notification
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
      */
-    public function via(mixed $notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['slack'];
     }

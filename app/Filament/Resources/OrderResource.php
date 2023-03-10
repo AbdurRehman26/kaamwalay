@@ -65,7 +65,7 @@ class OrderResource extends Resource
                     ->maxLength(65535),
                 Forms\Components\Select::make('salesman')
                     // @phpstan-ignore-next-line
-                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
+                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesmen())
                     ->searchable()
                     ->nullable(),
             ]);

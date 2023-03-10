@@ -5,16 +5,14 @@ namespace App\Http\Resources\API\V1\Admin\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 class OrderPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         if (! $this->response) {
             return [];

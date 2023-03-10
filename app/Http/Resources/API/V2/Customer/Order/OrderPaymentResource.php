@@ -52,7 +52,7 @@ class OrderPaymentResource extends BaseResource
                 $card = $providerResponse->card;
             } else {
                 //TODO ENABLE COLLECTOR COIN HERE
-                $card = $providerResponse->charges->data[0]->payment_method_details->card;
+                $card = $providerResponse->latest_charge->payment_method_details->card;
             }
         }
 

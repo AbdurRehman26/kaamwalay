@@ -57,7 +57,7 @@ class OrderPaymentResource extends BaseResource
             if (! empty($providerResponse->card)) {
                 $card = $providerResponse->card;
             } else {
-                $card = $providerResponse->charges->data[0]->payment_method_details->card;
+                $card = $providerResponse->latest_charge->payment_method_details->card;
             }
         }
 

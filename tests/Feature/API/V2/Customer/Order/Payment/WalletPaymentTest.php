@@ -71,8 +71,8 @@ test('user can be charged successfully from wallet', function () {
     ])
         ->assertOk();
 
-    expect($this->user->wallet->balance)->toBe((float) 1);
-    expect($this->user->wallet->lastTransaction->amount)->toBe(round($this->order->grand_total, 2));
+    expect($this->user->wallet->balance)->toBe((float) 1)
+        ->and($this->user->wallet->lastTransaction->amount)->toBe(round($this->order->grand_total, 2));
 })->group('payment');
 
 test('user can be charged partially from wallet', function () {
@@ -107,6 +107,6 @@ test('user can be charged partially from wallet', function () {
     ])
         ->assertOk();
 
-    expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount);
-    expect($this->user->wallet->lastTransaction->amount)->toBe($walletAmount);
+    expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount)
+        ->and($this->user->wallet->lastTransaction->amount)->toBe($walletAmount);
 })->group('payment');

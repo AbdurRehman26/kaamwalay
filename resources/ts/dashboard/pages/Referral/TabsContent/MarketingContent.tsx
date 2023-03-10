@@ -9,62 +9,62 @@ import { useCallback, useState } from 'react';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 import { Link } from 'react-router-dom';
-import marketingContentImage1 from '@shared/assets/marketingContentImage1.jpg';
-import marketingContentImage2 from '@shared/assets/marketingContentImage2.jpg';
-import marketingContentImage3 from '@shared/assets/marketingContentImage3.jpg';
-import marketingContentImage4 from '@shared/assets/marketingContentImage4.jpg';
-import marketingContentImage5 from '@shared/assets/marketingContentImage5.jpg';
-import marketingContentImage6 from '@shared/assets/marketingContentImage6.jpg';
-import marketingContentImage7 from '@shared/assets/marketingContentImage7.jpg';
-import marketingContentImage8 from '@shared/assets/marketingContentImage8.jpg';
-import marketingContentImage9 from '@shared/assets/marketingContentImage9.jpg';
-import marketingContentImage10 from '@shared/assets/marketingContentImage10.jpg';
-import marketingContentImage11 from '@shared/assets/marketingContentImage11.jpg';
+import partnerProgramAgsAd1 from '@shared/assets/partnerProgramAgsAd1.jpg';
+import partnerProgramAgsAd2 from '@shared/assets/partnerProgramAgsAd2.jpg';
+import partnerProgramAgsAd3 from '@shared/assets/partnerProgramAgsAd3.jpg';
+import partnerProgramAgsAd4 from '@shared/assets/partnerProgramAgsAd4.jpg';
+import partnerProgramAgsAd5 from '@shared/assets/partnerProgramAgsAd5.jpg';
+import partnerProgramAgsAd6 from '@shared/assets/partnerProgramAgsAd6.jpg';
+import partnerProgramAgsAd7 from '@shared/assets/partnerProgramAgsAd7.jpg';
+import partnerProgramAgsAd8 from '@shared/assets/partnerProgramAgsAd8.jpg';
+import partnerProgramAgsAd9 from '@shared/assets/partnerProgramAgsAd9.jpg';
+import partnerProgramAgsAd10 from '@shared/assets/partnerProgramAgsAd10.jpg';
+import partnerProgramAgsAd11 from '@shared/assets/partnerProgramAgsAd11.jpg';
 import theme from '@shared/styles/theme';
 
 const images = [
     {
-        url: marketingContentImage1,
+        url: partnerProgramAgsAd1,
         title: '',
     },
     {
-        url: marketingContentImage2,
+        url: partnerProgramAgsAd2,
         title: '',
     },
     {
-        url: marketingContentImage3,
+        url: partnerProgramAgsAd3,
         title: '',
     },
     {
-        url: marketingContentImage4,
+        url: partnerProgramAgsAd4,
         title: '',
     },
     {
-        url: marketingContentImage5,
+        url: partnerProgramAgsAd5,
         title: '',
     },
     {
-        url: marketingContentImage6,
+        url: partnerProgramAgsAd6,
         title: '',
     },
     {
-        url: marketingContentImage7,
+        url: partnerProgramAgsAd7,
         title: '',
     },
     {
-        url: marketingContentImage8,
+        url: partnerProgramAgsAd8,
         title: '',
     },
     {
-        url: marketingContentImage9,
+        url: partnerProgramAgsAd9,
         title: '',
     },
     {
-        url: marketingContentImage10,
+        url: partnerProgramAgsAd10,
         title: '',
     },
     {
-        url: marketingContentImage11,
+        url: partnerProgramAgsAd11,
         title: '',
     },
 ];
@@ -213,37 +213,37 @@ export function MarketingContent({ isMain }: props) {
             <Grid container>
                 <Grid className={'ImagesDiv'}>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(0, marketingContentImage1)}>
+                        <ButtonBase onClick={() => handleClick(0, partnerProgramAgsAd1)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage1}
+                                src={partnerProgramAgsAd1}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(1, marketingContentImage2)}>
+                        <ButtonBase onClick={() => handleClick(1, partnerProgramAgsAd2)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage2}
+                                src={partnerProgramAgsAd2}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(2, marketingContentImage3)}>
+                        <ButtonBase onClick={() => handleClick(2, partnerProgramAgsAd3)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage3}
+                                src={partnerProgramAgsAd3}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(3, marketingContentImage4)}>
+                        <ButtonBase onClick={() => handleClick(3, partnerProgramAgsAd4)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage4}
+                                src={partnerProgramAgsAd4}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
@@ -251,37 +251,37 @@ export function MarketingContent({ isMain }: props) {
                 </Grid>
                 <Grid className={'ImagesDiv'}>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(4, marketingContentImage5)}>
+                        <ButtonBase onClick={() => handleClick(4, partnerProgramAgsAd5)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage5}
+                                src={partnerProgramAgsAd5}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(5, marketingContentImage6)}>
+                        <ButtonBase onClick={() => handleClick(5, partnerProgramAgsAd6)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage6}
+                                src={partnerProgramAgsAd6}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(6, marketingContentImage7)}>
+                        <ButtonBase onClick={() => handleClick(6, partnerProgramAgsAd7)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage7}
+                                src={partnerProgramAgsAd7}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
                     </div>
                     <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(7, marketingContentImage8)}>
+                        <ButtonBase onClick={() => handleClick(7, partnerProgramAgsAd8)}>
                             <img
                                 className={'MarketingContentImage'}
-                                src={marketingContentImage8}
+                                src={partnerProgramAgsAd8}
                                 alt={'MarketingContentImage'}
                             />
                         </ButtonBase>
@@ -290,28 +290,28 @@ export function MarketingContent({ isMain }: props) {
                 {!isMain ? (
                     <Grid className={'ImagesDiv'}>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(8, marketingContentImage9)}>
+                            <ButtonBase onClick={() => handleClick(8, partnerProgramAgsAd9)}>
                                 <img
                                     className={'MarketingContentImage'}
-                                    src={marketingContentImage9}
+                                    src={partnerProgramAgsAd9}
                                     alt={'MarketingContentImage'}
                                 />
                             </ButtonBase>
                         </div>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(9, marketingContentImage10)}>
+                            <ButtonBase onClick={() => handleClick(9, partnerProgramAgsAd10)}>
                                 <img
                                     className={'MarketingContentImage'}
-                                    src={marketingContentImage10}
+                                    src={partnerProgramAgsAd10}
                                     alt={'MarketingContentImage'}
                                 />
                             </ButtonBase>
                         </div>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(10, marketingContentImage11)}>
+                            <ButtonBase onClick={() => handleClick(10, partnerProgramAgsAd11)}>
                                 <img
                                     className={'MarketingContentImage'}
-                                    src={marketingContentImage11}
+                                    src={partnerProgramAgsAd11}
                                     alt={'MarketingContentImage'}
                                 />
                             </ButtonBase>

@@ -352,7 +352,11 @@ export function MarketingContent({ isMain }: props) {
             </Grid>
             {isMain && isSm ? (
                 <Grid className={'SeeAllButtonDiv'}>
-                    <Link to={'/referral-program/marketing-content'} className={'ButtonLink'}>
+                    <Link
+                        to={'/referral-program/marketing-content'}
+                        className={'ButtonLink'}
+                        onClick={() => window.scroll(0, 0)}
+                    >
                         <Button variant="contained" className={'SeeAllButton'}>
                             See All
                         </Button>

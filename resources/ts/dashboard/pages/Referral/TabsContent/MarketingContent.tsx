@@ -275,7 +275,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd4}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd4'}
                             />
                         </ButtonBase>
                     </div>

@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('salesman_id')->after('order_customer_shipment_id')->nullable()->constrained('users');
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign('orders_salesman_id_foreign');

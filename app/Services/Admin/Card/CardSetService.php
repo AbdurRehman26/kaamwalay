@@ -50,8 +50,8 @@ class CardSetService
     protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
         return $this->agsService->getCardSeries([
-            'name' => $seriesName,
-            'category_name' => $categoryName,
+            'exact_name' => $seriesName,
+            'exact_category_name' => $categoryName,
         ])['results'][0]['id'];
     }
 
@@ -62,7 +62,7 @@ class CardSetService
 
         //Check if set already exists in AGS DB
         $setResponse = $this->agsService->getCardSet([
-            'name' => $setName,
+            'exact_name' => $setName,
             'serie' => $agsSeriesId,
         ]);
 

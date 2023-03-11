@@ -14,11 +14,8 @@ class UserCardResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         /** @var CardProduct $cardProduct */
         $cardProduct = $this->orderItem->cardProduct;

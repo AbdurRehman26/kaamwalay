@@ -6,17 +6,15 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\CustomerCollection;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\PaymentPlanCollection;
 use App\Models\Coupon;
+use Illuminate\Http\Request;
 
 /** @mixin Coupon */
 class CouponResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

@@ -10,7 +10,7 @@ use App\Models\DatabaseNotification;
  */
 class PushNotificationResource extends BaseResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

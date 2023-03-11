@@ -7,10 +7,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $australiaId = DB::table('countries')->where('code', 'AU')->first()->id;
         $canadaId = DB::table('countries')->where('code', 'CA')->first()->id;
@@ -24,10 +22,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         //
     }

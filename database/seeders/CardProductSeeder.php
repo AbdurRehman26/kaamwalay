@@ -8,10 +8,8 @@ class CardProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         \DB::table('order_items')->delete();
         \DB::table('card_products')->delete();

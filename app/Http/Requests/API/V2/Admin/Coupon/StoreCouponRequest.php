@@ -9,10 +9,8 @@ class StoreCouponRequest extends V1StoreCouponRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
 

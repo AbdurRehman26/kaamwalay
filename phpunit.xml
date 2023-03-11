@@ -37,7 +37,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
-        <env name="JWT_SECRET" value="test_jwt_secret"/>
+        <env name="JWT_SECRET" value="wh2QZU5riRa0Xr9jrpuYgifHY9E114mYJYzrPC2734atizEWJfA2NEvpLHVmhNz9"/>
         <env name="SCOUT_DRIVER" value="null"/>
         <env name="AGS_BASE_URL" value="https://ags.api"/>
         <env name="AGS_AUTHORIZATION_TOKEN" value="12345"/>

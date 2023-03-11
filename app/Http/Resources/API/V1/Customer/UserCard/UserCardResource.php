@@ -11,12 +11,9 @@ class UserCardResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
      */
 
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         // @phpstan-ignore-next-line
         $isShipped = $this->orderItem->order->orderStatus->id >= OrderStatus::SHIPPED;

@@ -16,9 +16,6 @@ class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
 
     /**
      * Handle the event.
-     *
-     * @param CustomerRegistered $event
-     * @return void
      */
     public function handle(CustomerRegistered $event): void
     {

@@ -17,9 +17,6 @@ class OrderPaymentProcessedNotification extends Notification
 
     /**
       * Get the notification's delivery channels.
-      *
-      * @param  mixed  $notifiable
-      * @return array
       */
     public function via(mixed $notifiable): array
     {
@@ -28,9 +25,6 @@ class OrderPaymentProcessedNotification extends Notification
 
     /**
      * Get the Slack representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return SlackMessage
      */
     public function toSlack(mixed $notifiable): SlackMessage
     {
@@ -75,6 +69,10 @@ class OrderPaymentProcessedNotification extends Notification
 
         if ($this->order->requiresCardCleaning()) {
             $message = "$message, Cleaning Required";
+        }
+
+        if ($this->order->user?->referredBy) {
+            $message = $message . "\nReferral: {$this->order->user->referredBy->email}";
         }
 
         if ($this->order->salesman) {

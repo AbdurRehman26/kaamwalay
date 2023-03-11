@@ -6,6 +6,7 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed $id
@@ -21,11 +22,8 @@ class VaultShipmentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

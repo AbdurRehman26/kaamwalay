@@ -25,7 +25,8 @@ const Root = styled(Grid)({
     padding: '20px',
 
     '.ImageDiv': {
-        maxWidth: '10%!important',
+        maxWidth: '120px !important',
+        maxHeight: '120px !important',
     },
     '.Avatar': {
         background: '#B5CBED',

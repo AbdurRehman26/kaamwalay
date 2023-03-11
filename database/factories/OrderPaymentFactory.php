@@ -11,10 +11,8 @@ class OrderPaymentFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'order_id' => Order::factory(),
@@ -26,10 +24,8 @@ class OrderPaymentFactory extends Factory
 
     /**
      * Indicate that the stripe request/response will be added.
-     *
-     * @return Factory
      */
-    public function stripe()
+    public function stripe(): Factory
     {
         return $this->state(function (array $attributes) {
             return [
@@ -43,10 +39,8 @@ class OrderPaymentFactory extends Factory
 
     /**
      * Indicate that the paypal request/response will be added.
-     *
-     * @return Factory
      */
-    public function paypal()
+    public function paypal(): Factory
     {
         return $this->state(function (array $attributes) {
             return [

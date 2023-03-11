@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\API\Admin;
+namespace App\Exceptions\API\Admin\Customer;
 
 use Exception;
 use Illuminate\Http\JsonResponse;

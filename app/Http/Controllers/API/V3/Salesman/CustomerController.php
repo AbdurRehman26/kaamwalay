@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\API\V3\Salesman;
 
 use App\Exceptions\API\Auth\AgsAuthenticationException;
-use App\Exceptions\API\Salesman\InvalidAgsDataForCustomer;
+use App\Exceptions\API\Salesman\Customer\CustomerDetailsCanNotBeUpdated;
+use App\Exceptions\API\Salesman\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Salesman\Customer\UpdateCustomerDetailsRequest;
 use App\Http\Resources\API\V3\Salesman\Customer\CustomerResource;
@@ -27,6 +28,7 @@ class CustomerController extends Controller
         $response = $this->agsService->updateCustomerData($authUser->ags_access_token, $user->username, $request->validated());
 
         if (! empty($response['code'])) {
+            throw_if($response['code'] === Response::HTTP_INTERNAL_SERVER_ERROR, CustomerDetailsCanNotBeUpdated::class);
             throw_if($response['code'] === Response::HTTP_BAD_REQUEST, new InvalidAgsDataForCustomer($response['message'], Response::HTTP_UNPROCESSABLE_ENTITY));
             throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
         }

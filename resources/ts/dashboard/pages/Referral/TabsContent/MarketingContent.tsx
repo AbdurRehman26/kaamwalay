@@ -26,47 +26,47 @@ import theme from '@shared/styles/theme';
 const images = [
     {
         url: partnerProgramAgsAd1,
-        title: '',
+        title: 'partnerProgramAgsAd1',
     },
     {
         url: partnerProgramAgsAd2,
-        title: '',
+        title: 'partnerProgramAgsAd2',
     },
     {
         url: partnerProgramAgsAd3,
-        title: '',
+        title: 'partnerProgramAgsAd3',
     },
     {
         url: partnerProgramAgsAd4,
-        title: '',
+        title: 'partnerProgramAgsAd4',
     },
     {
         url: partnerProgramAgsAd5,
-        title: '',
+        title: 'partnerProgramAgsAd5',
     },
     {
         url: partnerProgramAgsAd6,
-        title: '',
+        title: 'partnerProgramAgsAd6',
     },
     {
         url: partnerProgramAgsAd7,
-        title: '',
+        title: 'partnerProgramAgsAd7',
     },
     {
         url: partnerProgramAgsAd8,
-        title: '',
+        title: 'partnerProgramAgsAd8',
     },
     {
         url: partnerProgramAgsAd9,
-        title: '',
+        title: 'partnerProgramAgsAd9',
     },
     {
         url: partnerProgramAgsAd10,
-        title: '',
+        title: 'partnerProgramAgsAd10',
     },
     {
         url: partnerProgramAgsAd11,
-        title: '',
+        title: 'partnerProgramAgsAd11',
     },
 ];
 
@@ -248,7 +248,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd1}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd1'}
                             />
                         </ButtonBase>
                     </div>
@@ -257,7 +257,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd2}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd2'}
                             />
                         </ButtonBase>
                     </div>
@@ -266,7 +266,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd3}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd3'}
                             />
                         </ButtonBase>
                     </div>
@@ -286,7 +286,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd5}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd5'}
                             />
                         </ButtonBase>
                     </div>
@@ -295,7 +295,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd6}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd6'}
                             />
                         </ButtonBase>
                     </div>
@@ -304,7 +304,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd7}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd7'}
                             />
                         </ButtonBase>
                     </div>
@@ -313,7 +313,7 @@ export function MarketingContent({ isMain }: props) {
                             <img
                                 className={'MarketingContentImage'}
                                 src={partnerProgramAgsAd8}
-                                alt={'MarketingContentImage'}
+                                alt={'partnerProgramAgsAd8'}
                             />
                         </ButtonBase>
                     </div>
@@ -325,7 +325,7 @@ export function MarketingContent({ isMain }: props) {
                                 <img
                                     className={'MarketingContentImage'}
                                     src={partnerProgramAgsAd9}
-                                    alt={'MarketingContentImage'}
+                                    alt={'partnerProgramAgsAd9'}
                                 />
                             </ButtonBase>
                         </div>
@@ -334,16 +334,16 @@ export function MarketingContent({ isMain }: props) {
                                 <img
                                     className={'MarketingContentImage'}
                                     src={partnerProgramAgsAd10}
-                                    alt={'MarketingContentImage'}
+                                    alt={'partnerProgramAgsAd10'}
                                 />
                             </ButtonBase>
                         </div>
                         <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(11)}>
+                            <ButtonBase onClick={() => handleClick(10)}>
                                 <img
                                     className={'MarketingContentImage'}
                                     src={partnerProgramAgsAd11}
-                                    alt={'MarketingContentImage'}
+                                    alt={'partnerProgramAgsAd11'}
                                 />
                             </ButtonBase>
                         </div>

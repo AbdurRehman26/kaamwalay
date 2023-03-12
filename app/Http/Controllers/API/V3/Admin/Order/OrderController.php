@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\API\V3\Admin\Order;
 
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V3\Admin\Order\UpdateShippingAddressRequest;
+use App\Http\Resources\API\V3\Admin\Order\UserCardResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V3\Admin\OrderListCollection;
 use App\Http\Resources\API\V3\Admin\OrderResource;
+use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\Order;
 use App\Services\Admin\V3\CreateOrderService;
 use App\Services\Admin\V3\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -61,5 +66,27 @@ class OrderController extends Controller
             'success' => true,
             'message' => 'Shipping Address Updated successfully.',
         ]);
+    }
+
+    public function getGrades(Request $request, Order $order): AnonymousResourceCollection | JsonResponse
+    {
+        $this->authorize('review', $order);
+
+        try {
+            GetCardGradesFromAgs::dispatchIf(
+                $order->canBeGraded() && $request->boolean('from_ags', true),
+                $order
+            );
+            $userCards = $this->orderService->getPaginatedCardsForGrading($order);
+        } catch (IncorrectOrderStatus $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
+
+        return UserCardResource::collection($userCards);
     }
 }

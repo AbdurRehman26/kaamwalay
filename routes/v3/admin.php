@@ -30,6 +30,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::prefix('{order}')->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
+            Route::get('grades', [OrderController::class, 'getGrades']);
         });
 
     });

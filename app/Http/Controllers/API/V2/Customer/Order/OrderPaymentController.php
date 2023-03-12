@@ -46,11 +46,11 @@ class OrderPaymentController extends Controller
 
             DB::commit();
 
-            if($order->user->referredBy) {
+            if ($order->user->referredBy) {
                 $this->emailService->sendEmail(
                     [[$order->user->referredBy->email => $order->user->referredBy->first_name ?? '']],
-                        EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING],
-                        EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
+                    EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING],
+                    EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
                     [
                         'REFERRER_NAME' => $order->user->referredBy->first_name,
                         'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',

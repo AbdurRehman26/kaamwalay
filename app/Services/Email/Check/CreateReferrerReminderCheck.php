@@ -4,7 +4,6 @@ namespace App\Services\Email\Check;
 
 use App\Models\ScheduledEmail;
 use App\Services\Email\ReschedulingCheckInterface;
-use Illuminate\Support\Facades\Log;
 use App\Services\Email\ShouldStillSendCheckInterface;
 use Carbon\Carbon;
 
@@ -36,7 +35,7 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
         }
 
         // Don't send if user referrers have paid order
-        foreach($users as $user) {
+        foreach ($users as $user) {
             if ($user->orders()->paid()->count() > 0) {
                 return false;
             }

@@ -4,8 +4,8 @@ namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\EmailService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ReferrerReminder implements ShouldBeEncrypted, ShouldQueue
 {

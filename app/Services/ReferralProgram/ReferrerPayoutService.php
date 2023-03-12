@@ -17,7 +17,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerPayoutService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
-    protected EmailService $emailService;
 
     /**
      * @return LengthAwarePaginator<Model>
@@ -66,10 +65,11 @@ class ReferrerPayoutService
 
             DB::commit();
 
-            $this->emailService->sendEmail(
-                [[$referrer->email => $referrer->first_name ?? '']],
-                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE],
-                EmailService::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE,
+            $emailService = resolve(EmailService::class);
+            $emailService->sendEmail(
+                [[$referrerPayout->user->email => $referrerPayout->user->first_name ?? '']],
+                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED],
+                EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED,
                 [
                     'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
                 ]

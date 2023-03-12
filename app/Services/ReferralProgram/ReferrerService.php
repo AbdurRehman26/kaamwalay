@@ -31,7 +31,7 @@ class ReferrerService
 
             $emailService = resolve(EmailService::class);
             $emailService->sendEmail(
-                [[$referrer->email => $referrer->first_name ?? '']],
+                [[$referrer->user->email => $referrer->user->first_name ?? '']],
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
                 EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
                 [

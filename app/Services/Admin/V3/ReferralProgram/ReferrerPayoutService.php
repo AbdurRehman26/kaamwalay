@@ -13,7 +13,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerPayoutService
 {
     protected const PER_PAGE = 10;
-    protected EmailService $emailService;
     /**
      * Payment Providers available for the application
      **/
@@ -114,8 +113,9 @@ class ReferrerPayoutService
             $payout->payment_method
         ])->handshake($payout);
 
+        $emailService = resolve(EmailService::class);
         if($response['transaction_status'] === 'SUCCESS') {
-            $this->emailService->sendEmail(
+            $emailService->sendEmail(
                 [[$payout->user->email => $$payout->user->first_name ?? '']],
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],
                 EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED,

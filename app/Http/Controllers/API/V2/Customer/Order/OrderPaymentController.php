@@ -45,14 +45,14 @@ class OrderPaymentController extends Controller
             $response = $this->paymentService->charge($order, $request->all());
 
             DB::commit();
-            //    //    // 
+
             if($order->user->referredBy) {
                 $this->emailService->sendEmail(
-                    [[$order->user->email => $order->user->first_name ?? '']],
-                        EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
-                        EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
+                    [[$order->user->referredBy->email => $order->user->referredBy->first_name ?? '']],
+                        EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING],
+                        EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
                     [
-                        'REFERRER_NAME' => $order->user->getFullName(),
+                        'REFERRER_NAME' => $order->user->referredBy->first_name,
                         'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/main',
                     ]
                 );

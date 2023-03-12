@@ -2,7 +2,6 @@
 
 namespace App\Services\Email\Check;
 
-use App\Models\Order;
 use App\Models\ScheduledEmail;
 use App\Services\Email\ReschedulingCheckInterface;
 use Illuminate\Support\Facades\Log;
@@ -38,11 +37,12 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
 
         foreach($users as $user) {
             $paidOrder = $user->orders()->paid()->count() > 0; 
-            Log::info("Paid order count !!! : ". $paidOrder);
-            return false;
+            if($paidOrder) {
+                Log::info("Paid order count !!! : ". $paidOrder);
+                return false;
+            }
         }
-        
 
-        // return true;
+        return true;
     }
 }

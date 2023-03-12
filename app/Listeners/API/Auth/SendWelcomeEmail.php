@@ -20,19 +20,5 @@ class SendWelcomeEmail implements ShouldBeEncrypted
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CUSTOMER_WELCOME],
             EmailService::TEMPLATE_SLUG_CUSTOMER_WELCOME
         );
-
-        $this->emailService->scheduleEmail(
-            now()->addMinutes(3),
-            [[$user->email => $user->first_name ?? '']],
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
-            EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
-            [
-                'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/main',
-                'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
-            ],
-            true,
-            'CreateReferrerReminderCheck',
-            ['user' => $user]
-        );
     }
 }

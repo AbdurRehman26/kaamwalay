@@ -17,7 +17,7 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
 
     public function getNextSendAt(ScheduledEmail $scheduledEmail): Carbon
     {
-        return now()->addMinutes(3);
+        return now()->addDays(3);
     }
 
     public function shouldStillSend(ScheduledEmail $scheduledEmail): bool
@@ -35,14 +35,11 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
             return true;
         }
 
+        // Don't send if user referrers have paid order
         foreach($users as $user) {
-            $paidOrder = $user->orders()->paid()->count() > 0; 
-            if($paidOrder) {
-                Log::info("Paid order count !!! : ". $paidOrder);
+            if ($user->orders()->paid()->count() > 0) {
                 return false;
             }
         }
-
-        return true;
     }
 }

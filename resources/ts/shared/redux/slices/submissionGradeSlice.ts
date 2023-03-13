@@ -8,11 +8,11 @@ export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
     async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`, { version: 'v3' });
         const cardsResponse = await endpoint.get('', {
             data: { fromAgs: DTO.fromAgs ?? true },
         });
-        return cardsResponse.data;
+        return cardsResponse;
     },
 );
 
@@ -73,6 +73,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    gradesPagination: any;
     hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
@@ -90,6 +91,7 @@ export interface SubmissionsGrades {
 
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
+    gradesPagination: null,
     viewModes: [],
     hasLoadedAllRobogrades: false,
 };
@@ -223,12 +225,18 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
-            state.allSubmissions = action.payload;
+            const data = action.payload.data.data;
+            const pagination = { links: action.payload.data.links, meta: action.payload.data.meta };
+
+            state.allSubmissions = data;
+            state.gradesPagination = pagination;
+
+            console.log('shared reducer');
             state.hasLoadedAllRobogrades =
-                action.payload.filter(
+                data.filter(
                     (card: Record<string, any>) =>
                         card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
-                ).length === action.payload.length;
+                ).length === data.length;
         },
     },
 });

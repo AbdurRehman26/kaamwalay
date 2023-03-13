@@ -8,6 +8,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
+import { TablePagination } from '@shared/components/TablePagination';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
@@ -30,6 +31,7 @@ const useStyles = makeStyles(
 export function SubmissionsGradeCards() {
     const classes = useStyles();
     const allCards = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
+    const gradesPagination = useAppSelector((state) => state.submissionGradesSlice.gradesPagination);
     const dispatch = useAppDispatch();
     const { id } = useParams<'id'>();
     const navigate = useNavigate();
@@ -37,6 +39,7 @@ export function SubmissionsGradeCards() {
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
 
+    console.log(gradesPagination);
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
             return false;
@@ -59,8 +62,8 @@ export function SubmissionsGradeCards() {
     }
 
     const loadGrades = useCallback(
-        (fromAgs = true) => {
-            dispatch(getAllSubmissions({ fromAgs, id: Number(id) }))
+        (perPage = 24, page = 1, fromAgs = true) => {
+            dispatch(getAllSubmissions({ fromAgs, id: Number(id), page, perPage }))
                 .unwrap()
                 .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
         },
@@ -69,7 +72,7 @@ export function SubmissionsGradeCards() {
 
     useRetry(
         () => {
-            loadGrades(false);
+            loadGrades(2, 1, false);
         },
         () => !hasLoadedAllRobogrades,
         { windowTime: 5000 },
@@ -93,9 +96,17 @@ export function SubmissionsGradeCards() {
         [dispatch, loadGrades, id],
     );
 
+    const handlePageChange = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+            console.log(page);
+            loadGrades(2, page + 1, false);
+        },
+        [loadGrades],
+    );
+
     useEffect(
         () => {
-            loadGrades();
+            loadGrades(2);
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [id],
@@ -135,6 +146,12 @@ export function SubmissionsGradeCards() {
                                 />
                             </div>
                         ))}
+                        <TablePagination
+                            count={gradesPagination.meta.total}
+                            page={gradesPagination.meta.currentPage - 1}
+                            rowsPerPage={gradesPagination.meta.perPage}
+                            onPageChange={handlePageChange}
+                        />
                     </Grid>
                 </>
             )}

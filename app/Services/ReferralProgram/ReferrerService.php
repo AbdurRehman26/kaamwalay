@@ -29,7 +29,7 @@ class ReferrerService
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
 
-            if($user->referredBy) {
+            if ($user->referredBy) {
                 $emailService = resolve(EmailService::class);
                 $emailService->sendEmail(
                     [[$user->referredBy->email => $user->referredBy->first_name ?? '']],
@@ -39,7 +39,7 @@ class ReferrerService
                         'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
                     ]
                 );
-            } 
+            }
         } catch (QueryException $e) {
             report($e);
             $referrer = $this->create($user);

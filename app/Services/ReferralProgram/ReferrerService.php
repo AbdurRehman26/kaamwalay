@@ -29,15 +29,17 @@ class ReferrerService
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
 
-            $emailService = resolve(EmailService::class);
-            $emailService->sendEmail(
-                [[$referrer->user->email => $referrer->user->first_name ?? '']],
-                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
-                EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
-                [
-                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
-                ]
-            );
+            if($user->referredBy) {
+                $emailService = resolve(EmailService::class);
+                $emailService->sendEmail(
+                    [[$user->referredBy->email => $user->referredBy->first_name ?? '']],
+                    EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
+                    EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
+                    [
+                        'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
+                    ]
+                );
+            } 
         } catch (QueryException $e) {
             report($e);
             $referrer = $this->create($user);

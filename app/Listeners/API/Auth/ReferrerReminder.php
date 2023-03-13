@@ -22,7 +22,7 @@ class ReferrerReminder implements ShouldBeEncrypted, ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\CustomerRegistered  $event
+     * @param CustomerRegistered  $event
      * @return void
      */
     public function handle(CustomerRegistered $event)

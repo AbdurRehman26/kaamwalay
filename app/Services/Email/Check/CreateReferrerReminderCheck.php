@@ -4,7 +4,6 @@ namespace App\Services\Email\Check;
 
 use App\Models\ScheduledEmail;
 use App\Services\Email\ReschedulingCheckInterface;
-use Illuminate\Support\Facades\Log;
 use App\Services\Email\ShouldStillSendCheckInterface;
 use Carbon\Carbon;
 
@@ -41,5 +40,7 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
                 return false;
             }
         }
+
+        return true;
     }
 }

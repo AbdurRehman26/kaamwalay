@@ -35,7 +35,7 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
         }
 
         // Don't send if user referrers have paid order
-        foreach($users as $user) {
+        foreach ($users as $user) {
             if ($user->orders()->paid()->count() > 0) {
                 return false;
             }

@@ -114,7 +114,7 @@ class ReferrerPayoutService
         ])->handshake($payout);
 
         $emailService = resolve(EmailService::class);
-        if($response['transaction_status'] === 'SUCCESS') {
+        if ($response['transaction_status'] === 'SUCCESS') {
             $emailService->sendEmail(
                 [[$payout->user->email => $$payout->user->first_name ?? '']],
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],

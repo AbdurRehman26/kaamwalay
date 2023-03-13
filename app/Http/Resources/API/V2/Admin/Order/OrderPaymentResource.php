@@ -57,7 +57,7 @@ class OrderPaymentResource extends BaseResource
             if (! empty($providerResponse->card)) {
                 $card = $providerResponse->card;
             } else {
-                if (! empty($providerResponse->latest_charge)) {
+                if (! empty($providerResponse->latest_charge) && is_object($providerResponse->latest_charge)) {
                     $card = $providerResponse->latest_charge->payment_method_details->card;
                 } else {
                     // Support old Stripe response

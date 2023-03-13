@@ -28,6 +28,7 @@ beforeEach(function () {
 });
 
 test('a referrer can withdraw his commission', function () {
+    Bus::fake();
     actingAs($this->user);
 
     postJson(route('v3.payouts.store', [

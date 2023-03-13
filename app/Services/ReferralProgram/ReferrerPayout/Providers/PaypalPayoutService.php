@@ -154,7 +154,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
             ]);
 
-            if ($transactionStatus === ReferrerPayoutStatus::STATUS_FAILED) {
+            if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
                 $this->processFailedPayout($payout);
             }
 

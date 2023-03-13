@@ -170,6 +170,7 @@ test('batch payout creation needs params', function () {
 });
 
 test('a batch payout is processed and stores data into DB', function () {
+    Bus::fake();
     Http::fake(['https://paypal.api/v1/payments/payouts' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
@@ -237,6 +238,7 @@ it('process payouts handshake', function () {
 });
 
 test('handshake cron is handled and stores data into DB', function () {
+    Bus::fake();
     $baseResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_payout_item_details_response.json'
     ), associative: true);
@@ -254,6 +256,7 @@ test('handshake cron is handled and stores data into DB', function () {
 });
 
 test('if item transaction fails in handshake, the amount is returned to referrer', function () {
+    Bus::fake();
     $baseResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_payout_item_details_fail_response.json'
     ), associative: true);

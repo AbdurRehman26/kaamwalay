@@ -232,7 +232,6 @@ export const submissionGradesSlice = createSlice({
         [getAllSubmissions.fulfilled as any]: (state, action) => {
             const data = action.payload.data.data;
             const pagination = { links: action.payload.data.links, meta: action.payload.data.meta };
-            console.log('admin reducer');
 
             // This API uses a background sync, but as this data is responsible for the whole page items,
             // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we

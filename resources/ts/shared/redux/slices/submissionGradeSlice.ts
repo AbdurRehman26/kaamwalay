@@ -231,7 +231,6 @@ export const submissionGradesSlice = createSlice({
             state.allSubmissions = data;
             state.gradesPagination = pagination;
 
-            console.log('shared reducer');
             state.hasLoadedAllRobogrades =
                 data.filter(
                     (card: Record<string, any>) =>

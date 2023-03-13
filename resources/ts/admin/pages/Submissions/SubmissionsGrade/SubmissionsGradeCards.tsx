@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
@@ -38,8 +38,9 @@ export function SubmissionsGradeCards() {
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(24);
 
-    console.log(gradesPagination);
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
             return false;
@@ -72,7 +73,7 @@ export function SubmissionsGradeCards() {
 
     useRetry(
         () => {
-            loadGrades(2, 1, false);
+            loadGrades(perPage, page, false);
         },
         () => !hasLoadedAllRobogrades,
         { windowTime: 5000 },
@@ -96,21 +97,25 @@ export function SubmissionsGradeCards() {
         [dispatch, loadGrades, id],
     );
 
-    const handlePageChange = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-            console.log(page);
-            loadGrades(2, page + 1, false);
-        },
-        [loadGrades],
-    );
+    const handlePageChange = useCallback((event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+        setPage(page + 1);
+    }, []);
+
+    const handleRowsPerPageChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        setPerPage(parseInt(event.target.value));
+    }, []);
 
     useEffect(
         () => {
-            loadGrades(2);
+            loadGrades();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [id],
     );
+
+    useEffect(() => {
+        loadGrades(perPage, page, false);
+    }, [perPage, page, loadGrades]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -150,7 +155,9 @@ export function SubmissionsGradeCards() {
                             count={gradesPagination.meta.total}
                             page={gradesPagination.meta.currentPage - 1}
                             rowsPerPage={gradesPagination.meta.perPage}
+                            rowsPerPageOptions={[24, 48, 72, 96, 120]}
                             onPageChange={handlePageChange}
+                            onRowsPerPageChange={handleRowsPerPageChange}
                         />
                     </Grid>
                 </>

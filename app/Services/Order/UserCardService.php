@@ -157,10 +157,6 @@ class UserCardService
         ];
     }
 
-     /**
-     * @param  array  $data
-     * @return array
-     */
     public function pepareScannedImagesForPublicCardPage(array $data): array
     {
         if (
@@ -179,10 +175,6 @@ class UserCardService
         return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
     }
 
-    /**
-     * @param  array  $data
-     * @return array
-     */
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
         $front = [
@@ -240,10 +232,6 @@ class UserCardService
         });
     }
 
-    /**
-     * @param  array  $data
-     * @return array
-     */
     protected function prepareSlabbedImagesForPublicCardPage(array $data, UserCard $userCard): array
     {
         if (
@@ -261,10 +249,6 @@ class UserCardService
         ];
     }
 
-     /**
-     * @param  UserCard  $userCard
-     * @return array
-     */
     protected function getAgsPopulationData(UserCard $userCard): array
     {
         $popData = PopReportsCard::where('card_product_id', $userCard->orderItem->card_product_id)->first();
@@ -301,19 +285,11 @@ class UserCardService
         return $data;
     }
 
-     /**
-     * @param  string  $nickname
-     * @return string
-     */
     protected function convertGradeNicknameToColumn(string $nickname): string
     {
         return Str::lower(Str::replace('-', '_', Str::replace('+', '_plus', $nickname)));
     }
 
-    /**
-     * @param  string  $certificateId
-     * @return string
-     */
     protected function getPageUrl(string $certificateId): string
     {
         return route('feed.view', $certificateId);
@@ -340,9 +316,6 @@ class UserCardService
     /**
      * It returns precise value for display.
      * e.g. 8.00 will be converted to 8, 8.50 will be converted to 8.5, 8.125 will be converted to 8.1
-     *
-     * @param  float  $gradeValue
-     * @return float
      */
     protected function preparePreciseValue(float $gradeValue): float
     {

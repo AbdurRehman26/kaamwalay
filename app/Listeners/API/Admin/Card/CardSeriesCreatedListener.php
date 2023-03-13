@@ -20,11 +20,8 @@ class CardSeriesCreatedListener
 
     /**
      * Handle the event.
-     *
-     * @param  CardSeriesCreatedEvent  $event
-     * @return void
      */
-    public function handle(CardSeriesCreatedEvent $event)
+    public function handle(CardSeriesCreatedEvent $event): void
     {
         $this->initializePopReport($event->cardSeries);
     }

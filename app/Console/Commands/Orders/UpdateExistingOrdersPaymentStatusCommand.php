@@ -26,10 +26,8 @@ class UpdateExistingOrdersPaymentStatusCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         Order::query()
             ->whereNotIn('order_status_id', [OrderStatus::PAYMENT_PENDING, OrderStatus::CANCELLED])

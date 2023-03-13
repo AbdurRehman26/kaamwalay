@@ -21,7 +21,6 @@ class CardsNotFoundException extends Exception
 
     /**
      * @param Request|array $request
-     * @return JsonResponse
      */
     public function render($request): JsonResponse
     {

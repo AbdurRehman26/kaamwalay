@@ -10,10 +10,9 @@ class DateBetweenRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
      * @param  mixed  $value
      */
-    public function passes($attribute, $value): bool
+    public function passes(mixed $attribute, $value): bool
     {
         if (
             is_null($value) ||

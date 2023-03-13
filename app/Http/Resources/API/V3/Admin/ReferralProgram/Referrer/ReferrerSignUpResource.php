@@ -5,17 +5,15 @@ namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
 use App\Services\ReferralProgram\ReferrerService;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class ReferrerSignUpResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $referrerService = new ReferrerService();
 

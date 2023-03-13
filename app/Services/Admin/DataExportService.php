@@ -32,7 +32,6 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
     }
 
     /**
-     * @return QueryBuilder
      * @phpstan-ignore-next-line
      */
     public function query(): QueryBuilder

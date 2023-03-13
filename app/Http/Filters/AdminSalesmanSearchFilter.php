@@ -7,10 +7,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminSalesmanSearchFilter implements Filter
 {
-    /**
-     * @param string $value
-     */
-    public function __invoke(Builder $query, $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $fullNameArray = explode(' ', $value);
         if (count($fullNameArray) === 2) {

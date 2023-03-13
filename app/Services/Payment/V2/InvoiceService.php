@@ -112,7 +112,7 @@ class InvoiceService
         if (property_exists($paymentResponse, 'card')) {
             $card = $paymentResponse->card;
         } else {
-            $card = $paymentResponse->charges->data[0]->payment_method_details->card;
+            $card = $paymentResponse->latest_charge->payment_method_details->card;
         }
 
         return json_decode(json_encode([

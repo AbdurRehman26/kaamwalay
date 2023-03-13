@@ -32,7 +32,9 @@ class ChangePasswordController extends Controller
 
         $this->fetchAndSaveAuthTokenFromAgs($user, $request->password);
 
-        $token = auth()->guard()->attempt(['email' => $user->email, 'password' => $request->password]);
+        /** @var \Tymon\JWTAuth\JWTGuard $guard */
+        $guard = auth()->guard();
+        $token = $guard->attempt(['email' => $user->email, 'password' => $request->password]);
 
         return new JsonResponse([
             'access_token' => $token,

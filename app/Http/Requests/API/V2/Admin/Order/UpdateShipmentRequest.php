@@ -11,10 +11,8 @@ class UpdateShipmentRequest extends V1UpdateOrderPaymentRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Order $order */
         $order = $this->route('order');

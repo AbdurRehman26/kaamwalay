@@ -21,8 +21,6 @@ class ReferrerPayoutService
     ];
 
     /**
-     * @param  array  $ids
-     * @param  string  $paymentMethod
      * @return Collection<int, ReferrerPayout>
      */
     protected function getPayoutsByIdArray(array $ids, string $paymentMethod = ''): Collection
@@ -37,7 +35,6 @@ class ReferrerPayoutService
     }
 
     /**
-     * @param  string  $paymentMethod
      * @return Collection<int, ReferrerPayout>
      */
     protected function getAllPendingPayouts(string $paymentMethod = ''): Collection
@@ -130,8 +127,6 @@ class ReferrerPayoutService
 
     /**
      * @param  Collection<int, ReferrerPayout>  $payouts
-     * @param  array  $data
-     * @return void
      */
     protected function processFailedBatchPayouts(Collection $payouts, array $data): void
     {

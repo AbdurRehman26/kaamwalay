@@ -17,10 +17,8 @@ class ReportMail extends Mailable
 
     /**
      * Build the message.
-     *
-     * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this->markdown($this->getTemplateName())
             ->from(config('mail.from.address'), config('mail.from.name'))

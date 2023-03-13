@@ -9,11 +9,8 @@ class UserCardCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
-     *
-     * @param Request $request
-     * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

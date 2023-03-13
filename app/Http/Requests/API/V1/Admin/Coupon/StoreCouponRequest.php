@@ -11,20 +11,16 @@ class StoreCouponRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->isAdmin();
     }
 
     /**
      * Prepare the data for validation.
-     *
-     * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         // The design does not have a date picker when is_permanent is selected
         if ($this->get('is_permanent')) {
@@ -36,10 +32,8 @@ class StoreCouponRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'code' => ['required'],

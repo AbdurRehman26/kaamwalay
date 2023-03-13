@@ -5,16 +5,14 @@ namespace App\Http\Resources\API\V1\Admin\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
+use Illuminate\Http\Request;
 
 class UserCardResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         /** @var Order $order */
         $order = $this->orderItem->order;

@@ -100,8 +100,6 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
     /**
      * @param  Collection<int, ReferrerPayout>  $payouts
-     * @param  array  $data
-     * @return void
      */
     public function storeItemsResponse(Collection $payouts, array $data): void
     {

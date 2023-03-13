@@ -48,8 +48,8 @@ class CardSeriesService
 
         //Check if series already exists in AGS DB
         $seriesResponse = $this->agsService->getCardSeries([
-            'name' => $seriesName,
-            'category_name' => $categoryName,
+            'exact_name' => $seriesName,
+            'exact_category_name' => $categoryName,
         ]);
 
         //If it doesn't exist, and we have required parameters, create it in AGS side

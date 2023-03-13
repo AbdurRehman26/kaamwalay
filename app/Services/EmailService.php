@@ -95,11 +95,6 @@ class EmailService
 
     /**
      * Send email using a template. It automatically sends email to queue for background processing.
-     *
-     * @param  array  $recipients
-     * @param  string  $subject
-     * @param  string  $templateName
-     * @param  array  $templateContent
      */
     public function sendEmail(
         array $recipients,
@@ -116,16 +111,6 @@ class EmailService
 
     /**
      * Schedule email for sending later. Email will be sent later at specified time.
-     *
-     * @param  DateTime  $sendAt
-     * @param  array  $recipients
-     * @param  string  $subject
-     * @param  string  $templateName
-     * @param  array  $templateContent
-     * @param  bool  $reschedulingRequired
-     * @param  string|null  $checkClass
-     * @param  array  $extraData
-     * @return bool
      */
     public function scheduleEmail(
         DateTime $sendAt,
@@ -168,10 +153,6 @@ class EmailService
 
     /**
      * Get predefined subject based on template.
-     *
-     * @param  string  $template
-     *
-     * @return string
      */
     public function getSubjectByTemplate(string $template): string
     {

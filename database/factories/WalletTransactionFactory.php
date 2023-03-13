@@ -13,10 +13,8 @@ class WalletTransactionFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $reason = $this->faker->randomElement([
             WalletTransactionReason::WALLET_CREDIT,

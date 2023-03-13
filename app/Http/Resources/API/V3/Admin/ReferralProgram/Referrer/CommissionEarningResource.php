@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V3\Admin\ReferralProgram\Referrer;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\Order;
+use Illuminate\Http\Request;
 
 /**
  * @mixin Order
@@ -14,11 +15,8 @@ class CommissionEarningResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

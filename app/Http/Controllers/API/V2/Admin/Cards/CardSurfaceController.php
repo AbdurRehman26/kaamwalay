@@ -38,7 +38,7 @@ class CardSurfaceController extends Controller
     {
         try {
             $surface->update($request->validated());
-        } catch(ModelNotFoundException) {
+        } catch (ModelNotFoundException) {
             return new JsonResponse(
                 [
                     'error' => 'Card Surface does not exist',

@@ -239,6 +239,7 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
                     'User Email' => $order->user->email,
                     'Type' => 'Extra Charge',
                 ],
+                'expand' => ['latest_charge'],
             ],
         ];
         $response = $this->successfulPaymentResponse($paymentData);

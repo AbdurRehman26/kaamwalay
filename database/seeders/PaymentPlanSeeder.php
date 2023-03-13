@@ -9,10 +9,8 @@ class PaymentPlanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         PaymentPlan::factory()
             ->count(5)

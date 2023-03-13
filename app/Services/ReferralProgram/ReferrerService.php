@@ -48,10 +48,6 @@ class ReferrerService
         return $referrer;
     }
 
-    /**
-     * @param  int  $referrerId
-     * @return LengthAwarePaginator
-     */
     // @phpstan-ignore-next-line
     public function getSignUps(int $referrerId): LengthAwarePaginator
     {
@@ -64,10 +60,6 @@ class ReferrerService
             ->paginate($itemsPerPage);
     }
 
-    /**
-     * @param  int  $referrerId
-     * @return LengthAwarePaginator
-     */
     // @phpstan-ignore-next-line
     public function getCommissionEarnings(int $referrerId): LengthAwarePaginator
     {
@@ -84,8 +76,6 @@ class ReferrerService
     }
 
     /**
-     * @param  int $referrerId
-     * @param  int $refereeId
      * @return Collection<int, ReferrerEarnedCommission>
      */
     public function getEarnedCommissionsByReferee(int $referrerId, int $refereeId): Collection

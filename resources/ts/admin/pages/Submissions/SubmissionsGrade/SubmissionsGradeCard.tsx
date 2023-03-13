@@ -1,4 +1,6 @@
+import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 import FaceIcon from '@mui/icons-material/Face';
+import PriorityHighTwoToneIcon from '@mui/icons-material/PriorityHighTwoTone';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -43,6 +45,7 @@ export function SubmissionsGradeCard({
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
+    const cardStatus = orderItemGradeData.cardStatus;
 
     return (
         <AccordionCardItem variant={'outlined'}>
@@ -53,8 +56,23 @@ export function SubmissionsGradeCard({
                 subheading={orderItemGradeData.cardFullName}
                 shortName={orderItemGradeData.shortName}
                 action={
-                    <Button disabled variant={'outlined'} className={cx(classes.statusButton, classes.disabledButton)}>
-                        {orderItemGradeData.cardStatus}
+                    <Button
+                        disabled
+                        variant={'outlined'}
+                        className={cx(
+                            classes.statusButton,
+                            classes.disabledButton,
+                            cardStatus === 'Not Accepted' || cardStatus === 'Missing'
+                                ? classes.notAcceptedOrMissingButton
+                                : classes.gradedButton,
+                        )}
+                    >
+                        {cardStatus === 'Not Accepted' || cardStatus === 'Missing' ? (
+                            <PriorityHighTwoToneIcon />
+                        ) : (
+                            <CheckTwoToneIcon />
+                        )}
+                        {cardStatus}
                     </Button>
                 }
             >

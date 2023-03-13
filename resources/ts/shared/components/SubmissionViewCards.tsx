@@ -10,8 +10,9 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
@@ -118,6 +119,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
     // TODO: replace with a dedicated hook `useUser`
     const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
+    const [openNotesModal, setOpenNotesModal] = useState(false);
+    const [notes, setNotes] = useState('');
 
     const handleOption = useCallback(
         async (action: RowOption, id: number) => {
@@ -133,6 +136,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
 
     return (
         <Box px={3} className={classes.containerBox}>
+            <NotesDialog description={notes} open={openNotesModal} onClose={() => setOpenNotesModal(false)} />
             <TableContainer className={classes.root}>
                 <Table>
                     <TableHead className={classes.header}>
@@ -330,6 +334,28 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                 </div>
                                             )}
                                         </GradeRoot>
+                                    ) : item.status.orderItemStatus.name === 'Not Accepted' ||
+                                      item.status.orderItemStatus.name === 'Missing' ? (
+                                        <>
+                                            {item.status.orderItemStatus.name}
+                                            <br />
+                                            {item.notes && (
+                                                <MuiLink
+                                                    href={'#'}
+                                                    rel={'noreferrer'}
+                                                    underline={'hover'}
+                                                    variant={'body2'}
+                                                    className={classes.viewGradeText}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setNotes(item.notes);
+                                                        setOpenNotesModal(true);
+                                                    }}
+                                                >
+                                                    View Notes
+                                                </MuiLink>
+                                            )}
+                                        </>
                                     ) : (
                                         '-'
                                     )}

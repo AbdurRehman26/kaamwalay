@@ -206,20 +206,7 @@ export function UnconfirmedCard({
                     <>
                         <Grid container direction={'column'} className={classes.buttons}>
                             <Box display={'flex'} flexDirection={'row'}>
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    onClick={() => setOpenNotAccepted(true)}
-                                    className={classes.button}
-                                >
-                                    Not Accepted
-                                </Button>
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    onClick={handleMissing}
-                                    className={classes.leftSpace}
-                                >
+                                <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
                                     Missing
                                 </Button>
                                 <Button
@@ -237,6 +224,14 @@ export function UnconfirmedCard({
                                     className={classes.leftSpace}
                                 >
                                     Swap Card
+                                </Button>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={() => setOpenNotAccepted(true)}
+                                    className={classes.leftSpace}
+                                >
+                                    Not Accepted
                                 </Button>
                             </Box>
                         </Grid>

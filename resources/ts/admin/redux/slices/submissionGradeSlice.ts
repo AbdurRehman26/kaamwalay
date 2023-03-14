@@ -1,4 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { app } from '@shared/lib/app';
 import { countDecimals } from '@shared/lib/utils/countDecimals';
 import { APIService } from '@shared/services/APIService';
@@ -6,7 +7,13 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (DTO: { id: number | string; fromAgs: boolean | undefined; page: number; perPage: number }) => {
+    async (DTO: {
+        id: number | string;
+        fromAgs: boolean | undefined;
+        page: number;
+        perPage: number;
+        itemId: string | null;
+    }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
             `admin/orders/${DTO.id}/grades?per_page=${DTO.perPage}&page=${DTO.page}`,
@@ -15,7 +22,11 @@ export const getAllSubmissions = createAsyncThunk(
         const cardsResponse = await endpoint.get('', {
             params: {
                 fromAgs: DTO.fromAgs,
+                filter: {
+                    orderItemId: DTO.itemId,
+                },
             },
+            ...bracketParams(),
         });
         return cardsResponse;
     },

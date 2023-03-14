@@ -64,11 +64,11 @@ export function SubmissionsGradeCards() {
 
     const loadGrades = useCallback(
         (perPage = 24, page = 1, fromAgs = true) => {
-            dispatch(getAllSubmissions({ fromAgs, id: Number(id), page, perPage }))
+            dispatch(getAllSubmissions({ fromAgs, id: Number(id), page, perPage, itemId: reviseGradeItemId }))
                 .unwrap()
                 .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
         },
-        [dispatch, id],
+        [dispatch, id, reviseGradeItemId],
     );
 
     useRetry(

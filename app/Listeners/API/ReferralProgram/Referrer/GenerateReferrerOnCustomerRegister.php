@@ -16,9 +16,8 @@ class GenerateReferrerOnCustomerRegister implements ShouldBeEncrypted
     public function handle(CustomerRegistered $event): void
     {
         $this->referrerService->create($event->user);
-        
+
         if ($event->user->referredBy) {
-            $this->emailService = resolve(EmailService::class);
             $this->emailService->sendEmail(
                 [[$event->user->referredBy->email => $event->user->referredBy->first_name ?? '']],
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],

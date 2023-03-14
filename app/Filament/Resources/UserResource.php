@@ -56,7 +56,6 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('phone')
-                    ->tel()
                     ->maxLength(255),
                 TextInput::make('profile_image')
                     ->maxLength(255),

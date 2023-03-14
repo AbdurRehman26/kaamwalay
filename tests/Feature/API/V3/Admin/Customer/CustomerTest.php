@@ -98,7 +98,7 @@ test('an admin can mark an user referral program as inactive', function () {
         ]);
 });
 
-test('an admin can update customer details', function(){
+test('an admin can update customer details', function () {
     actingAs($this->user);
     Http::fake([
         '*' => Http::response([]),
@@ -107,7 +107,7 @@ test('an admin can update customer details', function(){
     putJson(route('v3.admin.customer.update', $this->customer->id), [
         'first_name' => 'Lorem',
         'last_name' => 'Update',
-        'phone' => '+1 (123) 456-7890'
+        'phone' => '+1 (123) 456-7890',
     ])
         ->assertSuccessful();
 

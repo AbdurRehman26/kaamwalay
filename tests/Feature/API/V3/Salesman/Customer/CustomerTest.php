@@ -22,7 +22,7 @@ beforeEach(function () {
     ))->create();
 });
 
-test('sales rep can update customer details', function(){
+test('sales rep can update customer details', function () {
     actingAs($this->user);
     Http::fake([
         '*' => Http::response([]),
@@ -31,7 +31,7 @@ test('sales rep can update customer details', function(){
     putJson(route('v3.salesman.customer.update', $this->customer->id), [
         'first_name' => 'Lorem',
         'last_name' => 'Update',
-        'phone' => '+1 (123) 456-7890'
+        'phone' => '+1 (123) 456-7890',
     ])
         ->assertSuccessful();
 
@@ -41,7 +41,7 @@ test('sales rep can update customer details', function(){
         ->and($customer->phone)->toBe('+1 (123) 456-7890');
 });
 
-test('sales rep can not update customer details if the user does not belong to them', function(){
+test('sales rep can not update customer details if the user does not belong to them', function () {
     actingAs($this->user);
     Http::fake([
         '*' => Http::response([]),
@@ -51,7 +51,7 @@ test('sales rep can not update customer details if the user does not belong to t
     putJson(route('v3.salesman.customer.update', $newCustomer->id), [
         'first_name' => 'Lorem',
         'last_name' => 'Update',
-        'phone' => '+1 (123) 456-7890'
+        'phone' => '+1 (123) 456-7890',
     ])
         ->assertForbidden();
 });

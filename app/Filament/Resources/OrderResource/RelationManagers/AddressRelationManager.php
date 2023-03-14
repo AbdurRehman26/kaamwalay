@@ -23,8 +23,14 @@ abstract class AddressRelationManager extends RelationManager
                 Forms\Components\TextInput::make('last_name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('phone')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Textarea::make('address')
                     ->required()
+                    ->maxLength(255)
+                    ->rows(3),
+                Forms\Components\Textarea::make('address_2')
                     ->maxLength(255)
                     ->rows(3),
                 Forms\Components\TextInput::make('city')
@@ -37,12 +43,9 @@ abstract class AddressRelationManager extends RelationManager
                 Forms\Components\TextInput::make('zip')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('flat')
                     ->maxLength(255),
-                Forms\Components\Select::make('country_id')
+                Forms\Components\Select::make('country')
                     ->relationship('country', 'name')
                     ->required(),
             ]);

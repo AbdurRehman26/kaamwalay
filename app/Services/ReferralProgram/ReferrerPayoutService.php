@@ -2,11 +2,10 @@
 
 namespace App\Services\ReferralProgram;
 
+use App\Events\API\Admin\ReferralProgram\PayoutInitiated;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
-use App\Models\User;
-use App\Services\EmailService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -65,15 +64,7 @@ class ReferrerPayoutService
 
             DB::commit();
 
-            $emailService = resolve(EmailService::class);
-            $emailService->sendEmail(
-                [[$referrerPayout->user->email => $referrerPayout->user->first_name ?? '']],
-                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED],
-                EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED,
-                [
-                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
-                ]
-            );
+            PayoutInitiated::dispatch($referrerPayout);
 
             return $referrerPayout;
         } catch (Exception $e) {

@@ -8,7 +8,6 @@ use App\Models\ReferrerEarnedCommission;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Models\User;
-use App\Services\EmailService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -20,7 +19,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerService
 {
     protected const DEFAULT_PAGE_SIZE = 10;
- 
 
     public function create(User $user): Referrer
     {
@@ -29,17 +27,6 @@ class ReferrerService
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
 
-            if ($user->referredBy) {
-                $emailService = resolve(EmailService::class);
-                $emailService->sendEmail(
-                    [[$user->referredBy->email => $user->referredBy->first_name ?? '']],
-                    EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
-                    EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
-                    [
-                        'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
-                    ]
-                );
-            }
         } catch (QueryException $e) {
             report($e);
             $referrer = $this->create($user);

@@ -25,46 +25,57 @@ import theme from '@shared/styles/theme';
 
 const images = [
     {
+        id: 0,
         url: partnerProgramAgsAd1,
         title: 'partnerProgramAgsAd1',
     },
     {
+        id: 1,
         url: partnerProgramAgsAd2,
         title: 'partnerProgramAgsAd2',
     },
     {
+        id: 2,
         url: partnerProgramAgsAd3,
         title: 'partnerProgramAgsAd3',
     },
     {
+        id: 3,
         url: partnerProgramAgsAd4,
         title: 'partnerProgramAgsAd4',
     },
     {
+        id: 4,
         url: partnerProgramAgsAd5,
         title: 'partnerProgramAgsAd5',
     },
     {
+        id: 5,
         url: partnerProgramAgsAd6,
         title: 'partnerProgramAgsAd6',
     },
     {
+        id: 6,
         url: partnerProgramAgsAd7,
         title: 'partnerProgramAgsAd7',
     },
     {
+        id: 7,
         url: partnerProgramAgsAd8,
         title: 'partnerProgramAgsAd8',
     },
     {
+        id: 8,
         url: partnerProgramAgsAd9,
         title: 'partnerProgramAgsAd9',
     },
     {
+        id: 9,
         url: partnerProgramAgsAd10,
         title: 'partnerProgramAgsAd10',
     },
     {
+        id: 10,
         url: partnerProgramAgsAd11,
         title: 'partnerProgramAgsAd11',
     },
@@ -94,13 +105,10 @@ const MarketingContentDiv = styled(Grid)({
     '.ImagesDiv': {
         display: 'flex',
         alignItems: 'center',
-        [theme.breakpoints.down('sm')]: {
-            flexWrap: 'wrap',
-        },
+        flexWrap: 'wrap',
     },
     '.MarketingContentImageDiv': {
         width: '210px',
-        margin: '4px',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '47%',
@@ -111,6 +119,7 @@ const MarketingContentDiv = styled(Grid)({
     },
     '.MarketingContentImage': {
         maxWidth: '210px',
+        padding: '4px',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '100%',
         },
@@ -243,112 +252,22 @@ export function MarketingContent({ isMain }: props) {
             </Grid>
             <Grid container>
                 <Grid className={'ImagesDiv'}>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(0)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd1}
-                                alt={'partnerProgramAgsAd1'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(1)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd2}
-                                alt={'partnerProgramAgsAd2'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(2)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd3}
-                                alt={'partnerProgramAgsAd3'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(3)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd4}
-                                alt={'partnerProgramAgsAd4'}
-                            />
-                        </ButtonBase>
-                    </div>
+                    {isMain
+                        ? images.slice(0, 8).map((data: any) => (
+                              <div className={'MarketingContentImageDiv'}>
+                                  <ButtonBase onClick={() => handleClick(data.id)}>
+                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                  </ButtonBase>
+                              </div>
+                          ))
+                        : images.map((data: any) => (
+                              <div className={'MarketingContentImageDiv'}>
+                                  <ButtonBase onClick={() => handleClick(data.id)}>
+                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                  </ButtonBase>
+                              </div>
+                          ))}
                 </Grid>
-                <Grid className={'ImagesDiv'}>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(4)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd5}
-                                alt={'partnerProgramAgsAd5'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(5)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd6}
-                                alt={'partnerProgramAgsAd6'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(6)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd7}
-                                alt={'partnerProgramAgsAd7'}
-                            />
-                        </ButtonBase>
-                    </div>
-                    <div className={'MarketingContentImageDiv'}>
-                        <ButtonBase onClick={() => handleClick(7)}>
-                            <img
-                                className={'MarketingContentImage'}
-                                src={partnerProgramAgsAd8}
-                                alt={'partnerProgramAgsAd8'}
-                            />
-                        </ButtonBase>
-                    </div>
-                </Grid>
-                {!isMain ? (
-                    <Grid className={'ImagesDiv'}>
-                        <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(8)}>
-                                <img
-                                    className={'MarketingContentImage'}
-                                    src={partnerProgramAgsAd9}
-                                    alt={'partnerProgramAgsAd9'}
-                                />
-                            </ButtonBase>
-                        </div>
-                        <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(9)}>
-                                <img
-                                    className={'MarketingContentImage'}
-                                    src={partnerProgramAgsAd10}
-                                    alt={'partnerProgramAgsAd10'}
-                                />
-                            </ButtonBase>
-                        </div>
-                        <div className={'MarketingContentImageDiv'}>
-                            <ButtonBase onClick={() => handleClick(10)}>
-                                <img
-                                    className={'MarketingContentImage'}
-                                    src={partnerProgramAgsAd11}
-                                    alt={'partnerProgramAgsAd11'}
-                                />
-                            </ButtonBase>
-                        </div>
-                    </Grid>
-                ) : null}
             </Grid>
             {isMain && isSm ? (
                 <Grid className={'SeeAllButtonDiv'}>

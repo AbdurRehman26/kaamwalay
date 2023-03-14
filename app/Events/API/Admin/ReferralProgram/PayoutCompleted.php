@@ -14,9 +14,8 @@ class PayoutCompleted
      * Create a new event instance.
      */
     public function __construct(
-       public ReferrerPayout $referrerPayout
-    )
-    {
+        public ReferrerPayout $referrerPayout
+    ) {
         //
     }
 }

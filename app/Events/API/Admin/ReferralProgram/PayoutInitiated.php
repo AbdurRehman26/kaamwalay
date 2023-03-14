@@ -15,8 +15,7 @@ class PayoutInitiated
      */
     public function __construct(
         public ReferrerPayout $referrerPayout
-    )
-    {
+    ) {
         //
     }
 }

@@ -213,10 +213,10 @@ export function MarketingContent({ isMain }: props) {
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    function handleClick(value: number) {
+    const handleClick = useCallback((value: number) => {
         setOpen(true);
         setIndex(value);
-    }
+    }, []);
 
     return (
         <MarketingContentDiv>

@@ -26,7 +26,6 @@ class ReferrerService
             $code = ReferralCodeGeneratorService::generate();
 
             $referrer = Referrer::create(['user_id' => $user->id, 'referral_code' => $code]);
-
         } catch (QueryException $e) {
             report($e);
             $referrer = $this->create($user);

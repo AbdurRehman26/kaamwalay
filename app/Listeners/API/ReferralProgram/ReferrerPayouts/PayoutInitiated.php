@@ -6,7 +6,7 @@ use App\Events\API\Admin\ReferralProgram\PayoutInitiated as ReferralProgramPayou
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PayoutInitiated  implements ShouldQueue
+class PayoutInitiated implements ShouldQueue
 {
     /**
      * Create the event listener.

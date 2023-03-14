@@ -111,7 +111,7 @@ class ReferrerPayoutService
         ])->handshake($payout);
 
         if ($response['transaction_status'] === 'SUCCESS') {
-            PayoutInitiated::dispatch($payout);   
+            PayoutInitiated::dispatch($payout);
         }
 
         Log::info('PAYOUT_HANDSHAKE', $response);

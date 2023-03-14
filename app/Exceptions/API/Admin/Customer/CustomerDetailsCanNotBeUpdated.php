@@ -13,7 +13,7 @@ class CustomerDetailsCanNotBeUpdated extends Exception
     protected $message = 'Customer details can not be updated due to an error occurred with AGS client.';
 
     /** @var int */
-    protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+    protected $code = Response::HTTP_INTERNAL_SERVER_ERROR;
 
     /**
      * @param Request|array $request

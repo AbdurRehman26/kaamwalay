@@ -20,12 +20,7 @@ class CustomerController extends Controller
     }
     public function update(UpdateCustomerDetailsRequest $request, User $user): CustomerResource
     {
-        /** @var User $authUser */
-        $authUser = auth()->user();
-
-        throw_if(! $authUser->ags_access_token, AgsAuthenticationException::class);
-
-        $response = $this->agsService->updateCustomerData($authUser->ags_access_token, $user->username, $request->validated());
+        $response = $this->agsService->updateCustomerData($user->username, $request->validated());
 
         if (! empty($response['code'])) {
             throw_if($response['code'] === Response::HTTP_INTERNAL_SERVER_ERROR, CustomerDetailsCanNotBeUpdated::class);

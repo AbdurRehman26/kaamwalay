@@ -277,7 +277,7 @@ class AGSClient
 
     public function updateCustomerData(string $username, array $data): array
     {
-        $route = '/users/' . $username;
+        $route = '/users/' . $username .'/';
         $response = Http::withToken($this->getAuthToken())
             ->patch(url: $this->getBaseUrl() . $route, data: $data);
 

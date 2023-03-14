@@ -17,7 +17,7 @@ import { addCardToOrder, addOrderStatusHistory, editCardOfOrder } from '@shared/
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
 import { useAppDispatch } from '@admin/redux/hooks';
 import ConfirmedCards from './ConfirmedCards';
-import MissingCards from './MissingCards';
+import MissingCards from './InvalidCards';
 import UnconfirmedCards from './UnconfirmedCards';
 
 const useStyles = makeStyles(

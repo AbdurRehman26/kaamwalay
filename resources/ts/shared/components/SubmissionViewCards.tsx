@@ -14,6 +14,7 @@ import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
@@ -334,8 +335,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                 </div>
                                             )}
                                         </GradeRoot>
-                                    ) : item.status.orderItemStatus.name === 'Not Accepted' ||
-                                      item.status.orderItemStatus.name === 'Missing' ? (
+                                    ) : item.status.orderItemStatus.id === OrderItemStatusEnum.NOT_ACCEPTED ||
+                                      item.status.orderItemStatus.id === OrderItemStatusEnum.MISSING ? (
                                         <>
                                             {item.status.orderItemStatus.name}
                                             <br />

@@ -13,6 +13,7 @@ import {
     AccordionCardItemHeader,
 } from '@shared/components/AccordionCardItem';
 import OutlinedCard from '@shared/components/OutlinedCard';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade/SubmissionGradeCardUpload';
@@ -45,7 +46,7 @@ export function SubmissionsGradeCard({
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
-    const cardStatus = orderItemGradeData.cardStatus;
+    const cardStatusID = gradeData.orderItem.status.orderItemStatus.id;
 
     return (
         <AccordionCardItem variant={'outlined'}>
@@ -62,17 +63,19 @@ export function SubmissionsGradeCard({
                         className={cx(
                             classes.statusButton,
                             classes.disabledButton,
-                            cardStatus === 'Not Accepted' || cardStatus === 'Missing'
+                            cardStatusID === OrderItemStatusEnum.NOT_ACCEPTED ||
+                                cardStatusID === OrderItemStatusEnum.MISSING
                                 ? classes.notAcceptedOrMissingButton
                                 : classes.gradedButton,
                         )}
                     >
-                        {cardStatus === 'Not Accepted' || cardStatus === 'Missing' ? (
+                        {cardStatusID === OrderItemStatusEnum.NOT_ACCEPTED ||
+                        cardStatusID === OrderItemStatusEnum.MISSING ? (
                             <PriorityHighTwoToneIcon />
                         ) : (
                             <CheckTwoToneIcon />
                         )}
-                        {cardStatus}
+                        {gradeData.orderItem.status.orderItemStatus.name}
                     </Button>
                 }
             >

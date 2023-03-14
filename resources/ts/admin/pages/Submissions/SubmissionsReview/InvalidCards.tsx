@@ -6,13 +6,13 @@ import { useAppDispatch } from '../../../redux/hooks';
 import CardItem from './CardItem';
 import CardsList from './CardsList';
 
-interface MissingCardsProps {
+interface InvalidCardsProps {
     items: OrderItemEntity[];
     orderId: number;
     title: string;
 }
 
-export function MissingCards({ items, orderId, title }: MissingCardsProps) {
+export function InvalidCards({ items, orderId, title }: InvalidCardsProps) {
     const count = (items || []).length;
     const hasNoCards = count === 0;
     const dispatch = useAppDispatch();
@@ -61,4 +61,4 @@ export function MissingCards({ items, orderId, title }: MissingCardsProps) {
     );
 }
 
-export default MissingCards;
+export default InvalidCards;

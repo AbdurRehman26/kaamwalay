@@ -112,7 +112,12 @@ class InvoiceService
         if (property_exists($paymentResponse, 'card')) {
             $card = $paymentResponse->card;
         } else {
-            $card = $paymentResponse->latest_charge->payment_method_details->card;
+            if (! empty($paymentResponse->latest_charge) && is_object($paymentResponse->latest_charge)) {
+                $card = $paymentResponse->latest_charge->payment_method_details->card;
+            } else {
+                // Support old Stripe response
+                $card = $paymentResponse->charges->data[0]->payment_method_details->card;
+            }
         }
 
         return json_decode(json_encode([

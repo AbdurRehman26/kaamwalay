@@ -27,10 +27,6 @@ class SerialNumberService
      * with max. amount of 3 letter.
      *
      * @param CanBeSerialNumbered|string $subject
-     * @param ?int $value
-     * @param int $len
-     * @param string $pad
-     * @return SerialNumber
      */
     public static function for(CanBeSerialNumbered | string $subject, ?int $value = null, int $len = 8, string $pad = '0'): SerialNumber
     {

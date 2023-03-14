@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\Wallet\CustomerWalletCredited;
 use App\Models\User;
 use App\Models\Wallet;
 use Database\Seeders\RolesSeeder;
@@ -7,6 +8,10 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
+    Event::fake([
+        CustomerWalletCredited::class,
+    ]);
+
     $this->seed([RolesSeeder::class]);
 
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
@@ -26,8 +31,10 @@ test('admin can credit amount in customer\'s wallet that doesnt have balance', f
     )->assertCreated();
 
     assertDatabaseCount('wallet_transactions', 1);
-    expect($this->customer->wallet->lastTransaction->amount)->toBe($amount);
-    expect($this->customer->wallet->refresh()->balance)->toBe($amount);
+    expect($this->customer->wallet->lastTransaction->amount)->toBe($amount)
+        ->and($this->customer->wallet->refresh()->balance)->toBe($amount);
+
+    Event::assertDispatchedTimes(CustomerWalletCredited::class);
 });
 
 test('admin can credit amount in customer\'s wallet that has balance', function () {
@@ -45,6 +52,7 @@ test('admin can credit amount in customer\'s wallet that has balance', function 
     )->assertCreated();
 
     assertDatabaseCount('wallet_transactions', 1);
-    expect($newCustomer->wallet->lastTransaction->amount)->toBe($amount);
-    expect($newCustomer->wallet->refresh()->balance)->toBe($amount + $oldBalance);
+    expect($newCustomer->wallet->lastTransaction->amount)->toBe($amount)
+        ->and($newCustomer->wallet->refresh()->balance)->toBe($amount + $oldBalance);
+    Event::assertDispatchedTimes(CustomerWalletCredited::class);
 });

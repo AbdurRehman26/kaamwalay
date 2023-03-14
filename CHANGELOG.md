@@ -1,5 +1,50 @@
 # Changelog
 
+## v3.7.0 - 2023-03-03
+
+### What's Changed
+
+- Fix: Improvement in Invoice Generation by @luis-molina in https://github.com/woozard/robograding/pull/896
+- Feature | Referral Program BE | Core structure by @luis-molina in https://github.com/woozard/robograding/pull/888
+- Feature | Referral Program BE | Landing by @luis-molina in https://github.com/woozard/robograding/pull/891
+- Feature | Referral BE | Referrer should be active to sign up using referral code by @luis-molina in https://github.com/woozard/robograding/pull/899
+- Hotfix: Hubspot Fix Corrupt Deals Command by @thenabeel in https://github.com/woozard/robograding/pull/904
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/905
+- Fix | Referral Program BE | Sign up | Increase sign ups only if needed by @luis-molina in https://github.com/woozard/robograding/pull/902
+- Feature | full name added for customer on admin  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/906
+- Feature: Referral Landing Page by @aliwooter in https://github.com/woozard/robograding/pull/901
+- Feature | Referral Program | Coupon Referee  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/898
+- Hotfix: Generation of invoice for vault orders with billing address by @luis-molina in https://github.com/woozard/robograding/pull/911
+- Hotfix: Category type in admin certificate API by @thenabeel in https://github.com/woozard/robograding/pull/912
+- Feature: Referral Program | Admin | Customers | Backend by @numair97 in https://github.com/woozard/robograding/pull/897
+- Feature: Referral Program | Referrers | FE by @numair97 in https://github.com/woozard/robograding/pull/903
+- Hotfix: Using exact names in card creation by @luis-molina in https://github.com/woozard/robograding/pull/915
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/916
+- Fix: Referral Landings by @aliwooter in https://github.com/woozard/robograding/pull/913
+- Fix: Referral Program | Styling Issues by @numair97 in https://github.com/woozard/robograding/pull/914
+- Feature: Admin Referral Customers FE by @aliwooter in https://github.com/woozard/robograding/pull/907
+- Feature: Referral Admin Submissions by @aliwooter in https://github.com/woozard/robograding/pull/900
+- Fix: Filter with Sort by @aliwooter in https://github.com/woozard/robograding/pull/917
+- Fix: Customer Table by @aliwooter in https://github.com/woozard/robograding/pull/919
+- Fix: Referral Program | UI Fixes by @numair97 in https://github.com/woozard/robograding/pull/921
+- Feature : Customer Payouts BE  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/918
+- Feature: Referral Program | Customer Payouts | FE by @numair97 in https://github.com/woozard/robograding/pull/920
+- Fix: Referral Program | Removed Payout Button From Header by @numair97 in https://github.com/woozard/robograding/pull/924
+- Feature: Referral Program | Admin side tables and stats by @luis-molina in https://github.com/woozard/robograding/pull/910
+- Fix: Admin | Referral Program BE | Referrers table options  by @luis-molina in https://github.com/woozard/robograding/pull/927
+- Bugfix : Multiple API Issues by @AbdurRehman26 in https://github.com/woozard/robograding/pull/926
+- Feature: Referral Payouts | Admin BE by @luis-molina in https://github.com/woozard/robograding/pull/922
+- Feature: Referral Program | Payouts Stats by @luis-molina in https://github.com/woozard/robograding/pull/923
+- Fix: Admin | Referral Program | Credit customer enabled for referral orders page by @luis-molina in https://github.com/woozard/robograding/pull/928
+- Feature: Referral Payout Admin by @aliwooter in https://github.com/woozard/robograding/pull/925
+- Fix | Referral Program Popup issue by @AbdurRehman26 in https://github.com/woozard/robograding/pull/929
+- Fix: Referral Landing | Referral Name Display by @luis-molina in https://github.com/woozard/robograding/pull/931
+- Feature: Referee Coupon Code Email by @aliwooter in https://github.com/woozard/robograding/pull/930
+- Small Fixes by @aliwooter in https://github.com/woozard/robograding/pull/935
+- Release v3.7.0 by @thenabeel in https://github.com/woozard/robograding/pull/934
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.6.0...v3.7.0
+
 ## v3.6.0 - 2023-02-02
 
 ### What's Changed

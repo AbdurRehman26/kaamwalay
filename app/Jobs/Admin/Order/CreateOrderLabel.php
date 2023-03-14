@@ -29,8 +29,6 @@ class CreateOrderLabel implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  OrderLabelService  $orderLabelService
-     * @return void
      * @throws OrderLabelCouldNotBeGeneratedException
      */
     public function handle(OrderLabelService $orderLabelService): void

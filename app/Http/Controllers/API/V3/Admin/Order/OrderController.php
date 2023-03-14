@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API\V3\Admin\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\Order\StoreOrderRequest;
+use App\Http\Requests\API\V3\Admin\Order\UpdateShippingAddressRequest;
 use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V3\Admin\OrderListCollection;
 use App\Http\Resources\API\V3\Admin\OrderResource;
+use App\Models\Order;
 use App\Services\Admin\V3\CreateOrderService;
 use App\Services\Admin\V3\OrderService;
 use Exception;
@@ -49,5 +51,15 @@ class OrderController extends Controller
         }
 
         return new OrderCreateResource($order);
+    }
+
+    public function updateShippingAddress(Order $order, UpdateShippingAddressRequest $request): JsonResponse
+    {
+        $this->orderService->updateShippingAddress($order, $request->validated());
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Shipping Address Updated successfully.',
+        ]);
     }
 }

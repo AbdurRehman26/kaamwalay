@@ -17,7 +17,7 @@ class VaultShipmentStatusHistoryFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'vault_shipment_status_id' => VaultShipmentStatus::factory(),

@@ -80,7 +80,6 @@ class CardLabelService
     }
 
     /**
-     * @param  Order  $order
      * @return Collection<int, UserCard>
      */
     public function getOrderLabels(Order $order): Collection

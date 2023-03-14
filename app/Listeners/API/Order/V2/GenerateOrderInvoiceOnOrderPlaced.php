@@ -8,6 +8,7 @@ use App\Services\Payment\V2\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Log;
+use Throwable;
 
 class GenerateOrderInvoiceOnOrderPlaced implements ShouldQueue
 {
@@ -28,12 +29,7 @@ class GenerateOrderInvoiceOnOrderPlaced implements ShouldQueue
         $this->invoiceService->saveInvoicePDF($event->order);
     }
 
-    /**
-     * @param  OrderPlaced  $event
-     * @param \Throwable $exception
-     * @return void
-     */
-    public function failed(OrderPlaced $event, $exception): void
+    public function failed(OrderPlaced $event, Throwable $exception): void
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

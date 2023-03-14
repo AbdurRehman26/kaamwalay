@@ -4,7 +4,7 @@ namespace App\Listeners\API\Admin\Order;
 
 use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Admin\Order\RefundSuccessful;
-use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\EmailService;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
@@ -25,9 +25,6 @@ class RefundSuccessfulListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  RefundSuccessful  $event
-     * @return void
      */
     public function handle(RefundSuccessful $event): void
     {

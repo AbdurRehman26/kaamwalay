@@ -5,6 +5,7 @@ namespace App\Http\Resources\API\V2\Customer\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\OrderPayment;
+use Illuminate\Http\Request;
 
 /**
  * @mixin OrderPayment
@@ -13,11 +14,8 @@ class OrderPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         if (! ($this->response ?? false)) {
             return [];
@@ -54,7 +52,7 @@ class OrderPaymentResource extends BaseResource
                 $card = $providerResponse->card;
             } else {
                 //TODO ENABLE COLLECTOR COIN HERE
-                $card = $providerResponse->charges->data[0]->payment_method_details->card;
+                $card = $providerResponse->latest_charge->payment_method_details->card;
             }
         }
 

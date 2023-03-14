@@ -3,16 +3,14 @@
 namespace App\Http\Resources\API\V1\Files;
 
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 class PresignUploadResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'size' => $this->getSize(),

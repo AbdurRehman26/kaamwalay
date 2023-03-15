@@ -6,9 +6,18 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
+    async (DTO: {
+        id: number | string;
+        fromAgs: boolean | undefined;
+        page?: number;
+        perPage?: number;
+        itemId?: string | null;
+    }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`, { version: 'v3' });
+        const endpoint = apiService.createEndpoint(
+            `admin/orders/${DTO.id}/grades?per_page=${DTO.perPage}&page=${DTO.page}`,
+            { version: 'v3' },
+        );
         const cardsResponse = await endpoint.get('', {
             data: { fromAgs: DTO.fromAgs ?? true },
         });

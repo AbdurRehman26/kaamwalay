@@ -103,10 +103,10 @@ export function SubmissionsGradeCards() {
                         value: declaredValue,
                     }),
                 );
-                await loadGrades(false);
+                await loadGrades(perPage, page, false);
             }
         },
-        [dispatch, loadGrades, id],
+        [dispatch, id, loadGrades, perPage, page],
     );
 
     const handlePageChange = useCallback((event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {

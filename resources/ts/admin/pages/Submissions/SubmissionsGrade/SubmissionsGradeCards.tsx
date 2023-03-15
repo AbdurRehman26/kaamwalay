@@ -24,6 +24,14 @@ const useStyles = makeStyles(
             padding: theme.spacing(2, 0, 3),
             marginBottom: theme.spacing(7),
         },
+        itemsPerPageLabel: {
+            fontFamily: 'Roboto',
+            fontWeight: 400,
+            fontSize: '14px',
+            lineHeight: '16px',
+            letterSpacing: '0.2088px',
+            color: 'rgba(0, 0, 0, 0.541176)',
+        },
     }),
     { name: 'SubmissionsGradeCards' },
 );
@@ -158,6 +166,9 @@ export function SubmissionsGradeCards() {
                             rowsPerPageOptions={[24, 48, 72, 96, 120]}
                             onPageChange={handlePageChange}
                             onRowsPerPageChange={handleRowsPerPageChange}
+                            labelRowsPerPage={
+                                <Typography className={classes.itemsPerPageLabel}>Items Per Page:</Typography>
+                            }
                         />
                     </Grid>
                 </>

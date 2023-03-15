@@ -10,9 +10,9 @@ export const getAllSubmissions = createAsyncThunk(
     async (DTO: {
         id: number | string;
         fromAgs: boolean | undefined;
-        page: number;
-        perPage: number;
-        itemId: string | null;
+        page?: number;
+        perPage?: number;
+        itemId?: string | null;
     }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(

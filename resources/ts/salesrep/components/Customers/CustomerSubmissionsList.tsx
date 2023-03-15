@@ -45,7 +45,7 @@ export function CustomerSubmissionsList({
                 {orders?.length > 0 ? (
                     orders.map((order) => (
                         <SubmissionsTableRow
-                            headings={headings?.map((i) => i.id)}
+                            headings={headings.map((i) => i.id)}
                             order={order}
                             key={order.id}
                             onEditCustomer={onEditCustomer}

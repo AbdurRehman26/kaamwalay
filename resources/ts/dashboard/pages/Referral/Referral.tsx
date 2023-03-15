@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { ListHeader } from '@dashboard/components/ListHeader';
 import CommissionStructure from './TabsContent/CommissionStructure';
 import Main from './TabsContent/Main/Main';
+import MarketingContent from './TabsContent/MarketingContent';
 import Referrals from './TabsContent/Referrals/Referrals';
 import Withdrawals from './TabsContent/Withdrawals/Withdrawals';
 
@@ -83,13 +84,13 @@ export function Referral() {
                                 label="Commission Structure"
                                 sx={styles.TabsLink}
                             />
-                            {/* <Tab
+                            <Tab
                                 component={Link}
                                 to={'/referral-program/marketing-content'}
                                 value={'marketing-content'}
                                 label="Marketing Content"
                                 sx={styles.TabsLink}
-                            /> */}
+                            />
                         </TabList>
                     </Box>
                     <TabPanel value={'main'} sx={styles.TabsPanel}>
@@ -103,6 +104,9 @@ export function Referral() {
                     </TabPanel>
                     <TabPanel value={'commission-structure'} sx={styles.TabsPanel}>
                         <CommissionStructure />
+                    </TabPanel>
+                    <TabPanel value={'marketing-content'} sx={styles.TabsPanel}>
+                        <MarketingContent />
                     </TabPanel>
                 </Grid>
             </TabContext>

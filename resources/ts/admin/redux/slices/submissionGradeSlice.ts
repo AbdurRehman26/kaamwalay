@@ -28,7 +28,7 @@ export const getAllSubmissions = createAsyncThunk(
             },
             ...bracketParams(),
         });
-        return cardsResponse;
+        return cardsResponse.data;
     },
 );
 
@@ -241,8 +241,8 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
-            const data = action.payload.data.data;
-            const pagination = { links: action.payload.data.links, meta: action.payload.data.meta };
+            const data = action.payload.data;
+            const pagination = { links: action.payload.links, meta: action.payload.meta };
 
             // This API uses a background sync, but as this data is responsible for the whole page items,
             // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we

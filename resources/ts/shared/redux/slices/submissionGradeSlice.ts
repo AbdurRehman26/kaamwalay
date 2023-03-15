@@ -12,7 +12,7 @@ export const getAllSubmissions = createAsyncThunk(
         const cardsResponse = await endpoint.get('', {
             data: { fromAgs: DTO.fromAgs ?? true },
         });
-        return cardsResponse;
+        return cardsResponse.data;
     },
 );
 
@@ -225,8 +225,8 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
-            const data = action.payload.data.data;
-            const pagination = { links: action.payload.data.links, meta: action.payload.data.meta };
+            const data = action.payload.data;
+            const pagination = { links: action.payload.links, meta: action.payload.meta };
 
             state.allSubmissions = data;
             state.gradesPagination = pagination;

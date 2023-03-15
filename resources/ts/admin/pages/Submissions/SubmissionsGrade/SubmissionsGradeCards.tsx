@@ -24,6 +24,10 @@ const useStyles = makeStyles(
             padding: theme.spacing(2, 0, 3),
             marginBottom: theme.spacing(7),
         },
+        tablePagination: {
+            marginTop: '28px',
+            borderTop: '1px solid #E0E0E0',
+        },
         itemsPerPageLabel: {
             fontFamily: 'Roboto',
             fontWeight: 400,
@@ -160,6 +164,7 @@ export function SubmissionsGradeCards() {
                             </div>
                         ))}
                         <TablePagination
+                            className={classes.tablePagination}
                             count={gradesPagination.meta.total}
                             page={gradesPagination.meta.currentPage - 1}
                             rowsPerPage={gradesPagination.meta.perPage}

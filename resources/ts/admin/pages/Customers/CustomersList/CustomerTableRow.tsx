@@ -10,7 +10,7 @@ import Select from '@mui/material/Select';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import React, { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { TruncateTextWithToolTip } from '@shared/components/ToolTip/TruncateTextWithToolTip';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';

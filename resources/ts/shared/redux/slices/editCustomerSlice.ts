@@ -19,10 +19,6 @@ export const editCustomerSlice = createSlice({
             // @ts-ignore
             state.customer = action.payload;
         },
-        emptyCustomerAddress: (state, action: PayloadAction<{}>) => {
-            // @ts-ignore
-            state.customerAddress = action.payload;
-        },
     },
 });
 

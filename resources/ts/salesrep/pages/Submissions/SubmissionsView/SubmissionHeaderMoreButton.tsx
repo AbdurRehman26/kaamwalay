@@ -68,8 +68,8 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
                     setCreditDialog(true);
                     break;
                 case Options.EditCustomerDetails:
-                    setEditCustomerDialog(true);
                     if (customer) {
+                        setEditCustomerDialog(true);
                         dispatch(setCustomer(customer));
                     }
                     break;
@@ -85,7 +85,9 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
-                <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                {customer ? (
+                    <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                ) : null}
             </Menu>
             {customer ? (
                 <>

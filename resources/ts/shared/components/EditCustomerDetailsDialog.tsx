@@ -37,16 +37,20 @@ export interface EditCustomerDetailsDialogProps extends Omit<DialogProps, 'onSub
 }
 const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
     '&': {
-        padding: '0px 14px !important',
+        padding: '0 !important',
         width: '100%',
         border: '1px solid lightgray',
         fontWeight: 400,
         fontSize: '1rem',
         borderRadius: 4,
     },
+    '.MuiInputAdornment-root': {
+        padding: '14px 12px',
+        marginRight: 0,
+    },
     '.MuiInput-input': {
         borderLeft: '1px solid lightgray',
-        padding: '7px 5px !important',
+        padding: '12px !important',
     },
     '.MuiInput-root:before': {
         border: '0 !important',

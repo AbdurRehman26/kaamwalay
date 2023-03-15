@@ -174,8 +174,8 @@ export default function SubmissionHeaderMoreButton({
                     await setGenerateLabelDialog();
                     break;
                 case Options.EditCustomerDetails:
-                    setEditCustomerDialog(true);
                     if (customer) {
+                        setEditCustomerDialog(true);
                         dispatch(setCustomer(customer));
                     }
                     break;
@@ -211,7 +211,9 @@ export default function SubmissionHeaderMoreButton({
                 {orderStatus.isAny([OrderStatusEnum.GRADED, OrderStatusEnum.ASSEMBLED, OrderStatusEnum.SHIPPED]) ? (
                     <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                 ) : null}
-                <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                {customer ? (
+                    <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                ) : null}
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}

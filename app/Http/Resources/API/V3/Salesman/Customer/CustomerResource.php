@@ -7,7 +7,6 @@ use App\Models\User;
 
 /**
  * @mixin User
- * @property mixed $referrer
  */
 class CustomerResource extends V2CustomerResource
 {

@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { CustomerCreditDialog } from '@salesrep/components/CustomerCreditDialog';
 import { useAppDispatch } from '@salesrep/redux/hooks';
-import React, { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';

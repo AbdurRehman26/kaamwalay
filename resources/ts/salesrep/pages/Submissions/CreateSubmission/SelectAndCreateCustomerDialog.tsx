@@ -70,10 +70,10 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
         (e) => {
             setSearch(e.target.value);
             debouncedFunc(() => {
-                customers.search({ search });
+                customers.search({ search: e.target.value });
             });
         },
-        [setSearch, search, customers],
+        [setSearch, customers],
     );
 
     const handleClose = useCallback(

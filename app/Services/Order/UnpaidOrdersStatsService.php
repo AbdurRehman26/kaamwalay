@@ -48,7 +48,6 @@ class UnpaidOrdersStatsService
     }
 
     /**
-     * @param  string  $currentDate
      * @return Builder<Order>
     */
     protected function dailyUnpaidOrders(string $currentDate): Builder
@@ -57,7 +56,6 @@ class UnpaidOrdersStatsService
     }
 
     /**
-     * @param  string  $currentDate
      * @return Builder<Order>
     */
     protected function monthlyUnpaidOrders(string $currentDate): Builder

@@ -10,10 +10,8 @@ class CouponApplicableFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'code' => Arr::random(['service_level', 'shipping_fee']),

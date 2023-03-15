@@ -1,6 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Class App\\\\Casts\\\\CouponDateRange implements generic interface Illuminate\\\\Contracts\\\\Database\\\\Eloquent\\\\CastsAttributes but does not specify its types\\: TGet, TSet$#"
+			count: 1
+			path: app/Casts/CouponDateRange.php
+
+		-
+			message: "#^Class App\\\\Casts\\\\CouponType implements generic interface Illuminate\\\\Contracts\\\\Database\\\\Eloquent\\\\CastsAttributes but does not specify its types\\: TGet, TSet$#"
+			count: 1
+			path: app/Casts/CouponType.php
+
+		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
@@ -176,6 +186,11 @@ parameters:
 			path: app/Exports/UsersExport.php
 
 		-
+			message: "#^Parameter \\#2 \\$publishRequest of method Pusher\\\\PushNotifications\\\\PushNotifications\\:\\:publishToInterests\\(\\) expects array\\<string\\>, array\\<string, array\\<string, array\\<string, mixed\\>\\>\\> given\\.$#"
+			count: 1
+			path: app/Filament/Pages/PushNotification.php
+
+		-
 			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:createCertificates\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/APIClients/AGSClient.php
@@ -186,29 +201,19 @@ parameters:
 			path: app/Http/APIClients/AGSClient.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\AdminController\\:\\:getView\\(\\) has no return type specified\\.$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardProductSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
-			path: app/Http/Controllers/AdminController.php
+			path: app/Http/Filters/AdminCardProductSearchFilter.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\AuthController\\:\\:getView\\(\\) has no return type specified\\.$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
-			path: app/Http/Controllers/AuthController.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\DashboardController\\:\\:getView\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Http/Controllers/DashboardController.php
+			path: app/Http/Filters/AdminCardRaritySearchFilter.php
 
 		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCouponSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminCouponSearchFilter.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardProductSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminCardProductSearchFilter.php
 
 		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCustomerPromotionalSubscribersFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
@@ -221,49 +226,14 @@ parameters:
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
 
 		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminUserReferredBy implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminUserReferredBy.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminOrderSearchFilter.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerStatusFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminReferrerStatusFilter.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminSalesmanSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminSalesmanSearchFilter.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\UserCardSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/UserCardSearchFilter.php
-
-		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\VaultShipmentSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/VaultShipmentSearchFilter.php
-
-		-
-			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\VaultShipment\\>\\) of method App\\\\Http\\\\Filters\\\\VaultShipmentSearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
-			count: 1
-			path: app/Http/Filters/VaultShipmentSearchFilter.php
-
-		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderReferByFilter.php
 
 		-
-			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\) of method App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
-			path: app/Http/Filters/AdminOrderReferByFilter.php
+			path: app/Http/Filters/AdminOrderSearchFilter.php
 
 		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerPayoutSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
@@ -276,19 +246,69 @@ parameters:
 			path: app/Http/Filters/AdminReferrerPayoutStatusFilter.php
 
 		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminReferrerStatusFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
-			path: app/Http/Filters/AdminCardRaritySearchFilter.php
+			path: app/Http/Filters/AdminReferrerStatusFilter.php
 
 		-
-			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\CardRarity\\>\\) of method App\\\\Http\\\\Filters\\\\AdminCardRaritySearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminSalesmanSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
-			path: app/Http/Filters/AdminCardRaritySearchFilter.php
+			path: app/Http/Filters/AdminSalesmanSearchFilter.php
 
 		-
-			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\User\\>\\) of method App\\\\Http\\\\Filters\\\\AdminUserReferredBy\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:__invoke\\(\\)$#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminUserReferredBy implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminUserReferredBy.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\UserCardSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/UserCardSearchFilter.php
+
+		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\VaultShipmentSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/VaultShipmentSearchFilter.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$middleware is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$middleware\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$middlewareAliases is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$middlewareAliases\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Kernel\\:\\:\\$middlewareGroups is not covariant with PHPDoc type array\\<string, array\\<int, string\\>\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Kernel\\:\\:\\$middlewareGroups\\.$#"
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\EncryptCookies\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Cookie\\\\Middleware\\\\EncryptCookies\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/EncryptCookies.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/PreventRequestsDuringMaintenance.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\TrimStrings\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TrimStrings\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/TrimStrings.php
+
+		-
+			message: "#^PHPDoc type array\\|string\\|null of property App\\\\Http\\\\Middleware\\\\TrustProxies\\:\\:\\$proxies is not covariant with PHPDoc type array\\<int, string\\>\\|string\\|null of overridden property Illuminate\\\\Http\\\\Middleware\\\\TrustProxies\\:\\:\\$proxies\\.$#"
+			count: 1
+			path: app/Http/Middleware/TrustProxies.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Http\\\\Middleware\\\\VerifyCsrfToken\\:\\:\\$except is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\VerifyCsrfToken\\:\\:\\$except\\.$#"
+			count: 1
+			path: app/Http/Middleware/VerifyCsrfToken.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"
@@ -321,7 +341,12 @@ parameters:
 			path: app/Http/Resources/API/Services/AGS/CardGradeResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, App\\\\Models\\\\CardCategory\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/CardCategory/CardCategoryCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableCollection.php
 
@@ -351,12 +376,12 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponCollection.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponLogCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponLogCollection.php
 
@@ -451,7 +476,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatusResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerCollection.php
 
@@ -471,7 +496,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\PaymentPlanCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanCollection.php
 
@@ -616,21 +641,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
@@ -646,39 +656,14 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_item_status_id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
-
-		-
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$id\\.$#"
@@ -721,21 +706,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
@@ -749,21 +719,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$created_at\\.$#"
@@ -821,7 +776,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentCollection.php
 
@@ -1051,7 +1006,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/CardSeries/CardSeriesCollection.php
 
@@ -1071,7 +1026,7 @@ parameters:
 			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/CardSet/CardSetCollection.php
 
@@ -1166,7 +1121,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\CardCategory\\\\CardCategoryCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/CardCategory/CardCategoryCollection.php
 
@@ -1421,7 +1376,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentCollection.php
 
@@ -1571,11 +1526,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodCollection.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$code\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodResource.php
@@ -1619,11 +1569,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$turnaround\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/ShippingMethod/ShippingMethodCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodResource\\:\\:\\$code\\.$#"
@@ -1706,12 +1651,12 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardCollection.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListCollection.php
 
@@ -1801,6 +1746,171 @@ parameters:
 			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
 
 		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Coupon/CouponApplicableCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Coupon/CouponLogCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Coupon/Couponable/CustomerCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Coupon/Couponable/PaymentPlanCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderPaymentCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/PaymentMethod/PaymentMethodCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/ShippingMethod/ShippingMethodCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\<int, App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Salesman\\\\SalesmanCommissionPaymentResource\\>\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Salesman\\\\SalesmanCommissionPaymentResource\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Salesman/SalesmanCommissionPaymentCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, App\\\\Models\\\\VaultShipment\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/VaultShipment/VaultShipmentCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, App\\\\Models\\\\VaultShipment\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/VaultShipment/VaultShipmentItemCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/ShippingMethod/ShippingMethodCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Coupon/CouponApplicableCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Coupon/CouponLogCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Coupon/Couponable/CustomerCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Coupon/Couponable/PaymentPlanCollection.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_item_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/OrderPaymentCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/PaymentMethod/PaymentMethodCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<string, mixed\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/Order/ShippingMethod/ShippingMethodCollection.php
+
+		-
+			message: "#^PHPDoc tag @return with type array\\<int, App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\SalesmanCommissionPaymentResource\\>\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\<int, App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Salesman\\\\SalesmanCommissionPaymentResource\\>\\|JsonSerializable is not subtype of native type array\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Salesman/SalesmanCommissionPaymentCollection.php
+
+		-
 			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Imports/CardProductAttributesUpdate.php
@@ -1826,24 +1936,9 @@ parameters:
 			path: app/Jobs/ProcessImage.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/Order/RefundSuccessfulListener.php
-
-		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\Order\\\\UpdateAutoSaveAttribute\\:\\:handle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/UpdateAutoSaveAttribute.php
 
 		-
 			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
@@ -1894,11 +1989,6 @@ parameters:
 			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/SendOrderPaidNotificationToSlack.php
-
-		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:handle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Services/UpdateRevenueStats.php
 
 		-
 			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:\\$tries has no type specified\\.$#"
@@ -2149,6 +2239,46 @@ parameters:
 			message: "#^PHPDoc type array of property App\\\\Models\\\\Invoice\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/Invoice.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$arrived_at\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$grand_total\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$orderItems\\.$#"
+			count: 2
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$orderStatus\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$payment_status\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Models/Order.php
 
 		-
 			message: "#^Method App\\\\Models\\\\Order\\:\\:billingAddress\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
@@ -2591,6 +2721,46 @@ parameters:
 			path: app/Models/State.php
 
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$customer_number\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$order_items_sum_quantity\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$paid_orders_count\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$wallet\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
 			message: "#^Method App\\\\Models\\\\User\\:\\:customerAddresses\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
 			count: 1
 			path: app/Models/User.php
@@ -2776,11 +2946,6 @@ parameters:
 			path: app/Notifications/OrdersExported.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Notifications/OrdersExported.php
-
-		-
 			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has parameter \\$notifiable with no type specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php
@@ -2801,39 +2966,9 @@ parameters:
 			path: app/Policies/OrderItemPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:create\\(\\) has no return type specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Providers\\\\EventServiceProvider\\:\\:\\$listen is not covariant with PHPDoc type array\\<string, array\\<int, string\\>\\> of overridden property Illuminate\\\\Foundation\\\\Support\\\\Providers\\\\EventServiceProvider\\:\\:\\$listen\\.$#"
 			count: 1
-			path: app/Policies/OrderPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:review\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/OrderPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/OrderPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:view\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/OrderPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:viewAny\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/OrderPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:view\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/UserCardPolicy.php
-
-		-
-			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:viewAny\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Policies/UserCardPolicy.php
+			path: app/Providers/EventServiceProvider.php
 
 		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
@@ -2886,6 +3021,11 @@ parameters:
 			path: app/Services/Admin/Coupon/CouponService.php
 
 		-
+			message: "#^Strict comparison using \\=\\=\\= between mixed and 'fixed'\\|'flat'\\|'free_cards'\\|'percentage'\\|false will always evaluate to false\\.$#"
+			count: 2
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponStatusService\\:\\:changeStatus\\(\\) has parameter \\$newCouponStatus with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Services/Admin/Coupon/CouponStatusService.php
@@ -2896,14 +3036,14 @@ parameters:
 			path: app/Services/Admin/Order/OrderItemService.php
 
 		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
-			count: 1
-			path: app/Services/Admin/V1/OrderService.php
+			message: "#^Parameter \\#1 \\$column of method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\:\\:having\\(\\) expects Closure\\|string, Illuminate\\\\Contracts\\\\Database\\\\Query\\\\Expression given\\.$#"
+			count: 3
+			path: app/Services/Admin/Report/MarketingReport/MarketingReport.php
 
 		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
-			path: app/Services/Salesman/V2/Order/OrderService.php
+			path: app/Services/Admin/V1/OrderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
@@ -3006,9 +3146,19 @@ parameters:
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
+			message: "#^Access to an undefined property Stripe\\\\PaymentIntent\\:\\:\\$charges\\.$#"
+			count: 1
+			path: app/Services/Payment/V1/Providers/StripeService.php
+
+		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
 			path: app/Services/Payment/V1/Providers/StripeService.php
+
+		-
+			message: "#^Access to an undefined property Stripe\\\\PaymentIntent\\:\\:\\$charges\\.$#"
+			count: 1
+			path: app/Services/Payment/V2/Providers/StripeService.php
 
 		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
@@ -3056,7 +3206,22 @@ parameters:
 			path: app/Services/PopReport/PopReportService.php
 
 		-
+			message: "#^Strict comparison using \\=\\=\\= between mixed and 'fixed'\\|'flat'\\|'free_cards'\\|'percentage'\\|false will always evaluate to false\\.$#"
+			count: 2
+			path: app/Services/Salesman/Coupon/CouponService.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Salesman/V2/Order/OrderService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no type specified\\.$#"
+			count: 1
+			path: app/Services/SerialNumberService/SerialNumber.php
+
+		-
+			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) should return Illuminate\\\\Database\\\\Query\\\\Expression but returns Illuminate\\\\Contracts\\\\Database\\\\Query\\\\Expression\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumber.php
 

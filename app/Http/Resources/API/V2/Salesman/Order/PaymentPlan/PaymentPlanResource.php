@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V2\Salesman\Order\PaymentPlan;
 
 use App\Http\Resources\API\V2\Salesman\Order\PaymentPlanRange\PaymentPlanRangeCollection;
 use App\Models\PaymentPlan;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin PaymentPlan */
@@ -11,11 +12,8 @@ class PaymentPlanResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $ranges = $this->paymentPlanRanges;
 

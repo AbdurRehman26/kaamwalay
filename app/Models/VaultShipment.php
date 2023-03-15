@@ -138,7 +138,6 @@ class VaultShipment extends Model
 
     /**
      * @param  Builder<VaultShipment>  $query
-     * @param  User  $user
      * @return Builder<VaultShipment>
      */
     public function scopeForUser(Builder $query, User $user): Builder

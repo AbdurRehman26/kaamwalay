@@ -77,11 +77,6 @@ class OrderLabelService
         return $labels;
     }
 
-    /**
-     * @param  Order  $order
-     * @param  array  $response
-     * @return string
-     */
     public function generateFileUploadToCloudAndSaveLabel(Order $order, array $response): string
     {
         $fileUrl = $this->generateFileAndUploadToCloud($order, $response);

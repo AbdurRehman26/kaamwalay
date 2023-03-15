@@ -15,10 +15,8 @@ class CouponFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'created_by' => User::factory()->create()->id,

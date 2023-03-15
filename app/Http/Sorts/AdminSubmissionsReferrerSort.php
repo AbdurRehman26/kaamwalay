@@ -10,9 +10,6 @@ class AdminSubmissionsReferrerSort implements Sort
 {
     /**
      * @param  Builder<Order>  $query
-     * @param  bool  $descending
-     * @param  string  $property
-     * @return void
      */
     public function __invoke(Builder $query, bool $descending, string $property): void
     {

@@ -8,6 +8,7 @@ use App\Services\Payment\V2\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Log;
+use Throwable;
 
 class GenerateOrderInvoiceOnOrderPaid implements ShouldQueue
 {
@@ -35,12 +36,7 @@ class GenerateOrderInvoiceOnOrderPaid implements ShouldQueue
     }
 
 
-    /**
-     * @param  OrderPaid  $event
-     * @param \Throwable $exception
-     * @return void
-     */
-    public function failed(OrderPaid $event, $exception): void
+    public function failed(OrderPaid $event, Throwable $exception): void
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

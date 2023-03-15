@@ -18,7 +18,7 @@ class UpdateRevenueStats implements ShouldQueue
     {
     }
 
-    public function handle(OrderPaid $event)
+    public function handle(OrderPaid $event): void
     {
         $this->revenueStatsService->updateStats(Carbon::now()->format('Y-m-d'), $event->order);
         $this->revenueStatsService->updateMonthlyStats(Carbon::now()->format('Y-m-d'), $event->order);

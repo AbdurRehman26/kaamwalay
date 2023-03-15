@@ -169,7 +169,6 @@ class OrderService
     }
 
     /**
-     * @param  array  $grades
      * @param  Collection <int, UserCard>  $cards
      */
     protected function updateLocalGrades(array $grades, Collection $cards): void

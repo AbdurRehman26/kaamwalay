@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('payment_plans', function (Blueprint $table) {
             $table->decimal('price_before_discount', 10)->nullable()->after('price')->comment('It can be used to show a pre-discount price.');
@@ -21,10 +19,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('payment_plans', function (Blueprint $table) {
             $table->dropColumn('price_before_discount');

@@ -8,10 +8,8 @@ class CommissionStructureFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'level' => rand(1, 5),

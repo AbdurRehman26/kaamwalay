@@ -137,7 +137,12 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
 
     return (
         <Box px={3} className={classes.containerBox}>
-            <NotesDialog description={notes} open={openNotesModal} onClose={() => setOpenNotesModal(false)} />
+            <NotesDialog
+                heading={'Notes'}
+                description={notes}
+                open={openNotesModal}
+                onClose={() => setOpenNotesModal(false)}
+            />
             <TableContainer className={classes.root}>
                 <Table>
                     <TableHead className={classes.header}>

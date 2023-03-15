@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import React, { useCallback } from 'react';
 
 interface NotesDialogProps extends Omit<DialogProps, ''> {
-    heading?: string;
+    heading: string;
     description: string;
     extraData?: Record<string, any>;
 
@@ -25,7 +25,7 @@ export function NotesDialog({ heading, description, extraData, onClose, ...rest 
 
     return (
         <Dialog {...rest} onClose={onClose} maxWidth={'lg'}>
-            <DialogTitle>{heading ? heading : 'Notes'}</DialogTitle>
+            <DialogTitle>{heading}</DialogTitle>
             <Divider />
             <DialogContent sx={{ color: '#000', padding: '30px 0px 76px 30px', width: '600px' }}>
                 {description && <p>{description}</p>}

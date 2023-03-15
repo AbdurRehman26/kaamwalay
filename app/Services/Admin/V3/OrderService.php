@@ -35,7 +35,7 @@ class OrderService extends V2OrderService
     }
 
     /**
-     * @return LengthAwarePaginator
+     * @return LengthAwarePaginator<UserCard>
      * @throws IncorrectOrderStatus
      */
     public function getPaginatedCardsForGrading(Order $order): LengthAwarePaginator
@@ -47,6 +47,7 @@ class OrderService extends V2OrderService
         $query = UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->where('order_items.order_id', $order->id)->select('user_cards.*');
 
+        // @phpstan-ignore-next-line
         return QueryBuilder::for($query)
             ->allowedFilters(UserCard::allowedFilters())
             ->paginate(request('per_page', 24));

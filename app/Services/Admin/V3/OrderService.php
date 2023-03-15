@@ -9,9 +9,8 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\UserCard;
 use App\Services\Admin\V2\OrderService as V2OrderService;
-use Illuminate\Support\Collection;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {

@@ -37,7 +37,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
-    const [promoCode, setPromoCode] = useState<PromoCodeEntity | null>(null);
+    const [couponCode, setCouponCode] = useState<PromoCodeEntity | null>(null);
     const dispatch = useAppDispatch();
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
@@ -152,7 +152,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 search,
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
-                promoCode,
+                couponCode,
             },
         },
         ...bracketParams(),
@@ -161,7 +161,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const totals = orders$.pagination?.meta?.total ?? 0;
 
     const clearPromoCode = useCallback(() => {
-        setPromoCode(null);
+        setCouponCode(null);
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({
@@ -203,11 +203,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus: null,
-                promoCode,
+                couponCode,
             }),
             1,
         );
-    }, [orders$, sortFilter, search, promoCode]);
+    }, [orders$, sortFilter, search, couponCode]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
@@ -230,17 +230,17 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
-                    promoCode,
+                    couponCode,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, promoCode],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode],
     );
 
     const handlePromoCodeFilter = useCallback(
         (e, promoCode) => {
-            setPromoCode(promoCode);
+            setCouponCode(promoCode);
             orders$.searchSortedWithPagination(
                 { sort: sortFilter },
                 toApiPropertiesObject({
@@ -314,11 +314,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         );
                     })}
                 </PageSelector>
-                <PageSelector label={'Coupon'} value={promoCode?.code} onClear={clearPromoCode}>
+                <PageSelector label={'Coupon'} value={couponCode?.code} onClear={clearPromoCode}>
                     <FormControl sx={{ width: '300px' }}>
                         <Autocomplete
                             getOptionLabel={(promoCodes) => promoCodes.code || searchPromoCode}
-                            value={promoCode}
+                            value={couponCode}
                             onKeyDown={(e) => handlePromoCodeSearch(e)}
                             onChange={handlePromoCodeFilter}
                             options={promoCodes}

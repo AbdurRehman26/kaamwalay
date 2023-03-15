@@ -86,35 +86,35 @@ beforeEach(function () {
 
     UserCard::factory()->count(7)
         ->state(new Sequence(
-        [
-            'order_item_id' => $orderItems[0]->id,
-            'certificate_number' => '000000100',
-        ],
-        [
-            'order_item_id' => $orderItems[1]->id,
-            'certificate_number' => '09000000',
-        ],
-        [
-            'order_item_id' => $orderItems[2]->id,
-            'certificate_number' => '09000001',
-        ],
-        [
-            'order_item_id' => $orderItems[3]->id,
-            'certificate_number' => '09000002',
-        ],
-        [
-            'order_item_id' => $orderItems[4]->id,
-            'certificate_number' => '09000003',
-        ],
-        [
-            'order_item_id' => $orderItems[5]->id,
-            'certificate_number' => '09000004',
-        ],
-        [
-            'order_item_id' => $orderItems[6]->id,
-            'certificate_number' => '09000005',
-        ]
-    ))->create();
+            [
+                'order_item_id' => $orderItems[0]->id,
+                'certificate_number' => '000000100',
+            ],
+            [
+                'order_item_id' => $orderItems[1]->id,
+                'certificate_number' => '09000000',
+            ],
+            [
+                'order_item_id' => $orderItems[2]->id,
+                'certificate_number' => '09000001',
+            ],
+            [
+                'order_item_id' => $orderItems[3]->id,
+                'certificate_number' => '09000002',
+            ],
+            [
+                'order_item_id' => $orderItems[4]->id,
+                'certificate_number' => '09000003',
+            ],
+            [
+                'order_item_id' => $orderItems[5]->id,
+                'certificate_number' => '09000004',
+            ],
+            [
+                'order_item_id' => $orderItems[6]->id,
+                'certificate_number' => '09000005',
+            ]
+        ))->create();
 
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->paymentPlanRanges = PaymentPlanRange::factory()->count(5)->state(new Sequence(

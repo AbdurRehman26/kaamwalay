@@ -49,10 +49,25 @@ beforeEach(function () {
         ['order_status_id' => $this->orders[4]->order_status_id, 'order_id' => $this->orders[4]->id, 'user_id' => $this->orders[4]->user_id]
     )->create();
 
-    OrderItem::factory()->count(5)
+    $orderItems = OrderItem::factory()->count(10)
         ->state(new Sequence(
             [
                 'order_id' => $this->orders[0]->id,
+            ],
+            [
+                'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[1]->id,
+            ],
+            [
+                'order_id' => $this->orders[1]->id,
             ],
             [
                 'order_id' => $this->orders[1]->id,
@@ -69,10 +84,35 @@ beforeEach(function () {
         ))
         ->create();
 
-    UserCard::factory()->state(new Sequence(
+    UserCard::factory()->count(7)
+        ->state(new Sequence(
         [
-            'order_item_id' => OrderItem::first()->id,
+            'order_item_id' => $orderItems[0]->id,
             'certificate_number' => '000000100',
+        ],
+        [
+            'order_item_id' => $orderItems[1]->id,
+            'certificate_number' => '09000000',
+        ],
+        [
+            'order_item_id' => $orderItems[2]->id,
+            'certificate_number' => '09000001',
+        ],
+        [
+            'order_item_id' => $orderItems[3]->id,
+            'certificate_number' => '09000002',
+        ],
+        [
+            'order_item_id' => $orderItems[4]->id,
+            'certificate_number' => '09000003',
+        ],
+        [
+            'order_item_id' => $orderItems[5]->id,
+            'certificate_number' => '09000004',
+        ],
+        [
+            'order_item_id' => $orderItems[6]->id,
+            'certificate_number' => '09000005',
         ]
     ))->create();
 
@@ -87,6 +127,10 @@ beforeEach(function () {
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->insured()->create();
     $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
+
+    $this->sampleAgsResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
+    ), associative: true);
 
     $this->actingAs($this->user);
 });
@@ -129,7 +173,9 @@ test('an admin can place order for an user', function () {
             'phone' => '1234567890',
             'flat' => '43',
             'save_for_later' => true,
-        ],
+        ],[
+                'order_id' => $this->orders[1]->id,
+            ],
         'billing_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -408,4 +454,50 @@ test('if shipping and billing addresses are different only shipping address is u
     $this->assertEquals($order->shippingAddress->address, $addressData['address']);
 
     Event::assertDispatched(OrderShippingAddressChangedEvent::class);
+});
+
+test('an admin can get paginated cards for grading', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    $orderItemId = $this->orders[1]->orderItems->first()->id;
+
+    $this->getJson(route('v3.admin.orders.get-grades', $this->orders[1]->id))
+        ->assertJsonStructure([
+            'data',
+            'links',
+            'meta',
+        ])
+        ->assertJsonFragment([
+            'center' => '2.00',
+        ])
+        ->assertJsonFragment([
+            'id' => $orderItemId,
+        ]);
+});
+
+test('an admin can paginate through cards results', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    $orderItemId = $this->orders[1]->orderItems[2]->id;
+
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 2, 'page' => 2]))
+        ->assertJsonFragment([
+            'id' => $orderItemId,
+        ]);
+});
+
+test('an admin can change the amount of cards results per page', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 3]))
+        ->assertJsonCount(3, ['data']);
+});
+
+test('an admin can filter by item to revise', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    $orderItemId = $this->orders[1]->orderItems[2]->id;
+
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'filter[order_item_id]' => $orderItemId]))
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'id' => $orderItemId,
+        ]);
 });

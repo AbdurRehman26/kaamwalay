@@ -25,6 +25,7 @@ import theme from '@shared/styles/theme';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
 import ReferralDeactivateBanner from '../../ReferralDeactivateBanner';
+import MarketingContent from '../MarketingContent';
 import Copylink from './CopyLink';
 import SocialShare from './SocialShare';
 import WithdrawBox from './WithdrawBox';
@@ -332,6 +333,7 @@ export function Main() {
                     </Grid>
                 </ImageDiv>
             </Grid>
+            <MarketingContent expandable={true} />
         </>
     );
 }

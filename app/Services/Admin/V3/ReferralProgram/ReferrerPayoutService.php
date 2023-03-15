@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Admin\V3\ReferralProgram;
 
-use App\Events\API\Admin\ReferralProgram\PayoutInitiated;
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
@@ -111,7 +111,7 @@ class ReferrerPayoutService
         ])->handshake($payout);
 
         if ($response['transaction_status'] === 'SUCCESS') {
-            PayoutInitiated::dispatch($payout);
+            PayoutCompletedEvent::dispatch($payout);
         }
 
         Log::info('PAYOUT_HANDSHAKE', $response);

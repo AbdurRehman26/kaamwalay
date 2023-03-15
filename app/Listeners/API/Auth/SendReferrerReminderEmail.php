@@ -7,7 +7,7 @@ use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReferrerReminder implements ShouldBeEncrypted, ShouldQueue
+class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.

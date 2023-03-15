@@ -2,7 +2,7 @@
 
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
-use App\Events\API\Admin\ReferralProgram\PayoutCompleted;
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Http\APIClients\PaypalClient;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
@@ -124,7 +124,7 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                 ]);
 
                 if ($transactionStatus === 'SUCCESS') {
-                    PayoutCompleted::dispatch($payout);
+                    PayoutCompletedEvent::dispatch($payout);
                 }
 
                 if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {

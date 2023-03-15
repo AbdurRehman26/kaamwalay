@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\ReferralProgram\PayoutInitiatedEvent;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\User;
@@ -28,7 +29,7 @@ beforeEach(function () {
 });
 
 test('a referrer can withdraw his commission', function () {
-    Bus::fake();
+    Event::fake();
     actingAs($this->user);
 
     postJson(route('v3.payouts.store', [
@@ -41,6 +42,7 @@ test('a referrer can withdraw his commission', function () {
             'created_at',
             'completed_at',
         ]]);
+    Event::assertDispatched(PayoutInitiatedEvent::class);
 });
 
 test('a referrer can get his own payouts', function () {

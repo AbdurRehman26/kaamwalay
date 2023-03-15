@@ -2,7 +2,7 @@
 
 namespace App\Listeners\API\ReferralProgram\ReferrerPayouts;
 
-use App\Events\API\Admin\ReferralProgram\PayoutCompleted as ReferralProgramPayoutCompleted;
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -19,7 +19,7 @@ class PayoutCompleted implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(ReferralProgramPayoutCompleted $event): void
+    public function handle(PayoutCompletedEvent $event): void
     {
         $this->emailService->sendEmail(
             [[$event->referrerPayout->user->email => $event->referrerPayout->user->first_name ?? '']],

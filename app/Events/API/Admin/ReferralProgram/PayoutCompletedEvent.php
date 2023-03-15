@@ -6,16 +6,15 @@ use App\Models\ReferrerPayout;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PayoutInitiated
+class PayoutCompletedEvent
 {
     use Dispatchable, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        public ReferrerPayout $referrerPayout
-    ) {
+    public function __construct(public ReferrerPayout $referrerPayout) 
+    {
         //
     }
 }

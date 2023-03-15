@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V2\Salesman\Coupon;
 
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @property int $times_used
@@ -14,11 +15,8 @@ class CouponStatResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'times_used' => $this->times_used,

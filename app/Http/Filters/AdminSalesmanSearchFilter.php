@@ -7,19 +7,21 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminSalesmanSearchFilter implements Filter
 {
-    /**
-     * @param string $value
-     */
-    public function __invoke(Builder $query, $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
-        $query->whereLike(
-            [
-                'first_name',
-                'last_name',
-                'email',
-                'phone',
-            ],
-            $value
-        );
+        $fullNameArray = explode(' ', $value);
+        if (count($fullNameArray) === 2) {
+            $query->where('first_name', $fullNameArray[0])->where('last_name', $fullNameArray[1]);
+        } else {
+            $query->whereLike(
+                [
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'phone',
+                ],
+                $value
+            );
+        }
     }
 }

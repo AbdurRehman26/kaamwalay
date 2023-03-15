@@ -212,7 +212,6 @@ class OrderService extends V1OrderService
     }
 
     /**
-     * @param  Order  $order
      * @return Collection<int, UserCard>
      */
     public function getCardsByStatus(Order $order, int $status): Collection

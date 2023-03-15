@@ -10,35 +10,32 @@ class OrderPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny()
+    public function viewAny(): bool
     {
         return true;
     }
 
-    public function view(User $user, Order $order)
+    public function view(User $user, Order $order): bool
     {
         return $user->isAdmin() || $order->user()->is($user);
     }
 
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }
 
-    public function update(User $user, Order $order)
+    public function update(User $user, Order $order): bool
     {
-        //
+        return $user->isAdmin() || $order->user()->is($user);
     }
 
-    public function review(User $user)
+    public function review(User $user): bool
     {
         return $user->isAdmin();
     }
 
-    /**
-     * @return bool
-     */
-    public function calculateCollectorCoin(User $user, Order $order)
+    public function calculateCollectorCoin(User $user, Order $order): bool
     {
         return ($user->isAdmin() || $order->user()->is($user))
         && $order->isPayable('v2');

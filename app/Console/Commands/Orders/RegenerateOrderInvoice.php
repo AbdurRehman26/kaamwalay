@@ -27,8 +27,6 @@ class RegenerateOrderInvoice extends Command
     /**
      * Execute the console command.
      *
-     * @param  InvoiceService  $invoiceService
-     * @return int
      * @throws \App\Exceptions\Services\Payment\InvoiceNotUploaded
      */
     public function handle(InvoiceService $invoiceService): int

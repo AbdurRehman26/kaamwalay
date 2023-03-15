@@ -23,10 +23,8 @@ class SyncUsersToMailchimp extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(MailchimpService $mailchimpService)
+    public function handle(MailchimpService $mailchimpService): int
     {
         $mailchimpService->sendExistingUsersToMailchimp(MailchimpService::LIST_NAME_SIGN_UP_USERS);
 

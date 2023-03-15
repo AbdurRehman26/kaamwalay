@@ -30,6 +30,7 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
                 ],
+                'expand' => ['latest_charge'],
             ],
         ];
 
@@ -78,39 +79,34 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
             'canceled_at' => null,
             'cancellation_reason' => null,
             'capture_method' => 'automatic',
-            'charges' => [
-                'object' => 'list',
-                'data' => [
-                    [
-                        'amount' => $data['amount'],
-                        'amount_captured' => $data['amount'],
-                        'calculated_statement_descriptor' => 'Test User PFA',
-                        'captured' => true,
-                        'created' => 1629186289,
-                        'currency' => 'usd',
-                        'customer' => $data['customer_id'],
-                        'description' => $data['additional_data']['description'],
-                        'metadata' => [
-                            'Order ID' => $data['additional_data']['metadata']['Order ID'],
-                            'User Email' => $data['additional_data']['metadata']['User Email'],
-                        ],
-                        'outcome' => [
-                            'type' => 'authorized',
-                        ],
-                        'paid' => true,
-                        'payment_intent' => $data['payment_intent_id'],
-                        'payment_method' => 'pm_1JNQ1VJCai8r8pbffJQmzj7g',
-                        'payment_method_details' => (object) [
-                            'card' => (object) [
-                                'brand' => 'visa',
-                                'exp_month' => 12,
-                                'exp_year' => 25,
-                                'last4' => 4454,
-                            ],
-                        ],
-                        'status' => 'succeeded',
+            'latest_charge' => [
+                'amount' => $data['amount'],
+                'amount_captured' => $data['amount'],
+                'calculated_statement_descriptor' => 'Test User PFA',
+                'captured' => true,
+                'created' => 1629186289,
+                'currency' => 'usd',
+                'customer' => $data['customer_id'],
+                'description' => $data['additional_data']['description'],
+                'metadata' => [
+                    'Order ID' => $data['additional_data']['metadata']['Order ID'],
+                    'User Email' => $data['additional_data']['metadata']['User Email'],
+                ],
+                'outcome' => [
+                    'type' => 'authorized',
+                ],
+                'paid' => true,
+                'payment_intent' => $data['payment_intent_id'],
+                'payment_method' => 'pm_1JNQ1VJCai8r8pbffJQmzj7g',
+                'payment_method_details' => (object) [
+                    'card' => (object) [
+                        'brand' => 'visa',
+                        'exp_month' => 12,
+                        'exp_year' => 25,
+                        'last4' => 4454,
                     ],
                 ],
+                'status' => 'succeeded',
             ],
             'currency' => 'usd',
             'customer' => 'cus_K1Sq1o4TaJvMHX',
@@ -243,6 +239,7 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
                     'User Email' => $order->user->email,
                     'Type' => 'Extra Charge',
                 ],
+                'expand' => ['latest_charge'],
             ],
         ];
         $response = $this->successfulPaymentResponse($paymentData);

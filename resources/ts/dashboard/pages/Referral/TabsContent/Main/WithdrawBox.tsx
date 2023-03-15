@@ -92,7 +92,7 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
                 <Typography className={'TotalAmount'}>
                     ${round(referrer.withdrawableCommission, 2).toFixed(2)}
                 </Typography>
-                {referrer.withdrawableCommission ? (
+                {referrer.withdrawableCommission > 0 ? (
                     <Link to={'/referral-program/withdraw-funds'} className={'ButtonLink'}>
                         <Button variant="contained" className={'WithDrawButton'}>
                             WITHDRAW FUNDS

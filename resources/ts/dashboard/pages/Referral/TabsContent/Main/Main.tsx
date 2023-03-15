@@ -333,7 +333,7 @@ export function Main() {
                     </Grid>
                 </ImageDiv>
             </Grid>
-            <MarketingContent isMain={true} />
+            <MarketingContent expandable={true} />
         </>
     );
 }

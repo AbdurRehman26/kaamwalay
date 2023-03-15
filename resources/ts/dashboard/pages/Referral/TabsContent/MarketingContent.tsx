@@ -10,74 +10,74 @@ import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import partnerProgramAgsAd1 from '@shared/assets/partnerProgramAgsAd1.jpg';
-import partnerProgramAgsAd2 from '@shared/assets/partnerProgramAgsAd2.jpg';
-import partnerProgramAgsAd3 from '@shared/assets/partnerProgramAgsAd3.jpg';
-import partnerProgramAgsAd4 from '@shared/assets/partnerProgramAgsAd4.jpg';
-import partnerProgramAgsAd5 from '@shared/assets/partnerProgramAgsAd5.jpg';
-import partnerProgramAgsAd6 from '@shared/assets/partnerProgramAgsAd6.jpg';
-import partnerProgramAgsAd7 from '@shared/assets/partnerProgramAgsAd7.jpg';
-import partnerProgramAgsAd8 from '@shared/assets/partnerProgramAgsAd8.jpg';
-import partnerProgramAgsAd9 from '@shared/assets/partnerProgramAgsAd9.jpg';
-import partnerProgramAgsAd10 from '@shared/assets/partnerProgramAgsAd10.jpg';
-import partnerProgramAgsAd11 from '@shared/assets/partnerProgramAgsAd11.jpg';
+import agsPartnerProgramPost1 from '@shared/assets/agsPartnerProgramPost1.jpg';
+import agsPartnerProgramPost2 from '@shared/assets/agsPartnerProgramPost2.jpg';
+import agsPartnerProgramPost3 from '@shared/assets/agsPartnerProgramPost3.jpg';
+import agsPartnerProgramPost4 from '@shared/assets/agsPartnerProgramPost4.jpg';
+import agsPartnerProgramPost5 from '@shared/assets/agsPartnerProgramPost5.jpg';
+import agsPartnerProgramPost6 from '@shared/assets/agsPartnerProgramPost6.jpg';
+import agsPartnerProgramPost7 from '@shared/assets/agsPartnerProgramPost7.jpg';
+import agsPartnerProgramPost8 from '@shared/assets/agsPartnerProgramPost8.jpg';
+import agsPartnerProgramPost9 from '@shared/assets/agsPartnerProgramPost9.jpg';
+import agsPartnerProgramPost10 from '@shared/assets/agsPartnerProgramPost10.jpg';
+import agsPartnerProgramPost11 from '@shared/assets/agsPartnerProgramPost11.jpg';
 import theme from '@shared/styles/theme';
 
 const images = [
     {
         id: 0,
-        url: partnerProgramAgsAd1,
-        title: 'partnerProgramAgsAd1',
+        url: agsPartnerProgramPost1,
+        title: 'agsPartnerProgramPost1',
     },
     {
         id: 1,
-        url: partnerProgramAgsAd2,
-        title: 'partnerProgramAgsAd2',
+        url: agsPartnerProgramPost2,
+        title: 'agsPartnerProgramPost2',
     },
     {
         id: 2,
-        url: partnerProgramAgsAd3,
-        title: 'partnerProgramAgsAd3',
+        url: agsPartnerProgramPost3,
+        title: 'agsPartnerProgramPost3',
     },
     {
         id: 3,
-        url: partnerProgramAgsAd4,
-        title: 'partnerProgramAgsAd4',
+        url: agsPartnerProgramPost4,
+        title: 'agsPartnerProgramPost4',
     },
     {
         id: 4,
-        url: partnerProgramAgsAd5,
-        title: 'partnerProgramAgsAd5',
+        url: agsPartnerProgramPost5,
+        title: 'agsPartnerProgramPost5',
     },
     {
         id: 5,
-        url: partnerProgramAgsAd6,
-        title: 'partnerProgramAgsAd6',
+        url: agsPartnerProgramPost6,
+        title: 'agsPartnerProgramPost6',
     },
     {
         id: 6,
-        url: partnerProgramAgsAd7,
-        title: 'partnerProgramAgsAd7',
+        url: agsPartnerProgramPost7,
+        title: 'agsPartnerProgramPost7',
     },
     {
         id: 7,
-        url: partnerProgramAgsAd8,
-        title: 'partnerProgramAgsAd8',
+        url: agsPartnerProgramPost8,
+        title: 'agsPartnerProgramPost8',
     },
     {
         id: 8,
-        url: partnerProgramAgsAd9,
-        title: 'partnerProgramAgsAd9',
+        url: agsPartnerProgramPost9,
+        title: 'agsPartnerProgramPost9',
     },
     {
         id: 9,
-        url: partnerProgramAgsAd10,
-        title: 'partnerProgramAgsAd10',
+        url: agsPartnerProgramPost10,
+        title: 'agsPartnerProgramPost10',
     },
     {
         id: 10,
-        url: partnerProgramAgsAd11,
-        title: 'partnerProgramAgsAd11',
+        url: agsPartnerProgramPost11,
+        title: 'agsPartnerProgramPost11',
     },
 ];
 
@@ -108,7 +108,7 @@ const MarketingContentDiv = styled(Grid)({
         flexWrap: 'wrap',
     },
     '.MarketingContentImageDiv': {
-        width: '210px',
+        width: '217px',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '47%',
@@ -118,7 +118,7 @@ const MarketingContentDiv = styled(Grid)({
         },
     },
     '.MarketingContentImage': {
-        maxWidth: '210px',
+        maxWidth: '217px',
         padding: '4px',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '100%',
@@ -213,10 +213,10 @@ const MarketingContentDiv = styled(Grid)({
 });
 
 interface props {
-    isMain?: boolean;
+    expandable?: boolean;
 }
 
-export function MarketingContent({ isMain }: props) {
+export function MarketingContent({ expandable }: props) {
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -236,7 +236,7 @@ export function MarketingContent({ isMain }: props) {
                         Downloadable content you can use to refer your friends and followers.
                     </Typography>
                 </div>
-                {isMain && !isSm ? (
+                {expandable && !isSm ? (
                     <div>
                         <Link
                             to={'/referral-program/marketing-content'}
@@ -252,7 +252,7 @@ export function MarketingContent({ isMain }: props) {
             </Grid>
             <Grid container>
                 <Grid className={'ImagesDiv'}>
-                    {isMain
+                    {expandable
                         ? images.slice(0, 8).map((data: any) => (
                               <div className={'MarketingContentImageDiv'}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
@@ -269,7 +269,7 @@ export function MarketingContent({ isMain }: props) {
                           ))}
                 </Grid>
             </Grid>
-            {isMain && isSm ? (
+            {expandable && isSm ? (
                 <Grid className={'SeeAllButtonDiv'}>
                     <Link
                         to={'/referral-program/marketing-content'}

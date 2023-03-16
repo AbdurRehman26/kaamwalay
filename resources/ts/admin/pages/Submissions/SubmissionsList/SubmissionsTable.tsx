@@ -66,7 +66,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [paymentStatus, setPaymentStatus] = useState(null);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: '' });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -265,7 +265,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
-        setReferrerStatus({ label: '', value: 0 });
+        setReferrerStatus({ label: '', value: '' });
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({

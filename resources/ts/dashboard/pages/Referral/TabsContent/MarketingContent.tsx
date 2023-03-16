@@ -111,10 +111,10 @@ const MarketingContentDiv = styled(Grid)({
         width: '217px',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
-            maxWidth: '47%',
+            maxWidth: '50%',
         },
         [theme.breakpoints.between(768, 1024)]: {
-            maxWidth: '140px',
+            maxWidth: '25%',
         },
     },
     '.MarketingContentImage': {

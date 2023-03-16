@@ -193,12 +193,6 @@ const MarketingContentDiv = styled(Grid)({
         color: '#fff',
         fontSize: '40px',
     },
-    '.DialogImage': {
-        maxHeight: '75vh!important',
-        [theme.breakpoints.down('sm')]: {
-            maxHeight: '65vh!important',
-        },
-    },
     '.DownloadGrid': {
         zIndex: 600000,
         position: 'fixed',

@@ -52,7 +52,12 @@ class OrderPaymentResource extends BaseResource
                 $card = $providerResponse->card;
             } else {
                 //TODO ENABLE COLLECTOR COIN HERE
-                $card = $providerResponse->latest_charge->payment_method_details->card;
+                if (! empty($providerResponse->latest_charge) && is_object($providerResponse->latest_charge)) {
+                    $card = $providerResponse->latest_charge->payment_method_details->card;
+                } else {
+                    // Support old Stripe response
+                    $card = $providerResponse->charges->data[0]->payment_method_details->card;
+                }
             }
         }
 

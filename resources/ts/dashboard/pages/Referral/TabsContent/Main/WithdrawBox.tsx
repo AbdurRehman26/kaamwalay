@@ -90,9 +90,9 @@ export function WithdrawBox({ referrer }: withdrawBoxProps) {
             <Grid className={'HeadingDiv'}>
                 <Typography className={'Heading'}>Withdrawable Commission</Typography>
                 <Typography className={'TotalAmount'}>
-                    ${round(referrer.withdrawableCommission, 2).toFixed(2)}
+                    ${round(referrer?.withdrawableCommission ?? 0, 2).toFixed(2)}
                 </Typography>
-                {referrer.withdrawableCommission ? (
+                {referrer?.withdrawableCommission > 0 ? (
                     <Link to={'/referral-program/withdraw-funds'} className={'ButtonLink'}>
                         <Button variant="contained" className={'WithDrawButton'}>
                             WITHDRAW FUNDS

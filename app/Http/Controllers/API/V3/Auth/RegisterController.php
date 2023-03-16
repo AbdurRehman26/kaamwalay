@@ -19,7 +19,9 @@ class RegisterController extends Controller
 
         CustomerRegistered::dispatch($user, $request->only('password', 'platform', 'app_generated_id', 'referral_code'));
 
-        $token = auth()->guard()->login($user);
+        /** @var \Tymon\JWTAuth\JWTGuard $guard */
+        $guard = auth()->guard();
+        $token = $guard->login($user);
 
         UserLoggedIn::dispatch($user);
 

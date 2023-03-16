@@ -2,8 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\State;
-use Filament\Forms;
+use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -19,39 +18,7 @@ abstract class AddressResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->disabled(),
-                Forms\Components\TextInput::make('first_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('last_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('address')
-                    ->required()
-                    ->maxLength(255)
-                    ->rows(3),
-                Forms\Components\TextInput::make('city')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('state')->options(State::pluck('code'))
-                    ->required()
-                    ->searchable()
-                    ->disablePlaceholderSelection(),
-                Forms\Components\TextInput::make('zip')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('flat')
-                    ->maxLength(255),
-                Forms\Components\Select::make('country_id')
-                    ->relationship('country', 'name')
-                    ->required(),
-            ]);
+        return AddressRelationManager::form($form);
     }
 
     public static function table(Table $table): Table

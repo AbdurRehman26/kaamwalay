@@ -134,7 +134,6 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
         },
         [dispatch],
     );
-
     return (
         <Box px={3} className={classes.containerBox}>
             <NotesDialog
@@ -340,8 +339,9 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                 </div>
                                             )}
                                         </GradeRoot>
-                                    ) : item.status.orderItemStatus.id === OrderItemStatusEnum.NOT_ACCEPTED ||
-                                      item.status.orderItemStatus.id === OrderItemStatusEnum.MISSING ? (
+                                    ) : !user.hasRole(RolesEnum.Customer) &&
+                                      (item.status.orderItemStatus.id === OrderItemStatusEnum.NOT_ACCEPTED ||
+                                          item.status.orderItemStatus.id === OrderItemStatusEnum.MISSING) ? (
                                         <>
                                             {item.status.orderItemStatus.name}
                                             <br />

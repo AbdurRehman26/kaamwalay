@@ -44,8 +44,8 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
         return [
             "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
-            "email_subject" => "You have a payout!",
-            "email_message" => "You have received a payout! Thanks for using our service!",
+            "email_subject" => "Payout from AGS Partner Program!",
+            "email_message" => "You have received your payout from AGS Partner Program. Keep referring for more!",
         ];
     }
     public function pay(array $items, array $data = []): array

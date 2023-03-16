@@ -8,7 +8,7 @@
     <div class="container ReferralHome-sectionContainer ReferralHome-featuresGrid" data-aos="fade-up"data-aos-delay="100">
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--third">
             <div class="ReferralHome-featureColumnSteps">
-                <img src="{{ asset('assets/images/landings/referralhome/stepone1.png') }}" alt="" class="ReferralHome-featureIcon">
+                <img src="{{ asset('assets/images/landings/referralhome/stepone1.svg') }}" alt="" class="ReferralHome-featureIcon">
                 <div class="Numbering-section">
                     <h3 class="Numbering">1</h3>
                     <h3 class="Numbering-title">SignUp</h3>
@@ -19,7 +19,7 @@
 
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--third">
             <div class="ReferralHome-featureColumnSteps">
-                <img src="{{ asset('assets/images/landings/referralhome/steptwo2.png') }}" alt="" class="ReferralHome-featureIcon">
+                <img src="{{ asset('assets/images/landings/referralhome/steptwo2.svg') }}" alt="" class="ReferralHome-featureIcon">
                 <div class="Numbering-section">
                     <h3 class="Numbering">2</h3>
                     <h3 class="Numbering-title">Create Submission</h3>
@@ -30,7 +30,7 @@
 
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--third">
             <div class="ReferralHome-featureColumnSteps">
-                <img src="{{ asset('assets/images/landings/referralhome/stepthree03.png') }}" alt="" class="ReferralHome-featureIcon">
+                <img src="{{ asset('assets/images/landings/referralhome/stepthree03.svg') }}" alt="" class="ReferralHome-featureIcon">
                 <div class="Numbering-section">
                     <h3 class="Numbering">3</h3>
                     <h3 class="Numbering-title">Save {{ config('robograding.feature_referral_discount_percentage') }}%</h3>

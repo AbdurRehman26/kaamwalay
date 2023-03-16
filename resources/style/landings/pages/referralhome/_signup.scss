@@ -43,29 +43,17 @@
 
 .ReferralHome-main {
     display: flex;
-    padding-left: 120px;
-    padding-right: 120px;
+    align-items: center;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
     @media screen and (max-width: 767px) {
         display: grid;
         padding: 20px;
     }
 }
 
-.ReferralHome-mainLeft {
-    width: 45%;
-    padding-top: 150px;
-    @media screen and (max-width: 767px) {
-        width: 100%;
-        padding: 0;
-    }
-}
-
 .ReferralHome-mainRight {
-    text-align: left;
-    margin-right: 8%;
-    width: 30%;
+    max-width: 455px;
     background-color: white;
     border-radius: 22px;
     @media screen and (max-width: 767px) {
@@ -75,14 +63,19 @@
     }
 }
 
+.ReferralHome-iconDiv {
+    background: #e1bbff;
+    padding: 16px 12px;
+}
+
 .ReferralHome-referralName {
     display: flex;
     border: 2px solid #e1bbff;
     border-radius: 7px;
     max-width: 85%;
-    height: 50px;
     margin-bottom: 24px;
     width: fit-content;
+    align-items: center;
     span {
         color: #e1bbff;
         font-size: 12px;
@@ -104,15 +97,15 @@
     font-size: 56px;
     line-height: 68px;
     letter-spacing: -0.5px;
-    max-width: 800px;
+    max-width: 684px;
     margin-bottom: 24px;
     span {
         color: #42e8e0;
     }
     @media screen and (max-width: 767px) {
         font-weight: 900;
-        font-size: 40px;
-        line-height: 47px;
+        font-size: 36px;
+        line-height: 44px;
     }
 }
 

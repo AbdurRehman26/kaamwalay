@@ -1,7 +1,7 @@
 <section class="ReferralHome-section ReferralHome-about">
     <div class="container ReferralHome-sectionContainerAbout">
         <div class="ReferralHome-sectionColumn ReferralHome-sectionColumn--half">
-            <div style="position: relative;">
+            <div class="ReferralHome-sectionColumn--videoDiv">
                 <video width="710" height="410">
                     <source src="{{ asset('assets/images/landings/referralhome/home.mp4') }}" type="video/mp4">
                 </video>

@@ -2,6 +2,7 @@
 
 use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Events\API\Admin\ReferralProgram\BatchPayoutCreated;
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
@@ -170,6 +171,7 @@ test('batch payout creation needs params', function () {
 });
 
 test('a batch payout is processed and stores data into DB', function () {
+    Event::fake();
     Http::fake(['https://paypal.api/v1/payments/payouts' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
@@ -184,7 +186,7 @@ test('a batch payout is processed and stores data into DB', function () {
     $referrerPayoutService->processBatchPayout(['items' => [$this->referrerPayouts[0]->id]]);
 
     $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
-
+    Event::assertDispatched(PayoutCompletedEvent::class);
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_COMPLETED)
         ->and($payout->transaction_id)->toBe($baseResponse['items'][0]['payout_item_id'])
         ->and($payout->transaction_status)->toBe($baseResponse['items'][0]['transaction_status']);
@@ -237,6 +239,7 @@ it('process payouts handshake', function () {
 });
 
 test('handshake cron is handled and stores data into DB', function () {
+    Event::fake();
     $baseResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/Paypal_payout_item_details_response.json'
     ), associative: true);
@@ -249,7 +252,7 @@ test('handshake cron is handled and stores data into DB', function () {
     $referrerPayoutService->processPayoutHandshake($this->referrerPayouts[1]);
 
     $payout = ReferrerPayout::find($this->referrerPayouts[1]->id);
-
+    Event::assertDispatched(PayoutCompletedEvent::class);
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_COMPLETED);
 });
 
@@ -270,7 +273,6 @@ test('if item transaction fails in handshake, the amount is returned to referrer
     $referrerPayoutService->processPayoutHandshake($this->referrerPayouts[1]);
 
     $payout = $payout->fresh();
-
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
         ->and($payout->transaction_status)->toBe($baseResponse['transaction_status'])
         ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount, 2));

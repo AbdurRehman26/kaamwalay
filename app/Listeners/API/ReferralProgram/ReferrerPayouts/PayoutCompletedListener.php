@@ -2,11 +2,11 @@
 
 namespace App\Listeners\API\ReferralProgram\ReferrerPayouts;
 
-use App\Events\API\Admin\ReferralProgram\PayoutInitiatedEvent;
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PayoutInitiated implements ShouldQueue
+class PayoutCompletedListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -19,12 +19,12 @@ class PayoutInitiated implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(PayoutInitiatedEvent $event): void
+    public function handle(PayoutCompletedEvent $event): void
     {
         $this->emailService->sendEmail(
             [[$event->referrerPayout->user->email => $event->referrerPayout->user->first_name ?? '']],
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED],
-            EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED,
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],
+            EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED,
             [
                 'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
             ]

@@ -39,7 +39,7 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
             ],
             true,
             'CreateReferrerReminderCheck',
-            ['user' => $user]
+            ['user_id' => $user->id]
         );
     }
 }

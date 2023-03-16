@@ -3,6 +3,7 @@
 namespace App\Services\Email\Check;
 
 use App\Models\ScheduledEmail;
+use App\Models\User;
 use App\Services\Email\ReschedulingCheckInterface;
 use App\Services\Email\ShouldStillSendCheckInterface;
 use Carbon\Carbon;
@@ -27,16 +28,18 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
     protected function check(ScheduledEmail $scheduledEmail): bool
     {
         $extraData = unserialize($scheduledEmail->extra_data);
-        $users = $extraData['user']->referees;
+        $user = User::find($extraData['user_id']);
+
+        $referees = $user->referees;
 
         // Send Remainder if user has no referees
-        if (count($users) === 0) {
+        if (count($referees) === 0) {
             return true;
         }
 
         // Don't send if user referrers have paid order
-        foreach ($users as $user) {
-            if ($user->orders()->paid()->count() > 0) {
+        foreach ($referees as $referee) {
+            if ($referee->orders()->paid()->count() > 0) {
                 return false;
             }
         }

@@ -39,7 +39,6 @@ class UpdateRevenueStats extends Command
         $revenueStats = $revenueStatsService->addDailyStats($currentDate);
         $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal($currentDate);
 
-
         $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
 
         $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);

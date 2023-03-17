@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import agsPartnerProgramPost1 from '@shared/assets/agsPartnerProgramPost1.jpg';
@@ -111,10 +112,10 @@ const MarketingContentDiv = styled(Grid)({
         width: '217px',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
-            maxWidth: '47%',
+            maxWidth: '50%',
         },
         [theme.breakpoints.between(768, 1024)]: {
-            maxWidth: '140px',
+            maxWidth: '25%',
         },
     },
     '.MarketingContentImage': {
@@ -157,10 +158,6 @@ const MarketingContentDiv = styled(Grid)({
         textDecoration: 'none',
     },
     '.DownloadButton': {
-        zIndex: 600000,
-        position: 'fixed',
-        top: '90%',
-        right: '45%',
         background: '#42E8E0',
         borderRadius: '24px',
         padding: '15px 50px',
@@ -173,42 +170,43 @@ const MarketingContentDiv = styled(Grid)({
         '&:hover': {
             background: '#42E8E0',
         },
-        [theme.breakpoints.down('sm')]: {
-            top: '90%',
-            right: '25%',
-        },
-        [theme.breakpoints.between(768, 1024)]: {
-            top: '85%',
-            right: '35%',
-        },
     },
     '.PreviousButton': {
         zIndex: 600000,
         position: 'fixed',
-        top: '50%',
+        top: '50vh',
         left: '0%',
         [theme.breakpoints.down('sm')]: {
-            top: '80%',
-        },
-        [theme.breakpoints.between(768, 1024)]: {
-            top: '85%',
+            top: '80vh',
         },
     },
     '.NextButton': {
         zIndex: 600000,
         position: 'fixed',
-        top: '50%',
+        top: '50vh',
         right: '0%',
         [theme.breakpoints.down('sm')]: {
-            top: '80%',
-        },
-        [theme.breakpoints.between(768, 1024)]: {
-            top: '85%',
+            top: '80vh',
         },
     },
     '.NavigationIcon': {
         color: '#fff',
         fontSize: '40px',
+    },
+    '.DownloadGrid': {
+        zIndex: 600000,
+        position: 'fixed',
+        bottom: '10px',
+        left: 0,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+});
+
+const useStyles = makeStyles({
+    dialogImage: {
+        maxHeight: '75vh',
     },
 });
 
@@ -217,6 +215,7 @@ interface props {
 }
 
 export function MarketingContent({ expandable }: props) {
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -283,15 +282,17 @@ export function MarketingContent({ expandable }: props) {
                 </Grid>
             ) : null}
             <Dialog open={open} onClose={handleClose}>
-                <img src={images[index].url} alt={images[index].title} />
+                <img src={images[index].url} alt={images[index].title} className={classes.dialogImage} />
             </Dialog>
             {open ? (
                 <>
-                    <a className={'AnchorLink'} href={images[index].url} download>
-                        <Button className={'DownloadButton'}>
-                            <FileDownloadOutlinedIcon /> DOWNLOAD
-                        </Button>
-                    </a>
+                    <Grid className={'DownloadGrid'}>
+                        <a className={'AnchorLink'} href={images[index].url} download>
+                            <Button className={'DownloadButton'}>
+                                <FileDownloadOutlinedIcon /> DOWNLOAD
+                            </Button>
+                        </a>
+                    </Grid>
                     <Button disabled={index === 0} onClick={() => setIndex(index - 1)} className={'PreviousButton'}>
                         <KeyboardArrowLeftOutlinedIcon className={'NavigationIcon'} />
                     </Button>

@@ -23,15 +23,18 @@ class UnpaidOrdersStatsService
         ];
     }
 
-    public function calculateDailyCardsTotal(string $currentDate): int {
+    public function calculateDailyCardsTotal(string $currentDate): int
+    {
         return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfDay(), Carbon::parse($currentDate)->endOfDay());
     }
 
-    public function calculateMonthlyCardsTotal(string $currentDate): int {
+    public function calculateMonthlyCardsTotal(string $currentDate): int
+    {
         return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfMonth(), Carbon::parse($currentDate)->endOfMonth());
     }
 
-    public function calculateCardsTotal($startTime, $endTime): int {
+    public function calculateCardsTotal($startTime, $endTime): int
+    {
         return DB::table('orders')
         ->join('order_items', 'orders.id', '=', 'order_items.order_id')
         ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)

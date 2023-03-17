@@ -86,7 +86,7 @@ it('counts daily unpaid orders cards', function () {
 
     $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal(Carbon::now());
 
-    expect($expectedCardTotal)->toBe($cardTotal);
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');
 
 it('counts monthly unpaid orders cards', function () {
@@ -99,5 +99,5 @@ it('counts monthly unpaid orders cards', function () {
 
     $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now());
 
-    expect($expectedCardTotal)->toBe($cardTotal);
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

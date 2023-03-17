@@ -33,7 +33,7 @@ class UnpaidOrdersStatsService
         return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfMonth(), Carbon::parse($currentDate)->endOfMonth());
     }
 
-    public function calculateCardsTotal($startTime, $endTime): int
+    public function calculateCardsTotal(string $startTime, string $endTime): int
     {
         return DB::table('orders')
         ->join('order_items', 'orders.id', '=', 'order_items.order_id')

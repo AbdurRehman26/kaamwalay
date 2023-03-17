@@ -106,7 +106,7 @@ it('counts daily paid orders cards', function () {
 
     $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal(Carbon::now());
 
-    expect($expectedCardTotal)->toBe($cardTotal);
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('revenue-stats');
 
 it('counts monthly paid orders cards', function () {
@@ -119,5 +119,5 @@ it('counts monthly paid orders cards', function () {
 
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal(Carbon::now());
 
-    expect($expectedCardTotal)->toBe($cardTotal);
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('revenue-stats');

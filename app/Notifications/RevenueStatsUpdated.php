@@ -32,7 +32,7 @@ class RevenueStatsUpdated extends Notification
 
     public function toSlack($notifiable)
     {
-        $monthYear = Carbon::parse($this->revenueStatsMonthly['event_at'])->format('F-Y');
+        $monthYear = Carbon::parse($this->revenueStatsMonthly->event_at)->format('F-Y');
 
         return (new SlackMessage)
             ->from('Robograding', ':bar_chart:')

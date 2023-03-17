@@ -47,7 +47,7 @@ class UnpaidOrdersStatsService
     {
         $unpaidOrders = $this->monthlyUnpaidOrders($currentDate)
             ->sum('grand_total');
-    
+
         return [
             'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,

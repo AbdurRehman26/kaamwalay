@@ -104,7 +104,7 @@ class RevenueStatsService
         }
         $revenue->save();
 
-        return $revenueData;
+        return $revenue;
     }
 
     public function updateStats(string $currentDate, Order $order): RevenueStatsDaily

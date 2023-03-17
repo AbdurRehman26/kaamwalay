@@ -35,14 +35,16 @@ class SendUnpaidOrdersStats extends Command
         $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Starting');
 
         $unpaidDailyStats = $unpaidOrdersStatsService->calculateDailyStats($currentDate);
+        $unpaidDailyCardsTotal = $unpaidOrdersStatsService->calculateDailyCardsTotal($currentDate);
 
         $this->log('Unpaid Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
 
         $unpaidMonthlyStats = $unpaidOrdersStatsService->calculateMonthlyStats($currentDate);
+        $unpaidMonthlyCardsTotal = $unpaidOrdersStatsService->calculateMonthlyCardsTotal($currentDate);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-                ->notify(new UnpaidOrdersStats($unpaidDailyStats, $unpaidMonthlyStats));
+                ->notify(new UnpaidOrdersStats($unpaidDailyStats, $unpaidMonthlyStats, $unpaidDailyCardsTotal, $unpaidMonthlyCardsTotal));
         }
 
         $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Completed');

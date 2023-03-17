@@ -13,7 +13,7 @@ class UnpaidOrdersStats extends Notification
      *
      * @return void
      */
-    public function __construct(public array $unpaidDailyStats, public array $unpaidMonthlyStats)
+    public function __construct(public array $unpaidDailyStats, public array $unpaidMonthlyStats, public int $dailyTotalCards, public int $monthlyTotalCards)
     {
         //
     }
@@ -35,7 +35,7 @@ class UnpaidOrdersStats extends Notification
             ->success()
             ->attachment(function ($attachment) use ($monthYear) {
                 $attachment->title('Unpaid Orders Stats')
-                    ->content("Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}), Total Cards: {$this->unpaidDailyStats['total_cards']},\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']}),Total Cards: {$this->unpaidDailyStats['total_cards']}");
+                    ->content("Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}), Total Cards: {$this->dailyTotalCards},\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']}),Total Cards: {$this->monthlyTotalCards}");
             });
     }
 }

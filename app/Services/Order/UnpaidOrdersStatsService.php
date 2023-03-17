@@ -5,7 +5,9 @@ namespace App\Services\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class UnpaidOrdersStatsService
 {
@@ -14,36 +16,39 @@ class UnpaidOrdersStatsService
         $unpaidOrders = $this->dailyUnpaidOrders($currentDate)
             ->sum('grand_total');
 
-        $orders = Order::placed()->forDate($currentDate)->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->get();
-        $totalCards = 0;
-        foreach ($orders as $order) {
-            $totalCards += $order->orderItems->sum('quantity');
-        }
-
         return [
             'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
             'total_orders' => $this->dailyOrdersCount($currentDate),
-            'total_cards' => $totalCards,
         ];
+    }
+
+    public function calculateDailyCardsTotal(string $currentDate): int {
+        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfDay(), Carbon::parse($currentDate)->endOfDay());
+    }
+
+    public function calculateMonthlyCardsTotal(string $currentDate): int {
+        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfMonth(), Carbon::parse($currentDate)->endOfMonth());
+    }
+
+    public function calculateCardsTotal($startTime, $endTime): int {
+        return DB::table('orders')
+        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        ->where('orders.created_at', '>=', $startTime)
+        ->where('orders.created_at', '<=', $endTime)
+        ->sum('order_items.quantity');
     }
 
     public function calculateMonthlyStats(string $currentDate): array
     {
         $unpaidOrders = $this->monthlyUnpaidOrders($currentDate)
             ->sum('grand_total');
-
-        $orders = Order::placed()->forMonth($currentDate)->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->get();
-        $totalCards = 0;
-        foreach ($orders as $order) {
-            $totalCards += $order->orderItems->sum('quantity');
-        }
     
         return [
             'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
             'total_orders' => $this->monthlyOrdersCount($currentDate),
-            'total_cards' => $totalCards,
         ];
     }
 

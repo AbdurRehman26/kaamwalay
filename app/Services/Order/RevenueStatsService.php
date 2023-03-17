@@ -2,16 +2,18 @@
 
 namespace App\Services\Order;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
-    public function addDailyStats(string $currentDate): array
+    public function addDailyStats(string $currentDate): RevenueStatsDaily
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forDate($currentDate)
@@ -30,10 +32,27 @@ class RevenueStatsService
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Daily Stats Completed");
 
-        return $this->addStats($currentDate, $orderPayments, $revenue);
+        return $revenue;
     }
 
-    public function addMonthlyStats(string $currentDate): array
+    public function calculateDailyCardsTotal (string $currentDate): int {
+        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfDay(), Carbon::parse($currentDate)->endOfDay());  
+    }
+
+    public function calculateMonthlyCardsTotal (string $currentDate): int {
+        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfMonth(), Carbon::parse($currentDate)->endOfMonth());
+    }
+
+    public function calculateCardsTotal($startTime, $endTime): int {
+        return DB::table('orders')
+        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
+        ->where('orders.created_at', '>=', $startTime)
+        ->where('orders.created_at', '<=', $endTime)
+        ->sum('order_items.quantity');
+    }
+
+    public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)
@@ -52,7 +71,7 @@ class RevenueStatsService
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Monthly Stats Completed");
 
-        return $this->addStats($currentDate, $orderPayments, $revenue);
+        return $revenue;
     }
 
     protected function addStats($currentDate, $orderPayments, $revenue)
@@ -61,13 +80,11 @@ class RevenueStatsService
             'profit' => 0,
             'revenue' => 0,
             'event_at' => $currentDate,
-            'total_cards' => 0,
         ];
 
         foreach ($orderPayments as $orderPayment) {
             $revenueData['profit'] += $orderPayment->order->service_fee - $orderPayment->provider_fee;
             $revenueData['revenue'] += $orderPayment->amount;
-            $revenueData['total_cards'] += $orderPayment->order->orderItems->sum('quantity');
         }
 
         if (
@@ -75,8 +92,8 @@ class RevenueStatsService
             round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)
         ) {
             Log::info("Discrepancy found in the revenue stats");
-            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue'] . ",  Total Cards: " . $revenue['total_cards']);
-            Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue'] . ",  Total Cards: " . $revenueData['total_cards']);
+            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue']);
+            Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);
             Log::info("Updating Revenue Stats");
 
             $revenue->profit = $revenueData['profit'];

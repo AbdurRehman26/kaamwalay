@@ -7,6 +7,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,14 +60,8 @@ it('calculates daily unpaid orders stats', function () {
 
     $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrderDate);
 
-    $toatalCards = 0;
-    foreach ($orders as $order) {
-        $toatalCards += $order->orderItems->sum('quantity');
-    }
-
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
-    expect($unpaidDailyStats['total_cards'])->toBe($toatalCards);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
@@ -77,12 +72,32 @@ it('calculates monthly unpaid orders stats for the current month', function () {
 
     $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrderDate);
 
-    $toatalCards = 0;
-    foreach ($orders as $order) {
-        $toatalCards += $order->orderItems->sum('quantity');
-    }
-
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
-    expect($unpaidMonthlyStats['total_cards'])->toBe($toatalCards);
+})->group('unpaid-orders-stats');
+
+it('counts daily unpaid orders cards', function () {
+    $expectedCardTotal = DB::table('orders')
+        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        ->where('orders.created_at', '>=', Carbon::now()->startOfDay())
+        ->where('orders.created_at', '<=', Carbon::now()->endOfDay())
+        ->sum('order_items.quantity');
+
+    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal(Carbon::now());
+
+    expect($expectedCardTotal)->toBe($cardTotal);
+})->group('unpaid-orders-stats');
+
+it('counts monthly unpaid orders cards', function () {
+    $expectedCardTotal = DB::table('orders')
+        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        ->where('orders.created_at', '>=', Carbon::now()->startOfMonth())
+        ->where('orders.created_at', '<=', Carbon::now()->endOfMonth())
+        ->sum('order_items.quantity');
+
+    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now());
+
+    expect($expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

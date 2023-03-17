@@ -97,27 +97,23 @@ it('adds monthly revenue stats for the current month', function () {
 })->group('revenue-stats');
 
 it('counts daily paid orders cards', function () {
-    $expectedCardTotal = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
-        ->where('orders.created_at', '>=', Carbon::now()->startOfDay())
-        ->where('orders.created_at', '<=', Carbon::now()->endOfDay())
-        ->sum('order_items.quantity');
+    $expectedCardTotal = Order::paid()
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+    ->sum('order_items.quantity');
 
-    $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal(Carbon::now());
+    $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal();
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('revenue-stats');
 
 it('counts monthly paid orders cards', function () {
-    $expectedCardTotal = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
-        ->where('orders.created_at', '>=', Carbon::now()->startOfMonth())
-        ->where('orders.created_at', '<=', Carbon::now()->endOfMonth())
-        ->sum('order_items.quantity');
+    $expectedCardTotal = Order::paid()
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+    ->sum('order_items.quantity');
 
-    $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal(Carbon::now());
+    $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal();
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('revenue-stats');

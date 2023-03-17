@@ -37,12 +37,12 @@ class UpdateRevenueStats extends Command
         $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Starting');
 
         $revenueStats = $revenueStatsService->addDailyStats($currentDate);
-        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal($currentDate);
+        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal();
 
         $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
 
         $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);
-        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal($currentDate);
+        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal();
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))

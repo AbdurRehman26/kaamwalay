@@ -6,6 +6,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -23,24 +24,20 @@ class UnpaidOrdersStatsService
         ];
     }
 
-    public function calculateDailyCardsTotal(string $currentDate): int
+    public function calculateDailyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfDay(), Carbon::parse($currentDate)->endOfDay());
+        return $this->calculateCardsTotal(now()->startOfDay(), now()->endOfDay());
     }
 
-    public function calculateMonthlyCardsTotal(string $currentDate): int
+    public function calculateMonthlyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(Carbon::parse($currentDate)->startOfMonth(), Carbon::parse($currentDate)->endOfMonth());
+        return $this->calculateCardsTotal(now()->startOfMonth(), now()->endOfMonth());
     }
 
-    public function calculateCardsTotal(string $startTime, string $endTime): int
+    public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
     {
-        return DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->where('orders.created_at', '>=', $startTime)
-        ->where('orders.created_at', '<=', $endTime)
-        ->sum('order_items.quantity');
+        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function calculateMonthlyStats(string $currentDate): array

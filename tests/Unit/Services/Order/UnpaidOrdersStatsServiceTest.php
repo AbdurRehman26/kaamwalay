@@ -77,27 +77,23 @@ it('calculates monthly unpaid orders stats for the current month', function () {
 })->group('unpaid-orders-stats');
 
 it('counts daily unpaid orders cards', function () {
-    $expectedCardTotal = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->where('orders.created_at', '>=', Carbon::now()->startOfDay())
-        ->where('orders.created_at', '<=', Carbon::now()->endOfDay())
-        ->sum('order_items.quantity');
+    $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+    ->sum('order_items.quantity');
 
-    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal(Carbon::now());
+    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal();
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');
 
 it('counts monthly unpaid orders cards', function () {
-    $expectedCardTotal = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->where('orders.created_at', '>=', Carbon::now()->startOfMonth())
-        ->where('orders.created_at', '<=', Carbon::now()->endOfMonth())
-        ->sum('order_items.quantity');
+    $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+    ->sum('order_items.quantity');
 
-    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now());
+    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal();
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

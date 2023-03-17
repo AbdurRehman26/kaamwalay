@@ -58,7 +58,7 @@ class RefereeCouponService
             array_merge(
                 [
                     'available_from' => now(),
-                    'available_till' => now()->addHours(48),
+                    'available_till' => now()->addDays(30),
                     'code' => $code,
                     'name' => $code,
                     'created_by' => $user->id,

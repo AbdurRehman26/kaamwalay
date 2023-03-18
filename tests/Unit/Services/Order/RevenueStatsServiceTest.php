@@ -99,7 +99,7 @@ it('adds monthly revenue stats for the current month', function () {
 it('counts daily paid orders cards', function () {
     $expectedCardTotal = Order::paid()
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-    ->whereBetween('orders.created_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
     ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal();
@@ -110,7 +110,7 @@ it('counts daily paid orders cards', function () {
 it('counts monthly paid orders cards', function () {
     $expectedCardTotal = Order::paid()
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-    ->whereBetween('orders.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
     ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal();

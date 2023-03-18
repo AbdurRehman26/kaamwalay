@@ -39,7 +39,7 @@ class RevenueStatsUpdated extends Notification
             ->success()
             ->attachment(function ($attachment) use ($monthYear) {
                 $attachment->title('Revenue Stats')
-                ->content("Date: {$this->revenueStatsDaily['event_at']}, Revenue: \${$this->revenueStatsDaily['revenue']}, Total Cards: {$this->paidDailyCardsTotal} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly['revenue']}, Total Cards: {$this->paidMonthlyCardsTotal}");
+                ->content("Date: {$this->revenueStatsDaily['event_at']}, Revenue: \${$this->revenueStatsDaily['revenue']} , Total Cards: {$this->paidDailyCardsTotal} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly['revenue']}, Total Cards: {$this->paidMonthlyCardsTotal}");
             });
     }
 }

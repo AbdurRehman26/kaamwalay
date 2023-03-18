@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 
 class UnpaidOrdersStatsService
@@ -19,6 +20,22 @@ class UnpaidOrdersStatsService
             'date' => $currentDate,
             'total_orders' => $this->dailyOrdersCount($currentDate),
         ];
+    }
+
+    public function calculateDailyCardsTotal(): int
+    {
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
+    }
+
+    public function calculateMonthlyCardsTotal(): int
+    {
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
+    }
+
+    public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
+    {
+        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+        ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function calculateMonthlyStats(string $currentDate): array

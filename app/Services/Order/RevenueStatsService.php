@@ -2,12 +2,10 @@
 
 namespace App\Services\Order;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
-use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -48,7 +46,6 @@ class RevenueStatsService
 
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
     {
-
         return Order::paid()->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 

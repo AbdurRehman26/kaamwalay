@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Referrer;
 use App\Models\ReferrerEarnedCommission;
 use App\Models\User;
+use App\Services\EmailService;
 use App\Services\ReferralProgram\ReferrerService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -124,7 +125,7 @@ test('a referral code is assigned after user registered', function () {
     Event::assertListening(CustomerRegistered::class, GenerateReferrerOnCustomerRegister::class);
 
     $user = User::whereEmail($email)->first();
-    $listener = new GenerateReferrerOnCustomerRegister(new ReferrerService());
+    $listener = new GenerateReferrerOnCustomerRegister(new ReferrerService(), new EmailService());
     $listener->handle(new CustomerRegistered($user, $requestData));
 
     $this->assertNotNull($user->referrer);

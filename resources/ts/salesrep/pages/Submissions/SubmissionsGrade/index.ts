@@ -1,1 +1,0 @@
-export { SubmissionsGrade } from './SubmissionsGrade';

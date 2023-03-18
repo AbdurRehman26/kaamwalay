@@ -40,6 +40,18 @@ class OrderPaidListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID,
             $this->orderService->getDataForCustomerOrderPaid($event->order)
         );
+
+        if ($event->order->user->referredBy) {
+            $this->emailService->sendEmail(
+                [[$event->order->user->referredBy->email => $event->order->user->referredBy->first_name ?? '']],
+                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING],
+                EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
+                [
+                    'REFERRER_NAME' => $event->order->user->referredBy->first_name,
+                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
+                ]
+            );
+        }
     }
 
     protected function processSalesmanCommission(OrderPaid $event): void

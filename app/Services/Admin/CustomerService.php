@@ -58,7 +58,6 @@ class CustomerService
 
     public function updateCustomer(User $user, array $data): User
     {
-
         $response = $this->agsService->updateUserDataByUsername($user->username, $data);
 
         if (! empty($response['code'])) {

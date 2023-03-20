@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\API\V3\Admin;
 
-use App\Exceptions\API\Admin\Customer\CustomerDetailsCouldNotBeUpdated;
-use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\Customer\UpdateCustomerDetailsRequest;
 use App\Http\Resources\API\V3\Admin\Customer\CustomerCollection;
 use App\Http\Resources\API\V3\Admin\Customer\CustomerResource;
 use App\Models\User;
 use App\Services\Admin\CustomerService;
-use App\Services\AGS\AgsService;
-use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
 {

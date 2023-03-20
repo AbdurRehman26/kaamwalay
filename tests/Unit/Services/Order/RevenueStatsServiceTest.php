@@ -98,7 +98,9 @@ it('adds monthly revenue stats for the current month', function () {
 
 it('counts daily paid orders cards', function () {
     $expectedCardTotal = Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
-        'users.email', Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray())
+        'users.email',
+        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+    )
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
     ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
     ->sum('order_items.quantity');
@@ -110,7 +112,9 @@ it('counts daily paid orders cards', function () {
 
 it('counts monthly paid orders cards', function () {
     $expectedCardTotal = Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
-        'users.email', Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray())
+        'users.email',
+        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+    )
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
     ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
     ->sum('order_items.quantity');

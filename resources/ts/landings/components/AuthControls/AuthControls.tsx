@@ -7,7 +7,6 @@ import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { AuthDialog } from '@shared/components/AuthDialog';
-import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
@@ -54,28 +53,9 @@ const useStyles = makeStyles(
 export function AuthControls() {
     const { checking, authenticated, openAuthDialog, authDialogProps, user } = useAuth();
     const classes = useStyles();
-    const isRedirect = localStorage.getItem('logged-in-user:redirect');
-
-    function redirection(redirectUrl: string) {
-        window.location.assign(redirectUrl);
-        localStorage.setItem('logged-in-user:redirect', 'false');
-    }
 
     if (checking) {
         return null;
-    }
-
-    if (authenticated && isRedirect !== 'false') {
-        const redirectUrl = user.hasRole(RolesEnum.Admin)
-            ? AuthenticationEnum.AdminRoute
-            : user.hasRole(RolesEnum.Salesman)
-            ? AuthenticationEnum.SalesRepDashboardRoute
-            : AuthenticationEnum.DashboardRoute;
-
-        redirection(redirectUrl);
-    }
-    if (!authenticated) {
-        localStorage.removeItem('logged-in-user:redirect');
     }
 
     return (

@@ -10,24 +10,16 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
-import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
+import { cx } from '@shared/lib/utils/cx';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
-import { getCardLabel, setEditLabelDialog } from '@shared/redux/slices/adminOrderLabelsSlice';
-import { OrderStatusEnum } from '../constants/OrderStatusEnum';
-import { RolesEnum } from '../constants/RolesEnum';
-import { OrderItemEntity } from '../entities/OrderItemEntity';
-import { useAuth } from '../hooks/useAuth';
-import { cx } from '../lib/utils/cx';
-import { formatCurrency } from '../lib/utils/formatCurrency';
-import font from '../styles/font.module.css';
+import font from '@shared/styles/font.module.css';
 
-enum RowOption {
-    EditLabel,
-}
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
     serviceLevelPrice: number;
@@ -116,24 +108,11 @@ export const useStyles = makeStyles(
 export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
-    const dispatch = useDispatch();
     // TODO: replace with a dedicated hook `useUser`
-    const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
     const [openNotesModal, setOpenNotesModal] = useState(false);
     const [notes, setNotes] = useState('');
 
-    const handleOption = useCallback(
-        async (action: RowOption, id: number) => {
-            switch (action) {
-                case RowOption.EditLabel:
-                    await dispatch(getCardLabel({ id }));
-                    dispatch(setEditLabelDialog(true));
-                    break;
-            }
-        },
-        [dispatch],
-    );
     return (
         <Box px={3} className={classes.containerBox}>
             <NotesDialog
@@ -283,9 +262,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {(orderStatusID === OrderStatusEnum.GRADED ||
-                                        orderStatusID === OrderStatusEnum.ASSEMBLED ||
-                                        orderStatusID === OrderStatusEnum.SHIPPED) &&
+                                    {orderStatusID === OrderStatusEnum.SHIPPED &&
                                     item?.userCard?.overallGrade !== '0' &&
                                     item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
@@ -312,18 +289,6 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
 
                                             {isMobile ? null : (
                                                 <div className={classes.gradeColumn}>
-                                                    {user.hasRole(RolesEnum.Admin) && (
-                                                        <MuiLink
-                                                            href={`/admin/submissions/${item.orderId}/grade?item_id=${item.id}`}
-                                                            rel={'noreferrer'}
-                                                            underline={'hover'}
-                                                            variant={'body2'}
-                                                            className={classes.viewGradeText}
-                                                        >
-                                                            Revise Grade
-                                                        </MuiLink>
-                                                    )}
-
                                                     {item?.userCard?.overallGrade ? (
                                                         <MuiLink
                                                             target={'_blank'}
@@ -339,10 +304,10 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                 </div>
                                             )}
                                         </GradeRoot>
-                                    ) : item.status.orderItemStatus.id === OrderItemStatusEnum.NOT_ACCEPTED ||
-                                      item.status.orderItemStatus.id === OrderItemStatusEnum.MISSING ? (
+                                    ) : item.status.id === OrderItemStatusEnum.NOT_ACCEPTED ||
+                                      item.status.id === OrderItemStatusEnum.MISSING ? (
                                         <>
-                                            {item.status.orderItemStatus.name}
+                                            {item.status.name}
                                             <br />
                                             {item.notes && (
                                                 <MuiLink
@@ -379,13 +344,6 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                         </TableCell>
                                     </>
                                 )}
-                                <TableCell>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
-                                            Edit Label Text
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
-                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

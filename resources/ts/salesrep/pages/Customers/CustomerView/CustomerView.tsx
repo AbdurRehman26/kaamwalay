@@ -9,15 +9,18 @@ import { CustomerCreditDialog } from '@salesrep/components/CustomerCreditDialog'
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { useSalesRepCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { resendAccessEmail } from '@shared/redux/slices/submissionGradeSlice';
 import { CustomerDetail } from './CustomerDetail';
 
 enum RowOption {
     CreditCustomer,
     ResendAccessEmail,
+    EditCustomerDetails,
 }
 
 const Root = styled(Grid)({
@@ -73,11 +76,21 @@ const Root = styled(Grid)({
 export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleCreditDialogClose = useCallback(() => {
         setCreditDialog(false);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
     }, []);
 
     const createCustomerSubmission = () => {
@@ -104,9 +117,13 @@ export function CustomerView() {
                 case RowOption.ResendAccessEmail:
                     dispatch(resendAccessEmail(id));
                     break;
+                case RowOption.EditCustomerDetails:
+                    setEditCustomerDialog(true);
+                    dispatch(setCustomer(data));
+                    break;
             }
         },
-        [dispatch, id],
+        [data, dispatch, id],
     );
 
     if (isLoading || !data) {
@@ -150,6 +167,7 @@ export function CustomerView() {
                     </Button>
                     <OptionsMenu onClick={handleOption}>
                         <OptionsMenuItem action={RowOption.CreditCustomer}>Credit Customer</OptionsMenuItem>
+                        <OptionsMenuItem action={RowOption.EditCustomerDetails}>Edit Customer Details</OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog
@@ -158,6 +176,13 @@ export function CustomerView() {
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
                     onSubmit={handleReloadCustomerData}
+                />
+                <EditCustomerDetailsDialog
+                    endpointUrl={`salesman/customer/${id}`}
+                    endpointVersion={'v3'}
+                    open={editCustomerDialog}
+                    onSubmit={handleEditCustomerSubmit}
+                    onClose={handleEditCustomerDialogClose}
                 />
             </Root>
             <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />

@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
@@ -12,6 +13,7 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -35,6 +37,7 @@ enum Options {
     CancelOrder,
     MarkAsPaid,
     GenerateLabel,
+    EditCustomerDetails,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -56,6 +59,7 @@ export default function SubmissionHeaderMoreButton({
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -79,6 +83,15 @@ export default function SubmissionHeaderMoreButton({
     const handleClose = useCallback(() => {
         setAnchorEl(null);
     }, [setAnchorEl]);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
 
     const setCancelDialog = useCallback(async () => {
         const result = await confirm({
@@ -160,9 +173,23 @@ export default function SubmissionHeaderMoreButton({
                 case Options.GenerateLabel:
                     await setGenerateLabelDialog();
                     break;
+                case Options.EditCustomerDetails:
+                    if (customer) {
+                        setEditCustomerDialog(true);
+                        dispatch(setCustomer(customer));
+                    }
+                    break;
             }
         },
-        [setCancelDialog, handleClose, handleViewGrades, setShowMarkPaidDialog, setGenerateLabelDialog],
+        [
+            setCancelDialog,
+            handleClose,
+            handleViewGrades,
+            setShowMarkPaidDialog,
+            setGenerateLabelDialog,
+            customer,
+            dispatch,
+        ],
     );
 
     return (
@@ -184,6 +211,9 @@ export default function SubmissionHeaderMoreButton({
                 {orderStatus.isAny([OrderStatusEnum.GRADED, OrderStatusEnum.ASSEMBLED, OrderStatusEnum.SHIPPED]) ? (
                     <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                 ) : null}
+                {customer ? (
+                    <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                ) : null}
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}
@@ -191,12 +221,21 @@ export default function SubmissionHeaderMoreButton({
                 setShowPaymentActionsModal={setShowPaymentActionsModal}
             />
             {customer ? (
-                <CustomerCreditDialog
-                    customer={customer}
-                    wallet={customer.wallet}
-                    open={creditDialog}
-                    onClose={handleCreditDialogClose}
-                />
+                <>
+                    <CustomerCreditDialog
+                        customer={customer}
+                        wallet={customer.wallet}
+                        open={creditDialog}
+                        onClose={handleCreditDialogClose}
+                    />
+                    <EditCustomerDetailsDialog
+                        endpointUrl={`admin/customer/${customer.id}`}
+                        endpointVersion={'v3'}
+                        open={editCustomerDialog}
+                        onSubmit={handleEditCustomerSubmit}
+                        onClose={handleEditCustomerDialogClose}
+                    />
+                </>
             ) : null}
             <MarkAsPaidDialog
                 orderId={orderId}

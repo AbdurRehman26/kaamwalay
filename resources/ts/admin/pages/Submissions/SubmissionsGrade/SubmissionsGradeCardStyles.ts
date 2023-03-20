@@ -107,7 +107,9 @@ export const useSubmissionsGradeCardStyles = makeStyles(
             width: '100%',
             marginTop: '12px',
         },
-        statusButton: {},
+        statusButton: {
+            borderRadius: 2,
+        },
         disabledButton: {},
         submitButton: {
             marginTop: theme.spacing(1.5),
@@ -205,6 +207,16 @@ export const useSubmissionsGradeCardStyles = makeStyles(
             lineHeight: '20px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
+        },
+        notAcceptedOrMissingButton: {
+            backgroundColor: 'rgba(255, 237, 237, 1) !important',
+            color: 'rgba(191, 32, 32, 1) !important',
+            border: '1px solid rgba(191, 32, 32, 1) !important',
+        },
+        gradedButton: {
+            backgroundColor: '#E9FFFE !important',
+            color: '#20BFB8 !important',
+            border: '1px solid #20BFB8 !important',
         },
     }),
     { name: 'SubmissionsGradeCard' },

@@ -322,8 +322,8 @@ class AgsService
         throw new CardProductCanNotBeDeleted;
     }
 
-    public function updateCustomerData(string $username, array $data): array
+    public function updateUserDataByUsername(string $username, array $data): array
     {
-        return $this->client->updateCustomerData($username, $data);
+        return $this->client->updateUserDataByUsername($username, $data);
     }
 }

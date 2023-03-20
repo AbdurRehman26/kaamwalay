@@ -275,7 +275,7 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: $route, payload: []);
     }
 
-    public function updateCustomerData(string $username, array $data): array
+    public function updateUserDataByUsername(string $username, array $data): array
     {
         $route = '/users/' . $username .'/';
         $response = Http::withToken($this->getAuthToken())

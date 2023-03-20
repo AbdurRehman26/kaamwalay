@@ -3,9 +3,11 @@
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\V1\PaymentService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -38,6 +40,10 @@ beforeEach(function () {
             ];
             }
         ));
+
+    foreach ($this->orders as $order) {
+        OrderItem::factory()->for($order)->create();
+    }
 });
 
 it('adds daily revenue stats', function () {
@@ -86,6 +92,28 @@ it('adds monthly revenue stats for the current month', function () {
 
     $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 
-    expect($revenue)->toBe($revenueStats->revenue);
-    expect(round($profit, 2))->toBe(round($revenueStats->profit, 2));
+    expect($revenue)->toBe($revenueStats['revenue']);
+    expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
+})->group('revenue-stats');
+
+it('counts daily paid orders cards', function () {
+    $expectedCardTotal = Order::paid()
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
+    ->sum('order_items.quantity');
+
+    $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal();
+
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
+})->group('revenue-stats');
+
+it('counts monthly paid orders cards', function () {
+    $expectedCardTotal = Order::paid()
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+    ->sum('order_items.quantity');
+
+    $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal();
+
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('revenue-stats');

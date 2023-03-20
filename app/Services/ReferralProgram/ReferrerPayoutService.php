@@ -2,10 +2,10 @@
 
 namespace App\Services\ReferralProgram;
 
+use App\Events\API\Admin\ReferralProgram\PayoutInitiatedEvent;
 use App\Models\Referrer;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +63,8 @@ class ReferrerPayoutService
             $referrer->save();
 
             DB::commit();
+
+            PayoutInitiatedEvent::dispatch($referrerPayout);
 
             return $referrerPayout;
         } catch (Exception $e) {

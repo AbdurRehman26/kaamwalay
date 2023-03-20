@@ -3,10 +3,14 @@
 namespace App\Services\Admin\V3;
 
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Models\Country;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\UserCard;
 use App\Services\Admin\V2\OrderService as V2OrderService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {
@@ -28,5 +32,24 @@ class OrderService extends V2OrderService
         OrderShippingAddressChangedEvent::dispatch($order);
 
         return $order;
+    }
+
+    /**
+     * @return LengthAwarePaginator<UserCard>
+     * @throws IncorrectOrderStatus
+     */
+    public function getPaginatedCardsForGrading(Order $order): LengthAwarePaginator
+    {
+        if (! $order->canBeGraded()) {
+            throw new IncorrectOrderStatus;
+        }
+
+        $query = UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->where('order_items.order_id', $order->id)->select('user_cards.*');
+
+        // @phpstan-ignore-next-line
+        return QueryBuilder::for($query)
+            ->allowedFilters(UserCard::allowedFilters())
+            ->paginate(request('per_page', 24));
     }
 }

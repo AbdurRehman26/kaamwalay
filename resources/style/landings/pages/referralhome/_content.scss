@@ -158,6 +158,10 @@
     min-width: 128px;
     font-weight: 500;
     font-size: 14px;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 14%), 0 2px 1px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 20%);
+    &:hover {
+        background-color: rgb(66, 232, 224);
+    }
     @media screen and (max-width: 767px) {
         margin-top: 8%;
     }
@@ -218,6 +222,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    &--videoDiv {
+        position: relative;
+        cursor: pointer;
+    }
     &--half {
         width: 50%;
         @media screen and (max-width: 1199px) {
@@ -246,6 +254,10 @@
     }
     &--fourth {
         width: 25%;
+        &:hover {
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
         @media screen and (max-width: 1279px) {
             width: 50%;
         }

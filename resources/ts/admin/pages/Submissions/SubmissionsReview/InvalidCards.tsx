@@ -6,12 +6,13 @@ import { useAppDispatch } from '../../../redux/hooks';
 import CardItem from './CardItem';
 import CardsList from './CardsList';
 
-interface MissingCardsProps {
+interface InvalidCardsProps {
     items: OrderItemEntity[];
     orderId: number;
+    title: string;
 }
 
-export function MissingCards({ items, orderId }: MissingCardsProps) {
+export function InvalidCards({ items, orderId, title }: InvalidCardsProps) {
     const count = (items || []).length;
     const hasNoCards = count === 0;
     const dispatch = useAppDispatch();
@@ -44,10 +45,10 @@ export function MissingCards({ items, orderId }: MissingCardsProps) {
     }
 
     return (
-        <CardsList heading={'Missing cards'} totals={count} onClear={handleClear}>
+        <CardsList heading={title} totals={count} onClear={handleClear}>
             {items.map((item, index) => (
                 <CardItem
-                    label={'Missing'}
+                    label={title}
                     itemId={item.id}
                     key={index}
                     card={item.cardProduct}
@@ -60,4 +61,4 @@ export function MissingCards({ items, orderId }: MissingCardsProps) {
     );
 }
 
-export default MissingCards;
+export default InvalidCards;

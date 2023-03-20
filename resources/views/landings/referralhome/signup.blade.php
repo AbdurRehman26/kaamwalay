@@ -1,11 +1,14 @@
 <section class="ReferralHome-signup">
-    <img src="{{ asset('assets/images/landings/home/priceBackground.jpg') }}" alt=""
-         class="ReferralHome-pricingBackground" />
+    <img src="{{ asset('assets/images/landings/home/priceBackground.jpg') }}" alt="" class="ReferralHome-pricingBackground" />
     <div id="top" class="ReferralHome-main">
         <div class="ReferralHome-mainLeft">
             <div class="ReferralHome-referralName">
-                    <img src="{{ asset('assets/images/landings/referralhome/announcement.png') }}" alt=""/>
+                <div class="ReferralHome-iconDiv">
+                    <img src="{{ asset('assets/images/landings/referralhome/announcement.svg') }}" alt="" />
+                </div>
+                <div>
                     <span>Referral by {{ $referBy }} </span>
+                </div>
             </div>
             <div>
                 <h1 class="ReferralHome-sectionTitle">Sign Up to Claim <span> {{ config('robograding.feature_referral_discount_percentage') }}% OFF </span> Your First Submission</h1>
@@ -13,7 +16,7 @@
             </div>
         </div>
         <div class="ReferralHome-mainRight">
-            <div data-atom="auth-views" data-aos="fade-left"data-aos-delay="200" data-discount={{ config('robograding.feature_referral_discount_percentage') }} data-content="{{$referralCode}}">
+            <div data-atom="auth-views" data-aos="fade-left" data-aos-delay="200" data-discount={{ config('robograding.feature_referral_discount_percentage') }} data-content="{{$referralCode}}">
                 {{-- JS runtime actions --}}
             </div>
         </div>

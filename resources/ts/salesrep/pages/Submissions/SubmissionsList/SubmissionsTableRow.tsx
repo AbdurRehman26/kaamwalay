@@ -191,6 +191,8 @@ export function SubmissionsTableRow({ order, headings, onEditCustomer }: Submiss
                         <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
                     ))}
 
+                {!headings || (headings?.includes('coupon') && <TableCell>{order?.coupon?.code ?? '-'}</TableCell>)}
+
                 {!headings ||
                     (headings?.includes('grand_total') && <TableCell>{formatCurrency(order.grandTotal)}</TableCell>)}
 

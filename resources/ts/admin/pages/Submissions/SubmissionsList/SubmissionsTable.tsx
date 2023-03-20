@@ -1,15 +1,16 @@
-import Check from '@mui/icons-material/Check';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import classNames from 'classnames';
 import { upperFirst } from 'lodash';
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
 import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { PageSelector } from '@shared/components/PageSelector';
@@ -18,6 +19,7 @@ import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
+import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -25,7 +27,9 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
+import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -33,42 +37,21 @@ interface SubmissionsTableProps {
     search?: string;
 }
 
-interface Props {
-    label: string;
-    active?: boolean;
-    value?: string;
-    onClear?: () => void;
-}
-
 const ReferralStatus = [
     { label: 'Yes', value: 1 },
     { label: 'No', value: 0 },
 ];
 
-const StyledButton = styled(Button)(({ theme }) => ({
-    borderRadius: 20,
-    textTransform: 'capitalize',
-    fontSize: 14,
-    fontWeight: 400,
-    margin: theme.spacing(0, 1),
-    padding: '7px 14px',
-    borderColor: '#e0e0e0',
-    '.MuiSvgIcon-root': {
-        color: 'rgba(0, 0, 0, .54)',
-    },
-    '&.active': {
-        '&, .MuiSvgIcon-root': {
-            color: theme.palette.primary.main,
-        },
-    },
-}));
-
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: 0 });
+    const [searchPromoCode, setSearchPromoCode] = useState('');
+    const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
+    const [couponCode, setCouponCode] = useState<PromoCodeEntity | null>(null);
+    const [referrerStatus, setReferrerStatus] = useState({ label: '', value: '' });
 
     const [orderDirection, setOrderDirection] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
@@ -76,6 +59,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
+    const dispatch = useAppDispatch();
     const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const customer = useAppSelector((state) => state.editCustomerSlice.customer);
 
@@ -161,6 +145,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             sortable: true,
         },
         {
+            id: 'coupon',
+            numeric: true,
+            disablePadding: false,
+            label: 'Promo Code',
+            align: 'left',
+            sortable: false,
+        },
+        {
             id: 'grand_total',
             numeric: true,
             disablePadding: false,
@@ -186,20 +178,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         },
     ];
 
-    const FilterButton = ({ label, active, value }: PropsWithChildren<Props>) => {
-        return (
-            <StyledButton
-                variant={'outlined'}
-                color={'inherit'}
-                startIcon={active ? <Check onClick={() => setPaymentStatus(null)} /> : null}
-                onClick={() => handleApplyFilter(value)}
-                className={classNames({ active: active })}
-            >
-                {label}
-            </StyledButton>
-        );
-    };
-
     const orders$ = useAdminOrdersListQuery({
         params: {
             include: [
@@ -210,18 +188,69 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'orderShipment',
                 'orderLabel',
                 'shippingMethod',
+                'coupon',
             ],
             sort: sortFilter,
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
+                couponCode,
             },
         },
         ...bracketParams(),
     });
 
+    const debouncedFunc = debounce((func: any) => {
+        func();
+    }, 300);
+
     const totals = orders$.pagination?.meta?.total ?? 0;
+
+    const clearPromoCode = useCallback(() => {
+        setCouponCode(null);
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus: paymentStatus,
+                couponCode: '',
+            }),
+            1,
+        );
+    }, [orders$, paymentStatus, search, sortFilter]);
+
+    const handlePromoCodeSearch = useCallback(
+        (event: any) => {
+            debouncedFunc(async () => {
+                setSearchPromoCode(event.target.value);
+                const result = await dispatch(getPromoCodes(event.target.value));
+                await setPromoCodes(
+                    result.payload.data.map((item: PromoCodeEntity) => {
+                        return {
+                            id: item?.id,
+                            code: item?.code,
+                        };
+                    }),
+                );
+            });
+        },
+        [dispatch, debouncedFunc],
+    );
+
+    const clearPaymentStatus = useCallback(() => {
+        setPaymentStatus(null);
+        setPaymentStatusLabel('');
+        orders$.searchSortedWithPagination(
+            { sort: sortFilter },
+            toApiPropertiesObject({
+                search,
+                paymentStatus: null,
+                couponCode,
+            }),
+            1,
+        );
+    }, [orders$, sortFilter, search, couponCode]);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -248,11 +277,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     };
 
     const handleApplyFilter = useCallback(
-        async (selectedPaymentStatus) => {
+        async (selectedPaymentStatus, selectedPaymentStatusLabel) => {
             if (selectedPaymentStatus === paymentStatus) {
                 setPaymentStatus(null);
+                setPaymentStatusLabel('');
             } else {
                 setPaymentStatus(selectedPaymentStatus);
+                setPaymentStatusLabel(selectedPaymentStatusLabel);
             }
 
             orders$.searchSortedWithPagination(
@@ -260,16 +291,33 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
+                    couponCode,
+                }),
+                1,
+            );
+        },
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode],
+    );
+
+    const handlePromoCodeFilter = useCallback(
+        (e, promoCode) => {
+            setCouponCode(promoCode);
+            orders$.searchSortedWithPagination(
+                { sort: sortFilter },
+                toApiPropertiesObject({
+                    search,
+                    paymentStatus: paymentStatus,
+                    couponCode: promoCode.code,
                     referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, referrerStatus.value],
+        [orders$, search, paymentStatus, sortFilter, referrerStatus.value],
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
-        setReferrerStatus({ label: '', value: 0 });
+        setReferrerStatus({ label: '', value: '' });
         orders$.searchSortedWithPagination(
             { sort: sortFilter },
             toApiPropertiesObject({
@@ -366,9 +414,22 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 </Grid>
             </Grid>
             <Grid alignItems={'left'}>
-                {Object.entries(PaymentStatusMap).map(([key, status]) => {
-                    return <FilterButton label={status} active={paymentStatus === key} value={key} />;
-                })}
+                <PageSelector label={'Payment Status'} value={paymentStatusLabel} onClear={clearPaymentStatus}>
+                    {Object.entries(PaymentStatusMap).map(([key, status]) => {
+                        return (
+                            <Grid key={key}>
+                                <MenuItem
+                                    sx={{ textTransform: 'capitalize' }}
+                                    onClick={() => handleApplyFilter(key, status)}
+                                    key={key}
+                                    value={key}
+                                >
+                                    {status}
+                                </MenuItem>
+                            </Grid>
+                        );
+                    })}
+                </PageSelector>
                 <PageSelector label={'Referrer'} value={referrerStatus.label} onClear={handleClearReferrerStatus}>
                     {ReferralStatus?.map((item: any) => {
                         return (
@@ -383,6 +444,19 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                             </Grid>
                         );
                     })}
+                </PageSelector>
+                <PageSelector label={'Coupon'} value={couponCode?.code} onClear={clearPromoCode}>
+                    <FormControl sx={{ width: '300px' }}>
+                        <Autocomplete
+                            getOptionLabel={(promoCodes) => promoCodes.code || searchPromoCode}
+                            value={couponCode}
+                            onKeyDown={(e) => handlePromoCodeSearch(e)}
+                            onChange={handlePromoCodeFilter}
+                            options={promoCodes}
+                            fullWidth
+                            renderInput={(params) => <TextField {...params} placeholder={'Search promo code'} />}
+                        />
+                    </FormControl>
                 </PageSelector>
             </Grid>
             <TableContainer>

@@ -15,7 +15,7 @@ class RevenueStatsUpdated extends Notification
      *
      * @return void
      */
-    public function __construct(public RevenueStatsDaily $revenueStatsDaily, public RevenueStatsMonthly $revenueStatsMonthly)
+    public function __construct(public RevenueStatsDaily $revenueStatsDaily, public RevenueStatsMonthly $revenueStatsMonthly, public int $paidDailyCardsTotal, public int $paidMonthlyCardsTotal)
     {
         //
     }
@@ -39,7 +39,7 @@ class RevenueStatsUpdated extends Notification
             ->success()
             ->attachment(function ($attachment) use ($monthYear) {
                 $attachment->title('Revenue Stats')
-                    ->content("Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue}\nMonth: {$monthYear}, Revenue: \${$this->revenueStatsMonthly->revenue}");
+                ->content("Date: {$this->revenueStatsDaily['event_at']}, Revenue: \${$this->revenueStatsDaily['revenue']}, Total Cards: {$this->paidDailyCardsTotal} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly['revenue']}, Total Cards: {$this->paidMonthlyCardsTotal}");
             });
     }
 }

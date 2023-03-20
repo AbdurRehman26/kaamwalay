@@ -69,7 +69,7 @@ class OrderItemService
         $item->save();
 
         // When item is marked as confirmed create the user card details.
-        if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
+        if (in_array($requestStatus->id, [OrderItemStatus::CONFIRMED, OrderItemStatus::NOT_ACCEPTED]) && ! $item->userCard) {
             $this->userCardService->createItemUserCard($item);
         }
 

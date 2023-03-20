@@ -6,9 +6,18 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
+    async (DTO: {
+        id: number | string;
+        fromAgs: boolean | undefined;
+        page?: number;
+        perPage?: number;
+        itemId?: string | null;
+    }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const endpoint = apiService.createEndpoint(
+            `admin/orders/${DTO.id}/grades?per_page=${DTO.perPage}&page=${DTO.page}`,
+            { version: 'v3' },
+        );
         const cardsResponse = await endpoint.get('', {
             data: { fromAgs: DTO.fromAgs ?? true },
         });
@@ -73,6 +82,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    gradesPagination: any;
     hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
@@ -90,6 +100,7 @@ export interface SubmissionsGrades {
 
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
+    gradesPagination: null,
     viewModes: [],
     hasLoadedAllRobogrades: false,
 };
@@ -223,12 +234,17 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
-            state.allSubmissions = action.payload;
+            const data = action.payload.data;
+            const pagination = { links: action.payload.links, meta: action.payload.meta };
+
+            state.allSubmissions = data;
+            state.gradesPagination = pagination;
+
             state.hasLoadedAllRobogrades =
-                action.payload.filter(
+                data.filter(
                     (card: Record<string, any>) =>
                         card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
-                ).length === action.payload.length;
+                ).length === data.length;
         },
     },
 });

@@ -339,7 +339,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                 </div>
                                             )}
                                         </GradeRoot>
-                                    ) : !user.hasRole(RolesEnum.Customer) &&
+                                    ) : window.location.href.match('admin') &&
                                       (item.status.orderItemStatus.id === OrderItemStatusEnum.NOT_ACCEPTED ||
                                           item.status.orderItemStatus.id === OrderItemStatusEnum.MISSING) ? (
                                         <>

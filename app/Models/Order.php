@@ -165,6 +165,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('status'),
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
+            AllowedFilter::scope('coupon_code'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
@@ -433,6 +434,18 @@ class Order extends Model implements Exportable
                 'like',
                 "%$customerName%"
             )
+        );
+    }
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string  $coupon
+     * @return Builder<Order>
+     */
+    public function scopeCouponCode(Builder $query, string $coupon): Builder
+    {
+        return $query->whereHas(
+            'coupon',
+            fn ($query) => $query->where('code', 'like', "$coupon")
         );
     }
 

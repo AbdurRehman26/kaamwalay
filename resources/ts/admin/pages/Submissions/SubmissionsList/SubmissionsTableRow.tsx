@@ -221,7 +221,7 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                {isReferralPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
+                {isReferralPage || isCustomerDetailPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
                 {!isSalesRepDetailPage && !isReferralPage ? (

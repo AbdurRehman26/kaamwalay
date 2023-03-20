@@ -142,8 +142,11 @@ export const authenticationSlice = createSlice({
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
         },
-        authenticateUser: (state, action: PayloadAction<boolean>) => {
-            state.authenticated = action.payload;
+        authenticateUser: (state, { payload }: PayloadAction<any>) => {
+            state.accessToken = payload?.authenticatedUser.accessToken ?? null;
+            state.user = payload?.user ?? null;
+            state.authenticated = !!payload;
+            state.checking = false;
         },
     },
     extraReducers: {

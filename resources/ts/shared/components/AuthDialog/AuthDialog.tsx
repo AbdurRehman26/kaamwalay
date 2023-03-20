@@ -98,7 +98,7 @@ export function AuthDialog({
             if (redirectPath && window.location.href.match('dashboard') === null) {
                 window.location.href = redirectPath;
             } else {
-                dispatch(authenticateUser(true));
+                dispatch(authenticateUser({ user, authenticatedUser }));
             }
 
             onClose && onClose({}, 'escapeKeyDown');

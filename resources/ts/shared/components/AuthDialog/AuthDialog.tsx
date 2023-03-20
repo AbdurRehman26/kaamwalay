@@ -3,9 +3,11 @@ import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
 import * as queryString from 'qs';
 import { useCallback, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { app } from '@shared/lib/app';
+import { authenticateUser } from '@shared/redux/slices/authenticationSlice';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { ApplicationEventsEnum } from '../../constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '../../entities/AuthenticatedUserEntity';
@@ -49,6 +51,7 @@ export function AuthDialog({
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
+    const dispatch = useDispatch();
     const { from: intendedRoute } = useMemo(() => {
         return queryString.parse(window.location.search.slice(1));
     }, []);
@@ -88,16 +91,27 @@ export function AuthDialog({
                 await onAuthSuccess(authenticatedUser);
             }
 
-            if (redirectPath) {
-                window.location.href = redirectPath;
-            }
             if (intendedRoute) {
                 window.location.href = intendedRoute.toString();
             }
 
+            if (redirectPath && window.location.href.match('dashboard') === null) {
+                window.location.href = redirectPath;
+            } else {
+                dispatch(authenticateUser(true));
+            }
+
             onClose && onClose({}, 'escapeKeyDown');
         },
-        [authenticationService, eventService, onAuthSuccess, onClose, intendedRoute, authenticationRepository],
+        [
+            authenticationService,
+            eventService,
+            onAuthSuccess,
+            onClose,
+            intendedRoute,
+            authenticationRepository,
+            dispatch,
+        ],
     );
 
     return (

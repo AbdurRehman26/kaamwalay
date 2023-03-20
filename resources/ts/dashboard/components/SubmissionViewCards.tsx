@@ -307,7 +307,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     ) : item.status.id === OrderItemStatusEnum.NOT_ACCEPTED ||
                                       item.status.id === OrderItemStatusEnum.MISSING ? (
                                         <>
-                                            {item.status?.name ?? '-'}
+                                            {item.status.name}
                                             <br />
                                             {item.notes && (
                                                 <MuiLink

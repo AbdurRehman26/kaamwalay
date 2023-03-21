@@ -215,10 +215,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 search,
                 paymentStatus: paymentStatus,
                 couponCode: '',
+                referredBy: referrerStatus.value,
             }),
             1,
         );
-    }, [orders$, paymentStatus, search, sortFilter]);
+    }, [orders$, paymentStatus, search, sortFilter, referrerStatus]);
 
     const handlePromoCodeSearch = useCallback(
         (event: any) => {
@@ -246,11 +247,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus: null,
-                couponCode,
+                couponCode: couponCode?.code,
+                referredBy: referrerStatus.value,
             }),
             1,
         );
-    }, [orders$, sortFilter, search, couponCode]);
+    }, [orders$, sortFilter, search, couponCode, referrerStatus]);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -291,12 +293,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
-                    couponCode,
+                    couponCode: couponCode?.code,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode, referrerStatus],
     );
 
     const handlePromoCodeFilter = useCallback(
@@ -323,10 +326,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus,
+                couponCode: couponCode?.code,
             }),
             1,
         );
-    }, [orders$, search, paymentStatus, sortFilter]);
+    }, [orders$, search, paymentStatus, sortFilter, couponCode]);
 
     const handleReferrerStatus = useCallback(
         async (values) => {
@@ -337,6 +341,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     search,
                     paymentStatus,
                     referredBy: values.value,
+                    couponCode: couponCode?.code,
                 }),
                 1,
             );
@@ -356,6 +361,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         search,
                         paymentStatus,
                         referredBy: referrerStatus.value,
+                        couponCode,
                     }),
                     1,
                 );

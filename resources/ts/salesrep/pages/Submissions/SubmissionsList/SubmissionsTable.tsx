@@ -208,7 +208,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus: null,
-                couponCode,
+                couponCode: couponCode?.code,
             }),
             1,
         );
@@ -235,7 +235,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
-                    couponCode,
+                    couponCode: couponCode?.code,
                 }),
                 1,
             );
@@ -268,6 +268,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     toApiPropertiesObject({
                         search,
                         paymentStatus,
+                        couponCode,
                     }),
                     1,
                 );

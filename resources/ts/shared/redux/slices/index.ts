@@ -34,6 +34,7 @@ export { adminCustomerReferralCommissionSlice as adminCustomerReferralCommission
 export { adminCustomersListSlice as adminCustomersList } from './adminCustomersListSlice';
 export { adminReferralPayoutSlice as adminReferralPayout } from './adminReferralPayoutSlice';
 export { addressEditSlice } from './addressEditSlice';
+export { editCustomerSlice } from './editCustomerSlice';
 
 /*
  *

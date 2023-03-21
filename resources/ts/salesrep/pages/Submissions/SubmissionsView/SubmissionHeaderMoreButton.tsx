@@ -3,9 +3,12 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
+import { useAppDispatch } from '@salesrep/redux/hooks';
 import React, { MouseEvent, useCallback, useState } from 'react';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
 const useStyles = makeStyles(
@@ -19,6 +22,7 @@ const useStyles = makeStyles(
 
 enum Options {
     CustomerCredit,
+    EditCustomerDetails,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -33,6 +37,8 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const open = Boolean(anchorEl);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -44,6 +50,15 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
         setAnchorEl(null);
     }, [setAnchorEl]);
 
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
+
     const handleOption = useCallback(
         (option: Options) => async () => {
             handleClose();
@@ -52,9 +67,15 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
                 case Options.CustomerCredit:
                     setCreditDialog(true);
                     break;
+                case Options.EditCustomerDetails:
+                    if (customer) {
+                        setEditCustomerDialog(true);
+                        dispatch(setCustomer(customer));
+                    }
+                    break;
             }
         },
-        [handleClose],
+        [customer, dispatch, handleClose],
     );
 
     return (
@@ -64,14 +85,26 @@ export default function SubmissionHeaderMoreButton({ customer }: SubmissionHeade
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                 <MenuItem onClick={handleOption(Options.CustomerCredit)}>Customer Credit</MenuItem>
+                {customer ? (
+                    <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
+                ) : null}
             </Menu>
             {customer ? (
-                <CustomerCreditDialog
-                    customer={customer}
-                    wallet={customer.wallet}
-                    open={creditDialog}
-                    onClose={handleCreditDialogClose}
-                />
+                <>
+                    <CustomerCreditDialog
+                        customer={customer}
+                        wallet={customer.wallet}
+                        open={creditDialog}
+                        onClose={handleCreditDialogClose}
+                    />
+                    <EditCustomerDetailsDialog
+                        endpointUrl={`salesman/customer/${customer.id}`}
+                        endpointVersion={'v3'}
+                        open={editCustomerDialog}
+                        onSubmit={handleEditCustomerSubmit}
+                        onClose={handleEditCustomerDialogClose}
+                    />
+                </>
             ) : null}
         </>
     );

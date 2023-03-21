@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);
 
@@ -95,4 +96,23 @@ test('an admin can mark an user referral program as inactive', function () {
         ->assertJsonFragment([
             'is_referral_active' => 0,
         ]);
+});
+
+test('an admin can update customer details', function () {
+    actingAs($this->user);
+    Http::fake([
+        '*' => Http::response([]),
+    ]);
+
+    putJson(route('v3.admin.customer.update', $this->customer->id), [
+        'first_name' => 'Lorem',
+        'last_name' => 'Update',
+        'phone' => '+1 (123) 456-7890',
+    ])
+        ->assertSuccessful();
+
+    $customer = $this->customer->fresh();
+    expect($customer->first_name)->toBe('Lorem')
+        ->and($customer->last_name)->toBe('Update')
+        ->and($customer->phone)->toBe('+1 (123) 456-7890');
 });

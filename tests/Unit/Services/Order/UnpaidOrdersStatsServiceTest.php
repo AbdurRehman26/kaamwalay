@@ -80,7 +80,9 @@ it('counts daily unpaid orders cards', function () {
     $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
     ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
-    ->sum('order_items.quantity');
+    ->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    })->sum('order_items.quantity');
 
     $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal();
 
@@ -91,7 +93,9 @@ it('counts monthly unpaid orders cards', function () {
     $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
     ->join('order_items', 'order_items.order_id', '=', 'orders.id')
     ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
-    ->sum('order_items.quantity');
+    ->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    })->sum('order_items.quantity');
 
     $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal();
 

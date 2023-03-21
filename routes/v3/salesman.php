@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V3\Salesman\CustomerController;
 use App\Http\Controllers\API\V3\Salesman\Order\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,7 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
         });
     });
-
+    Route::prefix('customer')->group(function () {
+        Route::put('/{user}', [CustomerController::class, 'update'])->name('customer.update');
+    });
 });

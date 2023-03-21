@@ -9,6 +9,7 @@ use App\Models\RevenueStatsMonthly;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Str;
 
 class RevenueStatsService
 {
@@ -46,7 +47,10 @@ class RevenueStatsService
 
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
     {
-        return Order::paid()->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
+        return Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
+            'users.email',
+            Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+        )->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly

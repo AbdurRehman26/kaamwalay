@@ -158,7 +158,7 @@ export function SubmissionsTableRow({ order, headings, onEditCustomer }: Submiss
                                     to={`/customers/${order.customer?.id}/view`}
                                     className={font.fontWeightMedium}
                                 >
-                                    {order.customer?.customerNumber}
+                                    {order.customer?.getFullName()}
                                 </MuiLink>
                             ) : (
                                 '-'

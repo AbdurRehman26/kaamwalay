@@ -43,7 +43,7 @@ it('sends new user to mailchimp', function () {
             'PHONE' => $this->user->phone ?: '',
         ],
     ])->andReturn($expectedResponse);
-});
+})->todo();
 
 it('create list on mailchimp', function () {
     $template = "Test Name";

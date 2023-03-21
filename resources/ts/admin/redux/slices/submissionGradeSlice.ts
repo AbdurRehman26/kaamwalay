@@ -1,4 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { app } from '@shared/lib/app';
 import { countDecimals } from '@shared/lib/utils/countDecimals';
 import { APIService } from '@shared/services/APIService';
@@ -6,13 +7,26 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const getAllSubmissions = createAsyncThunk(
     'submissionGrades/getSubmissionsAndGrades',
-    async (DTO: { id: number | string; fromAgs: boolean | undefined }) => {
+    async (DTO: {
+        id: number | string;
+        fromAgs: boolean | undefined;
+        page?: number;
+        perPage?: number;
+        itemId?: string | null;
+    }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.id}/grades`);
+        const endpoint = apiService.createEndpoint(
+            `admin/orders/${DTO.id}/grades?per_page=${DTO.perPage}&page=${DTO.page}`,
+            { version: 'v3' },
+        );
         const cardsResponse = await endpoint.get('', {
             params: {
                 fromAgs: DTO.fromAgs,
+                filter: {
+                    orderItemId: DTO.itemId,
+                },
             },
+            ...bracketParams(),
         });
         return cardsResponse.data;
     },
@@ -75,6 +89,7 @@ export const updateGeneralOrderNotes = createAsyncThunk(
 
 export interface SubmissionsGrades {
     allSubmissions: any;
+    gradesPagination: any;
     hasLoadedAllRobogrades: boolean;
     viewModes: {
         name: string;
@@ -92,6 +107,7 @@ export interface SubmissionsGrades {
 
 const initialState: SubmissionsGrades = {
     allSubmissions: [],
+    gradesPagination: null,
     viewModes: [],
     hasLoadedAllRobogrades: true,
 };
@@ -225,14 +241,17 @@ export const submissionGradesSlice = createSlice({
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
+            const data = action.payload.data;
+            const pagination = { links: action.payload.links, meta: action.payload.meta };
+
             // This API uses a background sync, but as this data is responsible for the whole page items,
             // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we
             // are checking the grades data to ensure if they are loaded, and only then update the state.
             const areGradesLoaded =
-                action.payload.filter(
+                data.filter(
                     (card: Record<string, any>) =>
                         card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
-                ).length === action.payload.length;
+                ).length === data.length;
 
             if (
                 // This will be true when the API is called first time, and the robogrades are not available.
@@ -242,7 +261,8 @@ export const submissionGradesSlice = createSlice({
                 // This will be true when the API is called first time and the grades are available instantly.
                 (state.hasLoadedAllRobogrades && areGradesLoaded)
             ) {
-                state.allSubmissions = action.payload;
+                state.allSubmissions = data;
+                state.gradesPagination = pagination;
             }
             state.hasLoadedAllRobogrades = areGradesLoaded;
         },

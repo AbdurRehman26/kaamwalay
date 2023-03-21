@@ -13,6 +13,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { PageSelector } from '@shared/components/PageSelector';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
@@ -24,6 +25,7 @@ import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -192,6 +194,8 @@ export function CustomersList() {
         label: '',
         value: '',
     });
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
 
     const ReferralStatus = [
         { label: 'Yes', value: 1 },
@@ -456,6 +460,19 @@ export function CustomersList() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleEditCustomerOption = useCallback(() => {
+        setEditCustomerDialog(true);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
+
     const headerActions = (
         <Button
             onClick={() => setAddCustomerDialog(true)}
@@ -656,7 +673,11 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} salesReps={salesReps} />
+                            <CustomerTableRow
+                                customer={customer}
+                                salesReps={salesReps}
+                                onEditCustomer={handleEditCustomerOption}
+                            />
                         ))}
                     </TableBody>
                     <TableFooter>
@@ -666,6 +687,13 @@ export function CustomersList() {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <EditCustomerDetailsDialog
+                endpointUrl={`admin/customer/${customer.id}`}
+                endpointVersion={'v3'}
+                open={editCustomerDialog}
+                onSubmit={handleEditCustomerSubmit}
+                onClose={handleEditCustomerDialogClose}
+            />
         </Grid>
     );
 }

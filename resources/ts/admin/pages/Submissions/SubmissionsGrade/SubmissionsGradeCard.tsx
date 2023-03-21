@@ -1,4 +1,6 @@
+import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 import FaceIcon from '@mui/icons-material/Face';
+import PriorityHighTwoToneIcon from '@mui/icons-material/PriorityHighTwoTone';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -11,6 +13,7 @@ import {
     AccordionCardItemHeader,
 } from '@shared/components/AccordionCardItem';
 import OutlinedCard from '@shared/components/OutlinedCard';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade/SubmissionGradeCardUpload';
@@ -43,6 +46,7 @@ export function SubmissionsGradeCard({
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
+    const cardStatusID = gradeData.orderItem.status.orderItemStatus.id;
 
     return (
         <AccordionCardItem variant={'outlined'}>
@@ -53,8 +57,25 @@ export function SubmissionsGradeCard({
                 subheading={orderItemGradeData.cardFullName}
                 shortName={orderItemGradeData.shortName}
                 action={
-                    <Button disabled variant={'outlined'} className={cx(classes.statusButton, classes.disabledButton)}>
-                        {orderItemGradeData.cardStatus}
+                    <Button
+                        disabled
+                        variant={'outlined'}
+                        className={cx(
+                            classes.statusButton,
+                            classes.disabledButton,
+                            cardStatusID === OrderItemStatusEnum.NOT_ACCEPTED ||
+                                cardStatusID === OrderItemStatusEnum.MISSING
+                                ? classes.notAcceptedOrMissingButton
+                                : classes.gradedButton,
+                        )}
+                    >
+                        {cardStatusID === OrderItemStatusEnum.NOT_ACCEPTED ||
+                        cardStatusID === OrderItemStatusEnum.MISSING ? (
+                            <PriorityHighTwoToneIcon />
+                        ) : (
+                            <CheckTwoToneIcon />
+                        )}
+                        {gradeData.orderItem.status.orderItemStatus.name}
                     </Button>
                 }
             >

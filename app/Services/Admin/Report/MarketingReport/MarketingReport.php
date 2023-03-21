@@ -9,6 +9,7 @@ use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\User;
 use DateTime;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,7 +24,7 @@ abstract class MarketingReport implements Reportable
 
     public function getDataForReport(DateTime $fromDate, DateTime $toDate): array
     {
-        return [
+        return array_merge([
             'Average order amount' => '$'.$this->getAvgOrderAmount($fromDate, $toDate),
             'Average number of cards graded by all customers' => $this->getAvgCardsGraded($fromDate, $toDate),
             'Number of repeat customers' => $this->getTotalRepeatCustomers($fromDate, $toDate),
@@ -37,7 +38,7 @@ abstract class MarketingReport implements Reportable
             'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate)  . ' Day(s)',
             '% of signups that make submission' => $this->getPercentageOfSignupThatMadeSubmission($fromDate, $toDate),
             '% of submissions that don`t make payment' => $this->getPercentageOfSubmissionThatDontMakePayment($fromDate, $toDate),
-        ];
+        ], $this->getCardsBreakdownForReport($fromDate, $toDate));
     }
 
     protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
@@ -152,5 +153,32 @@ abstract class MarketingReport implements Reportable
         }
 
         return (float) number_format((Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() / $totalOrders) * 100, 2);
+    }
+
+    protected function getCardsBreakdownForReport(DateTime $fromDate, DateTime $toDate): array
+    {
+        $data = [];
+        $cardsBreakdown = $this->getCardsBreakdown($fromDate, $toDate);
+
+        foreach ($cardsBreakdown as $item) {
+            $data['Number of ' . $item->name . ' cards'] = $item->quantity;
+        }
+
+        return $data;
+    }
+
+    // @phpstan-ignore-next-line
+    protected function getCardsBreakdown(DateTime $fromDate, DateTime $toDate): Collection
+    {
+        return Order::paid()
+            ->join('order_items','order_items.order_id','orders.id')
+            ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+            ->leftJoin('card_categories', 'card_products.card_category_id', 'card_categories.id')
+            ->whereBetween('orders.created_at', [$fromDate, $toDate])
+            ->groupBy('card_categories.id')
+            ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
+            ->orderBy('quantity','desc')
+            ->get();
+
     }
 }

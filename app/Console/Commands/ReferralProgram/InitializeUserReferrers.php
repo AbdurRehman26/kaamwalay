@@ -29,7 +29,7 @@ class InitializeUserReferrers extends Command
      */
     public function handle()
     {
-        $users = User::all();
+        $users = User::whereDoesntHave('referrer')->get();
         $referrerService = new ReferrerService();
 
         foreach ($users as $user) {

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CardCategory;
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
@@ -28,6 +30,8 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
     $toDate = $reportable['toDate'];
 
     $differenceInDays = $fromDate->diff($toDate)->days;
+    $categories = CardCategory::factory()->count(3)->create();
+    $categoriesIds = $categories->pluck('id')->toArray();
 
     $this->users = User::factory()->count(4)->create([
         'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
@@ -66,6 +70,9 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
         OrderItem::factory()->count(rand(1, 50))->create([
             'order_id' => $order->id,
             'order_item_status_id' => OrderItemStatus::GRADED,
+            'card_product_id' => CardProduct::factory()->create([
+                'card_category_id' => $categoriesIds[array_rand($categoriesIds)],
+            ])->id,
             'created_at' => Carbon::create($this->date)->addDays(rand(1, ($differenceInDays / 2))),
         ]);
 
@@ -92,7 +99,23 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
 
     $queryCardsConfirmationToGrading = clone $queryCardsConfirmationToNextStatus;
 
-    $resultArray = [
+    $categoriesArray = [];
+
+    $categoriesBreakdown = Order::paid()
+        ->join('order_items','order_items.order_id','orders.id')
+        ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+        ->leftJoin('card_categories', 'card_products.card_category_id', 'card_categories.id')
+        ->whereBetween('orders.created_at', [$fromDate, $toDate])
+        ->groupBy('card_categories.id')
+        ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
+        ->orderBy('quantity','desc')
+        ->get();
+
+    foreach ($categoriesBreakdown as $category) {
+        $categoriesArray['Number of ' . $category->name . ' cards'] = $category->quantity;
+    }
+
+    $resultArray = array_merge([
         'Average order amount' => '$'.(float) number_format(Order::betweenDates($fromDate, $toDate)->avg('grand_total'), 2) ?? 0,
         'Average number of cards graded by all customers' => (int)(OrderItem::count() / 4),
         'Number of repeat customers' => Order::selectRaw('MAX(id)')->groupBy('user_id')->having(DB::raw('COUNT(user_id)'), '>', 1)->count(),
@@ -122,7 +145,7 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
 
         '% of submissions that don`t make payment' => (float) number_format((Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() / Order::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
 
-    ];
+    ], $categoriesArray);
 
     $reportData = $report->getDataForReport($fromDate, $toDate);
 

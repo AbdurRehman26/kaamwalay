@@ -17,6 +17,7 @@ use function Pest\Laravel\putJson;
 uses(WithFaker::class);
 
 beforeEach(function () {
+    Event::fake();
     Http::fake([
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),

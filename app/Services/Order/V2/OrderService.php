@@ -183,9 +183,8 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-            if($order->shippingMethod->code === ShippingMethod::INSURED_SHIPPING) {
-                ChangeShippingAddressEvent::dispatch($order);
-            }
+            ChangeShippingAddressEvent::dispatch($order);
+
         return $order;
     }
 

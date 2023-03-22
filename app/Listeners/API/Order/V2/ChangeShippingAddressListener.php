@@ -4,6 +4,7 @@ namespace App\Listeners\API\Order\V2;
 
 use App\Events\API\Customer\Order\ChangeShippingAddressEvent;
 use App\Services\Payment\V3\InvoiceService;
+use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Log;
@@ -35,5 +36,4 @@ class ChangeShippingAddressListener implements ShouldQueue
             'trace' => $exception->getTraceAsString(),
         ]);
     }
-
 }

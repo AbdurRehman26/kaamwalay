@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Events\API\Customer\Order\ChangeShippingAddressEvent;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Country;
 use App\Models\Coupon;
@@ -182,6 +183,9 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
+            if($order->shippingMethod->code === ShippingMethod::INSURED_SHIPPING) {
+                ChangeShippingAddressEvent::dispatch($order);
+            }
         return $order;
     }
 

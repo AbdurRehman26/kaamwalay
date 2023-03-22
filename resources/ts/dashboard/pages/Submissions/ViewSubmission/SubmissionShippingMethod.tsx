@@ -58,6 +58,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                         message: 'Successfully switched to Insured Shipping.',
                     });
                     await delay(2000);
+                    window.location.reload();
                 } catch (e) {
                     loadingModal.setData({
                         state: 'error',

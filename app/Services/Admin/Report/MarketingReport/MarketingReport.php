@@ -171,14 +171,13 @@ abstract class MarketingReport implements Reportable
     protected function getCardsBreakdown(DateTime $fromDate, DateTime $toDate): Collection
     {
         return Order::paid()
-            ->join('order_items','order_items.order_id','orders.id')
+            ->join('order_items', 'order_items.order_id', 'orders.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->leftJoin('card_categories', 'card_products.card_category_id', 'card_categories.id')
             ->whereBetween('orders.created_at', [$fromDate, $toDate])
             ->groupBy('card_categories.id')
             ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
-            ->orderBy('quantity','desc')
+            ->orderBy('quantity', 'desc')
             ->get();
-
     }
 }

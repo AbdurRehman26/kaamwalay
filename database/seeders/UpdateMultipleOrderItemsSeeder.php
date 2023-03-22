@@ -9,10 +9,8 @@ class UpdateMultipleOrderItemsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $currentDateTime = new \Datetime();
         $items = OrderItem::where('quantity','>',1)->get();

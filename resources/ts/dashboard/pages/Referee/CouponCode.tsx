@@ -21,7 +21,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@shared/assets/robogradingLogo.svg';
-import { getRemainingTime } from '@shared/components/Counter';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 
@@ -155,30 +154,6 @@ export function CouponCode() {
         code: '',
     });
 
-    const endTime =
-        coupon.availableTill && new Date() <= new Date(coupon.availableTill)
-            ? new Date(coupon.availableTill.toString()).getTime()
-            : 0;
-
-    const defaultRemainingTime = {
-        seconds: '00',
-        minutes: '00',
-        hours: '00',
-    };
-
-    const [remainingTime, setRemainingTime] = useState(defaultRemainingTime);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            updateRemainingTime(endTime);
-        }, 1000);
-        return () => clearInterval(intervalId);
-    }, [endTime]);
-
-    function updateRemainingTime(countdown: any) {
-        setRemainingTime(getRemainingTime(countdown));
-    }
-
     const onClickSubmitButton = () => {
         navigate(`/submissions/new?coupon=${coupon.code}`);
     };
@@ -295,10 +270,7 @@ export function CouponCode() {
                         >
                             Click the button below to start your submission & get your discount.
                             <br />
-                            Your code will expire in{' '}
-                            <b>
-                                {remainingTime.hours}h:{remainingTime.minutes}m:{remainingTime.seconds}s
-                            </b>
+                            <b>Your code will expire in 30 days.</b>
                         </Typography>
 
                         <Button

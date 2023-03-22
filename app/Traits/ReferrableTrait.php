@@ -92,8 +92,6 @@ trait ReferrableTrait
 
     /**
      * @param  Builder<User>  $query
-     * @param  string  $startDate
-     * @param  string  $endDate
      * @return Builder<User>
      */
     public function scopeReferrerSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
@@ -103,8 +101,6 @@ trait ReferrableTrait
 
     /**
      * @param  Builder<User>  $query
-     * @param  string  $minSubmissionCount
-     * @param  string  $maxSubmissionCount
      * @return Builder<User>
      */
     public function scopeReferrerSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder

@@ -53,8 +53,6 @@ class DropboxService
 
     /**
      * @see Client
-     * @param  string  $path
-     * @return string
      */
     protected function normalizePath(string $path): string
     {

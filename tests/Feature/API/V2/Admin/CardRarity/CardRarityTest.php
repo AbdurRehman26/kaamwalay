@@ -77,7 +77,7 @@ test('admins can create card rarities', function () {
                 'name',
                 'card_category',
             ],
-        ])->dump()->assertJsonFragment([
+        ])->assertJsonFragment([
             'name' => 'Lorem Ipsum',
         ])->assertJsonPath('data.card_category.id', $this->categories[0]->id);
 });

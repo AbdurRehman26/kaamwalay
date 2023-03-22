@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Admin\V3\ReferralProgram;
 
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
 use App\Services\ReferralProgram\ReferrerPayout\Providers\PaypalPayoutService;
@@ -20,8 +21,6 @@ class ReferrerPayoutService
     ];
 
     /**
-     * @param  array  $ids
-     * @param  string  $paymentMethod
      * @return Collection<int, ReferrerPayout>
      */
     protected function getPayoutsByIdArray(array $ids, string $paymentMethod = ''): Collection
@@ -36,7 +35,6 @@ class ReferrerPayoutService
     }
 
     /**
-     * @param  string  $paymentMethod
      * @return Collection<int, ReferrerPayout>
      */
     protected function getAllPendingPayouts(string $paymentMethod = ''): Collection
@@ -112,13 +110,15 @@ class ReferrerPayoutService
             $payout->payment_method
         ])->handshake($payout);
 
+        if ($response['transaction_status'] === 'SUCCESS') {
+            PayoutCompletedEvent::dispatch($payout);
+        }
+
         Log::info('PAYOUT_HANDSHAKE', $response);
     }
 
     /**
      * @param  Collection<int, ReferrerPayout>  $payouts
-     * @param  array  $data
-     * @return void
      */
     protected function processFailedBatchPayouts(Collection $payouts, array $data): void
     {

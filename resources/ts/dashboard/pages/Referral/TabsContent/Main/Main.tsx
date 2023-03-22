@@ -8,6 +8,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
@@ -15,6 +16,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import EarnCommission from '@shared/assets/earnCommission.png';
 import Pay from '@shared/assets/pay.png';
 import ShareLink from '@shared/assets/shareLink.png';
@@ -23,6 +25,7 @@ import theme from '@shared/styles/theme';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getReferrerDetail } from '@dashboard/redux/slices/referralProgramSlice';
 import ReferralDeactivateBanner from '../../ReferralDeactivateBanner';
+import MarketingContent from '../MarketingContent';
 import Copylink from './CopyLink';
 import SocialShare from './SocialShare';
 import WithdrawBox from './WithdrawBox';
@@ -209,8 +212,15 @@ export function Main() {
                     <Typography sx={styles.MainText}>
                         Share your unique link to refer people to RoboGrading. They will get{' '}
                         {featureReferralDiscountPercentage}% off their first submission and you will{' '}
-                        <strong style={{ color: '#20BFB8', textDecoration: 'underline' }}>earn commission</strong> every
-                        time they pay & anytime someone they refer pays.{' '}
+                        <MuiLink
+                            sx={{ fontWeight: '500' }}
+                            component={Link}
+                            to={'/referral-program/commission-structure'}
+                            color={'primary'}
+                        >
+                            earn commission
+                        </MuiLink>{' '}
+                        every time they pay & anytime someone they refer pays.{' '}
                     </Typography>
                 </Grid>
             ) : (
@@ -323,6 +333,7 @@ export function Main() {
                     </Grid>
                 </ImageDiv>
             </Grid>
+            <MarketingContent expandable={true} />
         </>
     );
 }

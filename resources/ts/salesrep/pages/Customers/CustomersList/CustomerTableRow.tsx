@@ -9,18 +9,22 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { CustomerCreditDialog } from '@salesrep/components/CustomerCreditDialog';
+import { useAppDispatch } from '@salesrep/redux/hooks';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 
 interface props {
     customer: CustomerEntity;
+    onEditCustomer?: any;
 }
 
 enum RowOption {
     CreditCustomer,
+    EditCustomerDetails,
 }
 
 const CustomerType = [
@@ -37,12 +41,13 @@ const styles = {
     },
 };
 
-export function CustomerTableRow({ customer }: props) {
+export function CustomerTableRow({ customer, onEditCustomer }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
         (e) => {
@@ -60,15 +65,19 @@ export function CustomerTableRow({ customer }: props) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
                     break;
+                case RowOption.EditCustomerDetails:
+                    dispatch(setCustomer(customer));
+                    onEditCustomer();
+                    break;
             }
         },
-        [handleCloseOptions],
+        [customer, dispatch, handleCloseOptions, onEditCustomer],
     );
 
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
             if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(`/customers/${customer.id}/view/overview`);
+                navigate(`/customers/${customer.id}/view`);
             }
         },
         [navigate, customer.id],
@@ -129,6 +138,7 @@ export function CustomerTableRow({ customer }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                        <MenuItem onClick={handleOption(RowOption.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                     </Menu>
                 </TableCell>
             </TableRow>

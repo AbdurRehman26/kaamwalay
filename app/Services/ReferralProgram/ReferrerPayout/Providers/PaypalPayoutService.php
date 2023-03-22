@@ -2,6 +2,7 @@
 
 namespace App\Services\ReferralProgram\ReferrerPayout\Providers;
 
+use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
 use App\Http\APIClients\PaypalClient;
 use App\Models\ReferrerPayout;
 use App\Models\ReferrerPayoutStatus;
@@ -44,8 +45,8 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
         return [
             "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
-            "email_subject" => "You have a payout!",
-            "email_message" => "You have received a payout! Thanks for using our service!",
+            "email_subject" => "Payout from AGS Partner Program!",
+            "email_message" => "You have received your payout from AGS Partner Program. Keep referring for more!",
         ];
     }
     public function pay(array $items, array $data = []): array
@@ -99,8 +100,6 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
     /**
      * @param  Collection<int, ReferrerPayout>  $payouts
-     * @param  array  $data
-     * @return void
      */
     public function storeItemsResponse(Collection $payouts, array $data): void
     {
@@ -123,6 +122,10 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
                     'referrer_payout_status_id' => $this->getPayoutStatusId($transactionStatus),
                     'completed_at' => $transactionStatus === 'SUCCESS' ? now() : null,
                 ]);
+
+                if ($transactionStatus === 'SUCCESS') {
+                    PayoutCompletedEvent::dispatch($payout);
+                }
 
                 if ($this->getPayoutStatusId($transactionStatus) === ReferrerPayoutStatus::STATUS_FAILED) {
                     $this->processFailedPayout($payout);

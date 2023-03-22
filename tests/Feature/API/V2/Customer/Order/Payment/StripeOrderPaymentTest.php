@@ -46,7 +46,7 @@ test('user can be charged successfully', function () {
         ],
     ])
         ->assertOk()
-        ->assertJsonStructure(['data' => ['id', 'charges']])
+        ->assertJsonStructure(['data' => ['id', 'latest_charge']])
         ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
 })->group('payment');
 

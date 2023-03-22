@@ -9,10 +9,8 @@ class NewImportedCardProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('card_products')->insert([
             [

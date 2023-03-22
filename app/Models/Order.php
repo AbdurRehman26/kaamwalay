@@ -165,6 +165,7 @@ class Order extends Model implements Exportable
             AllowedFilter::scope('status'),
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
+            AllowedFilter::scope('coupon_code'),
             AllowedFilter::scope('customer_id'),
             AllowedFilter::scope('salesman_id'),
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
@@ -435,6 +436,18 @@ class Order extends Model implements Exportable
             )
         );
     }
+    /**
+     * @param  Builder<Order>  $query
+     * @param  string  $coupon
+     * @return Builder<Order>
+     */
+    public function scopeCouponCode(Builder $query, string $coupon): Builder
+    {
+        return $query->whereHas(
+            'coupon',
+            fn ($query) => $query->where('code', 'like', "$coupon")
+        );
+    }
 
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
@@ -549,17 +562,13 @@ class Order extends Model implements Exportable
         return self::getAllowedAdminIncludes();
     }
 
-    /**
-     * @param  Order  $row
-     * @return array
-     */
-    public function exportRowMap($row): array
+    public function exportRowMap(Model $row): array
     {
         return [
             $row->order_number,
             $row->created_at,
             $row->arrived_at,
-            $row->user?->customer_number,
+            $row->user?->getFullName(),
             $row->orderItems->sum('quantity'),
             $row->orderStatus->name,
             $row->payment_status->toString(),

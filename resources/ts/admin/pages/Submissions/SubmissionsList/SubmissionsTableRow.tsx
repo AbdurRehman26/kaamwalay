@@ -21,6 +21,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { deleteOrder } from '@shared/redux/slices/ordersSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
@@ -34,6 +35,7 @@ interface SubmissionsTableRowProps {
     isCustomerDetailPage: boolean;
     isSalesRepDetailPage?: boolean;
     isReferralPage?: boolean;
+    onEditCustomer?: any;
 }
 
 enum Options {
@@ -43,6 +45,7 @@ enum Options {
     CreditCustomer,
     Delete,
     MarkAsPaid,
+    EditCustomerDetails,
 }
 
 const useStyles = makeStyles(
@@ -64,6 +67,7 @@ const useStyles = makeStyles(
 export function SubmissionsTableRow({
     order,
     isCustomerDetailPage,
+    onEditCustomer,
     isSalesRepDetailPage = false,
     isReferralPage = false,
 }: SubmissionsTableRowProps) {
@@ -114,6 +118,12 @@ export function SubmissionsTableRow({
                 case Options.MarkAsPaid:
                     setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
+                case Options.EditCustomerDetails:
+                    if (onEditCustomer) {
+                        dispatch(setCustomer(order.customer));
+                        onEditCustomer();
+                    }
+                    break;
             }
         },
         [
@@ -126,6 +136,9 @@ export function SubmissionsTableRow({
             order.orderLabel,
             order.orderNumber,
             showMarkPaidDialog,
+            dispatch,
+            order.customer,
+            onEditCustomer,
         ],
     );
 
@@ -221,7 +234,7 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                {isReferralPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
+                {isReferralPage || isCustomerDetailPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
                 {!isSalesRepDetailPage && !isReferralPage ? (
@@ -271,6 +284,11 @@ export function SubmissionsTableRow({
                                       </MenuItem>,
                                   ]
                                 : null}
+                            {order?.customer && onEditCustomer ? (
+                                <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>
+                                    Edit Customer Details
+                                </MenuItem>
+                            ) : null}
                         </>
                     </Menu>
                 </TableCell>

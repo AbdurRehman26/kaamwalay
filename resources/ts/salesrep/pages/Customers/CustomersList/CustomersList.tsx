@@ -12,6 +12,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { ListPageHeader, ListPageSelector } from '@shared/components/ListPage';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
@@ -21,6 +22,7 @@ import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktop
 import { FormikTextField } from '@shared/components/fields/FormikTextField';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { DateLike } from '@shared/lib/datetime/DateLike';
@@ -137,12 +139,14 @@ export function CustomersList() {
     const [order, setOrder] = useState<TableSortType>('desc');
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
 
     const navigate = useNavigate();
 
     const redirectToCustomerProfile = useCallback(
         (customer: CustomerEntity) => {
-            navigate(`/customers/${customer.id}/view/overview`);
+            navigate(`/customers/${customer.id}/view`);
         },
         [navigate],
     );
@@ -241,6 +245,19 @@ export function CustomersList() {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    const handleEditCustomerOption = useCallback(() => {
+        setEditCustomerDialog(true);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
 
     useEffect(() => {
         setSortFilter((order === 'desc' ? '-' : '') + orderBy);
@@ -377,7 +394,7 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} />
+                            <CustomerTableRow customer={customer} onEditCustomer={handleEditCustomerOption} />
                         ))}
                     </TableBody>
                     <TableFooter>
@@ -387,6 +404,13 @@ export function CustomersList() {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <EditCustomerDetailsDialog
+                endpointUrl={`salesman/customer/${customer.id}`}
+                endpointVersion={'v3'}
+                open={editCustomerDialog}
+                onSubmit={handleEditCustomerSubmit}
+                onClose={handleEditCustomerDialogClose}
+            />
         </Grid>
     );
 }

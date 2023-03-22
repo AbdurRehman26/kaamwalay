@@ -12,6 +12,7 @@ import {
     AccordionCardItemProps,
 } from '@shared/components/AccordionCardItem';
 import AccordionCardItemLoader from '@shared/components/AccordionCardItem/AccordionCardItemLoader';
+import OutlinedCard from '@shared/components/OutlinedCard';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -23,10 +24,13 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     card: CardProductEntity;
     disableConfirm?: boolean;
     internalNotes?: string;
+    notes?: string;
     orderId: number;
     onConfirm(index: number): void;
 
     onMissing: any;
+
+    onNotAccepted: any;
 
     onEdit(index: number): void;
 
@@ -50,6 +54,10 @@ const useStyles = makeStyles(
         buttons: {
             marginTop: theme.spacing(1.5),
         },
+        notAcceptedButtons: {
+            marginTop: theme.spacing(1.5),
+            textAlign: 'right',
+        },
     }),
     { name: 'UnconfirmedCard' },
 );
@@ -60,24 +68,28 @@ export function UnconfirmedCard({
     declaredValue,
     onConfirm,
     onMissing,
+    onNotAccepted,
     onEdit,
     onPreview,
     onSwapCard,
     disableConfirm,
     internalNotes,
+    notes,
     onCardNotesChange,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
     const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
+    const [notAcceptedNotes, setNotAcceptedNotes] = useState(notes);
     const notification = useNotifications();
+    const [openNotAccepted, setOpenNotAccepted] = useState(false);
 
     const handleCardNotesChange = useCallback(
-        (newNotes: string) => {
+        (internalNotes?: string, notes?: string) => {
             setLoading(true);
             try {
-                onCardNotesChange(itemId, newNotes).then(() => {
+                onCardNotesChange(itemId, internalNotes, notes).then(() => {
                     setLoading(false);
                 });
             } catch (e: any) {
@@ -94,6 +106,14 @@ export function UnconfirmedCard({
         (event) => {
             setInternalNotes(event.target.value);
             debounceNotes(event.target.value);
+        },
+        [debounceNotes],
+    );
+
+    const handleNotAcceptedNotes = useCallback(
+        (event) => {
+            setNotAcceptedNotes(event.target.value);
+            debounceNotes('', event.target.value);
         },
         [debounceNotes],
     );
@@ -120,6 +140,19 @@ export function UnconfirmedCard({
         // TODO: fix memory leak error (dispatched action on unmounted component)
         setLoading(false);
     }, [onMissing, itemId, notification]);
+
+    const handleNotAccepted = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onNotAccepted(itemId);
+            setOpenNotAccepted(false);
+            setNotAcceptedNotes('');
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        // TODO: fix memory leak error (dispatched action on unmounted component)
+        setLoading(false);
+    }, [itemId, notification, onNotAccepted]);
 
     const handleEdit = useCallback(async () => {
         setLoading(true);
@@ -150,15 +183,17 @@ export function UnconfirmedCard({
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={
-                    <Button
-                        variant={'contained'}
-                        color={'primary'}
-                        className={classes.button}
-                        disabled={disableConfirm}
-                        onClick={handleConfirm}
-                    >
-                        Confirm
-                    </Button>
+                    !openNotAccepted && (
+                        <Button
+                            variant={'contained'}
+                            color={'primary'}
+                            className={classes.button}
+                            disabled={disableConfirm}
+                            onClick={handleConfirm}
+                        >
+                            Confirm
+                        </Button>
+                    )
                 }
             >
                 <Typography variant={'caption'}>
@@ -167,41 +202,91 @@ export function UnconfirmedCard({
                     <span>{formatCurrency(declaredValue)}</span>
                 </Typography>
 
-                <Grid container direction={'column'} className={classes.buttons}>
-                    <Box display={'flex'} flexDirection={'row'}>
-                        <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
-                            Missing
-                        </Button>
-                        <Button
-                            variant={'contained'}
-                            color={'inherit'}
-                            onClick={handleEdit}
-                            className={classes.leftSpace}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            variant={'contained'}
-                            color={'inherit'}
-                            onClick={handleSwapCard}
-                            className={classes.leftSpace}
-                        >
-                            Swap Card
-                        </Button>
-                    </Box>
-                </Grid>
-                <Box marginTop={'18px'} width={'100%'}>
-                    <TextField
-                        label="Internal Notes"
-                        fullWidth
-                        multiline
-                        value={cardInternalNotes}
-                        onChange={handleSetCardNotes}
-                        placeholder={'Internal Notes'}
-                        rows={4}
-                    />
-                </Box>
+                {!openNotAccepted && (
+                    <>
+                        <Grid container direction={'column'} className={classes.buttons}>
+                            <Box display={'flex'} flexDirection={'row'}>
+                                <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
+                                    Missing
+                                </Button>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleEdit}
+                                    className={classes.leftSpace}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleSwapCard}
+                                    className={classes.leftSpace}
+                                >
+                                    Swap Card
+                                </Button>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={() => setOpenNotAccepted(true)}
+                                    className={classes.leftSpace}
+                                >
+                                    Not Accepted
+                                </Button>
+                            </Box>
+                        </Grid>
+
+                        <Box marginTop={'18px'} width={'100%'}>
+                            <TextField
+                                label="Internal Notes"
+                                fullWidth
+                                multiline
+                                value={cardInternalNotes}
+                                onChange={handleSetCardNotes}
+                                placeholder={'Internal Notes'}
+                                rows={4}
+                            />
+                        </Box>
+                    </>
+                )}
             </AccordionCardItemHeader>
+
+            {openNotAccepted && (
+                <>
+                    <OutlinedCard className={classes.buttons} heading={'Notes'}>
+                        <TextField
+                            label="Enter Notes"
+                            multiline
+                            rows={4}
+                            onChange={handleNotAcceptedNotes}
+                            value={notAcceptedNotes}
+                            sx={{ marginTop: '16px' }}
+                            fullWidth
+                        />
+                    </OutlinedCard>
+
+                    <div className={classes.notAcceptedButtons}>
+                        <Button
+                            variant={'contained'}
+                            disableElevation
+                            onClick={() => setOpenNotAccepted(false)}
+                            className={'classes.submitButton'}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant={'contained'}
+                            disableElevation
+                            disabled={!true}
+                            color={'primary'}
+                            onClick={handleNotAccepted}
+                            className={classes.leftSpace}
+                        >
+                            Done
+                        </Button>
+                    </div>
+                </>
+            )}
             <AccordionCardItemLoader show={loading} />
         </AccordionCardItem>
     );

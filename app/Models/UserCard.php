@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class UserCard extends Model
 {
@@ -49,10 +50,8 @@ class UserCard extends Model
 
     /**
      * Get the indexable data array for the model.
-     *
-     * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'id' => $this->order_item_id,
@@ -66,6 +65,14 @@ class UserCard extends Model
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
             'shipped_at' => $this->orderItem->order->shipped_at,
+        ];
+    }
+
+    public static function allowedFilters(): array
+    {
+        return [
+            AllowedFilter::exact('certificate_number'),
+            AllowedFilter::exact('order_item_id'),
         ];
     }
 

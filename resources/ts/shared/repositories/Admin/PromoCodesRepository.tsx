@@ -8,6 +8,11 @@ export class AdminPromoCodesRepository extends Repository<PromoCodeEntity> {
     readonly endpointPath: string = 'admin/coupons';
     readonly model = PromoCodeEntity;
 
+    public async getPromoCodes(input: string) {
+        const { data } = await this.endpoint.get(`?filter[search]=${input}`);
+        return this.toEntity(data);
+    }
+
     async storeCoupon(input: StoreCouponDto) {
         const { data } = await this.endpoint.post(``, input);
         return data;

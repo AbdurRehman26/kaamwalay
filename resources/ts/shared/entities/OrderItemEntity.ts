@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+import { OrderItemStatusEntity } from '@shared/entities/OrderItemStatusEntity';
 import { OrderItemStatusHistoryEntity } from '@shared/entities/OrderItemStatusHistoryEntity';
 import { CardProductEntity } from './CardProductEntity';
 import { Entity } from './Entity';
@@ -12,8 +13,8 @@ export class OrderItemEntity extends Entity {
     public notes!: string;
     public internalNotes!: string;
 
-    @Type(() => OrderItemStatusHistoryEntity)
-    public status!: OrderItemStatusHistoryEntity;
+    @Type(() => OrderItemStatusHistoryEntity || OrderItemStatusEntity)
+    public status!: any;
 
     @Type(() => CardProductEntity)
     public cardProduct!: CardProductEntity;

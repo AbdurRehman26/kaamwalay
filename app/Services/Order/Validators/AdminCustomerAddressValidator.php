@@ -8,8 +8,6 @@ use App\Models\CustomerAddress;
 class AdminCustomerAddressValidator
 {
     /**
-     * @param  array  $data
-     * @return void
      * @throws \Throwable
      */
     public static function validate(array $data): void

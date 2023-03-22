@@ -96,8 +96,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  string  $certificateId
-     * @return array
      */
     public function getGradesForPublicPage(string $certificateId): array
     {
@@ -135,8 +133,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  array  $card
-     * @return string
      */
     protected function getCardFullName(array $card): string
     {
@@ -148,10 +144,6 @@ class AgsService
             $card['name'];
     }
 
-    /**
-     * @param  array  $data
-     * @return array
-     */
     protected function prepareDataForCertificate(array $data): array
     {
         $cardsData = [];
@@ -186,8 +178,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  array  $grade
-     * @return array
      */
     protected function prepareGradeForPublicPage(array $grade): array
     {
@@ -199,8 +189,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  array  $data
-     * @return array
      */
     protected function prepareOverallGradesForPublicPage(array $data): array
     {
@@ -217,9 +205,6 @@ class AgsService
      *
      * It returns precise value for display.
      * e.g. 8.00 will be converted to 8, 8.50 will be converted to 8.5, 8.125 will be converted to 8.1
-     *
-     * @param  string  $value
-     * @return float
      */
     protected function preparePreciseValue(string $value): float
     {
@@ -234,8 +219,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  array  $data
-     * @return array
      */
     protected function prepareFrontScanGradesForPublicPage(array $data): array
     {
@@ -249,8 +232,6 @@ class AgsService
 
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
-     * @param  array  $data
-     * @return array
      */
     protected function prepareBackScanGradesForPublicPage(array $data): array
     {
@@ -339,5 +320,10 @@ class AgsService
         }
 
         throw new CardProductCanNotBeDeleted;
+    }
+
+    public function updateUserDataByUsername(string $username, array $data): array
+    {
+        return $this->client->updateUserDataByUsername($username, $data);
     }
 }

@@ -12,10 +12,8 @@ class CouponableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         Couponable::factory()->count(5)->state(new Sequence(
             [

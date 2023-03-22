@@ -9,10 +9,8 @@ class PaymentPlanRangeFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $min = $this->faker->numberBetween(1, 50);
 

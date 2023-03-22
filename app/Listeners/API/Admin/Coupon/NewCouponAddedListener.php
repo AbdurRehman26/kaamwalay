@@ -17,11 +17,8 @@ class NewCouponAddedListener
 
     /**
      * Handle the event.
-     *
-     * @param  NewCouponAdded  $event
-     * @return void
      */
-    public function handle(NewCouponAdded $event)
+    public function handle(NewCouponAdded $event): void
     {
     }
 }

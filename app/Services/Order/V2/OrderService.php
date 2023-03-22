@@ -183,7 +183,8 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-            ChangeShippingAddressEvent::dispatch($order);
+        ChangeShippingAddressEvent::dispatch($order);
+
         return $order;
     }
 

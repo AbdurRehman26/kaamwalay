@@ -34,9 +34,8 @@
 .ReferralHome-sectionContentCaptionSteps {
     font-weight: 900;
     text-align: center;
-    font-size: 36px;
-    text-transform: uppercase;
-    line-height: 37.5px;
+    font-size: 32px;
+    line-height: 38px;
     @media screen and (max-width: 767px) {
         font-size: 28px;
         line-height: 32.81px;
@@ -150,12 +149,9 @@
     background-color: #20bfb8;
     color: white;
     border-radius: 28px;
-    padding: 12px;
+    padding: 15px 40px;
     text-transform: uppercase;
-    height: 48px;
-    width: 13%;
     margin-top: 5%;
-    min-width: 128px;
     font-weight: 500;
     font-size: 14px;
     box-shadow: 0 1px 1px rgb(0 0 0 / 14%), 0 2px 1px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 20%);
@@ -288,7 +284,6 @@
         margin: 0;
     }
     @media screen and (max-width: 599px) {
-        width: 120%;
         height: 179px;
         padding: 4px 0px;
         margin: 0;

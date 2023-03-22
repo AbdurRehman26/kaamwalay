@@ -126,7 +126,7 @@ export function SubmissionsGradeCards() {
     );
 
     useEffect(() => {
-        loadGrades(perPage, page, false);
+        loadGrades(perPage, page, true);
     }, [perPage, page, loadGrades]);
 
     useEffect(() => {

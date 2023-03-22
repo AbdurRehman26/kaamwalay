@@ -35,5 +35,4 @@ class ChangeShippingAddressListener implements ShouldQueue
             'trace' => $exception->getTraceAsString(),
         ]);
     }
-
 }

@@ -184,7 +184,6 @@ class OrderService extends V1OrderService
             ->saveOrder($order);
 
             ChangeShippingAddressEvent::dispatch($order);
-
         return $order;
     }
 

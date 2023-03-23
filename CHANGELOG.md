@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.8.1 - 2023-03-23
+
+### What's Changed
+
+- Hotfix: Multiple Issues after Release 3.8.0 by @luis-molina in https://github.com/woozard/robograding/pull/976
+- Hotfix: Css Issue In Referral Landing Page by @numair97 in https://github.com/woozard/robograding/pull/975
+- Hotfix: Edit Customer Details | Updated url for PATCH API by @luis-molina in https://github.com/woozard/robograding/pull/977
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.8.0...v3.8.1
+
 ## v3.8.0 - 2023-03-22
 
 ### What's Changed

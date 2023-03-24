@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Salesman\Wallet;
+namespace App\Http\Resources\API\V2\Customer\Wallet;
 
 use App\Enums\Wallet\WalletTransactionReason;
 use App\Http\Resources\API\BaseResource;

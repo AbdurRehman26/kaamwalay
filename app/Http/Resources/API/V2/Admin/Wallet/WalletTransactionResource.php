@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V2\Admin\Wallet;
 
 use App\Enums\Wallet\WalletTransactionReason;
-use App\Models\WalletTransaction;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionResource as WalletTransactionResourceV2;
+use App\Models\WalletTransaction;
 
 /**
  * @mixin WalletTransaction

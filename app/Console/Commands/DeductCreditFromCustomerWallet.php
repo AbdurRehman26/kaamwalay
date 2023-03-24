@@ -39,15 +39,13 @@ class DeductCreditFromCustomerWallet extends Command
 
         $this->info('Deducting customer balance...');
 
-        foreach (array_shift($customers) as $customer){
-
+        foreach (array_shift($customers) as $customer) {
             $user = User::whereCustomerNumber('C00014582')->first();
 
-            if(!empty($user)){
-
-                if($user->wallet->balance != 40){
-
+            if (! empty($user)) {
+                if ($user->wallet->balance != 40) {
                     $this->info(sprintf('Customer %s Wallet Balance : %s', $user->customer_number, $user->wallet->balance));
+
                     continue;
                 }
 
@@ -65,15 +63,12 @@ class DeductCreditFromCustomerWallet extends Command
                 );
 
                 $this->info(sprintf('After Deduction -> Balance: %s', $user->wallet->refresh()->balance));
-
-            }else{
-
+            } else {
                 $this->info(sprintf(
                     'Customer with customer number : %s does not exist',
-                            $customer[0]
+                    $customer[0]
                 ));
             }
-
         }
 
         $this->info('Done...');

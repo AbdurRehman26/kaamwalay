@@ -92,8 +92,8 @@ class WalletService
         Wallet $wallet,
         float $amount,
         int $userId,
-        $walletTransactionType = WalletTransactionType::CREDIT,
-        $walletTransactionReason = WalletTransactionReason::WALLET_CREDIT
+        WalletTransactionType $walletTransactionType = WalletTransactionType::CREDIT,
+        WalletTransactionReason $walletTransactionReason = WalletTransactionReason::WALLET_CREDIT
     ): void {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,

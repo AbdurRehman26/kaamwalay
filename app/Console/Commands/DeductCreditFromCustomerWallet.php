@@ -35,7 +35,7 @@ class DeductCreditFromCustomerWallet extends Command
     public function handle(): int
     {
         $fileName = $this->ask('Filename (e.g storage/app/public/file.csv)');
-        $customers = Excel::toArray([], $fileName);
+        $customers = Excel::toArray(new \StdClass(), $fileName);
 
         $this->info('Deducting customer balance...');
 

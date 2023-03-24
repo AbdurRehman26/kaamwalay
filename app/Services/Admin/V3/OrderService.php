@@ -10,10 +10,31 @@ use App\Models\OrderAddress;
 use App\Models\UserCard;
 use App\Services\Admin\V2\OrderService as V2OrderService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {
+    public function getOrder(int $orderId): Model | QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->with([
+//                'shippingAddress.country',
+//                'billingAddress.country',
+////                'orderItems',
+////                'orderItems.cardProduct',
+////                'orderItems.cardProduct.cardSet',
+//                'orderItems.cardProduct.cardSet.cardSeries',
+////                'orderItems.cardProduct.cardCategory',
+//                'orderItems.cardProduct.cardCategory.cardCategoryType',
+//                'orderItems.orderItemStatusHistory.orderItemStatus',
+//                'orderItems.userCard',
+//                'orderItems.gradedBy',
+            ])
+            ->allowedIncludes(Order::getAllowedAdminIncludes())
+            ->findOrFail($orderId);
+    }
+
     public function updateShippingAddress(Order $order, array $data): Order
     {
         $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;

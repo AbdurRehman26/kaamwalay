@@ -154,6 +154,15 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
+            AllowedInclude::relationship('createdBy'),
+            AllowedInclude::relationship('billingAddress.country'),
+            AllowedInclude::relationship('shippingAddress.country'),
+            AllowedInclude::relationship('orderItems.cardProduct'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
         ];
     }
 

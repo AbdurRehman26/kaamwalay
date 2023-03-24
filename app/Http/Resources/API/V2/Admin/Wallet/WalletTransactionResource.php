@@ -1,36 +1,21 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Salesman\Wallet;
+namespace App\Http\Resources\API\V2\Admin\Wallet;
 
 use App\Enums\Wallet\WalletTransactionReason;
-use App\Http\Resources\API\BaseResource;
 use App\Models\WalletTransaction;
-use Illuminate\Http\Request;
+use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionResource as WalletTransactionResourceV2;
 
 /**
  * @mixin WalletTransaction
 */
-class WalletTransactionResource extends BaseResource
+class WalletTransactionResource extends WalletTransactionResourceV2
 {
-    /**
-     * Transform the resource into an array.
-     */
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'description' => $this->getTransactionDescription(),
-            'amount' => $this->amount,
-            'created_at' => $this->created_at->toISOString(),
-            'updated_at' => $this->updated_at->toISOString(),
-        ];
-    }
-
     protected function getTransactionDescription(): string
     {
         /** @var WalletTransactionReason */
         $reason = $this->reason;
-
+        
         return match ($reason) {
             WalletTransactionReason::REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
             WalletTransactionReason::ORDER_PAYMENT => 'Customer used credit on a submission',

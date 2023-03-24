@@ -4,15 +4,26 @@ namespace App\Http\Controllers\API\V2\Admin\Wallet;
 
 use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\API\Admin\Wallet\CustomerWalletCredited;
-use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletController as V1CustomerWalletController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Wallet\CustomerWalletCreditRequest;
+use App\Http\Resources\API\V2\Admin\Wallet\WalletResource;
+use App\Http\Resources\API\V2\Admin\Wallet\WalletTransactionCollection;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerWalletController extends V1CustomerWalletController
+class CustomerWalletController extends Controller
 {
+    public function show(Wallet $wallet): WalletResource
+    {
+        return new WalletResource($wallet);
+    }
+
+    public function getTransactionsHistory(Wallet $wallet): WalletTransactionCollection
+    {
+        return new WalletTransactionCollection($wallet->walletTransactions);
+    }
     //
     public function creditToWallet(CustomerWalletCreditRequest $request, Wallet $wallet): JsonResponse
     {

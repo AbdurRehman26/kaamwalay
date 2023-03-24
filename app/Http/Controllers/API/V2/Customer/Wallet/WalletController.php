@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Wallet;
 
-use App\Http\Controllers\API\V1\Customer\Wallet\WalletController as V1WalletController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletTransactionCollection;

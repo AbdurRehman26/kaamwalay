@@ -94,8 +94,7 @@ class WalletService
         int $userId,
         $walletTransactionType = WalletTransactionType::CREDIT,
         $walletTransactionReason = WalletTransactionReason::WALLET_CREDIT
-    ): void
-    {
+    ): void {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
             'created_by' => $userId,

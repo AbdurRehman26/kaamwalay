@@ -35,7 +35,6 @@ class WalletService
             WalletTransactionReason::ORDER_PAYMENT => $this->processOrderPayment($wallet, $amount, $orderId),
             WalletTransactionReason::WALLET_CREDIT => $this->processCustomerWalletCredit($wallet, $amount, $userId),
             WalletTransactionReason::WALLET_PAYMENT => $this->processWalletPayment($wallet, $amount),
-            WalletTransactionReason::WALLET_DEBIT => $this->processCustomerWalletCredit($wallet, $amount, $userId, WalletTransactionType::DEBIT, WalletTransactionReason::WALLET_DEBIT),
         };
     }
 
@@ -88,21 +87,15 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    protected function processCustomerWalletCredit(
-        Wallet $wallet,
-        float $amount,
-        int $userId,
-        $walletTransactionType = WalletTransactionType::CREDIT,
-        $walletTransactionReason = WalletTransactionReason::WALLET_CREDIT
-    ): void
+    protected function processCustomerWalletCredit(Wallet $wallet, float $amount, int $userId): void
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
             'created_by' => $userId,
             'amount' => $amount,
-            'type' => $walletTransactionType,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => $walletTransactionReason,
+            'reason' => WalletTransactionReason::WALLET_CREDIT,
         ]);
 
         $wallet->increment('balance', $amount);

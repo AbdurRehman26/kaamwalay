@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\API\V2\Customer\Wallet;
 
-use App\Http\Resources\API\V1\Customer\Wallet\WalletResource as WalletResourceV2;
+use App\Http\Resources\API\BaseResource;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 
 /** @mixin Wallet */
-class WalletResource extends WalletResourceV2
+class WalletResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

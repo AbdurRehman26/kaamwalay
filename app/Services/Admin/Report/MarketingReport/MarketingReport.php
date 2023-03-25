@@ -38,7 +38,7 @@ abstract class MarketingReport implements Reportable
             'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate)  . ' Day(s)',
             '% of signups that make submission' => $this->getPercentageOfSignupThatMadeSubmission($fromDate, $toDate),
             '% of submissions that don`t make payment' => $this->getPercentageOfSubmissionThatDontMakePayment($fromDate, $toDate),
-        ], $this->getCardsBreakdownForReport($fromDate, $toDate));
+        ], $this->getCardsBreakdownByCategoryFormatted($fromDate, $toDate));
     }
 
     protected function getAvgOrderAmount(DateTime $fromDate, DateTime $toDate): float
@@ -155,10 +155,10 @@ abstract class MarketingReport implements Reportable
         return (float) number_format((Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() / $totalOrders) * 100, 2);
     }
 
-    protected function getCardsBreakdownForReport(DateTime $fromDate, DateTime $toDate): array
+    protected function getCardsBreakdownByCategoryFormatted(DateTime $fromDate, DateTime $toDate): array
     {
         $data = [];
-        $cardsBreakdown = $this->getCardsBreakdown($fromDate, $toDate);
+        $cardsBreakdown = $this->getCardsBreakdownByCategory($fromDate, $toDate);
 
         foreach ($cardsBreakdown as $item) {
             $data['Number of ' . $item->name . ' cards'] = $item->quantity;

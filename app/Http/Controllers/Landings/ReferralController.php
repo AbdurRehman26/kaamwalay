@@ -23,4 +23,9 @@ class ReferralController extends Controller
 
         return redirect('/');
     }
+
+    public function getPartnerPage(): View
+    {
+        return view('landings.partners.view');
+    }
 }

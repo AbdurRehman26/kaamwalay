@@ -1,0 +1,49 @@
+.partner-content {
+    margin-top: 100px;
+
+    &__container {
+        display: flex;
+        align-items: center;
+        padding: 50px 0px;
+    }
+
+    &__text-div {
+        width: 50%;
+        margin-left: 50px;
+    }
+
+    &__small-title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #251f33;
+        padding: 10px;
+    }
+
+    &__title {
+        font-weight: 900;
+        font-size: 40px;
+        line-height: 47px;
+        color: #251f33;
+        padding: 10px;
+    }
+
+    &__description {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.15px;
+        color: #251f33;
+        padding: 10px;
+    }
+
+    &__image-div {
+        width: 50%;
+
+        &__image {
+            width: 710px;
+        }
+    }
+}

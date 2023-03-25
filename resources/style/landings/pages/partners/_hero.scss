@@ -1,0 +1,57 @@
+@use '../../../shared/theme';
+@use '../../../shared/utils';
+@use '../../../shared/breakpoints';
+@use '../../../shared/mixins';
+
+.partner-hero {
+    &__container {
+        background-image: url('/assets/images/partner-banner.png');
+        height: 790px;
+        overflow: hidden;
+        text-align: center;
+        color: #ffffff;
+        background-size: cover;
+        background-position: center;
+    }
+
+    &__overlay {
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.6);
+        height: 790px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__title-first {
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 24px;
+        text-align: center;
+        letter-spacing: 1.5px;
+        color: #42e8e0;
+        padding: 10px;
+    }
+
+    &__title-second {
+        color: #ffffff;
+    }
+
+    &__title {
+        font-weight: 900;
+        font-size: 56px;
+        line-height: 64px;
+        text-align: center;
+        color: #ffffff;
+        padding: 10px;
+    }
+
+    &__subtitle {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        letter-spacing: 0.1px;
+        color: #ffffff;
+    }
+}

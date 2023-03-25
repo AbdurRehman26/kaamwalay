@@ -49,3 +49,5 @@ Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->nam
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
 
 Route::get('referral/{code}', [ReferralController::class, 'getReferralPage'])->name('referral');
+
+Route::get('partners', [ReferralController::class, 'getPartnerPage'])->name('partners');

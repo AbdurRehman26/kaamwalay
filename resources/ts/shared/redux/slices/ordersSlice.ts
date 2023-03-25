@@ -60,6 +60,9 @@ export const ordersSlice = createSlice({
                 orderId: number;
                 shippingMethod: ShippingMethodEntity;
                 shippingAddress: AddressEntity;
+                shippingFee: number;
+                serviceFee: number;
+                grandTotal: number;
             }>,
         ) {
             if (state.entities[action.payload.orderId]) {
@@ -70,6 +73,9 @@ export const ordersSlice = createSlice({
                 state.entities[action.payload.orderId].shippingAddress = instanceToPlain(
                     action.payload.shippingAddress,
                 ) as AddressEntity;
+                state.entities[action.payload.orderId].shippingFee = action.payload.shippingFee;
+                state.entities[action.payload.orderId].serviceFee = action.payload.serviceFee;
+                state.entities[action.payload.orderId].grandTotal = action.payload.grandTotal;
             }
         },
     },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Country;
 use App\Models\CustomerAddress;
@@ -17,7 +18,6 @@ use function Pest\Laravel\putJson;
 uses(WithFaker::class);
 
 beforeEach(function () {
-    Event::fake();
     Http::fake([
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
@@ -44,6 +44,7 @@ beforeEach(function () {
     ]);
     $this->country = Country::factory()->create(['code' => 'US']);
     OrderItem::factory()->for($this->insuredShippingOrder)->create();
+    Event::fake(OrderShippingAddressChangedEvent::class);
 });
 
 test('order\'s shipping method can be changed from insured shipping to vault', function () {
@@ -198,4 +199,42 @@ test('shipping address is saved for customer when provided separately while chan
     expect($customerAddress->country_id)->toBe($address['country_id']);
     expect($customerAddress->phone)->toBe($address['phone']);
     expect($customerAddress->flat)->toBe($address['flat']);
+});
+
+test('Whenever shipping address is changed OrderShippingAddressChangedEvent is dispatched', function() {
+    OrderItem::factory()->for($this->vaultShippingOrder)->create([
+        'declared_value_total' => 100,
+        'quantity' => 2,
+    ]);
+
+    $address = [
+        'first_name' => $this->faker->firstNameMale(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->streetAddress(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'country_id' => 1,
+        'phone' => $this->faker->phoneNumber(),
+        'flat' => $this->faker->buildingNumber(),
+        'save_for_later' => false,
+    ];
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
+        'shipping_method_id' => $this->insuredShippingMethod->id,
+        'customer_address' => ['id'],
+        'shipping_address' => $address,
+    ])->assertOk();
+
+    $shippingAddress = $this->vaultShippingOrder->refresh()->shippingAddress;
+
+    expect($shippingAddress->first_name)->toBe($address['first_name']);
+    expect($shippingAddress->last_name)->toBe($address['last_name']);
+    expect($shippingAddress->address)->toBe($address['address']);
+    expect($shippingAddress->state)->toBe($address['state']);
+    expect($shippingAddress->zip)->toBe($address['zip']);
+    expect($shippingAddress->country_id)->toBe($address['country_id']);
+    expect($shippingAddress->phone)->toBe($address['phone']);
+    expect($shippingAddress->flat)->toBe($address['flat']);
+
+    Event::assertDispatchedTimes(OrderShippingAddressChangedEvent::class);
 });

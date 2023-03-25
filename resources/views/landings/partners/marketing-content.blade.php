@@ -4,7 +4,7 @@
             <p class="marketing-content__heading-div__small-text" data-aos="fade">PRE-made Content for social media </p>
             <h1 class="marketing-content__heading-div__heading" data-aos="fade">Share these posts with your link</h1>
         </div>
-        <div class="marketing-content__images-div" data-aos="fade-up">
+        <div class="marketing-content__images-div" data-aos="fade">
             <div class="marketing-content__image-div">
                 <a href="{{ asset('assets/images/landings/partner/agsPartnerProgramPost1.png') }}" class="glightbox">
                     <img src="{{ asset('assets/images/landings/partner/agsPartnerProgramPost1.png') }}" alt="marketing-content" class="marketing-content__image-div__image">

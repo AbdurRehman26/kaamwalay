@@ -27,4 +27,7 @@
             </div>
         </div>
     </div>
+    <div data-atom="auth-button" data-class-name="partner-hero__auth-button" data-button-content="START EARNING">
+        {{-- JS runtime actions --}}
+    </div>
 </section>

@@ -66,5 +66,8 @@
                 </a>
             </div>
         </div>
+        <div data-atom="auth-button" data-class-name="partner-hero__auth-button" data-button-content="START SHARING">
+            {{-- JS runtime actions --}}
+        </div>
     </div>
 </section>

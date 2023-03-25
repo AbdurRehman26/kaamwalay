@@ -1,3 +1,4 @@
+import { AuthButtonAtom } from '../atoms/AuthButtonAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
 import { Controller } from '../classes/Controller';
 import { CanSetup } from '../interfaces/CanSetup';
@@ -8,7 +9,9 @@ class PartnerController extends Controller implements CanSetup<PartnerController
         await mountAtom(LayoutAtom);
     }
 
-    public getPartner() {}
+    public getPartner() {
+        mountAtom(AuthButtonAtom);
+    }
 }
 
 export default PartnerController;

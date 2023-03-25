@@ -10,7 +10,7 @@ const PartnerController = () => import('./controllers/PartnerController');
 export default () => {
     route('/', [HomeController, 'getHome']).name('home');
     route('/referral/:code', [ReferralHomeController, 'getFeferalHome']).name('referralhome');
-    route('/partner', [PartnerController, 'getPartner']).name('partner');
+    route('/partners', [PartnerController, 'getPartner']).name('partner');
 
     route('/feed')
         .name('feed')

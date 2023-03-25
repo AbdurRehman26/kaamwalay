@@ -6,7 +6,10 @@
         <div class="partner-content__text-div">
             <p class="partner-content__small-title">Spread the word & Rake in the rewards</p>
             <h1 class="partner-content__title">You could earn thousands of dollars a month!</h1>
-            <p class="partner-content__description">The more you promote AGS, the more you earn. You will make commission for every paid submission (forever) from people your refer.Commission can be $1 per card in submission or 10% of total cost of submission (whichever is lower).</p>
+            <p class="partner-content__description">The more you promote AGS, the more you earn. You will make commission for every paid submission (forever) from people your refer.Commission can be <span class="partner-content__bold-text">$1 per card in submission</span> or <span class="partner-content__bold-text">10% of total cost of submission</span> (whichever is lower).</p>
+            <div data-atom="auth-button" data-class-name="partner-hero__auth-button" data-button-content="JOIN THE PARTNER PROGRAM">
+                {{-- JS runtime actions --}}
+            </div>
         </div>
     </div>
 </section>

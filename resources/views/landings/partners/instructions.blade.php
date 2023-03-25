@@ -6,7 +6,7 @@
         <div class="partner-instructions__images-div">
             <div class="partner-instructions__instruction-div">
                 <div class="partner-instructions__image-div">
-                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/instruction1.svg') }}" alt="instructions" />
+                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/share.svg') }}" alt="share" />
                 </div>
                 <div class="partner-instructions__image-content">
                     <div class="partner-instructions__image-content__number-div">
@@ -18,7 +18,7 @@
             </div>
             <div class="partner-instructions__instruction-div">
                 <div class="partner-instructions__image-div">
-                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/instruction2.svg') }}" alt="instructions" />
+                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/pay.svg') }}" alt="pay" />
                 </div>
                 <div class="partner-instructions__image-content">
                     <div class="partner-instructions__image-content__number-div">
@@ -30,7 +30,7 @@
             </div>
             <div class="partner-instructions__instruction-div">
                 <div class="partner-instructions__image-div">
-                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/instruction3.svg') }}" alt="instructions" />
+                    <img class="partner-instructions__image" src="{{ asset('assets/images/landings/partner/earn-commission.svg') }}" alt="earn-commission" />
                 </div>
                 <div class="partner-instructions__image-content">
                     <div class="partner-instructions__image-content__number-div">

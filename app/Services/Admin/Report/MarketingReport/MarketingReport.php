@@ -168,7 +168,7 @@ abstract class MarketingReport implements Reportable
     }
 
     // @phpstan-ignore-next-line
-    protected function getCardsBreakdown(DateTime $fromDate, DateTime $toDate): Collection
+    protected function getCardsBreakdownByCategory(DateTime $fromDate, DateTime $toDate): Collection
     {
         return Order::paid()
             ->join('order_items', 'order_items.order_id', 'orders.id')

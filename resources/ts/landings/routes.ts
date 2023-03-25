@@ -4,11 +4,13 @@ const HomeController = () => import('./controllers/HomeController');
 const FeedController = () => import('./controllers/FeedController');
 const PopController = () => import('./controllers/PopController');
 const ReferralHomeController = () => import('./controllers/ReferralHomeController');
+const PartnerController = () => import('./controllers/PartnerController');
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
     route('/', [HomeController, 'getHome']).name('home');
     route('/referral/:code', [ReferralHomeController, 'getFeferalHome']).name('referralhome');
+    route('/partner', [PartnerController, 'getPartner']).name('partner');
 
     route('/feed')
         .name('feed')

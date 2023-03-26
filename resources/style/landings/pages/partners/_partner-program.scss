@@ -15,6 +15,7 @@
 
     &__text-div {
         width: 50%;
+        overflow: hidden;
 
         @media screen and (max-width: 767px) {
             width: 100%;
@@ -56,6 +57,7 @@
     &__image-div {
         width: 50%;
         margin-left: 50px;
+        overflow: hidden;
 
         @media screen and (max-width: 767px) {
             width: 100%;

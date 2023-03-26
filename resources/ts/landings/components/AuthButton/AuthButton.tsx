@@ -7,7 +7,7 @@ interface Props extends Omit<ButtonProps, 'onClick'> {
     buttonContent?: string;
 }
 
-export function SubmissionButton({ buttonContent, ...rest }: Props) {
+export function AuthButton({ buttonContent, ...rest }: Props) {
     const { openAuthDialog, authDialogProps, authenticated } = useAuth();
     const redirectToPartnerProgram = useCallback(() => window.location.assign('/dashboard/referral-program/main'), []);
 
@@ -21,4 +21,4 @@ export function SubmissionButton({ buttonContent, ...rest }: Props) {
     );
 }
 
-export default SubmissionButton;
+export default AuthButton;

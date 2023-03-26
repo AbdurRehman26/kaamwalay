@@ -42,10 +42,14 @@
     }
 
     &__image-div {
-        max-width: 312px;
+        max-width: 309px;
         padding: 5px;
 
         @media screen and (max-width: 767px) {
+            max-width: 50%;
+        }
+
+        @media (min-width: 768px) and (max-width: 1023.95px) {
             max-width: 50%;
         }
 

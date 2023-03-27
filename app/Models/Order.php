@@ -163,6 +163,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderItems.cardProduct.cardCategory'),
             AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
             AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('firstOrderPayment.user'),
         ];
     }
 

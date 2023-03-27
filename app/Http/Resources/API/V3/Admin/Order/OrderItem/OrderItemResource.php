@@ -15,25 +15,29 @@ class OrderItemResource extends BaseResource
     {
         $isGraded = $this->order_item_status_id >= OrderItemStatus::GRADED;
 
+        $latestStatusHistoryQuery = $this->orderItemStatusHistory()->latest();
+
+        if ($isGraded) {
+            $latestStatusHistoryQuery->with(['user', 'user.roles']);
+        }
+
+        $latestStatusHistory = $latestStatusHistoryQuery->first();
+
         return [
             'id' => $this->id,
             'order_id' => $this->order_id,
             'quantity' => $this->quantity,
             'declared_value_per_unit' => $this->declared_value_per_unit,
-            'card_product' => new CardProductResource($this->cardProduct),
-            'status' => new OrderItemStatusHistoryResource($this->orderItemStatusHistory()->latest()->first()),
+            'card_product' => $this->whenLoaded('cardProduct', new CardProductResource($this->cardProduct)),
+            'status' => new OrderItemStatusHistoryResource($latestStatusHistory),
 
             'certificate_number' => $this->userCard?->certificate_number,
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
-            'graded_by' => $this->when($isGraded, fn () => $this->getGradedStatusHistory()?->user?->getFullName()),
-            'graded_at' => $this->when($isGraded, fn () => $this->formatDate($this->getGradedStatusHistory()?->updated_at)),
+            'graded_by' => $this->when($isGraded, fn () => $latestStatusHistory?->user?->getFullName()),
+            'graded_at' => $this->when($isGraded, fn () => $this->formatDate($latestStatusHistory?->updated_at)),
             'notes' => $this->notes ?? '',
             'internal_notes' => $this->internal_notes ?? '',
         ];
     }
 
-    private function getGradedStatusHistory(): ?OrderItemStatusHistory
-    {
-        return $this->orderItemStatusHistory()->where('order_item_status_id', OrderItemStatus::GRADED)->latest()->first();
-    }
 }

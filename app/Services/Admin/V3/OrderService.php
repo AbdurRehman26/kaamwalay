@@ -21,13 +21,6 @@ class OrderService extends V2OrderService
             ->with([
 //                'shippingAddress.country',
 //                'billingAddress.country',
-////                'orderItems',
-////                'orderItems.cardProduct',
-////                'orderItems.cardProduct.cardSet',
-//                'orderItems.cardProduct.cardSet.cardSeries',
-////                'orderItems.cardProduct.cardCategory',
-//                'orderItems.cardProduct.cardCategory.cardCategoryType',
-//                'orderItems.orderItemStatusHistory.orderItemStatus',
 //                'orderItems.userCard',
 //                'orderItems.gradedBy',
             ])

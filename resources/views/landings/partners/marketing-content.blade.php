@@ -60,11 +60,6 @@
                     <img src="{{ asset('assets/images/landings/partner/agsPartnerProgramPost11.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/partner/agsPartnerProgramPost3.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/partner/agsPartnerProgramPost3.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
-                </a>
-            </div>
         </div>
         <div data-atom="auth-button" data-class-name="partner-hero__auth-button" data-button-content="START SHARING" data-aos="fade-up">
             {{-- JS runtime actions --}}

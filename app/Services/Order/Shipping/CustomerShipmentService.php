@@ -13,7 +13,7 @@ class CustomerShipmentService
     {
         try {
             $orderCustomerShipment = $order->orderCustomerShipment;
-            
+
             if ($orderCustomerShipment) {
                 $orderCustomerShipment->update([
                     'shipping_provider' => $shippingProvider,

@@ -11,6 +11,7 @@ import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useAuth } from '@shared/hooks/useAuth';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { AddressEntity } from '../entities/AddressEntity';
@@ -26,6 +27,7 @@ interface SubmissionViewBillingProps {
     paymentMethodCode: string;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
+    orderCustomerShipment?: ShipmentEntity | null;
     mode: 'customer' | 'admin';
     admin?: string;
 }
@@ -56,6 +58,12 @@ export const useStyles = makeStyles(
                 color: '#288480',
             },
         },
+        trackingUrl: {
+            marginRight: '10px',
+            textDecoration: 'none',
+            color: '#20BFB8',
+            fontWeight: 500,
+        },
     }),
     {
         name: 'SubmissionViewBilling',
@@ -75,6 +83,7 @@ export function SubmissionViewBilling({
     paymentMethodCode,
     paymentStatus,
     walletPayment,
+    orderCustomerShipment,
     mode = 'customer',
     admin,
 }: SubmissionViewBillingProps) {
@@ -191,6 +200,24 @@ export function SubmissionViewBilling({
                     endpointUrl={editShippingEndpointUrlPrefix + `/orders/${id}/update-shipping-address`}
                     endpointVersion={'v3'}
                 />
+                {orderCustomerShipment ? (
+                    <Grid mt={3}>
+                        <Typography variant={'body1'} className={font.fontWeightMedium}>
+                            Customer Shipment Tracking #
+                        </Typography>
+                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.54)'} textTransform={'uppercase'} pt={1}>
+                            <a
+                                href={orderCustomerShipment?.trackingUrl ?? ''}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={classes.trackingUrl}
+                            >
+                                {orderCustomerShipment?.trackingNumber}
+                            </a>
+                            ({orderCustomerShipment?.shippingProvider})
+                        </Typography>
+                    </Grid>
+                ) : null}
             </Grid>
             <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>

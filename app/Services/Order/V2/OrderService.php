@@ -4,6 +4,7 @@ namespace App\Services\Order\V2;
 
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Jobs\GenerateOrderInvoiceOnShippingAddressChange;
 use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
@@ -183,7 +184,7 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-            OrderShippingAddressChangedEvent::dispatch($order);
+            GenerateOrderInvoiceOnShippingAddressChange::dispatchSync($order);
 
         return $order;
     }

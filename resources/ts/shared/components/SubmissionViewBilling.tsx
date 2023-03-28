@@ -59,7 +59,6 @@ export const useStyles = makeStyles(
             },
         },
         trackingUrl: {
-            marginRight: '10px',
             textDecoration: 'none',
             color: '#20BFB8',
             fontWeight: 500,
@@ -205,16 +204,27 @@ export function SubmissionViewBilling({
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
                             Customer Shipment Tracking #
                         </Typography>
-                        <Typography variant={'body2'} color={'rgba(0, 0, 0, 0.54)'} textTransform={'uppercase'} pt={1}>
-                            <a
-                                href={orderCustomerShipment?.trackingUrl ?? ''}
-                                target="_blank"
-                                rel="noreferrer"
-                                className={classes.trackingUrl}
+                        <Typography variant={'body2'} pt={1}>
+                            {orderCustomerShipment?.trackingUrl ? (
+                                <a
+                                    href={orderCustomerShipment?.trackingUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className={classes.trackingUrl}
+                                >
+                                    {orderCustomerShipment?.trackingNumber}
+                                </a>
+                            ) : (
+                                orderCustomerShipment?.trackingNumber
+                            )}
+                            <Typography
+                                variant={'caption'}
+                                color={'rgba(0, 0, 0, 0.54)'}
+                                textTransform={'uppercase'}
+                                pl={1}
                             >
-                                {orderCustomerShipment?.trackingNumber}
-                            </a>
-                            ({orderCustomerShipment?.shippingProvider})
+                                ({orderCustomerShipment?.shippingProvider})
+                            </Typography>
                         </Typography>
                     </Grid>
                 ) : null}

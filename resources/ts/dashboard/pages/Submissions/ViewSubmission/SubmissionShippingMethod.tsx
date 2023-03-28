@@ -46,7 +46,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                 });
 
                 try {
-                    const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee } =
+                    const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee, invoice } =
                         await orderRepository.attachShippingAddress({
                             address,
                             orderId,
@@ -62,6 +62,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                             shippingFee,
                             serviceFee,
                             grandTotal,
+                            invoice,
                         }),
                     );
 
@@ -91,7 +92,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                 message: 'Switching to Insured Shipping...',
             });
             try {
-                const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee } =
+                const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee, invoice } =
                     await orderRepository.attachShippingAddress({
                         orderId,
                         shippingMethod: ShippingMethodType.VaultStorageID,
@@ -105,6 +106,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                         shippingFee,
                         serviceFee,
                         grandTotal,
+                        invoice,
                     }),
                 );
 

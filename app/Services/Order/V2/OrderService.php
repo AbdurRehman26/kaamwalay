@@ -2,9 +2,7 @@
 
 namespace App\Services\Order\V2;
 
-use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
-use App\Jobs\GenerateOrderInvoiceOnShippingAddressChange;
 use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
@@ -15,6 +13,7 @@ use App\Services\EmailService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
+use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -184,7 +183,13 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-            GenerateOrderInvoiceOnShippingAddressChange::dispatchSync($order);
+            $invoiceService = resolve(InvoiceService::class);
+
+            if ($order->hasInvoice()) {
+                $order->invoice()->delete();
+            }
+
+            $invoiceService->saveInvoicePDF($order);
 
         return $order;
     }

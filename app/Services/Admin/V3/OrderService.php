@@ -64,6 +64,7 @@ class OrderService extends V2OrderService
         // @phpstan-ignore-next-line
         return QueryBuilder::for($query)
             ->allowedFilters(UserCard::allowedFilters())
+            ->allowedIncludes(UserCard::allowedIncludes())
             ->paginate(request('per_page', 24));
     }
 }

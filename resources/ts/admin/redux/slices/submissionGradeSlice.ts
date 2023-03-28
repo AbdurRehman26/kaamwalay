@@ -25,6 +25,12 @@ export const getAllSubmissions = createAsyncThunk(
                 filter: {
                     orderItemId: DTO.itemId,
                 },
+                include: [
+                    'orderItem',
+                    'orderItem.cardProduct.cardSet.cardSeries',
+                    'orderItem.cardProduct.cardCategory',
+                    'customer',
+                ],
             },
             ...bracketParams(),
         });

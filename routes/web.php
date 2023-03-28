@@ -48,6 +48,7 @@ Route::prefix('pop')->group(function () {
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
 
-Route::get('referral/{code}', [ReferralController::class, 'getReferralPage'])->name('referral');
-
-Route::get('partners', [ReferralController::class, 'getPartnerPage'])->name('partners');
+Route::prefix('referral')->group(function () {
+    Route::get('/', [ReferralController::class, 'index'])->name('referral.view');
+    Route::get('/{code}', [ReferralController::class, 'getReferralPage'])->name('referral.home');
+});

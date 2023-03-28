@@ -120,7 +120,7 @@ export function LayoutHeader() {
                         <MuiLink className={classes.navLink} href={'/pop'}>
                             POP Report
                         </MuiLink>
-                        <MuiLink className={classes.navLink} href={'/partners'}>
+                        <MuiLink className={classes.navLink} href={'/referral'}>
                             Partners
                         </MuiLink>
                     </Grid>

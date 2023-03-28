@@ -4,14 +4,16 @@ import { Controller } from '../classes/Controller';
 import { CanSetup } from '../interfaces/CanSetup';
 import { mountAtom } from '../utils/mountAtom';
 
-class PartnerController extends Controller implements CanSetup<PartnerController> {
+class ReferralController extends Controller implements CanSetup<ReferralController> {
     public async setup() {
         await mountAtom(LayoutAtom);
     }
 
-    public getPartner() {
+    public getReferralHome() {}
+
+    public referralView() {
         mountAtom(AuthButtonAtom);
     }
 }
 
-export default PartnerController;
+export default ReferralController;

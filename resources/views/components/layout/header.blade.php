@@ -17,7 +17,7 @@
         <nav class="page__header__nav">
             <a href="{{ url('/feed') }}" class="page__header__nav-item {{Route::is('feed.list') ? 'page__header__nav-item--active' : null}}">Live Feed</a>
             <a href="{{ url('/pop') }}" class="page__header__nav-item {{str_contains(Route::currentRouteName(), 'pop') ? 'page__header__nav-item--active' : null}}">POP Report</a>
-            <a href="{{ url('/partners') }}" class="page__header__nav-item {{str_contains(Route::currentRouteName(), 'partners') ? 'page__header__nav-item--active' : null}}">Partners</a>
+            <a href="{{ url('/referral') }}" class="page__header__nav-item {{str_contains(Route::currentRouteName(), 'referral.view') ? 'page__header__nav-item--active' : null}}">Partners</a>
             {{-- <a href="{{ url('/how-it-works') }}" class="page__header__nav-item">How It Works</a>
             <a href="{{ url('/pricing') }}" class="page__header__nav-item">Pricing</a>
             <a href="{{ url('/about-us') }}" class="page__header__nav-item">About Us</a>

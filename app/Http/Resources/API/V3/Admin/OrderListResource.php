@@ -2,20 +2,47 @@
 
 namespace App\Http\Resources\API\V3\Admin;
 
-use App\Http\Resources\API\V2\Admin\Order\OrderListResource as V2OrderOrderListResource;
+use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderCustomerShipmentResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
+use App\Http\Resources\API\V3\Admin\User\UserResource;
+use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use Illuminate\Http\Request;
 
-class OrderListResource extends V2OrderOrderListResource
+class OrderListResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
      */
     public function toArray(Request $request): array
     {
-        $data = parent::toArray($request);
-
-        return array_merge($data, [
-            'referrer' => $this->user?->referredBy,
-        ]);
+        return [
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'number_of_cards' => $this->orderItems->sum('quantity'),
+            'total_declared_value' => $this->orderItems->sum('declared_value_total'),
+            'grand_total' => $this->grand_total,
+            'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
+            'owner' => $this->whenLoaded('salesman', UserResource::class),
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'payment_status' => $this->payment_status,
+            'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
+            'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
+            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
+            'arrived' => ! is_null($this->arrived_at),
+            'arrived_at' => $this->formatDate($this->arrived_at),
+            'created_at' => $this->formatDate($this->created_at),
+            'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
+            'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
+            'coupon' => $this->whenLoaded('coupon', CouponResource::class),
+            'salesman_commission' => $this->salesman_commission,
+        ];
     }
 }

@@ -18,7 +18,7 @@ class OrderItemResource extends BaseResource
         $latestStatusHistoryQuery = $this->orderItemStatusHistory()->latest();
 
         if ($isGraded) {
-            $latestStatusHistoryQuery->with(['user', 'user.roles']);
+            $latestStatusHistoryQuery->with(['user']);
         }
 
         $latestStatusHistory = $latestStatusHistoryQuery->first();

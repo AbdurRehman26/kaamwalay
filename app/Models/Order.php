@@ -147,6 +147,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('customer.wallet', 'user.wallet'),
+            AllowedInclude::relationship('customer.referredBy', 'user.referredBy'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
@@ -155,8 +156,8 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
             AllowedInclude::relationship('createdBy'),
-            AllowedInclude::relationship('billingAddress.country'),
-            AllowedInclude::relationship('shippingAddress.country'),
+            AllowedInclude::relationship('reviewedBy'),
+            AllowedInclude::relationship('gradedBy'),
             AllowedInclude::relationship('orderItems.cardProduct'),
             AllowedInclude::relationship('orderItems.cardProduct.cardSet'),
             AllowedInclude::relationship('orderItems.cardProduct.cardSet.cardSeries'),
@@ -164,6 +165,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
             AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
             AllowedInclude::relationship('firstOrderPayment.user'),
+            AllowedInclude::relationship('salesman'),
         ];
     }
 
@@ -276,7 +278,7 @@ class Order extends Model implements Exportable
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->without('roles');
     }
 
     public function paymentPlan(): BelongsTo
@@ -532,7 +534,7 @@ class Order extends Model implements Exportable
      */
     public function salesman(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'salesman_id');
+        return $this->belongsTo(User::class, 'salesman_id')->without('roles');
     }
 
     /**

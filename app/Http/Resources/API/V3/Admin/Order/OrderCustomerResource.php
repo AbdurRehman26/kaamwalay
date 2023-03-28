@@ -2,8 +2,29 @@
 
 namespace App\Http\Resources\API\V3\Admin\Order;
 
-use App\Http\Resources\API\V2\Admin\Order\OrderCustomerResource as V2OrderCustomerResource;
+use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
+use App\Http\Resources\API\V3\Admin\User\UserResource;
+use Illuminate\Http\Request;
+use App\Models\User;
 
-class OrderCustomerResource extends V2OrderCustomerResource
+/** @mixin User */
+class OrderCustomerResource extends BaseResource
 {
+    /**
+     * Transform the resource into an array.
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'customer_number' => $this->customer_number,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'wallet' => $this->whenLoaded('wallet', WalletResource::class),
+            'referredBy' => $this->whenLoaded('referredBy', UserResource::class),
+        ];
+    }
 }

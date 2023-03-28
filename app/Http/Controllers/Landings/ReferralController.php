@@ -10,7 +10,6 @@ use Illuminate\View\View;
 
 class ReferralController extends Controller
 {
-
     public function index(): View
     {
         return view('landings.referral.view');

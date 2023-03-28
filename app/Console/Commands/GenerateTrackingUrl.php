@@ -31,7 +31,7 @@ class GenerateTrackingUrl extends Command
         $customerShipmentService = new CustomerShipmentService();
         $orders = Order::whereShippingMethodId(1)->whereNotNull('order_customer_shipment_id')->get();
 
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $orderCustomerShipment = OrderCustomerShipment::whereId($order->order_customer_shipment_id)->whereNull('tracking_url')->first();
             
             if ($orderCustomerShipment) {

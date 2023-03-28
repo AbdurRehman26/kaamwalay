@@ -26,6 +26,6 @@ class ReferralController extends Controller
 
     public function getPartnerPage(): View
     {
-        return view('landings.partners.view');
+        return view('landings.referral.view');
     }
 }

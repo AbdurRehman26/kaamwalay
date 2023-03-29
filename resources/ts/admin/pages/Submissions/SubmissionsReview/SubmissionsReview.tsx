@@ -51,14 +51,14 @@ export function SubmissionsReview() {
     });
 
     const handleCompleteOrderReview = useCallback(async () => {
-        setLoading(false);
+        setLoading(true);
         await dispatch(
             addOrderStatusHistory({
                 orderId: data?.id,
                 orderStatusId: OrderStatusEnum.CONFIRMED,
             }),
         );
-        setLoading(true);
+        setLoading(false);
     }, [dispatch, data?.id]);
 
     const handleAddCard = useCallback<ManageCardDialogProps['onAdd']>(

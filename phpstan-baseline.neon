@@ -1916,11 +1916,6 @@ parameters:
 			path: app/Imports/CardProductAttributesUpdate.php
 
 		-
-			message: "#^Property App\\\\Jobs\\\\Admin\\\\Order\\\\CreateOrderFoldersOnDropbox\\:\\:\\$tries has no type specified\\.$#"
-			count: 1
-			path: app/Jobs/Admin/Order/CreateOrderFoldersOnDropbox.php
-
-		-
 			message: "#^Property App\\\\Jobs\\\\Email\\\\SendEmail\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Email/SendEmail.php

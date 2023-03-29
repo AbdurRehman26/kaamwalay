@@ -15,6 +15,7 @@ class OrderCustomerShipmentResource extends JsonResource
             'shipment_date' => $this->shipment_date,
             'shipping_provider' => $this->shipping_provider,
             'tracking_number' => $this->tracking_number,
+            'tracking_url' => $this->tracking_url,
         ];
     }
 }

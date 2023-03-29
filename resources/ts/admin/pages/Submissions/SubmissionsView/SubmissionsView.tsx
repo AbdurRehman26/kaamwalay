@@ -21,6 +21,7 @@ export function SubmissionsView() {
                 include: [
                     'customer.wallet',
                     'customer.referredBy',
+                    'orderCustomerShipment',
                     'billingAddress',
                     'shippingAddress',
                     'shippingMethod',
@@ -100,6 +101,7 @@ export function SubmissionsView() {
                 referrer={data?.customer?.referredBy}
                 salesmanCommission={data?.salesmanCommission}
                 referralCommission={data?.referralCommission}
+                orderCustomerShipment={data?.orderCustomerShipment}
             />
             <Divider />
             <RefundsAndExtraCharges

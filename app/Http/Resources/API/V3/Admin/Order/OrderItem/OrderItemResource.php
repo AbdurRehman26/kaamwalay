@@ -3,12 +3,14 @@
 namespace App\Http\Resources\API\V3\Admin\Order\OrderItem;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemStatusHistoryResource;
 use App\Http\Resources\API\V3\Admin\UserCard\UserCardResource;
 use App\Http\Resources\API\V3\Admin\CardProduct\CardProductResource;
+use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
-use App\Models\OrderItemStatusHistory;
 
+/**
+ * @mixin OrderItem
+ */
 class OrderItemResource extends BaseResource
 {
     public function toArray($request): array

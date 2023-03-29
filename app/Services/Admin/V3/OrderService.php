@@ -18,12 +18,6 @@ class OrderService extends V2OrderService
     public function getOrder(int $orderId): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)
-            ->with([
-//                'shippingAddress.country',
-//                'billingAddress.country',
-//                'orderItems.userCard',
-//                'orderItems.gradedBy',
-            ])
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->findOrFail($orderId);
     }

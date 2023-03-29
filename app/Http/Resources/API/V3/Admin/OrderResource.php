@@ -4,28 +4,29 @@ namespace App\Http\Resources\API\V3\Admin;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderCertificate\OrderCertificateResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderCustomerShipmentResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemCollection;
-use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderPaymentCollection;
-use App\Http\Resources\API\V2\Admin\Order\OrderPaymentResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
-use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderPaymentCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderPaymentResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderShipmentResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
-use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
-use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V3\Admin\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Closure;
+use App\Models\Order;
 
-/*
- * @mixin Order
+/**
+ * @mixin Order;
  */
 class OrderResource extends BaseResource
 {
@@ -76,7 +77,7 @@ class OrderResource extends BaseResource
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'discounted_amount' => $this->discounted_amount,
             'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
-            'payment_method_id' => $this->payment_metxhod_id,
+            'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,

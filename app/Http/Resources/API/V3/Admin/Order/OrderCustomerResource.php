@@ -5,8 +5,8 @@ namespace App\Http\Resources\API\V3\Admin\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 /** @mixin User */
 class OrderCustomerResource extends BaseResource

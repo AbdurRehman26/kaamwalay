@@ -10,5 +10,4 @@ use App\Models\OrderPayment;
  */
 class OrderPaymentResource extends V2OrderPaymentResource
 {
-
 }

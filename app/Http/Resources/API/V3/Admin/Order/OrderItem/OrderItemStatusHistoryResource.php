@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V3\Admin\Order\OrderItem;
 
-use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemStatusResource;
 use App\Models\OrderItemStatusHistory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,4 +19,3 @@ class OrderItemStatusHistoryResource extends JsonResource
         ];
     }
 }
-

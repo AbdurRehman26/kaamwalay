@@ -85,7 +85,7 @@ class UserCard extends Model
             AllowedInclude::relationship('orderItem.cardProduct.cardSet.cardSeries'),
             AllowedInclude::relationship('orderItem.cardProduct.cardCategory'),
             AllowedInclude::relationship('orderItem.cardProduct.cardCategory.cardCategoryType'),
-            AllowedInclude::relationship('customer','user'),
+            AllowedInclude::relationship('customer', 'user'),
 
         ];
     }

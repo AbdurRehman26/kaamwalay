@@ -3,7 +3,10 @@
 namespace App\Http\Resources\API\V3\Admin;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerShipmentResource;
@@ -14,16 +17,13 @@ use App\Http\Resources\API\V3\Admin\Order\OrderPaymentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
-use App\Http\Resources\API\V3\Admin\User\UserResource;
-use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
-use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V3\Admin\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V3\Admin\User\UserResource;
+use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use Illuminate\Http\Request;
 use Closure;
-use App\Models\Order;
+use Illuminate\Http\Request;
 
 /**
  * @mixin Order;

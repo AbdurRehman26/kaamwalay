@@ -30,6 +30,7 @@ class GenerateTrackingUrl extends Command
         $customerShipmentService = new CustomerShipmentService();
         $orders = Order::join('order_customer_shipments', 'order_customer_shipments.id', 'orders.order_customer_shipment_id')
             ->whereNull('order_customer_shipments.tracking_url')
+            ->whereIn('order_customer_shipments.shipping_provider', ['usps', 'ups', 'fedex', 'dhlexpress'])
             ->get();
 
         if ($orders->count() > 0) {

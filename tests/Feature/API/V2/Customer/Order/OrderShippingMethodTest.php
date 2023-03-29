@@ -38,12 +38,12 @@ beforeEach(function () {
         'service_fee' => 20,
         'shipping_fee' => 14,
         'grand_total' => 34,
-        'payment_status' => OrderPaymentStatusEnum::PENDING
+        'payment_status' => OrderPaymentStatusEnum::PENDING,
     ]);
     $this->vaultShippingOrder = Order::factory()->for($this->user)->create([
         'shipping_method_id' => $this->vaultShippingMethod->id,
         'service_fee' => 20,
-        'payment_status' => OrderPaymentStatusEnum::PENDING
+        'payment_status' => OrderPaymentStatusEnum::PENDING,
     ]);
     $this->country = Country::factory()->create(['code' => 'US']);
     OrderItem::factory()->for($this->insuredShippingOrder)->create();

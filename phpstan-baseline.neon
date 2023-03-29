@@ -3229,3 +3229,13 @@ parameters:
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V3/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V3/Admin/Order/OrderItem/OrderItemResource.php

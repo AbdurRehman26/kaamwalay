@@ -183,13 +183,13 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-            $invoiceService = resolve(InvoiceService::class);
+        $invoiceService = resolve(InvoiceService::class);
 
-            if ($order->hasInvoice()) {
-                $order->invoice()->delete();
-            }
+        if ($order->hasInvoice()) {
+            $order->invoice()->delete();
+        }
 
-            $invoiceService->saveInvoicePDF($order);
+        $invoiceService->saveInvoicePDF($order);
 
         return $order;
     }

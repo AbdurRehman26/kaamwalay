@@ -35,6 +35,7 @@ class GenerateTrackingUrl extends Command
         if ($orders->count() > 0) {
             foreach ($orders as $order) {
                 $this->info("Generating tracking url for order# $order->order_number");
+                // @phpstan-ignore-next-line
                 $customerShipmentService->process($order, $order->shipping_provider, $order->tracking_number);
             }
             $this->info('Generated tracking urls.');

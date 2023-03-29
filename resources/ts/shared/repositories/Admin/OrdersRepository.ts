@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios';
 import { plainToInstance } from 'class-transformer';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
@@ -20,6 +21,16 @@ import { Repository } from '../Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'admin/orders/:orderId';
     readonly model = OrderEntity;
+    endpointConfig = { version: 'v2' };
+
+    // @ts-ignore
+    async show(resourceId: number, config?: AxiosRequestConfig): Promise<OrderEntity> {
+        this.endpointConfig = { version: 'v3' };
+
+        const { data } = await this.endpoint.get(`${resourceId}`, config);
+
+        return plainToInstance(OrderEntity, data);
+    }
 
     async addOrderStatusHistory(input: AddOrderStatusHistoryDto): Promise<OrderStatusHistoryEntity> {
         const { orderId, orderStatusId } = input;

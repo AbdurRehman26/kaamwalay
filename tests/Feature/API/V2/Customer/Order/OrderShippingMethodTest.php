@@ -10,8 +10,8 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Payment\V3\InvoiceService;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\putJson;
@@ -44,7 +44,7 @@ beforeEach(function () {
         'shipping_method_id' => $this->vaultShippingMethod->id,
         'service_fee' => 20,
         'shipping_fee' => 0,
-        'payment_status' => OrderPaymentStatusEnum::PENDING
+        'payment_status' => OrderPaymentStatusEnum::PENDING,
     ]);
     $this->country = Country::factory()->create(['code' => 'US']);
     OrderItem::factory()->for($this->insuredShippingOrder)->create();
@@ -204,7 +204,7 @@ test('shipping address is saved for customer when provided separately while chan
     expect($customerAddress->flat)->toBe($address['flat']);
 });
 
-test('Whenever shipping method is changed Invoice is Generated', function() {
+test('Whenever shipping method is changed Invoice is Generated', function () {
     OrderItem::factory()->for($this->vaultShippingOrder)->create([
         'declared_value_total' => 100,
         'quantity' => 2,

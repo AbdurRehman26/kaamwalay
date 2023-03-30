@@ -10,12 +10,11 @@ use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCertificate\OrderCertificateResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerShipmentResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderLabel\OrderLabelResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderPaymentCollection;
 use App\Http\Resources\API\V3\Admin\Order\OrderPaymentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderShipmentResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V3\Admin\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
@@ -57,21 +56,21 @@ class OrderResource extends BaseResource
             'created_by' => $this->whenLoaded('createdBy', UserResource::class),
             'owner' => $this->whenLoaded('owner', new UserResource($this->salesman)),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
-            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
+            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryResource::collection($this->orderStatusHistory)),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
             'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
             'order_payment' => $this->whenLoaded('firstOrderPayment', OrderPaymentResource::class),
-            'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
+            'order_items' => $this->whenLoaded('orderItems', OrderItemResource::collection($this->orderItems)),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
             'order_certificate' => $this->whenLoaded('orderCertificate', OrderCertificateResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
-            'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
-            'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
+            'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentResource::collection($this->extraCharges)),
+            'refunds' => $this->whenLoaded('refunds', OrderPaymentResource::collection($this->refunds)),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),

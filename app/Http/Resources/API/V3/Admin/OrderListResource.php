@@ -9,7 +9,7 @@ use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderShipmentResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V3\Admin\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
@@ -38,7 +38,7 @@ class OrderListResource extends BaseResource
             'payment_status' => $this->payment_status,
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
-            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
+            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryResource::collection($this->orderStatusHistory)),
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
             'created_at' => $this->formatDate($this->created_at),

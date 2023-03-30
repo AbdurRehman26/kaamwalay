@@ -34,7 +34,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         });
 
     });
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show'])
+        ->names([
+            'index' => 'orders.index',
+            'show' => 'orders.show',
+        ]);
 
     Route::apiResource('customers', CustomerController::class)->only(['index', 'show'])
         ->names([

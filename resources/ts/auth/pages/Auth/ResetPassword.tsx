@@ -29,6 +29,7 @@ export function ResetPassword() {
     const navigate = useNavigate();
     const classes = useStyles();
     const { resetPassword } = useAuth();
+    const { login } = useAuth();
     const initialState = useMemo<ResetPasswordRequestDto>(
         () => ({
             token,
@@ -51,9 +52,11 @@ export function ResetPassword() {
                 notifications.success(payload?.message);
             }
 
-            navigate('/sign-in');
+            await login(values.email, values.password);
+
+            navigate('/dashboard');
         },
-        [navigate, notifications, resetPassword],
+        [login, navigate, notifications, resetPassword],
     );
 
     if (!email || !token) {

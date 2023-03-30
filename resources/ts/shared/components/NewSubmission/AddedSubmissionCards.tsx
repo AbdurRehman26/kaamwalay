@@ -23,6 +23,7 @@ import { NumberFormatTextField } from '@shared/components/NumberFormatTextField'
 import { CardsSelectionEvents, EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import {
     SearchResultItemCardProps,
     changeSelectedCardQty,
@@ -33,6 +34,7 @@ import {
     markCardAsUnselected,
     resetSelectedCards,
     setBillingAddress,
+    setCleaningFee,
     setIsCouponApplied,
     setPreviewTotal,
 } from '@shared/redux/slices/adminCreateOrderSlice';
@@ -203,6 +205,7 @@ export function AddedSubmissionCards() {
     const [isCreateSubmission, setIsCreateSubmission] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [previewCleaningFee, setPreviewCleaningFee] = useState(0);
     const classes = useStyles();
     const useCustomShippingAddress = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.useCustomShippingAddress,
@@ -235,6 +238,8 @@ export function AddedSubmissionCards() {
     );
     const shippingFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.shippingFee);
     const cleaningFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.cleaningFee);
+    const requiresCleaning = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.requiresCleaning);
+    const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const finalShippingAddress =
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
@@ -360,6 +365,22 @@ export function AddedSubmissionCards() {
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }
+
+    useEffect(() => {
+        if (requiresCleaning) {
+            const calculatedCleaningFee = numberOfSelectedCards * featureOrderCleaningFeePerCard;
+            const previewCleaningFees =
+                calculatedCleaningFee >= featureOrderCleaningFeeMaxCap
+                    ? featureOrderCleaningFeeMaxCap
+                    : calculatedCleaningFee;
+            dispatch(setCleaningFee(previewCleaningFees));
+            setPreviewCleaningFee(previewCleaningFees);
+        } else {
+            dispatch(setCleaningFee(0));
+            setPreviewCleaningFee(0);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cleaningFee, dispatch, previewCleaningFee, requiresCleaning]);
 
     return (
         <div className={classes.addedCardsContainer}>
@@ -513,7 +534,10 @@ export function AddedSubmissionCards() {
                         />
                     </div>
                 ) : null}
-                <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                <div
+                    className={classes.row}
+                    style={{ marginTop: '16px', marginBottom: !requiresCleaning ? '16px' : '0px' }}
+                >
                     <Typography className={classes.rowLeftText}>
                         {shippingMethod?.code === ShippingMethodType.InsuredShipping
                             ? 'Insured Shipping: '
@@ -528,6 +552,19 @@ export function AddedSubmissionCards() {
                         prefix={'$'}
                     />
                 </div>
+                {requiresCleaning ? (
+                    <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                        <Typography className={classes.rowLeftText}>Cleaning Fee:</Typography>
+                        <NumberFormat
+                            value={previewCleaningFee}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
+                    </div>
+                ) : null}
                 <Divider />
                 <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                     <Typography className={classes.rowLeftText}>Total:</Typography>

@@ -460,7 +460,7 @@ test('an admin can get paginated cards for grading', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems->first()->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', $this->orders[1]->id))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include[]' => 'orderItem']))
         ->assertJsonStructure([
             'data',
             'links',
@@ -478,7 +478,7 @@ test('an admin can paginate through cards results', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems[2]->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 2, 'page' => 2]))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 2, 'page' => 2, 'include[]' => 'orderItem']))
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
@@ -495,7 +495,7 @@ test('an admin can filter by item to revise', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems[2]->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'filter[order_item_id]' => $orderItemId]))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'filter[order_item_id]' => $orderItemId, 'include[]' => 'orderItem']))
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'id' => $orderItemId,

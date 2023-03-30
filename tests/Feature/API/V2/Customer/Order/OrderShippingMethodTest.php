@@ -63,7 +63,7 @@ test('order\'s shipping method can be changed from vault to insured shipping', f
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
         'shipping_method_id' => $this->insuredShippingMethod->id,
         'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
-    ])->assertOk();
+    ])->dump()->assertOk();
     expect($this->vaultShippingOrder->refresh()->shippingMethod->code)->toBe(ShippingMethod::INSURED_SHIPPING);
 });
 

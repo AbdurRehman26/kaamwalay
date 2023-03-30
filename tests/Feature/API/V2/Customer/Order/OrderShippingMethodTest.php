@@ -23,6 +23,7 @@ beforeEach(function () {
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
+    Storage::fake('s3');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -59,7 +60,6 @@ test('order\'s shipping method can be changed from insured shipping to vault', f
 
 
 test('order\'s shipping method can be changed from vault to insured shipping', function () {
-    Storage::fake('s3');
     OrderItem::factory()->for($this->vaultShippingOrder)->create();
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
         'shipping_method_id' => $this->insuredShippingMethod->id,

@@ -154,7 +154,7 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson(route('v3.admin.orders.show', ['order' => $this->orders[0]->id, 'include'=>'customer,orderItems']))
+    $this->getJson(route('v3.admin.orders.show', ['order' => $this->orders[0]->id, 'include' => 'customer,orderItems']))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -174,7 +174,7 @@ it('returns order details', function () {
 test('an admin can get order cards grades', function () {
     Bus::fake();
 
-    $this->getJson(route('v3.admin.orders.get-grades' , $this->orders[1]->id ))->assertOk();
+    $this->getJson(route('v3.admin.orders.get-grades', $this->orders[1]->id))->assertOk();
 
     Bus::assertDispatched(GetCardGradesFromAgs::class);
 });
@@ -185,7 +185,7 @@ test('it dispatches get grades from AGS job when admin fetches grades', function
     UserCard::factory()->create([
         'order_item_id' => $this->orders[1]->orderItems->first()->id,
     ]);
-    $this->getJson(route('v3.admin.orders.get-grades' , $this->orders[1]->id ))
+    $this->getJson(route('v3.admin.orders.get-grades', $this->orders[1]->id))
         ->assertOk()
         ->assertJsonFragment([
             'robo_grade_values' => null,
@@ -201,7 +201,7 @@ test('an admin can get order cards if AGS API returns grades', function () {
         'order_item_id' => $orderItemId,
         'certificate_number' => '09000000',
     ]);
-    $this->getJson(route('v3.admin.orders.get-grades' , $this->orders[1]->id ))
+    $this->getJson(route('v3.admin.orders.get-grades', $this->orders[1]->id))
         ->assertJsonFragment([
             'center' => '2.00',
         ])

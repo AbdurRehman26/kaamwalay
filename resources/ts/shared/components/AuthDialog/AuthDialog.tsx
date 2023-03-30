@@ -95,7 +95,7 @@ export function AuthDialog({
                 window.location.href = intendedRoute.toString();
             }
 
-            if (redirectPath && window.location.href.match('dashboard') === null) {
+            if (redirectPath && !window.location.pathname.includes('dashboard')) {
                 window.location.href = redirectPath;
             } else {
                 dispatch(authenticateUser({ user, authenticatedUser }));

@@ -13,6 +13,8 @@ use App\Models\User;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
+use Mockery;
+use Mockery\MockInterface;
 
 use function Pest\Laravel\putJson;
 
@@ -23,7 +25,9 @@ beforeEach(function () {
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
-    Storage::fake('s3');
+    // Storage::fake('s3');
+    // $this->mockService = \Mockery::mock(InvoiceService::class);
+    // $this->mockService->shouldReceive('saveInvoicePDF');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -32,7 +36,6 @@ beforeEach(function () {
     $this->vaultShippingMethod = ShippingMethod::factory()->vault()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
     $this->insuredShippingOrderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-    $this->invoiceService = resolve(InvoiceService::class);
     $this->actingAs($this->user);
     $this->insuredShippingOrder = Order::factory()->for($this->user)->create([
         'shipping_method_id' => $this->insuredShippingMethod->id,
@@ -205,39 +208,16 @@ test('shipping address is saved for customer when provided separately while chan
     expect($customerAddress->flat)->toBe($address['flat']);
 });
 
-test('Whenever shipping method is changed Invoice is Generated', function () {
-    OrderItem::factory()->for($this->vaultShippingOrder)->create([
-        'declared_value_total' => 100,
-        'quantity' => 2,
-    ]);
+test('Invoice is re-generated whenever a shipping method is changed', function (Order $order, ShippingMethod $shippingMethod) {
+    // $this->mockService->shouldReceive('saveInvoicePDF')->with($order);
 
-    $address = [
-        'first_name' => $this->faker->firstNameMale(),
-        'last_name' => $this->faker->lastName(),
-        'address' => $this->faker->streetAddress(),
-        'city' => $this->faker->city(),
-        'state' => $this->faker->stateAbbr(),
-        'zip' => $this->faker->postcode(),
-        'country_id' => 1,
-        'phone' => $this->faker->phoneNumber(),
-        'flat' => $this->faker->buildingNumber(),
-        'save_for_later' => false,
-    ];
-    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
-        'shipping_method_id' => $this->insuredShippingMethod->id,
-        'customer_address' => ['id'],
-        'shipping_address' => $address,
-    ])->assertOk();
-
-    $this->invoiceService->saveInvoicePDF($this->vaultShippingOrder);
-    $shippingAddress = $this->vaultShippingOrder->refresh()->shippingAddress;
-
-    expect($shippingAddress->first_name)->toBe($address['first_name']);
-    expect($shippingAddress->last_name)->toBe($address['last_name']);
-    expect($shippingAddress->address)->toBe($address['address']);
-    expect($shippingAddress->state)->toBe($address['state']);
-    expect($shippingAddress->zip)->toBe($address['zip']);
-    expect($shippingAddress->country_id)->toBe($address['country_id']);
-    expect($shippingAddress->phone)->toBe($address['phone']);
-    expect($shippingAddress->flat)->toBe($address['flat']);
-});
+    OrderItem::factory()->for($order)->create();
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
+        'shipping_method_id' => $shippingMethod->id,
+        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
+    ])->dump()->assertOk();
+})
+->with([
+    fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
+    fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
+]);

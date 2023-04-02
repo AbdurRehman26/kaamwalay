@@ -183,6 +183,8 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
+        // The reason for calling this service synchronously is to get the update Invoice Data 
+        // Instantly so when user download Invoice Updated data will be shown.
         $invoiceService = resolve(InvoiceService::class);
 
         if ($order->hasInvoice()) {

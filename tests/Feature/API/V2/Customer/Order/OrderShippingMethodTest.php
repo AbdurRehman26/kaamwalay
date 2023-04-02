@@ -23,9 +23,9 @@ beforeEach(function () {
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
-    // Storage::fake('s3');
-    // $this->mockService = \Mockery::mock(InvoiceService::class);
-    // $this->mockService->shouldReceive('saveInvoicePDF');
+    Storage::fake('s3');
+    $this->mockService = \Mockery::mock(InvoiceService::class);
+    $this->mockService->shouldReceive('saveInvoicePDF');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -207,13 +207,13 @@ test('shipping address is saved for customer when provided separately while chan
 });
 
 test('Invoice is re-generated whenever a shipping method is changed', function (Order $order, ShippingMethod $shippingMethod) {
-    // $this->mockService->shouldReceive('saveInvoicePDF')->with($order);
+    $this->mockService->shouldReceive('saveInvoicePDF')->with($order);
 
     OrderItem::factory()->for($order)->create();
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
         'shipping_method_id' => $shippingMethod->id,
         'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
-    ])->dd()->assertOk();
+    ])->assertOk();
 })
 ->with([
     fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],

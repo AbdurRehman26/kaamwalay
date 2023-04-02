@@ -213,7 +213,7 @@ test('Invoice is re-generated whenever a shipping method is changed', function (
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
         'shipping_method_id' => $shippingMethod->id,
         'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
-    ])->dump()->assertOk();
+    ])->dd()->assertOk();
 })
 ->with([
     fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],

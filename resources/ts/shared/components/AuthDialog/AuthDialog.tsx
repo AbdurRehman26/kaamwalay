@@ -101,7 +101,7 @@ export function AuthDialog({
                 window.location.href = intendedRoute.toString();
             }
 
-            if (redirectPath && !window.location.href.includes('dashboard') && !intendedRoute) {
+            if (redirectPath && !window.location.href.includes('dashboard') && !intendedRoute && !isPartners) {
                 window.location.href = redirectPath;
             } else {
                 dispatch(authenticateUser({ user, authenticatedUser }));

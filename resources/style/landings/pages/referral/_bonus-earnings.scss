@@ -1,0 +1,62 @@
+.bonus-earnings {
+    margin-bottom: 80px;
+    text-align: center;
+
+    &__heading-div {
+        margin-top: 40px;
+
+        &__small-text {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #251f33;
+            padding: 10px;
+        }
+
+        &__heading {
+            font-weight: 900;
+            font-size: 40px;
+            line-height: 47px;
+            text-align: center;
+            color: #251f33;
+            padding: 10px 10px 30px 10px;
+            width: 40%;
+            margin-left: auto;
+            margin-right: auto;
+
+            @media screen and (max-width: 767px) {
+                width: 100%;
+                font-size: 28px;
+                line-height: 33px;
+            }
+        }
+    }
+
+    &__images-div {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    &__image-div {
+        max-width: 309px;
+        padding: 5px;
+
+        @media screen and (max-width: 767px) {
+            max-width: 50%;
+        }
+
+        @media (min-width: 768px) and (max-width: 1023.95px) {
+            max-width: 50%;
+        }
+
+        &:hover {
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+    }
+}

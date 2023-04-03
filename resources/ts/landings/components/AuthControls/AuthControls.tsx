@@ -7,6 +7,7 @@ import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { AuthDialog } from '@shared/components/AuthDialog';
+import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
@@ -72,10 +73,10 @@ export function AuthControls() {
                 <ButtonBase
                     href={
                         user.hasRole(RolesEnum.Admin)
-                            ? '/admin'
+                            ? AuthenticationEnum.AdminRoute
                             : user.hasRole(RolesEnum.Salesman)
-                            ? '/salesrep'
-                            : '/dashboard'
+                            ? AuthenticationEnum.SalesRepDashboardRoute
+                            : AuthenticationEnum.DashboardRoute
                     }
                 >
                     <Avatar src={user?.profileImage ?? dummyLargeAvatar} />

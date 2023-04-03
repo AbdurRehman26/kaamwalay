@@ -3,12 +3,16 @@ import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
 import * as queryString from 'qs';
 import { useCallback, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
+import { RolesEnum } from '@shared/constants/RolesEnum';
+import { app } from '@shared/lib/app';
+import { authenticateUser } from '@shared/redux/slices/authenticationSlice';
+import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { ApplicationEventsEnum } from '../../constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '../../entities/AuthenticatedUserEntity';
 import { useInjectable } from '../../hooks/useInjectable';
-import { useSharedDispatch } from '../../hooks/useSharedDispatch';
 import { googleTagManager } from '../../lib/utils/googleTagManager';
-import { authenticateCheckAction } from '../../redux/slices/authenticationSlice';
 import { AuthenticationService } from '../../services/AuthenticationService';
 import { EventService } from '../../services/EventService';
 import { NotificationsService } from '../../services/NotificationsService';
@@ -22,7 +26,6 @@ interface AuthDialogProps extends DialogProps {
     subtitle?: string;
     internalCloseOnly?: boolean;
     initialView?: AuthDialogView;
-    redirectPath?: string;
     onAuthSuccess?: (authenticatedUser: AuthenticatedUserEntity) => void;
     isPartners?: boolean;
 }
@@ -43,14 +46,14 @@ export function AuthDialog({
     internalCloseOnly,
     onClose,
     initialView,
-    redirectPath,
     onAuthSuccess,
     isPartners,
     ...rest
 }: AuthDialogProps) {
     const eventService = useInjectable(EventService);
     const authenticationService = useInjectable(AuthenticationService);
-    const dispatch = useSharedDispatch();
+    const authenticationRepository = app(AuthenticationRepository);
+    const dispatch = useDispatch();
     const { from: intendedRoute } = useMemo(() => {
         return queryString.parse(window.location.search.slice(1));
     }, []);
@@ -79,8 +82,13 @@ export function AuthDialog({
             eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
             await authenticationService.setAccessToken(authenticatedUser.accessToken);
             googleTagManager({ event: 'google-ads-authenticated' });
-            dispatch(authenticateCheckAction());
+            const user = await authenticationRepository.whoami();
             NotificationsService.success('Login successfully!');
+            const redirectPath = user.hasRole(RolesEnum.Admin)
+                ? AuthenticationEnum.AdminRoute
+                : user.hasRole(RolesEnum.Salesman)
+                ? AuthenticationEnum.SalesRepDashboardRoute
+                : AuthenticationEnum.DashboardRoute;
             if (onAuthSuccess) {
                 await onAuthSuccess(authenticatedUser);
             }
@@ -89,11 +97,14 @@ export function AuthDialog({
                 window.location.assign('/dashboard/referral-program/main');
             }
 
-            if (redirectPath) {
-                window.location.href = redirectPath;
-            }
             if (intendedRoute) {
                 window.location.href = intendedRoute.toString();
+            }
+
+            if (redirectPath && !window.location.href.includes('dashboard') && !intendedRoute) {
+                window.location.href = redirectPath;
+            } else {
+                dispatch(authenticateUser({ user, authenticatedUser }));
             }
 
             onClose && onClose({}, 'escapeKeyDown');
@@ -104,8 +115,8 @@ export function AuthDialog({
             eventService,
             onAuthSuccess,
             onClose,
-            redirectPath,
             intendedRoute,
+            authenticationRepository,
             isPartners,
         ],
     );

@@ -5,4 +5,5 @@ export enum AuthenticationEnum {
     DashboardRoute = '/dashboard',
     SalesRepDashboardRoute = '/salesrep',
     HomeRoute = '/',
+    AdminRoute = '/admin',
 }

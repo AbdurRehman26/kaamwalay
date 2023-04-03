@@ -1,5 +1,49 @@
 # Changelog
 
+## v3.8.0 - 2023-03-22
+
+### What's Changed
+
+- Fix: Small Issues by @numair97 in https://github.com/woozard/robograding/pull/936
+- Bugfix | Unlimited coupon from admin side by @AbdurRehman26 in https://github.com/woozard/robograding/pull/938
+- Hotfix: Submission Listing with deleted user and endcrypted job by @luis-molina in https://github.com/woozard/robograding/pull/941
+- Fix: Small Fixes by @aliwooter in https://github.com/woozard/robograding/pull/940
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/943
+- Feature: Admin | Full Name Search  Support by @numair97 in https://github.com/woozard/robograding/pull/939
+- Feature | Email on Wallet Credit by @AbdurRehman26 in https://github.com/woozard/robograding/pull/933
+- Feature: Admin & Sales Rep | Edit Order Address by @luis-molina in https://github.com/woozard/robograding/pull/942
+- attempting to rollback wrongly added code by @luis-molina in https://github.com/woozard/robograding/pull/946
+- Fix: Added Link  by @aliwooter in https://github.com/woozard/robograding/pull/948
+- Fix: Salesrep Customer Image Alignment by @aliwooter in https://github.com/woozard/robograding/pull/947
+- Hotfix: Card Series and Set creation with exact params by @luis-molina in https://github.com/woozard/robograding/pull/949
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/950
+- Laravel 10.x Shift by @thenabeel in https://github.com/woozard/robograding/pull/945
+- Laravel 10 Upgrade by @thenabeel in https://github.com/woozard/robograding/pull/952
+- Improvement | Remove extra files  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/957
+- Feature: Referral Program Marketing Content by @numair97 in https://github.com/woozard/robograding/pull/954
+- Fix: Desktop | Mobile | Referral Landing Page Issues by @numair97 in https://github.com/woozard/robograding/pull/953
+- Fix: Updated Subject and Message for PayPal Payout by @luis-molina in https://github.com/woozard/robograding/pull/961
+- Fix: Referral Submission not showing when searched by @luis-molina in https://github.com/woozard/robograding/pull/959
+- Feature: Referrals Emails by @aliwooter in https://github.com/woozard/robograding/pull/955
+- Fix: Fixes For Referral Program Marketing Content by @numair97 in https://github.com/woozard/robograding/pull/962
+- Feature | Change referee coupon validity period by @AbdurRehman26 in https://github.com/woozard/robograding/pull/960
+- Feature: Notification Total Cards  by @aliwooter in https://github.com/woozard/robograding/pull/695
+- Fix: Notification Space by @aliwooter in https://github.com/woozard/robograding/pull/963
+- Feature: Submission List Changes by @aliwooter in https://github.com/woozard/robograding/pull/852
+- Feature: Admin | Not-Accepted Cards in Review  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/956
+- Feature: Admin | Pagination on grading page by @luis-molina in https://github.com/woozard/robograding/pull/958
+- Fix: Improvement by @aliwooter in https://github.com/woozard/robograding/pull/964
+- Feature: Admin & Sales Rep | Edit Customer Details by @luis-molina in https://github.com/woozard/robograding/pull/951
+- Fix: Not accepted state for card grading on admin side by @AbdurRehman26 in https://github.com/woozard/robograding/pull/965
+- Feature: Admin | Export customer name in submissions list by @luis-molina in https://github.com/woozard/robograding/pull/966
+- Fix: Salesrep | Added Customer Name In Submissions Listing And Detail Page by @numair97 in https://github.com/woozard/robograding/pull/967
+- Fix: SalesRep Submissions by @aliwooter in https://github.com/woozard/robograding/pull/968
+- Upgrade Pest to v2 by @thenabeel in https://github.com/woozard/robograding/pull/969
+- Hotfix: Initialize missing referrers command by @luis-molina in https://github.com/woozard/robograding/pull/971
+- Release v3.8.0 by @thenabeel in https://github.com/woozard/robograding/pull/970
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.7.0...v3.8.0
+
 ## v3.7.0 - 2023-03-03
 
 ### What's Changed

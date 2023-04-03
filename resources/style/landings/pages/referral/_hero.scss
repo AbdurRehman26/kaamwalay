@@ -1,0 +1,103 @@
+@use '../../../shared/theme';
+@use '../../../shared/utils';
+@use '../../../shared/breakpoints';
+@use '../../../shared/mixins';
+
+.referral-hero {
+    &__container {
+        background-image: url('/assets/images/partner-banner.png');
+        height: 790px;
+        overflow: hidden;
+        text-align: center;
+        color: #ffffff;
+        background-size: cover;
+        background-position: center;
+
+        @media screen and (max-width: 767px) {
+            height: 575px;
+        }
+    }
+
+    &__overlay {
+        display: flex;
+        background-color: rgba(34, 28, 46, 0.65);
+        height: 790px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+
+        @media screen and (max-width: 767px) {
+            height: 575px;
+        }
+    }
+
+    &__title-first {
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 24px;
+        text-align: center;
+        letter-spacing: 1.5px;
+        color: #42e8e0;
+
+        @media screen and (max-width: 767px) {
+            font-size: 20px;
+        }
+    }
+
+    &__title-second {
+        color: #ffffff;
+    }
+
+    &__title {
+        font-weight: 900;
+        font-size: 56px;
+        line-height: 64px;
+        text-align: center;
+        color: #ffffff;
+        padding: 10px;
+
+        @media screen and (max-width: 767px) {
+            font-size: 36px;
+            line-height: 44px;
+        }
+    }
+
+    &__subtitle {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        letter-spacing: 0.1px;
+        color: #ffffff;
+        width: 51%;
+        margin-left: auto;
+        margin-right: auto;
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+        }
+    }
+
+    &__auth-button {
+        margin-top: 25px;
+        padding: 14px 24px;
+        background-color: #20bfb8;
+        border-radius: 28px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.35px;
+        color: #ffffff;
+        transition: background-color 0.2s ease-in-out;
+        text-align: center;
+
+        &:hover {
+            background-color: #35ddd6;
+        }
+
+        &__font-color {
+            color: #000000;
+        }
+    }
+}

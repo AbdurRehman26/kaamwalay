@@ -21,6 +21,7 @@ interface CustomerSubmissionsListProps {
     orderDirection?: TableSortType;
     orderBy?: string;
     handleRequestSort?: any | null;
+    onEditCustomer?: any;
 }
 
 export function CustomerSubmissionsList({
@@ -30,6 +31,7 @@ export function CustomerSubmissionsList({
     orderBy = '',
     orderDirection = 'desc',
     handleRequestSort,
+    onEditCustomer,
 }: CustomerSubmissionsListProps) {
     return (
         <Table>
@@ -42,7 +44,12 @@ export function CustomerSubmissionsList({
             <TableBody>
                 {orders?.length > 0 ? (
                     orders.map((order) => (
-                        <SubmissionsTableRow headings={headings?.map((i) => i.id)} order={order} key={order.id} />
+                        <SubmissionsTableRow
+                            headings={headings.map((i) => i.id)}
+                            order={order}
+                            key={order.id}
+                            onEditCustomer={onEditCustomer}
+                        />
                     ))
                 ) : (
                     <TableRow>

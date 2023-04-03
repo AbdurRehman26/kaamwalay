@@ -275,5 +275,5 @@ test('if item transaction fails in handshake, the amount is returned to referrer
     $payout = $payout->fresh();
     expect($payout->referrer_payout_status_id)->toBe(ReferrerPayoutStatus::STATUS_FAILED)
         ->and($payout->transaction_status)->toBe($baseResponse['transaction_status'])
-        ->and($referrer->fresh()->withdrawable_commission)->toBe(round($withdrawableCommission + $payout->amount, 2));
+        ->and(round($referrer->fresh()->withdrawable_commission, 2))->toBe(round($withdrawableCommission + $payout->amount, 2));
 });

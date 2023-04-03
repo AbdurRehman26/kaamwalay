@@ -27,6 +27,7 @@ interface AuthDialogProps extends DialogProps {
     internalCloseOnly?: boolean;
     initialView?: AuthDialogView;
     onAuthSuccess?: (authenticatedUser: AuthenticatedUserEntity) => void;
+    isPartners?: boolean;
 }
 
 const Root = styled(Dialog)({
@@ -46,6 +47,7 @@ export function AuthDialog({
     onClose,
     initialView,
     onAuthSuccess,
+    isPartners,
     ...rest
 }: AuthDialogProps) {
     const eventService = useInjectable(EventService);
@@ -91,6 +93,10 @@ export function AuthDialog({
                 await onAuthSuccess(authenticatedUser);
             }
 
+            if (isPartners) {
+                window.location.assign('/dashboard/referral-program/main');
+            }
+
             if (intendedRoute) {
                 window.location.href = intendedRoute.toString();
             }
@@ -105,12 +111,13 @@ export function AuthDialog({
         },
         [
             authenticationService,
+            dispatch,
             eventService,
             onAuthSuccess,
             onClose,
             intendedRoute,
             authenticationRepository,
-            dispatch,
+            isPartners,
         ],
     );
 

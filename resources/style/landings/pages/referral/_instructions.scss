@@ -1,0 +1,94 @@
+.referral-instructions {
+    background-color: #f4f4fb;
+    margin-top: 100px;
+    text-align: center;
+    padding-bottom: 80px;
+
+    &__heading {
+        font-weight: 900;
+        font-size: 32px;
+        line-height: 38px;
+        text-align: center;
+        color: #251f33;
+        padding: 50px 0px;
+
+        @media screen and (max-width: 767px) {
+            font-size: 28px;
+            line-height: 33px;
+        }
+    }
+
+    &__instruction-div {
+        text-align: center;
+
+        @media screen and (max-width: 767px) {
+            margin-bottom: 30px;
+        }
+    }
+
+    &__images-div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        @media screen and (max-width: 767px) {
+            display: block;
+        }
+    }
+
+    &__image {
+        max-width: 241px;
+        height: 210px;
+        display: block;
+        margin: auto;
+    }
+
+    &__image-content {
+        padding: 20px 0px;
+
+        &__number-div {
+            background: #f4f4fb;
+            border: 2px solid #5022a7;
+            border-radius: 100%;
+            width: 40px;
+            text-align: center;
+            height: 40px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        &__number {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+            color: #5022a7;
+            margin: 6px 0px;
+        }
+
+        &__heading {
+            font-weight: 500;
+            font-size: 24px;
+            line-height: 24px;
+            text-align: center;
+            letter-spacing: 0.15px;
+            color: rgba(0, 0, 0, 0.87);
+            padding: 5px;
+        }
+
+        &__description {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.87);
+            max-width: 290px;
+            padding: 5px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}

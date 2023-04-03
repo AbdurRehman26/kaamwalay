@@ -72,7 +72,7 @@ class OrderPaymentProcessedNotification extends Notification
         }
 
         if ($this->order->user?->referredBy) {
-            $message = $message . "\nReferral: {$this->order->user->referredBy->email}";
+            $message = $message . "\nPartner: {$this->order->user->referredBy->email}";
         }
 
         if ($this->order->salesman) {

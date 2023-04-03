@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import { useOrderStatus } from '@salesrep/hooks/useOrderStatus';
+import { useAppDispatch } from '@salesrep/redux/hooks';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
@@ -20,6 +21,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { font } from '@shared/styles/utils';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
@@ -27,6 +29,7 @@ interface SubmissionsTableRowProps {
     order: OrderEntity;
     headings?: Array<any>;
     isSalesRepDetailPage?: boolean;
+    onEditCustomer?: any;
 }
 
 enum Options {
@@ -36,6 +39,7 @@ enum Options {
     CreditCustomer,
     Delete,
     MarkAsPaid,
+    EditCustomerDetails,
 }
 
 const useStyles = makeStyles(
@@ -48,7 +52,7 @@ const useStyles = makeStyles(
     { name: 'SubmissionsTableRow' },
 );
 
-export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProps) {
+export function SubmissionsTableRow({ order, headings, onEditCustomer }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
@@ -59,6 +63,7 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
+    const dispatch = useAppDispatch();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -95,6 +100,12 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
                 case Options.MarkAsPaid:
                     setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
+                case Options.EditCustomerDetails:
+                    if (onEditCustomer) {
+                        dispatch(setCustomer(order.customer));
+                        onEditCustomer();
+                    }
+                    break;
             }
         },
         [
@@ -107,6 +118,9 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
             order.orderLabel,
             order.orderNumber,
             showMarkPaidDialog,
+            onEditCustomer,
+            order.customer,
+            dispatch,
         ],
     );
 
@@ -144,7 +158,7 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
                                     to={`/customers/${order.customer?.id}/view`}
                                     className={font.fontWeightMedium}
                                 >
-                                    {order.customer?.customerNumber}
+                                    {order.customer?.getFullName()}
                                 </MuiLink>
                             ) : (
                                 '-'
@@ -196,6 +210,11 @@ export function SubmissionsTableRow({ order, headings }: SubmissionsTableRowProp
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                        {order?.customer && onEditCustomer ? (
+                            <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>
+                                Edit Customer Details
+                            </MenuItem>
+                        ) : null}
                     </Menu>
                 </TableCell>
             </TableRow>

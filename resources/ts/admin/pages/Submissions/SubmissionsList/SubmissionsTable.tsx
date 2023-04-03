@@ -12,6 +12,7 @@ import { upperFirst } from 'lodash';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
@@ -19,6 +20,7 @@ import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEn
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -58,6 +60,8 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
     const dispatch = useAppDispatch();
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
 
     const headings: EnhancedTableHeadCell[] = [
         {
@@ -211,10 +215,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 search,
                 paymentStatus: paymentStatus,
                 couponCode: '',
+                referredBy: referrerStatus.value,
             }),
             1,
         );
-    }, [orders$, paymentStatus, search, sortFilter]);
+    }, [orders$, paymentStatus, search, sortFilter, referrerStatus]);
 
     const handlePromoCodeSearch = useCallback(
         (event: any) => {
@@ -242,11 +247,12 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus: null,
-                couponCode,
+                couponCode: couponCode?.code,
+                referredBy: referrerStatus.value,
             }),
             1,
         );
-    }, [orders$, sortFilter, search, couponCode]);
+    }, [orders$, sortFilter, search, couponCode, referrerStatus]);
 
     const handleExportData = useCallback(async () => {
         try {
@@ -287,12 +293,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 toApiPropertiesObject({
                     search,
                     paymentStatus: selectedPaymentStatus === paymentStatus ? null : selectedPaymentStatus,
-                    couponCode,
+                    couponCode: couponCode?.code,
+                    referredBy: referrerStatus.value,
                 }),
                 1,
             );
         },
-        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode],
+        [orders$, search, paymentStatus, setPaymentStatus, sortFilter, couponCode, referrerStatus],
     );
 
     const handlePromoCodeFilter = useCallback(
@@ -319,10 +326,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             toApiPropertiesObject({
                 search,
                 paymentStatus,
+                couponCode: couponCode?.code,
             }),
             1,
         );
-    }, [orders$, search, paymentStatus, sortFilter]);
+    }, [orders$, search, paymentStatus, sortFilter, couponCode]);
 
     const handleReferrerStatus = useCallback(
         async (values) => {
@@ -333,6 +341,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     search,
                     paymentStatus,
                     referredBy: values.value,
+                    couponCode: couponCode?.code,
                 }),
                 1,
             );
@@ -352,6 +361,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         search,
                         paymentStatus,
                         referredBy: referrerStatus.value,
+                        couponCode,
                     }),
                     1,
                 );
@@ -360,6 +370,19 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search, isSearchEnabled, sortFilter],
     );
+
+    const handleEditCustomerOption = useCallback(() => {
+        setEditCustomerDialog(true);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
 
     useEffect(() => {
         setIsSearchEnabled(true);
@@ -450,8 +473,16 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     handleRequestSort={handleRequestSort}
                     orderBy={orderBy}
                     orderDirection={orderDirection}
+                    onEditCustomer={handleEditCustomerOption}
                 />
             </TableContainer>
+            <EditCustomerDetailsDialog
+                endpointUrl={`admin/customer/${customer.id}`}
+                endpointVersion={'v3'}
+                open={editCustomerDialog}
+                onSubmit={handleEditCustomerSubmit}
+                onClose={handleEditCustomerDialogClose}
+            />
         </Grid>
     );
 }

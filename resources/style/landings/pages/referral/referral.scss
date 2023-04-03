@@ -1,0 +1,10 @@
+@use 'hero';
+@use 'content';
+@use 'instructions';
+@use 'marketing-content';
+@use 'partner-program';
+@use 'bonus-earnings';
+
+.page--referral {
+    background-color: #ffffff !important;
+}

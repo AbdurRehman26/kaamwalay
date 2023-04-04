@@ -5,7 +5,7 @@ import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { useStyles } from '@shared/components/AuthDialog/styles';
@@ -26,7 +26,6 @@ import { font } from '@shared/styles/utils';
 export function ResetPassword() {
     const [{ token, email }] = useLocationQuery<{ token: string; email: string }>();
     const notifications = useNotifications();
-    const navigate = useNavigate();
     const classes = useStyles();
     const { resetPassword } = useAuth();
     const { login } = useAuth();
@@ -54,9 +53,9 @@ export function ResetPassword() {
 
             await login(values.email, values.password);
 
-            navigate('/dashboard');
+            window.location.href = '/dashboard';
         },
-        [login, navigate, notifications, resetPassword],
+        [login, notifications, resetPassword],
     );
 
     if (!email || !token) {

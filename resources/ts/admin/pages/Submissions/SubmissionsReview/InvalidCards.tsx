@@ -52,7 +52,7 @@ export function InvalidCards({ items, orderId, title }: InvalidCardsProps) {
                     itemId={item.id}
                     key={index}
                     card={item.cardProduct}
-                    certificateId={item.certificateNumber}
+                    certificateId={item.userCard?.certificateNumber}
                     declaredValue={item.declaredValuePerUnit}
                     onRemove={handleRemove}
                 />

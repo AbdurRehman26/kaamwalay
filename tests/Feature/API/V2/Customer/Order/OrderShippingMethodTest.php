@@ -25,6 +25,8 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
+    $this->instance(InvoiceService::class, Mockery::mock(InvoiceService::class))->shouldReceive('saveInvoicePDF');
+
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->cardProduct = CardProduct::factory()->create();

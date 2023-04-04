@@ -24,7 +24,6 @@ beforeEach(function () {
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
-    Storage::fake('s3');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);

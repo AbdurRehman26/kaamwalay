@@ -10,11 +10,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DeductCreditFromCustomerWallet extends Command
 {
-    public function __construct(private WalletService $walletService)
-    {
-        parent::__construct();
-    }
-
     /**
      * The name and signature of the console command.
      *
@@ -32,15 +27,16 @@ class DeductCreditFromCustomerWallet extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(WalletService $walletService): int
     {
         $fileName = $this->ask('Filename (e.g storage/app/public/file.csv)');
-        $customers = Excel::toArray(new \StdClass(), $fileName);
+        $data = Excel::toArray(new \StdClass(), $fileName);
+        $customers = array_shift($data);
 
         $this->info('Deducting customer balance...');
 
-        foreach (array_shift($customers) as $customer) {
-            $user = User::whereCustomerNumber('C00014582')->first();
+        foreach ($customers as $customer) {
+            $user = User::whereCustomerNumber($customer[0])->first();
 
             if (! empty($user)) {
                 if ($user->wallet->balance != 40) {
@@ -54,7 +50,7 @@ class DeductCreditFromCustomerWallet extends Command
                 $this->info(sprintf('Customer Number : %s', $user->customer_number));
                 $this->info(sprintf('Before Deduction -> Balance: %s', $user->wallet->balance));
 
-                $this->walletService->processTransaction(
+                $walletService->processTransaction(
                     $user->wallet->id,
                     -40,
                     WalletTransactionReason::WALLET_DEBIT,

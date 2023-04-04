@@ -4,9 +4,10 @@ namespace App\Http\Controllers\API\V2\Customer\Wallet;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
-use App\Http\Resources\API\V2\Customer\Wallet\WalletTransactionCollection;
+use App\Http\Resources\API\V2\Customer\Wallet\WalletTransactionResource;
 use App\Models\User;
 use App\Services\Wallet\WalletService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class WalletController extends Controller
 {
@@ -22,8 +23,8 @@ class WalletController extends Controller
         return new WalletResource($user->wallet);
     }
 
-    public function getTransactions(): WalletTransactionCollection
+    public function getTransactions(): AnonymousResourceCollection
     {
-        return new WalletTransactionCollection($this->walletService->getWalletTransactions());
+        return WalletTransactionResource::collection($this->walletService->getWalletTransactions());
     }
 }

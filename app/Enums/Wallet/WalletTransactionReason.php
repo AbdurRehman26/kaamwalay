@@ -8,8 +8,8 @@ enum WalletTransactionReason: int
     case ORDER_PAYMENT = 2;
     case WALLET_CREDIT = 3;
     case WALLET_PAYMENT = 4;
-
     case WALLET_DEBIT = 5;
+
     public function toString(): string
     {
         return match ($this) {

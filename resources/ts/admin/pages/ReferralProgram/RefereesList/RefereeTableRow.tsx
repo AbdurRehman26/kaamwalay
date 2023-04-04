@@ -193,7 +193,7 @@ export function RefereeTableRow({ customer, salesReps }: props) {
                 </TableCell>
                 <TableCell variant={'body'} align={'left'}>
                     <Typography variant={'body2'} sx={{ color: '#20BFB8', fontWeight: 500 }}>
-                        {customer.referredBy.fullName}
+                        {customer.referredBy ? customer.referredBy.getFullName() : '-'}
                     </Typography>
                 </TableCell>
                 <TableCell variant={'body'} align={'right'}>

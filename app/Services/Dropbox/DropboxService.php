@@ -3,7 +3,6 @@
 namespace App\Services\Dropbox;
 
 use Exception;
-use Log;
 use Spatie\Dropbox\Client;
 use Spatie\Dropbox\Exceptions\BadRequest;
 
@@ -19,36 +18,29 @@ class DropboxService
         $this->rootPath = config('services.dropbox.root_path');
     }
 
-    public function createFolderBatch(array $paths): bool
+    /**
+     * @throws Exception|BadRequest
+     */
+    public function createFolderBatch(array $paths): array
     {
         $paths = collect($paths)->map(function (string $path) {
             return $this->rootPath . $this->normalizePath($path);
         })->toArray();
 
-        try {
-            $response = $this->client->rpcEndpointRequest('files/create_folder_batch', [
-                'paths' => $paths,
-            ]);
+        return $this->client->rpcEndpointRequest('files/create_folder_batch', [
+            'paths' => $paths,
+             // 'force_async' => true, //Enable this if async flow needs to be tested locally
+        ]);
+    }
 
-            if (empty($response['.tag'])) {
-                Log::error('Folders could not be created on Dropbox.', [
-                    'response' => $response,
-                    'folders' => $paths,
-                ]);
-
-                return false;
-            }
-
-            return true;
-        } catch (BadRequest $e) {
-            Log::error($e->response->getBody());
-
-            return false;
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-
-            return false;
-        }
+    /**
+     * @throws Exception|BadRequest
+     */
+    public function checkFolderBatchStatus(string $asyncJobId): array
+    {
+        return $this->client->rpcEndpointRequest('files/create_folder_batch/check', [
+            'async_job_id' => $asyncJobId,
+        ]);
     }
 
     /**

@@ -13,6 +13,7 @@ import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -50,6 +51,7 @@ interface SubmissionsViewDetailsProps {
     referrer?: UserEntity;
     salesmanCommission?: number;
     referralCommission?: number;
+    orderCustomerShipment?: ShipmentEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -93,6 +95,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         referralCommission,
         owner,
         referrer,
+        orderCustomerShipment,
     } = props;
 
     const classes = useStyles();
@@ -205,6 +208,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 paymentMethodCode={paymentMethodCode}
                 walletPayment={walletPayment}
                 paymentStatus={paymentStatus}
+                orderCustomerShipment={orderCustomerShipment}
                 mode={'admin'}
                 admin={admin}
             />

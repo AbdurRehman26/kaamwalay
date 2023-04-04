@@ -4,7 +4,7 @@
         <div class="ReferralHome-mainLeft">
             <div class="ReferralHome-referralName">
                 <div class="ReferralHome-iconDiv">
-                    <img src="{{ asset('assets/images/landings/referralhome/announcement.svg') }}" alt="" />
+                    <img src="{{ asset('assets/images/landings/referralhome/ags_branding.svg') }}" alt="" />
                 </div>
                 <div>
                     <span>Referral by {{ $referBy }} </span>

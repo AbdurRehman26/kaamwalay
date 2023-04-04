@@ -1,5 +1,6 @@
 // TODO: Merge into a general component
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
@@ -163,6 +164,15 @@ export function DrawerNavigation() {
                         </StyledListItemIcon>
                         <ListItemText
                             primary={'POP Report'}
+                            primaryTypographyProps={{ className: classes.listItemText }}
+                        />
+                    </ListItem>
+                    <ListItem onClick={handleItemPress('/referral')}>
+                        <StyledListItemIcon>
+                            <CampaignOutlinedIcon />
+                        </StyledListItemIcon>
+                        <ListItemText
+                            primary={'Partners'}
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>

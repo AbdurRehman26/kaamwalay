@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
+use Mockery\MockInterface;
 
 use function Pest\Laravel\putJson;
 
@@ -24,8 +25,6 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
     Storage::fake('s3');
-    $this->mockService = \Mockery::mock(InvoiceService::class);
-    $this->mockService->shouldReceive('saveInvoicePDF');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -207,7 +206,12 @@ test('shipping address is saved for customer when provided separately while chan
 });
 
 test('Invoice is re-generated whenever a shipping method is changed', function (Order $order, ShippingMethod $shippingMethod) {
-    $this->mockService->shouldReceive('saveInvoicePDF')->with($order);
+    $this->instance(
+        InvoiceService::class,
+        Mockery::mock(InvoiceService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('saveInvoicePDF')->once();
+        })
+    );
 
     OrderItem::factory()->for($order)->create();
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [

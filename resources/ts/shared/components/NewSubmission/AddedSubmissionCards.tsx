@@ -380,7 +380,7 @@ export function AddedSubmissionCards() {
             setPreviewCleaningFee(0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cleaningFee, dispatch, previewCleaningFee, requiresCleaning]);
+    }, [cleaningFee, dispatch, previewCleaningFee, requiresCleaning, numberOfSelectedCards]);
 
     return (
         <div className={classes.addedCardsContainer}>

@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
+use App\Events\API\Admin\Card\CardProductDeleteEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
 use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
@@ -232,7 +233,7 @@ class CardProductService
             throw new CardProductCanNotBeDeleted;
         }
 
-        $cardProduct->popReportsCard()->delete();
+        CardProductDeleteEvent::dispatch($cardProduct);
         $cardProduct->delete();
     }
 

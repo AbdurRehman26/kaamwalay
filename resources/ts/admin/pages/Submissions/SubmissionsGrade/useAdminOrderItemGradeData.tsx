@@ -54,7 +54,7 @@ export function useAdminOrderItemGradeData(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.longName,
     );
     const certificateNumber = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].certificateNumber,
     );
     const shortName = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.shortName,

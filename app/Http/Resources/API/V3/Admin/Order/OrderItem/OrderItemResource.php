@@ -32,8 +32,6 @@ class OrderItemResource extends BaseResource
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => $this->whenLoaded('cardProduct', new CardProductResource($this->cardProduct)),
             'status' => new OrderItemStatusHistoryResource($latestStatusHistory),
-
-//            'certificate_number' => $this->userCard?->certificate_number,
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
             'graded_by' => $this->when($isGraded, fn () => $latestStatusHistory?->user?->getFullName()),
             'graded_at' => $this->when($isGraded, fn () => $this->formatDate($latestStatusHistory?->updated_at)),

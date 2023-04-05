@@ -55,7 +55,10 @@ trait AuthenticatableWithAGS
 
     public function authenticateAgsUser(User $user): string
     {
-        return auth()->guard()->login($user);
+        /** @var \Tymon\JWTAuth\JWTGuard $guard */
+        $guard = auth()->guard();
+
+        return $guard->login($user);
     }
 
     public function validateResponse(array $response): void

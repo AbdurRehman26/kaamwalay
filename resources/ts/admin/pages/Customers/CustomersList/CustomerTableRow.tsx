@@ -3,6 +3,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -10,23 +11,31 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { MouseEvent, MouseEventHandler, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { TruncateTextWithToolTip } from '@shared/components/ToolTip/TruncateTextWithToolTip';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { changeReferralStatus } from '@shared/redux/slices/adminCustomerReferralCommissionSlice';
 import { assignSalesRep, unAssignSalesRep } from '@shared/redux/slices/adminCustomersSlice';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
+import CustomerReferralActivationDialog from './CustomerReferralActivationDialog';
 
 interface props {
     customer: CustomerEntity;
     salesReps: SalesRepEntity[];
+    onEditCustomer?: any;
 }
 
 enum RowOption {
     CreditCustomer,
+    Deactivate,
+    Reactivate,
+    EditCustomerDetails,
 }
 
 const CustomerType = [
@@ -43,14 +52,16 @@ const styles = {
     },
 };
 
-export function CustomerTableRow({ customer, salesReps }: props) {
+export function CustomerTableRow({ customer, salesReps, onEditCustomer }: props) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
+    const [referralDialog, setReferralDialog] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultValue, setDefaultValue] = useState('Unassigned');
     const navigate = useNavigate();
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const handleReferralDialogClose = useCallback(() => setReferralDialog(false), []);
     const dispatch = useAppDispatch();
 
     const handleClickOptions = useCallback<MouseEventHandler>(
@@ -61,23 +72,40 @@ export function CustomerTableRow({ customer, salesReps }: props) {
         [setAnchorEl],
     );
 
+    const handleChangeReferralProgram = useCallback(
+        async (customerId: number, referralStatus: boolean) => {
+            const DTO = { customerId, referralStatus };
+            await dispatch(changeReferralStatus(DTO));
+            window.location.reload();
+        },
+        [dispatch],
+    );
+
     const handleOption = useCallback(
-        (option: RowOption) => async (e: MouseEvent<HTMLElement>) => {
+        (option: RowOption, customerId?: number, status?: boolean) => async (e: MouseEvent<HTMLElement>) => {
             e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case RowOption.CreditCustomer:
                     setCreditDialog(true);
                     break;
+                case RowOption.Reactivate:
+                case RowOption.Deactivate:
+                    setReferralDialog(true);
+                    break;
+                case RowOption.EditCustomerDetails:
+                    dispatch(setCustomer(customer));
+                    onEditCustomer();
+                    break;
             }
         },
-        [handleCloseOptions],
+        [handleCloseOptions, dispatch, customer, onEditCustomer],
     );
 
     const handleRowClick = useCallback<MouseEventHandler>(
         (e) => {
             if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
-                navigate(`/customers/${customer.id}/view`);
+                navigate(`/customers/${customer.id}/view/overview`);
             }
         },
         [navigate, customer.id],
@@ -99,19 +127,23 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     <Grid container>
                         <Avatar src={customer.profileImage ?? ''}>{customer.getInitials()}</Avatar>
                         <Grid item xs container direction={'column'} pl={2}>
-                            <Typography variant={'body2'}>{customer.fullName}</Typography>
-                            <Typography variant={'caption'} color={'textSecondary'}>
-                                {customer.customerNumber}
-                            </Typography>
+                            <>
+                                <TruncateTextWithToolTip inputText={customer.fullName} lengthCheck={20} />
+                                <Typography variant={'caption'} color={'textSecondary'}>
+                                    {customer.customerNumber}
+                                </Typography>
+                            </>
                         </Grid>
                     </Grid>
                 </TableCell>
                 <TableCell variant={'body'}>
                     <Grid item xs container direction={'column'}>
-                        <Typography variant={'body2'}>{customer.email}</Typography>
-                        <Typography variant={'caption'} color={'textSecondary'}>
-                            {customer.phone ?? '-'}
-                        </Typography>
+                        <>
+                            <TruncateTextWithToolTip inputText={customer.email} lengthCheck={20} />
+                            <Typography variant={'caption'} color={'textSecondary'}>
+                                {customer.phone ?? '-'}
+                            </Typography>
+                        </>
                     </Grid>
                 </TableCell>
                 <TableCell variant={'body'}>{formatDate(customer.createdAt, 'MM/DD/YYYY')}</TableCell>
@@ -191,6 +223,25 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                             })}
                     </Select>
                 </TableCell>
+                <TableCell variant={'body'} align={'left'}>
+                    <Typography sx={{ fontSize: '14px', fontWeight: '500' }} color={'primary'}>
+                        {customer.referredBy ? (
+                            <MuiLink
+                                onClick={(e: any) => e.stopPropagation()}
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${customer.referredBy?.id}/view/overview`}
+                            >
+                                <TruncateTextWithToolTip
+                                    inputText={customer.referredBy?.getFullName()}
+                                    lengthCheck={20}
+                                />
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </Typography>
+                </TableCell>
                 <TableCell variant={'body'} align={'right'}>
                     <Select
                         sx={{ height: '40px !important' }}
@@ -217,6 +268,20 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         <MenuItem onClick={handleOption(RowOption.CreditCustomer)}>Credit Customer</MenuItem>
+                        {customer?.referrer ? (
+                            <>
+                                {customer?.referrer?.isReferralActive ? (
+                                    <MenuItem onClick={handleOption(RowOption.Deactivate, customer.id, false)}>
+                                        Deactivate Referral Program
+                                    </MenuItem>
+                                ) : (
+                                    <MenuItem onClick={handleOption(RowOption.Reactivate, customer.id, true)}>
+                                        Reactivate Referral Program
+                                    </MenuItem>
+                                )}
+                            </>
+                        ) : null}
+                        <MenuItem onClick={handleOption(RowOption.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                     </Menu>
                 </TableCell>
             </TableRow>
@@ -225,6 +290,14 @@ export function CustomerTableRow({ customer, salesReps }: props) {
                 wallet={customer.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
+            />
+            <CustomerReferralActivationDialog
+                open={referralDialog}
+                onSubmit={() =>
+                    handleChangeReferralProgram(customer.id, customer?.referrer?.isReferralActive ? false : true)
+                }
+                status={customer?.referrer?.isReferralActive ? true : false}
+                onClose={handleReferralDialogClose}
             />
         </>
     );

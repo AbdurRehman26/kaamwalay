@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Resources\API\V3\Admin\ReferralProgram\ReferrerPayout;
+
+use App\Http\Resources\API\V3\Admin\ReferralProgram\ReferrerPayoutStatus\ReferrerPayoutStatusResource;
+use App\Models\ReferrerPayout;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * @mixin ReferrerPayout
+ */
+class ReferrerPayoutListResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'user' => new UserResource($this->user),
+            'created_at' => $this->created_at,
+            'completed_at' => $this->completed_at,
+            'payout_account' => $this->payout_account,
+            'paid_by' => new UserResource($this->paidBy),
+            'status' => new ReferrerPayoutStatusResource($this->referrerPayoutStatus),
+            'amount' => $this->amount,
+        ];
+    }
+}

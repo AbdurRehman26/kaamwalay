@@ -6,8 +6,10 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Str;
 
 class RevenueStatsService
 {
@@ -31,6 +33,24 @@ class RevenueStatsService
         Log::info("Calculation For Daily Stats Completed");
 
         return $revenue;
+    }
+
+    public function calculateDailyCardsTotal(): int
+    {
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
+    }
+
+    public function calculateMonthlyCardsTotal(): int
+    {
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
+    }
+
+    public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
+    {
+        return Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
+            'users.email',
+            Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+        )->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly

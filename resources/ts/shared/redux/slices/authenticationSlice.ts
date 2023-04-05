@@ -100,6 +100,7 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async (inp
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
     const authenticationService = app(AuthenticationService);
     await authenticationService.removeAccessToken();
+    localStorage.removeItem('referral-program-popup:show');
 });
 
 export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string, thunkAPI) => {
@@ -140,6 +141,12 @@ export const authenticationSlice = createSlice({
     reducers: {
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
+        },
+        authenticateUser: (state, { payload }: PayloadAction<any>) => {
+            state.accessToken = payload?.authenticatedUser.accessToken ?? null;
+            state.user = payload?.user ?? null;
+            state.authenticated = !!payload;
+            state.checking = false;
         },
     },
     extraReducers: {
@@ -186,4 +193,4 @@ export const authenticationSlice = createSlice({
     },
 });
 
-export const { updateUserProfileData } = authenticationSlice.actions;
+export const { updateUserProfileData, authenticateUser } = authenticationSlice.actions;

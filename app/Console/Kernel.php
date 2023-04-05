@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Coupon\ActivateCoupons;
 use App\Console\Commands\Coupon\ExpireCoupons;
 use App\Console\Commands\Orders\ProcessPaymentHandshake;
+use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Console\Commands\RevenueStats\SendUnpaidOrdersStats;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\SendAdminReports;
@@ -17,13 +18,11 @@ class Kernel extends ConsoleKernel
 {
     /**
      * Define the application's command schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('cache:prune-stale-tags')->hourly();
         $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
             ->dailyAt('00:20');
         $schedule->command(SendUnpaidOrdersStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
@@ -33,14 +32,13 @@ class Kernel extends ConsoleKernel
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
         $schedule->command(ProcessPaymentHandshake::class, ['--email=platform@robograding.com'])->everyFiveMinutes();
         $schedule->command(SendAdminReports::class)->dailyAt('00:20')->environments(['production', 'local', 'testing']);
+        $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**
      * Register the commands for the application.
-     *
-     * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__ . '/Commands');
 

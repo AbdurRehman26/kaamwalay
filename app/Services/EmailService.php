@@ -26,6 +26,13 @@ class EmailService
     public const TEMPLATE_SLUG_SUBMISSION_IN_VAULT = 'customer-stored-in-vault';
     public const TEMPLATE_SLUG_SHIPPED_FROM_VAULT = 'shipped-from-vault';
     public const TEMPLATE_CREATED_USER_ACCESS_ACCOUNT = 'access-account';
+    public const TEMPLATE_SLUG_WALLET_CREDITED = 'credit-added';
+    public const TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE = 'referee-discount-code';
+    public const TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED = 'payout-initiated';
+    public const TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP = 'referral-sign-up';
+    public const TEMPLATE_SLUG_REFEREE_REFER_NOW = 'refer-now';
+    public const TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING = 'commission-earning';
+    public const TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED = 'payout-completed';
     /* Transactional End */
 
     /* Marketing Start */
@@ -62,6 +69,13 @@ class EmailService
         self::TEMPLATE_SLUG_SUBMISSION_IN_VAULT => 'Your cards are in AGS Vault!',
         self::TEMPLATE_SLUG_SHIPPED_FROM_VAULT => 'Your cards have shipped from AGS Vault!',
         self::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT => 'Access Account',
+        self::TEMPLATE_SLUG_WALLET_CREDITED => 'Robograding Wallet Credited',
+        self::TEMPLATE_SLUG_REFEREE_DISCOUNT_CODE => 'Your Discount Code',
+        self::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED => 'Payout Initiated',
+        self::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP => 'AGS Referral Sign Up',
+        self::TEMPLATE_SLUG_REFEREE_REFER_NOW => 'Earn Cash Through AGS Referral Program',
+        self::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING => 'AGS Commission Earning',
+        self::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED => 'Payout Completed',
 
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_WHAT_HAPPENED => 'What happened?',
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_NOT_SURE_YET => 'Not sure yet?',
@@ -81,11 +95,6 @@ class EmailService
 
     /**
      * Send email using a template. It automatically sends email to queue for background processing.
-     *
-     * @param  array  $recipients
-     * @param  string  $subject
-     * @param  string  $templateName
-     * @param  array  $templateContent
      */
     public function sendEmail(
         array $recipients,
@@ -102,16 +111,6 @@ class EmailService
 
     /**
      * Schedule email for sending later. Email will be sent later at specified time.
-     *
-     * @param  DateTime  $sendAt
-     * @param  array  $recipients
-     * @param  string  $subject
-     * @param  string  $templateName
-     * @param  array  $templateContent
-     * @param  bool  $reschedulingRequired
-     * @param  string|null  $checkClass
-     * @param  array  $extraData
-     * @return bool
      */
     public function scheduleEmail(
         DateTime $sendAt,
@@ -154,10 +153,6 @@ class EmailService
 
     /**
      * Get predefined subject based on template.
-     *
-     * @param  string  $template
-     *
-     * @return string
      */
     public function getSubjectByTemplate(string $template): string
     {

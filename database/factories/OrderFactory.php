@@ -20,16 +20,17 @@ class OrderFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
+        $grandTotal = $this->faker->randomFloat(2, 20, 10000);
+
         return [
             'order_number' => strtoupper($this->faker->uuid()),
             'shipping_fee' => $this->faker->randomFloat(2, 50, 500),
             'service_fee' => $this->faker->randomFloat(2, 50, 500),
-            'grand_total' => $this->faker->randomFloat(2, 20, 10000),
+            'grand_total' => $grandTotal,
+            'grand_total_before_discount' => $grandTotal,
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
             'coupon_id' => Coupon::factory()->create(),
             'order_status_id' => OrderStatus::factory(),

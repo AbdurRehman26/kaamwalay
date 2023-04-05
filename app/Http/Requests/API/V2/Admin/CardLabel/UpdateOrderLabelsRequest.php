@@ -8,10 +8,8 @@ class UpdateOrderLabelsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'data' => ['required', 'array'],
@@ -19,7 +17,7 @@ class UpdateOrderLabelsRequest extends FormRequest
             'data.*.line_one' => ['required', 'string'],
             'data.*.line_two' => ['required', 'string'],
             'data.*.line_three' => ['nullable', 'string'],
-            'data.*.line_four' => ['required', 'string'],
+            'data.*.line_four' => ['nullable', 'string'],
             'data.*.persist_changes' => ['required', 'boolean'],
         ];
     }

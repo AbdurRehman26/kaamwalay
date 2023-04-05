@@ -410,6 +410,30 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\CommissionStructure
+ *
+ * @property int $id
+ * @property int $level
+ * @property float $fixed_value_per_card
+ * @property float $percentage_value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\CommissionStructureFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure whereFixedValuePerCard($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure wherePercentageValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure whereUpdatedAt($value)
+ */
+	class CommissionStructure extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Country
  *
  * @property int $id
@@ -454,6 +478,7 @@ namespace App\Models{
  * @property float|null $capped_amount
  * @property \App\Enums\Coupon\CouponMinThresholdTypeEnum $min_threshold_type 0 => No threshold, 1 => card count, 2 => amount
  * @property int $min_threshold_value when 0 it means no threshold
+ * @property int $is_system_generated
  * @property $available_from
  * @property |null $available_till if its null then the coupon is permanent
  * @property int $coupon_applicable_id
@@ -473,10 +498,12 @@ namespace App\Models{
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon excludeSystemGeneratedCoupons()
  * @method static \Database\Factories\CouponFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon notCreatedBy(string|int $id)
  * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon status(string|int $status)
@@ -496,6 +523,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereDiscountValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereIsCapped($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereIsSystemGenerated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMaxUsageAllowed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdValue($value)
@@ -827,7 +855,7 @@ namespace App\Models{
  * @property float|null $grand_total
  * @property float|null $amount_paid_from_wallet
  * @property string|null $grand_total_before_discount
- * @property string|null $discounted_amount
+ * @property float|null $discounted_amount
  * @property float|null $payment_method_discounted_amount
  * @property float $extra_charge_total This will hold the cumulative value of all the extra charges per order
  * @property float $refund_total This will hold the cumulative value of all the refunds per order
@@ -845,6 +873,7 @@ namespace App\Models{
  * @property int|null $order_shipment_id
  * @property int|null $order_customer_shipment_id
  * @property int|null $salesman_id
+ * @property float $referral_total_commission
  * @property bool $requires_cleaning Refers to card cleaning service
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
@@ -913,7 +942,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order paid()
  * @method static \Illuminate\Database\Eloquent\Builder|Order placed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order salesmanId(string $salesmanId)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order salesmanId(string|int $salesmanId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order status(string|int $status)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmountPaidFromWallet($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereArrivedAt($value)
@@ -945,6 +974,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereReferralTotalCommission($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresCleaning($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
@@ -1715,6 +1745,100 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Referrer
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $referral_code
+ * @property float $withdrawable_commission
+ * @property int $link_clicks
+ * @property int $successful_signups
+ * @property int $referral_orders The total amount of paid orders done by referred users
+ * @property bool $is_referral_active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ReferrerEarnedCommission[] $earnedCommissions
+ * @property-read int|null $earned_commissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $referees
+ * @property-read int|null $referees_count
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\ReferrerFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereIsReferralActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereLinkClicks($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereReferralCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereReferralOrders($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereSuccessfulSignups($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Referrer whereWithdrawableCommission($value)
+ */
+	class Referrer extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\ReferrerEarnedCommission
+ *
+ * @property int $id
+ * @property int $referrer_id
+ * @property int $order_id
+ * @property int $commission_structure_id
+ * @property int $type 1 => Order Paid, 2 => Order Refunded, 3 => Extra Charge
+ * @property float $commission
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CommissionStructure|null $commissionStructure
+ * @property-read \App\Models\Order $order
+ * @property-read \App\Models\Referrer|null $referrer
+ * @method static \Database\Factories\ReferrerEarnedCommissionFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereCommission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereCommissionStructureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereReferrerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission whereUpdatedAt($value)
+ */
+	class ReferrerEarnedCommission extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\ReferrerPayout
+ *
+ * @property-read \App\Models\User|null $paidBy
+ * @property-read \App\Models\ReferrerPayoutStatus|null $referrerPayoutStatus
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\ReferrerPayoutFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout query()
+ */
+	class ReferrerPayout extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\ReferrerPayoutStatus
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus query()
+ */
+	class ReferrerPayoutStatus extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\RevenueStatsDaily
  *
  * @property int $id
@@ -1985,6 +2109,7 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property mixed|null $ags_access_token
  * @property int|null $salesman_id
+ * @property int|null $referred_by
  * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -1994,6 +2119,7 @@ namespace App\Models{
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $customer_number
+ * @property bool $is_marketing_notifications_enabled
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
  * @property-read int|null $coupons_count
  * @property-read User|null $createdBy
@@ -2010,6 +2136,8 @@ namespace App\Models{
  * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
+ * @property-read User|null $referredBy
+ * @property-read \App\Models\Referrer|null $referrer
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
  * @property-read User|null $salesman
@@ -2031,7 +2159,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|User salesmanId(string $salesmanId)
+ * @method static \Illuminate\Database\Eloquent\Builder|User salesmanId(string|int $salesmanId)
  * @method static \Illuminate\Database\Eloquent\Builder|User salesmanSignedUpBetween(string $startDate, string $endDate)
  * @method static \Illuminate\Database\Eloquent\Builder|User salesmen()
  * @method static \Illuminate\Database\Eloquent\Builder|User signedUpBetween(string $startDate, string $endDate)
@@ -2046,6 +2174,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsMarketingNotificationsEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLoginAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
@@ -2053,6 +2182,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePmLastFour($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePmType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProfileImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereReferredBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSalesmanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeId($value)

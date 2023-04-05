@@ -274,4 +274,17 @@ class AGSClient
 
         return $this->handleErrorResponse(response: $response, route: $route, payload: []);
     }
+
+    public function updateUserDataByUsername(string $username, array $data): array
+    {
+        $route = '/users/' . $username .'/';
+        $response = Http::withToken($this->getAuthToken())
+            ->patch(url: $this->getBaseUrl() . $route, data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponseWithCode(response: $response, route: $route, payload: $data);
+    }
 }

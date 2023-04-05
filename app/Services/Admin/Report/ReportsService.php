@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Admin\Report\MarketingReport\MarketingMonthlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingQuarterlyReport;
 use App\Services\Admin\Report\MarketingReport\MarketingWeeklyReport;
+use App\Services\Admin\Report\MarketingReport\MarketingYearlyReport;
 use Illuminate\Support\Facades\Mail;
 
 class ReportsService
@@ -17,6 +18,7 @@ class ReportsService
         MarketingWeeklyReport::class,
         MarketingMonthlyReport::class,
         MarketingQuarterlyReport::class,
+        MarketingYearlyReport::class,
     ];
 
     /**

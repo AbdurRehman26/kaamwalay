@@ -22,5 +22,7 @@ export class SignUpRequestDto {
     @IsPhoneNumber('US', createErrorMessageOption(ErrorMessages.ShouldBeValidPhoneNumber, 'Phone'))
     public phone?: string;
 
+    public referralCode?: string;
+
     public isMarketingNotificationsEnabled!: boolean;
 }

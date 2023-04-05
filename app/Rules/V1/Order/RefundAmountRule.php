@@ -13,10 +13,9 @@ class RefundAmountRule implements Rule, DataAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
      * @param  mixed  $value
      */
-    public function passes($attribute, $value): bool
+    public function passes(mixed $attribute, $value): bool
     {
         if ((float) $value > $this->maxRefundableAmount()) {
             return false;
@@ -32,11 +31,8 @@ class RefundAmountRule implements Rule, DataAwareRule
 
     /**
      * Set the data under validation.
-     *
-     * @param  array  $data
-     * @return self
      */
-    public function setData($data)
+    public function setData(array $data): self
     {
         $this->data = $data;
 

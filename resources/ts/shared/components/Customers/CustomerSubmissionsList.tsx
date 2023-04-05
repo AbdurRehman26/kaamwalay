@@ -19,10 +19,12 @@ interface CustomerSubmissionsListProps {
     orders: OrderEntity[];
     paginationProp?: any;
     isCustomerDetailPage?: boolean;
+    isReferralPage?: boolean;
     headings?: Array<any>;
     orderDirection?: TableSortType;
     orderBy?: string;
     handleRequestSort?: any | null;
+    onEditCustomer?: any;
 }
 
 export function CustomerSubmissionsList({
@@ -30,10 +32,12 @@ export function CustomerSubmissionsList({
     orders,
     paginationProp,
     isCustomerDetailPage,
+    isReferralPage = false,
     headings,
     orderBy = '',
     orderDirection = 'desc',
     handleRequestSort,
+    onEditCustomer,
 }: CustomerSubmissionsListProps) {
     return (
         <Table>
@@ -49,16 +53,15 @@ export function CustomerSubmissionsList({
                     <TableRow>
                         <TableCell variant={'head'}>Submission #</TableCell>
                         <TableCell variant={'head'}>{'Placed'}</TableCell>
-                        {!isCustomerDetailPage ? (
-                            <>
-                                <TableCell variant={'head'}>Reviewed</TableCell>
-                                <TableCell variant={'head'}>Customer</TableCell>
-                            </>
+                        {!isCustomerDetailPage && !isReferralPage ? (
+                            <TableCell variant={'head'}>Reviewed</TableCell>
                         ) : null}
+                        {!isCustomerDetailPage ? <TableCell variant={'head'}>Customer</TableCell> : null}
                         <TableCell variant={'head'}>Cards</TableCell>
                         <TableCell variant={'head'}>Status</TableCell>
                         <TableCell variant={'head'}>Payment</TableCell>
                         <TableCell variant={'head'}>Declared Value</TableCell>
+                        {isReferralPage ? <TableCell variant={'head'}>Promo Code</TableCell> : null}
                         <TableCell variant={'head'}>Order Total</TableCell>
                         <TableCell variant={'head'} />
                         <TableCell variant={'head'} />
@@ -72,6 +75,8 @@ export function CustomerSubmissionsList({
                             order={order}
                             key={order.id}
                             isCustomerDetailPage={!isCustomerDetailPage}
+                            isReferralPage={isReferralPage}
+                            onEditCustomer={onEditCustomer}
                         />
                     ))
                 ) : (

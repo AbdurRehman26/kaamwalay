@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
+use App\Http\Controllers\Landings\ReferralController;
 use App\Http\Controllers\SalesRepController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,3 +47,8 @@ Route::prefix('pop')->group(function () {
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');
 Route::get('/terms-and-conditions', TermsAndConditionsController::class);
+
+Route::prefix('referral')->group(function () {
+    Route::get('/', [ReferralController::class, 'index'])->name('referral.view');
+    Route::get('/{code}', [ReferralController::class, 'getReferralPage'])->name('referral.home');
+});

@@ -1,0 +1,15 @@
+.ReferralHome-about {
+    @media screen and (max-width: 767px) {
+        padding: 48px 0;
+        .ReferralHome-sectionLayer--topLeft {
+            display: none;
+        }
+        .ReferralHome-sectionImageHolder {
+            margin-top: 48px;
+            margin-bottom: 0;
+        }
+        .ReferralHome-sectionContainer {
+            flex-direction: column-reverse;
+        }
+    }
+}

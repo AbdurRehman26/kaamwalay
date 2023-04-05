@@ -1,0 +1,165 @@
+.ReferralHome-signup {
+    background-color: #261d39;
+    padding-top: 108px;
+    padding-bottom: 145px;
+    position: relative;
+    z-index: 1;
+    @media screen and (max-width: 1280px) {
+        padding-bottom: 100px;
+    }
+    @media screen and (max-width: 767px) {
+        padding-top: 20px;
+        padding-bottom: 0;
+        height: 600px;
+    }
+    .ReferralHome-sectionContentCaption {
+        color: #eee;
+    }
+    .ReferralHome-sectionContentHeadline {
+        color: #fff;
+    }
+    .ReferralHome-sectionContentHeadline {
+        font-weight: 900;
+        font-size: 34px;
+        line-height: 40px;
+        max-width: 100%;
+        @media screen and (max-width: 699px) {
+            font-size: 24px;
+            line-height: 32px;
+        }
+    }
+    .ReferralHome-sectionColumn {
+        width: 100%;
+    }
+    .ReferralHome-sectionContainer {
+        flex-direction: column;
+        padding: 0;
+        @media screen and (max-width: 1264px) {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}
+
+.ReferralHome-main {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+    @media screen and (max-width: 767px) {
+        display: grid;
+        padding: 20px;
+    }
+}
+
+.ReferralHome-mainRight {
+    max-width: 455px;
+    background-color: white;
+    border-radius: 22px;
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        z-index: 3;
+        box-shadow: 0 8px 10px -2px #e5e5e5;
+    }
+}
+
+.ReferralHome-iconDiv {
+    background: #e1bbff;
+    padding: 14px 8px;
+}
+
+.ReferralHome-referralName {
+    display: flex;
+    border: 2px solid #e1bbff;
+    border-radius: 7px;
+    max-width: 85%;
+    margin-bottom: 24px;
+    width: fit-content;
+    align-items: center;
+    span {
+        color: #e1bbff;
+        font-size: 12px;
+        text-align: left;
+        text-transform: uppercase;
+        margin: auto;
+        padding: 16px 12px;
+        @media screen and (max-width: 767px) {
+            padding: 8px 8px;
+        }
+    }
+    @media screen and (max-width: 767px) {
+        max-width: 100%;
+    }
+}
+
+.ReferralHome-sectionTitle {
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 68px;
+    letter-spacing: -0.5px;
+    max-width: 684px;
+    margin-bottom: 24px;
+    span {
+        color: #42e8e0;
+    }
+    @media screen and (max-width: 767px) {
+        font-weight: 900;
+        font-size: 36px;
+        line-height: 44px;
+    }
+}
+
+.ReferralHome-sectionSubtitle {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0.15px;
+    margin-bottom: 46px;
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+.ReferralHome-sectionTitle,
+.ReferralHome-sectionSubtitle {
+    color: #fff;
+}
+
+.ReferralHome-pricingBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+}
+
+.ReferralHome-priceRange {
+    width: 100%;
+}
+
+.ReferralHome-pricesHolder {
+    max-width: 100%;
+}
+
+.ReferralHome-prices {
+    max-width: calc(100% - 68px);
+    display: flex;
+    margin: 64px 34px 0;
+    @media screen and (max-width: 699px) {
+        margin-top: 32px;
+    }
+    .ReferralHome-priceColumn {
+        @media screen and (max-width: 699px) {
+            width: 100%;
+            margin: 0;
+        }
+        .ReferralHome-submissionCtaContainer {
+            margin: 0 auto;
+        }
+    }
+}

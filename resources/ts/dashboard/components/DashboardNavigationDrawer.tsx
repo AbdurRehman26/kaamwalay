@@ -2,6 +2,7 @@
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
@@ -198,6 +199,19 @@ export function DashboardNavigationDrawer() {
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
+                <ListItem
+                    selected={isItemActive('/referral-program')}
+                    onClick={handleItemPress('/referral-program/main')}
+                    button
+                >
+                    <StyledListItemIcon>
+                        <CampaignOutlinedIcon />
+                    </StyledListItemIcon>
+                    <ListItemText
+                        primary={'Partner Program'}
+                        primaryTypographyProps={{ className: classes.listItemText }}
+                    />
+                </ListItem>
 
                 <Divider className={classes.divider} />
 
@@ -212,6 +226,12 @@ export function DashboardNavigationDrawer() {
                         <AssessmentIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'POP Report'} primaryTypographyProps={{ className: classes.listItemText }} />
+                </ListItem>
+                <ListItem component={'a'} href={'/referral'}>
+                    <StyledListItemIcon>
+                        <CampaignOutlinedIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary={'Partners'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
             </List>
         </Drawer>

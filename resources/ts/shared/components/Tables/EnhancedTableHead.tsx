@@ -11,17 +11,31 @@ interface EnhancedTableProps {
     order: TableSortType;
     orderBy: string;
     headCells: Array<any>;
+    hasStyling?: boolean;
+    isReferral?: boolean;
 }
 
+const styles = {
+    ReferralHead: {
+        fontWeight: 500,
+        fontSize: '10px',
+        lineHeight: '16px',
+        letterSpacing: '0.75px',
+        textTransform: 'uppercase',
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
+};
+
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, onRequestSort, headCells } = props;
+    const { order, orderBy, onRequestSort, headCells, isReferral, hasStyling } = props;
+
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
     return (
         <TableHead>
-            <TableRow>
+            <TableRow sx={{ background: isReferral ? '#F9F9F9' : '#fff' }}>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -29,6 +43,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         variant={'head'}
+                        sx={isReferral || hasStyling ? styles.ReferralHead : null}
                     >
                         {headCell.sortable ? (
                             <TableSortLabel

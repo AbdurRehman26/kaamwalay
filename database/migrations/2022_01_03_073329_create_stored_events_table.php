@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('stored_events', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -24,7 +24,7 @@ return new class extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('stored_events');
     }

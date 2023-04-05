@@ -16,7 +16,7 @@ class UpdateAutoSaveAttribute
         //
     }
 
-    public function handle(OrderUpdated $event)
+    public function handle(OrderUpdated $event): void
     {
         $order = $event->order;
 

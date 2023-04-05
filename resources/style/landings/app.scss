@@ -1,12 +1,12 @@
 @import '../shared/tailwind';
-
 // Block imports
 @import './blocks/page/page';
 @import './blocks/pagination';
-
 // Pages imports
 @import './pages/home/home';
+@import './pages/referralhome/referralhome';
 @import './pages/feed/feed';
+@import './pages/referral/referral';
 @import './pages/terms-and-conditions';
 @import './pages/pop/pop';
 @import './pages/pop/index';

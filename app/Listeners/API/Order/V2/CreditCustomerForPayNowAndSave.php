@@ -20,9 +20,6 @@ class CreditCustomerForPayNowAndSave
 
     /**
      * Handle the event.
-     *
-     * @param  OrderPaid  $event
-     * @return void
      */
     public function handle(OrderPaid $event): void
     {
@@ -31,10 +28,6 @@ class CreditCustomerForPayNowAndSave
         }
     }
 
-    /**
-     * @param  OrderPaid  $event
-     * @return void
-     */
     protected function addCreditToCustomerWallet(OrderPaid $event): void
     {
         $creditAmount = (

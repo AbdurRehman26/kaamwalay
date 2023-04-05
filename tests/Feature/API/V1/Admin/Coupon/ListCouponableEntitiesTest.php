@@ -20,7 +20,7 @@ beforeEach(function () {
         ->create();
 });
 
-test('admin can get couponable entities', function (string $couponApplicableId) {
+test('admin can get couponable entities', function (int $couponApplicableId) {
     actingAs($this->user);
 
     getJson(route('v1.couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))
@@ -30,7 +30,7 @@ test('admin can get couponable entities', function (string $couponApplicableId) 
     fn () => CouponApplicable::FOR_USERS,
 ]);
 
-test('admin can get error with invalid coupon applicable', function (string $couponApplicableId) {
+test('admin can get error with invalid coupon applicable', function (int $couponApplicableId) {
     actingAs($this->user);
 
     getJson(route('v1.couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))

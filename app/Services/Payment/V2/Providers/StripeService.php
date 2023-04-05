@@ -56,6 +56,7 @@ class StripeService extends V1StripeService
                     'User Email' => $order->user->email,
                     'Type' => 'Order Payment',
                 ],
+                'expand' => ['latest_charge'],
             ],
         ];
 

@@ -167,9 +167,9 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderItems.userCard'),
             AllowedInclude::relationship('firstOrderPayment.user'),
             AllowedInclude::relationship('salesman'),
-            AllowedInclude::relationship('orderItems.latestStatusHistory','orderItems.latestOrderItemStatusHistory'),
-            AllowedInclude::relationship('orderItems.latestStatusHistory.orderItemStatus','orderItems.latestOrderItemStatusHistory.orderItemStatus'),
-            AllowedInclude::relationship('orderItems.latestStatusHistory.user','orderItems.latestOrderItemStatusHistory.user'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory', 'orderItems.latestOrderItemStatusHistory'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory.orderItemStatus', 'orderItems.latestOrderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory.user', 'orderItems.latestOrderItemStatusHistory.user'),
         ];
     }
 

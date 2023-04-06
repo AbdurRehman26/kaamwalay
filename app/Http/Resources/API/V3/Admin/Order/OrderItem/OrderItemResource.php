@@ -6,7 +6,6 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V3\Admin\CardProduct\CardProductResource;
 use App\Http\Resources\API\V3\Admin\UserCard\UserCardResource;
 use App\Models\OrderItem;
-use App\Models\OrderItemStatus;
 
 /**
  * @mixin OrderItem

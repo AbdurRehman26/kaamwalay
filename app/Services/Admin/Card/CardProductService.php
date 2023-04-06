@@ -233,8 +233,9 @@ class CardProductService
             throw new CardProductCanNotBeDeleted;
         }
 
-        CardProductDeletedEvent::dispatch($cardProduct);
         $cardProduct->delete();
+
+        CardProductDeletedEvent::dispatch($cardProduct);
     }
 
     protected function deleteCardProductFromAgs(CardProduct $cardProduct): array

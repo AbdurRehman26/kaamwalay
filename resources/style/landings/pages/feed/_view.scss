@@ -108,14 +108,8 @@
                 0px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        @include breakpoints.down(1024) {
-            overflow: scroll;
-        }
-
         &__container {
-            @include breakpoints.down(768) {
-                overflow: scroll;
-            }
+            overflow: scroll;
         }
 
         &__content {
@@ -132,11 +126,7 @@
             padding: 20px;
 
             @include breakpoints.down(768) {
-                width: 100% !important;
-            }
-
-            @include breakpoints.down(1024) {
-                width: 1200px;
+                width: 100%;
             }
         }
 

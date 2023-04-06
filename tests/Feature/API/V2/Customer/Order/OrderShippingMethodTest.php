@@ -160,14 +160,14 @@ test('shipping address is saved when provided separately while changing shipping
 
     $shippingAddress = $this->vaultShippingOrder->refresh()->shippingAddress;
 
-    expect($shippingAddress->first_name)->toBe($address['first_name']);
-    expect($shippingAddress->last_name)->toBe($address['last_name']);
-    expect($shippingAddress->address)->toBe($address['address']);
-    expect($shippingAddress->state)->toBe($address['state']);
-    expect($shippingAddress->zip)->toBe($address['zip']);
-    expect($shippingAddress->country_id)->toBe($address['country_id']);
-    expect($shippingAddress->phone)->toBe($address['phone']);
-    expect($shippingAddress->flat)->toBe($address['flat']);
+    expect($shippingAddress->first_name)->toBe($address['first_name'])
+        ->and($shippingAddress->last_name)->toBe($address['last_name'])
+        ->and($shippingAddress->address)->toBe($address['address'])
+        ->and($shippingAddress->state)->toBe($address['state'])
+        ->and($shippingAddress->zip)->toBe($address['zip'])
+        ->and($shippingAddress->country_id)->toBe($address['country_id'])
+        ->and($shippingAddress->phone)->toBe($address['phone'])
+        ->and($shippingAddress->flat)->toBe($address['flat']);
 });
 
 test('shipping address is saved for customer when provided separately while changing shipping method', function () {
@@ -196,14 +196,14 @@ test('shipping address is saved for customer when provided separately while chan
 
     $customerAddress = $this->vaultShippingOrder->refresh()->user->customerAddresses()->latest()->first();
 
-    expect($customerAddress->first_name)->toBe($address['first_name']);
-    expect($customerAddress->last_name)->toBe($address['last_name']);
-    expect($customerAddress->address)->toBe($address['address']);
-    expect($customerAddress->state)->toBe($address['state']);
-    expect($customerAddress->zip)->toBe($address['zip']);
-    expect($customerAddress->country_id)->toBe($address['country_id']);
-    expect($customerAddress->phone)->toBe($address['phone']);
-    expect($customerAddress->flat)->toBe($address['flat']);
+    expect($customerAddress->first_name)->toBe($address['first_name'])
+        ->and($customerAddress->last_name)->toBe($address['last_name'])
+        ->and($customerAddress->address)->toBe($address['address'])
+        ->and($customerAddress->state)->toBe($address['state'])
+        ->and($customerAddress->zip)->toBe($address['zip'])
+        ->and($customerAddress->country_id)->toBe($address['country_id'])
+        ->and($customerAddress->phone)->toBe($address['phone'])
+        ->and($customerAddress->flat)->toBe($address['flat']);
 });
 
 test('Invoice is re-generated whenever a shipping method is changed', function (Order $order, ShippingMethod $shippingMethod) {

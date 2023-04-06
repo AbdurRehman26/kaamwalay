@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Country;
 use App\Models\Coupon;
@@ -175,6 +176,9 @@ class OrderService extends V1OrderService
         return $order;
     }
 
+    /**
+     * @throws InvoiceNotUploaded
+     */
     public function processChangeInShippingMethod(Order $order, array $data): Order
     {
         $this->changeShippingMethod($order, $data['shipping_method_id'])
@@ -183,8 +187,8 @@ class OrderService extends V1OrderService
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
 
-        // The reason for calling this service synchronously is to get the update Invoice Data
-        // Instantly so when user download Invoice Updated data will be shown.
+        // Executing this service synchronously because we need invoice data instantly on the client side
+        // When user switches shipping method and downloads invoice.
         $invoiceService = resolve(InvoiceService::class);
 
         if ($order->hasInvoice()) {

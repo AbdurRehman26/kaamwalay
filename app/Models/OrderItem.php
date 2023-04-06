@@ -85,6 +85,11 @@ class OrderItem extends Model
         return $this->hasMany(OrderItemStatusHistory::class);
     }
 
+    public function latestOrderItemStatusHistory(): HasOne
+    {
+        return $this->orderItemStatusHistory()->one()->ofMany();
+    }
+
     public function userCard(): HasOne
     {
         return $this->hasOne(UserCard::class);

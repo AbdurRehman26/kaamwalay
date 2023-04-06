@@ -53,7 +53,9 @@ export const updateRemoteHumanGrades = createAsyncThunk(
     'submissionGrades/rejectCard',
     async (DTO: { orderID: number; topLevelID: number; humanGradeValues: any; gradeDelta: number }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/cards/${DTO.topLevelID}/grades`);
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/cards/${DTO.topLevelID}/grades`, {
+            version: 'v3',
+        });
         return await endpoint.put('', {
             humanGradeValues: DTO.humanGradeValues,
             gradeDelta: DTO.gradeDelta,

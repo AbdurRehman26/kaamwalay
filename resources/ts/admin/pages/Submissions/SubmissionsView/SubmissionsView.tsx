@@ -38,6 +38,7 @@ export function SubmissionsView() {
                     'coupon',
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
+                    'orderItems.userCard',
                     'firstOrderPayment.user',
                 ],
             },

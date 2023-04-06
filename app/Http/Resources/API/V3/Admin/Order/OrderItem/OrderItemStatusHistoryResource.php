@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V3\Admin\Order\OrderItem;
 
+use App\Http\Resources\API\V3\Admin\User\UserResource;
 use App\Models\OrderItemStatusHistory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,8 +15,10 @@ class OrderItemStatusHistoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'order_item_status' => new OrderItemStatusResource($this->orderItemStatus),
+            'order_item_status' => $this->whenLoaded('orderItemStatus', new OrderItemStatusResource($this->orderItemStatus)),
+            'user' => $this->whenLoaded('user', new UserResource($this->user)),
             'notes' => $this->notes,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

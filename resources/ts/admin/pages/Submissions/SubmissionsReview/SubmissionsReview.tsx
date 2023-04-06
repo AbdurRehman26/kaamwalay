@@ -46,6 +46,7 @@ export function SubmissionsReview() {
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
+                    'orderItems.latestStatusHistory.orderItemStatus',
                 ],
             },
         },

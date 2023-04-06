@@ -39,6 +39,7 @@ export function SubmissionsView() {
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
+                    'orderItems.latestStatusHistory.orderItemStatus',
                     'firstOrderPayment.user',
                     'salesman',
                 ],

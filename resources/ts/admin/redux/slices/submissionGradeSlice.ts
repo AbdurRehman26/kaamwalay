@@ -30,6 +30,8 @@ export const getAllSubmissions = createAsyncThunk(
                     'orderItem.cardProduct.cardSet.cardSeries',
                     'orderItem.cardProduct.cardCategory',
                     'customer',
+                    'orderItem.latestStatusHistory.orderItemStatus',
+                    'orderItem.latestStatusHistory.user',
                 ],
             },
             ...bracketParams(),

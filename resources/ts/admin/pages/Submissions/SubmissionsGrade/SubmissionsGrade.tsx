@@ -47,6 +47,8 @@ export function SubmissionsGrade() {
                     'orderStatusHistory.orderStatus',
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
+                    'orderItems.latestStatusHistory.orderItemStatus',
+                    'orderItems.latestStatusHistory.user',
                 ],
             },
         },

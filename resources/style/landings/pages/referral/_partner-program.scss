@@ -20,6 +20,7 @@
     &__text-div {
         width: 50%;
         overflow: hidden;
+        padding: 10px 0px;
 
         @media screen and (max-width: 767px) {
             width: 100%;

@@ -29,8 +29,8 @@ class OrderListResource extends BaseResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'number_of_cards' => $this->orderItems->sum('quantity'),
-            'total_declared_value' => $this->orderItems->sum('declared_value_total'),
+            'number_of_cards' => $this->number_of_cards,
+            'total_declared_value' => $this->total_declared_value,
             'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'owner' => $this->whenLoaded('salesman', UserResource::class),

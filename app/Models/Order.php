@@ -245,6 +245,7 @@ class Order extends Model implements Exportable
             'grand_total',
         ];
     }
+
     public static function getAllowedIncludes(): array
     {
         return [

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\CardProduct;
 use App\Models\Country;
 use App\Models\CustomerAddress;
@@ -10,7 +11,9 @@ use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
+use Mockery\MockInterface;
 
 use function Pest\Laravel\putJson;
 
@@ -21,6 +24,8 @@ beforeEach(function () {
         // Faking AGS Certificate API
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
+
+    $this->instance(InvoiceService::class, Mockery::mock(InvoiceService::class))->shouldReceive('saveInvoicePDF');
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -35,11 +40,13 @@ beforeEach(function () {
         'service_fee' => 20,
         'shipping_fee' => 14,
         'grand_total' => 34,
+        'payment_status' => OrderPaymentStatusEnum::PENDING,
     ]);
     $this->vaultShippingOrder = Order::factory()->for($this->user)->create([
         'shipping_method_id' => $this->vaultShippingMethod->id,
         'service_fee' => 20,
         'shipping_fee' => 0,
+        'payment_status' => OrderPaymentStatusEnum::PENDING,
     ]);
     $this->country = Country::factory()->create(['code' => 'US']);
     OrderItem::factory()->for($this->insuredShippingOrder)->create();
@@ -153,14 +160,14 @@ test('shipping address is saved when provided separately while changing shipping
 
     $shippingAddress = $this->vaultShippingOrder->refresh()->shippingAddress;
 
-    expect($shippingAddress->first_name)->toBe($address['first_name']);
-    expect($shippingAddress->last_name)->toBe($address['last_name']);
-    expect($shippingAddress->address)->toBe($address['address']);
-    expect($shippingAddress->state)->toBe($address['state']);
-    expect($shippingAddress->zip)->toBe($address['zip']);
-    expect($shippingAddress->country_id)->toBe($address['country_id']);
-    expect($shippingAddress->phone)->toBe($address['phone']);
-    expect($shippingAddress->flat)->toBe($address['flat']);
+    expect($shippingAddress->first_name)->toBe($address['first_name'])
+        ->and($shippingAddress->last_name)->toBe($address['last_name'])
+        ->and($shippingAddress->address)->toBe($address['address'])
+        ->and($shippingAddress->state)->toBe($address['state'])
+        ->and($shippingAddress->zip)->toBe($address['zip'])
+        ->and($shippingAddress->country_id)->toBe($address['country_id'])
+        ->and($shippingAddress->phone)->toBe($address['phone'])
+        ->and($shippingAddress->flat)->toBe($address['flat']);
 });
 
 test('shipping address is saved for customer when provided separately while changing shipping method', function () {
@@ -189,12 +196,31 @@ test('shipping address is saved for customer when provided separately while chan
 
     $customerAddress = $this->vaultShippingOrder->refresh()->user->customerAddresses()->latest()->first();
 
-    expect($customerAddress->first_name)->toBe($address['first_name']);
-    expect($customerAddress->last_name)->toBe($address['last_name']);
-    expect($customerAddress->address)->toBe($address['address']);
-    expect($customerAddress->state)->toBe($address['state']);
-    expect($customerAddress->zip)->toBe($address['zip']);
-    expect($customerAddress->country_id)->toBe($address['country_id']);
-    expect($customerAddress->phone)->toBe($address['phone']);
-    expect($customerAddress->flat)->toBe($address['flat']);
+    expect($customerAddress->first_name)->toBe($address['first_name'])
+        ->and($customerAddress->last_name)->toBe($address['last_name'])
+        ->and($customerAddress->address)->toBe($address['address'])
+        ->and($customerAddress->state)->toBe($address['state'])
+        ->and($customerAddress->zip)->toBe($address['zip'])
+        ->and($customerAddress->country_id)->toBe($address['country_id'])
+        ->and($customerAddress->phone)->toBe($address['phone'])
+        ->and($customerAddress->flat)->toBe($address['flat']);
 });
+
+test('Invoice is re-generated whenever a shipping method is changed', function (Order $order, ShippingMethod $shippingMethod) {
+    $this->instance(
+        InvoiceService::class,
+        Mockery::mock(InvoiceService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('saveInvoicePDF')->once();
+        })
+    );
+
+    OrderItem::factory()->for($order)->create();
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
+        'shipping_method_id' => $shippingMethod->id,
+        'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
+    ])->assertOk();
+})
+->with([
+    fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
+    fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
+]);

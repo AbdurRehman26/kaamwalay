@@ -40,6 +40,7 @@ export function SubmissionsView() {
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
                     'firstOrderPayment.user',
+                    'salesman',
                 ],
             },
         },
@@ -98,7 +99,7 @@ export function SubmissionsView() {
                 walletPayment={data?.amountPaidFromWallet}
                 admin={data?.orderPayment?.user?.fullName}
                 createdBy={data?.createdBy}
-                owner={data?.owner}
+                owner={data?.salesman}
                 referrer={data?.customer?.referredBy}
                 salesmanCommission={data?.salesmanCommission}
                 referralCommission={data?.referralCommission}

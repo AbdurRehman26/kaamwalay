@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin Order
+ * @property mixed $number_of_cards
+ * @property mixed $total_declared_value
  */
 class OrderListResource extends BaseResource
 {

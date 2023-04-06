@@ -215,7 +215,7 @@ test('an admin can delete a card', function () {
     $response->assertNoContent();
 
     Event::assertDispatched(CardProductDeletedEvent::class);
-    
+
 });
 
 test('an admin can get a single card', function () {

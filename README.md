@@ -1,5 +1,6 @@
 # Robgrading
-[![Code style](https://github.com/woozard/robograding/actions/workflows/code-style.yml/badge.svg)](https://github.com/woozard/robograding/actions/workflows/code-style.yml)
+[![Code style](https://github.com/woozard/robograding/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/woozard/robograding/actions/workflows/frontend-ci.yml)
+[![Code style](https://github.com/woozard/robograding/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/woozard/robograding/actions/workflows/backend-ci.yml)
 
 The project is based on
 

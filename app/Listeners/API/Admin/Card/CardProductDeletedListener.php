@@ -2,10 +2,10 @@
 
 namespace App\Listeners\API\Admin\Card;
 
-use App\Events\API\Admin\Card\CardProductDeleteEvent;
+use App\Events\API\Admin\Card\CardProductDeletedEvent;
 use App\Services\PopReport\PopReportService;
 
-class CardProductDeleteListener
+class CardProductDeletedListener
 {
     /**
      * Create the event listener.
@@ -19,7 +19,7 @@ class CardProductDeleteListener
     /**
      * Handle the event.
      */
-    public function handle(CardProductDeleteEvent $event): void
+    public function handle(CardProductDeletedEvent $event): void
     {
         $this->popReportService->deleteCardPopReport($event->cardProduct);
     }

@@ -4,10 +4,7 @@ use App\Events\API\Admin\Card\CardProductDeletedEvent;
 use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSurface;
-use App\Models\OrderItem;
-use App\Models\PopReportsCard;
 use App\Models\User;
-use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
@@ -84,5 +81,5 @@ test('admins can delete a card', function () {
     $response->assertNoContent();
 
     Event::assertDispatched(CardProductDeletedEvent::class);
-    
+
 });

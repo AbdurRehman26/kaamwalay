@@ -8,6 +8,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { useMemo } from 'react';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { OrderEntity } from '@shared/entities/OrderEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { cx } from '@shared/lib/utils/cx';
@@ -19,6 +20,7 @@ import { SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';
 
 interface ViewSubmissionStatusProps {
+    order: OrderEntity;
     orderId?: number;
     orderStatus: string | SubmissionSteps;
     trackingNumber?: string;
@@ -52,6 +54,7 @@ const STATUS_DESCRIPTION_MAP = {
  * @constructor
  */
 export function ViewSubmissionStatus({
+    order,
     orderId,
     orderStatus,
     shipmentProvider,
@@ -148,7 +151,12 @@ export function ViewSubmissionStatus({
                     p={2}
                     sx={{ border: '1px solid #E0E0E0', borderRadius: '4px', paddingBottom: isPaid ? '0px' : '12px' }}
                 >
-                    <SubmissionShippingMethod orderId={orderId} shippingMethod={shippingMethod} paid={isPaid} />
+                    <SubmissionShippingMethod
+                        orderId={orderId}
+                        shippingMethod={shippingMethod}
+                        paid={isPaid}
+                        order={order}
+                    />
                 </Grid>
                 {estimatedDeliveryStartAt && estimatedDeliveryEndAt && !isVaultStorage ? (
                     <Grid

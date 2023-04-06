@@ -6,12 +6,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/AuthDialog/styles';
 import { PopupSignUpValidationRules } from '@shared/components/AuthDialog/validation';
+import SignUpInternationalPhoneNumber from '@shared/components/SignUpInternationalPhoneNumber';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
@@ -37,6 +38,12 @@ const useStyles = makeStyles(
             fontSize: '15px',
             fontWeight: 'bolder',
         },
+        phoneField: {
+            marginBottom: '24px',
+        },
+        countriesDropdown: {
+            maxHeight: '240px',
+        },
     }),
     { name: 'SignUpContent' },
 );
@@ -49,6 +56,7 @@ export function SignUpContent({
     isDisabled = false,
 }: AuthDialogContentProps) {
     const classes = useStyles();
+    const [phone, setPhone] = useState('');
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
     const initialState = useMemo<SignUpRequestDto>(
@@ -67,7 +75,8 @@ export function SignUpContent({
     const handleSignInClick = useCallback(() => onViewChange(AuthDialogView.SignIn), [onViewChange]);
     const handleSubmit = useCallback(
         async (values: SignUpRequestDto) => {
-            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode };
+            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode, phone };
+
             try {
                 const authenticatedUser = await authenticationRepository.postRegister(values);
                 ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
@@ -78,7 +87,7 @@ export function SignUpContent({
                 NotificationsService.exception(e);
             }
         },
-        [authenticationRepository, onAuthSuccess, referralCode],
+        [authenticationRepository, onAuthSuccess, referralCode, phone],
     );
 
     return (
@@ -107,7 +116,22 @@ export function SignUpContent({
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} disabled={isDisabled} />
+                            <SignUpInternationalPhoneNumber
+                                countryCodeEditable={false}
+                                preferredCountries={['us']}
+                                defaultCountry="us"
+                                disableAreaCodes
+                                value={values.phone}
+                                name={'phone'}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                    setPhone(e.toString());
+                                }}
+                                className={classes.phoneField}
+                                dropdownClass={classes.countriesDropdown}
+                                label={'Phone Number'}
+                                disabled={isDisabled}
+                            />
                         </FormRoot>
 
                         <FormRoot>

@@ -20,7 +20,7 @@ class UserCardResource extends BaseResource
         return [
             'id' => $this->id,
             'certificate_number' => $this->certificate_number,
-            'customer' => $this->whenLoaded('customer', new OrderCustomerResource($this->user)),
+            'customer' => $this->whenLoaded('customer', OrderCustomerResource::class),
             'order_item' => $this->whenLoaded('orderItem', OrderItemResource::class),
             'human_grade_values' => $this->human_grade_values,
             'robo_grade_values' => $this->robo_grade_values,

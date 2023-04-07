@@ -58,7 +58,7 @@ class OrderPayment extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->without('roles');
+        return $this->belongsTo(User::class);
     }
 
     public function getPaymentType(int $type): string

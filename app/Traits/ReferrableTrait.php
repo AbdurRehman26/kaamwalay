@@ -25,7 +25,7 @@ trait ReferrableTrait
      */
     public function referredBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'referred_by')->without('roles');
+        return $this->belongsTo(User::class, 'referred_by');
     }
 
     /**

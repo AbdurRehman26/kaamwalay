@@ -23,8 +23,8 @@ class UserCardResource extends BaseResource
             'overall_values' => $this->overall_values,
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
-            'overall_grade' => $this->resource->overall_grade,
-            'overall_grade_nickname' => $this->resource->overall_grade_nickname,
+            'overall_grade' => $this->overall_grade,
+            'overall_grade_nickname' => $this->overall_grade_nickname,
         ];
     }
 }

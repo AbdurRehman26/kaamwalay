@@ -283,7 +283,7 @@ class Order extends Model implements Exportable
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->without('roles');
+        return $this->belongsTo(User::class);
     }
 
     public function paymentPlan(): BelongsTo
@@ -539,7 +539,7 @@ class Order extends Model implements Exportable
      */
     public function salesman(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'salesman_id')->without('roles');
+        return $this->belongsTo(User::class, 'salesman_id');
     }
 
     /**

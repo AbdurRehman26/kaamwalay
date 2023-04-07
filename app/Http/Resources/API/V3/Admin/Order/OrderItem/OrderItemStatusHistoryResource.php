@@ -16,11 +16,11 @@ class OrderItemStatusHistoryResource extends JsonResource
         $orderItemStatusResource = null;
         $userResource = null;
 
-        if ($this->resource->relationLoaded('orderItemStatus')){
-            $orderItemStatusResource =new OrderItemStatusResource($this->orderItemStatus);
+        if ($this->resource->relationLoaded('orderItemStatus')) {
+            $orderItemStatusResource = new OrderItemStatusResource($this->orderItemStatus);
         }
 
-        if ($this->resource->relationLoaded('user')){
+        if ($this->resource->relationLoaded('user')) {
             $userResource = new UserResource($this->user);
         }
 

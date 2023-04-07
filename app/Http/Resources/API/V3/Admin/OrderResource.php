@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V3\Admin;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
@@ -59,7 +59,7 @@ class OrderResource extends BaseResource
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryResource::collection($this->orderStatusHistory)),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
-            'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
+            'payment_plan' => $this->whenLoaded('paymentPlan', OrderPaymentPlanResource::class),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
             'order_payment' => $this->whenLoaded('firstOrderPayment', OrderPaymentResource::class),

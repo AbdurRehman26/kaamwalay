@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V3\Admin;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V3\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V3\Admin\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderAddressResource;
@@ -12,6 +11,7 @@ use App\Http\Resources\API\V3\Admin\Order\OrderCustomerResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderPaymentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V3\Admin\Order\OrderStatusHistoryResource;

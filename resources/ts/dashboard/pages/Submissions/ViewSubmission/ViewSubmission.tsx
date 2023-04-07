@@ -82,6 +82,7 @@ export function ViewSubmission() {
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus
+                order={data}
                 orderId={data?.id}
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}

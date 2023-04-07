@@ -1,0 +1,80 @@
+.referral-content {
+    margin-top: 100px;
+
+    @media screen and (max-width: 767px) {
+        margin-top: 50px;
+    }
+
+    &__container {
+        display: flex;
+        align-items: center;
+
+        @media screen and (max-width: 767px) {
+            flex-direction: column-reverse;
+        }
+    }
+
+    &__text-div {
+        width: 50%;
+        margin-left: 50px;
+        overflow: hidden;
+        padding: 10px 0px;
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            margin-left: 0px;
+        }
+    }
+
+    &__small-title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #251f33;
+        padding: 10px;
+    }
+
+    &__title {
+        font-weight: 900;
+        font-size: 40px;
+        line-height: 47px;
+        color: #251f33;
+        padding: 10px;
+
+        @media screen and (max-width: 767px) {
+            font-size: 28px;
+            line-height: 33px;
+        }
+    }
+
+    &__description {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.15px;
+        color: #251f33;
+        padding: 10px;
+    }
+
+    &__bold-text {
+        font-weight: 600;
+    }
+
+    &__image-div {
+        width: 50%;
+        overflow: hidden;
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        &__image {
+            width: 710px;
+            filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.14)) drop-shadow(0px 1px 10px rgba(0, 0, 0, 0.12))
+                drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
+        }
+    }
+}

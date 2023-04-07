@@ -26,7 +26,7 @@ class OrderController extends Controller
         protected OrderService $orderService,
         protected CreateOrderService $createOrderService
     ) {
-//        $this->authorizeResource(Order::class, 'order');
+        //        $this->authorizeResource(Order::class, 'order');
     }
 
     public function index(): OrderCollection

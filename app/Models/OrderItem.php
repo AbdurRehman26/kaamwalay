@@ -90,7 +90,10 @@ class OrderItem extends Model
      */
     public function latestOrderItemStatusHistory(): HasOne
     {
-        return $this->orderItemStatusHistory()->one()->ofMany();
+        /** @var HasOne $orderItemsStatusHistory */
+        $orderItemsStatusHistory = $this->orderItemStatusHistory()->one();
+
+        return $orderItemsStatusHistory->ofMany();
     }
 
     public function userCard(): HasOne

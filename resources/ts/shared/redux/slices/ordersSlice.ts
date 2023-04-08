@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { InvoiceEntity } from '@shared/entities/InvoiceEntity';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
@@ -60,6 +61,10 @@ export const ordersSlice = createSlice({
                 orderId: number;
                 shippingMethod: ShippingMethodEntity;
                 shippingAddress: AddressEntity;
+                shippingFee: number;
+                serviceFee: number;
+                grandTotal: number;
+                invoice: InvoiceEntity | null;
             }>,
         ) {
             if (state.entities[action.payload.orderId]) {
@@ -70,6 +75,10 @@ export const ordersSlice = createSlice({
                 state.entities[action.payload.orderId].shippingAddress = instanceToPlain(
                     action.payload.shippingAddress,
                 ) as AddressEntity;
+                state.entities[action.payload.orderId].shippingFee = action.payload.shippingFee;
+                state.entities[action.payload.orderId].serviceFee = action.payload.serviceFee;
+                state.entities[action.payload.orderId].grandTotal = action.payload.grandTotal;
+                state.entities[action.payload.orderId].invoice = action.payload.invoice;
             }
         },
     },

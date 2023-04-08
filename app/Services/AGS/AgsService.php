@@ -243,6 +243,10 @@ class AgsService
         ];
     }
 
+    public function createCardCategory(string $categoryName) {
+        return $this->client->createCardCategory($categoryName);
+    }
+
     public function getCardSeries(array $data): array
     {
         return $this->client->getCardSeries($data);

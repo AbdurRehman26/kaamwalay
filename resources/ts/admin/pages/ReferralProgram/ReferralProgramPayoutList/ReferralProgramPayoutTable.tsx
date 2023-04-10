@@ -336,17 +336,11 @@ export function ReferralProgramPayoutTable({ search, all, tabFilter }: ReferralP
                                             </Grid>
                                         </TableCell>
                                         <TableCell>
-                                            {`${formatDate(payout.createdAt, 'll')} at ${formatDate(
-                                                payout.createdAt,
-                                                'LT',
-                                            )}`}
+                                            {formatDate(payout.createdAt, 'MMM D, YYYY [at] hh:mm A')}
                                         </TableCell>
                                         <TableCell>
                                             {payout.completedAt
-                                                ? `${formatDate(payout.completedAt, 'll')} at ${formatDate(
-                                                      payout.completedAt,
-                                                      'LT',
-                                                  )}`
+                                                ? formatDate(payout.completedAt, 'MMM D, YYYY [at] hh:mm A')
                                                 : '-'}
                                         </TableCell>
                                         <TableCell>{payout.payoutAccount}</TableCell>

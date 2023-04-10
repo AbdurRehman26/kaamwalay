@@ -14,6 +14,7 @@ import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
 import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
+import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -38,6 +39,7 @@ enum Options {
     MarkAsPaid,
     GenerateLabel,
     EditCustomerDetails,
+    MarkAbandoned,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -45,6 +47,7 @@ interface SubmissionHeaderMoreButtonProps {
     orderStatus: OrderStatusEntity;
     customer: UserEntity | null;
     paymentStatus?: number;
+    isAbandoned: boolean;
 }
 
 export default function SubmissionHeaderMoreButton({
@@ -52,6 +55,7 @@ export default function SubmissionHeaderMoreButton({
     orderStatus,
     customer,
     paymentStatus,
+    isAbandoned,
 }: SubmissionHeaderMoreButtonProps) {
     const confirm = useConfirmation();
     const classes = useStyles();
@@ -59,6 +63,7 @@ export default function SubmissionHeaderMoreButton({
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
+    const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
     const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
@@ -179,17 +184,12 @@ export default function SubmissionHeaderMoreButton({
                         dispatch(setCustomer(customer));
                     }
                     break;
+                case Options.MarkAbandoned:
+                    await setShowMarkAbandonedDialog(true);
+                    break;
             }
         },
-        [
-            setCancelDialog,
-            handleClose,
-            handleViewGrades,
-            setShowMarkPaidDialog,
-            setGenerateLabelDialog,
-            customer,
-            dispatch,
-        ],
+        [handleClose, handleViewGrades, setCancelDialog, setGenerateLabelDialog, customer, dispatch],
     );
 
     return (
@@ -214,6 +214,9 @@ export default function SubmissionHeaderMoreButton({
                 {customer ? (
                     <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                 ) : null}
+                <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
+                    Mark {isAbandoned ? 'UnAbandoned' : 'Abandoned'}
+                </MenuItem>
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}
@@ -243,11 +246,13 @@ export default function SubmissionHeaderMoreButton({
                 open={showMarkPaidDialog}
                 onClose={() => setShowMarkPaidDialog(false)}
             />
-            <MarkAsPaidDialog
-                orderId={orderId}
+
+            <MarkAbandonedStateDialog
+                isAbandoned={isAbandoned}
+                orderIds={[orderId]}
                 onSubmit={handleOrderPaid}
-                open={showMarkPaidDialog}
-                onClose={() => setShowMarkPaidDialog(false)}
+                open={showMarkAbandonedDialog}
+                onClose={() => setShowMarkAbandonedDialog(false)}
             />
         </>
     );

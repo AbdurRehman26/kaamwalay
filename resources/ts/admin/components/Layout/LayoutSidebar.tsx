@@ -194,6 +194,7 @@ function LayoutSidebar() {
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />
+                <LayoutSidebarItem icon={ReceiptIcon} title={'Abandoned'} href={'/abandoned/submissions/all/list'} />
             </List>
         </Drawer>
     );

@@ -33,6 +33,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::get('grades', [OrderController::class, 'getGrades'])->name('orders.get-grades');
         });
 
+        Route::post('mark-abandoned', [OrderController::class, 'markAsAbandoned'])->name('orders.mark-abandoned');
+        Route::post('mark-un-abandoned', [OrderController::class, 'markAsUnAbandoned'])->name('orders.mark-un-abandoned');
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
 

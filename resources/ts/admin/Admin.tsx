@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ReferralProgram } from '@admin/pages/ReferralProgram';
 import { Layout } from './components/Layout';
+import { AbandonedSubmissions } from './pages/AbandonedSubmissions';
 import { Cards } from './pages/Cards';
 import { Customers } from './pages/Customers';
 import { PromoCodes } from './pages/PromoCodes';
@@ -17,6 +18,7 @@ export function Admin() {
             <Routes>
                 <Route path={''} element={<Navigate to={'/submissions'} replace />} />
                 <Route path={'/submissions/*'} element={<Submissions />} />
+                <Route path={'/abandoned/submissions/*'} element={<AbandonedSubmissions />} />
                 <Route path={'/promo-codes/*'} element={<PromoCodes />} />
                 <Route path={'/customers/*'} element={<Customers />} />
                 <Route path={'/salesreps/*'} element={<SalesReps />} />

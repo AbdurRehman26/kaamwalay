@@ -36,6 +36,7 @@ export function SubmissionsView() {
                     'orderCertificate',
                     'orderStatusHistory.orderStatus',
                     'coupon',
+                    'isAbandoned',
                 ],
             },
         },
@@ -64,6 +65,7 @@ export function SubmissionsView() {
                 customer={data?.customer}
                 paymentStatus={data.paymentStatus}
                 isVault={isVault}
+                isAbandoned={data?.isAbandoned}
             />
             <Divider />
             <SubmissionsViewDetails

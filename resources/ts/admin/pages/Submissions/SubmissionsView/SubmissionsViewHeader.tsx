@@ -35,6 +35,7 @@ interface SubmissionViewHeaderProps {
     orderCertificate?: OrderLabelEntity | null;
     customer: UserEntity | null;
     isVault?: boolean;
+    isAbandoned: boolean;
     paymentStatus?: number;
 }
 
@@ -87,6 +88,7 @@ export function SubmissionsViewHeader({
     orderCertificate,
     isVault,
     paymentStatus,
+    isAbandoned,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
@@ -212,6 +214,7 @@ export function SubmissionsViewHeader({
                         orderId={orderId}
                         orderStatus={orderStatus}
                         customer={customer}
+                        isAbandoned={isAbandoned}
                     />
                 </Grid>
             </Grid>

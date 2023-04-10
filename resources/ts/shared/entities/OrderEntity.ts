@@ -48,6 +48,7 @@ export class OrderEntity extends Entity {
     public estimatedDeliveryStartAt!: string;
     public estimatedDeliveryEndAt!: string;
     public salesmanCommission!: number;
+    public isAbandoned!: boolean;
 
     @Type(() => UserEntity)
     public referrer!: UserEntity;

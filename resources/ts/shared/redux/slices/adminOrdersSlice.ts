@@ -288,6 +288,33 @@ export const markOrderAsPaid = createAsyncThunk('markOrderAsPaid', async (orderI
     }
 });
 
+export const markOrderAsAbandoned = createAsyncThunk('markOrderAsAbandoned', async (orderIds: number[], thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        await ordersRepository.markOrderAsAbandoned({ orderIds });
+        NotificationsService.success('Order marked as Abandoned!');
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const markOrderAsUnAbandoned = createAsyncThunk(
+    'markOrderAsUnAbandoned',
+    async (orderIds: number[], thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+
+        try {
+            await ordersRepository.markOrderAsUnAbandoned({ orderIds });
+            NotificationsService.success('Order marked as UnAbandoned!');
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {

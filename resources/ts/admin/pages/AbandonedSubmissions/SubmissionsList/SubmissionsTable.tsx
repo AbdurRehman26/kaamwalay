@@ -34,6 +34,7 @@ import { useAppDispatch } from '@admin/redux/hooks';
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
     all?: boolean;
+    isAbandoned?: boolean;
     search?: string;
 }
 
@@ -42,7 +43,7 @@ const ReferralStatus = [
     { label: 'No', value: 0 },
 ];
 
-export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
+export function SubmissionsTable({ tabFilter, all, search, isAbandoned }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
@@ -196,7 +197,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
                 couponCode,
-                isAbandoned: 0,
+                isAbandoned: 1,
             },
         },
         ...bracketParams(),

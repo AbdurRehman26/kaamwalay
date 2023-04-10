@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\V3\Admin\Order;
 
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V3\Admin\Order\MarkOrderAsAbandonedRequest;
+use App\Http\Requests\API\V3\Admin\Order\MarkOrderAsUnAbandonedRequest;
 use App\Http\Requests\API\V3\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V3\Admin\Order\UpdateShippingAddressRequest;
 use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
@@ -65,6 +67,26 @@ class OrderController extends Controller
         return new JsonResponse([
             'success' => true,
             'message' => 'Shipping Address Updated successfully.',
+        ]);
+    }
+
+    public function markAsAbandoned(MarkOrderAsAbandonedRequest $request): JsonResponse
+    {
+        $order->attachTag('abandoned');
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Order Abandoned successfully.',
+        ]);
+    }
+
+    public function markAsUnAbandoned(MarkOrderAsUnAbandonedRequest $request): JsonResponse
+    {
+        $order->detachTag('abandoned');
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Order Abandoned successfully.',
         ]);
     }
 

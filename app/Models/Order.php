@@ -23,15 +23,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\AllowedSort;
+use Spatie\Tags\HasTags;
 
 class Order extends Model implements Exportable
 {
-    use HasFactory, ActivityLog, HasOrderPayments;
+    use HasFactory, ActivityLog, HasOrderPayments, HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -154,6 +156,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
+            AllowedInclude::relationship('isAbandoned'),
         ];
     }
 
@@ -171,6 +174,7 @@ class Order extends Model implements Exportable
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
+            AllowedFilter::scope('is_abandoned', 'whereOrderIsAbandoned'),
         ];
     }
 
@@ -710,5 +714,23 @@ class Order extends Model implements Exportable
             $this->order_status_id,
             [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
         );
+    }
+
+    public function isAbandoned(): MorphToMany
+    {
+        return $this->tagsTranslated('abandoned');
+    }
+
+    /**
+     * @param  Builder  $query  <Order>
+     * @return Builder <Order>
+    */
+    public function scopeWhereOrderIsAbandoned(Builder $query, int $isAbandoned): Builder
+    {
+        if($isAbandoned){
+          return $query->withAllTags(['abandoned']);
+        }
+
+        return $query->doesntHave('tags');
     }
 }

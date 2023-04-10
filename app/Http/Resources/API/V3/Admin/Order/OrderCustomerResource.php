@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V3\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Customer\Wallet\WalletResource;
+use App\Http\Resources\API\V3\Admin\Customer\Wallet\WalletResource;
 use App\Http\Resources\API\V3\Admin\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;

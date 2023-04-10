@@ -6,6 +6,7 @@ use App\Enums\Salesman\CommissionEarnedEnum;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
+use App\Services\ReferralProgram\ReferrerCommissionService;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -23,14 +24,12 @@ class OrderPaidListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  OrderPaid  $event
-     * @return void
      */
     public function handle(OrderPaid $event): void
     {
         $this->processEmails($event);
         $this->processSalesmanCommission($event);
+        $this->processReferrerCommission($event);
     }
 
     protected function processEmails(OrderPaid $event): void
@@ -41,6 +40,18 @@ class OrderPaidListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID,
             $this->orderService->getDataForCustomerOrderPaid($event->order)
         );
+
+        if ($event->order->user->referredBy) {
+            $this->emailService->sendEmail(
+                [[$event->order->user->referredBy->email => $event->order->user->referredBy->first_name ?? '']],
+                EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING],
+                EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
+                [
+                    'REFERRER_NAME' => $event->order->user->referredBy->first_name,
+                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
+                ]
+            );
+        }
     }
 
     protected function processSalesmanCommission(OrderPaid $event): void
@@ -48,5 +59,10 @@ class OrderPaidListener implements ShouldQueue
         if ($event->order->salesman()->exists()) {
             SalesmanCommissionService::onOrderLine($event->order, CommissionEarnedEnum::ORDER_CREATED);
         }
+    }
+
+    protected function processReferrerCommission(OrderPaid $event): void
+    {
+        ReferrerCommissionService::processOrderReferralCommissions($event->order);
     }
 }

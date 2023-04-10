@@ -247,9 +247,6 @@ class PaymentService
         return ! $this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
     }
 
-    /**
-     * @return void
-     */
     protected function updatePartialPayment(): void
     {
         $partialPaymentResponse = resolve($this->providers['wallet'])->charge($this->order);

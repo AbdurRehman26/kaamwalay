@@ -13,6 +13,7 @@ interface FormInputProps extends HTMLAttributes<HTMLInputElement> {
     label: string;
     name: string;
     type: string;
+    disabled?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -77,7 +78,7 @@ const useStyles = makeStyles(
  * @date: 09.08.2021
  * @time: 20:21
  */
-export function FormInput({ label, id, name, type, ...rest }: FormInputProps) {
+export function FormInput({ label, id, name, type, disabled = false, ...rest }: FormInputProps) {
     const [showSensitive, setShowSensitive] = useState(false);
     const id$ = useMemo(() => id || `${kebabCase(label)}_${new Date().getTime()}`, [id, label]);
     const formik = useFormikContext<Record<string, any>>();
@@ -96,6 +97,7 @@ export function FormInput({ label, id, name, type, ...rest }: FormInputProps) {
                 value={meta.value as any}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                disabled={disabled}
                 className={cx(classes.input, {
                     [classes.sensitiveField]: isSensitiveField,
                     [classes.errorField]: isError,

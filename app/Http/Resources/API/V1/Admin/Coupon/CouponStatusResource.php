@@ -3,16 +3,14 @@
 namespace App\Http\Resources\API\V1\Admin\Coupon;
 
 use App\Http\Resources\API\BaseResource;
+use Illuminate\Http\Request;
 
 class CouponStatusResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

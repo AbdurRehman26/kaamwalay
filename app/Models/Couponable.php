@@ -11,6 +11,7 @@ class Couponable extends Model
 
     const COUPONABLE_TYPES = [
         'service_level' => \App\Models\PaymentPlan::class,
+        'user' => \App\Models\User::class,
     ];
 
     protected $fillable = [

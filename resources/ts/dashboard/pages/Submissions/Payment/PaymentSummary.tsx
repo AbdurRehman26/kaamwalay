@@ -285,7 +285,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 },
                 ...(couponCode && {
                     coupon: {
-                        code: couponCode,
+                        code: isCouponApplied ? couponCode : -1,
                     },
                     paymentPlan: {
                         id: originalPaymentPlanId,

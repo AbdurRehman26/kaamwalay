@@ -8,16 +8,19 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { nameInitials } from '@shared/lib/strings/initials';
-import { useAdminCustomerQuery } from '@shared/redux/hooks/useCustomerQuery';
+import { useAdminCustomersShowQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { CustomerCreditDialog } from '@admin/components/CustomerCreditDialog';
 import { resendAccessEmail } from '@admin/redux/slices/submissionGradeSlice';
-import { CustomerDetail } from './CustomerDetail';
+import { CustomerViewContent } from './CustomerViewContent';
 
 enum RowOption {
     CreditCustomer,
     ResendAccessEmail,
+    EditCustomerDetails,
 }
 
 const Root = styled(Grid)({
@@ -73,6 +76,7 @@ const Root = styled(Grid)({
 export function CustomerView() {
     const { id } = useParams<'id'>();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -80,11 +84,20 @@ export function CustomerView() {
         setCreditDialog(false);
     }, []);
 
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
+
     const createCustomerSubmission = () => {
         navigate(`/submissions/${id}/new`, { state: { from: 'customer' } });
     };
 
-    const customer$ = useAdminCustomerQuery({
+    const customer$ = useAdminCustomersShowQuery({
         resourceId: Number(id),
     });
 
@@ -104,9 +117,13 @@ export function CustomerView() {
                 case RowOption.ResendAccessEmail:
                     dispatch(resendAccessEmail(id));
                     break;
+                case RowOption.EditCustomerDetails:
+                    setEditCustomerDialog(true);
+                    dispatch(setCustomer(data));
+                    break;
             }
         },
-        [dispatch, id],
+        [dispatch, id, data],
     );
 
     if (isLoading || !data) {
@@ -153,6 +170,7 @@ export function CustomerView() {
                         {data.createdBy && !data.lastLoginAt ? (
                             <OptionsMenuItem action={RowOption.ResendAccessEmail}>Resend Access Email</OptionsMenuItem>
                         ) : null}
+                        <OptionsMenuItem action={RowOption.EditCustomerDetails}>Edit Customer Details</OptionsMenuItem>
                     </OptionsMenu>
                 </Grid>
                 <CustomerCreditDialog
@@ -162,8 +180,17 @@ export function CustomerView() {
                     onClose={handleCreditDialogClose}
                     onSubmit={handleReloadCustomerData}
                 />
+                <EditCustomerDetailsDialog
+                    endpointUrl={`admin/customer/${id}`}
+                    endpointVersion={'v3'}
+                    open={editCustomerDialog}
+                    onSubmit={handleEditCustomerSubmit}
+                    onClose={handleEditCustomerDialogClose}
+                />
             </Root>
-            <CustomerDetail handleResendCall={handleReloadCustomerData} customer={data} />
+            <Grid container>
+                <CustomerViewContent customer={data} />
+            </Grid>
         </>
     );
 }

@@ -3,10 +3,18 @@ import { route } from './utils/route';
 const HomeController = () => import('./controllers/HomeController');
 const FeedController = () => import('./controllers/FeedController');
 const PopController = () => import('./controllers/PopController');
+const ReferralController = () => import('./controllers/ReferralController');
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
     route('/', [HomeController, 'getHome']).name('home');
+
+    route('/referral')
+        .name('referral')
+        .group((route) => {
+            route('/', [ReferralController, 'referralView']).name('view');
+            route('/:code', [ReferralController, 'getReferralHome']).name('referralhome');
+        });
 
     route('/feed')
         .name('feed')

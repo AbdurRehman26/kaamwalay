@@ -4,10 +4,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
+import { TablePagination } from '@shared/components/TablePagination';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
@@ -23,6 +24,18 @@ const useStyles = makeStyles(
             padding: theme.spacing(2, 0, 3),
             marginBottom: theme.spacing(7),
         },
+        tablePagination: {
+            marginTop: '28px',
+            borderTop: '1px solid #E0E0E0',
+        },
+        itemsPerPageLabel: {
+            fontFamily: 'Roboto',
+            fontWeight: 400,
+            fontSize: '14px',
+            lineHeight: '16px',
+            letterSpacing: '0.2088px',
+            color: 'rgba(0, 0, 0, 0.541176)',
+        },
     }),
     { name: 'SubmissionsGradeCards' },
 );
@@ -30,12 +43,15 @@ const useStyles = makeStyles(
 export function SubmissionsGradeCards() {
     const classes = useStyles();
     const allCards = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
+    const gradesPagination = useAppSelector((state) => state.submissionGradesSlice.gradesPagination);
     const dispatch = useAppDispatch();
     const { id } = useParams<'id'>();
     const navigate = useNavigate();
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(24);
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -59,17 +75,17 @@ export function SubmissionsGradeCards() {
     }
 
     const loadGrades = useCallback(
-        (fromAgs = true) => {
-            dispatch(getAllSubmissions({ fromAgs, id: Number(id) }))
+        (perPage = 24, page = 1, fromAgs = true) => {
+            dispatch(getAllSubmissions({ fromAgs, id: Number(id), page, perPage, itemId: reviseGradeItemId }))
                 .unwrap()
                 .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
         },
-        [dispatch, id],
+        [dispatch, id, reviseGradeItemId],
     );
 
     useRetry(
         () => {
-            loadGrades(false);
+            loadGrades(perPage, page, false);
         },
         () => !hasLoadedAllRobogrades,
         { windowTime: 5000 },
@@ -87,11 +103,19 @@ export function SubmissionsGradeCards() {
                         value: declaredValue,
                     }),
                 );
-                await loadGrades(false);
+                await loadGrades(perPage, page, false);
             }
         },
-        [dispatch, loadGrades, id],
+        [dispatch, id, loadGrades, perPage, page],
     );
+
+    const handlePageChange = useCallback((event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+        setPage(page + 1);
+    }, []);
+
+    const handleRowsPerPageChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        setPerPage(parseInt(event.target.value));
+    }, []);
 
     useEffect(
         () => {
@@ -100,6 +124,10 @@ export function SubmissionsGradeCards() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [id],
     );
+
+    useEffect(() => {
+        loadGrades(perPage, page, false);
+    }, [perPage, page, loadGrades]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -135,6 +163,18 @@ export function SubmissionsGradeCards() {
                                 />
                             </div>
                         ))}
+                        <TablePagination
+                            className={classes.tablePagination}
+                            count={gradesPagination.meta.total}
+                            page={gradesPagination.meta.currentPage - 1}
+                            rowsPerPage={gradesPagination.meta.perPage}
+                            rowsPerPageOptions={[24, 48, 72, 96, 120]}
+                            onPageChange={handlePageChange}
+                            onRowsPerPageChange={handleRowsPerPageChange}
+                            labelRowsPerPage={
+                                <Typography className={classes.itemsPerPageLabel}>Items Per Page:</Typography>
+                            }
+                        />
                     </Grid>
                 </>
             )}

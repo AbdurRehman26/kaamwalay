@@ -107,13 +107,27 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         [dispatch, orderId],
     );
 
+    const handleMarkCardNotAccepted = useCallback(
+        async (orderItemId: number) => {
+            await dispatch(
+                changeOrderItemStatus({
+                    orderItemId,
+                    orderId,
+                    orderItemStatus: OrderItemStatusEnum.NOT_ACCEPTED,
+                }),
+            );
+        },
+        [dispatch, orderId],
+    );
+
     const handleCardNotesChange = useCallback(
-        async (orderItemId: number, internalNotes: string) => {
+        async (orderItemId: number, internalNotes?: string, notes?: string) => {
             await dispatch(
                 changeOrderItemNotes({
                     orderItemId,
                     orderId,
                     internalNotes,
+                    notes,
                 }),
             );
         },
@@ -142,12 +156,14 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}
                                 onMissing={handleMarkCardMissing}
+                                onNotAccepted={handleMarkCardNotAccepted}
                                 onCardNotesChange={handleCardNotesChange}
                                 onEdit={handleEdit}
                                 disableConfirm={item.cardProduct.addedByCustomer}
                                 onSwapCard={handleSwapCard}
                                 orderId={item.orderId}
                                 internalNotes={item.internalNotes}
+                                notes={item.notes}
                             />
                         ))
                     ) : (

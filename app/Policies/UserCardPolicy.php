@@ -20,12 +20,12 @@ class UserCardPolicy
         //
     }
 
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         return true;
     }
 
-    public function view(User $user, UserCard $userCard)
+    public function view(User $user, UserCard $userCard): bool
     {
         return $user->isAdmin() || $userCard->user()->is($user);
     }

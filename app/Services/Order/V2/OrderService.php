@@ -2,7 +2,9 @@
 
 namespace App\Services\Order\V2;
 
+use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
 use App\Models\Order;
@@ -12,6 +14,7 @@ use App\Services\EmailService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
+use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -157,6 +160,9 @@ class OrderService extends V1OrderService
 
     public function updateBillingAddress(Order $order, array $data): Order
     {
+        $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;
+        $data['phone'] = $data['phone'] ?? '';
+
         if ($order->hasSameShippingAndBillingAddresses() || ! $order->hasBillingAddress()) {
             $orderAddress = OrderAddress::create($data);
             $order->billingAddress()->associate($orderAddress);
@@ -170,6 +176,9 @@ class OrderService extends V1OrderService
         return $order;
     }
 
+    /**
+     * @throws InvoiceNotUploaded
+     */
     public function processChangeInShippingMethod(Order $order, array $data): Order
     {
         $this->changeShippingMethod($order, $data['shipping_method_id'])
@@ -177,6 +186,16 @@ class OrderService extends V1OrderService
             ->updateShippingFee($order)
             ->recalculateGrandTotal($order)
             ->saveOrder($order);
+
+        // Executing this service synchronously because we need invoice data instantly on the client side
+        // When user switches shipping method and downloads invoice.
+        $invoiceService = resolve(InvoiceService::class);
+
+        if ($order->hasInvoice()) {
+            $order->invoice()->delete();
+        }
+
+        $invoiceService->saveInvoicePDF($order);
 
         return $order;
     }

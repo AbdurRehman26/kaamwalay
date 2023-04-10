@@ -183,6 +183,7 @@ class OrderService extends V1OrderService
         $order->orderPayments()->create([
             'payment_method_id' => $manualPaymentMethodId,
             'user_id' => $user->id,
+            'response' => json_encode(['processed' => false]),
         ]);
 
         return $order;
@@ -211,7 +212,6 @@ class OrderService extends V1OrderService
     }
 
     /**
-     * @param  Order  $order
      * @return Collection<int, UserCard>
      */
     public function getCardsByStatus(Order $order, int $status): Collection

@@ -23,11 +23,8 @@ class UserCardGradeRevisedListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  UserCardGradeRevisedEvent  $event
-     * @return void
      */
-    public function handle(UserCardGradeRevisedEvent $event)
+    public function handle(UserCardGradeRevisedEvent $event): void
     {
         $this->popReportService->updateCardProductsReport($event->userCard->orderItem->cardProduct);
         $this->popReportService->updateSetsReport($event->userCard->orderItem->cardProduct->cardSet);

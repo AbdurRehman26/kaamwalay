@@ -76,6 +76,11 @@ class PopReportService
         ]);
     }
 
+    public function deleteCardPopReport(CardProduct $cardProduct): void
+    {
+        PopReportsCard::where('card_product_id', $cardProduct->id)->delete();
+    }
+
     public function initializeSeriesPopReport(CardSeries $cardSeries): PopReportsSeries
     {
         return PopReportsSeries::firstOrCreate([
@@ -166,7 +171,7 @@ class PopReportService
             ->select('user_cards.overall_grade')
             ->get();
 
-        $whereCondition = ['card_set_id' => $cardSet->id , 'card_series_id' => $cardSet->card_series_id];
+        $whereCondition = ['card_set_id' => $cardSet->id, 'card_series_id' => $cardSet->card_series_id];
 
         $popSetReportModel = PopReportsSet::firstOrCreate($whereCondition);
 
@@ -206,7 +211,7 @@ class PopReportService
             ->select('user_cards.overall_grade', 'card_products.card_set_id as card_set_id')
             ->get();
 
-        $whereCondition = ['card_product_id' => $cardProduct->id , 'card_set_id' => $cardProduct->card_set_id];
+        $whereCondition = ['card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id];
         $popCardReportModel = PopReportsCard::firstOrCreate($whereCondition);
 
         $reportsTableArray = $this->accumulateReportRow($userCards);
@@ -277,9 +282,9 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id')
-        ->where('card_series.card_category_id', $cardCategory->id)
-        ->select('*')
-        ->addSelect(DB::raw('(total + total_plus) as total_graded'));
+            ->where('card_series.card_category_id', $cardCategory->id)
+            ->select('*')
+            ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_series_id', 'total_graded'])
@@ -310,6 +315,7 @@ class PopReportService
 
         $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
             ->where('pop_reports_cards.card_set_id', $cardSet->id)
+            ->whereNull('card_products.deleted_at')
             ->select('*')
             ->addSelect(DB::raw('(total + total_plus) as total_graded'));
 

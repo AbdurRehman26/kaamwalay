@@ -13,6 +13,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
 import { PageSelector } from '@shared/components/PageSelector';
 import { TablePagination } from '@shared/components/TablePagination';
 import EnhancedTableHead from '@shared/components/Tables/EnhancedTableHead';
@@ -24,6 +25,7 @@ import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { SalesRepEntity } from '@shared/entities/SalesRepEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
@@ -31,7 +33,7 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { useAdminCustomersListQuery } from '@shared/redux/hooks/useAdminCustomersQuery';
 import { getSalesReps } from '@shared/redux/slices/adminSalesRepSlice';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { CustomerAddDialog } from '@admin/components/Customer/CustomerAddDialog';
@@ -47,6 +49,7 @@ type InitialValues = {
     search: string;
     salesmanId: string;
     promotionalSubscribers?: string;
+    referredBy?: boolean | null;
 };
 
 const PromotionalSubscribersStatus = [
@@ -104,6 +107,14 @@ const headings: EnhancedTableHeadCell[] = [
         sortable: false,
     },
     {
+        id: 'referrer',
+        numeric: true,
+        disablePadding: false,
+        label: 'Referrer',
+        align: 'left',
+        sortable: false,
+    },
+    {
         id: 'customer_type',
         numeric: true,
         disablePadding: false,
@@ -139,6 +150,7 @@ const getFilters = (values: InitialValues) => ({
     signedUpBetween: signedUpFilter(values.signedUpStart, values.signedUpEnd),
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
     promotionalSubscribers: values.promotionalSubscribers,
+    referredBy: values.referredBy,
 });
 
 const useStyles = makeStyles(
@@ -175,10 +187,20 @@ export function CustomersList() {
     const dispatch = useAppDispatch();
     const [salesReps, setSalesRep] = useState<SalesRepEntity[]>([]);
     const [salesRepFilter, setSalesRepFilter] = useState({ salesmanName: '', salesmanId: '' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const referrerDefaultState = { label: '', value: 0 };
+    const [referrerStatus, setReferrerStatus] = useState(referrerDefaultState);
     const [promotionalSubscribersStatusFilter, setPromotionalSubscribersStatusFilter] = useState({
         label: '',
         value: '',
     });
+    const [editCustomerDialog, setEditCustomerDialog] = useState(false);
+    const customer = useAppSelector((state) => state.editCustomerSlice.customer);
+
+    const ReferralStatus = [
+        { label: 'Yes', value: 1 },
+        { label: 'No', value: 0 },
+    ];
 
     const navigate = useNavigate();
 
@@ -198,7 +220,7 @@ export function CustomersList() {
 
     const redirectToCustomerProfile = useCallback(
         (customer: CustomerEntity) => {
-            navigate(`/customers/${customer.id}/view`);
+            navigate(`/customers/${customer.id}/view/overview`);
         },
         [navigate],
     );
@@ -212,6 +234,7 @@ export function CustomersList() {
             search: query.search ?? '',
             salesmanId: query.salesmanId ?? '',
             promotionalSubscribers: query.promotionalSubscribers ?? '',
+            referredBy: query.referredBy,
         }),
         [
             query.minSubmissions,
@@ -221,12 +244,13 @@ export function CustomersList() {
             query.search,
             query.salesmanId,
             query.promotionalSubscribers,
+            query.referredBy,
         ],
     );
 
-    const customers = useAdminCustomersQuery({
+    const customers = useAdminCustomersListQuery({
         params: {
-            include: ['salesman'],
+            include: ['salesman', 'referrer', 'referredBy'],
             sort: sortFilter,
             filter: getFilters(query),
         },
@@ -413,6 +437,42 @@ export function CustomersList() {
         [salesRepFilter, handleSubmit],
     );
 
+    const handleClearReferrerStatus = useCallback(async () => {
+        setReferrerStatus(referrerDefaultState);
+        delQuery('referredBy');
+        await customers.searchSortedWithPagination(
+            { sort: sortFilter },
+            getFilters({
+                ...formikRef.current!.values,
+                referredBy: null,
+            }),
+            1,
+        );
+    }, [customers, delQuery, sortFilter, referrerDefaultState]);
+
+    const handleReferrerStatus = useCallback(async (values) => {
+        values = {
+            ...values,
+            referredBy: values.value ? true : false,
+        };
+        setReferrerStatus({ value: values.value, label: values.label });
+        await handleSubmit(values);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleEditCustomerOption = useCallback(() => {
+        setEditCustomerDialog(true);
+    }, []);
+
+    const handleEditCustomerDialogClose = useCallback(() => {
+        setEditCustomerDialog(false);
+    }, []);
+
+    const handleEditCustomerSubmit = useCallback(() => {
+        setEditCustomerDialog(false);
+        window.location.reload();
+    }, []);
+
     const headerActions = (
         <Button
             onClick={() => setAddCustomerDialog(true)}
@@ -565,6 +625,26 @@ export function CustomersList() {
                                         );
                                     })}
                                 </PageSelector>
+
+                                <PageSelector
+                                    label={'Referrer'}
+                                    value={referrerStatus.label}
+                                    onClear={handleClearReferrerStatus}
+                                >
+                                    {ReferralStatus?.map((item: any) => {
+                                        return (
+                                            <Grid key={item.value}>
+                                                <MenuItem
+                                                    onClick={() => handleReferrerStatus(item)}
+                                                    key={item.value}
+                                                    value={item.value}
+                                                >
+                                                    {item.label}
+                                                </MenuItem>
+                                            </Grid>
+                                        );
+                                    })}
+                                </PageSelector>
                             </Grid>
                         )}
                     </Formik>
@@ -593,7 +673,11 @@ export function CustomersList() {
 
                     <TableBody>
                         {customers.data.map((customer) => (
-                            <CustomerTableRow customer={customer} salesReps={salesReps} />
+                            <CustomerTableRow
+                                customer={customer}
+                                salesReps={salesReps}
+                                onEditCustomer={handleEditCustomerOption}
+                            />
                         ))}
                     </TableBody>
                     <TableFooter>
@@ -603,6 +687,13 @@ export function CustomersList() {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <EditCustomerDetailsDialog
+                endpointUrl={`admin/customer/${customer.id}`}
+                endpointVersion={'v3'}
+                open={editCustomerDialog}
+                onSubmit={handleEditCustomerSubmit}
+                onClose={handleEditCustomerDialogClose}
+            />
         </Grid>
     );
 }

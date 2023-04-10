@@ -22,6 +22,7 @@ class OrderItemResource extends BaseResource
             'card_product' => new CardProductResource($this->cardProduct),
             'status' => new OrderItemStatusResource($this->orderItemStatus),
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
+            'notes' => $this->notes ?? '',
         ];
     }
 }

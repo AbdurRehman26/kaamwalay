@@ -54,6 +54,7 @@ use Illuminate\Http\Request;
  * @property mixed $user_id
  * @property mixed $requires_cleaning
  * @property mixed $salesman_commission
+ * @property mixed $referral_total_commission
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
  * @method orderStatusHistory()
@@ -63,11 +64,8 @@ class OrderResource extends V1OrderResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

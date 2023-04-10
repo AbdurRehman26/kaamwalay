@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\Card\CardProductDeletedEvent;
 use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSurface;
@@ -66,7 +67,7 @@ beforeEach(function () {
     $this->actingAs($this->user);
 });
 
-test('admins can create cards manually', function () {
+test('an admin can create cards manually', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -164,7 +165,7 @@ it('creates card with one different param from existing card', function () {
     $response->assertSuccessful();
 });
 
-test('admins can update cards manually', function () {
+test('an admin can update cards manually', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -197,7 +198,8 @@ test('admins can update cards manually', function () {
     ]);
 });
 
-test('admins can delete a card', function () {
+test('an admin can delete a card', function () {
+    Event::fake();
     Http::fake([
         '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
         '*/cards/*' => Http::response([
@@ -211,15 +213,18 @@ test('admins can delete a card', function () {
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));
 
     $response->assertNoContent();
+
+    Event::assertDispatched(CardProductDeletedEvent::class);
+
 });
 
-test('admins can get a single card', function () {
+test('an admin can get a single card', function () {
     $response = $this->getJson(route('v2.admin.card-products.show', ['cardProduct' => $this->card]));
 
     $response->assertSuccessful();
 });
 
-test('admins can not delete a card if it has graded items', function () {
+test('an admin can not delete a card if it has graded items', function () {
     $orderItem = OrderItem::factory()->create([
         'card_product_id' => $this->card->id,
     ]);
@@ -233,7 +238,7 @@ test('admins can not delete a card if it has graded items', function () {
     $response->assertForbidden();
 });
 
-test('admins can get get a list of card products', function () {
+test('an admin can get get a list of card products', function () {
     $cardProducts = CardProduct::factory()->count(100)->create([
         'added_manually' => 0,
     ]);
@@ -247,4 +252,4 @@ test('admins can get get a list of card products', function () {
     $response = $this->getJson(route('v2.admin.card-products.index', ['per_page' => 100]));
 
     $response->assertOk()->assertJsonCount(100, 'data');
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');

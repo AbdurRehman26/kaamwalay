@@ -21,6 +21,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { deleteOrder } from '@shared/redux/slices/ordersSlice';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
@@ -33,6 +34,8 @@ interface SubmissionsTableRowProps {
     order: OrderEntity;
     isCustomerDetailPage: boolean;
     isSalesRepDetailPage?: boolean;
+    isReferralPage?: boolean;
+    onEditCustomer?: any;
 }
 
 enum Options {
@@ -42,6 +45,7 @@ enum Options {
     CreditCustomer,
     Delete,
     MarkAsPaid,
+    EditCustomerDetails,
 }
 
 const useStyles = makeStyles(
@@ -63,7 +67,9 @@ const useStyles = makeStyles(
 export function SubmissionsTableRow({
     order,
     isCustomerDetailPage,
+    onEditCustomer,
     isSalesRepDetailPage = false,
+    isReferralPage = false,
 }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
@@ -112,6 +118,12 @@ export function SubmissionsTableRow({
                 case Options.MarkAsPaid:
                     setShowMarkPaidDialog(!showMarkPaidDialog);
                     break;
+                case Options.EditCustomerDetails:
+                    if (onEditCustomer) {
+                        dispatch(setCustomer(order.customer));
+                        onEditCustomer();
+                    }
+                    break;
             }
         },
         [
@@ -124,6 +136,9 @@ export function SubmissionsTableRow({
             order.orderLabel,
             order.orderNumber,
             showMarkPaidDialog,
+            dispatch,
+            order.customer,
+            onEditCustomer,
         ],
     );
 
@@ -156,26 +171,26 @@ export function SubmissionsTableRow({
                     </MuiLink>
                 </TableCell>
                 <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                {isCustomerDetailPage ? (
-                    <>
-                        <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
-                        <TableCell>
-                            {order.customer?.id && order.customer?.customerNumber ? (
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={`/customers/${order.customer?.id}/view`}
-                                    className={font.fontWeightMedium}
-                                >
-                                    {order.customer?.customerNumber}
-                                </MuiLink>
-                            ) : (
-                                '-'
-                            )}
-                        </TableCell>
-                    </>
+                {isCustomerDetailPage && !isReferralPage ? (
+                    <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
                 ) : null}
-                {isCustomerDetailPage ? (
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order.customer?.id && order.customer?.customerNumber ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.customer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.customer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
                     <TableCell>
                         {order?.owner?.fullName ? (
                             <MuiLink
@@ -191,6 +206,22 @@ export function SubmissionsTableRow({
                         )}{' '}
                     </TableCell>
                 ) : null}
+                {isCustomerDetailPage || isReferralPage ? (
+                    <TableCell>
+                        {order?.referrer ? (
+                            <MuiLink
+                                component={Link}
+                                color={'primary'}
+                                to={`/customers/${order.referrer?.id}/view/overview`}
+                                className={font.fontWeightMedium}
+                            >
+                                {order.referrer?.getFullName()}
+                            </MuiLink>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                ) : null}
                 <TableCell>{order.numberOfCards}</TableCell>
                 <TableCell>
                     <StatusChip label={statusLabel} color={statusType} />
@@ -203,10 +234,10 @@ export function SubmissionsTableRow({
                     />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                {isReferralPage || isCustomerDetailPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
-                {isSalesRepDetailPage ? (
-                    <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell>
-                ) : (
+                {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
+                {!isSalesRepDetailPage && !isReferralPage ? (
                     <TableCell align={'right'}>
                         <SubmissionActionButton
                             orderId={order.id}
@@ -217,7 +248,7 @@ export function SubmissionsTableRow({
                             shippingProvider={order.orderShipment?.shippingProvider}
                         />
                     </TableCell>
-                )}
+                ) : null}
                 <TableCell align={'right'} className={classes.optionsCell}>
                     <Grid container alignItems={'center'} justifyContent={'flex-end'}>
                         {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}
@@ -253,6 +284,11 @@ export function SubmissionsTableRow({
                                       </MenuItem>,
                                   ]
                                 : null}
+                            {order?.customer && onEditCustomer ? (
+                                <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>
+                                    Edit Customer Details
+                                </MenuItem>
+                            ) : null}
                         </>
                     </Menu>
                 </TableCell>

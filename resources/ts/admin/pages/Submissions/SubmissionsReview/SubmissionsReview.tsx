@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import ManageCardDialog, { ManageCardDialogProps } from '@shared/components/ManageCardDialog/ManageCardDialog';
@@ -16,13 +17,23 @@ import { addCardToOrder, addOrderStatusHistory, editCardOfOrder } from '@shared/
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
 import { useAppDispatch } from '@admin/redux/hooks';
 import ConfirmedCards from './ConfirmedCards';
-import MissingCards from './MissingCards';
+import MissingCards from './InvalidCards';
 import UnconfirmedCards from './UnconfirmedCards';
+
+const useStyles = makeStyles(
+    (theme) => ({
+        container: {
+            padding: '0px 125px',
+        },
+    }),
+    { name: 'SubmissionsReview' },
+);
 
 export function SubmissionsReview() {
     const { id } = useParams<'id'>();
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
+    const classes = useStyles();
 
     const { data, isLoading } = useAdminOrderQuery({
         resourceId: Number(id),
@@ -34,14 +45,14 @@ export function SubmissionsReview() {
     });
 
     const handleCompleteOrderReview = useCallback(async () => {
-        setLoading(false);
+        setLoading(true);
         await dispatch(
             addOrderStatusHistory({
                 orderId: data?.id,
                 orderStatusId: OrderStatusEnum.CONFIRMED,
             }),
         );
-        setLoading(true);
+        setLoading(false);
     }, [dispatch, data?.id]);
 
     const handleAddCard = useCallback<ManageCardDialogProps['onAdd']>(
@@ -95,42 +106,54 @@ export function SubmissionsReview() {
 
     return (
         <>
-            <Container>
-                <Box pt={7} pb={3} display={'flex'} alignItems={'center'}>
-                    <Grid item xs>
-                        <Typography variant={'h5'}>
-                            Review Submission <b># {data.orderNumber}</b>
-                        </Typography>
-                    </Grid>
-                    <Grid container item xs justifyContent={'flex-end'}>
-                        <Button
-                            component={Link}
-                            to={`/submissions/${id}/view`}
-                            startIcon={<VisibilityIcon color={'inherit'} />}
-                            color={'primary'}
-                        >
-                            View Submission
-                        </Button>
-                    </Grid>
-                </Box>
-                <Divider />
-                <Box pt={3} pb={3}>
-                    <Grid container spacing={3}>
+            <Container maxWidth={'xl'}>
+                <Container className={classes.container} maxWidth={'xl'}>
+                    <Box pt={7} pb={3} display={'flex'} alignItems={'center'}>
                         <Grid item xs>
-                            <UnconfirmedCards items={pendingItems} orderId={data.id} />
+                            <Typography variant={'h5'}>
+                                Review Submission <b># {data.orderNumber}</b>
+                            </Typography>
                         </Grid>
-                        <Grid item xs>
-                            <ConfirmedCards
-                                items={data.getItemsByStatus(OrderItemStatusEnum.CONFIRMED)}
-                                orderId={data.id}
-                            />
-                            <MissingCards
-                                items={data.getItemsByStatus(OrderItemStatusEnum.MISSING)}
-                                orderId={data.id}
-                            />
+                        <Grid container item xs justifyContent={'flex-end'}>
+                            <Button
+                                component={Link}
+                                to={`/submissions/${id}/view`}
+                                startIcon={<VisibilityIcon color={'inherit'} />}
+                                color={'primary'}
+                            >
+                                View Submission
+                            </Button>
                         </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                    <Divider />
+                    <Box pt={3} pb={3}>
+                        <Grid container spacing={3}>
+                            <Grid item xs>
+                                <UnconfirmedCards items={pendingItems} orderId={data.id} />
+                            </Grid>
+                            <Grid item xs>
+                                <>
+                                    <ConfirmedCards
+                                        items={data.getItemsByStatus(OrderItemStatusEnum.CONFIRMED)}
+                                        orderId={data.id}
+                                    />
+                                </>
+                                <>
+                                    <MissingCards
+                                        title={'Missing'}
+                                        items={data.getItemsByStatus(OrderItemStatusEnum.MISSING)}
+                                        orderId={data.id}
+                                    />
+                                    <MissingCards
+                                        title={'Not Accepted'}
+                                        items={data.getItemsByStatus(OrderItemStatusEnum.NOT_ACCEPTED)}
+                                        orderId={data.id}
+                                    />
+                                </>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Container>
             </Container>
             <Box height={4} width={'100%'} />
             {pendingItems.length === 0 && data.orderItems?.length > 0 ? (

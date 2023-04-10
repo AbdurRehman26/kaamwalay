@@ -18,7 +18,7 @@ class VaultShipmentPaymentFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'vault_shipment_id' => VaultShipment::factory(),
@@ -29,10 +29,8 @@ class VaultShipmentPaymentFactory extends Factory
 
     /**
      * Indicate that the stripe request/response will be added.
-     *
-     * @return Factory
      */
-    public function stripe()
+    public function stripe(): Factory
     {
         return $this->state(function (array $attributes) {
             return [
@@ -46,10 +44,8 @@ class VaultShipmentPaymentFactory extends Factory
 
     /**
      * Indicate that the paypal request/response will be added.
-     *
-     * @return Factory
      */
-    public function paypal()
+    public function paypal(): Factory
     {
         return $this->state(function (array $attributes) {
             return [

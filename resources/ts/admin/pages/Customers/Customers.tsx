@@ -14,7 +14,7 @@ export function Customers() {
         <Routes>
             <Route path={''} element={<Navigate to={'/customers/list'} replace />} />
             <Route path={'list'} element={<CustomersList />} />
-            <Route path={'/:id/view'} element={<CustomerView />} />
+            <Route path={'/:id/view/:tab'} element={<CustomerView />} />
         </Routes>
     );
 }

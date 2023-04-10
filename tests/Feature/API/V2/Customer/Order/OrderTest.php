@@ -667,9 +667,11 @@ test('a customer can update order billing address', function () {
     $this->actingAs($this->user);
 
     $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'country_code' => 'US',
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'address' => $this->faker->address(),
+        'address_2' => $this->faker->address(),
         'city' => $this->faker->city(),
         'state' => $this->faker->stateAbbr(),
         'zip' => $this->faker->postcode(),
@@ -687,9 +689,11 @@ test('a customer can not update other user\'s billing address', function () {
     $this->actingAs($this->user);
 
     $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'country_code' => 'US',
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'address' => $this->faker->address(),
+        'address_2' => $this->faker->address(),
         'city' => $this->faker->city(),
         'state' => $this->faker->stateAbbr(),
         'zip' => $this->faker->postcode(),

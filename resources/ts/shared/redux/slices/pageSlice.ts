@@ -3,11 +3,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export interface PageState {
     drawerOpened: boolean;
     cardsManagementSelected: boolean;
+    referralProgramSelected: boolean;
 }
 
 const initialState: PageState = {
     drawerOpened: true,
     cardsManagementSelected: false,
+    referralProgramSelected: false,
 };
 
 export const pageSlice = createSlice({
@@ -20,7 +22,10 @@ export const pageSlice = createSlice({
         setCardsManagementState: (state, action: PayloadAction<boolean>) => {
             state.cardsManagementSelected = action.payload;
         },
+        setReferralProgramState: (state, action: PayloadAction<boolean>) => {
+            state.referralProgramSelected = action.payload;
+        },
     },
 });
 
-export const { drawerVisibility, setCardsManagementState } = pageSlice.actions;
+export const { drawerVisibility, setCardsManagementState, setReferralProgramState } = pageSlice.actions;

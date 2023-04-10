@@ -33,7 +33,7 @@ class OrderController extends Controller
         protected CreateOrderService $createOrderService,
         protected OrderStatusHistoryService $orderStatusHistoryService
     ) {
-//        $this->authorizeResource(Order::class, 'order');
+        //        $this->authorizeResource(Order::class, 'order');
     }
 
     public function index(): OrderCollection

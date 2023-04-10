@@ -23,9 +23,6 @@ class DeleteDuplicateUsersInMailchimpLists extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param  MailchimpService  $mailchimpService
-     * @return int
      */
     public function handle(MailchimpService $mailchimpService): int
     {

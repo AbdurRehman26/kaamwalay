@@ -8,12 +8,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
-import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
+import { SubmissionViewCards } from '@dashboard/components/SubmissionViewCards';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';
@@ -82,6 +82,7 @@ export function ViewSubmission() {
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus
+                order={data}
                 orderId={data?.id}
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}

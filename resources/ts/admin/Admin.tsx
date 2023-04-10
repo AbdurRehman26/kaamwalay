@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { ReferralProgram } from '@admin/pages/ReferralProgram';
 import { Layout } from './components/Layout';
 import { Cards } from './pages/Cards';
 import { Customers } from './pages/Customers';
@@ -23,6 +24,7 @@ export function Admin() {
                 <Route path={'/cards/*'} element={<Cards />} />
                 <Route path={'/rarities/*'} element={<Rarities />} />
                 <Route path={'/surfaces/*'} element={<Surfaces />} />
+                <Route path={'/referral-program/*'} element={<ReferralProgram />} />
             </Routes>
         </Layout>
     );

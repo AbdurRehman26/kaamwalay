@@ -2,81 +2,55 @@
 
 namespace App\Services\Payment\V1\Providers;
 
+use App\Http\APIClients\PaypalClient;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Services\Payment\V1\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\V1\Providers\Contracts\PaymentProviderVerificationInterface;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
-use PayPalCheckoutSdk\Core\PayPalHttpClient;
-use PayPalCheckoutSdk\Core\ProductionEnvironment;
-use PayPalCheckoutSdk\Core\SandboxEnvironment;
-use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
-use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
-use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
-    protected SandboxEnvironment|ProductionEnvironment $environment;
-    protected PayPalHttpClient $client;
-
-    public function __construct()
+    public function __construct(protected PaypalClient $client)
     {
-        if (app()->environment(['local', 'staging'])) {
-            $this->environment = new SandboxEnvironment(
-                config('services.paypal.client_id'),
-                config('services.paypal.client_secret'),
-            );
-        } else {
-            $this->environment = new ProductionEnvironment(
-                config('services.paypal.client_id'),
-                config('services.paypal.client_secret'),
-            );
-        }
-        $this->client = new PayPalHttpClient($this->environment);
     }
 
     public function charge(Order $order, array $data = []): array
     {
-        $orderRequest = new OrdersCreateRequest();
-        $orderRequest->prefer('return=representation');
-        $requestData = [
-            "intent" => "CAPTURE",
-            "purchase_units" => [[
-                "reference_id" => $order->order_number,
-                "amount" => [
-                    "value" => $order->grand_total_to_be_paid,
-                    "currency_code" => "USD",
-                ],
-            ]],
-        ];
-
-        $orderRequest->body = $requestData;
-
         try {
-            $response = $this->client->execute($orderRequest);
+            $requestData = [
+                "intent" => "CAPTURE",
+                "purchase_units" => [[
+                    "reference_id" => $order->order_number,
+                    "amount" => [
+                        "value" => $order->grand_total_to_be_paid,
+                        "currency_code" => "USD",
+                    ],
+                ]],
+            ];
+            $response = $this->client->createOrder($requestData);
 
             return [
                 'request' => $requestData,
-                'response' => json_decode(json_encode($response->result), associative: true),
-                'payment_provider_reference_id' => $response->result->id,
+                'response' => json_decode(json_encode($response), associative: true),
+                'payment_provider_reference_id' => $response['id'],
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             ];
-        } catch (HttpException $e) {
+        } catch (RequestException $e) {
             return ['message' => $e->getMessage()];
         }
     }
 
+
+
     public function verify(Order $order, string $paymentIntentId): bool
     {
-        $orderRequest = new OrdersCaptureRequest($paymentIntentId);
-        $orderRequest->prefer('return=representation');
-
         try {
-            $response = $this->client->execute($orderRequest);
+            $response = $this->client->captureOrder($paymentIntentId);
 
-            return $this->validateOrderIsPaid($order, json_decode(json_encode($response->result), associative: true));
-        } catch (HttpException $e) {
+            return $this->validateOrderIsPaid($order, json_decode(json_encode($response), associative: true));
+        } catch (RequestException $e) {
             return false;
         }
     }
@@ -145,11 +119,10 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
         ];
 
         try {
-            $refundRequest = new CapturesRefundRequest($paymentData['purchase_units'][0]['payments']['captures'][0]['id']);
-            $refundRequest->prefer('return=representation');
-            $refundRequest->body = $refundData;
-
-            $response = $this->client->execute($refundRequest);
+            $response = $this->client->captureRefund(
+                $paymentData['purchase_units'][0]['payments']['captures'][0]['id'],
+                $refundData
+            );
         } catch (\Exception $exception) {
             Log::error('Encountered error while refunding a charge with Paypal', [
                 'message' => $exception->getMessage(),
@@ -162,7 +135,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
         return [
             'success' => true,
             'request' => $refundData,
-            'response' => json_decode(json_encode($response->result), associative: true),
+            'response' => json_decode(json_encode($response), associative: true),
             'payment_provider_reference_id' => $paymentData['id'],
             'amount' => $data['amount'],
             'type' => OrderPayment::TYPE_REFUND,

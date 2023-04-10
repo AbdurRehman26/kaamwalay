@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
+use App\Events\API\Admin\Card\CardProductDeletedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
 use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
@@ -134,13 +135,13 @@ class CardProductService
 
     protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
     {
-        return $this->agsService->getCardSeries(['name' => $seriesName, 'category_name' => $categoryName])['results'][0]['id'];
+        return $this->agsService->getCardSeries(['exact_name' => $seriesName, 'exact_category_name' => $categoryName])['results'][0]['id'];
     }
 
     protected function getSetFromAgs(int $seriesId, string $setName): int | null
     {
         return $this->agsService->getCardSet([
-            'name' => $setName,
+            'exact_name' => $setName,
             'serie' => $seriesId,
         ])['results'][0]['id'];
     }
@@ -233,6 +234,8 @@ class CardProductService
         }
 
         $cardProduct->delete();
+
+        CardProductDeletedEvent::dispatch($cardProduct);
     }
 
     protected function deleteCardProductFromAgs(CardProduct $cardProduct): array

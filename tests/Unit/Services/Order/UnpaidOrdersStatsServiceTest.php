@@ -7,6 +7,7 @@ use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Order\UnpaidOrdersStatsService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -73,4 +74,30 @@ it('calculates monthly unpaid orders stats for the current month', function () {
 
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
+})->group('unpaid-orders-stats');
+
+it('counts daily unpaid orders cards', function () {
+    $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
+    ->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    })->sum('order_items.quantity');
+
+    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal();
+
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
+})->group('unpaid-orders-stats');
+
+it('counts monthly unpaid orders cards', function () {
+    $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+    ->where(function (Builder $query) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+    })->sum('order_items.quantity');
+
+    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal();
+
+    expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

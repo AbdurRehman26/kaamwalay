@@ -32,11 +32,22 @@ const useStyles = makeStyles(
             marginBottom: '24px',
             alignItems: 'flex-start',
         },
+        deactivatedText: {
+            color: '#DD323B',
+            fontSize: '15px',
+            fontWeight: 'bolder',
+        },
     }),
     { name: 'SignUpContent' },
 );
 
-export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContentProps) {
+export function SignUpContent({
+    onViewChange,
+    onAuthSuccess,
+    fromReferralHome,
+    referralCode,
+    isDisabled = false,
+}: AuthDialogContentProps) {
     const classes = useStyles();
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
@@ -48,15 +59,15 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
             password: '',
             passwordConfirmation: '',
             isMarketingNotificationsEnabled: true,
+            referralCode: '',
         }),
         [],
     );
 
     const handleSignInClick = useCallback(() => onViewChange(AuthDialogView.SignIn), [onViewChange]);
-
     const handleSubmit = useCallback(
         async (values: SignUpRequestDto) => {
-            values = { ...values, passwordConfirmation: values.password };
+            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode };
             try {
                 const authenticatedUser = await authenticationRepository.postRegister(values);
                 ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
@@ -67,7 +78,7 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                 NotificationsService.exception(e);
             }
         },
-        [authenticationRepository, onAuthSuccess],
+        [authenticationRepository, onAuthSuccess, referralCode],
     );
 
     return (
@@ -80,20 +91,32 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
             {({ values, handleChange }) => (
                 <Form>
                     <Grid container marginTop={4} sx={{ padding: '24px 24px 0 24px' }}>
+                        {isDisabled ? (
+                            <Grid container justifyContent={'center'} mb={2}>
+                                <Typography className={classes.deactivatedText}>
+                                    Sign Up Deactivated. Looks like you are already signed in.
+                                </Typography>
+                            </Grid>
+                        ) : null}
                         <FormRoot>
-                            <FormInput type={'text'} label={'Full Name'} name={'fullName'} />
+                            <FormInput type={'text'} label={'Full Name'} name={'fullName'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'text'} label={'Email'} name={'email'} />
+                            <FormInput type={'text'} label={'Email'} name={'email'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
+                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} disabled={isDisabled} />
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'password'} label={'Create Password'} name={'password'} />
+                            <FormInput
+                                type={'password'}
+                                label={'Create Password'}
+                                name={'password'}
+                                disabled={isDisabled}
+                            />
                         </FormRoot>
 
                         <FormRoot>
@@ -108,22 +131,29 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                                 }
                                 label={'Opt in to receive updates & promotions from AGS via email and text.'}
                                 className={classes.notificationsControlLabel}
+                                disabled={isDisabled}
                             />
                         </FormRoot>
 
                         <FormRoot>
-                            <SubmitButton isModal>Sign up</SubmitButton>
+                            <SubmitButton isModal isDisabled={isDisabled}>
+                                Sign up
+                            </SubmitButton>
                         </FormRoot>
                     </Grid>
-                    <Divider />
-                    <ActionContent>
-                        <Typography align={'center'} variant={'caption'} marginRight={2}>
-                            Already have an account?
-                        </Typography>
-                        <Button variant={'text'} onClick={handleSignInClick}>
-                            Log In
-                        </Button>
-                    </ActionContent>
+                    {fromReferralHome ? null : (
+                        <>
+                            <Divider />
+                            <ActionContent>
+                                <Typography align={'center'} variant={'caption'} marginRight={2}>
+                                    Already have an account?
+                                </Typography>
+                                <Button variant={'text'} onClick={handleSignInClick}>
+                                    Log In
+                                </Button>
+                            </ActionContent>
+                        </>
+                    )}
                 </Form>
             )}
         </Formik>

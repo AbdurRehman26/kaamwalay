@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
+import { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
@@ -146,6 +147,7 @@ function SubmissionSummary() {
     const classes = useStyles();
 
     const [query, { delQuery }] = useLocationQuery();
+    const [previewCleaningFee, setPreviewCleaningFee] = useState(0);
 
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const priceRanges = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.priceRanges);
@@ -206,15 +208,21 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
-    function getCleaningFee() {
-        const calculatedCleaningFee = numberOfSelectedCards * featureOrderCleaningFeePerCard;
-        const previewCleaningFee =
-            calculatedCleaningFee >= featureOrderCleaningFeeMaxCap
-                ? featureOrderCleaningFeeMaxCap
-                : calculatedCleaningFee;
-        dispatch(setCleaningFee(previewCleaningFee));
-        return previewCleaningFee;
-    }
+    useEffect(() => {
+        if (requiresCleaning) {
+            const calculatedCleaningFee = numberOfSelectedCards * featureOrderCleaningFeePerCard;
+            const previewCleaningFees =
+                calculatedCleaningFee >= featureOrderCleaningFeeMaxCap
+                    ? featureOrderCleaningFeeMaxCap
+                    : calculatedCleaningFee;
+            dispatch(setCleaningFee(previewCleaningFees));
+            setPreviewCleaningFee(previewCleaningFees);
+        } else {
+            dispatch(setCleaningFee(0));
+            setPreviewCleaningFee(0);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cleaningFee, dispatch, previewCleaningFee, requiresCleaning]);
 
     function getPreviewTotal() {
         const previewTotal = Number(
@@ -329,7 +337,7 @@ function SubmissionSummary() {
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat
-                                        value={getCleaningFee()}
+                                        value={previewCleaningFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator
@@ -510,7 +518,7 @@ function SubmissionSummary() {
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat
-                                        value={getCleaningFee()}
+                                        value={previewCleaningFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

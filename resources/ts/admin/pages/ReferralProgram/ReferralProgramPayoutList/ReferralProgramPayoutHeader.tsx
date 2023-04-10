@@ -14,6 +14,7 @@ import { useAdminReferralPayoutsQuery } from '@shared/redux/hooks/useAdminReferr
 import { payReferralCommissions } from '@shared/redux/slices/adminReferralPayoutSlice';
 import theme from '@shared/styles/theme';
 import { useAppDispatch } from '@admin/redux/hooks';
+import PayoutCommissionDialog from './PayoutCommissionDialog';
 
 interface HeaderProps {
     onSearch: (query: string) => void;
@@ -73,6 +74,9 @@ export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
 
+    const [payoutTotal, setPayoutTotal] = useState(0);
+    const [showPayoutCommission, setShowPayoutCommission] = useState(false);
+
     const payouts = useAdminReferralPayoutsQuery({
         params: {
             filter: {
@@ -105,44 +109,75 @@ export function ReferralProgramPayoutHeader({ onSearch, tabs }: HeaderProps) {
         window.location.reload();
     };
 
+    const calculateTotal = () => {
+        const data: number[] = [];
+        payouts.data
+            .filter((payout: PayoutEntity) => payout.status.id === PayoutStatusEnum.PENDING)
+            .map((payout: PayoutEntity) => {
+                data.push(parseFloat(payout.amount.toString()));
+            });
+        setPayoutTotal(data.reduce((a, b) => a + b, 0));
+    };
+
+    const handlePayCommission = () => {
+        calculateTotal();
+        setShowPayoutCommission(true);
+    };
+
+    const handleDialogClose = () => {
+        setPayoutTotal(0);
+        setShowPayoutCommission(false);
+    };
+
     return (
-        <Grid component={'header'} container sx={styles.headerStyle}>
-            <Grid container alignItems={'center'} sx={styles.header}>
-                <Grid item container xs alignItems={'center'}>
-                    <Typography variant={'h4'} sx={styles.title}>
-                        Payouts
-                    </Typography>
-                    <TextField
-                        variant={'outlined'}
-                        onChange={handleSearch}
-                        value={search}
-                        placeholder={'Search...'}
-                        sx={styles.searchField}
-                        InputProps={{
-                            classes: {
-                                input: classes.searchFieldInput,
-                                notchedOutline: classes.searchFieldNotch,
-                            },
-                            startAdornment: (
-                                <InputAdornment position={'start'}>
-                                    <SearchIcon color={'inherit'} />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+        <>
+            <PayoutCommissionDialog
+                onSubmit={() => handlePayReferralCommissions()}
+                onClose={() => {
+                    handleDialogClose();
+                }}
+                open={showPayoutCommission}
+                totalRecipient={pendingPayouts.length}
+                totalPayout={payoutTotal}
+            />
+            <Grid component={'header'} container sx={styles.headerStyle}>
+                <Grid container alignItems={'center'} sx={styles.header}>
+                    <Grid item container xs alignItems={'center'}>
+                        <Typography variant={'h4'} sx={styles.title}>
+                            Payouts
+                        </Typography>
+                        <TextField
+                            variant={'outlined'}
+                            onChange={handleSearch}
+                            value={search}
+                            placeholder={'Search...'}
+                            sx={styles.searchField}
+                            InputProps={{
+                                classes: {
+                                    input: classes.searchFieldInput,
+                                    notchedOutline: classes.searchFieldNotch,
+                                },
+                                startAdornment: (
+                                    <InputAdornment position={'start'}>
+                                        <SearchIcon color={'inherit'} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                    <LoadingButton
+                        loading={loading}
+                        variant={'contained'}
+                        color={'primary'}
+                        sx={styles.payoutButton}
+                        disabled={pendingPayouts.length === 0}
+                        onClick={() => handlePayCommission()}
+                    >
+                        Pay All Pending
+                    </LoadingButton>
                 </Grid>
-                <LoadingButton
-                    loading={loading}
-                    variant={'contained'}
-                    color={'primary'}
-                    sx={styles.payoutButton}
-                    disabled={pendingPayouts.length === 0}
-                    onClick={() => handlePayReferralCommissions()}
-                >
-                    Pay All Pending
-                </LoadingButton>
+                {tabs}
             </Grid>
-            {tabs}
-        </Grid>
+        </>
     );
 }

@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.9.1 - 2023-04-10
+
+### What's Changed
+
+- Hotfix: Removed Card Uniqueness Validation on Cards Management by @luis-molina in https://github.com/woozard/robograding/pull/999
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.9.0...v3.9.1
+
 ## v3.9.0 - 2023-04-07
 
 ### What's Changed

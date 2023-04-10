@@ -540,7 +540,7 @@ class Order extends Model implements Exportable
     public function exportQuery(): Builder
     {
         return self::query()
-            ->with(['user', 'orderStatus'])
+            ->with(['user:id,first_name,last_name', 'orderStatus:id,name'])
             ->withSum('orderItems as number_of_cards', 'quantity')
             ->withSum('orderItems as total_declared_value', 'declared_value_total');
     }

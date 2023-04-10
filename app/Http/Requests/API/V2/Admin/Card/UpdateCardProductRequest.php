@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
-use App\Models\CardProduct;
 use App\Services\Admin\Card\CardProductService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

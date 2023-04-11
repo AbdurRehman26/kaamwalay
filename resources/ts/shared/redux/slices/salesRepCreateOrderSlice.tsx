@@ -618,6 +618,12 @@ export const salesRepCreateOrderSlice = createSlice({
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
+        setRequiresCleaning: (state, action: PayloadAction<boolean>) => {
+            state.step02Data.requiresCleaning = action.payload;
+        },
+        setCleaningFee: (state, action: PayloadAction<number>) => {
+            state.step02Data.cleaningFee = action.payload;
+        },
         setPayNow: (state, action: PayloadAction<boolean>) => {
             state.payNow = action.payload;
         },
@@ -740,6 +746,8 @@ export const {
     setCardsSearchValue,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    setCleaningFee,
+    setRequiresCleaning,
     markCardAsUnselected,
     setCouponCode,
     updatePaymentMethodId,

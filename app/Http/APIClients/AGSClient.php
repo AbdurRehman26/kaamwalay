@@ -105,7 +105,7 @@ class AGSClient
 
     public function createCardCategory(string $categoryName): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/categories/', $categoryName);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/categories/', ["name" => $categoryName]);
 
         if ($response->successful()) {
             return $response->json();

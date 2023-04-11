@@ -60,6 +60,12 @@ const useStyles = makeStyles(
         label: {
             color: '#0000008A',
         },
+        validationStyle: {
+            color: '#0000008A',
+            fontSize: '12px',
+            fontWeight: '400',
+            marginTop: '4px',
+        },
     }),
     { name: 'CardAddDialog' },
 );
@@ -98,9 +104,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<number | undefined | null>(
-        dialogState.selectedCategory?.id ?? null,
-    );
+    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(null);
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
@@ -120,6 +124,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const [cardName, setCardName] = useState<string | null | undefined>(null);
     const [cardNumber, setCardNumber] = useState<string | null | undefined>(null);
     const [createCardView, setCreateCardView] = useState(true);
+    const [createCategoryView, setCreateCategoryView] = useState(false);
     const [createSeriesView, setCreateSeriesView] = useState(false);
     const [createSetView, setCreateSetView] = useState(false);
     const [newSetName, setNewSetName] = useState('');
@@ -127,6 +132,8 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const [newSetReleaseDate, setNewSetReleaseDate] = useState<Date | null>(null);
     const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
     const [newSeriesName, setNewSeriesName] = useState('');
+    const [newCategoryName, setNewCategoryName] = useState('');
+    const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
@@ -143,6 +150,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             setReleaseDate(null);
 
             setCreateCardView(true);
+            setCreateCategoryView(false);
             setCreateSetView(false);
             setCreateSeriesView(false);
         }
@@ -247,7 +255,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 const response = await endpoint.get('');
                 const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
                 setAvailableCategories(response.data);
-                setCardCategory(categoryId);
                 dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
 
                 await fetchSeries(categoryId);
@@ -272,11 +279,11 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [setSelectedSetFromState]);
 
     const handleCardCategoryChange = useCallback(
-        (e) => {
-            setCardCategory(e.target.value);
+        (e, newValue) => {
+            setCardCategory(newValue);
 
             const category = availableCategories.filter((cat) => {
-                return cat.id === e.target.value;
+                return cat.id === newValue.id;
             })[0];
 
             batch(() => {
@@ -291,8 +298,8 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             setSelectedSurface(null);
             setReleaseDate(null);
 
-            fetchSeries(e.target.value);
-            fetchDropdownsData(e.target.value);
+            fetchSeries(newValue.id);
+            fetchDropdownsData(newValue.id);
         },
         [fetchSeries, fetchDropdownsData, dispatch, availableCategories],
     );
@@ -333,13 +340,22 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         setReleaseDate(newReleaseDate);
     }, []);
 
+    const toggleNewCategory = useCallback(() => {
+        setCreateCategoryView(true);
+        setCreateCardView(false);
+        setCreateSetView(false);
+        setCreateSeriesView(false);
+    }, []);
+
     const toggleNewSeries = useCallback(() => {
+        setCreateCategoryView(false);
         setCreateCardView(false);
         setCreateSetView(false);
         setCreateSeriesView(true);
     }, []);
 
     const toggleNewSet = useCallback(() => {
+        setCreateCategoryView(false);
         setCreateSeriesView(false);
         setCreateCardView(false);
         setCreateSetView(true);
@@ -446,11 +462,44 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     };
 
     const handleNewSeriesLogoChange = useCallback((newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo), []);
+    const handleNewCategoryLogoChange = useCallback(
+        (newCategoryLogo: File | null) => setNewCategoryLogo(newCategoryLogo),
+        [],
+    );
+
+    const handleNewCategoryNameChange = useCallback((e) => setNewCategoryName(e.target.value), []);
+    const showSaveButtonCategory = useMemo(() => {
+        return !!(newCategoryLogo && newCategoryName);
+    }, [newCategoryLogo, newCategoryName]);
 
     const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
     const showSaveButtonSeries = useMemo(() => {
         return !!(newSeriesLogo && newSeriesName);
     }, [newSeriesLogo, newSeriesName]);
+
+    const handleAddCategory = async () => {
+        const endpoint = apiService.createEndpoint('/admin/cards/categories', { version: 'v3' });
+        setIsLoading(true);
+        try {
+            const categoriesLogo = await filesRepository.uploadFile(newCategoryLogo!);
+
+            const DTO = {
+                name: newCategoryName,
+                imageUrl: categoriesLogo,
+            };
+            const responseItem = await endpoint.post('', DTO);
+            batch(() => {
+                dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
+                dispatch(manageCardDialogActions.navigateToPreviousView());
+            });
+            setCreateCardView(true);
+            setCreateCategoryView(false);
+            NotificationsService.success('Category Added Successfully');
+        } catch (e: any) {
+            NotificationsService.exception(e);
+        }
+        setIsLoading(false);
+    };
 
     const handleAddSeries = async () => {
         const endpoint = apiService.createEndpoint('/admin/cards/series');
@@ -509,6 +558,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const handleModalBack = () => {
         setCreateCardView(true);
+        setCreateCategoryView(false);
         setCreateSetView(false);
         setCreateSeriesView(false);
     };
@@ -531,6 +581,82 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         <IconButton onClick={handleModalBack} size={'small'} sx={{ color: 'black', marginBottom: 0.5 }}>
             <ArrowBackIcon />
         </IconButton>
+    );
+
+    const createCategory = (
+        <div>
+            <DialogTitle>
+                {modalBack}
+                Create a New Category
+                {closeIcon}
+            </DialogTitle>
+            <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
+                <Box padding={'12px'}>
+                    <Grid container padding={'12px'} spacing={24}>
+                        <Grid item md={4}>
+                            <FormControl>
+                                <FormHelperText
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        marginLeft: 0,
+                                    }}
+                                >
+                                    Category Logo*
+                                </FormHelperText>
+                                <ImageUploader isCategoryImage={true} onChange={handleNewCategoryLogoChange} />
+                                <span className={classes.validationStyle}>
+                                    Only upload .png file with a transparent background.
+                                </span>
+                            </FormControl>
+                        </Grid>
+                        <Grid item md={8}>
+                            <FormControl>
+                                <FormHelperText
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        marginLeft: 0,
+                                    }}
+                                >
+                                    Category Name*
+                                </FormHelperText>
+                                <TextField
+                                    variant="outlined"
+                                    value={newCategoryName}
+                                    onChange={handleNewCategoryNameChange}
+                                    placeholder={'Enter category name'}
+                                    fullWidth
+                                    sx={{ minWidth: '231px' }}
+                                />
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        minWidth={'150px'}
+                        marginRight={'13px'}
+                    >
+                        <Button variant="text" sx={{ color: '#000' }} onClick={handleClose}>
+                            Cancel
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            color={'primary'}
+                            onClick={handleAddCategory}
+                            disabled={!showSaveButtonCategory || isLoading}
+                        >
+                            {isLoading ? <CircularProgress color={'primary'} /> : 'Save'}
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+        </div>
     );
 
     const createSeries = (
@@ -708,25 +834,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
                     {!isUpdate ? (
                         <>
-                            <FormControl sx={{ m: 1, minWidth: '97%' }}>
-                                <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                                    Category
-                                </FormHelperText>
-                                <Select
-                                    value={cardCategory}
-                                    onChange={handleCardCategoryChange}
-                                    defaultValue={cardCategory}
-                                >
-                                    {availableCategories?.map((item) => {
-                                        return (
-                                            <MenuItem key={item.id} value={item.id}>
-                                                {item.name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-
                             <Box
                                 display={'flex'}
                                 flexDirection={'row'}
@@ -736,46 +843,82 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                 marginTop={'12px'}
                             >
                                 <FormControl sx={{ minWidth: '70%' }}>
-                                    <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                                        Series
+                                    <FormHelperText
+                                        sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
+                                    >
+                                        Category
                                     </FormHelperText>
                                     <Autocomplete
-                                        value={selectedSeries}
-                                        onChange={handleSeriesChange}
-                                        options={availableSeries}
+                                        value={cardCategory}
+                                        onChange={handleCardCategoryChange}
+                                        options={availableCategories}
+                                        getOptionLabel={(option) => option.name || ''}
                                         fullWidth
                                         renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                placeholder={'Enter Series'}
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    startAdornment: selectedSeries ? (
-                                                        <img
-                                                            src={selectedSeries?.imagePath}
-                                                            alt=""
-                                                            style={{
-                                                                height: '19px',
-                                                                width: '49px',
-                                                                marginLeft: '10px',
-                                                            }}
-                                                        />
-                                                    ) : null,
-                                                }}
-                                            />
+                                            <TextField {...params} placeholder={'Select Category'} />
                                         )}
                                     />
                                 </FormControl>
                                 <Button
-                                    disabled={isUpdate}
                                     variant={'outlined'}
                                     color={'primary'}
                                     sx={{ minHeight: '56px', width: '145px' }}
-                                    onClick={toggleNewSeries}
+                                    onClick={toggleNewCategory}
                                 >
-                                    Add series
+                                    Add Category
                                 </Button>
                             </Box>
+                            {cardCategory && !isUpdate ? (
+                                <Box
+                                    display={'flex'}
+                                    flexDirection={'row'}
+                                    justifyContent={'space-between'}
+                                    alignItems={'flex-end'}
+                                    padding={'6px'}
+                                    marginTop={'12px'}
+                                >
+                                    <FormControl sx={{ minWidth: '70%' }}>
+                                        <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
+                                            Series
+                                        </FormHelperText>
+                                        <Autocomplete
+                                            value={selectedSeries}
+                                            onChange={handleSeriesChange}
+                                            options={availableSeries}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    placeholder={'Enter Series'}
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        startAdornment: selectedSeries ? (
+                                                            <img
+                                                                src={selectedSeries?.imagePath}
+                                                                alt=""
+                                                                style={{
+                                                                    height: '19px',
+                                                                    width: '49px',
+                                                                    marginLeft: '10px',
+                                                                }}
+                                                            />
+                                                        ) : null,
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </FormControl>
+                                    <Button
+                                        disabled={isUpdate}
+                                        variant={'outlined'}
+                                        color={'primary'}
+                                        sx={{ minHeight: '56px', width: '145px' }}
+                                        onClick={toggleNewSeries}
+                                    >
+                                        Add series
+                                    </Button>
+                                </Box>
+                            ) : null}
                         </>
                     ) : null}
                     {selectedSeries && !isUpdate ? (
@@ -1103,6 +1246,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         <>
             <Dialog onClose={handleClose} {...rest} fullWidth scroll={'body'}>
                 {createCardView ? createCard : null}
+                {createCategoryView ? createCategory : null}
                 {createSeriesView ? createSeries : null}
                 {createSetView ? createSet : null}
             </Dialog>

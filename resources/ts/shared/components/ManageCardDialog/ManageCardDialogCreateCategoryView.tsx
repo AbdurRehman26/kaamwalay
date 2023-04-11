@@ -16,7 +16,6 @@ import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { APIService } from '@shared/services/APIService';
@@ -38,6 +37,12 @@ const useStyles = makeStyles(
             marginTop: 19,
             height: 38,
         },
+        validationStyle: {
+            color: '#0000008A',
+            fontSize: '12px',
+            fontWeight: '400',
+            marginTop: '4px',
+        },
     }),
     { name: 'ManageCardDialogView' },
 );
@@ -48,16 +53,14 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
         const classes = useStyles();
-        const dialogState = useManageCardDialogState();
-
         const filesRepository = useRepository(FilesRepository);
 
         const [isLoading, setIsLoading] = useState(false);
 
         const Notifications = useNotifications();
-        // New series section
+        // New category section
         const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
-        const [newSeriesName, setNewSeriesName] = useState('');
+        const [newCategoryName, setNewCategoryName] = useState('');
 
         const apiService = useInjectable(APIService);
 
@@ -77,27 +80,27 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
             [],
         );
 
-        const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
+        const handleNewCategoryNameChange = useCallback((e) => setNewCategoryName(e.target.value), []);
         const showSaveButton = useMemo(() => {
-            return !!(newCategoryLogo && newSeriesName);
-        }, [newCategoryLogo, newSeriesName]);
+            return !!(newCategoryLogo && newCategoryName);
+        }, [newCategoryLogo, newCategoryName]);
 
         const handleAddCategory = async () => {
-            const endpoint = apiService.createEndpoint('/admin/cards/categories');
+            const endpoint = apiService.createEndpoint('/admin/cards/categories', { version: 'v3' });
             setIsLoading(true);
             try {
-                const seriesLogoPublicImage = await filesRepository.uploadFile(newCategoryLogo!);
+                const categoriesLogo = await filesRepository.uploadFile(newCategoryLogo!);
 
                 const DTO = {
-                    cardCategoryId: dialogState.selectedCategory?.id,
-                    name: newSeriesName,
-                    imagePath: seriesLogoPublicImage,
+                    name: newCategoryName,
+                    imageUrl: categoriesLogo,
                 };
                 const responseItem = await endpoint.post('', DTO);
                 batch(() => {
                     dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
                     dispatch(manageCardDialogActions.navigateToPreviousView());
                 });
+                Notifications.success('Category Added Successfully');
             } catch (e: any) {
                 Notifications.exception(e);
             }
@@ -123,7 +126,10 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
                                     >
                                         Category Logo*
                                     </FormHelperText>
-                                    <ImageUploader onChange={handleNewCategoryLogoChange} />
+                                    <ImageUploader isCategoryImage={true} onChange={handleNewCategoryLogoChange} />
+                                    <span className={classes.validationStyle}>
+                                        Only upload .png file with a transparent background.
+                                    </span>
                                 </FormControl>
                             </Grid>
                             <Grid item md={8}>
@@ -140,8 +146,8 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
                                     </FormHelperText>
                                     <TextField
                                         variant="outlined"
-                                        value={newSeriesName}
-                                        onChange={handleNewSeriesNameChange}
+                                        value={newCategoryName}
+                                        onChange={handleNewCategoryNameChange}
                                         placeholder={'Enter Category Name'}
                                         fullWidth
                                         sx={{ minWidth: '231px' }}

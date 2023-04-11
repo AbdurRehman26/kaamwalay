@@ -217,7 +217,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     const response = await endpoint.get('');
                     const category = dialogState.selectedCategory ?? response.data[0];
                     setAvailableCategories(response.data);
-                    setCardCategory(category);
 
                     dispatch(
                         manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]),
@@ -388,7 +387,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                         padding={'6px'}
                         marginTop={'12px'}
                     >
-                        <FormControl sx={{ minWidth: '70%' }}>
+                        <FormControl sx={{ minWidth: '67%' }}>
                             <FormHelperText
                                 sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
                             >
@@ -406,44 +405,47 @@ export const ManageCardDialogCreateCardView = forwardRef(
                         <Button
                             variant={'outlined'}
                             color={'primary'}
-                            sx={{ minHeight: '56px', width: '145px' }}
+                            sx={{ minHeight: '56px', width: '165px' }}
+                            startIcon={<AddIcon />}
                             onClick={toggleNewCategory}
                         >
                             Add Category
                         </Button>
                     </Box>
-                    <Box
-                        display={'flex'}
-                        flexDirection={'row'}
-                        justifyContent={'space-between'}
-                        alignItems={'flex-end'}
-                        padding={'6px'}
-                        marginTop={'12px'}
-                    >
-                        <FormControl sx={{ minWidth: '70%' }}>
-                            <FormHelperText
-                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
-                            >
-                                Series
-                            </FormHelperText>
-                            <Autocomplete
-                                value={selectedSeries}
-                                onChange={handleSeriesChange}
-                                options={availableSeries}
-                                fullWidth
-                                renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
-                            />
-                        </FormControl>
-                        <Button
-                            variant={'outlined'}
-                            color={'primary'}
-                            sx={{ minHeight: '56px', width: '145px' }}
-                            startIcon={<AddIcon />}
-                            onClick={toggleNewSeries}
+                    {cardCategory ? (
+                        <Box
+                            display={'flex'}
+                            flexDirection={'row'}
+                            justifyContent={'space-between'}
+                            alignItems={'flex-end'}
+                            padding={'6px'}
+                            marginTop={'12px'}
                         >
-                            New series
-                        </Button>
-                    </Box>
+                            <FormControl sx={{ minWidth: '70%' }}>
+                                <FormHelperText
+                                    sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
+                                >
+                                    Series
+                                </FormHelperText>
+                                <Autocomplete
+                                    value={selectedSeries}
+                                    onChange={handleSeriesChange}
+                                    options={availableSeries}
+                                    fullWidth
+                                    renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
+                                />
+                            </FormControl>
+                            <Button
+                                variant={'outlined'}
+                                color={'primary'}
+                                sx={{ minHeight: '56px', width: '145px' }}
+                                startIcon={<AddIcon />}
+                                onClick={toggleNewSeries}
+                            >
+                                New series
+                            </Button>
+                        </Box>
+                    ) : null}
 
                     {selectedSeries ? (
                         <Box

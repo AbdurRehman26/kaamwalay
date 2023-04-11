@@ -15,6 +15,7 @@ interface ImageUploaderProps {
     maxHeight?: string;
     maxWidth?: string;
     isSmall?: boolean;
+    isCategoryImage?: boolean;
     imageUrl?: any;
     onDelete?: () => void;
 }
@@ -43,7 +44,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
         [props],
     );
     const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
-        accept: 'image/*',
+        accept: props.isCategoryImage ? 'image/png' : 'image/*',
         onDrop,
     } as DropzoneOptions);
 

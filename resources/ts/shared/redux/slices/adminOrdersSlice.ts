@@ -45,7 +45,6 @@ export const changeOrderItemStatus = createAsyncThunk<
     try {
         const item = await orderItemsRepository.changeOrderItemStatus(input);
 
-        console.log(item);
         return {
             orderId: input.orderId,
             orderItemId: input.orderItemId,

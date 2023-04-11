@@ -27,12 +27,12 @@ test('admins can create card category', function () {
 
     $this->postJson(route('v3.admin.cards.categories.store'), [
         'name' => 'Lorem Ipsum',
-        'image_path' => 'https://mann.org/quia-quos-et-nihil.html',
+        'image_url' => 'https://mann.org/quia-quos-et-nihil.html',
     ])->assertSuccessful()
         ->assertJsonStructure([
             'data' => [
                 'name',
-                'image_path',
+                'image_url',
             ],
         ]);
 });
@@ -47,6 +47,6 @@ test('customer cannot create card category', function () {
 
     $this->postJson(route('v3.admin.cards.categories.store'), [
         'name' => 'Lorem Ipsum',
-        'image_path' => 'https://mann.org/quia-quos-et-nihil.html',
+        'image_url' => 'https://mann.org/quia-quos-et-nihil.html',
     ])->assertForbidden();
 });

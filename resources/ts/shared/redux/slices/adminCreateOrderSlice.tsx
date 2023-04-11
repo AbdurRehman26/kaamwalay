@@ -615,6 +615,12 @@ export const adminCreateOrderSlice = createSlice({
             // TODO: This will be replaced with search integration
             state.step02Data.searchResults = [];
         },
+        setRequiresCleaning: (state, action: PayloadAction<boolean>) => {
+            state.step02Data.requiresCleaning = action.payload;
+        },
+        setCleaningFee: (state, action: PayloadAction<number>) => {
+            state.step02Data.cleaningFee = action.payload;
+        },
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
@@ -740,6 +746,8 @@ export const {
     setCardsSearchValue,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    setRequiresCleaning,
+    setCleaningFee,
     markCardAsUnselected,
     setCouponCode,
     updatePaymentMethodId,

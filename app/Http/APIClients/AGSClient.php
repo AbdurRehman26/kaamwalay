@@ -288,7 +288,7 @@ class AGSClient
 
     public function updateUserDataByUsername(string $username, array $data): array
     {
-        $route = '/users/' . $username .'/';
+        $route = self::API_VERSION_2 . '/robograding/users/' . $username .'/';
         $response = Http::withToken($this->getAuthToken())
             ->patch(url: $this->getBaseUrl() . $route, data: $data);
 

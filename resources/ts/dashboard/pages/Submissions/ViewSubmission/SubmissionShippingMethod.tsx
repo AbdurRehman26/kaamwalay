@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { useCallback, useMemo } from 'react';
 import { SelectAddressDialog, SelectAddressFormValues } from '@shared/components/SelectAddressDialog';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { OrderEntity } from '@shared/entities/OrderEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useDialogHelper } from '@shared/hooks/useDialogHelper';
 import { useLoadingModal } from '@shared/hooks/useLoadingModal';
@@ -18,12 +19,13 @@ import { setDialog } from '@dashboard/redux/slices/newSubmissionSlice';
 import SubmissionShippingDetailDialog from './SubmissionShippingDetailDialog';
 
 interface Props {
+    order: OrderEntity;
     orderId?: number;
     shippingMethod?: ShippingMethodEntity;
     paid?: boolean;
 }
 
-export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Props) {
+export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order }: Props) {
     const orderRepository = useRepository(OrdersRepository);
     const selectAddress = useDialogHelper();
     const loadingModal = useLoadingModal();
@@ -44,14 +46,25 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                 });
 
                 try {
-                    const { shippingMethod, shippingAddress } = await orderRepository.attachShippingAddress({
-                        address,
-                        orderId,
-                        saveForLater: !!newAddress,
-                        shippingMethod: ShippingMethodType.InsuredShippingID,
-                    });
+                    const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee, invoice } =
+                        await orderRepository.attachShippingAddress({
+                            address,
+                            orderId,
+                            saveForLater: !!newAddress,
+                            shippingMethod: ShippingMethodType.InsuredShippingID,
+                        });
 
-                    dispatch(updateOrderShippingMethod({ orderId, shippingMethod, shippingAddress }));
+                    dispatch(
+                        updateOrderShippingMethod({
+                            orderId,
+                            shippingMethod,
+                            shippingAddress,
+                            shippingFee,
+                            serviceFee,
+                            grandTotal,
+                            invoice,
+                        }),
+                    );
 
                     loadingModal.setData({
                         state: 'loaded',
@@ -79,12 +92,23 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Prop
                 message: 'Switching to Insured Shipping...',
             });
             try {
-                const { shippingMethod, shippingAddress } = await orderRepository.attachShippingAddress({
-                    orderId,
-                    shippingMethod: ShippingMethodType.VaultStorageID,
-                });
+                const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee, invoice } =
+                    await orderRepository.attachShippingAddress({
+                        orderId,
+                        shippingMethod: ShippingMethodType.VaultStorageID,
+                    });
 
-                dispatch(updateOrderShippingMethod({ orderId, shippingMethod, shippingAddress }));
+                dispatch(
+                    updateOrderShippingMethod({
+                        orderId,
+                        shippingMethod,
+                        shippingAddress,
+                        shippingFee,
+                        serviceFee,
+                        grandTotal,
+                        invoice,
+                    }),
+                );
 
                 loadingModal.setData({
                     state: 'loaded',

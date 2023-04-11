@@ -34,6 +34,13 @@ class ReferrerService
         return $referrer;
     }
 
+    public function createReferrerIfNull(User $user): void
+    {
+        if (! $user->referrer()->exists()) {
+            $this->create($user);
+        }
+    }
+
     // @phpstan-ignore-next-line
     public function getSignUps(int $referrerId): LengthAwarePaginator
     {

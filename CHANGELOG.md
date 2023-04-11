@@ -1,5 +1,48 @@
 # Changelog
 
+## v3.9.1 - 2023-04-10
+
+### What's Changed
+
+- Hotfix: Removed Card Uniqueness Validation on Cards Management by @luis-molina in https://github.com/woozard/robograding/pull/999
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.9.0...v3.9.1
+
+## v3.9.0 - 2023-04-07
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/974
+- Fix: Icon Change by @aliwooter in https://github.com/woozard/robograding/pull/972
+- Feature: Marketing Reports - Add Card Categories Breakdown by @luis-molina in https://github.com/woozard/robograding/pull/978
+- Fix: Referee Page Crashing On Admin Side by @AbdurRehman26 in https://github.com/woozard/robograding/pull/983
+- Hotfix: Fix Failing Job by @aliwooter in https://github.com/woozard/robograding/pull/985
+- Fix: Dropbox Folders Creation Improvement by @thenabeel in https://github.com/woozard/robograding/pull/986
+- Fix: Admin | Loading Icon On Complete Review Button by @numair97 in https://github.com/woozard/robograding/pull/987
+- Feature: Admin | Show Customer Shipment Tracking Detail by @numair97 in https://github.com/woozard/robograding/pull/984
+- Fix: Issues In Tracking Url Command by @numair97 in https://github.com/woozard/robograding/pull/989
+- Fix : Login after Reset Password Issue by @AbdurRehman26 in https://github.com/woozard/robograding/pull/988
+- Feature: Partner Program Landing Page by @numair97 in https://github.com/woozard/robograding/pull/981
+- Feature: Redirect User To Their Dashboard by @numair97 in https://github.com/woozard/robograding/pull/944
+- Fix: Issue In Redirect From Partner's Page by @numair97 in https://github.com/woozard/robograding/pull/994
+- Fix: Redirection after password change by @AbdurRehman26 in https://github.com/woozard/robograding/pull/993
+- Feature: Wallet Credit Removal by @AbdurRehman26 in https://github.com/woozard/robograding/pull/979
+- Fix: Css Issues In Partner Program Landing Page by @numair97 in https://github.com/woozard/robograding/pull/995
+- Fix: Address on Invoice by @aliwooter in https://github.com/woozard/robograding/pull/973
+- Release v3.9.0 by @thenabeel in https://github.com/woozard/robograding/pull/996
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.8.1...v3.9.0
+
+## v3.8.1 - 2023-03-23
+
+### What's Changed
+
+- Hotfix: Multiple Issues after Release 3.8.0 by @luis-molina in https://github.com/woozard/robograding/pull/976
+- Hotfix: Css Issue In Referral Landing Page by @numair97 in https://github.com/woozard/robograding/pull/975
+- Hotfix: Edit Customer Details | Updated url for PATCH API by @luis-molina in https://github.com/woozard/robograding/pull/977
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.8.0...v3.8.1
+
 ## v3.8.0 - 2023-03-22
 
 ### What's Changed

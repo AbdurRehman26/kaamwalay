@@ -16,7 +16,7 @@ const SignUpInternationalPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
     },
     '.MuiInput-input': {
         // borderLeft: '1px solid lightgray',
-        padding: '12px !important',
+        padding: '8px 12px 12px 12px!important',
     },
     '.MuiInput-root:before': {
         border: '0 !important',
@@ -28,6 +28,16 @@ const SignUpInternationalPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
         paddingTop: 8,
         paddingLeft: 24,
     },
+    '.MuiButtonBase-root': {
+        height: '24px',
+        minWidth: '24px',
+    },
+    // '.MuiButtonBase-root:after': {
+    //     content: '"Test"',
+    //     height: '10px',
+    //     width: '10px',
+    //     border: '1px solid blue',
+    // },
 }));
 
 export default SignUpInternationalPhoneNumber;

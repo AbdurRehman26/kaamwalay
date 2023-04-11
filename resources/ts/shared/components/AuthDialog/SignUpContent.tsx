@@ -41,9 +41,6 @@ const useStyles = makeStyles(
         phoneField: {
             marginBottom: '24px',
         },
-        countriesDropdown: {
-            maxHeight: '240px',
-        },
     }),
     { name: 'SignUpContent' },
 );
@@ -119,18 +116,19 @@ export function SignUpContent({
                             <SignUpInternationalPhoneNumber
                                 countryCodeEditable={false}
                                 preferredCountries={['us']}
-                                defaultCountry="us"
-                                disableAreaCodes
+                                country="us"
                                 value={values.phone}
-                                name={'phone'}
                                 onChange={(e) => {
                                     handleChange(e);
                                     setPhone(e.toString());
                                 }}
-                                className={classes.phoneField}
-                                dropdownClass={classes.countriesDropdown}
-                                label={'Phone Number'}
+                                containerClass={classes.phoneField}
+                                specialLabel={'Phone Number'}
                                 disabled={isDisabled}
+                                inputProps={{
+                                    name: 'phone',
+                                    label: 'Phone Number',
+                                }}
                             />
                         </FormRoot>
 

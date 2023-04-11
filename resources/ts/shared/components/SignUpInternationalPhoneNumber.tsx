@@ -1,43 +1,42 @@
 import { styled } from '@mui/material/styles';
-import MaterialUiPhoneNumber from 'material-ui-phone-number';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/material.css';
 
-const SignUpInternationalPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
-    '&': {
-        padding: '0 !important',
-        width: '100%',
-        border: '1px solid lightgray',
+const SignUpInternationalPhoneNumber = styled(PhoneInput)(() => ({
+    '.country-list': {
+        maxHeight: '240px !important',
+    },
+    '.form-control': {
+        width: '100% !important',
+        border: '1px solid lightgray !important',
         fontWeight: 400,
-        fontSize: '1rem',
-        borderRadius: '28px',
+        borderRadius: '28px !important',
+        padding: '21px 14px 10px 68px !important',
     },
-    '.MuiInputAdornment-root': {
-        padding: '10px 0px 10px 20px',
-        marginRight: 0,
+    '.form-control:focus': {
+        borderColor: '#20BFB8 !important',
+        boxShadow: 'none !important',
+        backgroundColor: 'rgba(32,191,184,0.05)',
     },
-    '.MuiInput-input': {
-        // borderLeft: '1px solid lightgray',
-        padding: '8px 12px 12px 12px!important',
+    '.special-label': {
+        display: 'block !important',
+        top: '5px !important',
+        left: '18px !important',
+        backgroundColor: 'transparent !important',
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '12px',
+        lineHeight: '16px',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.54)',
     },
-    '.MuiInput-root:before': {
-        border: '0 !important',
+    '.selected-flag': {
+        paddingLeft: '22px !important',
     },
-    '.MuiInput-root:after': {
-        border: '0 !important',
+    '.selected-flag .flag': {
+        top: '59% !important',
     },
-    '.MuiInputLabel-root': {
-        paddingTop: 8,
-        paddingLeft: 24,
-    },
-    '.MuiButtonBase-root': {
-        height: '24px',
-        minWidth: '24px',
-    },
-    // '.MuiButtonBase-root:after': {
-    //     content: '"Test"',
-    //     height: '10px',
-    //     width: '10px',
-    //     border: '1px solid blue',
-    // },
 }));
 
 export default SignUpInternationalPhoneNumber;

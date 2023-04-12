@@ -12,7 +12,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
-import NumberFormat from 'react-number-format';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { useAuth } from '@shared/hooks/useAuth';
 import {
     getCountriesList,
@@ -147,6 +147,10 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
+    phoneField: {
+        margin: 8,
+        marginLeft: 0,
+    },
 }));
 
 export function InsuredShippingMethod() {
@@ -256,12 +260,6 @@ export function InsuredShippingMethod() {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'stateName',
-                    newValue: '',
-                }),
-            );
-            dispatch(
-                updateShippingAddressField({
-                    fieldName: 'phoneNumber',
                     newValue: '',
                 }),
             );
@@ -678,28 +676,17 @@ export function InsuredShippingMethod() {
                             <div className={classes.inputsRow04}>
                                 <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                                     <Typography className={classes.methodDescription}>Phone Number</Typography>
-                                    <NumberFormat
-                                        error={phoneNumber === ''}
-                                        helperText={phoneNumber === '' ? 'Required Field' : ' '}
-                                        customInput={TextField}
-                                        format={
-                                            country.phoneCode
-                                                ? '+' + country.phoneCode + ' (###) ###-####'
-                                                : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
-                                        }
-                                        mask=""
-                                        style={{ margin: 8, marginLeft: 0 }}
-                                        placeholder="Enter Phone Number"
+
+                                    <InternationalPhoneNumberField
+                                        countryCodeEditable={false}
+                                        preferredCountries={['us']}
+                                        country="us"
                                         value={phoneNumber}
-                                        onChange={(e: any) => updateField('phoneNumber', e.target.value)}
+                                        onChange={(e: any) => updateField('phoneNumber', e.toString())}
                                         onBlur={handleShippingFee}
-                                        fullWidth
                                         disabled={disableAllInputs}
-                                        variant={'outlined'}
-                                        margin="normal"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
+                                        placeholder="Enter Phone Number"
+                                        containerClass={classes.phoneField}
                                     />
                                 </div>
                             </div>

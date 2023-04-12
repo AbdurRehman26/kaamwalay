@@ -530,14 +530,14 @@ it('filters un-abandoned orders', function () {
 
 test('admin can mark order as abandoned', function () {
     Event::fake();
-    postJson(route('v3.admin.orders.mark-abandoned'), ['items' => [$this->orders->last()]])->assertSuccessful();
+    postJson(route('v3.admin.orders.mark-abandoned'), ['items' => [$this->orders->last()->id]])->assertSuccessful();
 
     expect($this->orders->last()->refresh())->isAbandoned()->count()->toBe(1);
 });
 
 test('admin can mark order as un abandoned', function () {
     Event::fake();
-    postJson(route('v3.admin.orders.mark-un-abandoned'), ['items' => [$this->orders->first()]])->assertSuccessful();
+    postJson(route('v3.admin.orders.mark-un-abandoned'), ['items' => [$this->orders->first()->id]])->assertSuccessful();
 
     expect($this->orders->first()->refresh())->isAbandoned()->count()->toBe(0);
 });

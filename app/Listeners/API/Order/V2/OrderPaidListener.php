@@ -30,7 +30,7 @@ class OrderPaidListener implements ShouldQueue
         $this->processEmails($event);
         $this->processSalesmanCommission($event);
         $this->processReferrerCommission($event);
-        $this->processOrderAbandoned($event);
+        $this->processForAbandonedOrder($event);
     }
 
     protected function processEmails(OrderPaid $event): void
@@ -67,7 +67,7 @@ class OrderPaidListener implements ShouldQueue
         ReferrerCommissionService::processOrderReferralCommissions($event->order);
     }
 
-    protected function processOrderAbandoned(OrderPaid $event): void
+    protected function processForAbandonedOrder(OrderPaid $event): void
     {
         $event->order->detachTag('abandoned');
     }

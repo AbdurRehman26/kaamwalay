@@ -522,7 +522,7 @@ it('filters un-abandoned orders', function () {
 
 
     $this->assertEquals(
-        Order::orderBy('order_number', 'DESC')->pluck('id')->toArray(),
+        Order::withAllTags(['abandoned'])->orderBy('order_number', 'DESC')->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
 

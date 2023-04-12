@@ -15,8 +15,7 @@ class CardCategoryService
     public function create(array $data): CardCategory
     {
         $response = $this->createCategoryOnAgs($data['name']);
-
-        if($response && $response['app_status'] === 1) {
+        if(!empty($response)) {
             return CardCategory::create([
                 'name' => $data['name'],
                 'image_url' => $data['image_url'],

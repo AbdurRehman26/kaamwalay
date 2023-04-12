@@ -520,9 +520,8 @@ it('filters un-abandoned orders', function () {
         ->assertOk()
         ->assertJsonCount(4, ['data']);
 
-
     $this->assertEquals(
-        Order::withAllTags(['abandoned'])->orderBy('order_number', 'DESC')->pluck('id')->toArray(),
+        Order::doesntHave('tags')->orderBy('order_number', 'DESC')->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
 

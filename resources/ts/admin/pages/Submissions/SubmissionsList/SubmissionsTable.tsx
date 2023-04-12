@@ -27,10 +27,10 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
-import { markOrderAsAbandoned } from '@shared/redux/slices/adminOrdersSlice';
 import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
 import { setSubmissionIds } from '@shared/redux/slices/submissionSelection';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface SubmissionsTableProps {
@@ -67,6 +67,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const customer = useAppSelector((state) => state.editCustomerSlice.customer);
     const [allSelected, setAllSelected] = useState(false);
     const selectedIds = useAppSelector((state) => state.submissionSelection.selectedIds);
+    const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
     const handleSelectAll = () => {
         if (!allSelected) {
             const newSelected = orders$.data
@@ -418,11 +419,6 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         setSortFilter((orderDirection === 'desc' ? '-' : '') + orderBy);
     }, [orderDirection, orderBy]);
 
-    const handleMarkAbandoned = useCallback(async () => {
-        await dispatch(markOrderAsAbandoned(selectedIds));
-        window.location.reload();
-    }, [dispatch, selectedIds]);
-
     if (orders$.isLoading) {
         return (
             <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -445,7 +441,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                             <Button
                                 style={{ marginRight: '12px', borderRadius: '25px' }}
                                 variant={'contained'}
-                                onClick={handleMarkAbandoned}
+                                onClick={() => setShowMarkAbandonedDialog(true)}
                             >
                                 Mark Abandoned
                             </Button>
@@ -524,6 +520,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 open={editCustomerDialog}
                 onSubmit={handleEditCustomerSubmit}
                 onClose={handleEditCustomerDialogClose}
+            />
+            <MarkAbandonedStateDialog
+                isAbandoned={false}
+                orderIds={selectedIds}
+                onSubmit={() => window.location.reload()}
+                open={showMarkAbandonedDialog}
+                onClose={() => setShowMarkAbandonedDialog(false)}
             />
         </Grid>
     );

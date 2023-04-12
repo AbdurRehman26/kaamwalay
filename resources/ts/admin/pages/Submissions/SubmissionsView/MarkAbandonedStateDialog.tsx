@@ -14,7 +14,7 @@ import { markOrderAsAbandoned, markOrderAsUnAbandoned } from '@shared/redux/slic
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface MarkAbandonedStateDialogProps extends Omit<DialogProps, 'onSubmit'> {
-    orderIds: [number];
+    orderIds: number[];
     isAbandoned: boolean;
     onSubmit(): Promise<void> | void;
 }
@@ -63,11 +63,12 @@ function MarkAbandonedStateDialog(props: MarkAbandonedStateDialogProps) {
         handleClose();
     }, [props.isAbandoned, onSubmit, handleClose, dispatch, orderIds]);
 
-    const titleText = props.isAbandoned ? 'UnAbandoned' : 'Abandoned';
+    const descriptionText = orderIds.length > 1 ? 'these orders' : 'this order';
+    const titleText = props.isAbandoned ? `unmark ${descriptionText}` : `mark ${descriptionText}`;
 
     return (
         <Dialog onClose={handleClose} {...rest}>
-            <DialogTitle>Are you sure you want to mark order(s) as {titleText}?</DialogTitle>
+            <DialogTitle>Are you sure you want to {titleText} as Abandoned?</DialogTitle>
             <Formik initialValues={{}} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                     <Form>

@@ -37,7 +37,6 @@ interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
     all?: boolean;
     search?: string;
-    isAbandoned?: boolean;
 }
 
 const ReferralStatus = [

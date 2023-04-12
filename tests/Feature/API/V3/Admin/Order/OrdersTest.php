@@ -133,6 +133,8 @@ beforeEach(function () {
     ), associative: true);
 
     $this->actingAs($this->user);
+
+    $this->orders->first()->attachTags(['abandoned']);
 });
 
 uses()->group('admin', 'admin_orders');
@@ -500,4 +502,26 @@ test('an admin can filter by item to revise', function () {
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
+});
+
+it('filters abandoned orders', function () {
+    $this->getJson('/api/v2/admin/orders?filter[is_abandoned]=' . 1)
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'id' => $this->orders->first()->id,
+        ]);
+});
+
+it('filters un-abandoned orders', function () {
+    $response = $this->getJson('/api/v2/admin/orders?filter[is_abandoned]=' . 0)
+        ->assertOk()
+        ->assertJsonCount(4, ['data']);
+
+
+    $this->assertEquals(
+        Order::orderBy('order_number', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+
 });

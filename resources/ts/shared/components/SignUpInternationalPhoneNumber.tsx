@@ -19,7 +19,6 @@ const SignUpInternationalPhoneNumber = styled(PhoneInput)(() => ({
         backgroundColor: 'rgba(32,191,184,0.05)',
     },
     '.special-label': {
-        display: 'block !important',
         top: '5px !important',
         left: '18px !important',
         backgroundColor: 'transparent !important',

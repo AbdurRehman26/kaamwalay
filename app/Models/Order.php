@@ -716,13 +716,16 @@ class Order extends Model implements Exportable
         );
     }
 
+    /**
+     * @return MorphToMany<Order>
+     */
     public function isAbandoned(): MorphToMany
     {
         return $this->tagsTranslated('abandoned');
     }
 
     /**
-     * @param  Builder  $query  <Order>
+     * @param  Builder  <Order> $query
      * @return Builder <Order>
     */
     public function scopeWhereAbandonedStateIs(Builder $query, int $isAbandoned): Builder

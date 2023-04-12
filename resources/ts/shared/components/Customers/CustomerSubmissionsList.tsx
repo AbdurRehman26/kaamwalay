@@ -25,6 +25,7 @@ interface CustomerSubmissionsListProps {
     orderBy?: string;
     handleRequestSort?: any | null;
     onEditCustomer?: any;
+    showSubmissionActionButtons?: boolean;
 }
 
 export function CustomerSubmissionsList({
@@ -38,6 +39,7 @@ export function CustomerSubmissionsList({
     orderDirection = 'desc',
     handleRequestSort,
     onEditCustomer,
+    showSubmissionActionButtons = true,
 }: CustomerSubmissionsListProps) {
     return (
         <Table>
@@ -72,6 +74,7 @@ export function CustomerSubmissionsList({
                 {orders?.length > 0 ? (
                     orders.map((order) => (
                         <SubmissionsTableRow
+                            showSubmissionActionButtons={showSubmissionActionButtons}
                             order={order}
                             key={order.id}
                             isCustomerDetailPage={!isCustomerDetailPage}

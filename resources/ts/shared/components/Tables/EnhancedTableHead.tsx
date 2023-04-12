@@ -45,6 +45,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         variant={'head'}
                         sx={isReferral || hasStyling ? styles.ReferralHead : null}
                     >
+                        {headCell.component}
                         {headCell.sortable ? (
                             <TableSortLabel
                                 active={orderBy === headCell.id}

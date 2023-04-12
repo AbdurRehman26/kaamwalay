@@ -174,7 +174,7 @@ class Order extends Model implements Exportable
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
-            AllowedFilter::scope('is_abandoned', 'whereOrderIsAbandoned'),
+            AllowedFilter::scope('is_abandoned', 'whereAbandonedStateIs'),
         ];
     }
 
@@ -725,7 +725,7 @@ class Order extends Model implements Exportable
      * @param  Builder  $query  <Order>
      * @return Builder <Order>
     */
-    public function scopeWhereOrderIsAbandoned(Builder $query, int $isAbandoned): Builder
+    public function scopeWhereAbandonedStateIs(Builder $query, int $isAbandoned): Builder
     {
         if($isAbandoned){
           return $query->withAllTags(['abandoned']);

@@ -67,7 +67,12 @@ export function SubmissionsList() {
     return (
         <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
-                <Header onSearch={setSearch} tabs={tabs} headerActions={headerActions} />
+                <Header
+                    title={'Abandoned Submissions'}
+                    onSearch={setSearch}
+                    tabs={tabs}
+                    headerActions={headerActions}
+                />
                 <SelectAndCreateCustomerDialog
                     btnText={'Create a new Customer'}
                     onClose={() => setCreateSubmission(false)}

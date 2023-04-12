@@ -1,5 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import CampaignOutlined from '@mui/icons-material/CampaignOutlined';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -194,7 +195,11 @@ function LayoutSidebar() {
                     </List>
                 </Collapse>
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />
-                <LayoutSidebarItem icon={ReceiptIcon} title={'Abandoned'} href={'/abandoned/submissions/all/list'} />
+                <LayoutSidebarItem
+                    icon={ArchiveOutlinedIcon}
+                    title={'Abandoned'}
+                    href={'/abandoned/submissions/all/list'}
+                />
             </List>
         </Drawer>
     );

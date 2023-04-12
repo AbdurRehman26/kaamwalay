@@ -72,7 +72,7 @@ class OrderController extends Controller
 
     public function markAsAbandoned(MarkOrderAsAbandonedRequest $request): JsonResponse
     {
-        $order->attachTag('abandoned');
+        $this->orderService->attachTags($request->items);
 
         return new JsonResponse([
             'success' => true,
@@ -80,9 +80,9 @@ class OrderController extends Controller
         ]);
     }
 
-    public function markAsUnAbandoned(MarkOrderAsUnAbandonedRequest $request): JsonResponse
+    public function markAsUnAbandoned(Request $request): JsonResponse
     {
-        $order->detachTag('abandoned');
+        $this->orderService->detachTags($request->items);
 
         return new JsonResponse([
             'success' => true,

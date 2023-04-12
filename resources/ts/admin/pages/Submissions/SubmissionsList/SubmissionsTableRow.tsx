@@ -1,4 +1,5 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
@@ -17,14 +18,17 @@ import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import { deleteOrder } from '@shared/redux/slices/ordersSlice';
+import { setSubmissionIds } from '@shared/redux/slices/submissionSelection';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
@@ -36,6 +40,7 @@ interface SubmissionsTableRowProps {
     isSalesRepDetailPage?: boolean;
     isReferralPage?: boolean;
     onEditCustomer?: any;
+    showSubmissionActionButtons?: boolean;
 }
 
 enum Options {
@@ -46,6 +51,7 @@ enum Options {
     Delete,
     MarkAsPaid,
     EditCustomerDetails,
+    MarkAbandoned,
 }
 
 const useStyles = makeStyles(
@@ -70,6 +76,7 @@ export function SubmissionsTableRow({
     onEditCustomer,
     isSalesRepDetailPage = false,
     isReferralPage = false,
+    showSubmissionActionButtons = true,
 }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
@@ -82,8 +89,10 @@ export function SubmissionsTableRow({
     const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
     const dispatch = useAppDispatch();
-
+    const selectedIds = useAppSelector((state) => state.submissionSelection.selectedIds);
+    const isSelected = (selectedRowId: number) => selectedIds.indexOf(selectedRowId) !== -1;
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
+    const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -124,6 +133,9 @@ export function SubmissionsTableRow({
                         onEditCustomer();
                     }
                     break;
+                case Options.MarkAbandoned:
+                    await setShowMarkAbandonedDialog(true);
+                    break;
             }
         },
         [
@@ -156,11 +168,38 @@ export function SubmissionsTableRow({
     );
 
     const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
+    const handleRowClick = (id: number) => {
+        if (selectedIds) {
+            const selectedIndex = selectedIds.indexOf(id);
+            let newSelected: number[] = [];
+            if (selectedIndex === -1) {
+                newSelected = newSelected.concat(selectedIds, id);
+            } else if (selectedIndex === 0) {
+                newSelected = newSelected.concat(selectedIds.slice(1));
+            } else if (selectedIndex === selectedIds.length - 1) {
+                newSelected = newSelected.concat(selectedIds.slice(0, -1));
+            } else if (selectedIndex > 0) {
+                newSelected = newSelected.concat(
+                    selectedIds.slice(0, selectedIndex),
+                    selectedIds.slice(selectedIndex + 1),
+                );
+            }
+            dispatch(setSubmissionIds({ ids: newSelected }));
+        }
+    };
 
     return (
         <>
             <TableRow>
                 <TableCell>
+                    <Checkbox
+                        color="primary"
+                        key={order.id}
+                        disabled={order.paymentStatus === PaymentStatusEnum.PAID && !order.isAbandoned}
+                        checked={isSelected(order.id)}
+                        onClick={() => handleRowClick(order.id)}
+                    />
+
                     <MuiLink
                         component={Link}
                         color={'primary'}
@@ -237,7 +276,7 @@ export function SubmissionsTableRow({
                 {isReferralPage || isCustomerDetailPage ? <TableCell>{order.coupon?.code ?? '-'}</TableCell> : null}
                 <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
                 {isSalesRepDetailPage ? <TableCell>{formatCurrency(order.salesmanCommission)}</TableCell> : null}
-                {!isSalesRepDetailPage && !isReferralPage ? (
+                {showSubmissionActionButtons && !isSalesRepDetailPage && !isReferralPage ? (
                     <TableCell align={'right'}>
                         <SubmissionActionButton
                             orderId={order.id}
@@ -289,6 +328,11 @@ export function SubmissionsTableRow({
                                     Edit Customer Details
                                 </MenuItem>
                             ) : null}
+                            {order.paymentStatus !== PaymentStatusEnum.PAID || order.isAbandoned ? (
+                                <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
+                                    Mark {order.isAbandoned ? 'UnAbandoned' : 'Abandoned'}
+                                </MenuItem>
+                            ) : null}
                         </>
                     </Menu>
                 </TableCell>
@@ -313,6 +357,14 @@ export function SubmissionsTableRow({
                 onSubmit={handleOrderPaid}
                 open={showMarkPaidDialog}
                 onClose={() => setShowMarkPaidDialog(false)}
+            />
+
+            <MarkAbandonedStateDialog
+                isAbandoned={order.isAbandoned}
+                orderIds={[order.id]}
+                onSubmit={() => window.location.reload()}
+                open={showMarkAbandonedDialog}
+                onClose={() => setShowMarkAbandonedDialog(false)}
             />
         </>
     );

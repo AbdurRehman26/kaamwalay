@@ -50,6 +50,7 @@ class OrderService
             ->allowedFilters(Order::getAllowedAdminFilters())
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->allowedSorts(Order::getAllowedAdminSorts())
+            ->with('isAbandoned')
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }

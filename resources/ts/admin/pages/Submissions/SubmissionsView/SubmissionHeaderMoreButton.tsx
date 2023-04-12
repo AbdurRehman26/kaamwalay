@@ -214,9 +214,11 @@ export default function SubmissionHeaderMoreButton({
                 {customer ? (
                     <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                 ) : null}
-                <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
-                    Mark {isAbandoned ? 'UnAbandoned' : 'Abandoned'}
-                </MenuItem>
+                {paymentStatus !== PaymentStatusEnum.PAID || isAbandoned ? (
+                    <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
+                        Mark {isAbandoned ? 'UnAbandoned' : 'Abandoned'}
+                    </MenuItem>
+                ) : null}
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}
@@ -250,7 +252,7 @@ export default function SubmissionHeaderMoreButton({
             <MarkAbandonedStateDialog
                 isAbandoned={isAbandoned}
                 orderIds={[orderId]}
-                onSubmit={handleOrderPaid}
+                onSubmit={() => window.location.reload()}
                 open={showMarkAbandonedDialog}
                 onClose={() => setShowMarkAbandonedDialog(false)}
             />

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V3\Admin\Order;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -13,13 +14,12 @@ class MarkOrderAsAbandonedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'items' => 'required_without:all|array',
+            'items' => 'required|array',
             'items.*' => [
-                Rule::exists('referrer_payouts', 'id')->where(function ($query) {
-                    return $query->where('referrer_payout_status_id', ReferrerPayoutStatus::STATUS_PENDING);
+                Rule::exists('orders', 'id')->where(function ($query) {
+                    return $query->where('payment_status', '!=', OrderPaymentStatusEnum::PAID);
                 }),
             ],
-            'all' => 'required_without:orderIds|boolean',
         ];
     }
 }

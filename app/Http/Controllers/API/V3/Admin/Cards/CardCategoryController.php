@@ -19,7 +19,7 @@ class CardCategoryController extends CardsCardCategoryController
     public function store(StoreCardCategoryRequest $request): JsonResponse | CardCategoryResource
     {
         try {
-            $series = $this->cardCategoryService->create($request->validated());
+            $category = $this->cardCategoryService->create($request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [
@@ -29,6 +29,6 @@ class CardCategoryController extends CardsCardCategoryController
             );
         }
 
-        return new CardCategoryResource($series);
+        return new CardCategoryResource($category);
     }
 }

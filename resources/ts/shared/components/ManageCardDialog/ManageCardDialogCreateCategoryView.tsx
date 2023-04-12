@@ -7,7 +7,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { ForwardedRef, forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useCallback, useMemo, useState } from 'react';
 import { batch } from 'react-redux';
 import ImageUploader from '@shared/components/ImageUploader';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
@@ -69,12 +69,6 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
             dispatch(manageCardDialogActions.setOpen(false));
         }, [dispatch]);
 
-        useEffect(
-            () => {},
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            [],
-        );
-
         const handleNewCategoryLogoChange = useCallback(
             (newCategoryLogo: File | null) => setNewCategoryLogo(newCategoryLogo),
             [],
@@ -126,7 +120,7 @@ export const ManageCardDialogCreateCategoryView = forwardRef(
                                     >
                                         Category Logo*
                                     </FormHelperText>
-                                    <ImageUploader isCategoryImage={true} onChange={handleNewCategoryLogoChange} />
+                                    <ImageUploader accept={'image/png'} onChange={handleNewCategoryLogoChange} />
                                     <span className={classes.validationStyle}>
                                         Only upload .png file with a transparent background.
                                     </span>

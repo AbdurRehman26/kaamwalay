@@ -604,7 +604,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                 >
                                     Category Logo*
                                 </FormHelperText>
-                                <ImageUploader isCategoryImage={true} onChange={handleNewCategoryLogoChange} />
+                                <ImageUploader accept={'image/png'} onChange={handleNewCategoryLogoChange} />
                                 <span className={classes.validationStyle}>
                                     Only upload .png file with a transparent background.
                                 </span>

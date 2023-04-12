@@ -20,7 +20,7 @@ class OrderResource extends V2OrderOrderResource
         return array_merge($data, [
             'referrer' => $this->user?->referredBy,
             'referral_commission' => $this->referral_total_commission,
-            'is_abandoned' => $this->whenLoaded('isAbandoned', $this->isAbandoned()->count())
+            'is_abandoned' => $this->whenLoaded('isAbandoned', $this->isAbandoned()->count()),
         ]);
     }
 }

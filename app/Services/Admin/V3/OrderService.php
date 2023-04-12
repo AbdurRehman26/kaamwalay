@@ -55,13 +55,13 @@ class OrderService extends V2OrderService
 
     public function detachTags(array $orderIds, $tag = 'abandoned'): void
     {
-        Order::whereIn('id', $orderIds)->get()->map(function(Order $order) use ($tag) {
+        Order::whereIn('id', $orderIds)->get()->map(function (Order $order) use ($tag) {
             $order->detachTag($tag);
         });
     }
     public function attachTags(array $orderIds, $tag = 'abandoned'): void
     {
-        Order::whereIn('id', $orderIds)->get()->map(function(Order $order)  use ($tag) {
+        Order::whereIn('id', $orderIds)->get()->map(function (Order $order) use ($tag) {
             $order->attachTag($tag);
         });
     }

@@ -66,7 +66,6 @@ export class OrderEntity extends Entity {
 
     @Type(() => SalesRepEntity)
     public owner!: SalesRepEntity;
-    public salesman!: SalesRepEntity;
 
     @Type(() => PaymentPlanEntity)
     public paymentPlan!: PaymentPlanEntity;

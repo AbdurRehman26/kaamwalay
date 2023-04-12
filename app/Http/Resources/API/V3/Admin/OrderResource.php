@@ -54,7 +54,7 @@ class OrderResource extends BaseResource
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
             'created_by' => $this->whenLoaded('createdBy', UserResource::class),
-            'salesman' => $this->whenLoaded('salesman', UserResource::class),
+            'owner' => $this->whenLoaded('salesman', UserResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryResource::collection($this->orderStatusHistory)),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),

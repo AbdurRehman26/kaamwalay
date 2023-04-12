@@ -189,7 +189,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'orderLabel',
                 'shippingMethod',
                 'coupon',
-                'salesman',
+                'owner',
             ],
             sort: sortFilter,
             filter: {

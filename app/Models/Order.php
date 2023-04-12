@@ -730,8 +730,8 @@ class Order extends Model implements Exportable
     */
     public function scopeWhereAbandonedStateIs(Builder $query, int $isAbandoned): Builder
     {
-        if($isAbandoned){
-          return $query->withAllTags(['abandoned']);
+        if($isAbandoned) {
+            return $query->withAllTags(['abandoned']);
         }
 
         return $query->doesntHave('tags');

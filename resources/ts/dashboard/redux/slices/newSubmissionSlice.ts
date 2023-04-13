@@ -101,6 +101,7 @@ export interface PaymentSubmissionState {
 
 const cart = localStorage.getItem('cart');
 const parsedCart = cart ? JSON.parse(cart) : null;
+
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
@@ -307,7 +308,7 @@ const initialState: NewSubmissionSliceState = {
     step02Data: {
         searchValue: '',
         searchResults: [],
-        selectedCards: parsedCart?.selectedCards ?? [],
+        selectedCards: parsedCart ?? [],
         shippingFee: 0,
         cleaningFee: 0,
         requiresCleaning: false,
@@ -754,64 +755,8 @@ const parseName = (id: number, fullName: any) => {
     }
 };
 
-const persistCart = (state: any, data: any, option: string) => {
-    type CartToSave = {
-        selectedCards: SearchResultItemCardProps[] | any;
-        numberOfCards: number;
-    };
-
-    let cartToSave: CartToSave = { selectedCards: [], numberOfCards: 0 };
-
-    cartToSave = cart ? JSON.parse(cart) : '';
-
-    switch (option) {
-        case 'add':
-            cartToSave = {
-                ...cartToSave,
-                selectedCards:
-                    cartToSave?.selectedCards?.length > 0
-                        ? [{ ...data }, ...cartToSave.selectedCards]
-                        : state?.step02Data?.selectedCards,
-                numberOfCards: state?.step02Data?.selectedCards.reduce(function (prev: number, cur: any) {
-                    // @ts-ignore
-                    return prev + cur?.qty;
-                }, 0),
-            };
-            break;
-        case 'remove':
-            cartToSave = {
-                ...cartToSave,
-                selectedCards: cartToSave.selectedCards.filter((item: { id: any }) => item.id !== data.id),
-                numberOfCards: cartToSave.selectedCards
-                    .filter((item: { id: any }) => item.id !== data.id)
-                    .reduce(function (prev: number, cur: any) {
-                        // @ts-ignore
-                        return prev + cur?.qty;
-                    }, 0),
-            };
-            break;
-        case 'value':
-            const lookup = cartToSave.selectedCards.find((card: { id: any }) => card.id === data.card.id);
-            if (lookup) {
-                lookup.value = data.newValue;
-            }
-            break;
-        case 'quantity':
-            const lookup1 = cartToSave.selectedCards.find((card: { id: any }) => card.id === data.card.id);
-            if (lookup1) {
-                lookup1.qty = data.qty;
-            }
-            cartToSave = {
-                ...cartToSave,
-                numberOfCards: cartToSave.selectedCards.reduce(function (prev: number, cur: any) {
-                    // @ts-ignore
-                    return prev + cur?.qty;
-                }, 0),
-            };
-            break;
-    }
-    localStorage.setItem('cart', JSON.stringify(cartToSave));
-    state.step02Data.selectedCards = cartToSave.selectedCards;
+const persistCart = (selectedCards: any) => {
+    localStorage.setItem('cart', JSON.stringify(selectedCards));
 };
 
 export const newSubmissionSlice = createSlice({
@@ -859,21 +804,20 @@ export const newSubmissionSlice = createSlice({
                 ...state.step02Data.selectedCards,
                 { ...action.payload, qty: 1, value: 1 },
             ];
-            action.payload = { ...action.payload, qty: 1, value: 1 };
-            persistCart(state, action.payload, 'add');
+            persistCart(state.step02Data.selectedCards);
         },
         markCardAsUnselected: (state, action: PayloadAction<Pick<SearchResultItemCardProps, 'id'>>) => {
-            persistCart(state, action.payload, 'remove');
             state.step02Data.selectedCards = state.step02Data.selectedCards.filter(
                 (cardItem) => cardItem.id !== action.payload.id,
             );
+            persistCart(state.step02Data.selectedCards);
         },
         changeSelectedCardQty: (state, action: PayloadAction<{ card: SearchResultItemCardProps; qty: number }>) => {
             const lookup = state.step02Data.selectedCards.find((card) => card.id === action.payload.card.id);
             if (lookup) {
                 lookup.qty = action.payload.qty;
             }
-            persistCart(state, { card: action.payload.card, qty: action.payload.qty }, 'quantity');
+            persistCart(state.step02Data.selectedCards);
         },
         changeSelectedCardValue: (
             state,
@@ -883,7 +827,7 @@ export const newSubmissionSlice = createSlice({
             if (lookup) {
                 lookup.value = action.payload.newValue;
             }
-            persistCart(state, { card: action.payload.card, newValue: action.payload.newValue }, 'value');
+            persistCart(state.step02Data.selectedCards);
         },
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;

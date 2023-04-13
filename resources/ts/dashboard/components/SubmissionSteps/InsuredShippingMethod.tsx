@@ -669,7 +669,9 @@ export function InsuredShippingMethod() {
                                     preferredCountries={['us']}
                                     country="us"
                                     value={phoneNumber}
-                                    onChange={(e: any) => updateField('phoneNumber', e.toString())}
+                                    onChange={(value, data, event, formattedValue) => {
+                                        updateField('phoneNumber', formattedValue);
+                                    }}
                                     onBlur={handleShippingFee}
                                 />
                             </div>

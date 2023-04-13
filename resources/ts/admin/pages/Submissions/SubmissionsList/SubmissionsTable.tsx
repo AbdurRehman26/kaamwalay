@@ -182,13 +182,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         params: {
             include: [
                 'orderStatus',
-                'customer',
                 'customer.wallet',
+                'customer.referredBy',
                 'invoice',
                 'orderShipment',
                 'orderLabel',
                 'shippingMethod',
                 'coupon',
+                'owner',
             ],
             sort: sortFilter,
             filter: {

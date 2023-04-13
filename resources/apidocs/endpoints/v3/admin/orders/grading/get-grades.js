@@ -11,6 +11,7 @@
  * @apiParam {Array} [filter[order_item_id]] To return only desired item in response, used for revise flow. E.g. filter[order_item_id]=1
  * @apiParam {Array} [per_page] For pagination, indicates the amount of results desired per page. Default is 24. E.g. per_page=10
  * @apiParam {Array} [page] For pagination, indicates the page number to be returned. E.g. page=2
+ * @apiParam {Array} [include] For including relationships [customer, orderItem]
  *
  * @apiSuccess {Object} data UserCardResource
  *

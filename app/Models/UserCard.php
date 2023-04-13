@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class UserCard extends Model
 {
@@ -73,6 +74,22 @@ class UserCard extends Model
         return [
             AllowedFilter::exact('certificate_number'),
             AllowedFilter::exact('order_item_id'),
+        ];
+    }
+    public static function allowedIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('orderItem'),
+            AllowedInclude::relationship('orderItem.cardProduct'),
+            AllowedInclude::relationship('orderItem.cardProduct.cardSet'),
+            AllowedInclude::relationship('orderItem.cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('orderItem.cardProduct.cardCategory'),
+            AllowedInclude::relationship('orderItem.cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('orderItem.latestStatusHistory', 'orderItem.latestOrderItemStatusHistory'),
+            AllowedInclude::relationship('orderItem.latestStatusHistory.orderItemStatus', 'orderItem.latestOrderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItem.latestStatusHistory.user', 'orderItem.latestOrderItemStatusHistory.user'),
+
         ];
     }
 

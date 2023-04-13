@@ -302,8 +302,8 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             <Typography variant={'caption'} className={classes.actionLabel}>
                                                 Value (USD)
                                             </Typography>
-                                            <TextField
-                                                value={row.value}
+                                            <NumberFormatTextField
+                                                value={row.value === 0 ? '' : row.value}
                                                 onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
                                                 name="numberformat"
                                                 size="small"
@@ -376,8 +376,8 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         <TableCell align="right">
                                             {!reviewMode ? (
                                                 <NumberFormatTextField
-                                                    value={row.value}
-                                                    onChange={(e) => handleChangeCardValue(row, e.target.value)}
+                                                    value={row.value === 0 ? '' : row.value}
+                                                    onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
                                                     name="numberformat"
                                                     size="small"
                                                     id="formatted-numberformat-input"

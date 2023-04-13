@@ -172,7 +172,6 @@ export function SignUpContent({
                                 disabled={isDisabled}
                                 inputProps={{
                                     name: 'phone',
-                                    label: 'Phone Number',
                                 }}
                             />
                         </FormRoot>

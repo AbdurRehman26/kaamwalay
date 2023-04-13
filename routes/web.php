@@ -53,6 +53,6 @@ Route::prefix('referral')->group(function () {
     Route::get('/{code}', [ReferralController::class, 'getReferralPage'])->name('referral.home');
 });
 
-Route::get('/partners', [ReferralController::class, 'index'])->name('referral.view');
+Route::get('/partners', [ReferralController::class, 'index'])->name('partners.view');
 
 Route::redirect('/referral', '/partners', 301);

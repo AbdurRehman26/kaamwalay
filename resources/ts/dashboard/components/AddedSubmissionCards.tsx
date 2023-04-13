@@ -262,7 +262,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                         .reverse()
                         .map((row: SearchResultItemCardProps) => (
                             <>
-                                <div className={classes.mobileViewContainer} key={row.id}>
+                                <div className={classes.mobileViewContainer}>
                                     <div title={row.shortName || row.name}>
                                         <SearchResultItemCard
                                             onPreview={handlePreview}
@@ -342,7 +342,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         <TableCell component="th" scope="row" align={'left'}>
                                             {!reviewMode ? (
                                                 <TextField
-                                                    onChange={(e) => handleChangeCardQty(row, e.target.value)}
+                                                    onChange={(e) => handleChangeCardQty(row, Number(e.target.value))}
                                                     type="number"
                                                     size={'small'}
                                                     value={row.qty === 0 ? '' : row.qty}
@@ -377,7 +377,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             {!reviewMode ? (
                                                 <NumberFormatTextField
                                                     value={row.value}
-                                                    onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                                    onChange={(e) => handleChangeCardValue(row, e.target.value)}
                                                     name="numberformat"
                                                     size="small"
                                                     id="formatted-numberformat-input"

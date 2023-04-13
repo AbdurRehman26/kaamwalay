@@ -19,7 +19,7 @@ beforeEach(function () {
     ), associative: true);
 });
 
-test('admins can create card category', function () {
+test('an admin can create card category', function () {
 
     Http::fake([
         '*/categories/*' => Http::response($this->sampleGetCategoriesResponse, 200, []),
@@ -37,7 +37,7 @@ test('admins can create card category', function () {
         ]);
 });
 
-test('customer cannot create card category', function () {
+test('a customer cannot create card category', function () {
     
     $customerUser = User::factory()
     ->withRole(config('permission.roles.customer'))

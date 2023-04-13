@@ -665,14 +665,12 @@ export function InsuredShippingMethod() {
                             <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                                 <Typography className={classes.methodDescription}>Phone Number</Typography>
                                 <InternationalPhoneNumberField
-                                    countryCodeEditable={false}
-                                    preferredCountries={['us']}
-                                    country="us"
                                     value={phoneNumber}
                                     onChange={(value, data, event, formattedValue) => {
                                         updateField('phoneNumber', formattedValue);
                                     }}
                                     onBlur={handleShippingFee}
+                                    disabled={disableAllInputs}
                                 />
                             </div>
                         </div>

@@ -678,16 +678,12 @@ export function InsuredShippingMethod() {
                                     <Typography className={classes.methodDescription}>Phone Number</Typography>
 
                                     <InternationalPhoneNumberField
-                                        countryCodeEditable={false}
-                                        preferredCountries={['us']}
-                                        country="us"
                                         value={phoneNumber}
                                         onChange={(value, data, event, formattedValue) => {
                                             updateField('phoneNumber', formattedValue);
                                         }}
                                         onBlur={handleShippingFee}
                                         disabled={disableAllInputs}
-                                        placeholder="Enter Phone Number"
                                         containerClass={classes.phoneField}
                                     />
                                 </div>

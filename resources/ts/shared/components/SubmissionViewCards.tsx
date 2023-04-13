@@ -380,11 +380,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </>
                                 )}
                                 <TableCell>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
-                                            Edit Label Text
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
+                                    {!window.location.href.includes('salesrep') ? (
+                                        <OptionsMenu onClick={handleOption}>
+                                            <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
+                                                Edit Label Text
+                                            </OptionsMenuItem>
+                                        </OptionsMenu>
+                                    ) : null}
                                 </TableCell>
                             </TableRow>
                         ))}

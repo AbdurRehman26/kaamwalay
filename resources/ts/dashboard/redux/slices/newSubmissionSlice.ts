@@ -755,7 +755,7 @@ const parseName = (id: number, fullName: any) => {
     }
 };
 
-const persistCart = (selectedCards: any) => {
+const persistCart = (selectedCards: SearchResultItemCardProps[]) => {
     localStorage.setItem('customer-submission:saved-cards', JSON.stringify(selectedCards));
 };
 

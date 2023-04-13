@@ -227,7 +227,7 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText primary={'POP Report'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
-                <ListItem component={'a'} href={'/referral'}>
+                <ListItem component={'a'} href={'/partners'}>
                     <StyledListItemIcon>
                         <CampaignOutlinedIcon />
                     </StyledListItemIcon>

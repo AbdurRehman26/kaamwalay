@@ -160,9 +160,9 @@ export function SignUpContent({
                         <FormRoot>
                             <InternationalPhoneNumberField
                                 value={values.phone}
-                                onChange={(e) => {
-                                    handleChange(e);
-                                    setPhone(e.toString());
+                                onChange={(value, data, event, formattedValue) => {
+                                    handleChange(event);
+                                    setPhone(formattedValue);
                                 }}
                                 containerClass={classes.phoneFieldContainer}
                                 inputClass={classes.phoneFieldInput}

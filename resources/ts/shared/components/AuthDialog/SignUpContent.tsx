@@ -82,6 +82,10 @@ const useStyles = makeStyles(
                 },
             },
         },
+        phoneFieldDropdown: {
+            maxHeight: '240px !important',
+            width: '390px !important',
+        },
     }),
     { name: 'SignUpContent' },
 );
@@ -163,6 +167,7 @@ export function SignUpContent({
                                 containerClass={classes.phoneFieldContainer}
                                 inputClass={classes.phoneFieldInput}
                                 buttonClass={classes.phoneFieldFlagButton}
+                                dropdownClass={classes.phoneFieldDropdown}
                                 specialLabel={'Phone Number'}
                                 disabled={isDisabled}
                                 inputProps={{

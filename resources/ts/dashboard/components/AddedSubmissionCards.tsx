@@ -333,82 +333,87 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {selectedCards.map((row: SearchResultItemCardProps) => (
-                            <>
-                                <TableRow key={row.id} className={classes.row}>
-                                    <TableCell component="th" scope="row" align={'left'}>
-                                        {!reviewMode ? (
-                                            <TextField
-                                                onChange={(e) => handleChangeCardQty(row, e.target.value)}
-                                                type="number"
-                                                size={'small'}
-                                                value={row.qty === 0 ? '' : row.qty}
-                                                InputProps={{
-                                                    inputProps: { min: 1, max: 100 },
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                className={classes.qtyField}
-                                                variant="outlined"
-                                            />
-                                        ) : (
-                                            <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                                {row.qty}
-                                            </Typography>
-                                        )}
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        <SearchResultItemCard
-                                            onPreview={handlePreview}
-                                            key={row.id}
-                                            id={row.id}
-                                            image={row.image}
-                                            longName={row.longName}
-                                            shortName={row.shortName}
-                                            name={row.name}
-                                            addedMode
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {!reviewMode ? (
-                                            <NumberFormatTextField
-                                                value={row.value}
-                                                onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
-                                                name="numberformat"
-                                                size="small"
-                                                id="formatted-numberformat-input"
-                                                variant="outlined"
-                                                InputProps={{
-                                                    inputProps: { min: 1 },
-                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                }}
-                                            />
-                                        ) : (
-                                            <NumberFormat
-                                                value={row.value}
-                                                displayType={'text'}
-                                                thousandSeparator
-                                                decimalSeparator={'.'}
-                                                prefix={'$'}
-                                                className={classes.tableRowText}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    {!reviewMode ? (
-                                        <TableCell align="left">
-                                            <IconButton
-                                                aria-label="delete"
-                                                onClick={() => handleDeselectCard(row)}
-                                                size="large"
-                                            >
-                                                <DeleteIcon fontSize="medium" />
-                                            </IconButton>
+                        {selectedCards
+                            .slice()
+                            .reverse()
+                            .map((row: SearchResultItemCardProps) => (
+                                <>
+                                    <TableRow key={row.id} className={classes.row}>
+                                        <TableCell component="th" scope="row" align={'left'}>
+                                            {!reviewMode ? (
+                                                <TextField
+                                                    onChange={(e) => handleChangeCardQty(row, e.target.value)}
+                                                    type="number"
+                                                    size={'small'}
+                                                    value={row.qty === 0 ? '' : row.qty}
+                                                    InputProps={{
+                                                        inputProps: { min: 1, max: 100 },
+                                                    }}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    className={classes.qtyField}
+                                                    variant="outlined"
+                                                />
+                                            ) : (
+                                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
+                                                    {row.qty}
+                                                </Typography>
+                                            )}
                                         </TableCell>
-                                    ) : null}
-                                </TableRow>
-                            </>
-                        ))}
+                                        <TableCell align="left">
+                                            <SearchResultItemCard
+                                                onPreview={handlePreview}
+                                                key={row.id}
+                                                id={row.id}
+                                                image={row.image}
+                                                longName={row.longName}
+                                                shortName={row.shortName}
+                                                name={row.name}
+                                                addedMode
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {!reviewMode ? (
+                                                <NumberFormatTextField
+                                                    value={row.value}
+                                                    onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                                    name="numberformat"
+                                                    size="small"
+                                                    id="formatted-numberformat-input"
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        inputProps: { min: 1 },
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">$</InputAdornment>
+                                                        ),
+                                                    }}
+                                                />
+                                            ) : (
+                                                <NumberFormat
+                                                    value={row.value}
+                                                    displayType={'text'}
+                                                    thousandSeparator
+                                                    decimalSeparator={'.'}
+                                                    prefix={'$'}
+                                                    className={classes.tableRowText}
+                                                />
+                                            )}
+                                        </TableCell>
+                                        {!reviewMode ? (
+                                            <TableCell align="left">
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    onClick={() => handleDeselectCard(row)}
+                                                    size="large"
+                                                >
+                                                    <DeleteIcon fontSize="medium" />
+                                                </IconButton>
+                                            </TableCell>
+                                        ) : null}
+                                    </TableRow>
+                                </>
+                            ))}
                     </TableBody>
                 </Table>
             )}

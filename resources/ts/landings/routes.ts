@@ -9,12 +9,9 @@ const ReferralController = () => import('./controllers/ReferralController');
 export default () => {
     route('/', [HomeController, 'getHome']).name('home');
 
-    route('/referral')
-        .name('referral')
-        .group((route) => {
-            route('/', [ReferralController, 'referralView']).name('view');
-            route('/:code', [ReferralController, 'getReferralHome']).name('referralhome');
-        });
+    route('/partners', [ReferralController, 'referralView']).name('view');
+
+    route('referral/:code', [ReferralController, 'getReferralHome']).name('referralhome');
 
     route('/feed')
         .name('feed')

@@ -167,7 +167,7 @@ export function DrawerNavigation() {
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>
-                    <ListItem onClick={handleItemPress('/referral')}>
+                    <ListItem onClick={handleItemPress('/partners')}>
                         <StyledListItemIcon>
                             <CampaignOutlinedIcon />
                         </StyledListItemIcon>

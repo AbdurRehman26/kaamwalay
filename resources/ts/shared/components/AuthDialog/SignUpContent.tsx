@@ -12,7 +12,7 @@ import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/AuthDialog/styles';
 import { PopupSignUpValidationRules } from '@shared/components/AuthDialog/validation';
-import SignUpInternationalPhoneNumber from '@shared/components/SignUpInternationalPhoneNumber';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
@@ -38,8 +38,49 @@ const useStyles = makeStyles(
             fontSize: '15px',
             fontWeight: 'bolder',
         },
-        phoneField: {
+        phoneFieldContainer: {
             marginBottom: '24px',
+
+            '& .special-label': {
+                top: '5px !important',
+                left: '18px !important',
+                backgroundColor: 'transparent !important',
+                fontFamily: 'Roboto',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                fontSize: '12px !important',
+                lineHeight: '16px',
+                letterSpacing: '0.2px',
+                color: 'rgba(0, 0, 0, 0.54)',
+            },
+        },
+        phoneFieldInput: {
+            width: '100% !important',
+            border: '1px solid lightgray !important',
+            borderRadius: '28px !important',
+            padding: '26px 14px 10px 68px !important',
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            fontSize: '14px !important',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+
+            '&:focus': {
+                borderColor: '#20BFB8 !important',
+                boxShadow: 'none !important',
+                backgroundColor: 'rgba(32,191,184,0.05)',
+            },
+        },
+        phoneFieldFlagButton: {
+            '& .selected-flag': {
+                paddingLeft: '22px !important',
+
+                '& .flag': {
+                    top: '64% !important',
+                },
+            },
         },
     }),
     { name: 'SignUpContent' },
@@ -113,16 +154,15 @@ export function SignUpContent({
                         </FormRoot>
 
                         <FormRoot>
-                            <SignUpInternationalPhoneNumber
-                                countryCodeEditable={false}
-                                preferredCountries={['us']}
-                                country="us"
+                            <InternationalPhoneNumberField
                                 value={values.phone}
                                 onChange={(e) => {
                                     handleChange(e);
                                     setPhone(e.toString());
                                 }}
-                                containerClass={classes.phoneField}
+                                containerClass={classes.phoneFieldContainer}
+                                inputClass={classes.phoneFieldInput}
+                                buttonClass={classes.phoneFieldFlagButton}
                                 specialLabel={'Phone Number'}
                                 disabled={isDisabled}
                                 inputProps={{

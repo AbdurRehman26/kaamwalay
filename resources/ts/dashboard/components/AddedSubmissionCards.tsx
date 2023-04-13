@@ -257,67 +257,70 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
 
             {mobileMode && !reviewMode ? (
                 <>
-                    {selectedCards.map((row: SearchResultItemCardProps) => (
-                        <>
-                            <div className={classes.mobileViewContainer} key={row.id}>
-                                <div title={row.shortName || row.name}>
-                                    <SearchResultItemCard
-                                        onPreview={handlePreview}
-                                        key={row.id}
-                                        id={row.id}
-                                        image={row.image}
-                                        longName={row.longName}
-                                        shortName={row.shortName}
-                                        name={row.name}
-                                        addedMode
-                                        reviewMode
-                                    />
-                                </div>
-
-                                <div className={classes.mobileViewCardActions}>
-                                    <div className={classes.mobileViewCardActionContainer}>
-                                        <Typography variant={'caption'} className={classes.actionLabel}>
-                                            Qty
-                                        </Typography>
-                                        <TextField
-                                            onChange={(e) => handleChangeCardQty(row, e.target.value)}
-                                            type="number"
-                                            size={'small'}
-                                            value={row.qty === 0 ? '' : row.qty}
-                                            InputProps={{
-                                                inputProps: { min: 1, max: 100 },
-                                            }}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            className={classes.qtyField}
-                                            variant="outlined"
+                    {selectedCards
+                        .slice()
+                        .reverse()
+                        .map((row: SearchResultItemCardProps) => (
+                            <>
+                                <div className={classes.mobileViewContainer} key={row.id}>
+                                    <div title={row.shortName || row.name}>
+                                        <SearchResultItemCard
+                                            onPreview={handlePreview}
+                                            key={row.id}
+                                            id={row.id}
+                                            image={row.image}
+                                            longName={row.longName}
+                                            shortName={row.shortName}
+                                            name={row.name}
+                                            addedMode
+                                            reviewMode
                                         />
                                     </div>
 
-                                    <div className={classes.mobileViewCardActionContainer}>
-                                        <Typography variant={'caption'} className={classes.actionLabel}>
-                                            Value (USD)
-                                        </Typography>
-                                        <TextField
-                                            value={row.value}
-                                            onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
-                                            name="numberformat"
-                                            size="small"
-                                            id="formatted-numberformat-input"
-                                            variant="outlined"
-                                            InputProps={{
-                                                inputProps: { min: 1 },
-                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                            }}
-                                            className={classes.valueField}
-                                        />
+                                    <div className={classes.mobileViewCardActions}>
+                                        <div className={classes.mobileViewCardActionContainer}>
+                                            <Typography variant={'caption'} className={classes.actionLabel}>
+                                                Qty
+                                            </Typography>
+                                            <TextField
+                                                onChange={(e) => handleChangeCardQty(row, e.target.value)}
+                                                type="number"
+                                                size={'small'}
+                                                value={row.qty === 0 ? '' : row.qty}
+                                                InputProps={{
+                                                    inputProps: { min: 1, max: 100 },
+                                                }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                className={classes.qtyField}
+                                                variant="outlined"
+                                            />
+                                        </div>
+
+                                        <div className={classes.mobileViewCardActionContainer}>
+                                            <Typography variant={'caption'} className={classes.actionLabel}>
+                                                Value (USD)
+                                            </Typography>
+                                            <TextField
+                                                value={row.value}
+                                                onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                                name="numberformat"
+                                                size="small"
+                                                id="formatted-numberformat-input"
+                                                variant="outlined"
+                                                InputProps={{
+                                                    inputProps: { min: 1 },
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }}
+                                                className={classes.valueField}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
-                        </>
-                    ))}
+                                {selectedCards[selectedCards.length - 1].id !== row.id ? <Divider light /> : null}
+                            </>
+                        ))}
                 </>
             ) : (
                 <Table className={classes.table}>
@@ -336,7 +339,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                     <TableCell component="th" scope="row" align={'left'}>
                                         {!reviewMode ? (
                                             <TextField
-                                                onChange={(e) => handleChangeCardQty(row, Number(e.target.value))}
+                                                onChange={(e) => handleChangeCardQty(row, e.target.value)}
                                                 type="number"
                                                 size={'small'}
                                                 value={row.qty === 0 ? '' : row.qty}
@@ -371,7 +374,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         {!reviewMode ? (
                                             <NumberFormatTextField
                                                 value={row.value}
-                                                onChange={(e) => handleChangeCardValue(row, e.target.value)}
+                                                onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
                                                 name="numberformat"
                                                 size="small"
                                                 id="formatted-numberformat-input"

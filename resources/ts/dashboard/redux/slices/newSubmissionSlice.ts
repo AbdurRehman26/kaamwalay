@@ -99,7 +99,7 @@ export interface PaymentSubmissionState {
     fetchingStatus: string | null;
 }
 
-const cart = localStorage.getItem('cart');
+const cart = localStorage.getItem('customer-submission:saved-cards');
 const parsedCart = cart ? JSON.parse(cart) : null;
 
 export interface NewSubmissionSliceState {
@@ -756,7 +756,7 @@ const parseName = (id: number, fullName: any) => {
 };
 
 const persistCart = (selectedCards: any) => {
-    localStorage.setItem('cart', JSON.stringify(selectedCards));
+    localStorage.setItem('customer-submission:saved-cards', JSON.stringify(selectedCards));
 };
 
 export const newSubmissionSlice = createSlice({

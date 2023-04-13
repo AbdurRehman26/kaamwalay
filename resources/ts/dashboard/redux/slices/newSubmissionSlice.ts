@@ -99,6 +99,9 @@ export interface PaymentSubmissionState {
     fetchingStatus: string | null;
 }
 
+const cart = localStorage.getItem('customer-submission:saved-cards');
+const parsedCart = cart ? JSON.parse(cart) : null;
+
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
@@ -305,7 +308,7 @@ const initialState: NewSubmissionSliceState = {
     step02Data: {
         searchValue: '',
         searchResults: [],
-        selectedCards: [],
+        selectedCards: parsedCart ?? [],
         shippingFee: 0,
         cleaningFee: 0,
         requiresCleaning: false,
@@ -687,6 +690,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
+    localStorage.removeItem('customer-submission:saved-cards');
     return newOrder.data;
 });
 
@@ -751,6 +755,10 @@ const parseName = (id: number, fullName: any) => {
     }
 };
 
+const persistCart = (selectedCards: SearchResultItemCardProps[]) => {
+    localStorage.setItem('customer-submission:saved-cards', JSON.stringify(selectedCards));
+};
+
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
     initialState,
@@ -796,17 +804,20 @@ export const newSubmissionSlice = createSlice({
                 ...state.step02Data.selectedCards,
                 { ...action.payload, qty: 1, value: 1 },
             ];
+            persistCart(state.step02Data.selectedCards);
         },
         markCardAsUnselected: (state, action: PayloadAction<Pick<SearchResultItemCardProps, 'id'>>) => {
             state.step02Data.selectedCards = state.step02Data.selectedCards.filter(
                 (cardItem) => cardItem.id !== action.payload.id,
             );
+            persistCart(state.step02Data.selectedCards);
         },
         changeSelectedCardQty: (state, action: PayloadAction<{ card: SearchResultItemCardProps; qty: number }>) => {
             const lookup = state.step02Data.selectedCards.find((card) => card.id === action.payload.card.id);
             if (lookup) {
                 lookup.qty = action.payload.qty;
             }
+            persistCart(state.step02Data.selectedCards);
         },
         changeSelectedCardValue: (
             state,
@@ -816,6 +827,7 @@ export const newSubmissionSlice = createSlice({
             if (lookup) {
                 lookup.value = action.payload.newValue;
             }
+            persistCart(state.step02Data.selectedCards);
         },
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;
@@ -927,6 +939,9 @@ export const newSubmissionSlice = createSlice({
             state.previewTotal = action.payload;
         },
         clearSubmissionState: () => initialState,
+        clearSelectedCards: (state) => {
+            state.step02Data.selectedCards = [];
+        },
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,
@@ -1167,6 +1182,7 @@ export const {
     setBillingAddress,
     setIsNextLoading,
     clearSubmissionState,
+    clearSelectedCards,
     setIsMobileSearchModalOpen,
     setIsCouponValid,
     setCouponCode,

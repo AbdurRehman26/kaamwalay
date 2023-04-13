@@ -1,84 +1,133 @@
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+import PlayArrow from '@mui/icons-material/PlayArrow';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import agsPartnerProgramPost1 from '@shared/assets/agsPartnerProgramPost1.jpg';
-import agsPartnerProgramPost2 from '@shared/assets/agsPartnerProgramPost2.jpg';
-import agsPartnerProgramPost3 from '@shared/assets/agsPartnerProgramPost3.jpg';
-import agsPartnerProgramPost4 from '@shared/assets/agsPartnerProgramPost4.jpg';
-import agsPartnerProgramPost5 from '@shared/assets/agsPartnerProgramPost5.jpg';
-import agsPartnerProgramPost6 from '@shared/assets/agsPartnerProgramPost6.jpg';
-import agsPartnerProgramPost7 from '@shared/assets/agsPartnerProgramPost7.jpg';
-import agsPartnerProgramPost8 from '@shared/assets/agsPartnerProgramPost8.jpg';
-import agsPartnerProgramPost9 from '@shared/assets/agsPartnerProgramPost9.jpg';
-import agsPartnerProgramPost10 from '@shared/assets/agsPartnerProgramPost10.jpg';
-import agsPartnerProgramPost11 from '@shared/assets/agsPartnerProgramPost11.jpg';
 import theme from '@shared/styles/theme';
+import agsPartnerProgramPost1 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost1.jpg';
+import agsPartnerProgramPost2 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost2.jpg';
+import agsPartnerProgramPost3 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost3.jpg';
+import agsPartnerProgramPost4 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost4.jpg';
+import agsPartnerProgramPost5 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost5.jpg';
+import agsPartnerProgramPost6 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost6.jpg';
+import agsPartnerProgramPost7 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost7.jpg';
+import agsPartnerProgramPost8 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost8.jpg';
+import agsPartnerProgramPost9 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost9.jpg';
+import agsPartnerProgramPost10 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost10.jpg';
+import agsPartnerProgramPost11 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost11.jpg';
+import agsPartnerProgramPost12 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost12.mp4';
+import agsPartnerProgramPost13 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost13.mp4';
+import agsPartnerProgramPost14 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost14.mp4';
+import agsPartnerProgramPost15 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost15.mp4';
+import agsPartnerProgramThumbnail12 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail12.svg';
+import agsPartnerProgramThumbnail13 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail13.svg';
+import agsPartnerProgramThumbnail14 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail14.svg';
+import agsPartnerProgramThumbnail15 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail15.svg';
 
 const images = [
     {
         id: 0,
-        url: agsPartnerProgramPost1,
-        title: 'agsPartnerProgramPost1',
+        url: agsPartnerProgramPost13,
+        thumbnail: agsPartnerProgramThumbnail13,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 1,
-        url: agsPartnerProgramPost2,
-        title: 'agsPartnerProgramPost2',
+        url: agsPartnerProgramPost15,
+        thumbnail: agsPartnerProgramThumbnail15,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 2,
-        url: agsPartnerProgramPost3,
-        title: 'agsPartnerProgramPost3',
+        url: agsPartnerProgramPost12,
+        thumbnail: agsPartnerProgramThumbnail12,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 3,
-        url: agsPartnerProgramPost4,
-        title: 'agsPartnerProgramPost4',
+        url: agsPartnerProgramPost14,
+        thumbnail: agsPartnerProgramThumbnail14,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 4,
-        url: agsPartnerProgramPost5,
-        title: 'agsPartnerProgramPost5',
+        url: agsPartnerProgramPost2,
+        title: 'agsPartnerProgramPost2',
+        type: 'image',
     },
     {
         id: 5,
-        url: agsPartnerProgramPost6,
-        title: 'agsPartnerProgramPost6',
+        url: agsPartnerProgramPost3,
+        title: 'agsPartnerProgramPost3',
+        type: 'image',
     },
     {
         id: 6,
-        url: agsPartnerProgramPost7,
-        title: 'agsPartnerProgramPost7',
+        url: agsPartnerProgramPost4,
+        title: 'agsPartnerProgramPost4',
+        type: 'image',
     },
     {
         id: 7,
-        url: agsPartnerProgramPost8,
-        title: 'agsPartnerProgramPost8',
+        url: agsPartnerProgramPost5,
+        title: 'agsPartnerProgramPost5',
+        type: 'image',
     },
     {
         id: 8,
-        url: agsPartnerProgramPost9,
-        title: 'agsPartnerProgramPost9',
+        url: agsPartnerProgramPost6,
+        title: 'agsPartnerProgramPost6',
+        type: 'image',
     },
     {
         id: 9,
-        url: agsPartnerProgramPost10,
-        title: 'agsPartnerProgramPost10',
+        url: agsPartnerProgramPost7,
+        title: 'agsPartnerProgramPost7',
+        type: 'image',
     },
     {
         id: 10,
+        url: agsPartnerProgramPost8,
+        title: 'agsPartnerProgramPost8',
+        type: 'image',
+    },
+    {
+        id: 11,
+        url: agsPartnerProgramPost9,
+        title: 'agsPartnerProgramPost9',
+        type: 'image',
+    },
+    {
+        id: 12,
+        url: agsPartnerProgramPost10,
+        title: 'agsPartnerProgramPost10',
+        type: 'image',
+    },
+    {
+        id: 13,
         url: agsPartnerProgramPost11,
         title: 'agsPartnerProgramPost11',
+        type: 'image',
+    },
+    {
+        id: 14,
+        url: agsPartnerProgramPost1,
+        title: 'agsPartnerProgramPost1',
+        type: 'image',
     },
 ];
 
@@ -110,6 +159,7 @@ const MarketingContentDiv = styled(Grid)({
     },
     '.MarketingContentImageDiv': {
         width: '217px',
+        position: 'relative',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '50%',
@@ -117,6 +167,12 @@ const MarketingContentDiv = styled(Grid)({
         [theme.breakpoints.between(768, 1024)]: {
             maxWidth: '25%',
         },
+    },
+    '.MarketingContentPlayIcon': {
+        color: 'white',
+        position: 'absolute',
+        top: '3%',
+        right: '3%',
     },
     '.MarketingContentImage': {
         maxWidth: '217px',
@@ -226,6 +282,25 @@ export function MarketingContent({ expandable }: props) {
         setIndex(value);
     }, []);
 
+    const getButtonContent = (type: string) => {
+        return type === 'video' ? (
+            <IconButton className={'MarketingContentPlayIcon'}>
+                <PlayArrow />
+            </IconButton>
+        ) : null;
+    };
+
+    const getContent = (index: number) => {
+        return images[index].type === 'video' ? (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video controls className={classes.dialogImage} autoPlay>
+                <source src={images[index].url} />
+            </video>
+        ) : (
+            <img src={images[index].url} alt={images[index].title} className={classes.dialogImage} />
+        );
+    };
+
     return (
         <MarketingContentDiv>
             <Grid className={'MarketingContentTopDiv'}>
@@ -255,15 +330,25 @@ export function MarketingContent({ expandable }: props) {
                         ? images.slice(0, 8).map((data: any) => (
                               <div className={'MarketingContentImageDiv'}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
-                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                      <img
+                                          className={'MarketingContentImage'}
+                                          src={data.type === 'image' ? data.url : data.thumbnail}
+                                          alt={data.title}
+                                      />
+                                      {getButtonContent(data.type)}
                                   </ButtonBase>
                               </div>
                           ))
                         : images.map((data: any) => (
                               <div className={'MarketingContentImageDiv'}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
-                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                      <img
+                                          className={'MarketingContentImage'}
+                                          src={data.type === 'image' ? data.url : data.thumbnail}
+                                          alt={data.title}
+                                      />
                                   </ButtonBase>
+                                  {getButtonContent(data.type)}
                               </div>
                           ))}
                 </Grid>
@@ -282,7 +367,7 @@ export function MarketingContent({ expandable }: props) {
                 </Grid>
             ) : null}
             <Dialog open={open} onClose={handleClose}>
-                <img src={images[index].url} alt={images[index].title} className={classes.dialogImage} />
+                {getContent(index)}
             </Dialog>
             {open ? (
                 <>

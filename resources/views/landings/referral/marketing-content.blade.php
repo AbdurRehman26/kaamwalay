@@ -6,58 +6,90 @@
         </div>
         <div class="marketing-content__images-div" data-aos="fade">
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost1.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost1.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost3.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost3.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                </a>
+            </div>
+            <div class="marketing-content__video-div">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost15.mp4') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail15.svg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                    <div class="marketing-content__play-icon-div">
+                        <span class="marketing-content__play-icon material-icons">play_arrow</span>
+                    </div>
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost3.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost3.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost8.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost8.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost2.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost2.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost4.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost4.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                </a>
+            </div>
+            <div class="marketing-content__video-div">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost13.mp4') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail13.svg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                    <div class="marketing-content__play-icon-div">
+                        <span class="marketing-content__play-icon material-icons">play_arrow</span>
+                    </div>
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost4.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost4.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost1.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost1.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                </a>
+            </div>
+            <div class="marketing-content__video-div">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost12.mp4') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail12.svg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                    <div class="marketing-content__play-icon-div">
+                        <span class="marketing-content__play-icon material-icons">play_arrow</span>
+                    </div>
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost5.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost5.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost2.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost2.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost6.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost6.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost10.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost10.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                </a>
+            </div>
+            <div class="marketing-content__video-div">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost14.mp4') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail14.svg') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                    <div class="marketing-content__play-icon-div">
+                        <span class="marketing-content__play-icon material-icons">play_arrow</span>
+                    </div>
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost8.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost8.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost6.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost6.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost5.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost5.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost10.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost10.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
             <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.png') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
+                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.jpg') }}" class="glightbox">
+                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
         </div>

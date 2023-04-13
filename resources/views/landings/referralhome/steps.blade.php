@@ -11,7 +11,7 @@
                 <img src="{{ asset('assets/images/landings/referralhome/stepone1.svg') }}" alt="" class="ReferralHome-featureIcon">
                 <div class="Numbering-section">
                     <h3 class="Numbering">1</h3>
-                    <h3 class="Numbering-title">SignUp</h3>
+                    <h3 class="Numbering-title">Sign Up</h3>
                     <h6 class="Numbering-subtitle">Sign up and we'll share a {{ config('robograding.feature_referral_discount_percentage') }}% OFF discount code with you.</h6>
                 </div>
             </div>

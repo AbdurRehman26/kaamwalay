@@ -19,8 +19,8 @@ export function SubmissionsView() {
         config: {
             params: {
                 include: [
-                    'customer',
                     'customer.wallet',
+                    'customer.referredBy',
                     'orderCustomerShipment',
                     'billingAddress',
                     'shippingAddress',
@@ -37,6 +37,12 @@ export function SubmissionsView() {
                     'orderStatusHistory.orderStatus',
                     'coupon',
                     'isAbandoned',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                    'orderItems.userCard',
+                    'orderItems.latestStatusHistory.orderItemStatus',
+                    'firstOrderPayment.user',
+                    'owner',
                 ],
             },
         },
@@ -97,7 +103,7 @@ export function SubmissionsView() {
                 admin={data?.orderPayment?.user?.fullName}
                 createdBy={data?.createdBy}
                 owner={data?.owner}
-                referrer={data?.referrer}
+                referrer={data?.customer?.referredBy}
                 salesmanCommission={data?.salesmanCommission}
                 referralCommission={data?.referralCommission}
                 orderCustomerShipment={data?.orderCustomerShipment}

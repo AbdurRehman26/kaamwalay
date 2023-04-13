@@ -51,7 +51,7 @@ export function SubmissionsGradeCards() {
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(24);
+    const [perPage, setPerPage] = useState(30);
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -126,7 +126,7 @@ export function SubmissionsGradeCards() {
     );
 
     useEffect(() => {
-        loadGrades(perPage, page, false);
+        loadGrades(perPage, page, true);
     }, [perPage, page, loadGrades]);
 
     useEffect(() => {
@@ -168,7 +168,7 @@ export function SubmissionsGradeCards() {
                             count={gradesPagination.meta.total}
                             page={gradesPagination.meta.currentPage - 1}
                             rowsPerPage={gradesPagination.meta.perPage}
-                            rowsPerPageOptions={[24, 48, 72, 96, 120]}
+                            rowsPerPageOptions={[30, 48, 72, 96, 120]}
                             onPageChange={handlePageChange}
                             onRowsPerPageChange={handleRowsPerPageChange}
                             labelRowsPerPage={

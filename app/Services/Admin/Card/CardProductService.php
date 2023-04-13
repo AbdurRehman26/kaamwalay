@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\Card\CardProductCreatedEvent;
+use App\Events\API\Admin\Card\CardProductDeletedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Exceptions\API\Admin\CardProductCanNotBeDeleted;
 use App\Exceptions\API\Admin\CardProductCanNotBeUpdated;
@@ -152,6 +153,10 @@ class CardProductService
     {
         // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
+            ->with([
+                'cardSet.cardSeries',
+                'cardCategory.cardCategoryType',
+            ])
             ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
             ->addSelect(DB::raw('card_products.*, pop_reports_cards.population'))
             ->excludeAddedManually()
@@ -233,6 +238,8 @@ class CardProductService
         }
 
         $cardProduct->delete();
+
+        CardProductDeletedEvent::dispatch($cardProduct);
     }
 
     protected function deleteCardProductFromAgs(CardProduct $cardProduct): array

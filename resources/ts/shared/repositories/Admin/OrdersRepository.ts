@@ -20,9 +20,11 @@ import { Repository } from '../Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'admin/orders/:orderId';
     readonly model = OrderEntity;
+    endpointConfig = { version: 'v3' };
 
     async addOrderStatusHistory(input: AddOrderStatusHistoryDto): Promise<OrderStatusHistoryEntity> {
         const { orderId, orderStatusId } = input;
+        this.endpointConfig = { version: 'v2' };
 
         const { data } = await this.endpoint.post('/status-history', toApiPropertiesObject({ orderStatusId }), {
             params: {
@@ -35,6 +37,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async addCard(input: AddCardToOrderDto) {
+        this.endpointConfig = { version: 'v2' };
+
         const { orderId, cardProductId: cardId, value } = input;
         const body = toApiPropertiesObject({ cardId, value });
         const { data } = await this.endpoint.post('/items', body, { params: { orderId } });
@@ -43,6 +47,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async editCard(input: EditCardOfOrderDto) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId, cardProductId: cardId, orderItemId, value } = input;
         const body = toApiPropertiesObject({ cardId, value });
         const { data } = await this.endpoint.put(`/items/:orderItemId`, body, { params: { orderItemId, orderId } });
@@ -51,6 +56,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async addExtraChargeToOrder(input: AddExtraChargeToOrderDto) {
+        this.endpointConfig = { version: 'v2' };
         const { notes, amount, orderId } = input;
         const body = toApiPropertiesObject({ notes, amount });
         const { data } = await this.endpoint.post(`${orderId}/payments/extra-charge`, body);
@@ -59,6 +65,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async refundOrderTransaction(input: RefundOrderTransactionDto) {
+        this.endpointConfig = { version: 'v2' };
         const { notes, amount, addToWallet, orderId } = input;
         const body = toApiPropertiesObject({ notes, amount, addToWallet });
         const { data } = await this.endpoint.post(`${orderId}/payments/refund`, body);
@@ -66,6 +73,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async markOrderAsPaid(input: { orderId: number }) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId } = input;
         const { data } = await this.endpoint.post(`${orderId}/mark-paid`);
         return plainToInstance(OrderEntity, data);
@@ -90,6 +98,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async editTransactionNotes(input: EditTransactionNotesDto) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId, transactionId, notes } = input;
         const body = toApiPropertiesObject({ notes });
         const { data } = await this.endpoint.put(`${orderId}/order-payments/${transactionId}`, body);
@@ -98,6 +107,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     public async setShipment(input: ChangeOrderShipmentDto) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId, shippingProvider, trackingNumber } = input;
         const { data } = await this.endpoint.post(
             'shipment',
@@ -116,12 +126,14 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async cancelOrder(input: { orderId: number }) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId } = input;
         const { data } = await this.endpoint.delete(`/${orderId}`);
         return plainToInstance(OrderEntity, data);
     }
 
     async generateOrderLabel(input: { orderId: number }) {
+        this.endpointConfig = { version: 'v2' };
         const { orderId } = input;
         const { data } = await this.endpoint.post(`/${orderId}/generate-label`);
         return plainToInstance(OrderEntity, data);

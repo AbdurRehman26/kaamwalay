@@ -9,7 +9,7 @@ use App\Http\Requests\API\V3\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V3\Admin\Order\UpdateShippingAddressRequest;
 use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V3\Admin\Order\UserCardResource;
-use App\Http\Resources\API\V3\Admin\OrderListCollection;
+use App\Http\Resources\API\V3\Admin\OrderListResource;
 use App\Http\Resources\API\V3\Admin\OrderResource;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\Order;
@@ -27,11 +27,11 @@ class OrderController extends Controller
     {
     }
 
-    public function index(): OrderListCollection
+    public function index(): AnonymousResourceCollection
     {
         $orders = $this->orderService->getOrders();
 
-        return new OrderListCollection($orders);
+        return OrderListResource::collection($orders);
     }
 
     public function show(int $orderId): OrderResource

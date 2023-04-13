@@ -31,6 +31,11 @@
             const frontButton = document.getElementsByClassName("feed-view__generated-images__buttons__front");
             const backButton = document.getElementsByClassName("feed-view__generated-images__buttons__back");
 
+            const graphDiv =  document.getElementsByClassName("feed-view__graph__container");
+            window.onload = function() {
+                graphDiv[0].scrollLeft = graphDiv[0].scrollWidth - graphDiv[0].clientWidth;
+            }
+
             function frontButtonToggle() {
                 front[0].style.display = "flex";
                 frontButton[0].style.background = "rgba(32, 191, 184, 0.08)"

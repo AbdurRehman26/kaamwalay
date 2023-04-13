@@ -30,6 +30,10 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
         $extraData = unserialize($scheduledEmail->extra_data);
         $user = User::find($extraData['user_id']);
 
+        if (! $user) {
+            return false;
+        }
+    
         $referees = $user->referees;
 
         // Send Remainder if user has no referees

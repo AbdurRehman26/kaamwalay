@@ -10,10 +10,18 @@ use App\Models\OrderAddress;
 use App\Models\UserCard;
 use App\Services\Admin\V2\OrderService as V2OrderService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {
+    public function getOrder(int $orderId): Model | QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->allowedIncludes(Order::getAllowedAdminIncludes())
+            ->findOrFail($orderId);
+    }
+
     public function updateShippingAddress(Order $order, array $data): Order
     {
         $data['country_id'] = Country::whereCode($data['country_code'] ?? 'US')->first()->id;
@@ -50,6 +58,7 @@ class OrderService extends V2OrderService
         // @phpstan-ignore-next-line
         return QueryBuilder::for($query)
             ->allowedFilters(UserCard::allowedFilters())
+            ->allowedIncludes(UserCard::allowedIncludes())
             ->paginate(request('per_page', 24));
     }
 

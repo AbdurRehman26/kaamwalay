@@ -247,14 +247,14 @@ export function SubmissionsTableRow({
                 ) : null}
                 {isCustomerDetailPage || isReferralPage ? (
                     <TableCell>
-                        {order?.referrer ? (
+                        {order?.customer?.referredBy ? (
                             <MuiLink
                                 component={Link}
                                 color={'primary'}
-                                to={`/customers/${order.referrer?.id}/view/overview`}
+                                to={`/customers/${order.customer?.referredBy?.id}/view/overview`}
                                 className={font.fontWeightMedium}
                             >
-                                {order.referrer?.getFullName()}
+                                {order.customer?.referredBy?.fullName}
                             </MuiLink>
                         ) : (
                             '-'

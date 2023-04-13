@@ -5,6 +5,7 @@ use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use App\Http\Controllers\API\V3\Admin\ReferrerPayoutController;
+use App\Http\Controllers\API\V3\Admin\Order\UserCardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +32,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::prefix('{order}')->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
             Route::get('grades', [OrderController::class, 'getGrades'])->name('orders.get-grades');
+            Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
         });
 
         Route::post('mark-abandoned', [OrderController::class, 'markAsAbandoned'])->name('orders.mark-abandoned');
         Route::post('mark-un-abandoned', [OrderController::class, 'markAsUnAbandoned'])->name('orders.mark-un-abandoned');
     });
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show'])
+        ->names([
+            'index' => 'orders.index',
+            'show' => 'orders.show',
+        ]);
 
     Route::apiResource('customers', CustomerController::class)->only(['index', 'show'])
         ->names([

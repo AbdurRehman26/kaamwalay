@@ -19,6 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import CleaningFee from '@shared/components/CleaningFee';
 import { AddedSubmissionCards } from '@shared/components/NewSubmission/AddedSubmissionCards';
 import { ApplyPromoCode } from '@shared/components/NewSubmission/ApplyPromoCode';
 import { CardsSearchResults } from '@shared/components/NewSubmission/CardsSearchResults';
@@ -34,6 +35,7 @@ import {
     getServiceLevels,
     setIsCouponApplied,
     setPayNow,
+    setRequiresCleaning,
     setServiceLevel,
     updatePaymentMethod,
     updatePaymentMethodId,
@@ -88,6 +90,7 @@ export function CreateSubmission() {
     const [isLoading, setIsLoading] = useState(false);
     const [openDropDown, setOpenDropDown] = useState(false);
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
+    const requiresCleaning = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.requiresCleaning);
     const searchValue = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.searchValue);
     const serviceLevels = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.availableServiceLevels);
     const selectedServiceLevel = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.selectedServiceLevel);
@@ -168,6 +171,8 @@ export function CreateSubmission() {
         () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
         [algoliaAppId, algoliaPublicKey],
     );
+
+    const dispatchRequiresCleaning = setRequiresCleaning(!requiresCleaning);
 
     return (
         <>
@@ -337,6 +342,18 @@ export function CreateSubmission() {
                                             </Grid>
                                         </Grid>
                                     </Grid>
+                                </Grid>
+                                <Grid
+                                    md={selectedCards.length > 0 ? 12 : 8}
+                                    m={selectedCards.length > 0 ? 3 : 'auto'}
+                                    mt={3}
+                                    border={'1px solid #E0E0E0'}
+                                    sx={{ background: '#FFFFFF', borderRadius: '4px' }}
+                                >
+                                    <CleaningFee
+                                        requiresCleaning={requiresCleaning}
+                                        setRequiresCleaning={dispatchRequiresCleaning}
+                                    />
                                 </Grid>
                                 <Grid
                                     md={selectedCards.length > 0 ? 12 : 8}

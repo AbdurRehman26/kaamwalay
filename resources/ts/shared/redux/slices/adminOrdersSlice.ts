@@ -7,6 +7,7 @@ import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
+import { UserCardEntity } from '@shared/entities/UserCardEntity';
 import { app } from '@shared/lib/app';
 import { OrderItemsRepository } from '@shared/repositories/Admin/OrderItemsRepository';
 import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
@@ -35,7 +36,7 @@ export const changeOrderItemStatus = createAsyncThunk<
     {
         orderId: number;
         orderItemId: number;
-        certificateNumber: string;
+        userCard: UserCardEntity;
         status: OrderItemStatusHistoryEntity;
     },
     ChangeOrderItemStatusDto
@@ -47,7 +48,7 @@ export const changeOrderItemStatus = createAsyncThunk<
         return {
             orderId: input.orderId,
             orderItemId: input.orderItemId,
-            certificateNumber: item.certificateNumber,
+            userCard: item.userCard,
             status: instanceToPlain(item.status) as OrderItemStatusHistoryEntity,
         };
     } catch (e: any) {
@@ -336,12 +337,12 @@ export const adminOrdersSlice = createSlice({
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
-            const { orderId, orderItemId, certificateNumber, status } = payload;
+            const { orderId, orderItemId, userCard, status } = payload;
             const order = plainToInstance(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
-                    item.certificateNumber = certificateNumber;
+                    item.userCard = userCard;
                     item.status = plainToInstance(OrderItemStatusHistoryEntity, status);
                 }
 

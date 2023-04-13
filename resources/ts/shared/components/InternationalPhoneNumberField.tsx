@@ -9,8 +9,14 @@ const InternationalPhoneNumberField = styled(PhoneInput)(() => ({
     '.form-control': {
         width: '100% !important',
         border: '1px solid lightgray !important',
+        borderRadius: '4px !important',
+        padding: '11px 12px 11px 70px !important',
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
         fontWeight: 400,
-        padding: '12px 12px 12px 70px !important',
+        lineHeight: '24px',
+        letterSpacing: '0.15px',
+        color: 'rgba(0, 0, 0, 0.87)',
     },
     '.form-control:focus': {
         border: '2px solid #20BFB8 !important',

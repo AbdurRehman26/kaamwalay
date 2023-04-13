@@ -9,9 +9,15 @@ const SignUpInternationalPhoneNumber = styled(PhoneInput)(() => ({
     '.form-control': {
         width: '100% !important',
         border: '1px solid lightgray !important',
-        fontWeight: 400,
         borderRadius: '28px !important',
-        padding: '21px 14px 10px 68px !important',
+        padding: '26px 14px 10px 68px !important',
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '14px !important',
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.87)',
     },
     '.form-control:focus': {
         borderColor: '#20BFB8 !important',
@@ -25,7 +31,7 @@ const SignUpInternationalPhoneNumber = styled(PhoneInput)(() => ({
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 500,
-        fontSize: '12px',
+        fontSize: '12px !important',
         lineHeight: '16px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
@@ -34,7 +40,7 @@ const SignUpInternationalPhoneNumber = styled(PhoneInput)(() => ({
         paddingLeft: '22px !important',
     },
     '.selected-flag .flag': {
-        top: '59% !important',
+        top: '64% !important',
     },
 }));
 

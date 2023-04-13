@@ -939,6 +939,9 @@ export const newSubmissionSlice = createSlice({
             state.previewTotal = action.payload;
         },
         clearSubmissionState: () => initialState,
+        clearSelectedCards: (state) => {
+            state.step02Data.selectedCards = [];
+        },
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,
@@ -1179,6 +1182,7 @@ export const {
     setBillingAddress,
     setIsNextLoading,
     clearSubmissionState,
+    clearSelectedCards,
     setIsMobileSearchModalOpen,
     setIsCouponValid,
     setCouponCode,

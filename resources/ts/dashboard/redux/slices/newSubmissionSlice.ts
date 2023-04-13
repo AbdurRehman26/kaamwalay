@@ -690,7 +690,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
     const newOrder = await endpoint.post('', orderDTO);
-    localStorage.removeItem('cart');
+    localStorage.removeItem('customer-submission:saved-cards');
     return newOrder.data;
 });
 

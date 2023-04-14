@@ -3036,6 +3036,11 @@ parameters:
 			path: app/Services/Admin/V1/OrderService.php
 
 		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Admin/V3/OrderService.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
 			count: 2
 			path: app/Services/Admin/V1/OrderStatusHistoryService.php

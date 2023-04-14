@@ -393,7 +393,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             const DTO = {
                 imagePath: cardPublicImage,
                 name: cardName || updateCard?.cardSetName,
-                category: cardCategory,
+                category: isUpdate ? updateCard.cardCategory.id : cardCategory?.id,
                 releaseDate: releaseDate || updateCard?.releaseDate,
                 seriesId: selectedSeries?.id,
                 seriesName: null,
@@ -421,7 +421,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         }
         setIsLoading(false);
     };
-
+    console.log('update card ', updateCard);
     const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
         setNewSetLogo(newSetLogo);
     }, []);

@@ -348,7 +348,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 const DTO = {
                     imagePath: cardPublicImage,
                     name: cardName,
-                    category: cardCategory,
+                    category: cardCategory?.id,
                     releaseDate: releaseDate,
                     seriesId: selectedSeries?.id,
                     seriesName: null,

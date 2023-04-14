@@ -260,14 +260,27 @@ export const submissionGradesSlice = createSlice({
             const data = action.payload.data;
             const pagination = { links: action.payload.links, meta: action.payload.meta };
 
-            state.allSubmissions = data;
-            state.gradesPagination = pagination;
-
-            state.hasLoadedAllRobogrades =
+            // This API uses a background sync, but as this data is responsible for the whole page items,
+            // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we
+            // are checking the grades data to ensure if they are loaded, and only then update the state.
+            const areGradesLoaded =
                 data.filter(
                     (card: Record<string, any>) =>
                         card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
                 ).length === data.length;
+
+            if (
+                // This will be true when the API is called first time, and the robogrades are not available.
+                (state.hasLoadedAllRobogrades && !areGradesLoaded) ||
+                // This will be true when the API is called more than once, and the robogrades are now available.
+                (!state.hasLoadedAllRobogrades && areGradesLoaded) ||
+                // This will be true when the API is called first time and the grades are available instantly.
+                (state.hasLoadedAllRobogrades && areGradesLoaded)
+            ) {
+                state.allSubmissions = data;
+                state.gradesPagination = pagination;
+            }
+            state.hasLoadedAllRobogrades = areGradesLoaded;
         },
     },
 });

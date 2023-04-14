@@ -80,17 +80,4 @@ class OrderService extends V2OrderService
             ->allowedIncludes(UserCard::allowedIncludes())
             ->paginate(request('per_page', 24));
     }
-
-    public function detachTags(array $orderIds, string $tag = 'abandoned'): void
-    {
-        Order::whereIn('id', $orderIds)->get()->map(function (Order $order) use ($tag) {
-            $order->detachTag($tag);
-        });
-    }
-    public function attachTags(array $orderIds, string $tag = 'abandoned'): void
-    {
-        Order::whereIn('id', $orderIds)->get()->map(function (Order $order) use ($tag) {
-            $order->attachTag($tag);
-        });
-    }
 }

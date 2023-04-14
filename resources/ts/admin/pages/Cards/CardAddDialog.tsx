@@ -23,6 +23,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { batch } from 'react-redux';
 import ImageUploader from '@shared/components/ImageUploader';
+import { ManageCardDialogCreateCategoryContent } from '@shared/components/ManageCardDialog/ManageCardDialogCreateCategoryContent';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
@@ -132,8 +133,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const [newSetReleaseDate, setNewSetReleaseDate] = useState<Date | null>(null);
     const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
     const [newSeriesName, setNewSeriesName] = useState('');
-    const [newCategoryName, setNewCategoryName] = useState('');
-    const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
@@ -248,22 +247,22 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         }
     }, [availableSets, dialogState.selectedCardSet]);
 
+    const fetchCategories = async () => {
+        const endpoint = apiService.createEndpoint(`admin/cards/categories`);
+        const response = await endpoint.get('');
+        const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
+        setAvailableCategories(response.data);
+        dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
+
+        await fetchSeries(categoryId);
+
+        setSelectedSeriesFromState();
+
+        fetchDropdownsData(categoryId);
+    };
+
     useEffect(
         () => {
-            async function fetchCategories() {
-                const endpoint = apiService.createEndpoint(`admin/cards/categories`);
-                const response = await endpoint.get('');
-                const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
-                setAvailableCategories(response.data);
-                dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
-
-                await fetchSeries(categoryId);
-
-                setSelectedSeriesFromState();
-
-                fetchDropdownsData(categoryId);
-            }
-
             fetchCategories();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -462,44 +461,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     };
 
     const handleNewSeriesLogoChange = useCallback((newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo), []);
-    const handleNewCategoryLogoChange = useCallback(
-        (newCategoryLogo: File | null) => setNewCategoryLogo(newCategoryLogo),
-        [],
-    );
-
-    const handleNewCategoryNameChange = useCallback((e) => setNewCategoryName(e.target.value), []);
-    const showSaveButtonCategory = useMemo(() => {
-        return !!(newCategoryLogo && newCategoryName);
-    }, [newCategoryLogo, newCategoryName]);
-
     const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
     const showSaveButtonSeries = useMemo(() => {
         return !!(newSeriesLogo && newSeriesName);
     }, [newSeriesLogo, newSeriesName]);
-
-    const handleAddCategory = async () => {
-        const endpoint = apiService.createEndpoint('/admin/cards/categories', { version: 'v3' });
-        setIsLoading(true);
-        try {
-            const categoriesLogo = await filesRepository.uploadFile(newCategoryLogo!);
-
-            const DTO = {
-                name: newCategoryName,
-                imageUrl: categoriesLogo,
-            };
-            const responseItem = await endpoint.post('', DTO);
-            batch(() => {
-                dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
-                dispatch(manageCardDialogActions.navigateToPreviousView());
-            });
-            setCreateCardView(true);
-            setCreateCategoryView(false);
-            NotificationsService.success('Category Added Successfully');
-        } catch (e: any) {
-            NotificationsService.exception(e);
-        }
-        setIsLoading(false);
-    };
 
     const handleAddSeries = async () => {
         const endpoint = apiService.createEndpoint('/admin/cards/series');
@@ -563,6 +528,12 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         setCreateSeriesView(false);
     };
 
+    const handleAdd = () => {
+        fetchCategories();
+        setCreateCardView(true);
+        setCreateCategoryView(false);
+    };
+
     const closeIcon = (
         <IconButton
             sx={{
@@ -590,72 +561,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 Create a New Category
                 {closeIcon}
             </DialogTitle>
-            <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
-                <Box padding={'12px'}>
-                    <Grid container padding={'12px'} spacing={24}>
-                        <Grid item md={4}>
-                            <FormControl>
-                                <FormHelperText
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: '#000',
-                                        marginLeft: 0,
-                                    }}
-                                >
-                                    Category Logo*
-                                </FormHelperText>
-                                <ImageUploader accept={'image/png'} onChange={handleNewCategoryLogoChange} />
-                                <span className={classes.validationStyle}>
-                                    Only upload .png file with a transparent background.
-                                </span>
-                            </FormControl>
-                        </Grid>
-                        <Grid item md={8}>
-                            <FormControl>
-                                <FormHelperText
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: '#000',
-                                        marginLeft: 0,
-                                    }}
-                                >
-                                    Category Name*
-                                </FormHelperText>
-                                <TextField
-                                    variant="outlined"
-                                    value={newCategoryName}
-                                    onChange={handleNewCategoryNameChange}
-                                    placeholder={'Enter category name'}
-                                    fullWidth
-                                    sx={{ minWidth: '231px' }}
-                                />
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                </Box>
-                <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
-                    <Box
-                        display={'flex'}
-                        flexDirection={'row'}
-                        justifyContent={'space-between'}
-                        minWidth={'150px'}
-                        marginRight={'13px'}
-                    >
-                        <Button variant="text" sx={{ color: '#000' }} onClick={handleClose}>
-                            Cancel
-                        </Button>
-
-                        <Button
-                            variant="contained"
-                            color={'primary'}
-                            onClick={handleAddCategory}
-                            disabled={!showSaveButtonCategory || isLoading}
-                        >
-                            {isLoading ? <CircularProgress color={'primary'} /> : 'Save'}
-                        </Button>
-                    </Box>
-                </Box>
-            </Box>
+            <ManageCardDialogCreateCategoryContent onAdd={handleAdd} onCancel={handleClose} />
         </div>
     );
 
@@ -840,12 +746,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                 justifyContent={'space-between'}
                                 alignItems={'flex-end'}
                                 padding={'6px'}
-                                marginTop={'12px'}
                             >
                                 <FormControl sx={{ minWidth: '70%' }}>
-                                    <FormHelperText
-                                        sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
-                                    >
+                                    <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
                                         Category
                                     </FormHelperText>
                                     <Autocomplete

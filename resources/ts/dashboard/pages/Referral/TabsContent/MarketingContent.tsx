@@ -13,26 +13,26 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import agsPartnerProgramPost1 from '@shared/assets/agsPartnerProgramPost1.jpg';
+import agsPartnerProgramPost2 from '@shared/assets/agsPartnerProgramPost2.jpg';
+import agsPartnerProgramPost3 from '@shared/assets/agsPartnerProgramPost3.jpg';
+import agsPartnerProgramPost4 from '@shared/assets/agsPartnerProgramPost4.jpg';
+import agsPartnerProgramPost5 from '@shared/assets/agsPartnerProgramPost5.jpg';
+import agsPartnerProgramPost6 from '@shared/assets/agsPartnerProgramPost6.jpg';
+import agsPartnerProgramPost7 from '@shared/assets/agsPartnerProgramPost7.jpg';
+import agsPartnerProgramPost8 from '@shared/assets/agsPartnerProgramPost8.jpg';
+import agsPartnerProgramPost9 from '@shared/assets/agsPartnerProgramPost9.jpg';
+import agsPartnerProgramPost10 from '@shared/assets/agsPartnerProgramPost10.jpg';
+import agsPartnerProgramPost11 from '@shared/assets/agsPartnerProgramPost11.jpg';
+import agsPartnerProgramPost12 from '@shared/assets/agsPartnerProgramPost12.mp4';
+import agsPartnerProgramPost13 from '@shared/assets/agsPartnerProgramPost13.mp4';
+import agsPartnerProgramPost14 from '@shared/assets/agsPartnerProgramPost14.mp4';
+import agsPartnerProgramPost15 from '@shared/assets/agsPartnerProgramPost15.mp4';
+import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.svg';
+import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.svg';
+import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.svg';
+import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.svg';
 import theme from '@shared/styles/theme';
-import agsPartnerProgramPost1 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost1.jpg';
-import agsPartnerProgramPost2 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost2.jpg';
-import agsPartnerProgramPost3 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost3.jpg';
-import agsPartnerProgramPost4 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost4.jpg';
-import agsPartnerProgramPost5 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost5.jpg';
-import agsPartnerProgramPost6 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost6.jpg';
-import agsPartnerProgramPost7 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost7.jpg';
-import agsPartnerProgramPost8 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost8.jpg';
-import agsPartnerProgramPost9 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost9.jpg';
-import agsPartnerProgramPost10 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost10.jpg';
-import agsPartnerProgramPost11 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost11.jpg';
-import agsPartnerProgramPost12 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost12.mp4';
-import agsPartnerProgramPost13 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost13.mp4';
-import agsPartnerProgramPost14 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost14.mp4';
-import agsPartnerProgramPost15 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramPost15.mp4';
-import agsPartnerProgramThumbnail12 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail12.svg';
-import agsPartnerProgramThumbnail13 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail13.svg';
-import agsPartnerProgramThumbnail14 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail14.svg';
-import agsPartnerProgramThumbnail15 from '../../../../../../public/assets/images/landings/referral/agsPartnerProgramThumbnail15.svg';
 
 const images = [
     {
@@ -267,6 +267,7 @@ const useStyles = makeStyles({
     dialogVideo: {
         height: '600px',
         width: '600px',
+        background: '#000000',
         [theme.breakpoints.down('sm')]: {
             height: '55vh',
             width: '300px',

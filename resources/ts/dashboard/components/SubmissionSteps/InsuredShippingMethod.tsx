@@ -148,6 +148,10 @@ const useStyles = makeStyles((theme) => ({
     },
     phoneField: {
         marginBottom: '180px',
+
+        [theme.breakpoints.down('md')]: {
+            marginBottom: '24px',
+        },
     },
 }));
 

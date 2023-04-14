@@ -9,12 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Formik } from 'formik';
-import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -35,30 +34,6 @@ export interface EditCustomerDetailsDialogProps extends Omit<DialogProps, 'onSub
     endpointVersion: string;
     onSubmit(): Promise<void> | void;
 }
-const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
-    '&': {
-        padding: '0 !important',
-        width: '100%',
-        border: '1px solid lightgray',
-        fontWeight: 400,
-        fontSize: '1rem',
-        borderRadius: 4,
-    },
-    '.MuiInputAdornment-root': {
-        padding: '14px 12px',
-        marginRight: 0,
-    },
-    '.MuiInput-input': {
-        borderLeft: '1px solid lightgray',
-        padding: '12px !important',
-    },
-    '.MuiInput-root:before': {
-        border: '0 !important',
-    },
-    '.MuiInput-root:after': {
-        border: '0 !important',
-    },
-}));
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -125,6 +100,10 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
+        },
+        phoneDropdown: {
+            position: 'fixed',
+            maxHeight: '240px !important',
         },
     }),
     { name: 'EditCustomerDetailsDialog' },
@@ -329,18 +308,13 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
                                     <div className={classes.inputsRow}>
                                         <div className={`${classes.fieldContainer} ${classes.fullWidth}`}>
                                             <Typography className={classes.inputTitle}>Phone Number</Typography>
-                                            <StyledPhoneNumber
-                                                countryCodeEditable={false}
-                                                defaultCountry="us"
-                                                disableAreaCodes
-                                                onlyCountries={availableCountries.map((country) =>
-                                                    country.code.toLowerCase(),
-                                                )}
+                                            <InternationalPhoneNumberField
                                                 value={values.phone}
-                                                onChange={(e) => {
-                                                    setFieldValue('phone', e);
-                                                    updateCurrentValues('phone', e.toString());
+                                                onChange={(value, data, event, formattedValue) => {
+                                                    setFieldValue('phone', value);
+                                                    updateCurrentValues('phone', formattedValue);
                                                 }}
+                                                dropdownClass={classes.phoneDropdown}
                                             />
                                         </div>
                                     </div>

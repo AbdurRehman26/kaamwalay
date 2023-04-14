@@ -7,7 +7,12 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import theme from '@shared/styles/theme';
 import { useAppDispatch } from '../redux/hooks';
-import { clearSubmissionState, createOrder, setIsNextLoading } from '../redux/slices/newSubmissionSlice';
+import {
+    clearSelectedCards,
+    clearSubmissionState,
+    createOrder,
+    setIsNextLoading,
+} from '../redux/slices/newSubmissionSlice';
 
 interface CompleteSubmissonButtonProps {
     buttonText: string;
@@ -39,6 +44,7 @@ export function CompleteSubmissonButton({ buttonText, hasStyle }: PropsWithChild
             });
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
+            dispatch(clearSelectedCards());
             navigate(`/submissions/${order.id}/confirmation`);
         } catch (error: any) {
             dispatch(setIsNextLoading(false));

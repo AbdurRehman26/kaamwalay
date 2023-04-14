@@ -380,11 +380,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </>
                                 )}
                                 <TableCell>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
-                                            Edit Label Text
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
+                                    {user.hasRole(RolesEnum.Admin) && (
+                                        <OptionsMenu onClick={handleOption}>
+                                            <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
+                                                Edit Label Text
+                                            </OptionsMenuItem>
+                                        </OptionsMenu>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}

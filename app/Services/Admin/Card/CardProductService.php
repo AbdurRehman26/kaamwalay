@@ -153,6 +153,10 @@ class CardProductService
     {
         // @phpstan-ignore-next-line
         return QueryBuilder::for(CardProduct::class)
+            ->with([
+                'cardSet.cardSeries',
+                'cardCategory.cardCategoryType',
+            ])
             ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
             ->addSelect(DB::raw('card_products.*, pop_reports_cards.population'))
             ->excludeAddedManually()

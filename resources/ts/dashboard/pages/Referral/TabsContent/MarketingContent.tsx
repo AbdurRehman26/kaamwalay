@@ -328,7 +328,7 @@ export function MarketingContent({ expandable }: props) {
                 <Grid className={'ImagesDiv'}>
                     {expandable
                         ? images.slice(0, 8).map((data: any) => (
-                              <div className={'MarketingContentImageDiv'}>
+                              <div className={'MarketingContentImageDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
                                           className={'MarketingContentImage'}
@@ -340,7 +340,7 @@ export function MarketingContent({ expandable }: props) {
                               </div>
                           ))
                         : images.map((data: any) => (
-                              <div className={'MarketingContentImageDiv'}>
+                              <div className={'MarketingContentImageDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
                                           className={'MarketingContentImage'}

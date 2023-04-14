@@ -421,7 +421,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         }
         setIsLoading(false);
     };
-    console.log('update card ', updateCard);
+
     const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
         setNewSetLogo(newSetLogo);
     }, []);

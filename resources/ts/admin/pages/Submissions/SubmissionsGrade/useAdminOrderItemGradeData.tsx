@@ -54,7 +54,7 @@ export function useAdminOrderItemGradeData(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.longName,
     );
     const certificateNumber = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].certificateNumber,
     );
     const shortName = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.shortName,
@@ -104,10 +104,10 @@ export function useAdminOrderItemGradeData(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
     );
     const gradedAt = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedAt,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.updatedAt,
     );
     const gradedBy = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedBy,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.user.fullName,
     );
 
     const [isDoneDisabled, setIsDoneDisabled] = useState(true);

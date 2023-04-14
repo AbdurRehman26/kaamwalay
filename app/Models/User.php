@@ -82,13 +82,6 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'referred_by' => 'integer',
     ];
 
-    /**
-     * The relations that should be returned with model.
-     *
-     * @var array
-     */
-    protected $with = ['roles:id,name'];
-
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);

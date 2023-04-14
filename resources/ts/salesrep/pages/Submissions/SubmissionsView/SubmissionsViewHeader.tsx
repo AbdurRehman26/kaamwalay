@@ -1,10 +1,9 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useOrderStatus } from '@salesrep/hooks/useOrderStatus';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
@@ -14,8 +13,6 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { font } from '@shared/styles/utils';
 import SubmissionHeaderMoreButton from '../SubmissionsView/SubmissionHeaderMoreButton';
 
@@ -82,17 +79,6 @@ export function SubmissionsViewHeader({
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
-    const notifications = useNotifications();
-
-    const sharedProps: any = useMemo(
-        () => ({
-            variant: 'contained',
-            color: 'primary',
-            size: 'large',
-            className: classes.printButton,
-        }),
-        [classes.printButton],
-    );
 
     const history = useMemo(
         () =>
@@ -120,15 +106,6 @@ export function SubmissionsViewHeader({
         [isVault, orderStatusHistory],
     );
 
-    const ExportCertificateIds = useCallback(async () => {
-        if (!orderCertificate) {
-            notifications.error('Order Label is generating at the moment, try again in some minutes!');
-            return;
-        }
-
-        await downloadFromUrl(orderCertificate.path, `${orderNumber}_certificate.xlsx`);
-    }, [notifications, orderCertificate, orderNumber]);
-
     return (
         <Grid container className={classes.root}>
             <Grid container className={classes.header}>
@@ -150,21 +127,6 @@ export function SubmissionsViewHeader({
                     ) : null}
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {orderStatus.is(OrderStatusEnum.CONFIRMED) ||
-                    orderStatus.is(OrderStatusEnum.GRADED) ||
-                    orderStatus.is(OrderStatusEnum.ASSEMBLED) ||
-                    orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <>
-                            <Button
-                                {...sharedProps}
-                                startIcon={<Icon>qr_code</Icon>}
-                                onClick={ExportCertificateIds}
-                                disabled={!orderCertificate}
-                            >
-                                Export Cert ID's
-                            </Button>
-                        </>
-                    ) : null}
                     <SubmissionHeaderMoreButton
                         paymentStatus={paymentStatus}
                         orderId={orderId}

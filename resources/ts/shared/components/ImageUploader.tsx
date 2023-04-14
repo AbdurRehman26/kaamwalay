@@ -15,6 +15,7 @@ interface ImageUploaderProps {
     maxHeight?: string;
     maxWidth?: string;
     isSmall?: boolean;
+    accept?: string;
     imageUrl?: any;
     onDelete?: () => void;
 }
@@ -32,6 +33,7 @@ const useStyles = makeStyles(
 );
 
 export default function ImageUploader(props: ImageUploaderProps) {
+    const { accept = 'image/*' } = props;
     const classes = useStyles();
     const [uploadedImage, setUploadedImage] = useState(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
@@ -43,7 +45,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
         [props],
     );
     const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
-        accept: 'image/*',
+        accept: accept,
         onDrop,
     } as DropzoneOptions);
 

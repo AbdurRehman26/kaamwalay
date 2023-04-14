@@ -146,6 +146,13 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
+    phoneField: {
+        marginBottom: '180px',
+
+        [theme.breakpoints.down('md')]: {
+            marginBottom: '24px',
+        },
+    },
 }));
 
 export function InsuredShippingMethod() {
@@ -671,6 +678,7 @@ export function InsuredShippingMethod() {
                                     }}
                                     onBlur={handleShippingFee}
                                     disabled={disableAllInputs}
+                                    containerClass={classes.phoneField}
                                 />
                             </div>
                         </div>

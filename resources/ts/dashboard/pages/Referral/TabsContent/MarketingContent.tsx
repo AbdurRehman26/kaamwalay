@@ -264,6 +264,14 @@ const useStyles = makeStyles({
     dialogImage: {
         maxHeight: '75vh',
     },
+    dialogVideo: {
+        height: '600px',
+        width: '600px',
+        [theme.breakpoints.down('sm')]: {
+            height: '55vh',
+            width: '300px',
+        },
+    },
 });
 
 interface props {
@@ -293,7 +301,7 @@ export function MarketingContent({ expandable }: props) {
     const getContent = (index: number) => {
         return images[index].type === 'video' ? (
             // eslint-disable-next-line jsx-a11y/media-has-caption
-            <video controls className={classes.dialogImage} autoPlay>
+            <video controls className={classes.dialogVideo} autoPlay key={images[index].url}>
                 <source src={images[index].url} />
             </video>
         ) : (
@@ -372,11 +380,13 @@ export function MarketingContent({ expandable }: props) {
             {open ? (
                 <>
                     <Grid className={'DownloadGrid'}>
-                        <a className={'AnchorLink'} href={images[index].url} download>
-                            <Button className={'DownloadButton'}>
-                                <FileDownloadOutlinedIcon /> DOWNLOAD
-                            </Button>
-                        </a>
+                        {images[index].type === 'image' ? (
+                            <a className={'AnchorLink'} href={images[index].url} download>
+                                <Button className={'DownloadButton'}>
+                                    <FileDownloadOutlinedIcon /> DOWNLOAD
+                                </Button>
+                            </a>
+                        ) : null}
                     </Grid>
                     <Button disabled={index === 0} onClick={() => setIndex(index - 1)} className={'PreviousButton'}>
                         <KeyboardArrowLeftOutlinedIcon className={'NavigationIcon'} />

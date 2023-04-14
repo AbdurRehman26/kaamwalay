@@ -380,13 +380,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </>
                                 )}
                                 <TableCell>
-                                    {!window.location.href.includes('salesrep') ? (
+                                    {user.hasRole(RolesEnum.Admin) && (
                                         <OptionsMenu onClick={handleOption}>
                                             <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
                                                 Edit Label Text
                                             </OptionsMenuItem>
                                         </OptionsMenu>
-                                    ) : null}
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -39,7 +39,15 @@ export function SubmissionsReview() {
         resourceId: Number(id),
         config: {
             params: {
-                include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
+                include: [
+                    'orderItems',
+                    'orderStatus',
+                    'orderStatusHistory.orderStatus',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                    'orderItems.userCard',
+                    'orderItems.latestStatusHistory.orderItemStatus',
+                ],
             },
         },
     });

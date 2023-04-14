@@ -147,6 +147,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('customer.wallet', 'user.wallet'),
+            AllowedInclude::relationship('customer.referredBy', 'user.referredBy'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
@@ -154,6 +155,21 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
+            AllowedInclude::relationship('createdBy'),
+            AllowedInclude::relationship('reviewedBy'),
+            AllowedInclude::relationship('gradedBy'),
+            AllowedInclude::relationship('orderItems.cardProduct'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItems.userCard'),
+            AllowedInclude::relationship('firstOrderPayment.user'),
+            AllowedInclude::relationship('owner', 'salesman'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory', 'orderItems.latestOrderItemStatusHistory'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory.orderItemStatus', 'orderItems.latestOrderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory.user', 'orderItems.latestOrderItemStatusHistory.user'),
         ];
     }
 
@@ -233,6 +249,7 @@ class Order extends Model implements Exportable
             'grand_total',
         ];
     }
+
     public static function getAllowedIncludes(): array
     {
         return [

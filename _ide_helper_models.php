@@ -33,18 +33,18 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategoryType|null $cardCategoryType
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardProduct[] $cardProducts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardProduct> $cardProducts
  * @property-read int|null $card_products_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardRarity[] $cardRarities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardRarity> $cardRarities
  * @property-read int|null $card_rarities_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSeries[] $cardSeries
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardSeries> $cardSeries
  * @property-read int|null $card_series_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardSet> $cardSets
  * @property-read int|null $card_sets_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSurface[] $cardSurfaces
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardSurface> $cardSurfaces
  * @property-read int|null $card_surfaces_count
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory enabled()
- * @method static \Database\Factories\CardCategoryFactory factory(...$parameters)
+ * @method static \Database\Factories\CardCategoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory query()
@@ -67,9 +67,9 @@ namespace App\Models{
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardCategory[] $cardCategories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardCategory> $cardCategories
  * @property-read int|null $card_categories_count
- * @method static \Database\Factories\CardCategoryTypeFactory factory(...$parameters)
+ * @method static \Database\Factories\CardCategoryTypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategoryType query()
@@ -115,7 +115,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardProduct $cardProduct
- * @method static \Database\Factories\CardLabelFactory factory(...$parameters)
+ * @method static \Database\Factories\CardLabelFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardLabel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardLabel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardLabel query()
@@ -163,18 +163,18 @@ namespace App\Models{
  * @property-read \App\Models\CardCategory|null $cardCategory
  * @property-read \App\Models\CardLabel|null $cardLabel
  * @property-read \App\Models\CardSet|null $cardSet
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
  * @property-read int|null $order_items_count
  * @property-read \App\Models\PopReportsCard|null $popReportsCard
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCard[] $userCards
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCard> $userCards
  * @property-read int|null $user_cards_count
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct canBeInitializedInPopReport()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct cardCategory(int $categoryId)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct excludeAddedManually()
- * @method static \Database\Factories\CardProductFactory factory(...$parameters)
+ * @method static \Database\Factories\CardProductFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newQuery()
- * @method static \Illuminate\Database\Query\Builder|CardProduct onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct query()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct releaseDate(string $startDate, string $endDate)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereAddedBy($value)
@@ -201,8 +201,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariant($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantCategory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantName($value)
- * @method static \Illuminate\Database\Query\Builder|CardProduct withTrashed()
- * @method static \Illuminate\Database\Query\Builder|CardProduct withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct withoutTrashed()
  */
 	class CardProduct extends \Eloquent {}
 }
@@ -218,7 +218,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity cardCategory(int $categoryId)
- * @method static \Database\Factories\CardRarityFactory factory(...$parameters)
+ * @method static \Database\Factories\CardRarityFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardRarity query()
@@ -243,11 +243,11 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardSet> $cardSets
  * @property-read int|null $card_sets_count
  * @property-read string $release_date
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries category(\App\Models\CardCategory $cardCategory)
- * @method static \Database\Factories\CardSeriesFactory factory(...$parameters)
+ * @method static \Database\Factories\CardSeriesFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries query()
@@ -309,10 +309,10 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardProduct[] $cardProducts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CardProduct> $cardProducts
  * @property-read int|null $card_products_count
  * @property-read \App\Models\CardSeries $cardSeries
- * @method static \Database\Factories\CardSetFactory factory(...$parameters)
+ * @method static \Database\Factories\CardSetFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardSet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSet query()
@@ -373,7 +373,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory $cardCategory
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface cardCategory(int $categoryId)
- * @method static \Database\Factories\CardSurfaceFactory factory(...$parameters)
+ * @method static \Database\Factories\CardSurfaceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSurface query()
@@ -418,7 +418,7 @@ namespace App\Models{
  * @property float $percentage_value
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\CommissionStructureFactory factory(...$parameters)
+ * @method static \Database\Factories\CommissionStructureFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CommissionStructure query()
@@ -445,7 +445,7 @@ namespace App\Models{
  * @property bool $is_enabled
  * @property-read \App\Models\ShippingMatrix|null $shippingMatrix
  * @method static \Illuminate\Database\Eloquent\Builder|Country enabled()
- * @method static \Database\Factories\CountryFactory factory(...$parameters)
+ * @method static \Database\Factories\CountryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country query()
@@ -487,24 +487,24 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Couponable|null $couponAble
  * @property-read \App\Models\CouponApplicable $couponApplicable
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponLog[] $couponLogs
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CouponLog> $couponLogs
  * @property-read int|null $coupon_logs_count
  * @property-read \App\Models\CouponStat|null $couponStats
  * @property-read \App\Models\CouponStatus $couponStatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CouponStatusHistory> $couponStatusHistories
  * @property-read int|null $coupon_status_histories_count
  * @property-read \App\Models\User $createdBy
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentPlan> $paymentPlans
  * @property-read int|null $payment_plans_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon excludeSystemGeneratedCoupons()
- * @method static \Database\Factories\CouponFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon notCreatedBy(string|int $id)
- * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon status(string|int $status)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon validForUserLimit(string $couponCode, \App\Models\User $user)
@@ -531,8 +531,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUsageAllowedPerUser($value)
- * @method static \Illuminate\Database\Query\Builder|Coupon withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Coupon withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon withoutTrashed()
  */
 	class Coupon extends \Eloquent {}
 }
@@ -548,9 +548,9 @@ namespace App\Models{
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Coupon> $coupons
  * @property-read int|null $coupons_count
- * @method static \Database\Factories\CouponApplicableFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponApplicableFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable onlyActive()
@@ -579,7 +579,7 @@ namespace App\Models{
  * @property-read \App\Models\Coupon $coupon
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\CouponLogFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponLogFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog query()
@@ -631,9 +631,9 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CouponStatusHistory> $couponStatusHistories
  * @property-read int|null $coupon_status_histories_count
- * @method static \Database\Factories\CouponStatusFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponStatusFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus forStatus(string|int $status)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus newQuery()
@@ -660,7 +660,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Coupon $coupon
  * @property-read \App\Models\CouponStatus $couponStatus
- * @method static \Database\Factories\CouponStatusHistoryFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponStatusHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory query()
@@ -684,7 +684,7 @@ namespace App\Models{
  * @property int $couponables_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\CouponableFactory factory(...$parameters)
+ * @method static \Database\Factories\CouponableFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Couponable newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Couponable newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Couponable query()
@@ -718,7 +718,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\CustomerAddressFactory factory(...$parameters)
+ * @method static \Database\Factories\CustomerAddressFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress newQuery()
@@ -754,9 +754,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notifiable
- * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] all($columns = ['*'])
- * @method static \Database\Factories\DatabaseNotificationFactory factory(...$parameters)
- * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] get($columns = ['*'])
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection<int, static> all($columns = ['*'])
+ * @method static \Database\Factories\DatabaseNotificationFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Notifications\DatabaseNotificationCollection<int, static> get($columns = ['*'])
  * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification query()
@@ -808,7 +808,7 @@ namespace App\Models{
  * @property string $path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\InvoiceFactory factory(...$parameters)
+ * @method static \Database\Factories\InvoiceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice query()
@@ -890,38 +890,38 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $shipped_at
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property string|null $salesman_commission
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderPayment> $allPayments
  * @property-read int|null $all_payments_count
  * @property-read \App\Models\OrderAddress|null $billingAddress
  * @property-read \App\Models\Coupon|null $coupon
  * @property-read \App\Models\User|null $createdBy
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderPayment> $extraCharges
  * @property-read int|null $extra_charges_count
  * @property-read \App\Models\OrderPayment|null $firstOrderPayment
  * @property-read int $grand_total_cents
  * @property-read float $grand_total_to_be_paid
  * @property-read \App\Models\User|null $gradedBy
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $gradedOrderItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $gradedOrderItems
  * @property-read int|null $graded_order_items_count
  * @property-read \App\Models\Invoice|null $invoice
  * @property-read \App\Models\OrderPayment|null $lastOrderPayment
  * @property-read \App\Models\OrderCertificate|null $orderCertificate
  * @property-read \App\Models\OrderCustomerShipment|null $orderCustomerShipment
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
  * @property-read int|null $order_items_count
  * @property-read \App\Models\OrderLabel|null $orderLabel
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $orderPayments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderPayment> $orderPayments
  * @property-read int|null $order_payments_count
  * @property-read \App\Models\OrderShipment|null $orderShipment
  * @property-read \App\Models\OrderStatus|null $orderStatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderStatusHistory> $orderStatusHistory
  * @property-read int|null $order_status_history_count
  * @property-read \App\Models\PaymentPlan $originalPaymentPlan
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\OrderPaymentPlan $paymentPlan
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderPayment> $refunds
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
  * @property-read \App\Models\User|null $salesman
@@ -929,10 +929,11 @@ namespace App\Models{
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Order betweenDates(\DateTime $fromDate, \DateTime $toDate)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order couponCode(string $coupon)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
  * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()
- * @method static \Database\Factories\OrderFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Order forDate(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forMonth(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forSalesman(\App\Models\User $user)
@@ -1010,7 +1011,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
- * @method static \Database\Factories\OrderAddressFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderAddressFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress query()
@@ -1064,7 +1065,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Order|null $order
- * @method static \Database\Factories\OrderCustomerShipmentFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderCustomerShipmentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderCustomerShipment query()
@@ -1098,17 +1099,18 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $order_item_customer_shipment_id
  * @property int $order_item_status_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\CardProduct $cardProduct
+ * @property-read \App\Models\OrderItemStatusHistory|null $latestOrderItemStatusHistory
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\OrderItemCustomerShipment|null $orderItemCustomerShipment
  * @property-read \App\Models\OrderItemShipment|null $orderItemShipment
  * @property-read \App\Models\OrderItemStatus $orderItemStatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItemStatusHistory[] $orderItemStatusHistory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItemStatusHistory> $orderItemStatusHistory
  * @property-read int|null $order_item_status_history_count
  * @property-read \App\Models\UserCard|null $userCard
- * @method static \Database\Factories\OrderItemFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
@@ -1141,7 +1143,7 @@ namespace App\Models{
  * @property string $shipping_provider
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\OrderItemCustomerShipmentFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderItemCustomerShipmentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemCustomerShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemCustomerShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemCustomerShipment query()
@@ -1168,7 +1170,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ShippingMethod $shippingMethod
- * @method static \Database\Factories\OrderItemShipmentFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderItemShipmentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemShipment query()
@@ -1194,7 +1196,7 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\OrderItemStatusFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderItemStatusFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus forStatus($status)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus newQuery()
@@ -1220,12 +1222,12 @@ namespace App\Models{
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\OrderItem $orderItem
  * @property-read \App\Models\OrderItemStatus $orderItemStatus
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\OrderItemStatusHistoryFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderItemStatusHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatusHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatusHistory query()
@@ -1279,12 +1281,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id Person who made the transaction, can be a user himself or an admin
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\OrderPaymentFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderPaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forMonth(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forValidPaidOrders()
@@ -1320,7 +1322,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Order|null $order
- * @method static \Database\Factories\OrderPaymentPlanFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderPaymentPlanFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan query()
@@ -1346,11 +1348,11 @@ namespace App\Models{
  * @property int $shipping_method_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\Order|null $order
  * @property-read \App\Models\ShippingMethod $shippingMethod
- * @method static \Database\Factories\OrderShipmentFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderShipmentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderShipment query()
@@ -1375,7 +1377,7 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\OrderStateFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderStateFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderState newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderState newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderState query()
@@ -1400,9 +1402,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OrderState $orderState
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderStatusHistory> $orderStatusHistories
  * @property-read int|null $order_status_histories_count
- * @method static \Database\Factories\OrderStatusFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderStatusFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus query()
@@ -1428,12 +1430,12 @@ namespace App\Models{
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\OrderStatus $orderStatus
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\OrderStatusHistoryFactory factory(...$parameters)
+ * @method static \Database\Factories\OrderStatusHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatusHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatusHistory query()
@@ -1461,7 +1463,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $handles_handshake
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod enabled()
- * @method static \Database\Factories\PaymentMethodFactory factory(...$parameters)
+ * @method static \Database\Factories\PaymentMethodFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod query()
@@ -1494,14 +1496,14 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Coupon> $coupons
  * @property-read int|null $coupons_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlanRange[] $paymentPlanRanges
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentPlanRange> $paymentPlanRanges
  * @property-read int|null $payment_plan_ranges_count
- * @method static \Database\Factories\PaymentPlanFactory factory(...$parameters)
+ * @method static \Database\Factories\PaymentPlanFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
- * @method static \Illuminate\Database\Query\Builder|PaymentPlan onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan query()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDeletedAt($value)
@@ -1515,8 +1517,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan wherePriceBeforeDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereTurnaround($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|PaymentPlan withTrashed()
- * @method static \Illuminate\Database\Query\Builder|PaymentPlan withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan withoutTrashed()
  */
 	class PaymentPlan extends \Eloquent {}
 }
@@ -1533,7 +1535,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PaymentPlan $paymentPlan
- * @method static \Database\Factories\PaymentPlanRangeFactory factory(...$parameters)
+ * @method static \Database\Factories\PaymentPlanRangeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlanRange query()
@@ -1580,7 +1582,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $population
  * @property-read \App\Models\CardProduct $cardProduct
- * @method static \Database\Factories\PopReportsCardFactory factory(...$parameters)
+ * @method static \Database\Factories\PopReportsCardFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard query()
@@ -1645,7 +1647,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardSeries|null $cardSeries
- * @method static \Database\Factories\PopReportsSeriesFactory factory(...$parameters)
+ * @method static \Database\Factories\PopReportsSeriesFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries query()
@@ -1709,7 +1711,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardSet $cardSet
- * @method static \Database\Factories\PopReportsSetFactory factory(...$parameters)
+ * @method static \Database\Factories\PopReportsSetFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet query()
@@ -1754,15 +1756,15 @@ namespace App\Models{
  * @property int $link_clicks
  * @property int $successful_signups
  * @property int $referral_orders The total amount of paid orders done by referred users
- * @property bool $is_referral_active
+ * @property int $is_referral_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ReferrerEarnedCommission[] $earnedCommissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReferrerEarnedCommission> $earnedCommissions
  * @property-read int|null $earned_commissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $referees
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $referees
  * @property-read int|null $referees_count
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\ReferrerFactory factory(...$parameters)
+ * @method static \Database\Factories\ReferrerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Referrer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Referrer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Referrer query()
@@ -1795,7 +1797,7 @@ namespace App\Models{
  * @property-read \App\Models\CommissionStructure|null $commissionStructure
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\Referrer|null $referrer
- * @method static \Database\Factories\ReferrerEarnedCommissionFactory factory(...$parameters)
+ * @method static \Database\Factories\ReferrerEarnedCommissionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerEarnedCommission query()
@@ -1815,13 +1817,44 @@ namespace App\Models{
 /**
  * App\Models\ReferrerPayout
  *
+ * @property int $id
+ * @property int $user_id
+ * @property string $payout_account
+ * @property string $payment_method
+ * @property string $amount
+ * @property string|null $initiated_at
+ * @property string|null $completed_at
+ * @property string|null $response_payload
+ * @property string|null $request_payload
+ * @property int $referrer_payout_status_id
+ * @property int|null $paid_by
+ * @property string|null $transaction_id
+ * @property string|null $transaction_status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $paidBy
- * @property-read \App\Models\ReferrerPayoutStatus|null $referrerPayoutStatus
+ * @property-read \App\Models\ReferrerPayoutStatus $referrerPayoutStatus
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\ReferrerPayoutFactory factory(...$parameters)
+ * @method static \Database\Factories\ReferrerPayoutFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereInitiatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout wherePaidBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout wherePayoutAccount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereReferrerPayoutStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereRequestPayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereResponsePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereTransactionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereTransactionStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayout whereUserId($value)
  */
 	class ReferrerPayout extends \Eloquent {}
 }
@@ -1830,9 +1863,21 @@ namespace App\Models{
 /**
  * App\Models\ReferrerPayoutStatus
  *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReferrerPayoutStatus whereUpdatedAt($value)
  */
 	class ReferrerPayoutStatus extends \Eloquent {}
 }
@@ -1894,7 +1939,7 @@ namespace App\Models{
  * @property int|null $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalesmanEarnedCommission[] $salesmanEarnedCommissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesmanEarnedCommission> $salesmanEarnedCommissions
  * @property-read int|null $salesman_earned_commissions_count
  * @method static \Illuminate\Database\Eloquent\Builder|Salesman newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Salesman newQuery()
@@ -1947,7 +1992,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $addedBy
  * @property-read \App\Models\User $salesman
- * @method static \Database\Factories\SalesmanCommissionPaymentFactory factory(...$parameters)
+ * @method static \Database\Factories\SalesmanCommissionPaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SalesmanCommissionPayment query()
@@ -2001,7 +2046,7 @@ namespace App\Models{
  * @property string|null $extra_data Extra data if needed in check class
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\ScheduledEmailFactory factory(...$parameters)
+ * @method static \Database\Factories\ScheduledEmailFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail query()
@@ -2029,7 +2074,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
- * @method static \Database\Factories\ShippingMatrixFactory factory(...$parameters)
+ * @method static \Database\Factories\ShippingMatrixFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMatrix query()
@@ -2052,7 +2097,7 @@ namespace App\Models{
  * @property string $code
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\ShippingMethodFactory factory(...$parameters)
+ * @method static \Database\Factories\ShippingMethodFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMethod newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMethod newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ShippingMethod query()
@@ -2076,7 +2121,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
- * @method static \Database\Factories\StateFactory factory(...$parameters)
+ * @method static \Database\Factories\StateFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|State newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|State newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|State query()
@@ -2120,44 +2165,50 @@ namespace App\Models{
  * @property string|null $pm_last_four
  * @property string|null $customer_number
  * @property bool $is_marketing_notifications_enabled
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Coupon> $coupons
  * @property-read int|null $coupons_count
  * @property-read User|null $createdBy
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CustomerAddress[] $customerAddresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerAddress> $customerAddresses
  * @property-read int|null $customer_addresses_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserDevice[] $devices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDevice> $devices
  * @property-read int|null $devices_count
  * @property-read string $name
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
  * @property-read int|null $order_items_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $referees
+ * @property-read int|null $referees_count
  * @property-read User|null $referredBy
  * @property-read \App\Models\Referrer|null $referrer
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @property-read User|null $salesman
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalesmanCommissionPayment[] $salesmanCommissionPayments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesmanCommissionPayment> $salesmanCommissionPayments
  * @property-read int|null $salesman_commission_payments_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $salesmanOrders
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $salesmanOrders
  * @property-read int|null $salesman_orders_count
  * @property-read \App\Models\Salesman|null $salesmanProfile
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Cashier\Subscription> $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read \App\Models\Wallet|null $wallet
  * @method static \Illuminate\Database\Eloquent\Builder|User admin()
  * @method static \Illuminate\Database\Eloquent\Builder|User customer()
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|User hasExpiredGenericTrial()
  * @method static \Illuminate\Database\Eloquent\Builder|User isActiveSalesman(bool $value)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User onGenericTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User referrerSignedUpBetween(string $startDate, string $endDate)
+ * @method static \Illuminate\Database\Eloquent\Builder|User referrerSubmissions(string $minSubmissionCount, string $maxSubmissionCount)
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User salesmanId(string|int $salesmanId)
  * @method static \Illuminate\Database\Eloquent\Builder|User salesmanSignedUpBetween(string $startDate, string $endDate)
@@ -2188,8 +2239,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
- * @method static \Illuminate\Database\Query\Builder|User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
  */
 	class User extends \Eloquent implements \Tymon\JWTAuth\Contracts\JWTSubject, \App\Contracts\Exportable, \App\Contracts\ExportableWithSort, \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
 }
@@ -2216,13 +2267,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\OrderItem $orderItem
  * @property-read \App\Models\User $user
  * @property-read \App\Models\UserCardCertificate|null $userCardCertificate
  * @property-read \App\Models\VaultShipmentItem|null $vaultShipmentItem
- * @method static \Database\Factories\UserCardFactory factory(...$parameters)
+ * @method static \Database\Factories\UserCardFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard query()
@@ -2258,7 +2309,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\UserCard $userCard
- * @method static \Database\Factories\UserCardCertificateFactory factory(...$parameters)
+ * @method static \Database\Factories\UserCardCertificateFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|UserCardCertificate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCardCertificate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCardCertificate query()
@@ -2282,7 +2333,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
- * @method static \Database\Factories\UserDeviceFactory factory(...$parameters)
+ * @method static \Database\Factories\UserDeviceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice query()
@@ -2325,14 +2376,14 @@ namespace App\Models{
  * @property-read \App\Models\OrderAddress $shippingAddress
  * @property-read \App\Models\ShippingMethod $shippingMethod
  * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentItem[] $vaultShipmentItems
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VaultShipmentItem> $vaultShipmentItems
  * @property-read int|null $vault_shipment_items_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentPayment[] $vaultShipmentPayments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VaultShipmentPayment> $vaultShipmentPayments
  * @property-read int|null $vault_shipment_payments_count
  * @property-read \App\Models\VaultShipmentStatus $vaultShipmentStatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentStatusHistory[] $vaultShipmentStatusHistories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VaultShipmentStatusHistory> $vaultShipmentStatusHistories
  * @property-read int|null $vault_shipment_status_histories_count
- * @method static \Database\Factories\VaultShipmentFactory factory(...$parameters)
+ * @method static \Database\Factories\VaultShipmentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newQuery()
@@ -2371,7 +2422,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\UserCard $userCard
  * @property-read \App\Models\VaultShipment $vaultShipment
- * @method static \Database\Factories\VaultShipmentItemFactory factory(...$parameters)
+ * @method static \Database\Factories\VaultShipmentItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem query()
@@ -2400,7 +2451,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\VaultShipment $vaultShipment
- * @method static \Database\Factories\VaultShipmentPaymentFactory factory(...$parameters)
+ * @method static \Database\Factories\VaultShipmentPaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment query()
@@ -2428,11 +2479,11 @@ namespace App\Models{
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentStatusHistory[] $vaultShipmentStatusHistories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VaultShipmentStatusHistory> $vaultShipmentStatusHistories
  * @property-read int|null $vault_shipment_status_histories_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipment[] $vaultShipments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\VaultShipment> $vaultShipments
  * @property-read int|null $vault_shipments_count
- * @method static \Database\Factories\VaultShipmentStatusFactory factory(...$parameters)
+ * @method static \Database\Factories\VaultShipmentStatusFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus query()
@@ -2458,7 +2509,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\VaultShipment $vaultShipment
  * @property-read \App\Models\VaultShipmentStatus $vaultShipmentStatus
- * @method static \Database\Factories\VaultShipmentStatusHistoryFactory factory(...$parameters)
+ * @method static \Database\Factories\VaultShipmentStatusHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory query()
@@ -2484,11 +2535,11 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\WalletTransaction|null $lastTransaction
  * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletPayment[] $walletPayments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WalletPayment> $walletPayments
  * @property-read int|null $wallet_payments_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletTransaction[] $walletTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WalletTransaction> $walletTransactions
  * @property-read int|null $wallet_transactions_count
- * @method static \Database\Factories\WalletFactory factory(...$parameters)
+ * @method static \Database\Factories\WalletFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet forCurrentUser()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet newModelQuery()
@@ -2519,7 +2570,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\Wallet $wallet
- * @method static \Database\Factories\WalletPaymentFactory factory(...$parameters)
+ * @method static \Database\Factories\WalletPaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment query()
@@ -2553,7 +2604,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Wallet $wallet
- * @method static \Database\Factories\WalletTransactionFactory factory(...$parameters)
+ * @method static \Database\Factories\WalletTransactionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction query()

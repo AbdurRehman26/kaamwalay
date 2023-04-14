@@ -194,13 +194,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                     >
                                                         ID: {item.id}
                                                     </Typography>
-                                                    {item.certificateNumber ? (
+                                                    {item.userCard?.certificateNumber ? (
                                                         <Typography
                                                             variant={'caption'}
                                                             color={'textSecondary'}
                                                             className={classes.gutterRight}
                                                         >
-                                                            Certificate #: {item.certificateNumber}
+                                                            Certificate #: {item.userCard?.certificateNumber}
                                                         </Typography>
                                                     ) : null}
                                                 </Box>
@@ -225,7 +225,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         </Typography>
                                                     </Box>
 
-                                                    {item.certificateNumber ? (
+                                                    {item.userCard?.certificateNumber ? (
                                                         <Box>
                                                             <Typography
                                                                 variant={'caption'}
@@ -239,7 +239,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                                 color={'textSecondary'}
                                                                 className={classes.cardDataKeyValue}
                                                             >
-                                                                &nbsp;{item.certificateNumber}
+                                                                &nbsp;{item.userCard?.certificateNumber}
                                                             </Typography>
                                                         </Box>
                                                     ) : null}
@@ -290,7 +290,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
                                             target={'_blank'}
-                                            href={`/feed/${item.certificateNumber}/view`}
+                                            href={`/feed/${item.userCard?.certificateNumber}/view`}
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
@@ -327,7 +327,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                     {item?.userCard?.overallGrade ? (
                                                         <MuiLink
                                                             target={'_blank'}
-                                                            href={`/feed/${item.certificateNumber}/view`}
+                                                            href={`/feed/${item.userCard?.certificateNumber}/view`}
                                                             rel={'noreferrer'}
                                                             underline={'hover'}
                                                             variant={'body2'}
@@ -380,11 +380,13 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     </>
                                 )}
                                 <TableCell>
-                                    <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
-                                            Edit Label Text
-                                        </OptionsMenuItem>
-                                    </OptionsMenu>
+                                    {user.hasRole(RolesEnum.Admin) && (
+                                        <OptionsMenu onClick={handleOption}>
+                                            <OptionsMenuItem action={RowOption.EditLabel} value={item.cardProduct?.id}>
+                                                Edit Label Text
+                                            </OptionsMenuItem>
+                                        </OptionsMenu>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}

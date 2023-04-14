@@ -13,7 +13,7 @@ class LoginController extends V2LoginController
     {
         return new JsonResponse([
             'data' => [
-                'user' => new UserResource(auth()->user()),
+                'user' => new UserResource(auth()->user()->load('roles:id,name')),
             ],
         ], Response::HTTP_OK);
     }

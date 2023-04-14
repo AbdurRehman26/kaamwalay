@@ -328,9 +328,9 @@ export function SubmissionsTableRow({
                                     Edit Customer Details
                                 </MenuItem>
                             ) : null}
-                            {order.paymentStatus !== PaymentStatusEnum.PAID || order.isAbandoned ? (
+                            {order.paymentStatus !== PaymentStatusEnum.PAID || order.hasTag('abandoned') ? (
                                 <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
-                                    Mark {order.isAbandoned ? 'UnAbandoned' : 'Abandoned'}
+                                    {order.hasTag('abandoned') ? 'Unmark' : 'Mark'} Abandoned
                                 </MenuItem>
                             ) : null}
                         </>
@@ -360,7 +360,7 @@ export function SubmissionsTableRow({
             />
 
             <MarkAbandonedStateDialog
-                isAbandoned={order.isAbandoned}
+                isAbandoned={order.hasTag('abandoned')}
                 orderIds={[order.id]}
                 onSubmit={() => window.location.reload()}
                 open={showMarkAbandonedDialog}

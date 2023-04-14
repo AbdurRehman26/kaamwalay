@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Concerns\HasTags;
 use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
+use App\Contracts\Taggable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
 use App\Http\Filters\AdminOrderReferByFilter;
@@ -23,15 +25,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\AllowedSort;
-use Spatie\Tags\HasTags;
 
-class Order extends Model implements Exportable
+class Order extends Model implements Exportable, Taggable
 {
     use HasFactory, ActivityLog, HasOrderPayments, HasTags;
 
@@ -157,7 +157,6 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
             AllowedInclude::relationship('orderCertificate'),
-            AllowedInclude::relationship('isAbandoned'),
             AllowedInclude::relationship('createdBy'),
             AllowedInclude::relationship('reviewedBy'),
             AllowedInclude::relationship('gradedBy'),
@@ -173,6 +172,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('orderItems.latestStatusHistory', 'orderItems.latestOrderItemStatusHistory'),
             AllowedInclude::relationship('orderItems.latestStatusHistory.orderItemStatus', 'orderItems.latestOrderItemStatusHistory.orderItemStatus'),
             AllowedInclude::relationship('orderItems.latestStatusHistory.user', 'orderItems.latestOrderItemStatusHistory.user'),
+            AllowedInclude::relationship('tags'),
         ];
     }
 
@@ -190,7 +190,6 @@ class Order extends Model implements Exportable
             AllowedFilter::custom('referred_by', new AdminOrderReferByFilter),
             AllowedFilter::exact('payment_status'),
             AllowedFilter::custom('search', new AdminOrderSearchFilter),
-            AllowedFilter::scope('is_abandoned', 'whereAbandonedStateIs'),
         ];
     }
 
@@ -217,7 +216,9 @@ class Order extends Model implements Exportable
 
     public static function getAllowedAdminFilters(): array
     {
-        return self::allowedFilters();
+        return array_merge(self::allowedFilters(), [
+            AllowedFilter::scope('tags', 'whereTagsExist'),
+        ]);
     }
 
     public static function getAllowedAdminSorts(): array
@@ -737,23 +738,15 @@ class Order extends Model implements Exportable
     }
 
     /**
-     * @return MorphToMany<Order>
-     */
-    public function isAbandoned(): MorphToMany
-    {
-        return $this->tagsTranslated('abandoned');
-    }
-
-    /**
      * @param  Builder  <Order> $query
      * @return Builder <Order>
-    */
-    public function scopeWhereAbandonedStateIs(Builder $query, int $isAbandoned): Builder
+     */
+    public function scopeWhereTagsExist(Builder $query, string $tag): Builder
     {
-        if($isAbandoned) {
-            return $query->withAllTags(['abandoned']);
+        if($tag == -1) {
+            return $query->doesntHave('tags');
         }
 
-        return $query->doesntHave('tags');
+        return $query->withAnyTagsOfAnyType([$tag]);
     }
 }

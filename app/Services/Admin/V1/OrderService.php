@@ -52,7 +52,6 @@ class OrderService
             ->withSum('orderItems as total_declared_value', 'declared_value_total')
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->allowedSorts(Order::getAllowedAdminSorts())
-            ->with('isAbandoned')
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }

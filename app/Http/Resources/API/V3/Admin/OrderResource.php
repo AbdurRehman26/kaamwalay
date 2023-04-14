@@ -82,8 +82,8 @@ class OrderResource extends BaseResource
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
             'referral_commission' => $this->referral_total_commission,
-            'is_abandoned' => $this->whenLoaded('isAbandoned', $this->isAbandoned()->count()),
             'referrer' => $this->user?->referredBy,
+            'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags))
         ];
     }
 

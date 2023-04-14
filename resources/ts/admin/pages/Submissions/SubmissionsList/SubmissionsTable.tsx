@@ -37,6 +37,7 @@ interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
     all?: boolean;
     search?: string;
+    abandoned?: boolean;
 }
 
 const ReferralStatus = [
@@ -44,11 +45,11 @@ const ReferralStatus = [
     { label: 'No', value: 0 },
 ];
 
-export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
+export function SubmissionsTable({ tabFilter, all, search, abandoned }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
-    const heading = all ? 'All' : upperFirst(status?.label ?? '');
+    const heading = abandoned ? 'Abandoned' : all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [searchPromoCode, setSearchPromoCode] = useState('');
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
@@ -67,11 +68,19 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const [allSelected, setAllSelected] = useState(false);
     const selectedIds = useAppSelector((state) => state.submissionSelection.selectedIds);
     const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
+
+    useEffect(() => {
+        dispatch(setSubmissionIds({ ids: [] }));
+        setAllSelected(false);
+    }, [dispatch]);
+
     const handleSelectAll = () => {
         if (!allSelected) {
-            const newSelected = orders$.data
-                .filter((order) => order.paymentStatus !== PaymentStatusEnum.PAID)
-                .map((order) => order.id);
+            let orderQuery = orders$.data;
+            if (!abandoned) {
+                orderQuery = orderQuery.filter((order) => order.paymentStatus !== PaymentStatusEnum.PAID);
+            }
+            const newSelected = orderQuery.map((order) => order.id);
             dispatch(setSubmissionIds({ ids: newSelected }));
             setAllSelected(true);
             return;
@@ -222,7 +231,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
                 couponCode,
-                isAbandoned: 0,
+                tags: abandoned ? 'abandoned' : -1,
             },
         },
         ...bracketParams(),

@@ -10,8 +10,9 @@ import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback } from 'react';
-import { markOrderAsAbandoned, markOrderAsUnAbandoned } from '@shared/redux/slices/adminOrdersSlice';
-import { useAppDispatch } from '@admin/redux/hooks';
+import { TaggableModelsEnum } from '@shared/constants/TaggableModelsEnum';
+import { useRepository } from '@shared/hooks/useRepository';
+import { TaggableModelRepository } from '@shared/repositories/Admin/TaggableModelRepository';
 
 interface MarkAbandonedStateDialogProps extends Omit<DialogProps, 'onSubmit'> {
     orderIds: number[];
@@ -42,7 +43,7 @@ const useStyles = makeStyles(
 function MarkAbandonedStateDialog(props: MarkAbandonedStateDialogProps) {
     const { onClose, onSubmit, orderIds, ...rest } = props;
     const classes = useStyles();
-    const dispatch = useAppDispatch();
+    const taggableModelRepository = useRepository(TaggableModelRepository);
 
     const handleClose = useCallback(
         (...args) => {
@@ -54,14 +55,22 @@ function MarkAbandonedStateDialog(props: MarkAbandonedStateDialogProps) {
     );
 
     const handleSubmit = useCallback(async () => {
-        if (props.isAbandoned) {
-            await dispatch(markOrderAsUnAbandoned(orderIds));
+        if (!props.isAbandoned) {
+            await taggableModelRepository.attachTags({
+                model: TaggableModelsEnum.Order,
+                modelIds: orderIds,
+                tags: ['abandoned'],
+            });
         } else {
-            await dispatch(markOrderAsAbandoned(orderIds));
+            await taggableModelRepository.detachTags({
+                model: TaggableModelsEnum.Order,
+                modelIds: orderIds,
+                tags: ['abandoned'],
+            });
         }
         await onSubmit();
         handleClose();
-    }, [props.isAbandoned, onSubmit, handleClose, dispatch, orderIds]);
+    }, [props.isAbandoned, onSubmit, handleClose, taggableModelRepository, orderIds]);
 
     const descriptionText = orderIds.length > 1 ? 'these orders' : 'this order';
     const titleText = props.isAbandoned ? `unmark ${descriptionText}` : `mark ${descriptionText}`;

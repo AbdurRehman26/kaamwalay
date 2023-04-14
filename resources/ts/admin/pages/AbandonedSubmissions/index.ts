@@ -1,1 +1,0 @@
-export { AbandonedSubmissions } from './AbandonedSubmissions';

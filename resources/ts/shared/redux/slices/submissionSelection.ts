@@ -13,7 +13,6 @@ export const submissionSelection = createSlice({
     initialState,
     reducers: {
         setSubmissionIds: (state, action: PayloadAction<{ ids: number[] | [] }>) => {
-            console.log(222, state.selectedIds);
             // @ts-ignore
             state.selectedIds = action.payload.ids;
         },

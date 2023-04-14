@@ -83,7 +83,7 @@ class OrderResource extends BaseResource
             'salesman_commission' => $this->salesman_commission,
             'referral_commission' => $this->referral_total_commission,
             'referrer' => $this->user?->referredBy,
-            'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags))
+            'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags)),
         ];
     }
 

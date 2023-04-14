@@ -33,16 +33,16 @@ class TaggableModelRequest extends FormRequest
             ],
             'model_ids' => [
                 'required',
-                'array'
+                'array',
             ],
             'model_ids.*' => Rule::exists(Str::plural(request()->model), 'id'),
             'tags' => [
                 'required',
-                'array'
+                'array',
             ],
             'tags.*' => [
                 'string',
-            ]
+            ],
         ];
     }
 }

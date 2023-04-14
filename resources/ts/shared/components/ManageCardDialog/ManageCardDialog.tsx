@@ -2,6 +2,7 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import makeStyles from '@mui/styles/makeStyles';
 import ManageCardDialogCreateCard from '@shared/components/ManageCardDialog/ManageCardDialogCreateCard';
+import ManageCardDialogCreateCategory from '@shared/components/ManageCardDialog/ManageCardDialogCreateCategory';
 import ManageCardDialogCreateSeries from '@shared/components/ManageCardDialog/ManageCardDialogCreateSeries';
 import ManageCardDialogCreateSet from '@shared/components/ManageCardDialog/ManageCardDialogCreateSet';
 import ManageCardDialogEdit from '@shared/components/ManageCardDialog/ManageCardDialogEdit';
@@ -68,6 +69,14 @@ export function ManageCardDialog({ onAdd, ...rest }: ManageCardDialogProps) {
                 exit={false}
             >
                 <ManageCardDialogCreateCard onAdd={onAdd} declaredValue={dialogState.declaredValue} />
+            </Slide>
+            <Slide
+                in={dialogState.view === ManageCardDialogViewEnum.CreateCategory}
+                direction={'left'}
+                unmountOnExit
+                exit={false}
+            >
+                <ManageCardDialogCreateCategory onAdd={onAdd} declaredValue={dialogState.declaredValue} />
             </Slide>
             <Slide
                 in={dialogState.view === ManageCardDialogViewEnum.CreateSeries}

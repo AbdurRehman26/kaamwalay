@@ -23,6 +23,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { batch } from 'react-redux';
 import ImageUploader from '@shared/components/ImageUploader';
+import { ManageCardDialogCreateCategoryContent } from '@shared/components/ManageCardDialog/ManageCardDialogCreateCategoryContent';
 import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
@@ -59,6 +60,12 @@ const useStyles = makeStyles(
         },
         label: {
             color: '#0000008A',
+        },
+        validationStyle: {
+            color: '#0000008A',
+            fontSize: '12px',
+            fontWeight: '400',
+            marginTop: '4px',
         },
     }),
     { name: 'CardAddDialog' },
@@ -98,9 +105,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<number | undefined | null>(
-        dialogState.selectedCategory?.id ?? null,
-    );
+    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(null);
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
@@ -120,6 +125,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const [cardName, setCardName] = useState<string | null | undefined>(null);
     const [cardNumber, setCardNumber] = useState<string | null | undefined>(null);
     const [createCardView, setCreateCardView] = useState(true);
+    const [createCategoryView, setCreateCategoryView] = useState(false);
     const [createSeriesView, setCreateSeriesView] = useState(false);
     const [createSetView, setCreateSetView] = useState(false);
     const [newSetName, setNewSetName] = useState('');
@@ -143,6 +149,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             setReleaseDate(null);
 
             setCreateCardView(true);
+            setCreateCategoryView(false);
             setCreateSetView(false);
             setCreateSeriesView(false);
         }
@@ -240,23 +247,22 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         }
     }, [availableSets, dialogState.selectedCardSet]);
 
+    const fetchCategories = async () => {
+        const endpoint = apiService.createEndpoint(`admin/cards/categories`);
+        const response = await endpoint.get('');
+        const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
+        setAvailableCategories(response.data);
+        dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
+
+        await fetchSeries(categoryId);
+
+        setSelectedSeriesFromState();
+
+        fetchDropdownsData(categoryId);
+    };
+
     useEffect(
         () => {
-            async function fetchCategories() {
-                const endpoint = apiService.createEndpoint(`admin/cards/categories`);
-                const response = await endpoint.get('');
-                const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
-                setAvailableCategories(response.data);
-                setCardCategory(categoryId);
-                dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
-
-                await fetchSeries(categoryId);
-
-                setSelectedSeriesFromState();
-
-                fetchDropdownsData(categoryId);
-            }
-
             fetchCategories();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,11 +278,11 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     }, [setSelectedSetFromState]);
 
     const handleCardCategoryChange = useCallback(
-        (e) => {
-            setCardCategory(e.target.value);
+        (e, newValue) => {
+            setCardCategory(newValue);
 
             const category = availableCategories.filter((cat) => {
-                return cat.id === e.target.value;
+                return cat.id === newValue.id;
             })[0];
 
             batch(() => {
@@ -291,8 +297,8 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             setSelectedSurface(null);
             setReleaseDate(null);
 
-            fetchSeries(e.target.value);
-            fetchDropdownsData(e.target.value);
+            fetchSeries(newValue.id);
+            fetchDropdownsData(newValue.id);
         },
         [fetchSeries, fetchDropdownsData, dispatch, availableCategories],
     );
@@ -333,13 +339,22 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         setReleaseDate(newReleaseDate);
     }, []);
 
+    const toggleNewCategory = useCallback(() => {
+        setCreateCategoryView(true);
+        setCreateCardView(false);
+        setCreateSetView(false);
+        setCreateSeriesView(false);
+    }, []);
+
     const toggleNewSeries = useCallback(() => {
+        setCreateCategoryView(false);
         setCreateCardView(false);
         setCreateSetView(false);
         setCreateSeriesView(true);
     }, []);
 
     const toggleNewSet = useCallback(() => {
+        setCreateCategoryView(false);
         setCreateSeriesView(false);
         setCreateCardView(false);
         setCreateSetView(true);
@@ -446,7 +461,6 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     };
 
     const handleNewSeriesLogoChange = useCallback((newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo), []);
-
     const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
     const showSaveButtonSeries = useMemo(() => {
         return !!(newSeriesLogo && newSeriesName);
@@ -509,8 +523,15 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const handleModalBack = () => {
         setCreateCardView(true);
+        setCreateCategoryView(false);
         setCreateSetView(false);
         setCreateSeriesView(false);
+    };
+
+    const handleAdd = () => {
+        fetchCategories();
+        setCreateCardView(true);
+        setCreateCategoryView(false);
     };
 
     const closeIcon = (
@@ -531,6 +552,17 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         <IconButton onClick={handleModalBack} size={'small'} sx={{ color: 'black', marginBottom: 0.5 }}>
             <ArrowBackIcon />
         </IconButton>
+    );
+
+    const createCategory = (
+        <div>
+            <DialogTitle>
+                {modalBack}
+                Create a New Category
+                {closeIcon}
+            </DialogTitle>
+            <ManageCardDialogCreateCategoryContent onAdd={handleAdd} onCancel={handleClose} />
+        </div>
     );
 
     const createSeries = (
@@ -708,74 +740,88 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
                     {!isUpdate ? (
                         <>
-                            <FormControl sx={{ m: 1, minWidth: '97%' }}>
-                                <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                                    Category
-                                </FormHelperText>
-                                <Select
-                                    value={cardCategory}
-                                    onChange={handleCardCategoryChange}
-                                    defaultValue={cardCategory}
-                                >
-                                    {availableCategories?.map((item) => {
-                                        return (
-                                            <MenuItem key={item.id} value={item.id}>
-                                                {item.name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-
                             <Box
                                 display={'flex'}
                                 flexDirection={'row'}
                                 justifyContent={'space-between'}
                                 alignItems={'flex-end'}
                                 padding={'6px'}
-                                marginTop={'12px'}
                             >
                                 <FormControl sx={{ minWidth: '70%' }}>
                                     <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
-                                        Series
+                                        Category
                                     </FormHelperText>
                                     <Autocomplete
-                                        value={selectedSeries}
-                                        onChange={handleSeriesChange}
-                                        options={availableSeries}
+                                        value={cardCategory}
+                                        onChange={handleCardCategoryChange}
+                                        options={availableCategories}
+                                        getOptionLabel={(option) => option.name || ''}
                                         fullWidth
                                         renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                placeholder={'Enter Series'}
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    startAdornment: selectedSeries ? (
-                                                        <img
-                                                            src={selectedSeries?.imagePath}
-                                                            alt=""
-                                                            style={{
-                                                                height: '19px',
-                                                                width: '49px',
-                                                                marginLeft: '10px',
-                                                            }}
-                                                        />
-                                                    ) : null,
-                                                }}
-                                            />
+                                            <TextField {...params} placeholder={'Select Category'} />
                                         )}
                                     />
                                 </FormControl>
                                 <Button
-                                    disabled={isUpdate}
                                     variant={'outlined'}
                                     color={'primary'}
                                     sx={{ minHeight: '56px', width: '145px' }}
-                                    onClick={toggleNewSeries}
+                                    onClick={toggleNewCategory}
                                 >
-                                    Add series
+                                    Add Category
                                 </Button>
                             </Box>
+                            {cardCategory && !isUpdate ? (
+                                <Box
+                                    display={'flex'}
+                                    flexDirection={'row'}
+                                    justifyContent={'space-between'}
+                                    alignItems={'flex-end'}
+                                    padding={'6px'}
+                                    marginTop={'12px'}
+                                >
+                                    <FormControl sx={{ minWidth: '70%' }}>
+                                        <FormHelperText sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0 }}>
+                                            Series
+                                        </FormHelperText>
+                                        <Autocomplete
+                                            value={selectedSeries}
+                                            onChange={handleSeriesChange}
+                                            options={availableSeries}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    placeholder={'Enter Series'}
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        startAdornment: selectedSeries ? (
+                                                            <img
+                                                                src={selectedSeries?.imagePath}
+                                                                alt=""
+                                                                style={{
+                                                                    height: '19px',
+                                                                    width: '49px',
+                                                                    marginLeft: '10px',
+                                                                }}
+                                                            />
+                                                        ) : null,
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </FormControl>
+                                    <Button
+                                        disabled={isUpdate}
+                                        variant={'outlined'}
+                                        color={'primary'}
+                                        sx={{ minHeight: '56px', width: '145px' }}
+                                        onClick={toggleNewSeries}
+                                    >
+                                        Add series
+                                    </Button>
+                                </Box>
+                            ) : null}
                         </>
                     ) : null}
                     {selectedSeries && !isUpdate ? (
@@ -1103,6 +1149,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         <>
             <Dialog onClose={handleClose} {...rest} fullWidth scroll={'body'}>
                 {createCardView ? createCard : null}
+                {createCategoryView ? createCategory : null}
                 {createSeriesView ? createSeries : null}
                 {createSetView ? createSet : null}
             </Dialog>

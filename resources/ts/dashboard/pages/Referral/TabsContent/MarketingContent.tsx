@@ -381,13 +381,11 @@ export function MarketingContent({ expandable }: props) {
             {open ? (
                 <>
                     <Grid className={'DownloadGrid'}>
-                        {images[index].type === 'image' ? (
-                            <a className={'AnchorLink'} href={images[index].url} download>
-                                <Button className={'DownloadButton'}>
-                                    <FileDownloadOutlinedIcon /> DOWNLOAD
-                                </Button>
-                            </a>
-                        ) : null}
+                        <a className={'AnchorLink'} href={images[index].url} download>
+                            <Button className={'DownloadButton'}>
+                                <FileDownloadOutlinedIcon /> DOWNLOAD
+                            </Button>
+                        </a>
                     </Grid>
                     <Button disabled={index === 0} onClick={() => setIndex(index - 1)} className={'PreviousButton'}>
                         <KeyboardArrowLeftOutlinedIcon className={'NavigationIcon'} />

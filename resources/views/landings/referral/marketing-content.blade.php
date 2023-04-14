@@ -77,21 +77,6 @@
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost5.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.jpg') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost7.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
-                </a>
-            </div>
-            <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.jpg') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost9.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
-                </a>
-            </div>
-            <div class="marketing-content__image-div">
-                <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.jpg') }}" class="glightbox">
-                    <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost11.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
-                </a>
-            </div>
         </div>
         <div data-atom="auth-button" data-class-name="referral-hero__auth-button" data-button-content="START SHARING" data-aos="fade-up">
             {{-- JS runtime actions --}}

@@ -69,7 +69,7 @@ class OrderPaidListener implements ShouldQueue
 
     protected function processForAbandonedOrder(OrderPaid $event): void
     {
-        if($event->order->tagExists('abandoned')){
+        if($event->order->tagExists('abandoned')) {
             $event->order->detachTag('abandoned');
         }
     }

@@ -580,8 +580,8 @@ test('an admin can filter by item to revise', function () {
         ]);
 });
 
-it('filters abandoned orders', function () {
-    $this->getJson('/api/v2/admin/orders?filter[is_abandoned]=' . 1)
+it('filters orders with abandoned tag', function () {
+    $this->getJson('/api/v2/admin/orders?filter[tags]=abandoned')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -589,8 +589,8 @@ it('filters abandoned orders', function () {
         ]);
 });
 
-it('filters un-abandoned orders', function () {
-    $response = $this->getJson('/api/v2/admin/orders?filter[is_abandoned]=' . 0)
+it('filters orders without any tags orders', function () {
+    $response = $this->getJson('/api/v2/admin/orders?filter[tags]=-1')
         ->assertOk()
         ->assertJsonCount(4, ['data']);
 
@@ -599,18 +599,4 @@ it('filters un-abandoned orders', function () {
         collect($response->getData()->data)->sortBy('id')->pluck('id')->toArray()
     );
 
-});
-
-test('admin can mark order as abandoned', function () {
-    Event::fake();
-    postJson(route('v3.admin.orders.mark-abandoned'), ['items' => [$this->orders->last()->id]])->assertSuccessful();
-
-    expect($this->orders->last()->refresh())->isAbandoned()->count()->toBe(1);
-});
-
-test('admin can mark order as un abandoned', function () {
-    Event::fake();
-    postJson(route('v3.admin.orders.mark-un-abandoned'), ['items' => [$this->orders->first()->id]])->assertSuccessful();
-
-    expect($this->orders->first()->refresh())->isAbandoned()->count()->toBe(0);
 });

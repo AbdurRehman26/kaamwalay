@@ -31,10 +31,9 @@ test('an admin cannot attach tag to a nonexistent model', function () {
 });
 
 test('an admin cannot tag model to a non-taggable model', function () {
-    $order = Order::factory()->create();
     $response = postJson(route('v3.admin.attach-tags'), [
         'model' => 'user',
-        'model_ids' => [$order->id],
+        'model_ids' => [$this->user->id],
         'tags' => ['abandoned'],
     ]);
 

@@ -34,7 +34,7 @@ test('an admin cannot tag model to a non-taggable model', function () {
     $response = postJson(route('v3.admin.attach-tags'), [
         'model' => 'user',
         'model_ids' => [1],
-        'tags' => ['abandoned']
+        'tags' => ['abandoned'],
     ]);
 
     $response->assertUnprocessable();
@@ -58,7 +58,7 @@ test('an admin can attach tags to order model', function () {
     $response = postJson(route('v3.admin.attach-tags'), [
         'model' => 'order',
         'model_ids' => [$orders->first()->id],
-        'tags' => ['abandoned']
+        'tags' => ['abandoned'],
     ]);
 
     $response->assertStatus(200);
@@ -72,7 +72,7 @@ test('an admin can detach tags from order model', function () {
     $response = postJson(route('v3.admin.attach-tags'), [
         'model' => 'order',
         'model_ids' => [$order->id],
-        'tags' => ['abandoned']
+        'tags' => ['abandoned'],
     ]);
 
     $response->assertStatus(200);

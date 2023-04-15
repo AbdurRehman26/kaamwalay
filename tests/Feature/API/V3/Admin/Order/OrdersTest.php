@@ -22,8 +22,6 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 
-use function Pest\Laravel\postJson;
-
 uses(WithFaker::class);
 
 beforeEach(function () {

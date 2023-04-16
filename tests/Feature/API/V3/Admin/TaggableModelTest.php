@@ -63,7 +63,7 @@ test('an admin can attach tags to order model', function () {
 
     $response->assertStatus(200);
     expect($orders->first()->tagExists('abandoned'))->toBe(true);
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 test('an admin can detach tags from order model', function () {
     $order = Order::factory()->create();
@@ -77,7 +77,7 @@ test('an admin can detach tags from order model', function () {
 
     $response->assertStatus(200);
     expect($order->tagExists('abandoned'))->toBe(true);
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
 
 test('a customer cannot attach tag to a model', function () {
     $this->user = User::factory()

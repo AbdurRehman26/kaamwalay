@@ -9,6 +9,7 @@ use App\Contracts\Exportable;
 use App\Contracts\Taggable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Http\Filters\AdminModelTaggableSearchFilter;
 use App\Http\Filters\AdminOrderReferByFilter;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
@@ -217,7 +218,7 @@ class Order extends Model implements Exportable, Taggable
     public static function getAllowedAdminFilters(): array
     {
         return array_merge(self::allowedFilters(), [
-            AllowedFilter::scope('tags', 'whereTagsExist'),
+            AllowedFilter::custom('tags', new AdminModelTaggableSearchFilter),
         ]);
     }
 
@@ -735,18 +736,5 @@ class Order extends Model implements Exportable, Taggable
             $this->order_status_id,
             [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
         );
-    }
-
-    /**
-     * @param  Builder  <Order> $query
-     * @return Builder <Order>
-     */
-    public function scopeWhereTagsExist(Builder $query, string $tag): Builder
-    {
-        if($tag == -1) {
-            return $query->doesntHave('tags');
-        }
-
-        return $query->withAnyTagsOfAnyType([$tag]);
     }
 }

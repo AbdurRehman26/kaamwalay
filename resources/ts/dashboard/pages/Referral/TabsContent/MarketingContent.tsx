@@ -34,7 +34,7 @@ import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbn
 import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.svg';
 import theme from '@shared/styles/theme';
 
-const images = [
+const marketingContent = [
     {
         id: 0,
         url: agsPartnerProgramPost13,
@@ -300,13 +300,17 @@ export function MarketingContent({ expandable }: props) {
     };
 
     const getContent = (index: number) => {
-        return images[index].type === 'video' ? (
+        return marketingContent[index].type === 'video' ? (
             // eslint-disable-next-line jsx-a11y/media-has-caption
-            <video controls className={classes.dialogVideo} autoPlay key={images[index].url}>
-                <source src={images[index].url} />
+            <video controls className={classes.dialogVideo} autoPlay key={marketingContent[index].url}>
+                <source src={marketingContent[index].url} />
             </video>
         ) : (
-            <img src={images[index].url} alt={images[index].title} className={classes.dialogImage} />
+            <img
+                src={marketingContent[index].url}
+                alt={marketingContent[index].title}
+                className={classes.dialogImage}
+            />
         );
     };
 
@@ -336,7 +340,7 @@ export function MarketingContent({ expandable }: props) {
             <Grid container>
                 <Grid className={'ImagesDiv'}>
                     {expandable
-                        ? images.slice(0, 8).map((data: any) => (
+                        ? marketingContent.slice(0, 8).map((data: any) => (
                               <div className={'MarketingContentImageDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
@@ -348,7 +352,7 @@ export function MarketingContent({ expandable }: props) {
                                   </ButtonBase>
                               </div>
                           ))
-                        : images.map((data: any) => (
+                        : marketingContent.map((data: any) => (
                               <div className={'MarketingContentImageDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
@@ -381,7 +385,7 @@ export function MarketingContent({ expandable }: props) {
             {open ? (
                 <>
                     <Grid className={'DownloadGrid'}>
-                        <a className={'AnchorLink'} href={images[index].url} download>
+                        <a className={'AnchorLink'} href={marketingContent[index].url} download>
                             <Button className={'DownloadButton'}>
                                 <FileDownloadOutlinedIcon /> DOWNLOAD
                             </Button>
@@ -391,7 +395,7 @@ export function MarketingContent({ expandable }: props) {
                         <KeyboardArrowLeftOutlinedIcon className={'NavigationIcon'} />
                     </Button>
                     <Button
-                        disabled={index === images.length - 1}
+                        disabled={index === marketingContent.length - 1}
                         onClick={() => setIndex(index + 1)}
                         className={'NextButton'}
                     >

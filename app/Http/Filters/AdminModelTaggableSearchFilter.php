@@ -9,13 +9,13 @@ class AdminModelTaggableSearchFilter implements Filter
 {
     public function __invoke(Builder $query, mixed $value, string $property): void
     {
-        if(gettype($value) === 'string'){
-            if($value == -1){
+        if(gettype($value) === 'string') {
+            if($value == -1) {
                 $query->doesntHave('tags');
-            }else{
+            } else {
                 $query->withAllTags([$value]);
             }
-        }else{
+        } else {
             $query->withAllTags($value);
         }
     }

@@ -20,8 +20,8 @@ export const getAllSubmissions = createAsyncThunk(
             { version: 'v3' },
         );
         const cardsResponse = await endpoint.get('', {
+            data: { fromAgs: DTO.fromAgs ?? true },
             params: {
-                fromAgs: DTO.fromAgs,
                 filter: {
                     orderItemId: DTO.itemId,
                 },
@@ -121,7 +121,6 @@ const initialState: SubmissionsGrades = {
     viewModes: [],
     hasLoadedAllRobogrades: true,
 };
-
 export const submissionGradesSlice = createSlice({
     name: 'submissionGradesSlice',
     initialState,
@@ -149,6 +148,13 @@ export const submissionGradesSlice = createSlice({
         updateExistingCardData: (state, action: PayloadAction<{ id: number; data: any }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
             state.allSubmissions[itemIndex] = action.payload.data;
+        },
+        updateExistingCardGradeData: (state, action: PayloadAction<{ id: number; data: any }>) => {
+            const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
+            state.allSubmissions[itemIndex].gradeDelta = action.payload.data.gradeDelta;
+            state.allSubmissions[itemIndex].grade = action.payload.data.grade;
+            state.allSubmissions[itemIndex].overallValues = action.payload.data.overallValues;
+            state.allSubmissions[itemIndex].humanGradeValues = action.payload.data.humanGradeValues;
         },
         updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
@@ -282,6 +288,7 @@ export const submissionGradesSlice = createSlice({
 export const {
     updateHumanGradeValue,
     updateExistingCardData,
+    updateExistingCardGradeData,
     updateExistingCardStatus,
     updateCardViewMode,
     handleActionNotesInput,

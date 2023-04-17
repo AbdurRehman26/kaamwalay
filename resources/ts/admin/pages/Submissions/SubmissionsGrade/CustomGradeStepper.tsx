@@ -11,7 +11,7 @@ import React, { useCallback, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { updateExistingCardData } from '@admin/redux/slices/submissionGradeSlice';
+import { updateExistingCardGradeData } from '@admin/redux/slices/submissionGradeSlice';
 
 interface CustomGradeStepperProps {
     orderID: number;
@@ -79,7 +79,7 @@ function CustomGradeStepper(props: CustomGradeStepperProps) {
                 humanGradeValues: humanGrades,
                 gradeDelta: newDelta,
             });
-            dispatch(updateExistingCardData({ id: cardID, data: response.data }));
+            dispatch(updateExistingCardGradeData({ id: cardID, data: response.data }));
             setIsLoading(false);
         },
         [apiService, cardID, dispatch, humanGrades, props.orderID],

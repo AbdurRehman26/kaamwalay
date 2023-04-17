@@ -101,10 +101,6 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             justifyContent: 'space-between',
         },
-        phoneDropdown: {
-            position: 'fixed',
-            maxHeight: '240px !important',
-        },
     }),
     { name: 'EditCustomerDetailsDialog' },
 );
@@ -311,10 +307,12 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
                                             <InternationalPhoneNumberField
                                                 value={values.phone}
                                                 onChange={(value, data, event, formattedValue) => {
-                                                    setFieldValue('phone', value);
+                                                    setFieldValue('phone', formattedValue);
                                                     updateCurrentValues('phone', formattedValue);
                                                 }}
-                                                dropdownClass={classes.phoneDropdown}
+                                                dropdownStyle={{
+                                                    position: 'fixed',
+                                                }}
                                             />
                                         </div>
                                     </div>

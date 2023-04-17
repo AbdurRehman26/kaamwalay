@@ -71,7 +71,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
         Route::get('orders', [ReferralProgramController::class, 'listReferralOrders'])->name('referral-program.orders');
     });
-
-    Route::post('attach-tags', [TaggableController::class, 'attachTags'])->name('attach-tags');
-    Route::post('detach-tags', [TaggableController::class, 'detachTags'])->name('detach-tags');
 });

@@ -6,7 +6,7 @@ use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use App\Http\Controllers\API\V3\Admin\ReferrerPayoutController;
 use App\Http\Controllers\API\V3\Admin\Order\UserCardController;
-use App\Http\Controllers\API\V3\TaggableController;
+use App\Http\Controllers\API\V3\Admin\TaggableController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -6,7 +6,7 @@ use App\Contracts\Taggable;
 use App\Exceptions\Services\Admin\ModelNotTaggableException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\Taggable\TaggableModelRequest;
-use App\Services\TaggableService;
+use App\Services\Admin\TaggableService;
 use Illuminate\Http\JsonResponse;
 
 class TaggableController extends Controller

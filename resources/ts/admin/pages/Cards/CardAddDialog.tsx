@@ -105,7 +105,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(null);
+    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(
+        dialogState.selectedCategory ?? null,
+    );
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
@@ -252,8 +254,8 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         const response = await endpoint.get('');
         const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
         setAvailableCategories(response.data);
-        dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
 
+        setCardCategory(availableCategories[0]);
         await fetchSeries(categoryId);
 
         setSelectedSeriesFromState();
@@ -752,7 +754,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         Category
                                     </FormHelperText>
                                     <Autocomplete
-                                        value={cardCategory}
+                                        value={dialogState.selectedCategory || cardCategory}
                                         onChange={handleCardCategoryChange}
                                         options={availableCategories}
                                         getOptionLabel={(option) => option.name || ''}

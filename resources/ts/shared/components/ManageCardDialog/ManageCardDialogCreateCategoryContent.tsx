@@ -39,6 +39,11 @@ const useStyles = makeStyles(
             fontWeight: '400',
             marginTop: '4px',
         },
+        errorStyle: {
+            fontSize: '12px',
+            color: '#FF0000',
+            fontWeight: 500,
+        },
     }),
     { name: 'ManageCardDialogView' },
 );
@@ -54,6 +59,7 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
     // New category section
     const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [error, setError] = useState(false);
 
     const apiService = useInjectable(APIService);
 
@@ -85,12 +91,19 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
             };
             const responseItem = await endpoint.post('', DTO);
             batch(() => {
+                dispatch(manageCardDialogActions.setSelectedCategory(responseItem.data));
                 dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
                 dispatch(manageCardDialogActions.navigateToPreviousView());
             });
             Notifications.success('Category Added Successfully');
             props.onAdd?.();
         } catch (e: any) {
+            if (e.message === 'The name has already been taken.') {
+                setError(true);
+                setTimeout(() => {
+                    setError(false);
+                }, 2500);
+            }
             Notifications.exception(e);
         }
         setIsLoading(false);
@@ -138,7 +151,13 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                     placeholder={'Enter Category Name'}
                                     fullWidth
                                     sx={{ minWidth: '231px' }}
+                                    error={error}
                                 />
+                                {error ? (
+                                    <span className={classes.errorStyle}>
+                                        A category with that name already exists.
+                                    </span>
+                                ) : null}
                             </FormControl>
                         </Grid>
                     </Grid>

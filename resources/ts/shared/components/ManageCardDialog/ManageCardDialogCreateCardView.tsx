@@ -87,7 +87,9 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const filesRepository = useRepository(FilesRepository);
 
         const [isLoading, setIsLoading] = useState(false);
-        const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(null);
+        const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(
+            dialogState.selectedCategory ?? null,
+        );
         const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
         const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
         const [availableSets, setAvailableSets] = useState<CardSets[]>([]);

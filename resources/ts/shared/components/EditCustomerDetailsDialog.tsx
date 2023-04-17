@@ -17,8 +17,6 @@ import InternationalPhoneNumberField from '@shared/components/InternationalPhone
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useInjectable } from '@shared/hooks/useInjectable';
-import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { getCountriesList } from '@shared/redux/slices/addressEditSlice';
 import { APIService } from '@shared/services/APIService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
@@ -116,9 +114,7 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
     const apiService = useInjectable(APIService);
-    const availableCountries = useAppSelector((state) => state.addressEditSlice.availableCountriesList);
     const customer = useAppSelector((state) => state.editCustomerSlice.customer);
-    const dispatch = useSharedDispatch();
 
     const [hasChanged, setHasChanged] = useState(false);
 
@@ -142,18 +138,6 @@ export const EditCustomerDetailsDialog = (props: EditCustomerDetailsDialogProps)
     useEffect(() => {
         setCurrentValues(initialValues);
     }, [initialValues]);
-
-    useEffect(
-        () => {
-            (async () => {
-                if (availableCountries.length === 1 && availableCountries[0].id === 0) {
-                    await dispatch(getCountriesList());
-                }
-            })();
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
-    );
 
     const handleClose = useCallback(() => {
         if (onClose) {

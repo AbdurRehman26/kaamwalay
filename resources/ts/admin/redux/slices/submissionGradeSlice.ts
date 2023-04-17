@@ -156,6 +156,11 @@ export const submissionGradesSlice = createSlice({
             state.allSubmissions[itemIndex].overallValues = action.payload.data.overallValues;
             state.allSubmissions[itemIndex].humanGradeValues = action.payload.data.humanGradeValues;
         },
+        updateExistingCardProductData: (state, action: PayloadAction<{ id: number; data: any }>) => {
+            const itemIndex = state.allSubmissions.findIndex((p: any) => p.orderItem.id === action.payload.id);
+            state.allSubmissions[itemIndex].orderItem.declaredValuePerUnit = action.payload.data.declaredValuePerUnit;
+            state.allSubmissions[itemIndex].orderItem.cardProduct = action.payload.data.cardProduct;
+        },
         updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
             state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name = action.payload.status;
@@ -289,6 +294,7 @@ export const {
     updateHumanGradeValue,
     updateExistingCardData,
     updateExistingCardGradeData,
+    updateExistingCardProductData,
     updateExistingCardStatus,
     updateCardViewMode,
     handleActionNotesInput,

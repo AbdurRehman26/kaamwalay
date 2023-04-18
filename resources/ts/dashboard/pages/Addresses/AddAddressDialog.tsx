@@ -14,7 +14,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
-import NumberFormat from 'react-number-format';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
@@ -258,12 +258,6 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                     newValue: '',
                 }),
             );
-            dispatch(
-                updateCustomerAddressField({
-                    fieldName: 'phone',
-                    newValue: '',
-                }),
-            );
             dispatch(getStatesList({ countryId }));
         }
     }
@@ -484,21 +478,13 @@ export function AddAddressDialog(props: AddAddressDialogProps) {
                 <div className={classes.inputsRow04}>
                     <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                         <Typography className={classes.methodDescription}>Phone Number</Typography>
-                        <NumberFormat
-                            customInput={TextField}
-                            format={
-                                country.phoneCode
-                                    ? '+' + country.phoneCode + ' (###) ###-####'
-                                    : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
-                            }
-                            mask=""
-                            style={{ margin: 8, marginLeft: 0 }}
-                            placeholder="Enter Phone Number"
+                        <InternationalPhoneNumberField
                             value={phoneNumber}
-                            onChange={(e: any) => updateField('phone', e.target.value)}
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
+                            onChange={(value, data, event, formattedValue) => {
+                                updateField('phone', formattedValue);
+                            }}
+                            dropdownStyle={{
+                                position: 'fixed',
                             }}
                         />
                     </div>

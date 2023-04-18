@@ -59,7 +59,8 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
     // New category section
     const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const [newCategoryName, setNewCategoryName] = useState('');
-    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showError, setShowError] = useState(false);
 
     const apiService = useInjectable(APIService);
 
@@ -98,10 +99,11 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
             Notifications.success('Category Added Successfully');
             props.onAdd?.();
         } catch (e: any) {
-            if (e.message === 'The name has already been taken.') {
-                setError(true);
+            if (e.message) {
+                setErrorMessage(e.message);
+                setShowError(true);
                 setTimeout(() => {
-                    setError(false);
+                    setShowError(false);
                 }, 2500);
             }
             Notifications.exception(e);
@@ -151,13 +153,9 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                     placeholder={'Enter Category Name'}
                                     fullWidth
                                     sx={{ minWidth: '231px' }}
-                                    error={error}
+                                    error={showError}
                                 />
-                                {error ? (
-                                    <span className={classes.errorStyle}>
-                                        A category with that name already exists.
-                                    </span>
-                                ) : null}
+                                {showError ? <span className={classes.errorStyle}>{errorMessage}</span> : null}
                             </FormControl>
                         </Grid>
                     </Grid>

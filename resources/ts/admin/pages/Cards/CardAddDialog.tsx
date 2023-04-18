@@ -255,7 +255,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
         setAvailableCategories(response.data);
 
-        setCardCategory(availableCategories[0]);
+        setCardCategory(availableCategories[availableCategories.length - 1]);
         await fetchSeries(categoryId);
 
         setSelectedSeriesFromState();

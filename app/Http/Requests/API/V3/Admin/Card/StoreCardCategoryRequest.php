@@ -18,11 +18,4 @@ class StoreCardCategoryRequest extends FormRequest
             'image_url' => ['required', 'string'],
         ];
     }
-
-    public function messages(): array
-    {
-        return [
-            'name.unique' => 'A category with that name already exists.',
-        ];
-    }
 }

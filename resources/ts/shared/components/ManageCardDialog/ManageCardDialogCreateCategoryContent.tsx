@@ -39,14 +39,6 @@ const useStyles = makeStyles(
             fontWeight: '400',
             marginTop: '4px',
         },
-        textFieldStyle: {
-            minWidth: '231px',
-            '& p': {
-                fontSize: '12px',
-                color: '#FF0000 !important',
-                fontWeight: 500,
-            },
-        },
     }),
     { name: 'ManageCardDialogView' },
 );
@@ -62,7 +54,6 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
     // New category section
     const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const [newCategoryName, setNewCategoryName] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
 
     const apiService = useInjectable(APIService);
 
@@ -101,12 +92,6 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
             Notifications.success('Category Added Successfully');
             props.onAdd?.();
         } catch (e: any) {
-            if (e.message) {
-                setErrorMessage(e.message);
-                setTimeout(() => {
-                    setErrorMessage('');
-                }, 2500);
-            }
             Notifications.exception(e);
         }
         setIsLoading(false);
@@ -150,12 +135,10 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                 <TextField
                                     variant="outlined"
                                     value={newCategoryName}
-                                    className={classes.textFieldStyle}
                                     onChange={handleNewCategoryNameChange}
                                     placeholder={'Enter Category Name'}
                                     fullWidth
-                                    error={errorMessage !== ''}
-                                    helperText={errorMessage ?? null}
+                                    sx={{ minWidth: '231px' }}
                                 />
                             </FormControl>
                         </Grid>

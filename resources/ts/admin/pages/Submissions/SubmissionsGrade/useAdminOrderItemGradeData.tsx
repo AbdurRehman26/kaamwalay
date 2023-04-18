@@ -10,7 +10,7 @@ import {
     rejectCard,
     resetCardViewMode,
     updateCardViewMode,
-    updateExistingCardData,
+    updateExistingCardGradeData,
     updateExistingCardStatus,
     updateHumanGradeValue,
     updateRemoteHumanGrades,
@@ -205,9 +205,9 @@ export function useAdminOrderItemGradeData(
                     gradeDelta: 0,
                 }),
             ).unwrap();
-            dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
+            dispatch(updateExistingCardGradeData({ id: topLevelID, data: response.data }));
         } catch (error: any) {
-            dispatch(getAllSubmissions({ id: orderID, fromAgs: false }));
+            dispatch(getAllSubmissions({ id: orderID, fromAgs: false, perPage: 30, page: 1 }));
             notifications.exception(error);
         }
     }

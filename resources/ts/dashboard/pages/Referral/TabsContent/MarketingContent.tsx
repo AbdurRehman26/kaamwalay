@@ -157,7 +157,7 @@ const MarketingContentDiv = styled(Grid)({
         alignItems: 'center',
         flexWrap: 'wrap',
     },
-    '.MarketingContentImageDiv': {
+    '.MarketingContentDiv': {
         width: '217px',
         position: 'relative',
         cursor: 'pointer',
@@ -174,7 +174,7 @@ const MarketingContentDiv = styled(Grid)({
         top: '3%',
         right: '3%',
     },
-    '.MarketingContentImage': {
+    '.MarketingContent': {
         maxWidth: '217px',
         padding: '4px',
         [theme.breakpoints.down('sm')]: {
@@ -341,10 +341,10 @@ export function MarketingContent({ expandable }: props) {
                 <Grid className={'ImagesDiv'}>
                     {expandable
                         ? marketingContent.slice(0, 8).map((data: any) => (
-                              <div className={'MarketingContentImageDiv'} key={data.id}>
+                              <div className={'MarketingContentDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
-                                          className={'MarketingContentImage'}
+                                          className={'MarketingContent'}
                                           src={data.type === 'image' ? data.url : data.thumbnail}
                                           alt={data.title}
                                       />
@@ -353,10 +353,10 @@ export function MarketingContent({ expandable }: props) {
                               </div>
                           ))
                         : marketingContent.map((data: any) => (
-                              <div className={'MarketingContentImageDiv'} key={data.id}>
+                              <div className={'MarketingContentDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
                                       <img
-                                          className={'MarketingContentImage'}
+                                          className={'MarketingContent'}
                                           src={data.type === 'image' ? data.url : data.thumbnail}
                                           alt={data.title}
                                       />

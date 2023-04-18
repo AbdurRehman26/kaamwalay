@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -138,7 +139,14 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                 </Box>
             </DialogTitle>
             <DialogContent>
-                <Grid container>
+                <Alert icon={false} sx={{ background: '#FEE9B5' }}>
+                    <Typography sx={{ fontWeight: 700, fontSize: '14px', color: '#000000DE' }}>
+                        {' '}
+                        PLEASE NOTE: If you are submitting a sports card, we are currently only accepting sports cards
+                        released after 2012. Sports cards released before 2012 will not be accepted.{' '}
+                    </Typography>
+                </Alert>
+                <Grid mt={2} container>
                     <Grid item xs={12} md={5}>
                         <Box display={'flex'} flexDirection={'column'}>
                             <Typography variant={'subtitle2'} sx={{ fontWeight: 'bold', marginBottom: '6px' }}>

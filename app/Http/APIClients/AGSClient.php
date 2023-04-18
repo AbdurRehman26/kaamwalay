@@ -103,6 +103,17 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
 
+    public function getCardCategory(array $data): array
+    {
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/categories/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: '/categories/', payload: [$data]);
+    }
+
     public function getCardSeries(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/series/', $data);

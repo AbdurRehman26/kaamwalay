@@ -9,17 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderFoldersOnAGSLocalMachineNotCreated extends Exception
 {
-     /** @var string */
-     protected $message = 'Order needs to be paid before it can be shipped.';
+    /** @var string */
+    protected $message = 'Order needs to be paid before it can be shipped.';
 
-     /** @var int */
-     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+    /** @var int */
+    protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
  
-     /**
-      * @param Request|array $request
-      */
-     public function render($request): JsonResponse
-     {
-         return new JsonResponse([ 'error' => $this->message ], $this->code);
-     }
+    /**
+     * @param Request|array $request
+     */
+    public function render($request): JsonResponse
+    {
+        return new JsonResponse([ 'error' => $this->message ], $this->code);
+    }
 }

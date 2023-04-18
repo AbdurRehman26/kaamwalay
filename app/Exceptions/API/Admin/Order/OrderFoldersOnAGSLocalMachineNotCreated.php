@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderFoldersOnAGSLocalMachineNotCreated extends Exception
 {
     /** @var string */
-    protected $message = 'Order needs to be paid before it can be shipped.';
+    protected $message = 'Order folders on AGS local machine could not be created.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

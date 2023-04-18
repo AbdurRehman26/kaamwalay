@@ -50,16 +50,6 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
             try {
                 $response = Http::post('http://44361659211a.ngrok.app/create_folders', $folders);
     
-                if (empty($response)) {
-                    Log::error('Folders could not be created on AGS local machine.', [
-                        'order_id' => $this->order->id,
-                        'response' => $response,
-                        'folders' => $folders,
-                    ]);
-                    
-                    throw new OrderFoldersOnAGSLocalMachineNotCreated;
-                }
-    
                 if ($response->status() !== 200) {
                     $this->release(5);
                 }

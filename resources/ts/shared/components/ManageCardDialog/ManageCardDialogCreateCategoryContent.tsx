@@ -39,10 +39,13 @@ const useStyles = makeStyles(
             fontWeight: '400',
             marginTop: '4px',
         },
-        errorStyle: {
-            fontSize: '12px',
-            color: '#FF0000',
-            fontWeight: 500,
+        textFieldStyle: {
+            minWidth: '231px',
+            '& p': {
+                fontSize: '12px',
+                color: '#FF0000 !important',
+                fontWeight: 500,
+            },
         },
     }),
     { name: 'ManageCardDialogView' },
@@ -60,7 +63,6 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
     const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const [newCategoryName, setNewCategoryName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [showError, setShowError] = useState(false);
 
     const apiService = useInjectable(APIService);
 
@@ -101,9 +103,8 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
         } catch (e: any) {
             if (e.message) {
                 setErrorMessage(e.message);
-                setShowError(true);
                 setTimeout(() => {
-                    setShowError(false);
+                    setErrorMessage('');
                 }, 2500);
             }
             Notifications.exception(e);
@@ -149,13 +150,13 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                 <TextField
                                     variant="outlined"
                                     value={newCategoryName}
+                                    className={classes.textFieldStyle}
                                     onChange={handleNewCategoryNameChange}
                                     placeholder={'Enter Category Name'}
                                     fullWidth
-                                    sx={{ minWidth: '231px' }}
-                                    error={showError}
+                                    error={errorMessage !== ''}
+                                    helperText={errorMessage ?? null}
                                 />
-                                {showError ? <span className={classes.errorStyle}>{errorMessage}</span> : null}
                             </FormControl>
                         </Grid>
                     </Grid>

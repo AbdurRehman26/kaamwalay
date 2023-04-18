@@ -28,10 +28,14 @@ import agsPartnerProgramPost12 from '@shared/assets/agsPartnerProgramPost12.mp4'
 import agsPartnerProgramPost13 from '@shared/assets/agsPartnerProgramPost13.mp4';
 import agsPartnerProgramPost14 from '@shared/assets/agsPartnerProgramPost14.mp4';
 import agsPartnerProgramPost15 from '@shared/assets/agsPartnerProgramPost15.mp4';
+import agsPartnerProgramPost16 from '@shared/assets/agsPartnerProgramPost16.mp4';
+import agsPartnerProgramPost17 from '@shared/assets/agsPartnerProgramPost17.mp4';
 import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.jpg';
 import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.jpg';
 import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.jpg';
 import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.jpg';
+import agsPartnerProgramThumbnail16 from '@shared/assets/agsPartnerProgramThumbnail16.png';
+import agsPartnerProgramThumbnail17 from '@shared/assets/agsPartnerProgramThumbnail17.png';
 import theme from '@shared/styles/theme';
 
 const marketingContent = [
@@ -128,6 +132,20 @@ const marketingContent = [
         url: agsPartnerProgramPost1,
         title: 'agsPartnerProgramPost1',
         type: 'image',
+    },
+    {
+        id: 15,
+        url: agsPartnerProgramPost16,
+        title: 'agsPartnerProgramPost16',
+        thumbnail: agsPartnerProgramThumbnail16,
+        type: 'video',
+    },
+    {
+        id: 16,
+        url: agsPartnerProgramPost17,
+        title: 'agsPartnerProgramPost17',
+        thumbnail: agsPartnerProgramThumbnail17,
+        type: 'video',
     },
 ];
 

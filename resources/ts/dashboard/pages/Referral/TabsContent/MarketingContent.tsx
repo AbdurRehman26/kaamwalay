@@ -28,10 +28,10 @@ import agsPartnerProgramPost12 from '@shared/assets/agsPartnerProgramPost12.mp4'
 import agsPartnerProgramPost13 from '@shared/assets/agsPartnerProgramPost13.mp4';
 import agsPartnerProgramPost14 from '@shared/assets/agsPartnerProgramPost14.mp4';
 import agsPartnerProgramPost15 from '@shared/assets/agsPartnerProgramPost15.mp4';
-import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.svg';
-import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.svg';
-import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.svg';
-import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.svg';
+import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.jpg';
+import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.jpg';
+import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.jpg';
+import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.jpg';
 import theme from '@shared/styles/theme';
 
 const marketingContent = [

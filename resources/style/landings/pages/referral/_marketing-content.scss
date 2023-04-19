@@ -36,21 +36,8 @@
     }
     &__image-div {
         max-width: 309px;
-        padding: 5px;
-        @media screen and (max-width: 767px) {
-            max-width: 50%;
-        }
-        @media (min-width: 768px) and (max-width: 1023.95px) {
-            max-width: 50%;
-        }
-        &:hover {
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                0 2px 4px -1px rgba(0, 0, 0, 0.2);
-        }
-    }
-    &__video-div {
-        padding: 5px;
         position: relative;
+        padding: 5px;
         @media screen and (max-width: 767px) {
             max-width: 50%;
         }
@@ -71,5 +58,11 @@
     }
     &__play-icon {
         font-size: 28px;
+    }
+}
+
+.plyr__video-wrapper--fixed-ratio {
+    @media screen and (max-width: 639px) {
+        aspect-ratio: 13 / 18 !important;
     }
 }

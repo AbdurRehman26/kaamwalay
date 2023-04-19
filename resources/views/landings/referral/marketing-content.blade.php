@@ -10,7 +10,7 @@
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost3.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__video-div">
+            <div class="marketing-content__image-div">
                 <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost15.mp4') }}" class="glightbox">
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail15.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                     <div class="marketing-content__play-icon-div">
@@ -28,7 +28,7 @@
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost4.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__video-div">
+            <div class="marketing-content__image-div">
                 <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost13.mp4') }}" class="glightbox">
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail13.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                     <div class="marketing-content__play-icon-div">
@@ -41,7 +41,7 @@
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost1.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__video-div">
+            <div class="marketing-content__image-div">
                 <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost12.mp4') }}" class="glightbox">
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail12.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                     <div class="marketing-content__play-icon-div">
@@ -59,7 +59,7 @@
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramPost10.png') }}" alt="marketing-content" class="marketing-content__image-div__image">
                 </a>
             </div>
-            <div class="marketing-content__video-div">
+            <div class="marketing-content__image-div">
                 <a href="{{ asset('assets/images/landings/referral/agsPartnerProgramPost14.mp4') }}" class="glightbox">
                     <img src="{{ asset('assets/images/landings/referral/agsPartnerProgramThumbnail14.jpg') }}" alt="marketing-content" class="marketing-content__image-div__image">
                     <div class="marketing-content__play-icon-div">

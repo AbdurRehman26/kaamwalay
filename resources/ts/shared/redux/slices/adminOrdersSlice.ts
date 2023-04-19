@@ -9,9 +9,11 @@ import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 import { UserCardEntity } from '@shared/entities/UserCardEntity';
 import { app } from '@shared/lib/app';
+import { normalizeError } from '@shared/lib/errors/normalizeError';
 import { OrderItemsRepository } from '@shared/repositories/Admin/OrderItemsRepository';
 import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
+import { ThunkShowActionArg } from '@shared/types/ThunkShowActionArg';
 import { AddExtraChargeToOrderDto } from '../../dto/AddExtraChargeToOrderDto';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemNotesDto } from '../../dto/ChangeOrderItemNotesDto';
@@ -265,6 +267,20 @@ export const cancelOrder = createAsyncThunk('cancelOrder', async (orderId: numbe
     }
 });
 
+export const getOrder = createAsyncThunk<OrderEntity, ThunkShowActionArg>(
+    'getOrder',
+    async (args: ThunkShowActionArg, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+        try {
+            const data = await ordersRepository.getOrder(args.resourceId, args.config);
+            return instanceToPlain(data) as OrderEntity;
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
+
 export const generateOrderLabel = createAsyncThunk('cancelOrder', async (orderId: number, thunkAPI) => {
     const ordersRepository = app(OrdersRepository);
 
@@ -430,6 +446,27 @@ export const adminOrdersSlice = createSlice({
 
             state.entities = entities;
         });
+
+        builder
+            .addCase(getOrder.pending, (state, { meta }) => {
+                const id = meta.arg.resourceId;
+                const skipLoading = meta.arg.skipLoading;
+                state.errors[`show_${id}`] = null;
+                if (!skipLoading) {
+                    state.isLoading[id] = true;
+                }
+            })
+            .addCase(getOrder.rejected, (state, { error, payload, meta }) => {
+                const id = meta.arg.resourceId;
+                state.errors[`show_${id}`] = normalizeError((payload as Error) || error);
+                state.isLoading[id] = false;
+            })
+            .addCase(getOrder.fulfilled, (state, { payload }) => {
+                const { id } = payload;
+                state.ids.push(id);
+                state.entities[id] = payload as any;
+                state.isLoading[id] = false;
+            });
     },
 });
 

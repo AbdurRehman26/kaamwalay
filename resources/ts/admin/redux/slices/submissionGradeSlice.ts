@@ -156,6 +156,11 @@ export const submissionGradesSlice = createSlice({
             state.allSubmissions[itemIndex].overallValues = action.payload.data.overallValues;
             state.allSubmissions[itemIndex].humanGradeValues = action.payload.data.humanGradeValues;
         },
+        updateExistingCardProductData: (state, action: PayloadAction<{ id: number; data: any }>) => {
+            const itemIndex = state.allSubmissions.findIndex((p: any) => p.orderItem.id === action.payload.id);
+            state.allSubmissions[itemIndex].orderItem.declaredValuePerUnit = action.payload.data.declaredValuePerUnit;
+            state.allSubmissions[itemIndex].orderItem.cardProduct = action.payload.data.cardProduct;
+        },
         updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
             state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name = action.payload.status;
@@ -260,27 +265,14 @@ export const submissionGradesSlice = createSlice({
             const data = action.payload.data;
             const pagination = { links: action.payload.links, meta: action.payload.meta };
 
-            // This API uses a background sync, but as this data is responsible for the whole page items,
-            // any change in the state will cause a rerender. To avoid the unnecessary rerendering, we
-            // are checking the grades data to ensure if they are loaded, and only then update the state.
-            const areGradesLoaded =
+            state.allSubmissions = data;
+            state.gradesPagination = pagination;
+
+            state.hasLoadedAllRobogrades =
                 data.filter(
                     (card: Record<string, any>) =>
                         card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
                 ).length === data.length;
-
-            if (
-                // This will be true when the API is called first time, and the robogrades are not available.
-                (state.hasLoadedAllRobogrades && !areGradesLoaded) ||
-                // This will be true when the API is called more than once, and the robogrades are now available.
-                (!state.hasLoadedAllRobogrades && areGradesLoaded) ||
-                // This will be true when the API is called first time and the grades are available instantly.
-                (state.hasLoadedAllRobogrades && areGradesLoaded)
-            ) {
-                state.allSubmissions = data;
-                state.gradesPagination = pagination;
-            }
-            state.hasLoadedAllRobogrades = areGradesLoaded;
         },
     },
 });
@@ -289,6 +281,7 @@ export const {
     updateHumanGradeValue,
     updateExistingCardData,
     updateExistingCardGradeData,
+    updateExistingCardProductData,
     updateExistingCardStatus,
     updateCardViewMode,
     handleActionNotesInput,

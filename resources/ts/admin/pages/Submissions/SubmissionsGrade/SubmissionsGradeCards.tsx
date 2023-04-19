@@ -14,7 +14,11 @@ import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
+import {
+    getAllSubmissions,
+    matchExistingOrderItemsToViewModes,
+    updateExistingCardProductData,
+} from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
 
 const useStyles = makeStyles(
@@ -95,18 +99,19 @@ export function SubmissionsGradeCards() {
         async (data) => {
             const { orderItemId, declaredValue, card } = data;
             if (orderItemId) {
-                await dispatch(
+                const response = await dispatch(
                     editCardOfOrder({
                         orderItemId,
                         orderId: Number(id),
                         cardProductId: card.id,
                         value: declaredValue,
                     }),
-                );
-                await loadGrades(perPage, page, false);
+                ).unwrap();
+
+                dispatch(updateExistingCardProductData({ id: response.id, data: response }));
             }
         },
-        [dispatch, id, loadGrades, perPage, page],
+        [dispatch, id],
     );
 
     const handlePageChange = useCallback((event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {

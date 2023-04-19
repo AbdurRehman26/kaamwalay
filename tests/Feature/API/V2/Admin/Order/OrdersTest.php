@@ -480,7 +480,7 @@ it('should send an event when order status gets changed', function () {
     });
 });
 
-it('dispatches jobs for creating folders on dropbox and AGS local machine when an order is reviewed', function () {
+it('dispatches job for creating folders on dropbox when an order is reviewed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     Bus::fake();
@@ -492,7 +492,20 @@ it('dispatches jobs for creating folders on dropbox and AGS local machine when a
     ]);
 
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
-    Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);
+});
+
+it('should not dispatches job for creating folders on AGS local machine when an environment is local ', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+
+    Bus::assertNotDispatched(CreateOrderFoldersOnAGSLocalMachine::class);
 });
 
 test('order can not be shipped if its not paid', function () {

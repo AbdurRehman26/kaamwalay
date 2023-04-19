@@ -34,7 +34,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         User|int $user = null,
         ?string $notes = null
     ): OrderStatusHistory|Model {
-        if (!$user) {
+        if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $user = auth()->user();
         }
@@ -48,18 +48,19 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             ->first();
 
         throw_if(
-            getModelId($orderStatus) === OrderStatus::GRADED && !Order::find($orderId)->isEligibleToMarkAsGraded(),
+            getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
 
         throw_if(
-            (getModelId($orderStatus) === OrderStatus::ASSEMBLED && !$order->isEligibleToMarkAsAssembled()
+            (
+                getModelId($orderStatus) === OrderStatus::ASSEMBLED && ! $order->isEligibleToMarkAsAssembled()
             ),
             OrderCanNotBeMarkedAsAssembled::class
         );
 
         throw_if(
-            (getModelId($orderStatus) === OrderStatus::SHIPPED && !$order->isEligibleToMarkAsShipped()),
+            (getModelId($orderStatus) === OrderStatus::SHIPPED && ! $order->isEligibleToMarkAsShipped()),
             OrderCanNotBeMarkedAsShipped::class
         );
 
@@ -78,7 +79,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         }
 
         if ($orderStatusId === OrderStatus::GRADED) {
-            if (!$order->isPaid()) {
+            if (! $order->isPaid()) {
                 $order->payment_status = OrderPaymentStatusEnum::DUE;
                 $order->save();
             }
@@ -89,7 +90,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             'order_status_id' => $orderStatusId,
         ]);
 
-        if (!$orderStatusHistory) {
+        if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([
                 'order_id' => $orderId,
                 'order_status_id' => $orderStatusId,

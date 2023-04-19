@@ -47,6 +47,7 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
         foreach ($certificates as $certificate) {
             $folders[] = "{$this->order->order_number}/$certificate";
         }
+
         try {
             $response = Http::post($this->baseUrl . self::ENDPOINT, $folders);
 

@@ -19,8 +19,10 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public const ENDPOINT = '/create_folders';
     public int $tries = 5;
     public int $maxExceptions = 3;
+    protected string $baseUrl;
 
     /**
      * Create a new job instance.
@@ -29,7 +31,7 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
      */
     public function __construct(protected Order $order)
     {
-        //
+        $this->baseUrl = config('services.agsLocalMachineFolderCreation.base_url');
     }
 
     /**
@@ -45,24 +47,20 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
         foreach ($certificates as $certificate) {
             $folders[] = "{$this->order->order_number}/$certificate";
         }
+        try {
+            $response = Http::post($this->baseUrl . self::ENDPOINT, $folders);
 
-        if (app()->environment('production')) {
-            try {
-                $response = Http::post('http://44361659211a.ngrok.app/create_folders', $folders);
-    
-                if ($response->status() !== 200) {
-                    $this->release(5);
-                }
-    
-            } catch (Exception $e) {
-                Log::error('Folders could not be created on AGS local machine.', [
-                    'order_id' => $this->order->id,
-                    'error' => $e->getMessage(),
-                    'folders' => $folders,
-                ]);
-    
-                throw new OrderFoldersOnAGSLocalMachineNotCreated;
+            if ($response->status() !== 200) {
+                $this->release(5);
             }
+        } catch (Exception $e) {
+            Log::error('Folders could not be created on AGS local machine.', [
+                'order_id' => $this->order->id,
+                'error' => $e->getMessage(),
+                'folders' => $folders,
+            ]);
+
+            throw new OrderFoldersOnAGSLocalMachineNotCreated;
         }
     }
 }

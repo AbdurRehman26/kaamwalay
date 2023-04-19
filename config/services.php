@@ -94,4 +94,8 @@ return [
         'store_id' => env('SHIPSTATION_STORE_ID'),
     ],
 
+    'agsLocalMachineFolderCreation' => [
+        'base_url' => env('AGS_LOCAL_MACHINE_BASE_URL'),
+    ],
+
 ];

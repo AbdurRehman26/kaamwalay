@@ -60,9 +60,3 @@
         font-size: 28px;
     }
 }
-
-.plyr__video-wrapper--fixed-ratio {
-    @media screen and (max-width: 639px) {
-        aspect-ratio: 13 / 18 !important;
-    }
-}

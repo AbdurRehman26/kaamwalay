@@ -105,7 +105,9 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(null);
+    const [cardCategory, setCardCategory] = useState<CardCategoryEntity | null | undefined>(
+        dialogState.selectedCategory ?? null,
+    );
     const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
     const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
     const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
@@ -252,13 +254,13 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         const response = await endpoint.get('');
         const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
         setAvailableCategories(response.data);
-        dispatch(manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]));
 
-        await fetchSeries(categoryId);
+        setCardCategory(dialogState.selectedCategory);
+        await fetchSeries(dialogState.selectedCategory?.id);
 
         setSelectedSeriesFromState();
 
-        fetchDropdownsData(categoryId);
+        fetchDropdownsData(categoryId || dialogState.selectedCategory?.id);
     };
 
     useEffect(
@@ -279,6 +281,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const handleCardCategoryChange = useCallback(
         (e, newValue) => {
+            dispatch(manageCardDialogActions.setSelectedCategory(null));
             setCardCategory(newValue);
 
             const category = availableCategories.filter((cat) => {
@@ -393,7 +396,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             const DTO = {
                 imagePath: cardPublicImage,
                 name: cardName || updateCard?.cardSetName,
-                category: isUpdate ? updateCard.cardCategory.id : cardCategory?.id,
+                category: isUpdate ? updateCard.cardCategory.id : cardCategory?.id || dialogState.selectedCategory?.id,
                 releaseDate: releaseDate || updateCard?.releaseDate,
                 seriesId: selectedSeries?.id,
                 seriesName: null,
@@ -752,7 +755,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                         Category
                                     </FormHelperText>
                                     <Autocomplete
-                                        value={cardCategory}
+                                        value={dialogState.selectedCategory || cardCategory}
                                         onChange={handleCardCategoryChange}
                                         options={availableCategories}
                                         getOptionLabel={(option) => option.name || ''}
@@ -771,7 +774,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                     Add Category
                                 </Button>
                             </Box>
-                            {cardCategory && !isUpdate ? (
+                            {cardCategory || (dialogState.selectedCategory && !isUpdate) ? (
                                 <Box
                                     display={'flex'}
                                     flexDirection={'row'}

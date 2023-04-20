@@ -85,6 +85,7 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
             };
             const responseItem = await endpoint.post('', DTO);
             batch(() => {
+                dispatch(manageCardDialogActions.setSelectedCategory(responseItem.data));
                 dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
                 dispatch(manageCardDialogActions.navigateToPreviousView());
             });

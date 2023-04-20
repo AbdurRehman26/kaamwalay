@@ -146,7 +146,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                         released after 2012. Sports cards released before 2012 will not be accepted.{' '}
                     </Typography>
                 </Alert>
-                <Grid mt={2} container>
+                <Grid mt={3} container>
                     <Grid item xs={12} md={5}>
                         <Box display={'flex'} flexDirection={'column'}>
                             <Typography variant={'subtitle2'} sx={{ fontWeight: 'bold', marginBottom: '6px' }}>

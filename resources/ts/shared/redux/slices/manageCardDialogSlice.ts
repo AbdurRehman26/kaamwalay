@@ -52,7 +52,7 @@ export const manageCardDialogSlice = createSlice({
             state.lastView = state.view;
             state.view = payload;
         },
-        setSelectedCategory(state, { payload }: PayloadAction<CardCategoryEntity>) {
+        setSelectedCategory(state, { payload }: PayloadAction<CardCategoryEntity | null>) {
             state.selectedCategory = instanceToPlain(payload) as any;
         },
         setSelectedCard(state, { payload }: PayloadAction<CardProductEntity | null>) {

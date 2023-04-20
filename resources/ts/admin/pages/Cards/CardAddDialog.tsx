@@ -255,12 +255,12 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
         const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
         setAvailableCategories(response.data);
 
-        setCardCategory(availableCategories[availableCategories.length - 1]);
-        await fetchSeries(categoryId);
+        setCardCategory(dialogState.selectedCategory);
+        await fetchSeries(dialogState.selectedCategory?.id);
 
         setSelectedSeriesFromState();
 
-        fetchDropdownsData(categoryId);
+        fetchDropdownsData(categoryId || dialogState.selectedCategory?.id);
     };
 
     useEffect(
@@ -281,6 +281,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
     const handleCardCategoryChange = useCallback(
         (e, newValue) => {
+            dispatch(manageCardDialogActions.setSelectedCategory(null));
             setCardCategory(newValue);
 
             const category = availableCategories.filter((cat) => {
@@ -395,7 +396,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
             const DTO = {
                 imagePath: cardPublicImage,
                 name: cardName || updateCard?.cardSetName,
-                category: isUpdate ? updateCard.cardCategory.id : cardCategory?.id,
+                category: isUpdate ? updateCard.cardCategory.id : cardCategory?.id || dialogState.selectedCategory?.id,
                 releaseDate: releaseDate || updateCard?.releaseDate,
                 seriesId: selectedSeries?.id,
                 seriesName: null,
@@ -773,7 +774,7 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
                                     Add Category
                                 </Button>
                             </Box>
-                            {cardCategory && !isUpdate ? (
+                            {cardCategory || (dialogState.selectedCategory && !isUpdate) ? (
                                 <Box
                                     display={'flex'}
                                     flexDirection={'row'}

@@ -480,7 +480,7 @@ it('should send an event when order status gets changed', function () {
     });
 });
 
-it('dispatches job for creating folders on dropbox and AGS local machine when an order is reviewed', function () {
+it('dispatches jobs for creating folders on dropbox and AGS local machine when an order is reviewed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     Bus::fake();

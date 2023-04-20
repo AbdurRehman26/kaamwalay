@@ -2251,11 +2251,6 @@ parameters:
 			path: app/Models/Order.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$orderItems\\.$#"
-			count: 2
-			path: app/Models/Order.php
-
-		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$orderStatus\\.$#"
 			count: 1
 			path: app/Models/Order.php

@@ -14,7 +14,11 @@ import { useRetry } from '@shared/hooks/useRetry';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
+import {
+    getAllSubmissions,
+    matchExistingOrderItemsToViewModes,
+    updateExistingCardProductData,
+} from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
 
 const useStyles = makeStyles(
@@ -51,7 +55,7 @@ export function SubmissionsGradeCards() {
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const hasLoadedAllRobogrades = useAppSelector((state) => state.submissionGradesSlice.hasLoadedAllRobogrades);
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(24);
+    const [perPage, setPerPage] = useState(30);
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -75,7 +79,7 @@ export function SubmissionsGradeCards() {
     }
 
     const loadGrades = useCallback(
-        (perPage = 24, page = 1, fromAgs = true) => {
+        (perPage = 30, page = 1, fromAgs = true) => {
             dispatch(getAllSubmissions({ fromAgs, id: Number(id), page, perPage, itemId: reviseGradeItemId }))
                 .unwrap()
                 .then(() => (fromAgs ? dispatch(matchExistingOrderItemsToViewModes()) : null));
@@ -95,18 +99,19 @@ export function SubmissionsGradeCards() {
         async (data) => {
             const { orderItemId, declaredValue, card } = data;
             if (orderItemId) {
-                await dispatch(
+                const response = await dispatch(
                     editCardOfOrder({
                         orderItemId,
                         orderId: Number(id),
                         cardProductId: card.id,
                         value: declaredValue,
                     }),
-                );
-                await loadGrades(perPage, page, false);
+                ).unwrap();
+
+                dispatch(updateExistingCardProductData({ id: response.id, data: response }));
             }
         },
-        [dispatch, id, loadGrades, perPage, page],
+        [dispatch, id],
     );
 
     const handlePageChange = useCallback((event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
@@ -168,7 +173,7 @@ export function SubmissionsGradeCards() {
                             count={gradesPagination.meta.total}
                             page={gradesPagination.meta.currentPage - 1}
                             rowsPerPage={gradesPagination.meta.perPage}
-                            rowsPerPageOptions={[24, 48, 72, 96, 120]}
+                            rowsPerPageOptions={[30, 48, 72, 96, 120]}
                             onPageChange={handlePageChange}
                             onRowsPerPageChange={handleRowsPerPageChange}
                             labelRowsPerPage={

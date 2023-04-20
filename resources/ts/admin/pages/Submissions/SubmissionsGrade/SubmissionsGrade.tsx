@@ -40,7 +40,16 @@ export function SubmissionsGrade() {
         resourceId: Number(id),
         config: {
             params: {
-                include: ['orderItems', 'orderStatus', 'orderCertificate', 'orderStatusHistory.orderStatus'],
+                include: [
+                    'orderItems',
+                    'orderStatus',
+                    'orderCertificate',
+                    'orderStatusHistory.orderStatus',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                    'orderItems.latestStatusHistory.orderItemStatus',
+                    'orderItems.latestStatusHistory.user',
+                ],
             },
         },
     });

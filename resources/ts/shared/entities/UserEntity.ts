@@ -21,6 +21,7 @@ export class UserEntity extends Entity {
     public showReferralPromotionalPopup!: boolean;
 
     public wallet!: WalletEntity;
+    public referredBy!: UserEntity;
 
     @DateField()
     public emailVerifiedAt!: Date;

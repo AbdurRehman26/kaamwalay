@@ -97,7 +97,11 @@
         }
 
         &__font-color {
-            color: #000000;
+            background-color: #42e8e0;
+
+            &:hover {
+                background-color: #71fff8;
+            }
         }
     }
 }

@@ -6,12 +6,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/AuthDialog/styles';
 import { PopupSignUpValidationRules } from '@shared/components/AuthDialog/validation';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
@@ -37,6 +38,54 @@ const useStyles = makeStyles(
             fontSize: '15px',
             fontWeight: 'bolder',
         },
+        phoneFieldContainer: {
+            marginBottom: '24px',
+
+            '& .special-label': {
+                top: '5px !important',
+                left: '18px !important',
+                backgroundColor: 'transparent !important',
+                fontFamily: 'Roboto',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                fontSize: '12px !important',
+                lineHeight: '16px',
+                letterSpacing: '0.2px',
+                color: 'rgba(0, 0, 0, 0.54)',
+            },
+        },
+        phoneFieldInput: {
+            width: '100% !important',
+            border: '1px solid lightgray !important',
+            borderRadius: '28px !important',
+            padding: '26px 14px 10px 68px !important',
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            fontSize: '14px !important',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+
+            '&:focus': {
+                borderColor: '#20BFB8 !important',
+                boxShadow: 'none !important',
+                backgroundColor: 'rgba(32,191,184,0.05)',
+            },
+        },
+        phoneFieldFlagButton: {
+            '& .selected-flag': {
+                paddingLeft: '22px !important',
+
+                '& .flag': {
+                    top: '64% !important',
+                },
+            },
+        },
+        phoneFieldDropdown: {
+            maxHeight: '240px !important',
+            width: '390px !important',
+        },
     }),
     { name: 'SignUpContent' },
 );
@@ -49,6 +98,7 @@ export function SignUpContent({
     isDisabled = false,
 }: AuthDialogContentProps) {
     const classes = useStyles();
+    const [phone, setPhone] = useState('');
 
     const authenticationRepository = useInjectable(AuthenticationRepository);
     const initialState = useMemo<SignUpRequestDto>(
@@ -67,7 +117,8 @@ export function SignUpContent({
     const handleSignInClick = useCallback(() => onViewChange(AuthDialogView.SignIn), [onViewChange]);
     const handleSubmit = useCallback(
         async (values: SignUpRequestDto) => {
-            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode };
+            values = { ...values, passwordConfirmation: values.password, referralCode: referralCode, phone };
+
             try {
                 const authenticatedUser = await authenticationRepository.postRegister(values);
                 ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
@@ -78,7 +129,7 @@ export function SignUpContent({
                 NotificationsService.exception(e);
             }
         },
-        [authenticationRepository, onAuthSuccess, referralCode],
+        [authenticationRepository, onAuthSuccess, referralCode, phone],
     );
 
     return (
@@ -107,7 +158,22 @@ export function SignUpContent({
                         </FormRoot>
 
                         <FormRoot>
-                            <FormInput type={'phone'} label={'Phone Number'} name={'phone'} disabled={isDisabled} />
+                            <InternationalPhoneNumberField
+                                value={values.phone}
+                                onChange={(value, data, event, formattedValue) => {
+                                    handleChange(event);
+                                    setPhone(formattedValue);
+                                }}
+                                containerClass={classes.phoneFieldContainer}
+                                inputClass={classes.phoneFieldInput}
+                                buttonClass={classes.phoneFieldFlagButton}
+                                dropdownClass={classes.phoneFieldDropdown}
+                                specialLabel={'Phone Number'}
+                                disabled={isDisabled}
+                                inputProps={{
+                                    name: 'phone',
+                                }}
+                            />
                         </FormRoot>
 
                         <FormRoot>

@@ -1,4 +1,5 @@
-import { plainToInstance } from 'class-transformer';
+import { AxiosRequestConfig } from 'axios';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
 import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
@@ -8,6 +9,8 @@ import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
+import { app } from '@shared/lib/app';
+import { APIService } from '@shared/services/APIService';
 import { AddExtraChargeToOrderDto } from '../../dto/AddExtraChargeToOrderDto';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
@@ -20,6 +23,21 @@ import { Repository } from '../Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'admin/orders/:orderId';
     readonly model = OrderEntity;
+
+    public async getOrder(
+        resourceId: any,
+        config?: AxiosRequestConfig,
+        transformModel?: ClassConstructor<OrderEntity>,
+    ): Promise<OrderEntity> {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(this.endpointPath, {
+            version: 'v3',
+        });
+
+        const { data } = await endpoint.get(`/${resourceId}`, config);
+
+        return this.toEntity(data, null, transformModel);
+    }
 
     async addOrderStatusHistory(input: AddOrderStatusHistoryDto): Promise<OrderStatusHistoryEntity> {
         const { orderId, orderStatusId } = input;

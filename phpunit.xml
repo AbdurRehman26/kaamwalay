@@ -44,5 +44,6 @@
         <env name="PAYPAL_API_BASE_URL" value="https://paypal.api" />
         <env name="PAYPAL_CLIENT_ID" value="12345" />
         <env name="PAYPAL_CLIENT_SECRET" value="12345" />
+        <env name="AGS_LOCAL_MACHINE_BASE_URL" value="https://ags.local.api" />
     </php>
 </phpunit>

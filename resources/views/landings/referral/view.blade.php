@@ -16,7 +16,13 @@
         <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
         <script>
             (function() {
-                var lightbox = GLightbox();
+                var lightbox = GLightbox({
+                    plyr: {
+                        config: {
+                            ratio: '9:16'   
+                        }
+                    }
+                });
 
                 AOS.init({
                     once: true,

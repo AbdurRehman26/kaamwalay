@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { toggleMarketingNotifications, updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
@@ -129,6 +130,44 @@ const useStyles = makeStyles((theme) => ({
     marketingEnabledFirstRadio: {
         marginRight: 52,
     },
+    phoneFieldContainer: {
+        '& .special-label': {
+            top: '5px !important',
+            left: '8px !important',
+            backgroundColor: 'transparent !important',
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '12px !important',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.54)',
+        },
+    },
+    phoneFieldInput: {
+        width: '100% !important',
+        border: '1px solid lightgray !important',
+        borderRadius: '4px !important',
+        padding: '26px 14px 10px 60px !important',
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: '24px',
+        letterSpacing: '0.15px',
+        color: 'rgba(0, 0, 0, 0.87)',
+
+        '&:focus': {
+            border: '2px solid #20BFB8 !important',
+            boxShadow: 'none !important',
+        },
+    },
+    phoneFieldFlagButton: {
+        '& .selected-flag': {
+            '& .flag': {
+                top: '64% !important',
+            },
+        },
+    },
 }));
 
 const CustomTextField = withStyles({
@@ -192,13 +231,6 @@ export function BasicInfo() {
     const onToggleShowPasswordText = useCallback(() => {
         setShowPasswordText((prev) => !prev);
     }, []);
-
-    const onPhoneChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            setNewPhone(event.target.value);
-        },
-        [setNewPhone],
-    );
 
     const onCurrentPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentPassword(e.target.value);
@@ -551,13 +583,15 @@ export function BasicInfo() {
                             Change Phone Number
                         </Typography>
 
-                        <CustomTextField
-                            label="Confirm New Phone Number"
-                            rows={1}
+                        <InternationalPhoneNumberField
                             value={newPhone}
-                            onChange={onPhoneChange}
-                            className={classes.textField}
-                            fullWidth
+                            onChange={(value, data, event, formattedValue) => {
+                                setNewPhone(formattedValue);
+                            }}
+                            specialLabel="Confirm New Phone Number"
+                            containerClass={classes.phoneFieldContainer}
+                            inputClass={classes.phoneFieldInput}
+                            buttonClass={classes.phoneFieldFlagButton}
                         />
                     </div>
                 </BasicInfoRow>

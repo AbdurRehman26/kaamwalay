@@ -28,10 +28,14 @@ import agsPartnerProgramPost12 from '@shared/assets/agsPartnerProgramPost12.mp4'
 import agsPartnerProgramPost13 from '@shared/assets/agsPartnerProgramPost13.mp4';
 import agsPartnerProgramPost14 from '@shared/assets/agsPartnerProgramPost14.mp4';
 import agsPartnerProgramPost15 from '@shared/assets/agsPartnerProgramPost15.mp4';
+import agsPartnerProgramPost16 from '@shared/assets/agsPartnerProgramPost16.mp4';
+import agsPartnerProgramPost17 from '@shared/assets/agsPartnerProgramPost17.mp4';
 import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.jpg';
 import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.jpg';
 import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.jpg';
 import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.jpg';
+import agsPartnerProgramThumbnail16 from '@shared/assets/agsPartnerProgramThumbnail16.png';
+import agsPartnerProgramThumbnail17 from '@shared/assets/agsPartnerProgramThumbnail17.png';
 import theme from '@shared/styles/theme';
 
 const marketingContent = [
@@ -65,66 +69,80 @@ const marketingContent = [
     },
     {
         id: 4,
+        url: agsPartnerProgramPost16,
+        title: 'agsPartnerProgramPost16',
+        thumbnail: agsPartnerProgramThumbnail16,
+        type: 'video',
+    },
+    {
+        id: 5,
+        url: agsPartnerProgramPost17,
+        title: 'agsPartnerProgramPost17',
+        thumbnail: agsPartnerProgramThumbnail17,
+        type: 'video',
+    },
+    {
+        id: 6,
         url: agsPartnerProgramPost2,
         title: 'agsPartnerProgramPost2',
         type: 'image',
     },
     {
-        id: 5,
+        id: 7,
         url: agsPartnerProgramPost3,
         title: 'agsPartnerProgramPost3',
         type: 'image',
     },
     {
-        id: 6,
+        id: 8,
         url: agsPartnerProgramPost4,
         title: 'agsPartnerProgramPost4',
         type: 'image',
     },
     {
-        id: 7,
+        id: 9,
         url: agsPartnerProgramPost5,
         title: 'agsPartnerProgramPost5',
         type: 'image',
     },
     {
-        id: 8,
+        id: 10,
         url: agsPartnerProgramPost6,
         title: 'agsPartnerProgramPost6',
         type: 'image',
     },
     {
-        id: 9,
+        id: 11,
         url: agsPartnerProgramPost7,
         title: 'agsPartnerProgramPost7',
         type: 'image',
     },
     {
-        id: 10,
+        id: 12,
         url: agsPartnerProgramPost8,
         title: 'agsPartnerProgramPost8',
         type: 'image',
     },
     {
-        id: 11,
+        id: 13,
         url: agsPartnerProgramPost9,
         title: 'agsPartnerProgramPost9',
         type: 'image',
     },
     {
-        id: 12,
+        id: 14,
         url: agsPartnerProgramPost10,
         title: 'agsPartnerProgramPost10',
         type: 'image',
     },
     {
-        id: 13,
+        id: 15,
         url: agsPartnerProgramPost11,
         title: 'agsPartnerProgramPost11',
         type: 'image',
     },
     {
-        id: 14,
+        id: 16,
         url: agsPartnerProgramPost1,
         title: 'agsPartnerProgramPost1',
         type: 'image',

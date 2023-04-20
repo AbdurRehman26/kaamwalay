@@ -17,13 +17,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageUploader from '@shared/components/ImageUploader';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { AddSalesRepRequestDto } from '@shared/dto/AddSalesRepRequestDto';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
-import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
 import { addExistingUserAsSalesRep, storeSalesRep } from '@shared/redux/slices/adminSalesRepSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -69,27 +68,6 @@ const RadioContainer = styled(ButtonBase)(({ theme }) => ({
     },
 }));
 
-const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
-    '&': {
-        padding: '8px 14px !important',
-        width: '100%',
-        border: '1px solid lightgray',
-        fontWeight: 400,
-        fontSize: '1rem',
-        borderRadius: 4,
-    },
-    '.MuiInput-input': {
-        borderLeft: '1px solid lightgray',
-        padding: '7px 5px !important',
-    },
-    '.MuiInput-root:before': {
-        border: '0 !important',
-    },
-    '.MuiInput-root:after': {
-        border: '0 !important',
-    },
-}));
-
 const useStyles = makeStyles(
     () => {
         return {
@@ -124,7 +102,6 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
     const [commissionValue, setCommissionValue] = useState(0);
     const [listActive, setListActive] = useState(true);
     const filesRepository = useRepository(FilesRepository);
-    const { data } = useCountriesListsQuery();
     const customer = useAppSelector((state) => state.adminCreateOrderSlice.user);
     const handleClose = useCallback(
         (event: {}) => {
@@ -304,13 +281,11 @@ export function SalesRepAddDialog({ onClose, fromSubmission, onSubmit, ...rest }
                             >
                                 Phone Number
                             </Typography>
-                            <StyledPhoneNumber
-                                countryCodeEditable={false}
-                                defaultCountry="us"
-                                disableAreaCodes
+                            <InternationalPhoneNumberField
                                 value={phone}
-                                onlyCountries={data.map((country) => country.code.toLowerCase())}
-                                onChange={(e) => setPhone(e.toString())}
+                                onChange={(value, data, event, formattedValue) => {
+                                    setPhone(formattedValue);
+                                }}
                             />
                         </Grid>
                     </Grid>

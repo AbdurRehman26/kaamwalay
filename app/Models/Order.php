@@ -270,6 +270,17 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('orderItems.cardProduct'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItems.userCard'),
+            AllowedInclude::relationship('firstOrderPayment.user'),
+            AllowedInclude::relationship('orderItems.orderItemStatus'),
+            AllowedInclude::relationship('billingAddress.country'),
+            AllowedInclude::relationship('shippingAddress.country'),
         ];
     }
 

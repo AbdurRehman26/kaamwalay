@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API\V3\Customer\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Customer\Order\StoreOrderRequest;
+use App\Http\Resources\API\V3\Customer\Order\OrderResource;
 use App\Http\Resources\API\V3\Customer\Order\OrderCreateResource;
+use App\Services\Order\V2\OrderService;
 use App\Services\Order\V3\CreateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +16,7 @@ class OrderController extends Controller
 {
     public function __construct(
         protected CreateOrderService $createOrderService,
+        protected OrderService $orderService,
     ) {
         //
     }
@@ -32,5 +35,13 @@ class OrderController extends Controller
         }
 
         return new OrderCreateResource($order);
+    }
+
+    public function show(int $orderId): OrderResource
+    {
+        $order = $this->orderService->getOrder($orderId);
+        $this->authorize('view', $order);
+
+        return new OrderResource($order);
     }
 }

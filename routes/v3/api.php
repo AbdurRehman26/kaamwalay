@@ -22,6 +22,7 @@ Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');
+            Route::get('{orderId}', [OrderController::class, 'show']);
         });
 
         Route::prefix('push-notifications')->group(function () {

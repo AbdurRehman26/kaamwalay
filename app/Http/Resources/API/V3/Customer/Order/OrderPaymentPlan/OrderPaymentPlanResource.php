@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Resources\API\V3\Customer\Order\PaymentPlan;
+namespace App\Http\Resources\API\V3\Customer\Order\OrderPaymentPlan;
 
-use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V3\Customer\Order\PaymentPlanRange\PaymentPlanRangeCollection;
 use App\Models\PaymentPlan;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin PaymentPlan */
-class PaymentPlanResource extends BaseResource
+class OrderPaymentPlanResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      */
     public function toArray(Request $request): array
     {
-        $ranges = $this->paymentPlanRanges;
-
         return [
             'id' => $this->id,
             'price' => $this->price,
@@ -24,9 +21,6 @@ class PaymentPlanResource extends BaseResource
             'discount_percentage' => $this->discount_percentage,
             'max_protection_amount' => $this->max_protection_amount,
             'turnaround' => $this->turnaround,
-            'price_ranges' => new PaymentPlanRangeCollection($ranges),
-            'min_price' => $ranges->last()?->price,
-            'max_price' => $ranges->first()?->price,
         ];
     }
 }

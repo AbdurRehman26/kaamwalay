@@ -4,7 +4,9 @@ import { AddressEntity } from '@shared/entities/AddressEntity';
 import { InvoiceEntity } from '@shared/entities/InvoiceEntity';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
+import { normalizeError } from '@shared/lib/errors/normalizeError';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
+import { ThunkShowActionArg } from '@shared/types/ThunkShowActionArg';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { app } from '../../lib/app';
@@ -48,6 +50,20 @@ export const deleteOrder = createAsyncThunk('deleteOrder', async (orderId: numbe
     }
 });
 
+export const getCustomerOrder = createAsyncThunk<OrderEntity, ThunkShowActionArg>(
+    'getCustomerOrder',
+    async (args: ThunkShowActionArg, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+        try {
+            const data = await ordersRepository.getOrder(args.resourceId, args.config);
+            return instanceToPlain(data) as OrderEntity;
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
+
 export const ordersSlice = createSlice({
     name: ordersThunk.name,
     initialState: {
@@ -90,6 +106,27 @@ export const ordersSlice = createSlice({
                 state.entities[payload.orderId].orderCustomerShipment = payload.orderCustomerShipment;
             }
         });
+
+        builder
+            .addCase(getCustomerOrder.pending, (state, { meta }) => {
+                const id = meta.arg.resourceId;
+                const skipLoading = meta.arg.skipLoading;
+                state.errors[`show_${id}`] = null;
+                if (!skipLoading) {
+                    state.isLoading[id] = true;
+                }
+            })
+            .addCase(getCustomerOrder.rejected, (state, { error, payload, meta }) => {
+                const id = meta.arg.resourceId;
+                state.errors[`show_${id}`] = normalizeError((payload as Error) || error);
+                state.isLoading[id] = false;
+            })
+            .addCase(getCustomerOrder.fulfilled, (state, { payload }) => {
+                const { id } = payload;
+                state.ids.push(id);
+                state.entities[id] = payload as any;
+                state.isLoading[id] = false;
+            });
     },
 });
 export const { invalidateOrders, updateOrderShippingMethod } = ordersSlice.actions;

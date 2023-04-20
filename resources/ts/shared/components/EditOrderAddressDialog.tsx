@@ -15,8 +15,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -206,18 +206,6 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
         [availableCountries],
     );
 
-    const getCountryPhoneCode = useCallback(
-        (id: number) => {
-            const countryLookup = availableCountries.find((country: any) => country.id === id);
-            if (countryLookup) {
-                return countryLookup.phoneCode;
-            } else {
-                return '';
-            }
-        },
-        [availableCountries],
-    );
-
     const parseName = (fullName: any) => {
         const value = fullName.trim();
         const firstSpace = value.indexOf(' ');
@@ -322,7 +310,6 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                                 setValues({
                                                     ...values,
                                                     countryId: e.target.value,
-                                                    phone: '',
                                                 });
                                                 updateCurrentValues('countryId', e.target.value);
                                             }}
@@ -550,30 +537,17 @@ export const EditOrderAddressDialog = (props: EditOrderAddressDialogProps) => {
                                             <Typography className={classes.inputTitle}>
                                                 Phone Number (Optional)
                                             </Typography>
-                                            <NumberFormat
-                                                customInput={TextField}
-                                                format={
-                                                    values.countryId
-                                                        ? '+' +
-                                                          getCountryPhoneCode(parseInt(values.countryId)) +
-                                                          ' (###) ###-####'
-                                                        : '+' + availableCountries[0]?.phoneCode + ' (###) ###-####'
-                                                }
-                                                mask=""
-                                                className={classes.formField}
-                                                placeholder="Enter Phone Number"
-                                                name={'phone'}
+                                            <InternationalPhoneNumberField
                                                 value={values.phone}
-                                                onChange={(e: { target: { value: string } }) => {
-                                                    handleChange(e);
-                                                    updateCurrentValues('phone', e.target.value);
+                                                onChange={(value, data, event, formattedValue) => {
+                                                    handleChange(event);
+                                                    updateCurrentValues('phone', formattedValue);
                                                 }}
-                                                fullWidth
                                                 inputProps={{
-                                                    className: classes.formInput,
+                                                    name: 'phone',
                                                 }}
-                                                InputLabelProps={{
-                                                    shrink: true,
+                                                dropdownStyle={{
+                                                    position: 'fixed',
                                                 }}
                                             />
                                         </div>

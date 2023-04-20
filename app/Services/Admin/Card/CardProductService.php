@@ -108,12 +108,12 @@ class CardProductService
     protected function createCardProductOnAgs(CardCategory $category, string $seriesName, string $setName, array $data): array
     {
         try {
+            $createData['category_id'] = $this->getCategoryFromAgs($category->name);
             $createData['series_id'] = $this->getSeriesFromAgs($seriesName, $category->name);
             $createData['set_id'] = $this->getSetFromAgs($createData['series_id'], $setName);
 
             $createData = array_merge($createData, [
                 'name' => $data['name'],
-                'category_id' => $category->id,
                 'rarity' => $data['rarity'],
                 'card_number_order' => $data['card_number'],
                 'image_path' => $data['image_path'],
@@ -131,6 +131,11 @@ class CardProductService
 
             return [];
         }
+    }
+
+    protected function getCategoryFromAgs(string $categoryName): int | null
+    {
+        return $this->agsService->getCardCategory(['exact_name' => $categoryName])['results'][0]['id'];
     }
 
     protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null

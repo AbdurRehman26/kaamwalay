@@ -1,10 +1,12 @@
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+import PlayArrow from '@mui/icons-material/PlayArrow';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -22,63 +24,128 @@ import agsPartnerProgramPost8 from '@shared/assets/agsPartnerProgramPost8.jpg';
 import agsPartnerProgramPost9 from '@shared/assets/agsPartnerProgramPost9.jpg';
 import agsPartnerProgramPost10 from '@shared/assets/agsPartnerProgramPost10.jpg';
 import agsPartnerProgramPost11 from '@shared/assets/agsPartnerProgramPost11.jpg';
+import agsPartnerProgramPost12 from '@shared/assets/agsPartnerProgramPost12.mp4';
+import agsPartnerProgramPost13 from '@shared/assets/agsPartnerProgramPost13.mp4';
+import agsPartnerProgramPost14 from '@shared/assets/agsPartnerProgramPost14.mp4';
+import agsPartnerProgramPost15 from '@shared/assets/agsPartnerProgramPost15.mp4';
+import agsPartnerProgramPost16 from '@shared/assets/agsPartnerProgramPost16.mp4';
+import agsPartnerProgramPost17 from '@shared/assets/agsPartnerProgramPost17.mp4';
+import agsPartnerProgramThumbnail12 from '@shared/assets/agsPartnerProgramThumbnail12.jpg';
+import agsPartnerProgramThumbnail13 from '@shared/assets/agsPartnerProgramThumbnail13.jpg';
+import agsPartnerProgramThumbnail14 from '@shared/assets/agsPartnerProgramThumbnail14.jpg';
+import agsPartnerProgramThumbnail15 from '@shared/assets/agsPartnerProgramThumbnail15.jpg';
+import agsPartnerProgramThumbnail16 from '@shared/assets/agsPartnerProgramThumbnail16.png';
+import agsPartnerProgramThumbnail17 from '@shared/assets/agsPartnerProgramThumbnail17.png';
 import theme from '@shared/styles/theme';
 
-const images = [
+const marketingContent = [
     {
         id: 0,
-        url: agsPartnerProgramPost1,
-        title: 'agsPartnerProgramPost1',
+        url: agsPartnerProgramPost13,
+        thumbnail: agsPartnerProgramThumbnail13,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 1,
-        url: agsPartnerProgramPost2,
-        title: 'agsPartnerProgramPost2',
+        url: agsPartnerProgramPost15,
+        thumbnail: agsPartnerProgramThumbnail15,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 2,
-        url: agsPartnerProgramPost3,
-        title: 'agsPartnerProgramPost3',
+        url: agsPartnerProgramPost12,
+        thumbnail: agsPartnerProgramThumbnail12,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 3,
-        url: agsPartnerProgramPost4,
-        title: 'agsPartnerProgramPost4',
+        url: agsPartnerProgramPost14,
+        thumbnail: agsPartnerProgramThumbnail14,
+        title: 'agsPartnerProgramPost12',
+        type: 'video',
     },
     {
         id: 4,
-        url: agsPartnerProgramPost5,
-        title: 'agsPartnerProgramPost5',
+        url: agsPartnerProgramPost16,
+        title: 'agsPartnerProgramPost16',
+        thumbnail: agsPartnerProgramThumbnail16,
+        type: 'video',
     },
     {
         id: 5,
-        url: agsPartnerProgramPost6,
-        title: 'agsPartnerProgramPost6',
+        url: agsPartnerProgramPost17,
+        title: 'agsPartnerProgramPost17',
+        thumbnail: agsPartnerProgramThumbnail17,
+        type: 'video',
     },
     {
         id: 6,
-        url: agsPartnerProgramPost7,
-        title: 'agsPartnerProgramPost7',
+        url: agsPartnerProgramPost2,
+        title: 'agsPartnerProgramPost2',
+        type: 'image',
     },
     {
         id: 7,
-        url: agsPartnerProgramPost8,
-        title: 'agsPartnerProgramPost8',
+        url: agsPartnerProgramPost3,
+        title: 'agsPartnerProgramPost3',
+        type: 'image',
     },
     {
         id: 8,
-        url: agsPartnerProgramPost9,
-        title: 'agsPartnerProgramPost9',
+        url: agsPartnerProgramPost4,
+        title: 'agsPartnerProgramPost4',
+        type: 'image',
     },
     {
         id: 9,
-        url: agsPartnerProgramPost10,
-        title: 'agsPartnerProgramPost10',
+        url: agsPartnerProgramPost5,
+        title: 'agsPartnerProgramPost5',
+        type: 'image',
     },
     {
         id: 10,
+        url: agsPartnerProgramPost6,
+        title: 'agsPartnerProgramPost6',
+        type: 'image',
+    },
+    {
+        id: 11,
+        url: agsPartnerProgramPost7,
+        title: 'agsPartnerProgramPost7',
+        type: 'image',
+    },
+    {
+        id: 12,
+        url: agsPartnerProgramPost8,
+        title: 'agsPartnerProgramPost8',
+        type: 'image',
+    },
+    {
+        id: 13,
+        url: agsPartnerProgramPost9,
+        title: 'agsPartnerProgramPost9',
+        type: 'image',
+    },
+    {
+        id: 14,
+        url: agsPartnerProgramPost10,
+        title: 'agsPartnerProgramPost10',
+        type: 'image',
+    },
+    {
+        id: 15,
         url: agsPartnerProgramPost11,
         title: 'agsPartnerProgramPost11',
+        type: 'image',
+    },
+    {
+        id: 16,
+        url: agsPartnerProgramPost1,
+        title: 'agsPartnerProgramPost1',
+        type: 'image',
     },
 ];
 
@@ -108,8 +175,9 @@ const MarketingContentDiv = styled(Grid)({
         alignItems: 'center',
         flexWrap: 'wrap',
     },
-    '.MarketingContentImageDiv': {
+    '.MarketingContentDiv': {
         width: '217px',
+        position: 'relative',
         cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
             maxWidth: '50%',
@@ -118,7 +186,13 @@ const MarketingContentDiv = styled(Grid)({
             maxWidth: '25%',
         },
     },
-    '.MarketingContentImage': {
+    '.MarketingContentPlayIcon': {
+        color: 'white',
+        position: 'absolute',
+        top: '3%',
+        right: '3%',
+    },
+    '.MarketingContent': {
         maxWidth: '217px',
         padding: '4px',
         [theme.breakpoints.down('sm')]: {
@@ -208,6 +282,15 @@ const useStyles = makeStyles({
     dialogImage: {
         maxHeight: '75vh',
     },
+    dialogVideo: {
+        height: '600px',
+        width: '600px',
+        background: '#000000',
+        [theme.breakpoints.down('sm')]: {
+            height: '55vh',
+            width: '300px',
+        },
+    },
 });
 
 interface props {
@@ -225,6 +308,29 @@ export function MarketingContent({ expandable }: props) {
         setOpen(true);
         setIndex(value);
     }, []);
+
+    const getButtonContent = (type: string) => {
+        return type === 'video' ? (
+            <IconButton className={'MarketingContentPlayIcon'}>
+                <PlayArrow />
+            </IconButton>
+        ) : null;
+    };
+
+    const getContent = (index: number) => {
+        return marketingContent[index].type === 'video' ? (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video controls className={classes.dialogVideo} autoPlay key={marketingContent[index].url}>
+                <source src={marketingContent[index].url} />
+            </video>
+        ) : (
+            <img
+                src={marketingContent[index].url}
+                alt={marketingContent[index].title}
+                className={classes.dialogImage}
+            />
+        );
+    };
 
     return (
         <MarketingContentDiv>
@@ -252,18 +358,28 @@ export function MarketingContent({ expandable }: props) {
             <Grid container>
                 <Grid className={'ImagesDiv'}>
                     {expandable
-                        ? images.slice(0, 8).map((data: any) => (
-                              <div className={'MarketingContentImageDiv'}>
+                        ? marketingContent.slice(0, 8).map((data: any) => (
+                              <div className={'MarketingContentDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
-                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                      <img
+                                          className={'MarketingContent'}
+                                          src={data.type === 'image' ? data.url : data.thumbnail}
+                                          alt={data.title}
+                                      />
+                                      {getButtonContent(data.type)}
                                   </ButtonBase>
                               </div>
                           ))
-                        : images.map((data: any) => (
-                              <div className={'MarketingContentImageDiv'}>
+                        : marketingContent.map((data: any) => (
+                              <div className={'MarketingContentDiv'} key={data.id}>
                                   <ButtonBase onClick={() => handleClick(data.id)}>
-                                      <img className={'MarketingContentImage'} src={data.url} alt={data.title} />
+                                      <img
+                                          className={'MarketingContent'}
+                                          src={data.type === 'image' ? data.url : data.thumbnail}
+                                          alt={data.title}
+                                      />
                                   </ButtonBase>
+                                  {getButtonContent(data.type)}
                               </div>
                           ))}
                 </Grid>
@@ -282,12 +398,12 @@ export function MarketingContent({ expandable }: props) {
                 </Grid>
             ) : null}
             <Dialog open={open} onClose={handleClose}>
-                <img src={images[index].url} alt={images[index].title} className={classes.dialogImage} />
+                {getContent(index)}
             </Dialog>
             {open ? (
                 <>
                     <Grid className={'DownloadGrid'}>
-                        <a className={'AnchorLink'} href={images[index].url} download>
+                        <a className={'AnchorLink'} href={marketingContent[index].url} download>
                             <Button className={'DownloadButton'}>
                                 <FileDownloadOutlinedIcon /> DOWNLOAD
                             </Button>
@@ -297,7 +413,7 @@ export function MarketingContent({ expandable }: props) {
                         <KeyboardArrowLeftOutlinedIcon className={'NavigationIcon'} />
                     </Button>
                     <Button
-                        disabled={index === images.length - 1}
+                        disabled={index === marketingContent.length - 1}
                         onClick={() => setIndex(index + 1)}
                         className={'NextButton'}
                     >

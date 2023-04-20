@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.9.2 - 2023-04-18
+
+### What's Changed
+
+- Hotfix: Card Management | Getting card category id from AGS  by @luis-molina in https://github.com/woozard/robograding/pull/1020
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.9.1...v3.9.2
+
 ## v3.9.1 - 2023-04-10
 
 ### What's Changed

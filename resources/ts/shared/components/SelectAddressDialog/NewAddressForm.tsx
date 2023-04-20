@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useFormikContext } from 'formik';
 import React, { forwardRef, useCallback, useState } from 'react';
-import NumberFormat from 'react-number-format';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import theme from '@shared/styles/theme';
 import { useAppSelector } from '@dashboard/redux/hooks';
 
@@ -19,9 +19,6 @@ interface Props {
 }
 
 const StackDiv = styled(Stack)({
-    '.divider': {
-        marginTop: '64px',
-    },
     '.methodDescription': {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
@@ -286,21 +283,15 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
             <div className={'inputsRow04'}>
                 <div className={'fieldContainer'} style={{ width: '100%', marginTop: '4px' }}>
                     <Typography className={'methodDescription'}>Phone Number</Typography>
-                    <NumberFormat
-                        customInput={TextField}
-                        format={
-                            country.phoneCode
-                                ? '+' + country.phoneCode + ' (###) ###-####'
-                                : '+' + availableCountries[0].phoneCode + ' (###) ###-####'
-                        }
-                        mask=""
-                        style={{ margin: 8, marginLeft: 0 }}
-                        placeholder="Enter Phone Number"
-                        onChange={formik.handleChange}
-                        name={'address.phone'}
-                        fullWidth
-                        InputLabelProps={{
-                            shrink: true,
+                    <InternationalPhoneNumberField
+                        onChange={(value, data, event, formattedValue) => {
+                            formik.handleChange(event);
+                        }}
+                        dropdownStyle={{
+                            position: 'fixed',
+                        }}
+                        inputProps={{
+                            name: 'address.phone',
                         }}
                     />
                 </div>

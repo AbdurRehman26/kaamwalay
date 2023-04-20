@@ -15,9 +15,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
@@ -144,6 +144,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         marginTop: '12px',
+        marginBottom: '25px',
     },
     billingAddressTitle: {
         fontFamily: 'Roboto',
@@ -703,7 +704,6 @@ export function Payment() {
                                                             name={`billingAddressCountry${id}`}
                                                             id={`billingAddressCountry${id}`}
                                                             onChange={(e) => {
-                                                                updateField('phoneNumber', '');
                                                                 updateBillingCountry(e.target.value);
                                                             }}
                                                             placeholder={'Select Country'}
@@ -931,26 +931,12 @@ export function Payment() {
                                                             <Typography className={classes.methodDescription}>
                                                                 Phone Number (Optional)
                                                             </Typography>
-                                                            <NumberFormat
-                                                                customInput={TextField}
-                                                                format={
-                                                                    country?.phoneCode
-                                                                        ? '+' + country?.phoneCode + ' (###) ###-####'
-                                                                        : '+' +
-                                                                          availableCountries[0]?.phoneCode +
-                                                                          ' (###) ###-####'
-                                                                }
-                                                                mask=""
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                placeholder="Enter Phone Number"
-                                                                onChange={(e: any) =>
-                                                                    updateField('phoneNumber', e.target.value)
-                                                                }
+                                                            <InternationalPhoneNumberField
                                                                 value={phoneNumber}
-                                                                fullWidth
-                                                                InputLabelProps={{
-                                                                    shrink: true,
+                                                                onChange={(value, data, event, formattedValue) => {
+                                                                    updateField('phoneNumber', formattedValue);
                                                                 }}
+                                                                containerStyle={{ margin: 8, marginLeft: 0 }}
                                                             />
                                                         </div>
                                                     </div>

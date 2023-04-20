@@ -1,5 +1,41 @@
 # Changelog
 
+## v3.10.0 - 2023-04-20
+
+### What's Changed
+
+- Fix: Graph Scroll Issue On Public Card Page by @numair97 in https://github.com/woozard/robograding/pull/997
+- Fix: Landing Page Pop Report Crash by @AbdurRehman26 in https://github.com/woozard/robograding/pull/863
+- Fix: Admin | Referral Program Payouts Issues.  by @numair97 in https://github.com/woozard/robograding/pull/998
+- Feature: Admin & Sales Rep | Cleaning Fee by @numair97 in https://github.com/woozard/robograding/pull/991
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1000
+- Fix: Data Export Performance Improvement by @thenabeel in https://github.com/woozard/robograding/pull/1001
+- Fix: DateTime Format Issue In Payouts by @numair97 in https://github.com/woozard/robograding/pull/1003
+- Feature: Admin | Grading - Pagination to 30 by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1005
+- Feature: Performance Improvement in Cards Management by @thenabeel in https://github.com/woozard/robograding/pull/1006
+- Fix: Admin API Improvements by @luis-molina in https://github.com/woozard/robograding/pull/990
+- Feature: Submission Cart Presistent by @aliwooter in https://github.com/woozard/robograding/pull/884
+- Fix: Change Partners Landing Page Url by @numair97 in https://github.com/woozard/robograding/pull/1007
+- Fix: Route Name Issue by @numair97 in https://github.com/woozard/robograding/pull/1009
+- Feature: New Logo by @numair97 in https://github.com/woozard/robograding/pull/1010
+- Feature: International Phone Number Field by @luis-molina in https://github.com/woozard/robograding/pull/1008
+- Feature: Create Card Category by @aliwooter in https://github.com/woozard/robograding/pull/1002
+- Fix: Sales Rep | Remove not valid options by @luis-molina in https://github.com/woozard/robograding/pull/1011
+- Fix: International Phone Number | Submission flow fix by @luis-molina in https://github.com/woozard/robograding/pull/1013
+- Fix: Partners Landing | Banner Button Color by @numair97 in https://github.com/woozard/robograding/pull/1012
+- Fix: International Phone Number | Spacing fix on mobile web by @luis-molina in https://github.com/woozard/robograding/pull/1014
+- Fix: Card Creation  by @aliwooter in https://github.com/woozard/robograding/pull/1015
+- FIx: API Improvements | Grading page blank issue by @luis-molina in https://github.com/woozard/robograding/pull/1017
+- Fix: Api improvements | Show method V3 and Card Swapping by @luis-molina in https://github.com/woozard/robograding/pull/1018
+- Feature: Marketing Content Videos by @aliwooter in https://github.com/woozard/robograding/pull/1016
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1021
+- FIx: API Improvements | Fix pagination issue by @luis-molina in https://github.com/woozard/robograding/pull/1024
+- Fix: Small Improvement by @aliwooter in https://github.com/woozard/robograding/pull/1025
+- Fix: Category Selection  by @aliwooter in https://github.com/woozard/robograding/pull/1019
+- Release v3.10.0 by @thenabeel in https://github.com/woozard/robograding/pull/1026
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.9.2...v3.10.0
+
 ## v3.9.2 - 2023-04-18
 
 ### What's Changed

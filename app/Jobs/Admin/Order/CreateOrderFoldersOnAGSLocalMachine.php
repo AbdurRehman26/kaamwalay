@@ -19,10 +19,10 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public const ENDPOINT = '/create_folders';
     public int $tries = 5;
     public int $maxExceptions = 3;
     protected string $baseUrl;
+    protected const ENDPOINT = '/create_folders';
 
     /**
      * Create a new job instance.
@@ -31,7 +31,7 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
      */
     public function __construct(protected Order $order)
     {
-        $this->baseUrl = config('services.agsLocalMachineFolderCreation.base_url');
+        $this->baseUrl = config('services.ags.local_machine_base_url');
     }
 
     /**

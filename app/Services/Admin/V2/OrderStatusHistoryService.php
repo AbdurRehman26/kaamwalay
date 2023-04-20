@@ -70,8 +70,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $response = $this->agsService->createCertificates($data);
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
-
-            if (app()->environment('production')) {
+            if (app()->environment('production') || app()->environment('testing')) {
                 CreateOrderFoldersOnAGSLocalMachine::dispatch($order);
             }
             CreateOrderFoldersOnDropbox::dispatch($order);

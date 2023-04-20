@@ -142,7 +142,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                 <Alert icon={false} sx={{ background: '#FEE9B5' }}>
                     <Typography sx={{ fontWeight: 700, fontSize: '14px', color: '#000000DE' }}>
                         PLEASE NOTE: If you are submitting a sports card, we are currently only accepting sports cards
-                        released after 2012. Sports cards released before 2012 will not be accepted.{' '}
+                        released after 2012. Sports cards released before 2012 will not be accepted.
                     </Typography>
                 </Alert>
                 <Grid mt={3} container>

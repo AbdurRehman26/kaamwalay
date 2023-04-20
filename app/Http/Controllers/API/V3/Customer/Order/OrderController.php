@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Customer\Order\StoreOrderRequest;
 use App\Http\Resources\API\V3\Customer\Order\OrderResource;
 use App\Http\Resources\API\V3\Customer\Order\OrderCreateResource;
-use App\Services\Order\V2\OrderService;
+use App\Services\Order\V3\OrderService;
 use App\Services\Order\V3\CreateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

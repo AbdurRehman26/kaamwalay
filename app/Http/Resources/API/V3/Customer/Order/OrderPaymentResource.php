@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V3\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Customer\Order\PaymentMethod\PaymentMethodResource;
+use App\Http\Resources\API\V3\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\OrderPayment;
 use Illuminate\Http\Request;
 
@@ -72,7 +72,7 @@ class OrderPaymentResource extends BaseResource
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
-            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'payment_method' => $this->whenLoaded('paymentMethod', PaymentMethodResource::class),
             'created_at' => $this->formatDate($this->created_at),
         ];
     }
@@ -84,7 +84,7 @@ class OrderPaymentResource extends BaseResource
                 "email" => $response['payer']['email_address'] ?? "N/A",
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
-            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'payment_method' => $this->whenLoaded('paymentMethod', PaymentMethodResource::class),
             'created_at' => $this->formatDate($this->created_at),
         ];
     }
@@ -97,7 +97,7 @@ class OrderPaymentResource extends BaseResource
                 'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
                 'complete_hash' => $response['txn_hash'],
             ],
-            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'payment_method' => $this->whenLoaded('paymentMethod', PaymentMethodResource::class),
             'created_at' => $this->formatDate($this->created_at),
         ];
     }
@@ -106,7 +106,7 @@ class OrderPaymentResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'payment_method' => new PaymentMethodResource($this->paymentMethod),
+            'payment_method' => $this->whenLoaded('paymentMethod', PaymentMethodResource::class),
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),

@@ -51,7 +51,7 @@ export function ViewSubmission() {
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
                     'orderItems.orderItemStatus',
-                    'firstOrderPayment.user',
+                    'firstOrderPayment.paymentMethod',
                 ],
             },
         },

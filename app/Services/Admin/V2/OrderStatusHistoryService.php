@@ -9,6 +9,7 @@ use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderCertificateExport;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -69,6 +70,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $response = $this->agsService->createCertificates($data);
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
+            CreateOrderFoldersOnAGSLocalMachine::dispatchIf(app()->environment(['production', 'testing']), $order);
             CreateOrderFoldersOnDropbox::dispatch($order);
             CreateOrderCertificateExport::dispatch($order);
         }

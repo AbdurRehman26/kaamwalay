@@ -35,6 +35,7 @@ return [
         'is_platform_enabled' => env('AGS_PLATFORM_ENABLED', false),
         'base_url' => env('AGS_BASE_URL'),
         'authorization_token' => env('AGS_AUTHORIZATION_TOKEN'),
+        'local_machine_base_url' => env('AGS_LOCAL_MACHINE_BASE_URL'),
     ],
 
     'paypal' => [
@@ -93,5 +94,4 @@ return [
         'api_secret' => env('SHIPSTATION_API_SECRET'),
         'store_id' => env('SHIPSTATION_STORE_ID'),
     ],
-
 ];

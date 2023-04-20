@@ -21,7 +21,6 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
 
     public int $tries = 5;
     public int $maxExceptions = 3;
-    protected string $baseUrl;
     protected const ENDPOINT = '/create_folders';
 
     /**
@@ -31,7 +30,6 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
      */
     public function __construct(protected Order $order)
     {
-        $this->baseUrl = config('services.ags.local_machine_base_url');
     }
 
     /**
@@ -49,9 +47,9 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
         }
 
         try {
-            $response = Http::post($this->baseUrl . self::ENDPOINT, $folders);
+            $response = Http::post(config('services.ags.local_machine_base_url') . self::ENDPOINT, $folders);
 
-            if ($response->status() !== 200) {
+            if (! $response->successful()) {
                 $this->release(5);
             }
         } catch (Exception $e) {

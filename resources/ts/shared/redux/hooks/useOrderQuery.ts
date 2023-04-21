@@ -1,12 +1,12 @@
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useShowQuery } from '@shared/hooks/useShowQuery';
 import { getOrder } from '@shared/redux/slices/adminOrdersSlice';
-import { getCustomerOrder } from '@shared/redux/slices/ordersSlice';
+import { showOrderAction } from '@shared/redux/slices/ordersSlice';
 import { showSalesRepOrderAction } from '@shared/redux/slices/salesRepOrdersSlice';
 import { ThunkShowActionArg } from '@shared/types/ThunkShowActionArg';
 
 export function useOrderQuery(options: ThunkShowActionArg) {
-    return useShowQuery(getCustomerOrder, OrderEntity, (state) => state.orders, options);
+    return useShowQuery(showOrderAction, OrderEntity, (state) => state.orders, options);
 }
 
 export function useAdminOrderQuery(options: ThunkShowActionArg) {

@@ -27,7 +27,7 @@ class OrderResource extends BaseResource
             'cleaning_fee' => $this->cleaning_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'created_at' => $this->formatDate($this->created_at),
-            'customer' => $this->whenLoaded('user', new UserResource($this->user)),
+            'customer' => $this->whenLoaded('user', UserResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
             'payment_plan' => $this->whenLoaded('paymentPlan', OrderPaymentPlanResource::class),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),

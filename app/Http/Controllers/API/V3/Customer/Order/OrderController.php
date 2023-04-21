@@ -4,12 +4,14 @@ namespace App\Http\Controllers\API\V3\Customer\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Customer\Order\StoreOrderRequest;
+use App\Http\Resources\API\V3\Customer\Order\OrderListResource;
 use App\Http\Resources\API\V3\Customer\Order\OrderResource;
 use App\Http\Resources\API\V3\Customer\Order\OrderCreateResource;
 use App\Services\Order\V3\OrderService;
 use App\Services\Order\V3\CreateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -19,6 +21,13 @@ class OrderController extends Controller
         protected OrderService $orderService,
     ) {
         //
+    }
+
+    public function index(): AnonymousResourceCollection
+    {
+        return OrderListResource::collection(
+            $this->orderService->getOrders()
+        );
     }
 
     public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse

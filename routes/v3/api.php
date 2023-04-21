@@ -21,6 +21,7 @@ Route::prefix('customer')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::prefix('orders')->group(function () {
+            Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');
             Route::get('{orderId}', [OrderController::class, 'show']);
         });

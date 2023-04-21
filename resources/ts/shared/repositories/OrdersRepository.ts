@@ -13,6 +13,9 @@ import { Repository } from './Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'customer/orders';
     readonly model = OrderEntity;
+    readonly endpointConfig = {
+        version: 'v3',
+    };
 
     public async getOrder(
         resourceId: any,

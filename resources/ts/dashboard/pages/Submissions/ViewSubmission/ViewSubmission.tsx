@@ -32,9 +32,7 @@ export function ViewSubmission() {
             params: {
                 include: [
                     'paymentPlan',
-                    'orderStatusHistory',
                     'orderCustomerShipment',
-                    'orderStatusHistory.orderStatus',
                     'invoice',
                     'extraCharges',
                     'refunds',
@@ -46,12 +44,11 @@ export function ViewSubmission() {
                     'shippingMethod',
                     'shippingAddress.country',
                     'billingAddress.country',
-                    'orderPayment',
+                    'orderPayment.paymentMethod',
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
                     'orderItems.orderItemStatus',
-                    'firstOrderPayment.paymentMethod',
                 ],
             },
         },

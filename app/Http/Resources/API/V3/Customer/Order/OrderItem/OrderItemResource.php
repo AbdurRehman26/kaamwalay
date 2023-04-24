@@ -10,6 +10,13 @@ use App\Models\OrderItem;
 /** @mixin OrderItem */
 class OrderItemResource extends BaseResource
 {
+    protected $orderStatus;
+
+    public function orderStatus($value){
+        $this->orderStatus = $value;
+        return $this;
+    }
+
     public function toArray($request): array
     {
         return [
@@ -19,8 +26,12 @@ class OrderItemResource extends BaseResource
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => $this->whenLoaded('cardProduct', CardProductResource::class),
             'status' => $this->whenLoaded('orderItemStatus', OrderItemStatusResource::class),
-            'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
+            'user_card' => $this->whenLoaded('userCard', UserCardResource::make($this->userCard)->orderStatus($this->orderStatus)),
             'notes' => $this->notes ?? '',
         ];
+    }
+
+    public static function collection($resource){
+        return new OrderItemCollection($resource);
     }
 }

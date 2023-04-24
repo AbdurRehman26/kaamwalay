@@ -8,14 +8,19 @@ use Illuminate\Http\Request;
 
 class UserCardResource extends BaseResource
 {
+    protected $orderStatus;
+
+    public function orderStatus($value){
+        $this->orderStatus = $value;
+        return $this;
+    }
     /**
      * Transform the resource into an array.
      */
 
     public function toArray(Request $request): array
     {
-        // @phpstan-ignore-next-line
-        $isShipped = $this->orderItem->order->orderStatus->id >= OrderStatus::SHIPPED;
+        $isShipped = $this->orderStatus->id >= OrderStatus::SHIPPED;
 
         return [
             'id' => $this->id,
@@ -24,7 +29,7 @@ class UserCardResource extends BaseResource
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
             'overall_grade' => $this->when($isShipped, $this->resource->overall_grade),
-            'overall_grade_nickname' => $this->resource->overall_grade_nickname,
+            'overall_grade_nickname' => $this->when($isShipped, $this->resource->overall_grade_nickname),
         ];
     }
 }

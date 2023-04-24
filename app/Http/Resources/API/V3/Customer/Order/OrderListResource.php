@@ -30,6 +30,7 @@ class OrderListResource extends BaseResource
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'payment_status' => $this->payment_status,
         ];
     }
 }

@@ -4,13 +4,16 @@ namespace App\Http\Resources\API\V3\Customer\Order\UserCard;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\OrderStatus;
+use App\Models\UserCard;
 use Illuminate\Http\Request;
 
+/** @mixin UserCard */
 class UserCardResource extends BaseResource
 {
-    protected $orderStatus;
+    protected OrderStatus $orderStatus;
 
-    public function orderStatus($value){
+    public function orderStatus(OrderStatus $value): UserCardResource
+    {
         $this->orderStatus = $value;
         return $this;
     }

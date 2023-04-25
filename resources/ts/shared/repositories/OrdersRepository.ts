@@ -1,8 +1,4 @@
-import { AxiosRequestConfig } from 'axios';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { AttachShippingAddressDto } from '@shared/dto/AttachShippingAddressDto';
-import { app } from '@shared/lib/app';
-import { APIService } from '@shared/services/APIService';
 import { Injectable } from '../decorators/Injectable';
 import { ChangeOrderShipmentDto } from '../dto/ChangeOrderShipmentDto';
 import { OrderEntity } from '../entities/OrderEntity';
@@ -16,21 +12,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointConfig = {
         version: 'v3',
     };
-
-    public async getOrder(
-        resourceId: any,
-        config?: AxiosRequestConfig,
-        transformModel?: ClassConstructor<OrderEntity>,
-    ): Promise<OrderEntity> {
-        const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(this.endpointPath, {
-            version: 'v3',
-        });
-
-        const { data } = await endpoint.get(`/${resourceId}`, config);
-
-        return this.toEntity(data, null, transformModel);
-    }
 
     public async setCustomerShipment(input: ChangeOrderShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;

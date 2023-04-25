@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
 use App\Http\Controllers\API\V3\Auth\LoginController;
 use App\Http\Controllers\API\V3\Customer\RefereeCouponController;
 use App\Http\Controllers\API\V3\Auth\RegisterController;
+use App\Http\Controllers\API\V3\Customer\Order\UpdateOrderShippingMethodController;
 
 Route::prefix('auth')->group(function () {
     Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');
@@ -24,6 +25,10 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');
             Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
+            Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+            Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class)
+                ->name('customer.orders.update-shipping-method');
         });
 
         Route::prefix('push-notifications')->group(function () {

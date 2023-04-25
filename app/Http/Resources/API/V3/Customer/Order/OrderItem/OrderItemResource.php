@@ -6,13 +6,15 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V3\Customer\CardProduct\CardProductResource;
 use App\Http\Resources\API\V3\Customer\Order\UserCard\UserCardResource;
 use App\Models\OrderItem;
+use App\Models\OrderStatus;
 
 /** @mixin OrderItem */
 class OrderItemResource extends BaseResource
 {
-    protected $orderStatus;
+    protected OrderStatus $orderStatus;
 
-    public function orderStatus($value){
+    public function orderStatus(OrderStatus $value): OrderItemResource
+    {
         $this->orderStatus = $value;
         return $this;
     }
@@ -32,6 +34,7 @@ class OrderItemResource extends BaseResource
     }
 
     public static function collection($resource){
+        // @phpstan-ignore-next-line
         return new OrderItemCollection($resource);
     }
 }

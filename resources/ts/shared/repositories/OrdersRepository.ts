@@ -1,3 +1,4 @@
+import { plainToInstance } from 'class-transformer';
 import { AttachShippingAddressDto } from '@shared/dto/AttachShippingAddressDto';
 import { Injectable } from '../decorators/Injectable';
 import { ChangeOrderShipmentDto } from '../dto/ChangeOrderShipmentDto';

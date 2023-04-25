@@ -16,6 +16,7 @@ class OrderItemResource extends BaseResource
     public function orderStatus(OrderStatus $value): OrderItemResource
     {
         $this->orderStatus = $value;
+
         return $this;
     }
 
@@ -33,7 +34,8 @@ class OrderItemResource extends BaseResource
         ];
     }
 
-    public static function collection($resource){
+    public static function collection($resource)
+    {
         // @phpstan-ignore-next-line
         return new OrderItemCollection($resource);
     }

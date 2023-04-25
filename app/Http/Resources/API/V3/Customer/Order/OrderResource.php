@@ -5,10 +5,9 @@ namespace App\Http\Resources\API\V3\Customer\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V3\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\V3\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V3\Customer\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\V3\Customer\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V3\Customer\Order\ShippingMethod\ShippingMethodResource;
-use App\Http\Resources\API\V3\Customer\Order\UserResource;
-use App\Http\Resources\API\V3\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 
 /** @mixin Order */

@@ -15,6 +15,7 @@ class UserCardResource extends BaseResource
     public function orderStatus(OrderStatus $value): UserCardResource
     {
         $this->orderStatus = $value;
+
         return $this;
     }
     /**

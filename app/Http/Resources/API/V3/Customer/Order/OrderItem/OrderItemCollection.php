@@ -14,6 +14,7 @@ class OrderItemCollection extends ResourceCollection
     public function orderStatus(OrderStatus $value): OrderItemCollection
     {
         $this->orderStatus = $value;
+
         return $this;
     }
 

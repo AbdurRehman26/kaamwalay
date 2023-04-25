@@ -3,6 +3,7 @@
 namespace  App\Services\Order\V3;
 
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
@@ -12,7 +13,6 @@ use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Models\Order;
 
 class OrderService
 {

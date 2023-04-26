@@ -5,8 +5,8 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 interface SubmissionEstimatedDeliveryProps {
     serviceLevel: string;
     turnAround: string;
-    estimatedDeliveryStartAt: string;
-    estimatedDeliveryEndAt: string;
+    estimatedDeliveryStartAt: Date;
+    estimatedDeliveryEndAt: Date;
 }
 
 export function SubmissionEstimatedDelivery({
@@ -15,20 +15,20 @@ export function SubmissionEstimatedDelivery({
     estimatedDeliveryStartAt,
     estimatedDeliveryEndAt,
 }: SubmissionEstimatedDeliveryProps) {
+    const estimatedDeliveryStartDate = formatDate(estimatedDeliveryStartAt, 'MMM DD, YYYY');
+    const estimatedDeliveryEndDate = formatDate(estimatedDeliveryEndAt, 'MMM DD, YYYY');
+
     return (
         <>
             <Grid py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500} sx={{ fontSize: '14px' }}>
-                    Estimated Delivery
+                    Estimated Shipping
                 </Typography>
                 <Grid container alignItems={'center'}>
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
-                        {estimatedDeliveryStartAt !== estimatedDeliveryEndAt
-                            ? `${formatDate(estimatedDeliveryStartAt, 'MMM DD ')} - ${formatDate(
-                                  estimatedDeliveryEndAt,
-                                  'MMM DD, YYYY',
-                              )}`
-                            : formatDate(estimatedDeliveryStartAt, 'MMM DD, YYYY')}
+                        {estimatedDeliveryStartDate !== estimatedDeliveryEndDate
+                            ? `${formatDate(estimatedDeliveryStartAt, 'MMM DD ')} - ${estimatedDeliveryEndDate}`
+                            : estimatedDeliveryStartDate}
                     </Typography>
                 </Grid>
                 <Grid display={'flex'}>

@@ -5,8 +5,12 @@ use App\Models\PaymentPlan;
 use App\Models\PaymentPlanRange;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 
 uses(WithFaker::class);
 
@@ -27,6 +31,7 @@ beforeEach(function () {
     ))->create();
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->insured()->create();
+    $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 });
 
 test('a customer can place order', function () {
@@ -186,3 +191,57 @@ test('correct service level price is assigned according to price ranges', functi
         [121, 3],
         [211, 4],
     ]);
+
+test('a customer can see his order', function () {
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
+    OrderItem::factory()->for($order)->create();
+
+    $response = $this->getJson(route('v3.customer.orders.show', ['orderId' => $order->id, 'include[]' => 'shippingMethod']));
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data' => ['id', 'order_number', 'shipping_method'],
+    ]);
+
+    $response->assertJsonFragment([
+        'refund_total' => 0,
+        'extra_charge_total' => 0,
+    ]);
+});
+
+test('a customer cannot see order by another customer', function () {
+    $someOtherCustomer = User::factory()->create();
+    $order = Order::factory()->for($someOtherCustomer)->create();
+
+    $this->actingAs($this->user);
+    $response = $this->getJson(route('v3.customer.orders.show', $order->id));
+
+    $response->assertForbidden();
+});
+
+test('a customer only see own orders', function () {
+    Event::fake();
+    $user = User::factory();
+    $orders = Order::factory()->for($user)
+        ->has(OrderItem::factory())
+        ->count(2)
+        ->create();
+
+    $orders = $orders->merge(
+        Order::factory()->for($this->user)
+            ->has(OrderItem::factory())
+            ->count(2)
+            ->create()
+    );
+
+    $this->actingAs($this->user);
+    $orders->each(function ($order) {
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $order->user_id);
+    });
+
+    $response = $this->getJson(route('v3.customer.orders.index'));
+
+    $response->assertOk();
+    $response->assertJsonCount(2, ['data']);
+});

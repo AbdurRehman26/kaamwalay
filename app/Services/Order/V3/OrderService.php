@@ -2,7 +2,7 @@
 
 namespace  App\Services\Order\V3;
 
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Events\API\Order\V3\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;

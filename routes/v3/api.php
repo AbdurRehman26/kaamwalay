@@ -24,9 +24,9 @@ Route::prefix('customer')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');
-            Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::get('{orderId}', [OrderController::class, 'show'])->name('customer.orders.show');
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
-            Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+            Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment'])->name('customer.orders.customer-shipment');
             Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class)
                 ->name('customer.orders.update-shipping-method');
         });

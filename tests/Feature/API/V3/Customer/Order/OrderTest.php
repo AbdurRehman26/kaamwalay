@@ -1,16 +1,16 @@
 <?php
 
 use App\Models\CardProduct;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\PaymentPlan;
 use App\Models\PaymentPlanRange;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderStatus;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Services\Admin\V2\OrderStatusHistoryService;
 
 uses(WithFaker::class);
 

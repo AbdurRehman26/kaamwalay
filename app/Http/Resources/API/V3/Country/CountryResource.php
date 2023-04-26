@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources\API\V3\Country;
 
+use App\Http\Resources\API\BaseResource;
 use App\Models\Country;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin Country
  */
-class CountryResource extends JsonResource
+class CountryResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

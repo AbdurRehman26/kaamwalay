@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V3\Customer\Order\ShippingMethod;
 
+use App\Http\Resources\API\BaseResource;
 use App\Models\ShippingMethod;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin ShippingMethod */
-class ShippingMethodResource extends JsonResource
+class ShippingMethodResource extends BaseResource
 {
     public function toArray($request): array
     {

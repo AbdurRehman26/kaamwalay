@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\API\V3\Customer\Order\OrderPaymentPlan;
 
+use App\Http\Resources\API\BaseResource;
 use App\Models\PaymentPlan;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin PaymentPlan */
-class OrderPaymentPlanResource extends JsonResource
+class OrderPaymentPlanResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

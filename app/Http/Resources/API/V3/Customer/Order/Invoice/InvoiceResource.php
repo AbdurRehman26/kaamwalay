@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V3\Customer\Order\Invoice;
 
+use App\Http\Resources\API\BaseResource;
 use App\Models\Invoice;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Invoice */
-class InvoiceResource extends JsonResource
+class InvoiceResource extends BaseResource
 {
     public function toArray($request): array
     {

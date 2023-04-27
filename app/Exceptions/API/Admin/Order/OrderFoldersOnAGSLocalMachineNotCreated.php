@@ -14,12 +14,12 @@ class OrderFoldersOnAGSLocalMachineNotCreated extends Exception
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
- 
+
     /**
      * @param Request|array $request
      */
     public function render($request): JsonResponse
     {
-        return new JsonResponse([ 'error' => $this->message ], $this->code);
+        return new JsonResponse(['error' => $this->message], $this->code);
     }
 }

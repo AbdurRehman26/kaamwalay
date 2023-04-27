@@ -40,6 +40,8 @@ class CreateOrderFoldersOnDropbox implements ShouldQueue
      */
     public function handle(OrderService $orderService, DropboxService $dropboxService): void
     {
+        Log::info('Creating folders on Dropbox: ' . $this->order->order_number);
+
         // If asyncJobId exists, job previously ran for folders creation, so we need to inquire status from Dropbox
         if (! empty($this->asyncJobId)) {
             $response = $dropboxService->checkFolderBatchStatus($this->asyncJobId);

@@ -37,7 +37,7 @@ class TopPartnersStats extends Notification
             });
     }
 
-    public function getContent(): string
+    protected function getContent(): string
     {
         $monthYear = Carbon::parse($this->topPartnersStats['date'])->format('F-Y');
         $content = "Month: {$monthYear}\n\n\nName, Revenue";

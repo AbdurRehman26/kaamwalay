@@ -32,17 +32,17 @@ class SendTopPartnersStats extends Command
      */
     public function handle(): int
     {
-        $currentDate = (Carbon::parse($this->argument('date')))->startOfDay()->format('Y-m-d');
-        $topPartnersStats = ['date' => $currentDate, 'data' => $this->getData($currentDate)];
+        $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
+        $topPartnersStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
 
-        $this->log('Top Partners Stats for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
+        $this->log('Top Partners Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
 
         if (!app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new TopPartnersStats($topPartnersStats));
         }
 
-        $this->log('Top Partners Stats for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Completed');
+        $this->log('Top Partners Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Completed');
 
         return 0;
     }
@@ -53,16 +53,19 @@ class SendTopPartnersStats extends Command
         Log::info($message, $context);
     }
 
-    protected function getData($currentDate): Collection
+    /**
+     * @return Collection<int,ReferrerEarnedCommission>
+     */
+    protected function getData(string $startDate, string $endDate): Collection
     {
         return ReferrerEarnedCommission::join('orders', 'orders.id', '=', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrers.id', '=', 'referrer_earned_commissions.referrer_id')
             ->join('users', 'users.id', '=', 'referrers.user_id')
-            ->whereBetween('orders.created_at', [Carbon::parse($currentDate)->startOfMonth(), $currentDate])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->groupBy('referrer_earned_commissions.referrer_id')
             ->select(DB::raw('CONCAT(users.first_name, " ", users.last_name) as full_name'), DB::raw('sum(orders.grand_total) as total'))
             ->orderByDesc('total')
-            ->limit(3)
+            ->limit(10)
             ->get();
     }
 }

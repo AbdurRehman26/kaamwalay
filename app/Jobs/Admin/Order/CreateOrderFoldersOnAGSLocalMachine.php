@@ -39,6 +39,8 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
      */
     public function handle(OrderService $orderService): void
     {
+        Log::info('Creating folders on AGS Local Machine: ' . $this->order->order_number);
+
         $folders = [$this->order->order_number];
         $certificates = $orderService->getOrderCertificates($this->order);
 

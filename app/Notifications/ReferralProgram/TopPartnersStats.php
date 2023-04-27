@@ -42,7 +42,7 @@ class TopPartnersStats extends Notification
         $monthYear = Carbon::parse($this->topPartnersStats['date'])->format('F-Y');
         $content = "Month: {$monthYear}\n\n\nName, Revenue";
 
-        foreach ($this->topPartnersStats['data'] as $partnersStat){
+        foreach ($this->topPartnersStats['data'] as $partnersStat) {
             $content .= "\n$partnersStat[full_name], \$$partnersStat[total]";
         }
 

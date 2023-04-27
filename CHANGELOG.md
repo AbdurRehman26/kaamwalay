@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.11.0 - 2023-04-27
+
+### What's Changed
+
+- Feature: Marketing Content Videos by @aliwooter in https://github.com/woozard/robograding/pull/1029
+- Fix: Clear Search by @aliwooter in https://github.com/woozard/robograding/pull/1028
+- Feature: Use new international phone input and remove old one by @luis-molina in https://github.com/woozard/robograding/pull/1023
+- Feature: Create Order Folders on AGS Local Machine by @numair97 in https://github.com/woozard/robograding/pull/1022
+- Feature: Card Disclaimer by @aliwooter in https://github.com/woozard/robograding/pull/1027
+- Release v3.11.0 by @thenabeel in https://github.com/woozard/robograding/pull/1032
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.10.0...v3.11.0
+
 ## v3.10.0 - 2023-04-20
 
 ### What's Changed

@@ -4,12 +4,12 @@ namespace App\Console\Commands\ReferralProgram;
 
 use App\Models\ReferrerEarnedCommission;
 use App\Notifications\ReferralProgram\TopPartnersStats;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
-use Carbon\Carbon;
 
 class SendTopPartnersStats extends Command
 {
@@ -37,7 +37,7 @@ class SendTopPartnersStats extends Command
 
         $this->log('Top Partners Stats for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
 
-        if (!app()->environment('local')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new TopPartnersStats($topPartnersStats));
         }

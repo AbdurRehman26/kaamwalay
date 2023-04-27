@@ -39,7 +39,14 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
         resourceId: orderId,
         config: {
             params: {
-                include: ['paymentPlan', 'invoice', 'shippingMethod', 'orderItems.orderItemStatus'],
+                include: [
+                    'paymentPlan',
+                    'invoice',
+                    'shippingMethod',
+                    'orderItems.orderItemStatus',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                ],
             },
         },
     });

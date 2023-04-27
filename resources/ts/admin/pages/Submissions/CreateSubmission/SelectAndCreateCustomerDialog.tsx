@@ -104,6 +104,7 @@ export function SelectAndCreateCustomerDialog(props: SelectAndCreateCustomerDial
             if (onClose) {
                 onClose(event, 'escapeKeyDown');
             }
+            setSearch('');
         },
         [onClose, dispatch],
     );

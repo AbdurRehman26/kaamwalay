@@ -6,14 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class TopPartnersStats extends Notification
+class TopReferrersStatsNotification extends Notification
 {
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(public array $topPartnersStats)
+    public function __construct(public array $topReferrersStats)
     {
         //
     }
@@ -32,18 +32,18 @@ class TopPartnersStats extends Notification
             ->from('Robograding', ':bar_chart:')
             ->success()
             ->attachment(function ($attachment) {
-                $attachment->title('Partners Stats')
+                $attachment->title('Partners Revenue Stats')
                     ->content($this->getContent());
             });
     }
 
     protected function getContent(): string
     {
-        $monthYear = Carbon::parse($this->topPartnersStats['date'])->format('F-Y');
-        $content = "Month: {$monthYear}\n\n\nName, Revenue";
+        $monthYear = Carbon::parse($this->topReferrersStats['date'])->format('F-Y');
+        $content = "Month: {$monthYear}\n\n";
 
-        foreach ($this->topPartnersStats['data'] as $partnersStat) {
-            $content .= "\n$partnersStat[full_name], \$$partnersStat[total]";
+        foreach ($this->topReferrersStats['data'] as $topReferrersStat) {
+            $content .= "\n$topReferrersStat[full_name], \$$topReferrersStat[total]";
         }
 
         return $content;

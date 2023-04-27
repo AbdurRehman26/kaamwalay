@@ -22,7 +22,6 @@ class OrderStatusHistoryResource extends BaseResource
             'notes' => $this->notes,
             'order_id' => $this->order_id,
             'order_status_id' => $this->order_status_id,
-            'order' => $this->whenLoaded('order', OrderResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'user' => $this->whenLoaded('user', UserResource::class),
             'created_at' => $this->formatDate($this->created_at),

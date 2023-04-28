@@ -37,7 +37,7 @@ class SendTopReferrersStats extends Command
 
         $this->info('Top Referrers Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
 
-        if ( app()->environment('local')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new TopReferrersStatsNotification($topReferrersStats));
         }

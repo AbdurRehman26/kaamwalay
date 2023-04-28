@@ -3,7 +3,7 @@
  * @apiName Taggable Model
  * @apiGroup Taggable Model
  *
- * @apiVersion 2.0.0
+ * @apiVersion 3.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization

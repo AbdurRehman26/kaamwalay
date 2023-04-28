@@ -45,6 +45,8 @@ class SendTopReferrersStats extends Command
     }
 
     /**
+     * @param  string  $startDate
+     * @param  string  $endDate
      * @return Collection<int,ReferrerEarnedCommission>
      */
     protected function getData(string $startDate, string $endDate): Collection
@@ -55,7 +57,7 @@ class SendTopReferrersStats extends Command
          * Another join is on users to get the referrer's Full name
          * Ordering by descending on total, so it will be in correct order
          * Limiting is the maximum referrers need to be shown
-         * */
+         */
         return ReferrerEarnedCommission::join('orders', 'orders.id', '=', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrers.id', '=', 'referrer_earned_commissions.referrer_id')
             ->join('users', 'users.id', '=', 'referrers.user_id')

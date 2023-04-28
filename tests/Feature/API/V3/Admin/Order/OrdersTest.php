@@ -579,7 +579,7 @@ test('an admin can filter by item to revise', function () {
 });
 
 it('filters orders with abandoned tag', function () {
-    $this->getJson('/api/v2/admin/orders?filter[tags]=abandoned')
+    $this->getJson(route('v3.admin.orders.index', ['filter[tags]' => 'abandoned']))
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -588,7 +588,7 @@ it('filters orders with abandoned tag', function () {
 });
 
 it('filters orders without any tags orders', function () {
-    $response = $this->getJson('/api/v2/admin/orders?filter[tags]=-1')
+    $response = $this->getJson(route('v3.admin.orders.index', ['filter[tags]' => -1]))
         ->assertOk()
         ->assertJsonCount(4, ['data']);
 

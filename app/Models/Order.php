@@ -172,8 +172,7 @@ class Order extends Model implements Exportable, Taggable
             AllowedInclude::relationship('owner', 'salesman'),
             AllowedInclude::relationship('orderItems.latestStatusHistory', 'orderItems.latestOrderItemStatusHistory'),
             AllowedInclude::relationship('orderItems.latestStatusHistory.orderItemStatus', 'orderItems.latestOrderItemStatusHistory.orderItemStatus'),
-            AllowedInclude::relationship('orderItems.latestStatusHistory.user', 'orderItems.latestOrderItemStatusHistory.user'),
-            AllowedInclude::relationship('tags'),
+            AllowedInclude::relationship('orderItems.latestStatusHistory.user', 'orderItems.latestOrderItemStatusHistory.user')
         ];
     }
 
@@ -212,7 +211,9 @@ class Order extends Model implements Exportable, Taggable
 
     public static function getAllowedAdminIncludes(): array
     {
-        return self::allowedIncludes();
+        return array_merge(self::allowedIncludes(), [
+            AllowedInclude::relationship('tags')
+        ]);
     }
 
     public static function getAllowedAdminFilters(): array

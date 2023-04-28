@@ -41,6 +41,7 @@ interface SubmissionsTableRowProps {
     isReferralPage?: boolean;
     onEditCustomer?: any;
     showSubmissionActionButtons?: boolean;
+    displayCheckbox?: boolean;
 }
 
 enum Options {
@@ -74,6 +75,7 @@ export function SubmissionsTableRow({
     order,
     isCustomerDetailPage,
     onEditCustomer,
+    displayCheckbox = false,
     isSalesRepDetailPage = false,
     isReferralPage = false,
     showSubmissionActionButtons = true,
@@ -192,13 +194,15 @@ export function SubmissionsTableRow({
         <>
             <TableRow>
                 <TableCell>
-                    <Checkbox
-                        color="primary"
-                        key={order.id}
-                        disabled={order.paymentStatus === PaymentStatusEnum.PAID && !order.isAbandoned}
-                        checked={isSelected(order.id)}
-                        onClick={() => handleRowClick(order.id)}
-                    />
+                    {displayCheckbox && (
+                        <Checkbox
+                            color="primary"
+                            key={order.id}
+                            disabled={order.paymentStatus === PaymentStatusEnum.PAID && !order.isAbandoned}
+                            checked={isSelected(order.id)}
+                            onClick={() => handleRowClick(order.id)}
+                        />
+                    )}
 
                     <MuiLink
                         component={Link}

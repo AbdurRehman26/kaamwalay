@@ -19,6 +19,7 @@ interface CustomerSubmissionsListProps {
     orders: OrderEntity[];
     paginationProp?: any;
     isCustomerDetailPage?: boolean;
+    displayCheckbox?: boolean;
     isReferralPage?: boolean;
     headings?: Array<any>;
     orderDirection?: TableSortType;
@@ -33,6 +34,7 @@ export function CustomerSubmissionsList({
     orders,
     paginationProp,
     isCustomerDetailPage,
+    displayCheckbox = false,
     isReferralPage = false,
     headings,
     orderBy = '',
@@ -77,6 +79,7 @@ export function CustomerSubmissionsList({
                             showSubmissionActionButtons={showSubmissionActionButtons}
                             order={order}
                             key={order.id}
+                            displayCheckbox={displayCheckbox}
                             isCustomerDetailPage={!isCustomerDetailPage}
                             isReferralPage={isReferralPage}
                             onEditCustomer={onEditCustomer}

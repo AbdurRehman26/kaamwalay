@@ -2,8 +2,6 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Theme } from '@mui/material/styles';
 import createStyles from '@mui/styles/createStyles';
@@ -81,9 +79,6 @@ function MarkAbandonedStateDialog(props: MarkAbandonedStateDialogProps) {
             <Formik initialValues={{}} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                     <Form>
-                        <DialogContent className={classes.contentContainer}>
-                            <DialogContentText></DialogContentText>
-                        </DialogContent>
                         <DialogActions className={classes.dialogActions}>
                             <Button disabled={isSubmitting} onClick={handleClose}>
                                 Cancel

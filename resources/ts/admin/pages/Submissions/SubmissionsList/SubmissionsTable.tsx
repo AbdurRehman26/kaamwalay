@@ -224,6 +224,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                 'shippingMethod',
                 'coupon',
                 'owner',
+                'tags',
             ],
             sort: sortFilter,
             filter: {
@@ -452,7 +453,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                                 variant={'contained'}
                                 onClick={() => setShowMarkAbandonedDialog(true)}
                             >
-                                Mark Abandoned
+                                {abandoned ? 'Unmark' : 'Mark'} Abandoned
                             </Button>
                         ) : null}
                         <Button
@@ -514,6 +515,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
             </Grid>
             <TableContainer>
                 <CustomerSubmissionsList
+                    displayCheckbox={true}
                     orders={orders$.data}
                     paginationProp={orders$.paginationProps}
                     headings={headings}
@@ -531,7 +533,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                 onClose={handleEditCustomerDialogClose}
             />
             <MarkAbandonedStateDialog
-                isAbandoned={false}
+                isAbandoned={!!abandoned}
                 orderIds={selectedIds}
                 onSubmit={() => window.location.reload()}
                 open={showMarkAbandonedDialog}

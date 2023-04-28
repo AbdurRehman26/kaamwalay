@@ -216,7 +216,7 @@ export default function SubmissionHeaderMoreButton({
                 ) : null}
                 {paymentStatus !== PaymentStatusEnum.PAID || isAbandoned ? (
                     <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
-                        {isAbandoned ? 'Mark' : 'Unmark'} Abandoned
+                        {!isAbandoned ? 'Mark' : 'Unmark'} Abandoned
                     </MenuItem>
                 ) : null}
             </Menu>

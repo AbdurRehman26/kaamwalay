@@ -79,24 +79,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
         return plainToInstance(OrderEntity, data);
     }
 
-    async markOrderAsAbandoned(input: { orderIds: number[] }) {
-        const { orderIds } = input;
-        this.endpointConfig.version = 'v3';
-        const { data } = await this.endpoint.post(`mark-abandoned`, {
-            items: orderIds,
-        });
-        return plainToInstance(OrderEntity, data);
-    }
-
-    async markOrderAsUnAbandoned(input: { orderIds: number[] }) {
-        const { orderIds } = input;
-        this.endpointConfig.version = 'v3';
-        const { data } = await this.endpoint.post(`mark-un-abandoned`, {
-            items: orderIds,
-        });
-        return plainToInstance(OrderEntity, data);
-    }
-
     async editTransactionNotes(input: EditTransactionNotesDto) {
         this.endpointConfig = { version: 'v2' };
         const { orderId, transactionId, notes } = input;

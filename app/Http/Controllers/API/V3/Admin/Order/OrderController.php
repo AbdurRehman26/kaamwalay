@@ -95,7 +95,7 @@ class OrderController extends Controller
     public function createFolders(Order $order): JsonResponse {
         try {
             CreateOrderFoldersOnDropbox::dispatch($order);
-            CreateOrderFoldersOnAGSLocalMachine::dispatch($order);
+            CreateOrderFoldersOnAGSLocalMachine::dispatchIf(app()->environment(['production', 'testing']), $order);
             return new JsonResponse(
                 [
                     'message' => 'Folders have been created.',

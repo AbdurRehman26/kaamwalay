@@ -12,7 +12,7 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
+import { cancelOrder, createFolders, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
 import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
@@ -38,6 +38,7 @@ enum Options {
     MarkAsPaid,
     GenerateLabel,
     EditCustomerDetails,
+    CreateFolders,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -92,6 +93,15 @@ export default function SubmissionHeaderMoreButton({
         setEditCustomerDialog(false);
         window.location.reload();
     }, []);
+
+    const createFoldersManually = useCallback(async () => {
+        try {
+            await dispatch(createFolders(orderId));
+            window.location.reload();
+        } catch (e) {
+            notifications.exception(e as Error);
+        }
+    }, [dispatch, notifications, orderId]);
 
     const setCancelDialog = useCallback(async () => {
         const result = await confirm({
@@ -179,6 +189,9 @@ export default function SubmissionHeaderMoreButton({
                         dispatch(setCustomer(customer));
                     }
                     break;
+                case Options.CreateFolders:
+                    await createFoldersManually();
+                    break;
             }
         },
         [
@@ -189,6 +202,7 @@ export default function SubmissionHeaderMoreButton({
             setGenerateLabelDialog,
             customer,
             dispatch,
+            createFoldersManually,
         ],
     );
 
@@ -214,6 +228,12 @@ export default function SubmissionHeaderMoreButton({
                 {customer ? (
                     <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                 ) : null}
+                <MenuItem
+                    onClick={handleOption(Options.CreateFolders)}
+                    disabled={orderStatus.id === OrderStatusEnum.PLACED}
+                >
+                    Create Folders
+                </MenuItem>
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}

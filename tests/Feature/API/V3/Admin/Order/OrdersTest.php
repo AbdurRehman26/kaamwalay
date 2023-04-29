@@ -3,6 +3,8 @@
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\CardProduct;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
@@ -574,4 +576,16 @@ test('an admin can filter by item to revise', function () {
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
+});
+
+it('admins can create folders manually', function () {
+    Bus::fake();
+
+    $order = Order::factory()->create();
+    
+    $this->postJson(route('v3.admin.orders.create-folders', ['order' => $order]))
+    ->assertSuccessful();
+
+    Bus::assertDispatched(CreateOrderFoldersOnDropbox::class);
+    Bus::assertDispatched(CreateOrderFoldersOnAGSLocalMachine::class);
 });

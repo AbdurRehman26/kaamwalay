@@ -61,7 +61,7 @@ export function SubmissionStep01Content() {
         } else {
             const selectedService: any = serviceLevels.find((service) => service.id === selectedServiceLevel.id);
             const { id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice } =
-                selectedService;
+                selectedService ?? serviceLevels[0];
             dispatch(
                 setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
             );

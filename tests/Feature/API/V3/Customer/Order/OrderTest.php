@@ -8,7 +8,6 @@ use App\Models\PaymentPlan;
 use App\Models\PaymentPlanRange;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -31,7 +30,6 @@ beforeEach(function () {
     ))->create();
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->insured()->create();
-    $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 });
 
 test('a customer can place order', function () {
@@ -223,25 +221,22 @@ test('a customer cannot see order by another customer', function () {
 test('a customer only see own orders', function () {
     Event::fake();
     $user = User::factory();
-    $orders = Order::factory()->for($user)
+    // Create orders for random user, this orders should not be returned in API response
+    Order::factory()->for($user)
         ->has(OrderItem::factory())
         ->count(2)
-        ->create();
+        ->create(['order_status_id' => OrderStatus::PLACED]);
 
-    $orders = $orders->merge(
-        Order::factory()->for($this->user)
-            ->has(OrderItem::factory())
-            ->count(2)
-            ->create()
-    );
+    // Create orders for correct user, these ones should be returned in API response
+    Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(3)
+        ->create(['order_status_id' => OrderStatus::PLACED]);
 
     $this->actingAs($this->user);
-    $orders->each(function ($order) {
-        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $order->user_id);
-    });
 
     $response = $this->getJson(route('v3.customer.orders.index'));
 
     $response->assertOk();
-    $response->assertJsonCount(2, ['data']);
+    $response->assertJsonCount(3, ['data']);
 });

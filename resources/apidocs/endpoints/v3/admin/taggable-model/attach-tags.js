@@ -1,5 +1,5 @@
 /**
- * @api {post} /v3/admin/attach-tags Attach Tags to a Model
+ * @api {post} /v3/admin/attach-tags Attach Tags to Models
  * @apiName Attach Tags To Models
  * @apiGroup Taggable Model
  *

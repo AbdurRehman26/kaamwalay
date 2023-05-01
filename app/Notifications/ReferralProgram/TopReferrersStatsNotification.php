@@ -40,7 +40,7 @@ class TopReferrersStatsNotification extends Notification
     protected function getContent(): string
     {
         $monthYear = Carbon::parse($this->topReferrersStats['date'])->format('F-Y');
-        $content = "Month: {$monthYear}\n\n";
+        $content = "Month: {$monthYear}\n";
 
         foreach ($this->topReferrersStats['data'] as $topReferrersStat) {
             $content .= "\n$topReferrersStat[full_name], \$$topReferrersStat[total]";

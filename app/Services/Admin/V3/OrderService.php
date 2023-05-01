@@ -27,7 +27,6 @@ class OrderService extends V2OrderService
             ->allowedFilters(Order::getAllowedAdminFilters())
             ->withSum('orderItems as number_of_cards', 'quantity')
             ->withSum('orderItems as total_declared_value', 'declared_value_total')
-            ->with('tags')
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->allowedSorts(Order::getAllowedAdminSorts())
             ->defaultSort('-orders.created_at')

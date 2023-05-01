@@ -578,7 +578,7 @@ test('an admin can filter by item to revise', function () {
         ]);
 });
 
-it('an admin can create folders manually', function () {
+test('an admin can create folders manually', function () {
     Bus::fake();
 
     $order = Order::factory()->create();

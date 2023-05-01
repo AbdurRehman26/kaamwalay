@@ -3,6 +3,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -15,6 +16,7 @@ import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import FacebookIcon from '@shared/assets/facebookIcon.svg';
+import InstagramIcon from '@shared/assets/instagramIcon.svg';
 import TwitterIcon from '@shared/assets/twitterIcon.svg';
 
 const styles = {
@@ -49,7 +51,7 @@ const styles = {
         color: '#FFFFFF',
         padding: '15px',
         width: '100%',
-        marginTop: '30px',
+        marginTop: '20px',
     },
     ShareLinkText: {
         fontWeight: 500,
@@ -77,9 +79,10 @@ const styles = {
 
 interface CardPageShareModalProp {
     content: string;
+    socialImage?: string;
 }
 
-export function CardPageShareModal({ content }: CardPageShareModalProp) {
+export function CardPageShareModal({ content, socialImage }: CardPageShareModalProp) {
     const [openModal, setOpenModal] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -188,9 +191,14 @@ export function CardPageShareModal({ content }: CardPageShareModalProp) {
                                     SHARE ON FACEBOOK
                                 </Typography>
                             </FacebookShareButton>
-                            {/* <Button sx={styles.Instagram}>
-                                <Instagram sx={{ marginRight: '5px' }} /> SHARE ON INSTAGRAM
-                            </Button> */}
+                            {socialImage ? (
+                                <a href={socialImage} download>
+                                    <Button sx={styles.Instagram}>
+                                        <img src={InstagramIcon} alt={'Instagram'} style={{ marginRight: '10px' }} />{' '}
+                                        SHARE ON INSTAGRAM
+                                    </Button>
+                                </a>
+                            ) : null}
                         </div>
                         <Snackbar
                             open={open}

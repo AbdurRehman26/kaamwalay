@@ -1,6 +1,7 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
@@ -8,13 +9,15 @@ import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import FacebookIcon from '@shared/assets/facebookIconDesktop.svg';
+import InstagramIcon from '@shared/assets/instagramIconDesktop.svg';
 import TwitterIcon from '@shared/assets/twitterIconDesktop.svg';
 
 interface Props {
     content: string;
+    socialImage?: string;
 }
 
-export default function CopyClipboard({ content }: Props) {
+export default function CopyClipboard({ content, socialImage }: Props) {
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {
@@ -42,6 +45,13 @@ export default function CopyClipboard({ content }: Props) {
                 <FacebookShareButton url={content} style={{ marginRight: '10px' }}>
                     <img src={FacebookIcon} alt={'Facebook'} />
                 </FacebookShareButton>
+                {socialImage ? (
+                    <a href={socialImage} download>
+                        <Button style={{ marginRight: '10px', minWidth: '0px', padding: '0px' }}>
+                            <img src={InstagramIcon} alt={'Instagram'} />
+                        </Button>
+                    </a>
+                ) : null}
                 <CopyToClipboard text={content} onCopy={() => handleClick()}>
                     <Avatar
                         sx={{

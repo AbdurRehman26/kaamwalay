@@ -192,7 +192,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__share">
-                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}" data-social-image="{{ $social_images['vertical'] ?? null }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $page_url }}">
+                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $page_url }}" data-social-image="{{ $social_images['vertical'] ?? null }}">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\CardProduct;
 use App\Models\Order;
@@ -596,5 +598,16 @@ it('filters orders without any tags orders', function () {
         Order::doesntHave('tags')->orderBy('id')->pluck('id')->toArray(),
         collect($response->getData()->data)->sortBy('id')->pluck('id')->toArray()
     );
+});
 
+test('an admin can create folders manually', function () {
+    Bus::fake();
+
+    $order = Order::factory()->create();
+    
+    $this->postJson(route('v3.admin.orders.create-folders', ['order' => $order]))
+    ->assertSuccessful();
+
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);
 });

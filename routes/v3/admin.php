@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\V3\Admin\Cards\CardCategoriesController;
+use App\Http\Controllers\API\V3\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V3\Admin\CustomerController;
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
@@ -33,6 +35,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::prefix('{order}')->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
             Route::get('grades', [OrderController::class, 'getGrades'])->name('orders.get-grades');
+            Route::post('create-folders', [OrderController::class, 'createFolders'])->name('orders.create-folders');
             Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
         });
 
@@ -49,6 +52,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'customers.show',
         ]);
 
+        Route::prefix('cards')->group(function () {
+            Route::post('categories', [CardCategoryController::class, 'store'])->name('cards.categories.store');
+        });
+   
     Route::prefix('customer')->group(function () {
         Route::get('/{user}/referral/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');
         Route::get('/{user}/referral/commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');

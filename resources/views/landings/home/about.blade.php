@@ -9,7 +9,7 @@
     <div class="container Home-sectionContainer">
         <div class="Home-sectionColumn Home-sectionColumn--half">
             <a
-                href="https://www.youtube.com/watch?v=Yz_u_F6n4SU"
+                href="https://www.youtube.com/watch?v=kykG32LWahg"
                 data-type="video"
                 data-effect="zoom"
                 class="Home-sectionImageHolder glightbox" data-aos="fade-right">
@@ -23,11 +23,11 @@
         <div class="Home-sectionColumn Home-sectionColumn--half">
             <h4 class="Home-sectionContentCaption" data-aos="fade-left">Meet Robograding</h4>
             <h3 class="Home-sectionContentHeadline" data-aos="fade-left">The world's first & only, fully A.I. card grading platform.</h3>
-            <p class="Home-sectionContentText" data-aos="fade-left"data-aos-delay="100">Other grading companies are inaccurate, expensive and extremely slow
+            <p class="Home-sectionContentText" data-aos="fade-left" data-aos-delay="100">Other grading companies are inaccurate, expensive and extremely slow
                 because humans are doing the grading. With our technology, are able to grade cards 10x faster, and
                 more accurately than the other guys.</p>
 
-            <div data-atom="submit-button" data-aos="fade-left"data-aos-delay="200" data-button-content="Start a submission">
+            <div data-atom="submit-button" data-aos="fade-left" data-aos-delay="200" data-button-content="Start a submission">
                 {{-- JS runtime actions --}}
             </div>
         </div>

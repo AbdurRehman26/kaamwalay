@@ -46,8 +46,8 @@ export class OrderEntity extends Entity {
     public amountPaidFromWallet!: string;
     public referralCommission!: number;
     public paymentStatus!: PaymentStatusEnum;
-    public estimatedDeliveryStartAt!: string;
-    public estimatedDeliveryEndAt!: string;
+    public estimatedDeliveryStartAt!: Date;
+    public estimatedDeliveryEndAt!: Date;
     public salesmanCommission!: number;
     public isAbandoned!: boolean;
 

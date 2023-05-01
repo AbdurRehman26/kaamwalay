@@ -12,7 +12,7 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
+import { cancelOrder, createFolders, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
 import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
 import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
@@ -40,6 +40,7 @@ enum Options {
     GenerateLabel,
     EditCustomerDetails,
     MarkAbandoned,
+    CreateFolders,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -97,6 +98,14 @@ export default function SubmissionHeaderMoreButton({
         setEditCustomerDialog(false);
         window.location.reload();
     }, []);
+
+    const createFoldersManually = useCallback(async () => {
+        try {
+            await dispatch(createFolders(orderId));
+        } catch (e) {
+            notifications.exception(e as Error);
+        }
+    }, [dispatch, notifications, orderId]);
 
     const setCancelDialog = useCallback(async () => {
         const result = await confirm({
@@ -187,9 +196,20 @@ export default function SubmissionHeaderMoreButton({
                 case Options.MarkAbandoned:
                     await setShowMarkAbandonedDialog(true);
                     break;
+                case Options.CreateFolders:
+                    await createFoldersManually();
+                    break;
             }
         },
-        [handleClose, handleViewGrades, setCancelDialog, setGenerateLabelDialog, customer, dispatch],
+        [
+            handleClose,
+            handleViewGrades,
+            setCancelDialog,
+            setGenerateLabelDialog,
+            customer,
+            createFoldersManually,
+            dispatch,
+        ],
     );
 
     return (
@@ -219,6 +239,12 @@ export default function SubmissionHeaderMoreButton({
                         {!isAbandoned ? 'Mark' : 'Unmark'} Abandoned
                     </MenuItem>
                 ) : null}
+                <MenuItem
+                    onClick={handleOption(Options.CreateFolders)}
+                    disabled={orderStatus.id === OrderStatusEnum.PLACED}
+                >
+                    Create Folders
+                </MenuItem>
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}

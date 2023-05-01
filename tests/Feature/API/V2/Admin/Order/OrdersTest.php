@@ -3,6 +3,8 @@
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Jobs\Admin\Order\CreateOrderCertificateExport;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\CardProduct;
@@ -479,18 +481,31 @@ it('should send an event when order status gets changed', function () {
     });
 });
 
-it('dispatches job for creating folders on dropbox when an order is reviewed', function () {
+it('dispatches jobs for creating folders on dropbox and AGS local machine when an order is reviewed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     Bus::fake();
 
-    /** @var Order $order */
     $order = Order::factory()->create();
     $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);
+});
+
+it('dispatches job for creating order certificates export when an order is reviewed', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
+
+    $order = Order::factory()->create();
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::CONFIRMED,
+    ]);
+
+    Bus::assertDispatchedTimes(CreateOrderCertificateExport::class);
 });
 
 test('order can not be shipped if its not paid', function () {

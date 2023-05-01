@@ -14,13 +14,12 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useAppDispatch } from '@salesrep/redux/hooks';
 import { Form, Formik } from 'formik';
-import MaterialUiPhoneNumber from 'material-ui-phone-number';
 import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
+import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { AddCustomerRequestDto } from '@shared/dto/AddCustomerRequestDto';
 import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { useCountriesListsQuery } from '@shared/redux/hooks/useCountriesQuery';
 import { storeCustomer } from '@shared/redux/slices/salesRepCustomersSlice';
 
 interface CustomerAddDialogProps extends Omit<DialogProps, 'customerAdded'> {
@@ -42,27 +41,6 @@ const Root = styled(Dialog)(({ theme }) => ({
             borderRadius: 2,
             marginLeft: theme.spacing(3),
         },
-    },
-}));
-
-const StyledPhoneNumber = styled(MaterialUiPhoneNumber)(() => ({
-    '&': {
-        padding: '0px 14px !important',
-        width: '100%',
-        border: '1px solid lightgray',
-        fontWeight: 400,
-        fontSize: '1rem',
-        borderRadius: 4,
-    },
-    '.MuiInput-input': {
-        borderLeft: '1px solid lightgray',
-        padding: '7px 5px !important',
-    },
-    '.MuiInput-root:before': {
-        border: '0 !important',
-    },
-    '.MuiInput-root:after': {
-        border: '0 !important',
     },
 }));
 
@@ -101,7 +79,6 @@ export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...r
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
-    const { data } = useCountriesListsQuery();
 
     const customerInput = useMemo<AddCustomerRequestDto>(
         () => ({
@@ -236,20 +213,20 @@ export function CustomerAddDialog({ onClose, fromSubmission, customerAdded, ...r
                                     />
                                 </Box>
 
-                                {data.length && (
-                                    <Box className={classes.inputWithLabelContainer} width={'100%'}>
-                                        <Typography variant={'subtitle1'} className={classes.label}>
-                                            Phone Number
-                                        </Typography>
-                                        <StyledPhoneNumber
-                                            countryCodeEditable={false}
-                                            defaultCountry="us"
-                                            disableAreaCodes
-                                            onlyCountries={data.map((country) => country.code.toLowerCase())}
-                                            onChange={(e) => setFieldValue('phone', e)}
-                                        />
-                                    </Box>
-                                )}
+                                <Box className={classes.inputWithLabelContainer} width={'100%'}>
+                                    <Typography variant={'subtitle1'} className={classes.label}>
+                                        Phone Number
+                                    </Typography>
+                                    <InternationalPhoneNumberField
+                                        value={values.phone}
+                                        onChange={(value, data, event, formattedValue) => {
+                                            setFieldValue('phone', formattedValue);
+                                        }}
+                                        dropdownStyle={{
+                                            position: 'fixed',
+                                        }}
+                                    />
+                                </Box>
                             </Grid>
                         </DialogContent>
                         <DialogActions>

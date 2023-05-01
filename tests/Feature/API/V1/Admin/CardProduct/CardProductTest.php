@@ -42,6 +42,10 @@ beforeEach(function () {
         'name' => 'Holo',
     ]);
 
+    $this->sampleGetCategoryResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_get_category_response_200.json'
+    ), associative: true);
+
     $this->sampleGetSeriesResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_get_series_response_200.json'
     ), associative: true);
@@ -59,6 +63,7 @@ beforeEach(function () {
 
 test('admins can create cards manually', function () {
     Http::fake([
+        '*/categories/*' => Http::response($this->sampleGetCategoryResponse, 200, []),
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
@@ -102,6 +107,7 @@ test('admins can create cards manually', function () {
 
 it('fails on repeated card number and params', function () {
     Http::fake([
+        '*/categories/*' => Http::response($this->sampleGetCategoryResponse, 200, []),
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),

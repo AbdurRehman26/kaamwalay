@@ -15,24 +15,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {
-    /**
-     * @return LengthAwarePaginator<Order>
-     */
-    public function getOrders(): LengthAwarePaginator
-    {
-        $itemsPerPage = request('per_page');
-
-        return QueryBuilder::for(Order::class)
-            ->excludeCancelled()
-            ->allowedFilters(Order::getAllowedAdminFilters())
-            ->withSum('orderItems as number_of_cards', 'quantity')
-            ->withSum('orderItems as total_declared_value', 'declared_value_total')
-            ->allowedIncludes(Order::getAllowedAdminIncludes())
-            ->allowedSorts(Order::getAllowedAdminSorts())
-            ->defaultSort('-orders.created_at')
-            ->paginate($itemsPerPage);
-    }
-
     public function getOrder(int $orderId): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)

@@ -17,7 +17,7 @@ interface Props {
     socialImage?: string;
 }
 
-export default function CopyClipboard({ content, socialImage }: Props) {
+export default function CardPageShareBox({ content, socialImage }: Props) {
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {

@@ -52,6 +52,9 @@ const styles = {
         padding: '15px',
         width: '100%',
         marginTop: '20px',
+        img: {
+            marginRight: '10px',
+        },
     },
     ShareLinkText: {
         fontWeight: 500,
@@ -194,7 +197,7 @@ export function CardPageShareModal({ content, socialImage }: CardPageShareModalP
                             {socialImage ? (
                                 <a href={socialImage} download>
                                     <Button sx={styles.Instagram}>
-                                        <img src={InstagramIcon} alt={'Instagram'} style={{ marginRight: '10px' }} />{' '}
+                                        <img src={InstagramIcon} alt={'Instagram'} />
                                         SHARE ON INSTAGRAM
                                     </Button>
                                 </a>

@@ -7,6 +7,7 @@ use Spatie\Tags\HasTags as SpatieHasTags;
 trait HasTags
 {
     use SpatieHasTags;
+
     public function attachTagsToModels(array $modelIds, array $tags): void
     {
         foreach ($this->whereIn('id', $modelIds)->get() as $model) {
@@ -21,9 +22,6 @@ trait HasTags
         }
     }
 
-    /**
-     * @return bool
-     */
     public function tagExists(string $tag): bool
     {
         return $this->tagsTranslated($tag)->exists();

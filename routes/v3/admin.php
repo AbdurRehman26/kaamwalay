@@ -36,8 +36,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
         });
 
-        Route::post('mark-abandoned', [OrderController::class, 'markAsAbandoned'])->name('orders.mark-abandoned');
-        Route::post('mark-un-abandoned', [OrderController::class, 'markAsUnAbandoned'])->name('orders.mark-un-abandoned');
     });
     Route::apiResource('orders', OrderController::class)->only(['index', 'show'])
         ->names([

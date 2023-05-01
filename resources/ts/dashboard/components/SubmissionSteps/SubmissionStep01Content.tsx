@@ -60,6 +60,11 @@ export function SubmissionStep01Content() {
             dispatch(setCustomStep(1));
         } else {
             const selectedService: any = serviceLevels.find((service) => service.id === selectedServiceLevel.id);
+            // This line takes the values from the service level selected by user
+            // but since it takes the value from Redux state, which is being filled in other places of the customer submission flow (like Payment Page)
+            // we will use the data from the state if it matches the available service levels,
+            // if not, it will take the first element in the list of available service levels
+            // This comes up when, for example, we go to payment page and then immediatly to new Submission Flow
             const { id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice } =
                 selectedService ?? serviceLevels[0];
             dispatch(

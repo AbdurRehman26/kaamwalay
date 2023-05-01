@@ -136,6 +136,8 @@ beforeEach(function () {
     ), associative: true);
 
     $this->actingAs($this->user);
+
+    $this->orders->first()->attachTags(['abandoned']);
 });
 
 uses()->group('admin', 'admin_orders');
@@ -576,6 +578,26 @@ test('an admin can filter by item to revise', function () {
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
+});
+
+it('filters orders with abandoned tag', function () {
+    $this->getJson(route('v3.admin.orders.index', ['filter[tags]' => 'abandoned']))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'id' => $this->orders->first()->id,
+        ]);
+});
+
+it('filters orders without any tags orders', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['filter[tags]' => -1]))
+        ->assertOk()
+        ->assertJsonCount(4, ['data']);
+
+    $this->assertEquals(
+        Order::doesntHave('tags')->orderBy('id')->pluck('id')->toArray(),
+        collect($response->getData()->data)->sortBy('id')->pluck('id')->toArray()
+    );
 });
 
 test('an admin can create folders manually', function () {

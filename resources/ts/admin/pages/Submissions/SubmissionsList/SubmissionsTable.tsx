@@ -1,6 +1,7 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
@@ -8,8 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TableContainer from '@mui/material/TableContainer';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { upperFirst } from 'lodash';
-import { debounce } from 'lodash';
+import { debounce, upperFirst } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CustomerSubmissionsList from '@shared/components/Customers/CustomerSubmissionsList';
 import EditCustomerDetailsDialog from '@shared/components/EditCustomerDetailsDialog';
@@ -17,7 +17,7 @@ import { PageSelector } from '@shared/components/PageSelector';
 import EnhancedTableHeadCell from '@shared/components/Tables/EnhancedTableHeadCell';
 import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
@@ -28,13 +28,16 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
 import { getPromoCodes } from '@shared/redux/slices/adminPromoCodesSlice';
+import { setSubmissionIds } from '@shared/redux/slices/submissionSelection';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import { useAppDispatch } from '@admin/redux/hooks';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
     all?: boolean;
     search?: string;
+    abandoned?: boolean;
 }
 
 const ReferralStatus = [
@@ -42,11 +45,11 @@ const ReferralStatus = [
     { label: 'No', value: 0 },
 ];
 
-export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
+export function SubmissionsTable({ tabFilter, all, search, abandoned }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter ? tabFilter : OrderStatusEnum.PLACED], [tabFilter]);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusLabel, setPaymentStatusLabel] = useState('');
-    const heading = all ? 'All' : upperFirst(status?.label ?? '');
+    const heading = abandoned ? 'Abandoned' : all ? 'All' : upperFirst(status?.label ?? '');
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
     const [searchPromoCode, setSearchPromoCode] = useState('');
     const [promoCodes, setPromoCodes] = useState<PromoCodeEntity[]>([]);
@@ -62,6 +65,29 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const dispatch = useAppDispatch();
     const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const customer = useAppSelector((state) => state.editCustomerSlice.customer);
+    const [allSelected, setAllSelected] = useState(false);
+    const selectedIds = useAppSelector((state) => state.submissionSelection.selectedIds);
+    const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
+
+    useEffect(() => {
+        dispatch(setSubmissionIds({ ids: [] }));
+        setAllSelected(false);
+    }, [dispatch]);
+
+    const handleSelectAll = () => {
+        if (!allSelected) {
+            let orderQuery = orders$.data;
+            if (!abandoned) {
+                orderQuery = orderQuery.filter((order) => order.paymentStatus !== PaymentStatusEnum.PAID);
+            }
+            const newSelected = orderQuery.map((order) => order.id);
+            dispatch(setSubmissionIds({ ids: newSelected }));
+            setAllSelected(true);
+            return;
+        }
+        dispatch(setSubmissionIds({ ids: [] }));
+        setAllSelected(false);
+    };
 
     const headings: EnhancedTableHeadCell[] = [
         {
@@ -71,6 +97,14 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             label: 'Submission #',
             align: 'left',
             sortable: true,
+            component: (
+                <Checkbox
+                    color="primary"
+                    checked={allSelected}
+                    indeterminate={selectedIds.length > 0}
+                    onClick={handleSelectAll}
+                />
+            ),
         },
         {
             id: 'created_at',
@@ -190,6 +224,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 'shippingMethod',
                 'coupon',
                 'owner',
+                'tags',
             ],
             sort: sortFilter,
             filter: {
@@ -197,6 +232,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
                 couponCode,
+                tags: abandoned ? 'abandoned' : -1,
             },
         },
         ...bracketParams(),
@@ -403,21 +439,32 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     return (
         <Grid container direction={'column'}>
-            <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
+            <Grid container pt={2} px={2} pb={2} justifyContent={'flex-start'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'h6'}>
                         {heading} {totals > 0 ? `(${totals})` : null}
                     </Typography>
                 </Grid>
-                <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                    <Button
-                        variant={'outlined'}
-                        color={'primary'}
-                        sx={{ borderRadius: 20, padding: '7px 24px' }}
-                        onClick={handleExportData}
-                    >
-                        Export List
-                    </Button>
+                <Grid item xs container alignItems={'center'} justifyContent={'flex-end'} maxWidth={'400px !important'}>
+                    <Grid display={'flex'}>
+                        {selectedIds.length > 0 ? (
+                            <Button
+                                style={{ marginRight: '12px', borderRadius: '25px' }}
+                                variant={'contained'}
+                                onClick={() => setShowMarkAbandonedDialog(true)}
+                            >
+                                {abandoned ? 'Unmark' : 'Mark'} Abandoned
+                            </Button>
+                        ) : null}
+                        <Button
+                            variant={'outlined'}
+                            color={'primary'}
+                            sx={{ borderRadius: 20, padding: '7px 24px' }}
+                            onClick={handleExportData}
+                        >
+                            Export List
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid alignItems={'left'}>
@@ -468,6 +515,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
             </Grid>
             <TableContainer>
                 <CustomerSubmissionsList
+                    displayCheckbox={true}
                     orders={orders$.data}
                     paginationProp={orders$.paginationProps}
                     headings={headings}
@@ -483,6 +531,13 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                 open={editCustomerDialog}
                 onSubmit={handleEditCustomerSubmit}
                 onClose={handleEditCustomerDialogClose}
+            />
+            <MarkAbandonedStateDialog
+                isAbandoned={!!abandoned}
+                orderIds={selectedIds}
+                onSubmit={() => window.location.reload()}
+                open={showMarkAbandonedDialog}
+                onClose={() => setShowMarkAbandonedDialog(false)}
             />
         </Grid>
     );

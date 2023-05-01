@@ -82,6 +82,7 @@ class OrderResource extends BaseResource
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
             'referral_commission' => $this->referral_total_commission,
+            'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags)),
         ];
     }
 

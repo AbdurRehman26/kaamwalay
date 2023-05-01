@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use App\Http\Controllers\API\V3\Admin\ReferrerPayoutController;
 use App\Http\Controllers\API\V3\Admin\Order\UserCardController;
+use App\Http\Controllers\API\V3\Admin\TaggableController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,4 +76,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('referees', [ReferralProgramController::class, 'listReferees'])->name('referral-program.referees');
         Route::get('orders', [ReferralProgramController::class, 'listReferralOrders'])->name('referral-program.orders');
     });
+
+    Route::post('attach-tags', [TaggableController::class, 'attachTags'])->name('attach-tags');
+    Route::post('detach-tags', [TaggableController::class, 'detachTags'])->name('detach-tags');
 });

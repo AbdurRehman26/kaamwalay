@@ -19,12 +19,14 @@ interface CustomerSubmissionsListProps {
     orders: OrderEntity[];
     paginationProp?: any;
     isCustomerDetailPage?: boolean;
+    displayCheckbox?: boolean;
     isReferralPage?: boolean;
     headings?: Array<any>;
     orderDirection?: TableSortType;
     orderBy?: string;
     handleRequestSort?: any | null;
     onEditCustomer?: any;
+    showSubmissionActionButtons?: boolean;
 }
 
 export function CustomerSubmissionsList({
@@ -32,12 +34,14 @@ export function CustomerSubmissionsList({
     orders,
     paginationProp,
     isCustomerDetailPage,
+    displayCheckbox = false,
     isReferralPage = false,
     headings,
     orderBy = '',
     orderDirection = 'desc',
     handleRequestSort,
     onEditCustomer,
+    showSubmissionActionButtons = true,
 }: CustomerSubmissionsListProps) {
     return (
         <Table>
@@ -72,8 +76,10 @@ export function CustomerSubmissionsList({
                 {orders?.length > 0 ? (
                     orders.map((order) => (
                         <SubmissionsTableRow
+                            showSubmissionActionButtons={showSubmissionActionButtons}
                             order={order}
                             key={order.id}
+                            displayCheckbox={displayCheckbox}
                             isCustomerDetailPage={!isCustomerDetailPage}
                             isReferralPage={isReferralPage}
                             onEditCustomer={onEditCustomer}

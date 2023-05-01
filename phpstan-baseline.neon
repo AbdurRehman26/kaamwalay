@@ -226,6 +226,16 @@ parameters:
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
 
 		-
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminModelTaggableSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminModelTaggableSearchFilter.php
+
+		-
+			message: "#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withAnyTags\\(\\)#"
+			count: 1
+			path: app/Http/Filters/AdminModelTaggableSearchFilter.php
+
+		-
 			message: "#^Class App\\\\Http\\\\Filters\\\\AdminOrderReferByFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderReferByFilter.php

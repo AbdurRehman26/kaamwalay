@@ -159,57 +159,57 @@ class UserCardService
 
     public function pepareScannedImagesForPublicCardPage(array $data): array
     {
-        if (
-            empty($data) ||
-            $data['count'] === 0 ||
-            (
-                empty($data['results'][0]['laser_front_scan']) &&
-                empty($data['results'][0]['laser_back_scan']) &&
-                empty($data['results'][0]['front_scan']) &&
-                empty($data['results'][0]['back_scan'])
-            )
-        ) {
-            return [];
-        }
+        // if (
+        //     empty($data) ||
+        //     $data['count'] === 0 ||
+        //     (
+        //         empty($data['results'][0]['laser_front_scan']) &&
+        //         empty($data['results'][0]['laser_back_scan']) &&
+        //         empty($data['results'][0]['front_scan']) &&
+        //         empty($data['results'][0]['back_scan'])
+        //     )
+        // ) {
+        //     return [];
+        // }
 
-        return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);
+        return $this->prepareGeneratedImagesForPublicPage($data);
     }
 
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
         $front = [
             [
-                'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Centering',
             ],
             [
-                'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Surface',
             ],
             [
-                'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Edges',
             ],
             [
-                'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Corners',
             ],
         ];
         $back = [
             [
-                'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Centering',
             ],
             [
-                'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Surface',
             ],
             [
-                'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Edges',
             ],
             [
-                'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                'output_image' => 'https://pokemon-statics.s3.amazonaws.com/media/centering/centering_front_00078452.jpg',
                 'name' => 'Corners',
             ],
         ];

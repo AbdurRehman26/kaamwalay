@@ -10,7 +10,6 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery\MockInterface;
@@ -33,7 +32,6 @@ beforeEach(function () {
     $this->insuredShippingMethod = ShippingMethod::factory()->insured()->create();
     $this->vaultShippingMethod = ShippingMethod::factory()->vault()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
-    $this->insuredShippingOrderStatusHistoryService = resolve(OrderStatusHistoryService::class);
     $this->actingAs($this->user);
     $this->insuredShippingOrder = Order::factory()->for($this->user)->create([
         'shipping_method_id' => $this->insuredShippingMethod->id,

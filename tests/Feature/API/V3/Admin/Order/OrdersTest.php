@@ -578,7 +578,7 @@ test('an admin can filter by item to revise', function () {
         ]);
 });
 
-it('admins can create folders manually', function () {
+it('an admin can create folders manually', function () {
     Bus::fake();
 
     $order = Order::factory()->create();
@@ -586,6 +586,6 @@ it('admins can create folders manually', function () {
     $this->postJson(route('v3.admin.orders.create-folders', ['order' => $order]))
     ->assertSuccessful();
 
-    Bus::assertDispatched(CreateOrderFoldersOnDropbox::class);
-    Bus::assertDispatched(CreateOrderFoldersOnAGSLocalMachine::class);
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);
 });

@@ -97,7 +97,6 @@ export default function SubmissionHeaderMoreButton({
     const createFoldersManually = useCallback(async () => {
         try {
             await dispatch(createFolders(orderId));
-            window.location.reload();
         } catch (e) {
             notifications.exception(e as Error);
         }

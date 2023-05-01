@@ -1,6 +1,6 @@
 /**
  * @api {post} /v3/admin/detach-tags Detach Tags from a Model
- * @apiName Detach Model From Tag
+ * @apiName Detach Tags From Models
  * @apiGroup Taggable Model
  *
  * @apiVersion 3.0.0

@@ -140,7 +140,7 @@ export function CardImageModal({ imagesJson }: props) {
                     >
                         {Object.keys(imagesJson).map((key) => {
                             return (
-                                <SwiperSlide>
+                                <SwiperSlide key={key}>
                                     <img src={imagesJson[key]} alt={''} />
                                 </SwiperSlide>
                             );
@@ -156,7 +156,7 @@ export function CardImageModal({ imagesJson }: props) {
                     >
                         {Object.keys(imagesJson).map((key) => {
                             return (
-                                <SwiperSlide>
+                                <SwiperSlide key={key}>
                                     <TransformWrapper
                                         centerOnInit={true}
                                         onZoomStart={() => setToolTipClass('SwiperToolTipHide')}

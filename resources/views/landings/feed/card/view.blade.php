@@ -17,12 +17,12 @@
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.1/dist/imagebox.min.css">
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.1/dist/imagebox.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         @if($grades_available)
         <script defer>
@@ -192,7 +192,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__share">
-                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ $page_url }}" data-social-image="{{ $social_images['vertical'] ?? null }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="copy-to-clip-board" data-content="{{ $page_url }}">
+                            <div class="feed-view__share__icon" data-atom="card-page-share-box" data-content="{{ $page_url }}" data-social-image="{{ $social_images['vertical'] ?? null }}">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

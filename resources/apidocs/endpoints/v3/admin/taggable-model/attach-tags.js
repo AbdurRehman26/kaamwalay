@@ -1,6 +1,6 @@
 /**
  * @api {post} /v3/admin/attach-tags Attach Tags to a Model
- * @apiName Attach Model
+ * @apiName Attach Model To Tag
  * @apiGroup Taggable Model
  *
  * @apiVersion 3.0.0

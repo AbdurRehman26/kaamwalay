@@ -126,4 +126,14 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const { data } = await this.endpoint.post(`/${orderId}/generate-label`);
         return plainToInstance(OrderEntity, data);
     }
+
+    async createFolders(input: { orderId: number }) {
+        const apiService = app(APIService);
+        const { orderId } = input;
+        const endpoint = apiService.createEndpoint(`${this.endpointPath}/${orderId}/create-folders`, {
+            version: 'v3',
+        });
+        const { data } = await endpoint.post('');
+        return data;
+    }
 }

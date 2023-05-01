@@ -65,7 +65,17 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
 
     useRetry(
         async () => {
-            await dispatch(showOrderAction({ resourceId: orderId, skipLoading: true }));
+            await dispatch(
+                showOrderAction({
+                    resourceId: orderId,
+                    skipLoading: true,
+                    config: {
+                        params: {
+                            include: ['paymentPlan', 'invoice', 'shippingMethod'],
+                        },
+                    },
+                }),
+            );
         },
         () => !isError && !invoice,
     );

@@ -35,7 +35,21 @@ interface ConfirmationSubmissionsSidebarProps {
  */
 export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissionsSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
-    const { isLoading, isError, data, error } = useOrderQuery({ resourceId: orderId });
+    const { isLoading, isError, data, error } = useOrderQuery({
+        resourceId: orderId,
+        config: {
+            params: {
+                include: [
+                    'paymentPlan',
+                    'invoice',
+                    'shippingMethod',
+                    'orderItems.orderItemStatus',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                ],
+            },
+        },
+    });
     const message = (error as Error)?.message || error;
     const endTime = new Date(new Date(data?.createdAt).getTime() + 86400000);
     const timeInMs = new Date() <= endTime ? new Date(data?.createdAt).getTime() + 86400000 : 0;

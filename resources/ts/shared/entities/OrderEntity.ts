@@ -162,6 +162,6 @@ export class OrderEntity extends Entity {
     }
 
     public hasTag(tagName: string): boolean {
-        return this.tags.filter((tag: TagEntity) => tag.name === tagName).length > 0;
+        return this.tags?.filter((tag: TagEntity) => tag.name === tagName).length > 0;
     }
 }

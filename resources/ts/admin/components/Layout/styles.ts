@@ -55,7 +55,7 @@ export const useContentHolderStyles = makeStyles(
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            maxWidth: drawerState ? 'calc(100% - 240px)' : '100%',
+            maxWidth: drawerState ? 'calc(100% - 260px)' : '100%',
             width: '100%',
         }),
     },

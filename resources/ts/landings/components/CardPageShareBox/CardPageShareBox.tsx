@@ -5,12 +5,13 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import FacebookIcon from '@shared/assets/facebookIconDesktop.svg';
 import InstagramIcon from '@shared/assets/instagramIconDesktop.svg';
 import TwitterIcon from '@shared/assets/twitterIconDesktop.svg';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 
 interface Props {
     content: string;
@@ -31,6 +32,14 @@ export default function CardPageShareBox({ content, socialImage }: Props) {
 
         setOpen(false);
     };
+
+    const handleDownload = useCallback(
+        async function handleDownload() {
+            await downloadFromUrl(socialImage!, 'agsInstagramPost');
+        },
+        [socialImage],
+    );
+
     return (
         <>
             <Grid sx={{ display: 'flex' }}>
@@ -46,11 +55,9 @@ export default function CardPageShareBox({ content, socialImage }: Props) {
                     <img src={FacebookIcon} alt={'Facebook'} />
                 </FacebookShareButton>
                 {socialImage ? (
-                    <a href={socialImage} download>
-                        <Button style={{ marginRight: '10px', minWidth: '0px', padding: '0px' }}>
-                            <img src={InstagramIcon} alt={'Instagram'} />
-                        </Button>
-                    </a>
+                    <Button onClick={handleDownload} style={{ marginRight: '10px', minWidth: '0px', padding: '0px' }}>
+                        <img src={InstagramIcon} alt={'Instagram'} />
+                    </Button>
                 ) : null}
                 <CopyToClipboard text={content} onCopy={() => handleClick()}>
                     <Avatar

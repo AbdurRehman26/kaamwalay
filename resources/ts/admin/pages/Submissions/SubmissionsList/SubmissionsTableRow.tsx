@@ -192,7 +192,7 @@ export function SubmissionsTableRow({
 
     return (
         <>
-            <TableRow style={{ backgroundColor: isSelected(order.id) ? 'rgba(32,191,184,0.2)' : '' }}>
+            <TableRow style={{ backgroundColor: isSelected(order.id) ? '#F5FEFE' : '' }}>
                 <TableCell style={{ minWidth: 200 }}>
                     {displayCheckbox && (
                         <Checkbox

@@ -46,6 +46,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     'orderItems.orderItemStatus',
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
+                    'orderStatus',
                 ],
             },
         },

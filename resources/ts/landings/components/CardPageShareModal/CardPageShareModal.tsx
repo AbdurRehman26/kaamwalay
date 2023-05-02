@@ -12,12 +12,13 @@ import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import FacebookIcon from '@shared/assets/facebookIcon.svg';
 import InstagramIcon from '@shared/assets/instagramIcon.svg';
 import TwitterIcon from '@shared/assets/twitterIcon.svg';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 
 const styles = {
     ModalHeader: {
@@ -102,6 +103,13 @@ export function CardPageShareModal({ content, socialImage }: CardPageShareModalP
 
         setOpen(false);
     };
+
+    const handleDownload = useCallback(
+        async function handleDownload() {
+            await downloadFromUrl(socialImage!, 'agsInstagramPost');
+        },
+        [socialImage],
+    );
 
     return (
         <Box>
@@ -195,12 +203,10 @@ export function CardPageShareModal({ content, socialImage }: CardPageShareModalP
                                 </Typography>
                             </FacebookShareButton>
                             {socialImage ? (
-                                <a href={socialImage} download>
-                                    <Button sx={styles.Instagram}>
-                                        <img src={InstagramIcon} alt={'Instagram'} />
-                                        SHARE ON INSTAGRAM
-                                    </Button>
-                                </a>
+                                <Button onClick={handleDownload} sx={styles.Instagram}>
+                                    <img src={InstagramIcon} alt={'Instagram'} />
+                                    SHARE ON INSTAGRAM
+                                </Button>
                             ) : null}
                         </div>
                         <Snackbar

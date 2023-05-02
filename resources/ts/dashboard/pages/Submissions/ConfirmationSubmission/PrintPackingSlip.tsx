@@ -71,7 +71,15 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
                     skipLoading: true,
                     config: {
                         params: {
-                            include: ['paymentPlan', 'invoice', 'shippingMethod'],
+                            include: [
+                                'paymentPlan',
+                                'invoice',
+                                'shippingMethod',
+                                'orderItems.orderItemStatus',
+                                'orderItems.cardProduct.cardSet.cardSeries',
+                                'orderItems.cardProduct.cardCategory',
+                                'orderStatus',
+                            ],
                         },
                     },
                 }),

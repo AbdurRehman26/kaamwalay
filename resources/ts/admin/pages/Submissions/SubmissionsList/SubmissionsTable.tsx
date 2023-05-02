@@ -438,7 +438,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
     }
 
     return (
-        <Grid container direction={'column'}>
+        <Grid container direction={'column'} display={'inline-grid'}>
             <Grid container pt={2} px={2} pb={2} justifyContent={'flex-start'}>
                 <Grid item xs container alignItems={'center'}>
                     <Typography variant={'h6'}>

@@ -49,6 +49,7 @@ class OrderListResource extends BaseResource
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'salesman_commission' => $this->salesman_commission,
+            'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags)),
         ];
     }
 }

@@ -9,8 +9,7 @@ import Tab from '@mui/material/Tab';
 import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from '@shared/components/Customers/Header';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { SelectAndCreateCustomerDialog } from '../CreateSubmission/SelectAndCreateCustomerDialog';
@@ -36,6 +35,7 @@ export function SubmissionsList() {
             <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
             <Tab component={Link} to={'/submissions/assembled/list'} value={'assembled'} label="Assembled" />
             <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
+            <Tab component={Link} to={'/submissions/abandoned/list'} value={'abandoned'} label="Abandoned" />
         </TabList>
     );
 
@@ -92,6 +92,9 @@ export function SubmissionsList() {
                 </TabContent>
                 <TabContent value={'shipped'}>
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.SHIPPED} />
+                </TabContent>
+                <TabContent value={'abandoned'}>
+                    <SubmissionsTable search={search} all abandoned />
                 </TabContent>
             </Grid>
         </TabContext>

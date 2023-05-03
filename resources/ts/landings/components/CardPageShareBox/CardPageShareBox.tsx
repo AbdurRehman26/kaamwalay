@@ -1,20 +1,24 @@
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import FacebookIcon from '@shared/assets/facebookIconDesktop.svg';
+import InstagramIcon from '@shared/assets/instagramIconDesktop.svg';
 import TwitterIcon from '@shared/assets/twitterIconDesktop.svg';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 
 interface Props {
     content: string;
+    socialImage?: string;
 }
 
-export default function CopyClipboard({ content }: Props) {
+export default function CardPageShareBox({ content, socialImage }: Props) {
     const [open, setOpen] = useState(false);
 
     const handleClick = () => {
@@ -28,6 +32,14 @@ export default function CopyClipboard({ content }: Props) {
 
         setOpen(false);
     };
+
+    const handleDownload = useCallback(
+        async function handleDownload() {
+            await downloadFromUrl(socialImage!, 'agsInstagramPost');
+        },
+        [socialImage],
+    );
+
     return (
         <>
             <Grid sx={{ display: 'flex' }}>
@@ -42,6 +54,11 @@ export default function CopyClipboard({ content }: Props) {
                 <FacebookShareButton url={content} style={{ marginRight: '10px' }}>
                     <img src={FacebookIcon} alt={'Facebook'} />
                 </FacebookShareButton>
+                {socialImage ? (
+                    <Button onClick={handleDownload} style={{ marginRight: '10px', minWidth: '0px', padding: '0px' }}>
+                        <img src={InstagramIcon} alt={'Instagram'} />
+                    </Button>
+                ) : null}
                 <CopyToClipboard text={content} onCopy={() => handleClick()}>
                     <Avatar
                         sx={{

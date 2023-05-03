@@ -4,6 +4,7 @@ import { AdminUserEntity } from '@shared/entities/AdminUserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
+import { TagEntity } from '@shared/entities/TagEntity';
 import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { DateField } from '../decorators/DateField';
@@ -45,9 +46,10 @@ export class OrderEntity extends Entity {
     public amountPaidFromWallet!: string;
     public referralCommission!: number;
     public paymentStatus!: PaymentStatusEnum;
-    public estimatedDeliveryStartAt!: string;
-    public estimatedDeliveryEndAt!: string;
+    public estimatedDeliveryStartAt!: Date;
+    public estimatedDeliveryEndAt!: Date;
     public salesmanCommission!: number;
+    public isAbandoned!: boolean;
 
     @Type(() => UserEntity)
     public referrer!: UserEntity;
@@ -118,6 +120,8 @@ export class OrderEntity extends Entity {
     @Type(() => OrderLabelEntity)
     public orderCertificate!: OrderLabelEntity | null;
 
+    public tags!: [];
+
     public get status() {
         return this.orderStatus?.code;
     }
@@ -155,5 +159,9 @@ export class OrderEntity extends Entity {
         }
 
         return this;
+    }
+
+    public hasTag(tagName: string): boolean {
+        return this.tags?.filter((tag: TagEntity) => tag.name === tagName).length > 0;
     }
 }

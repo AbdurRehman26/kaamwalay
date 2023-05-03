@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Concerns\HasTags;
 use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
+use App\Contracts\Taggable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Http\Filters\AdminModelTaggableSearchFilter;
 use App\Http\Filters\AdminOrderReferByFilter;
 use App\Http\Filters\AdminOrderSearchFilter;
 use App\Http\Sorts\AdminSubmissionsCardsSort;
@@ -29,9 +32,9 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\AllowedSort;
 
-class Order extends Model implements Exportable
+class Order extends Model implements Exportable, Taggable
 {
-    use HasFactory, ActivityLog, HasOrderPayments;
+    use HasFactory, ActivityLog, HasOrderPayments, HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -208,12 +211,16 @@ class Order extends Model implements Exportable
 
     public static function getAllowedAdminIncludes(): array
     {
-        return self::allowedIncludes();
+        return array_merge(self::allowedIncludes(), [
+            AllowedInclude::relationship('tags'),
+        ]);
     }
 
     public static function getAllowedAdminFilters(): array
     {
-        return self::allowedFilters();
+        return array_merge(self::allowedFilters(), [
+            AllowedFilter::custom('tags', new AdminModelTaggableSearchFilter),
+        ]);
     }
 
     public static function getAllowedAdminSorts(): array
@@ -270,6 +277,17 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
             AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('orderItems.cardProduct'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory'),
+            AllowedInclude::relationship('orderItems.cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('orderItems.orderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('orderItems.userCard'),
+            AllowedInclude::relationship('orderPayment.paymentMethod', 'firstOrderPayment.paymentMethod'),
+            AllowedInclude::relationship('orderItems.orderItemStatus'),
+            AllowedInclude::relationship('billingAddress.country'),
+            AllowedInclude::relationship('shippingAddress.country'),
         ];
     }
 

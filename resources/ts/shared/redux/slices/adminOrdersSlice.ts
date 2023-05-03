@@ -304,6 +304,17 @@ export const markOrderAsPaid = createAsyncThunk('markOrderAsPaid', async (orderI
         return thunkAPI.rejectWithValue(e);
     }
 });
+export const createFolders = createAsyncThunk('createFolders', async (orderId: number, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        await ordersRepository.createFolders({ orderId });
+        NotificationsService.success('Folders have been created.');
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,

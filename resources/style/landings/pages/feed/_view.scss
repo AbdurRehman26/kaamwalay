@@ -109,7 +109,9 @@
         }
 
         &__container {
-            overflow: scroll;
+            @include breakpoints.down(lg) {
+                overflow: scroll;
+            }
         }
 
         &__content {

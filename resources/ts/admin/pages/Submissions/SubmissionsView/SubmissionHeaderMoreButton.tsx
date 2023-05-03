@@ -12,8 +12,9 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { cancelOrder, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
+import { cancelOrder, createFolders, generateOrderLabel } from '@shared/redux/slices/adminOrdersSlice';
 import { setCustomer } from '@shared/redux/slices/editCustomerSlice';
+import MarkAbandonedStateDialog from '@admin/pages/Submissions/SubmissionsView/MarkAbandonedStateDialog';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -38,6 +39,8 @@ enum Options {
     MarkAsPaid,
     GenerateLabel,
     EditCustomerDetails,
+    MarkAbandoned,
+    CreateFolders,
 }
 
 interface SubmissionHeaderMoreButtonProps {
@@ -45,6 +48,7 @@ interface SubmissionHeaderMoreButtonProps {
     orderStatus: OrderStatusEntity;
     customer: UserEntity | null;
     paymentStatus?: number;
+    isAbandoned: boolean;
 }
 
 export default function SubmissionHeaderMoreButton({
@@ -52,6 +56,7 @@ export default function SubmissionHeaderMoreButton({
     orderStatus,
     customer,
     paymentStatus,
+    isAbandoned,
 }: SubmissionHeaderMoreButtonProps) {
     const confirm = useConfirmation();
     const classes = useStyles();
@@ -59,6 +64,7 @@ export default function SubmissionHeaderMoreButton({
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [creditDialog, setCreditDialog] = useState(false);
     const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
+    const [showMarkAbandonedDialog, setShowMarkAbandonedDialog] = useState(false);
     const [editCustomerDialog, setEditCustomerDialog] = useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
@@ -92,6 +98,14 @@ export default function SubmissionHeaderMoreButton({
         setEditCustomerDialog(false);
         window.location.reload();
     }, []);
+
+    const createFoldersManually = useCallback(async () => {
+        try {
+            await dispatch(createFolders(orderId));
+        } catch (e) {
+            notifications.exception(e as Error);
+        }
+    }, [dispatch, notifications, orderId]);
 
     const setCancelDialog = useCallback(async () => {
         const result = await confirm({
@@ -179,15 +193,21 @@ export default function SubmissionHeaderMoreButton({
                         dispatch(setCustomer(customer));
                     }
                     break;
+                case Options.MarkAbandoned:
+                    await setShowMarkAbandonedDialog(true);
+                    break;
+                case Options.CreateFolders:
+                    await createFoldersManually();
+                    break;
             }
         },
         [
-            setCancelDialog,
             handleClose,
             handleViewGrades,
-            setShowMarkPaidDialog,
+            setCancelDialog,
             setGenerateLabelDialog,
             customer,
+            createFoldersManually,
             dispatch,
         ],
     );
@@ -214,6 +234,17 @@ export default function SubmissionHeaderMoreButton({
                 {customer ? (
                     <MenuItem onClick={handleOption(Options.EditCustomerDetails)}>Edit Customer Details</MenuItem>
                 ) : null}
+                {paymentStatus !== PaymentStatusEnum.PAID || isAbandoned ? (
+                    <MenuItem onClick={handleOption(Options.MarkAbandoned)}>
+                        {!isAbandoned ? 'Mark' : 'Unmark'} Abandoned
+                    </MenuItem>
+                ) : null}
+                <MenuItem
+                    onClick={handleOption(Options.CreateFolders)}
+                    disabled={orderStatus.id === OrderStatusEnum.PLACED}
+                >
+                    Create Folders
+                </MenuItem>
             </Menu>
             <SubmissionPaymentActionsModal
                 openState={showPaymentActionsModal}
@@ -243,11 +274,13 @@ export default function SubmissionHeaderMoreButton({
                 open={showMarkPaidDialog}
                 onClose={() => setShowMarkPaidDialog(false)}
             />
-            <MarkAsPaidDialog
-                orderId={orderId}
-                onSubmit={handleOrderPaid}
-                open={showMarkPaidDialog}
-                onClose={() => setShowMarkPaidDialog(false)}
+
+            <MarkAbandonedStateDialog
+                isAbandoned={isAbandoned}
+                orderIds={[orderId]}
+                onSubmit={() => window.location.reload()}
+                open={showMarkAbandonedDialog}
+                onClose={() => setShowMarkAbandonedDialog(false)}
             />
         </>
     );

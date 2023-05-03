@@ -10,6 +10,8 @@ use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
 use App\Http\Resources\API\V3\Admin\Order\UserCardResource;
 use App\Http\Resources\API\V3\Admin\OrderListResource;
 use App\Http\Resources\API\V3\Admin\OrderResource;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\Order;
 use App\Services\Admin\V3\CreateOrderService;
@@ -88,5 +90,26 @@ class OrderController extends Controller
         }
 
         return UserCardResource::collection($userCards);
+    }
+
+    public function createFolders(Order $order): JsonResponse
+    {
+        try {
+            CreateOrderFoldersOnDropbox::dispatch($order);
+            CreateOrderFoldersOnAGSLocalMachine::dispatchIf(app()->environment(['production', 'testing']), $order);
+
+            return new JsonResponse(
+                [
+                    'message' => 'Folders have been created.',
+                ]
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                $e->getCode()
+            );
+        }
     }
 }

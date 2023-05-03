@@ -72,7 +72,7 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
             >
                 {Object.keys(imagesJson).map((key) => {
                     return (
-                        <SwiperSlide onClick={handleDialog}>
+                        <SwiperSlide onClick={handleDialog} key={key}>
                             <img src={imagesJson[key]} alt={''} className={'Image'} />
                         </SwiperSlide>
                     );
@@ -91,7 +91,7 @@ export function CardImageSlider({ images }: CardImageSliderProp) {
                 >
                     {Object.keys(imagesJson).map((key) => {
                         return (
-                            <SwiperSlide>
+                            <SwiperSlide key={key}>
                                 <img src={imagesJson[key]} alt={''} />
                             </SwiperSlide>
                         );

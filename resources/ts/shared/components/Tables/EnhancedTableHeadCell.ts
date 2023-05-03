@@ -5,4 +5,5 @@ export default interface EnhancedTableHeadCell {
     numeric: boolean;
     align: 'right' | 'left' | 'center';
     sortable: boolean;
+    component?: any;
 }

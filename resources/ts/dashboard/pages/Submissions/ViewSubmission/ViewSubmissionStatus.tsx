@@ -30,8 +30,8 @@ interface ViewSubmissionStatusProps {
     isPaid?: boolean;
     serviceLevel: string;
     turnAround: string;
-    estimatedDeliveryStartAt: string;
-    estimatedDeliveryEndAt: string;
+    estimatedDeliveryStartAt: Date;
+    estimatedDeliveryEndAt: Date;
 }
 
 const STATUS_DESCRIPTION_MAP = {

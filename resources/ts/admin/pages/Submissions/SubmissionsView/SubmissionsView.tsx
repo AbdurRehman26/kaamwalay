@@ -36,6 +36,7 @@ export function SubmissionsView() {
                     'orderCertificate',
                     'orderStatusHistory.orderStatus',
                     'coupon',
+                    'tags',
                     'orderItems.cardProduct.cardSet.cardSeries',
                     'orderItems.cardProduct.cardCategory',
                     'orderItems.userCard',
@@ -70,6 +71,7 @@ export function SubmissionsView() {
                 customer={data?.customer}
                 paymentStatus={data.paymentStatus}
                 isVault={isVault}
+                isAbandoned={data?.hasTag('abandoned')}
             />
             <Divider />
             <SubmissionsViewDetails

@@ -98,9 +98,9 @@ class CardProductService
     public function getOptionsValues(CardCategory $cardCategory): array
     {
         return [
-            'rarity' => CardRarity::where('card_category_id', $cardCategory->id)->pluck('name')->toArray(),
+            'rarity' => CardRarity::where('card_category_id', $cardCategory->id)->orderBy('name')->pluck('name')->toArray(),
             'edition' => CardProductService::CARD_EDITIONS,
-            'surface' => CardSurface::where('card_category_id', $cardCategory->id)->pluck('name')->toArray(),
+            'surface' => CardSurface::where('card_category_id', $cardCategory->id)->orderBy('name')->pluck('name')->toArray(),
             'language' => CardProductService::CARD_LANGUAGES,
         ];
     }

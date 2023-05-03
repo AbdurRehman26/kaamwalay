@@ -18,7 +18,7 @@ class ReferralController extends Controller
     public function getReferralPage(string $referralCode): RedirectResponse | View
     {
         $referral = Referrer::where('referral_code', $referralCode)->first();
-        if ($referral) {
+        if ($referral && $referral->user) {
             $referBy = $referral->user->name;
 
             ReferralLandingOpened::dispatch($referral);

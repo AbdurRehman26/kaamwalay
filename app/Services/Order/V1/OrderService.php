@@ -96,7 +96,7 @@ class OrderService
         if (! $orderPayment) {
             return 0;
         }
-        
+
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd($paymentBlockchainNetwork, $order->grand_total_to_be_paid);
         $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
         $orderPayment->update();

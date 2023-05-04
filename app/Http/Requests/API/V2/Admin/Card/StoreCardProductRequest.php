@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
-use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest as V1StoreCardProductRequest;
 use App\Services\Admin\Card\CardProductService;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreCardProductRequest extends V1StoreCardProductRequest
+class StoreCardProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -35,6 +35,13 @@ class StoreCardProductRequest extends V1StoreCardProductRequest
                 return $query->where('card_category_id', $this->category);
             })],
             'variant' => ['sometimes', 'nullable', 'string'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'card_number.unique' => 'This card number already exists in this set',
         ];
     }
 }

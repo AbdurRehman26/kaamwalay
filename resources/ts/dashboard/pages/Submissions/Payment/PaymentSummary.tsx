@@ -7,7 +7,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import { round } from 'lodash';
 import React, { useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
@@ -219,13 +219,12 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     );
 
     const sendECommerceDataToGA = () => {
-        ReactGA.plugin.require('ecommerce');
         ReactGA.event({
             category: EventCategories.Submissions,
             action: SubmissionEvents.placed,
         });
 
-        ReactGA.plugin.execute('ecommerce', 'addItem', {
+        ReactGA.gtag('event', 'addItem', {
             id: String(orderID),
             name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
             category: 'Cards',
@@ -233,14 +232,14 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             quantity: String(numberOfSelectedCards),
         });
 
-        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+        ReactGA.gtag('event', 'addTransaction', {
             id: String(orderID), // Doing these type coercions because GA wants this data as string
             revenue: String(grandTotal),
             shipping: String(shippingFee),
         });
 
-        ReactGA.plugin.execute('ecommerce', 'send', null);
-        ReactGA.plugin.execute('ecommerce', 'clear', null);
+        ReactGA.gtag('event', 'send', null);
+        ReactGA.gtag('event', 'clear', null);
     };
 
     function getPreviewTotal() {

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Navigate } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';

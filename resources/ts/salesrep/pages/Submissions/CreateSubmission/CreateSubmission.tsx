@@ -20,7 +20,7 @@ import { ShippingMethods } from '@salesrep/components/NewSubmission/ShippingMeth
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
 import algoliaSearch from 'algoliasearch';
 import React, { useEffect, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CleaningFee from '@shared/components/CleaningFee';
@@ -126,7 +126,7 @@ export function CreateSubmission() {
         dispatch(setServiceLevel(level));
         dispatch(setIsCouponApplied(false));
 
-        ReactGA.event({
+        ReactGA.gtag('event', {
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
             dimension1: 'Level',

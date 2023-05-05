@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
 import { CardsSelectionEvents, EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';

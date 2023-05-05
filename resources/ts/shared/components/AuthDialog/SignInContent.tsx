@@ -6,7 +6,7 @@ import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { AuthenticationEvents, EventCategories } from '../../constants/GAEventsTypes';
 import { LoginRequestDto } from '../../dto/LoginRequestDto';
 import { useInjectable } from '../../hooks/useInjectable';

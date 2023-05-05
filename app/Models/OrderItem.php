@@ -119,10 +119,16 @@ class OrderItem extends Model
         return $this->cardProduct->cardLabel()->doesntExist() && $this->isGraded();
     }
 
+    /**
+     * @param  Builder<OrderItem>  $query
+     * @param  Order  $order
+     * @return Builder<OrderItem>
+     */
     public function scopeForOrder(Builder $query, Order $order): Builder
     {
         return $query->where('order_items.order_id', $order->id);
     }
+
     public static function allowedFilters(): array
     {
         return [

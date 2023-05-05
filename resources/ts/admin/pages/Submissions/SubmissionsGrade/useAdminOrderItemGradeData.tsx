@@ -34,80 +34,79 @@ export function useAdminOrderItemGradeData(
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
 
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.humanGradeValues,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.userCard?.humanGradeValues,
     );
     const gradeDeltaValues = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].gradeDelta,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.gradeDelta,
     );
 
     const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
 
-    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.id);
+    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const topLevelID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
-    const cardName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.name,
-    );
+    const userCardId = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.id);
+    const cardName = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].cardProduct.name);
     const cardImage = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.imagePath,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].cardProduct.imagePath,
     );
     const cardFullName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.longName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].cardProduct.longName,
     );
     const certificateNumber = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].certificateNumber,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.certificateNumber,
     );
     const shortName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.shortName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].cardProduct.shortName,
     );
-    const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
+    const overallGrade = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallGrade,
+    );
     const overallGradeNickname = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.nickname,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallGradeNickname,
     );
     const overallEdgeGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallValues?.edge,
     );
     const overallCenterGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallValues?.center,
     );
     const overallCornerGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallValues?.corner,
     );
     const overallSurfaceGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.overallValues?.surface,
     );
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name ?? '',
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].status?.orderItemStatus?.name ?? '',
     );
 
     const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.front?.center,
     );
     const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.front?.edge,
     );
     const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.front?.corner,
     );
     const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.front?.surface,
     );
     const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.back?.surface,
     );
     const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.back?.edge,
     );
     const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.back?.corner,
     );
     const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.humanGradeValues?.back?.center,
     );
-    const gradedAt = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.updatedAt,
-    );
+    const gradedAt = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].status.updatedAt);
     const gradedBy = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.user.fullName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].status.user.fullName,
     );
 
     const [isDoneDisabled, setIsDoneDisabled] = useState(true);
@@ -200,13 +199,14 @@ export function useAdminOrderItemGradeData(
             const response = await dispatch(
                 updateRemoteHumanGrades({
                     orderID,
-                    topLevelID,
+                    topLevelID: userCardId,
                     humanGradeValues: humanGrades,
                     gradeDelta: 0,
                 }),
             ).unwrap();
             dispatch(updateExistingCardGradeData({ id: topLevelID, data: response.data }));
         } catch (error: any) {
+            console.log(error);
             dispatch(getAllSubmissions({ id: orderID, fromAgs: false, perPage: 30, page: 1 }));
             notifications.exception(error);
         }
@@ -225,8 +225,8 @@ export function useAdminOrderItemGradeData(
     const handleEdit = useCallback(() => {
         dispatch(
             manageCardDialogActions.editCard({
-                card: gradeData?.orderItem?.cardProduct,
-                declaredValue: gradeData?.orderItem?.declaredValuePerUnit,
+                card: gradeData?.cardProduct,
+                declaredValue: gradeData?.declaredValuePerUnit,
                 orderItemId: orderItemID,
             }),
         );

@@ -29,13 +29,13 @@ const useStyles = makeStyles(
 function SubmissionGradeCardUpload({ itemIndex }: { itemIndex: number }) {
     const classes = useStyles();
     const generatedImages = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].generatedImages,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.roboGradeValues?.generatedImages,
     );
 
     return (
         <OutlinedCard heading={'Uploads'} icon={''} className={classes.root}>
             <div className={classes.imagesContainer}>
-                {generatedImages.map((item: any, index: any) => (
+                {generatedImages?.map((item: any, index: any) => (
                     <div key={index} className={classes.imageContainer}>
                         <Typography variant={'subtitle2'}>{item.name}</Typography>
                         <img

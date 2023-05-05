@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class OrderItem extends Model
 {
@@ -114,5 +117,32 @@ class OrderItem extends Model
     public function canCreateLabel(): bool
     {
         return $this->cardProduct->cardLabel()->doesntExist() && $this->isGraded();
+    }
+
+    public function scopeForOrder(Builder $query, Order $order): Builder
+    {
+        return $query->where('order_items.order_id', $order->id);
+    }
+    public static function allowedFilters(): array
+    {
+        return [
+            AllowedFilter::exact('id'),
+        ];
+    }
+    public static function allowedIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('cardProduct'),
+            AllowedInclude::relationship('cardProduct.cardSet'),
+            AllowedInclude::relationship('cardProduct.cardSet.cardSeries'),
+            AllowedInclude::relationship('cardProduct.cardCategory'),
+            AllowedInclude::relationship('cardProduct.cardCategory.cardCategoryType'),
+            AllowedInclude::relationship('userCard'),
+            AllowedInclude::relationship('userCard.customer', 'userCard.user'),
+            AllowedInclude::relationship('latestStatusHistory', 'latestOrderItemStatusHistory'),
+            AllowedInclude::relationship('latestStatusHistory.orderItemStatus', 'latestOrderItemStatusHistory.orderItemStatus'),
+            AllowedInclude::relationship('latestStatusHistory.user', 'latestOrderItemStatusHistory.user'),
+
+        ];
     }
 }

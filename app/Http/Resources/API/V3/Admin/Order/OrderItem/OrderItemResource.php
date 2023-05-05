@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\V3\Admin\Order\OrderItem;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V3\Admin\CardProduct\CardProductResource;
-use App\Http\Resources\API\V3\Admin\UserCard\UserCardResource;
+use App\Http\Resources\API\V3\Admin\Order\UserCardResource;
 use App\Models\OrderItem;
 
 /**

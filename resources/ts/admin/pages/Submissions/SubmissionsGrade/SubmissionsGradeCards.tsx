@@ -156,14 +156,14 @@ export function SubmissionsGradeCards() {
                     </Typography>
                     <Grid container direction={'column'} className={classes.cards}>
                         {allCards.map((item: any, index: number) => (
-                            <div id={'card-id-' + item.orderItem.id} key={item.orderItem.id}>
+                            <div id={'card-id-' + item.id} key={item.id}>
                                 <SubmissionsGradeCard
-                                    key={item.orderItem.id}
+                                    key={item.id}
                                     orderID={Number(id)}
                                     itemIndex={index}
-                                    notes={item.orderItem.notes}
-                                    internalNotes={item.orderItem.internalNotes}
-                                    itemId={item.orderItem.id}
+                                    notes={item.notes}
+                                    internalNotes={item.internalNotes}
+                                    itemId={item.id}
                                     gradeData={item}
                                 />
                             </div>

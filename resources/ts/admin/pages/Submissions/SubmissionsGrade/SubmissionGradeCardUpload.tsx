@@ -29,7 +29,7 @@ const useStyles = makeStyles(
 function SubmissionGradeCardUpload({ itemIndex }: { itemIndex: number }) {
     const classes = useStyles();
     const generatedImages = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.roboGradeValues?.generatedImages,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.generatedImages,
     );
 
     return (

@@ -40,10 +40,7 @@ export function useAdminOrderItemGradeData(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.gradeDelta,
     );
 
-    const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
-
     const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
-    const topLevelID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const userCardId = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].userCard?.id);
     const cardName = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].cardProduct.name);
     const cardImage = useAppSelector(
@@ -187,7 +184,7 @@ export function useAdminOrderItemGradeData(
         try {
             await dispatch(rejectCard(DTO)).unwrap();
             const newCardStatus = viewModes[itemIndex]?.name === 'missing_pending_notes' ? 'Missing' : 'Not Accepted';
-            dispatch(updateExistingCardStatus({ status: newCardStatus, id: topLevelID }));
+            dispatch(updateExistingCardStatus({ status: newCardStatus, id: orderItemID }));
             notifications.info(`Card was marked as ${newCardStatus}`, 'Warning');
         } catch (err: any) {
             notifications.exception(err);
@@ -204,7 +201,7 @@ export function useAdminOrderItemGradeData(
                     gradeDelta: 0,
                 }),
             ).unwrap();
-            dispatch(updateExistingCardGradeData({ id: topLevelID, data: response.data }));
+            dispatch(updateExistingCardGradeData({ id: orderItemID, data: response.data }));
         } catch (error: any) {
             console.log(error);
             dispatch(getAllSubmissions({ id: orderID, fromAgs: false, perPage: 30, page: 1 }));
@@ -215,11 +212,11 @@ export function useAdminOrderItemGradeData(
     function handleGradedReviseModeSave() {
         // noinspection JSIgnoredPromiseFromCall
         sendHumanGradesToBackend();
-        dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: topLevelID }));
+        dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: orderItemID }));
     }
 
     const handleCancel = () => {
-        dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: topLevelID }));
+        dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: orderItemID }));
     };
 
     const handleEdit = useCallback(() => {
@@ -265,7 +262,7 @@ export function useAdminOrderItemGradeData(
             dispatch(
                 updateExistingCardStatus({
                     status: response.data.status.orderItemStatus.name,
-                    id: topLevelID,
+                    id: orderItemID,
                 }),
             );
         }
@@ -355,7 +352,6 @@ export function useAdminOrderItemGradeData(
         handleMissing,
         handleUpdateCardNotes,
         orderItemID,
-        topLevelID,
         cardName,
         cardImage,
         cardFullName,
@@ -390,7 +386,6 @@ export function useAdminOrderItemGradeData(
         isOverallGradeBtnVisible,
         areRoboGradesAvailable,
         isReviseGradedSaveBtnDisabled,
-        itemID,
         updateHumanGrade,
         sendHumanGradesToBackend,
     };

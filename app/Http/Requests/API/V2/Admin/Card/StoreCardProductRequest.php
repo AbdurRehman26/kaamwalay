@@ -22,10 +22,7 @@ class StoreCardProductRequest extends FormRequest
             'release_date' => ['required', 'date'],
             'series_id' => ['required', 'integer', 'exists:card_series,id'],
             'set_id' => ['required', 'integer', 'exists:card_sets,id'],
-            'card_number' => [
-                'required',
-                'string',
-            ],
+            'card_number' => ['required', 'string'],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
             'rarity' => ['required', 'string', Rule::exists('card_rarities', 'name')->where(function ($query) {
                 return $query->where('card_category_id', $this->category);
@@ -35,13 +32,6 @@ class StoreCardProductRequest extends FormRequest
                 return $query->where('card_category_id', $this->category);
             })],
             'variant' => ['sometimes', 'nullable', 'string'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'card_number.unique' => 'This card number already exists in this set',
         ];
     }
 }

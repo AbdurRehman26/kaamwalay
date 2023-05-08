@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V3\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\UserCard;
 use Illuminate\Http\Request;
 

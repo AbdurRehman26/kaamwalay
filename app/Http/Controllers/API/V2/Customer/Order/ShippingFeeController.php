@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
-use App\Http\Controllers\API\V1\Customer\Order\ShippingFeeController as V1ShippingFeeController;
+use App\Http\Controllers\Controller;
 use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ShippingFeeController extends V1ShippingFeeController
+class ShippingFeeController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
@@ -43,5 +43,21 @@ class ShippingFeeController extends V1ShippingFeeController
                 ),
             ],
         ]);
+    }
+
+    protected function prepareData(array $items): array
+    {
+        $items = collect($items);
+
+        $totalDeclaredValue = $items->map(function (array $item) {
+            return $item['quantity'] * $item['declared_value_per_unit'];
+        })->sum();
+
+        $totalNumberOfItems = $items->sum('quantity');
+
+        return [
+            'totalDeclaredValue' => $totalDeclaredValue,
+            'totalNumberOfItems' => $totalNumberOfItems,
+        ];
     }
 }

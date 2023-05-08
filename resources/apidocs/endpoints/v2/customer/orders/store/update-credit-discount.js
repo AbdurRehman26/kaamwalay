@@ -3,7 +3,7 @@
  * @apiName Update Order Credit And Discount Amount
  * @apiGroup Customer-Orders
  *
- * @apiVersion 1.0.0
+ * @apiVersion 2.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization

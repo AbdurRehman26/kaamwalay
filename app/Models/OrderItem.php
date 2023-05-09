@@ -135,6 +135,7 @@ class OrderItem extends Model
             AllowedFilter::exact('id'),
         ];
     }
+
     public static function allowedIncludes(): array
     {
         return [

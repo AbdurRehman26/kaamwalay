@@ -53,7 +53,7 @@ class OrderService extends V2OrderService
             throw new IncorrectOrderStatus;
         }
 
-        $query = OrderItem::forOrder($order);
+        $query = $order->orderItems();
 
         // @phpstan-ignore-next-line
         return QueryBuilder::for($query)

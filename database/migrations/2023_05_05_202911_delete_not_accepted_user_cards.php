@@ -16,8 +16,7 @@ return new class extends Migration
             ->select('user_cards.id as id')
             ->get()->pluck('id')->flatten();
 
-        if (count($userCardIds) > 0)
-        {
+        if (count($userCardIds) > 0) {
             DB::table('user_card_certificates')->whereIn('user_card_id', $userCardIds)->delete();
             DB::table('user_cards')->whereIn('id', $userCardIds)->delete();
         }

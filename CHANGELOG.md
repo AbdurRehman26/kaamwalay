@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.12.1 - 2023-05-09
+
+### What's Changed
+
+- Hotfix: Salesrep name in customers export by @thenabeel in https://github.com/woozard/robograding/pull/1047
+- Hotfix: View Grades Link in Customer Submission Details by @luis-molina in https://github.com/woozard/robograding/pull/1053
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.0...v3.12.1
+
 ## v3.12.0 - 2023-05-03
 
 ### What's Changed

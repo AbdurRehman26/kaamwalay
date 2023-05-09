@@ -1,5 +1,37 @@
 # Changelog
 
+## v3.12.1 - 2023-05-09
+
+### What's Changed
+
+- Hotfix: Salesrep name in customers export by @thenabeel in https://github.com/woozard/robograding/pull/1047
+- Hotfix: View Grades Link in Customer Submission Details by @luis-molina in https://github.com/woozard/robograding/pull/1053
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.0...v3.12.1
+
+## v3.12.0 - 2023-05-03
+
+### What's Changed
+
+- Fix: Changes to Estimated Delivery on Customer Submission Details Page by @numair97 in https://github.com/woozard/robograding/pull/1031
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1033
+- Feature: Top Partners Closes Notification by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1034
+- Feature: Admins Create Folders Manually by @aliwooter in https://github.com/woozard/robograding/pull/1035
+- Feature: Abandoned Submissions by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1004
+- Fix : Top Partners Closes Notifications Empty Line by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1039
+- Fix: Broken navigation from Payment Page to Submisison Flow by @luis-molina in https://github.com/woozard/robograding/pull/1036
+- Feature: Public Card Page - Share to Instagram by @numair97 in https://github.com/woozard/robograding/pull/1037
+- Fix : Abandoned Submissions API Doc issue by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1040
+- Feature: Improve Customer Order API endpoints by @luis-molina in https://github.com/woozard/robograding/pull/1030
+- Hotfix: Deleted User Check Referral by @aliwooter in https://github.com/woozard/robograding/pull/1042
+- Fix: Issues In Public Card Page by @numair97 in https://github.com/woozard/robograding/pull/1043
+- Fix: Customer Order APIs | Frontend Bugs by @luis-molina in https://github.com/woozard/robograding/pull/1044
+- Fix : Styling issue for submissions list by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1041
+- Maser into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1045
+- Release v3.12.0 by @thenabeel in https://github.com/woozard/robograding/pull/1046
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.11.0...v3.12.0
+
 ## v3.11.0 - 2023-04-27
 
 ### What's Changed

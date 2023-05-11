@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.12.2 - 2023-05-11
+
+### What's Changed
+
+- Hotfix: New Pricing May 2023 by @thenabeel in https://github.com/woozard/robograding/pull/1055
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.1...v3.12.2
+
 ## v3.12.1 - 2023-05-09
 
 ### What's Changed

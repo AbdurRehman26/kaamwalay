@@ -46,7 +46,7 @@ export function SubmissionsGradeCard({
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
-    const cardStatusID = gradeData.orderItem.status.orderItemStatus.id;
+    const cardStatusID = gradeData.status.orderItemStatus.id;
 
     return (
         <AccordionCardItem variant={'outlined'}>
@@ -75,7 +75,7 @@ export function SubmissionsGradeCard({
                         ) : (
                             <CheckTwoToneIcon />
                         )}
-                        {gradeData.orderItem.status.orderItemStatus.name}
+                        {gradeData.status.orderItemStatus.name}
                     </Button>
                 }
             >
@@ -89,7 +89,7 @@ export function SubmissionsGradeCard({
                             Last Graded:{' '}
                             <span className={classes.lastGradedTime}>
                                 {formatDate(orderItemGradeData.gradedAt, 'MM/DD/YYYY')} at{' '}
-                                {formatDate(orderItemGradeData.gradedAt, 'H:M')}
+                                {formatDate(orderItemGradeData.gradedAt, 'H:mm')}
                             </span>{' '}
                             ({orderItemGradeData.gradedBy})
                         </Typography>

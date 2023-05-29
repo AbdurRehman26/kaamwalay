@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Admin\Order;
 
-use App\Http\Resources\API\V1\Country\CountryResource;
+use App\Http\Resources\API\V2\Country\CountryResource;
 use App\Models\OrderAddress;
 use Illuminate\Http\Resources\Json\JsonResource;
 

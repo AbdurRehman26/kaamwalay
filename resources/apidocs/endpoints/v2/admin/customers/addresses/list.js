@@ -3,7 +3,7 @@
  * @apiName List Customer Saved Addresses
  * @apiGroup Admin Customer Addresses
  *
- * @apiVersion 1.0.0
+ * @apiVersion 2.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization

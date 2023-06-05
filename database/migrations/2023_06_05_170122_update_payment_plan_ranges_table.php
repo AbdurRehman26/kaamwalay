@@ -21,16 +21,16 @@ return new class extends Migration
         DB::table('payment_plan_ranges')->where(['id' => 12])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 29, 'updated_at' => $now]);
 
         DB::table('payment_plan_ranges')->where(['id' => 16])->update(['max_cards' => 99, 'updated_at' => $now]);
-        DB::table('payment_plan_ranges')->where(['id' => 17])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 49, 'updated_at' => $now]);
+        DB::table('payment_plan_ranges')->where(['id' => 17])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 45, 'updated_at' => $now]);
 
         DB::table('payment_plan_ranges')->where(['id' => 21])->update(['max_cards' => 99, 'updated_at' => $now]);
-        DB::table('payment_plan_ranges')->where(['id' => 22])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 74, 'updated_at' => $now]);
+        DB::table('payment_plan_ranges')->where(['id' => 22])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 65, 'updated_at' => $now]);
 
         DB::table('payment_plan_ranges')->where(['id' => 26])->update(['max_cards' => 99, 'updated_at' => $now]);
-        DB::table('payment_plan_ranges')->where(['id' => 27])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 99, 'updated_at' => $now]);
+        DB::table('payment_plan_ranges')->where(['id' => 27])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 85, 'updated_at' => $now]);
 
         DB::table('payment_plan_ranges')->where(['id' => 31])->update(['max_cards' => 99, 'updated_at' => $now]);
-        DB::table('payment_plan_ranges')->where(['id' => 32])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 199, 'updated_at' => $now]);
+        DB::table('payment_plan_ranges')->where(['id' => 32])->update(['min_cards' => 100, 'max_cards' => null, 'price' => 175, 'updated_at' => $now]);
 
         DB::table('payment_plan_ranges')->whereIn('id', [3, 4, 5, 8, 9, 10, 13, 14, 15, 18, 19, 20, 23, 24, 25, 28, 29, 30, 33, 34, 35])->delete();
     }

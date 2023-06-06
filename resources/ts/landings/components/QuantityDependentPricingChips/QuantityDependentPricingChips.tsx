@@ -69,7 +69,7 @@ interface props {
 
 export default function QuantityDependentPricingChips({ content }: props) {
     const [data, setData] = useState<[]>([]);
-    const [selected, setSelected] = useState('200');
+    const [selected, setSelected] = useState('100');
     const object = JSON.parse(content);
 
     function findPrice(min: any, max: any) {
@@ -101,55 +101,22 @@ export default function QuantityDependentPricingChips({ content }: props) {
                         <Button
                             className={selected === '1' ? 'HomePriceTextSelected' : 'HomePriceText'}
                             onClick={() => {
-                                findPrice(1, 20);
+                                findPrice(1, 99);
                                 setSelected('1');
                             }}
                         >
-                            1-20 Cards
+                            1-99 Cards
                         </Button>
                     </div>
-                    <div className={selected === '21' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
+                    <div className={selected === '100' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
                         <Button
-                            className={selected === '21' ? 'HomePriceTextSelected' : 'HomePriceText'}
+                            className={selected === '100' ? 'HomePriceTextSelected' : 'HomePriceText'}
                             onClick={() => {
-                                findPrice(21, 50);
-                                setSelected('21');
+                                findPrice(100, null);
+                                setSelected('100');
                             }}
                         >
-                            21-50 Cards
-                        </Button>
-                    </div>
-                    <div className={selected === '51' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
-                        <Button
-                            className={selected === '51' ? 'HomePriceTextSelected' : 'HomePriceText'}
-                            onClick={() => {
-                                findPrice(51, 100);
-                                setSelected('51');
-                            }}
-                        >
-                            51-100 Cards
-                        </Button>
-                    </div>
-                    <div className={selected === '101' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
-                        <Button
-                            className={selected === '101' ? 'HomePriceTextSelected' : 'HomePriceText'}
-                            onClick={() => {
-                                findPrice(101, 200);
-                                setSelected('101');
-                            }}
-                        >
-                            101-200 Cards
-                        </Button>
-                    </div>
-                    <div className={selected === '200' ? 'HomePriceRangeDivSelected' : 'HomePriceRangeDiv'}>
-                        <Button
-                            className={selected === '200' ? 'HomePriceTextSelected' : 'HomePriceText'}
-                            onClick={() => {
-                                findPrice(201, null);
-                                setSelected('200');
-                            }}
-                        >
-                            200+ Cards
+                            100+ Cards
                         </Button>
                     </div>
                 </div>

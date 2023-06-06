@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.13.0 - 2023-06-06
+
+### What's Changed
+
+- Feature: Rarities and Surfaces In Alphabetical Order in Dropdown  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1048
+- Refactor: Remove API v1 by @thenabeel in https://github.com/woozard/robograding/pull/1049
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1054
+- Feature: Enable all countries for shipping by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1052
+- Fix: Admin | Dont Generate Certificates for Not Accepted Cards by @luis-molina in https://github.com/woozard/robograding/pull/1051
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1056
+- Fix: Admin | Dont Generate Certificates for Not Accepted Cards by @luis-molina in https://github.com/woozard/robograding/pull/1058
+- Fix: Admin | Export Filters by @luis-molina in https://github.com/woozard/robograding/pull/1059
+- Feature: New Pricing June 2023 by @thenabeel in https://github.com/woozard/robograding/pull/1060
+- Release v3.13.0 by @thenabeel in https://github.com/woozard/robograding/pull/1061
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.2...v3.13.0
+
 ## v3.12.2 - 2023-05-11
 
 ### What's Changed

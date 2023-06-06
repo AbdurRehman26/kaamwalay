@@ -42,8 +42,6 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
         }
     }
 
-
-
     public function verify(Order $order, string $paymentIntentId): bool
     {
         try {

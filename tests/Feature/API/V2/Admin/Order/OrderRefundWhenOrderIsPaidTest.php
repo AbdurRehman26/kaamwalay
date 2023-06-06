@@ -272,7 +272,7 @@ test('admin can refund the order total when order has partial refund to wallet',
         'created_at' => now()->addMinute(),
     ]);
 
-    postJson(route('v1.payments.refund', ['order' => $this->order]), [
+    postJson(route('v2.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total - 10,
         'add_to_wallet' => false,

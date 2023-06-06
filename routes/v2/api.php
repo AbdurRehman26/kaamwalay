@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\V1\Auth\ChangePasswordController;
+use App\Http\Controllers\API\V2\Auth\ChangePasswordController;
 use App\Http\Controllers\API\V2\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;

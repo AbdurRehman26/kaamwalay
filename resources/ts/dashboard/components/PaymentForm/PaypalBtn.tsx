@@ -48,18 +48,27 @@ function PaypalBtn() {
             action: SubmissionEvents.paid,
         });
 
-        ReactGA.gtag('event', 'addItem', {
-            id: String(orderID),
-            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
-            category: 'Cards',
-            price: String(currentSelectedLevelPrice),
-            quantity: String(numberOfSelectedCards),
+        ReactGA.gtag('event', 'add_to_cart', {
+            items: [
+                {
+                    // eslint-disable-next-line
+                    item_id: String(orderID),
+                    // eslint-disable-next-line
+                    item_name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+                    // eslint-disable-next-line
+                    item_category: 'Cards',
+                    price: currentSelectedLevelPrice,
+                    quantity: numberOfSelectedCards,
+                },
+            ],
         });
 
-        ReactGA.gtag('event', 'addTransaction', {
-            id: String(orderID), // Doing these type coercions because GA wants this data as string
-            revenue: String(grandTotal),
-            shipping: String(shippingFee),
+        ReactGA.gtag('event', 'purchase', {
+            // eslint-disable-next-line
+            transaction_id: String(orderID),
+            value: grandTotal,
+            currency: 'USD',
+            shipping: shippingFee,
         });
 
         ReactGA.gtag('event', 'send', null);

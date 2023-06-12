@@ -81,7 +81,8 @@ export function ShippingMethods() {
                             </Typography>
 
                             <Typography variant={'caption'} mb={2}>
-                                You can opt to have your card shipped to you at any point.
+                                You can have your cards shipped back to you at any point, by simply paying the shipping
+                                fee.
                             </Typography>
 
                             <Typography variant={'caption'}>Vault storage is completely FREE.</Typography>

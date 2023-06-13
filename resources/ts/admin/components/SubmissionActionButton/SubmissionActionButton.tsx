@@ -29,6 +29,7 @@ interface SubmissionActionButtonProps extends LoadingButtonProps {
     trackingNumber?: ShipmentEntity['trackingNumber'];
     buttonOnly?: boolean;
     inVault?: boolean;
+    onSubmit?: () => void;
 }
 
 /**
@@ -44,6 +45,7 @@ export function SubmissionActionButton({
     shippingProvider,
     buttonOnly,
     inVault,
+    onSubmit,
     ...rest
 }: SubmissionActionButtonProps) {
     const classes = useStyles();
@@ -72,8 +74,11 @@ export function SubmissionActionButton({
     const handleShipmentSubmit = useCallback(
         async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
             await dispatch(setOrderShipment({ trackingNumber, shippingProvider, orderId }));
+            if (onSubmit) {
+                onSubmit();
+            }
         },
-        [dispatch, orderId],
+        [dispatch, onSubmit, orderId],
     );
 
     const handleOpenShipmentDialog = useCallback(() => {
@@ -84,13 +89,19 @@ export function SubmissionActionButton({
         setLoading(true);
         await dispatch(setOrderShipment({ orderId, shippingMethod: { code: ShippingMethodType.VaultStorage } }));
         setLoading(false);
-    }, [dispatch, orderId]);
+        if (onSubmit) {
+            onSubmit();
+        }
+    }, [dispatch, onSubmit, orderId]);
 
     const handleMarkAssembled = useCallback(async () => {
         setLoading(true);
         await dispatch(addOrderStatusHistory({ orderId: orderId, orderStatusId: OrderStatusEnum.ASSEMBLED }));
         setLoading(false);
-    }, [dispatch, orderId]);
+        if (onSubmit) {
+            onSubmit();
+        }
+    }, [dispatch, onSubmit, orderId]);
 
     const handleCloseShipmentDialog = useCallback(() => {
         setIsShipmentDialogOpen(false);

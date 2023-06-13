@@ -289,6 +289,7 @@ export function SubmissionsTableRow({
                             buttonOnly
                             trackingNumber={order.orderShipment?.trackingNumber}
                             shippingProvider={order.orderShipment?.shippingProvider}
+                            onSubmit={() => window.location.reload()}
                         />
                     </TableCell>
                 ) : null}

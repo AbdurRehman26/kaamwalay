@@ -85,7 +85,8 @@ export default function SubmissionShippingDetailDialog({ shippingMethod, paid }:
                 <Typography className={'Content'}>
                     Vault storage allows you to safely store your cards in our AGS Vault. Rather than shipping it back
                     after grading, we will store your slabbed cards in a level-8 secrity safe. Vault storage is
-                    completely free and you can opt to have your cards shipped back to you at any point.
+                    completely free and you can opt to have your cards shipped back to you at any point, by simply
+                    paying a shipping fee.
                 </Typography>
             );
         } else {

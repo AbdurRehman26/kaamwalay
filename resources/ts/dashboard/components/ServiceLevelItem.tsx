@@ -152,11 +152,9 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
         dispatch(
             setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
         );
-        ReactGA.gtag('event', {
+        ReactGA.event({
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
-            dimension1: 'Level',
-            metric1: id,
         });
     }, [dispatch, id, maxProtectionAmount, price, turnaround, type, priceRanges, minPrice, maxPrice]);
 

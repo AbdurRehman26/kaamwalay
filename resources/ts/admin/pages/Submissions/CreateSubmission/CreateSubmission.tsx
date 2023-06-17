@@ -130,11 +130,9 @@ export function CreateSubmission() {
         dispatch(setServiceLevel(level));
         dispatch(setIsCouponApplied(false));
 
-        ReactGA.gtag('event', {
+        ReactGA.event({
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
-            dimension1: 'Level',
-            metric1: level.id,
         });
     };
 

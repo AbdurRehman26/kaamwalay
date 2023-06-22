@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     protected const STATES_LIST = [
-        "AA" => "Armed Forces Central and South Americas (Armed Forces Americas)",
-        "AP" => "Armed Forces Pacific",
-        "AE" => "Armed Forces Europe (including-Canada, Middle East, and Africa)",
+        'AA' => 'Armed Forces Central and South Americas (Armed Forces Americas)',
+        'AP' => 'Armed Forces Pacific',
+        'AE' => 'Armed Forces Europe (including-Canada, Middle East, and Africa)',
     ];
 
     /**
@@ -23,8 +23,8 @@ return new class extends Migration
             return [
                 'code' => $code,
                 'name' => $name,
-                "created_at" => $now,
-                "updated_at" => $now,
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         })->toArray();
 

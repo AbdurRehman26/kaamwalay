@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.13.1 - 2023-06-22
+
+### What's Changed
+
+- Hotfix: Add Military States by @thenabeel in https://github.com/woozard/robograding/pull/1065
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.13.0...v3.13.1
+
 ## v3.13.0 - 2023-06-06
 
 ### What's Changed

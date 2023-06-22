@@ -23,6 +23,7 @@ return new class extends Migration
             return [
                 'code' => $code,
                 'name' => $name,
+                'country_id' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
             ];

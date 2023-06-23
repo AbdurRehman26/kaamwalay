@@ -1,5 +1,4 @@
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,6 +12,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -27,6 +27,28 @@ import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch } from '@dashboard/redux/hooks';
 import { SearchResultItemCardProps, markCardAsSelected } from '@dashboard/redux/slices/newSubmissionSlice';
+
+const ManualCardNotice = styled(Grid)({
+    background: '#FEE9B5',
+    borderRadius: '4px',
+    padding: '15px 8px 5px 8px',
+
+    '.Heading': {
+        paddingLeft: '15px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        fontSize: '14px',
+        fontWeight: 700,
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
+    },
+    '.Points': {
+        color: 'rgba(0, 0, 0, 0.87)',
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
+        padding: '8px 0px',
+    },
+});
 
 interface CustomerAddCardDialogProps {
     showDialog: boolean | null;
@@ -131,20 +153,24 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
             <DialogTitle>
                 <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                     <Typography variant={'h6'}>Add Card Manually</Typography>
-                    {isSm ? (
-                        <IconButton onClick={handleOnClose}>
-                            <CloseIcon />
-                        </IconButton>
-                    ) : null}
+                    <IconButton onClick={handleOnClose}>
+                        <CloseIcon />
+                    </IconButton>
                 </Box>
             </DialogTitle>
             <DialogContent>
-                <Alert icon={false} sx={{ background: '#FEE9B5' }}>
-                    <Typography sx={{ fontWeight: 700, fontSize: '14px', color: '#000000DE' }}>
-                        PLEASE NOTE: If you are submitting a sports card, we are currently only accepting sports cards
-                        released after 2012. Sports cards released before 2012 will not be accepted.
-                    </Typography>
-                </Alert>
+                <ManualCardNotice>
+                    <Typography className={'Heading'}>PLEASE NOTE:</Typography>
+                    <ul>
+                        <li className={'Points'}>
+                            Cards added manually (not in AGS database) can be <b>delayed up to 3 months.</b>
+                        </li>
+                        <li className={'Points'}>
+                            If you are submitting a sports card, we are currently only accepting sports cards released
+                            after 2012. <b>Sports cards released before 2012 will not be accepted.</b>
+                        </li>
+                    </ul>
+                </ManualCardNotice>
                 <Grid mt={3} container>
                     <Grid item xs={12} md={5}>
                         <Box display={'flex'} flexDirection={'column'}>

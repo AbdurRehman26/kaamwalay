@@ -41,7 +41,7 @@ const ManualCardNotice = styled(Grid)({
         lineHeight: '20px',
         letterSpacing: '0.2px',
     },
-    '.Points': {
+    '.Description': {
         color: 'rgba(0, 0, 0, 0.87)',
         fontSize: '14px',
         lineHeight: '20px',
@@ -162,10 +162,10 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                 <ManualCardNotice>
                     <Typography className={'Heading'}>PLEASE NOTE:</Typography>
                     <ul>
-                        <li className={'Points'}>
+                        <li className={'Description'}>
                             Cards added manually (not in AGS database) can be <b>delayed up to 3 months.</b>
                         </li>
-                        <li className={'Points'}>
+                        <li className={'Description'}>
                             If you are submitting a sports card, we are currently only accepting sports cards released
                             after 2012. <b>Sports cards released before 2012 will not be accepted.</b>
                         </li>

@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.14.0 - 2023-06-25
+
+### What's Changed
+
+- Fix: Vault Storage Help Texts by @luis-molina in https://github.com/woozard/robograding/pull/1063
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1066
+- Feature: Customer | Manual Card | Update Notice by @numair97 in https://github.com/woozard/robograding/pull/1067
+- Fix: Mark Assembled and Shipped UI Feedback by @luis-molina in https://github.com/woozard/robograding/pull/1064
+- Release v3.14.0 by @thenabeel in https://github.com/woozard/robograding/pull/1068
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.13.1...v3.14.0
+
 ## v3.13.1 - 2023-06-22
 
 ### What's Changed

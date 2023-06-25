@@ -6,9 +6,9 @@ use App\Models\Order;
 use App\Notifications\Salesman\TopSalesmenStatsNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class SendTopSalesmenStats extends Command
 {

@@ -470,18 +470,19 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function exportQuery(): Builder
     {
         return self::query()
+            ->customer()
             ->withCount(['orders as paid_orders_count' => fn ($query) => ($query->paid())])
             ->withSum([
                 'orderItems' => fn (Builder $query) => (
                     $query->where('orders.payment_status', OrderPaymentStatusEnum::PAID)
                 ),
             ], 'quantity')
-            ->with('wallet:id,user_id,balance');
+            ->with(['wallet:id,user_id,balance', 'salesman:id,first_name,last_name']);
     }
 
     public function exportHeadings(): array
     {
-        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Cards', 'Wallet Balance'];
+        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Cards', 'Owner', 'Wallet Balance'];
     }
 
     public function exportFilters(): array
@@ -504,6 +505,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->created_at,
             $row->paid_orders_count,
             $row->order_items_sum_quantity,
+            $row->salesman?->name, // @phpstan-ignore-line
             $row->wallet?->balance,
         ];
     }

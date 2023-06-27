@@ -13,7 +13,6 @@ class DropboxService
 
     public function __construct()
     {
-        // @phpstan-ignore-next-line
         $this->client = new Client(new AutoRefreshDropboxTokenService());
         $this->rootPath = config('services.dropbox.root_path');
     }

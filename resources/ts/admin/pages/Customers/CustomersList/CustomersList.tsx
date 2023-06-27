@@ -211,6 +211,23 @@ export function CustomersList() {
 
             const status = PromotionalSubscribersStatus?.filter((item) => item.value === query.promotionalSubscribers);
             setPromotionalSubscribersStatusFilter({ value: status[0]?.value, label: status[0]?.label });
+
+            const preselectedSalesRep = await data.payload.data?.filter(
+                (item: SalesRepEntity) => item.id.toString() === query.salesmanId,
+            );
+            if (preselectedSalesRep.length > 0) {
+                setSalesRepFilter({
+                    salesmanName: preselectedSalesRep[0].fullName,
+                    salesmanId: preselectedSalesRep[0].id,
+                });
+            }
+
+            const referredByQuery = query.referredBy?.toString() ?? '';
+            if (['true', 'false'].includes(referredByQuery)) {
+                const referredByQueryValue = referredByQuery === 'true' ? 1 : 0;
+                const preselectedReferralStatus = ReferralStatus?.filter((item) => item.value === referredByQueryValue);
+                setReferrerStatus(preselectedReferralStatus[0]);
+            }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -269,12 +286,15 @@ export function CustomersList() {
                 ...formikRef.current!.values,
                 minSubmissions: '',
                 maxSubmissions: '',
-                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
-                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value, salesRepFilter.salesmanId]);
+        await formikRef.current?.setValues({
+            ...formikRef.current!.values,
+            minSubmissions: '',
+            maxSubmissions: '',
+        });
+    }, [delQuery, customers, sortFilter]);
 
     const handleClearSignUp = useCallback(async () => {
         formikRef.current?.setFieldValue('signedUpStart', '');
@@ -287,12 +307,15 @@ export function CustomersList() {
                 ...formikRef.current!.values,
                 signedUpStart: '',
                 signedUpEnd: '',
-                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
-                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-    }, [delQuery, customers, sortFilter, promotionalSubscribersStatusFilter.value, salesRepFilter.salesmanId]);
+        await formikRef.current?.setValues({
+            ...formikRef.current!.values,
+            signedUpStart: '',
+            signedUpEnd: '',
+        });
+    }, [delQuery, customers, sortFilter]);
 
     const handleSearch = useCallback(
         async (search: string) => {
@@ -327,6 +350,11 @@ export function CustomersList() {
     const handleSubmit = useCallback(
         async (values) => {
             setQuery({
+                ...values,
+                signedUpStart: formatDate(values.signedUpStart, 'YYYY-MM-DD'),
+                signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
+            });
+            formikRef.current?.setValues({
                 ...values,
                 signedUpStart: formatDate(values.signedUpStart, 'YYYY-MM-DD'),
                 signedUpEnd: formatDate(values.signedUpEnd, 'YYYY-MM-DD'),
@@ -383,13 +411,12 @@ export function CustomersList() {
             values = {
                 ...values,
                 salesmanId: saleRep.id,
-                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
             };
             setSalesRepFilter({ salesmanName: saleRep.fullName, salesmanId: saleRep.id });
             handleSubmit(values);
             // eslint-disable-next-line react-hooks/exhaustive-deps
         },
-        [promotionalSubscribersStatusFilter, handleSubmit],
+        [handleSubmit],
     );
 
     const handleClearSalesRep = useCallback(async () => {
@@ -400,10 +427,13 @@ export function CustomersList() {
             getFilters({
                 ...formikRef.current!.values,
                 salesmanId: '',
-                promotionalSubscribers: promotionalSubscribersStatusFilter.value,
             }),
         );
-    }, [customers, delQuery, promotionalSubscribersStatusFilter.value]);
+        await formikRef.current?.setValues({
+            ...formikRef.current!.values,
+            salesmanId: '',
+        });
+    }, [customers, delQuery]);
 
     const handleClearPromotionalSubscribers = useCallback(async () => {
         formikRef.current?.setFieldValue('promotionalSubscribers', '');
@@ -414,18 +444,20 @@ export function CustomersList() {
             getFilters({
                 ...formikRef.current!.values,
                 promotionalSubscribers: '',
-                salesmanId: salesRepFilter.salesmanId,
             }),
             1,
         );
-    }, [delQuery, customers, sortFilter, salesRepFilter.salesmanId]);
+        await formikRef.current?.setValues({
+            ...formikRef.current!.values,
+            promotionalSubscribers: '',
+        });
+    }, [delQuery, customers, sortFilter]);
 
     const handlePromotionalSubscribers = useCallback(
         async (values, promotionalSubscribers) => {
             values = {
                 ...values,
                 promotionalSubscribers: promotionalSubscribers.value,
-                salesmanId: salesRepFilter.salesmanId,
             };
             setPromotionalSubscribersStatusFilter({
                 value: promotionalSubscribers.value,
@@ -434,7 +466,7 @@ export function CustomersList() {
             await handleSubmit(values);
             // eslint-disable-next-line react-hooks/exhaustive-deps
         },
-        [salesRepFilter, handleSubmit],
+        [handleSubmit],
     );
 
     const handleClearReferrerStatus = useCallback(async () => {
@@ -448,14 +480,18 @@ export function CustomersList() {
             }),
             1,
         );
+        await formikRef.current?.setValues({
+            ...formikRef.current!.values,
+            referredBy: null,
+        });
     }, [customers, delQuery, sortFilter, referrerDefaultState]);
 
-    const handleReferrerStatus = useCallback(async (values) => {
+    const handleReferrerStatus = useCallback(async (values, referrerStatusItem) => {
         values = {
             ...values,
-            referredBy: values.value ? true : false,
+            referredBy: referrerStatusItem.value ? true : false,
         };
-        setReferrerStatus({ value: values.value, label: values.label });
+        setReferrerStatus({ value: referrerStatusItem.value, label: referrerStatusItem.label });
         await handleSubmit(values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -625,7 +661,6 @@ export function CustomersList() {
                                         );
                                     })}
                                 </PageSelector>
-
                                 <PageSelector
                                     label={'Referrer'}
                                     value={referrerStatus.label}
@@ -635,7 +670,7 @@ export function CustomersList() {
                                         return (
                                             <Grid key={item.value}>
                                                 <MenuItem
-                                                    onClick={() => handleReferrerStatus(item)}
+                                                    onClick={() => handleReferrerStatus(values, item)}
                                                     key={item.value}
                                                     value={item.value}
                                                 >

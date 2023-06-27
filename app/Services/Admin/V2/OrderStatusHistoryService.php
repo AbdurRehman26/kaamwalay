@@ -67,8 +67,11 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 
-            $response = $this->agsService->createCertificates($data);
-            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+            // Generate certificates on AGS if there is at least one confirmed card
+            if (count($data) > 0) {
+                $response = $this->agsService->createCertificates($data);
+                throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+            }
 
             CreateOrderFoldersOnAGSLocalMachine::dispatchIf(app()->environment(['production', 'testing']), $order);
             CreateOrderFoldersOnDropbox::dispatch($order);

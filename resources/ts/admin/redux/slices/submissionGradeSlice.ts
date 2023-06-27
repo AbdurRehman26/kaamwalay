@@ -23,15 +23,14 @@ export const getAllSubmissions = createAsyncThunk(
             data: { fromAgs: DTO.fromAgs ?? true },
             params: {
                 filter: {
-                    orderItemId: DTO.itemId,
+                    id: DTO.itemId,
                 },
                 include: [
-                    'orderItem',
-                    'orderItem.cardProduct.cardSet.cardSeries',
-                    'orderItem.cardProduct.cardCategory',
-                    'customer',
-                    'orderItem.latestStatusHistory.orderItemStatus',
-                    'orderItem.latestStatusHistory.user',
+                    'cardProduct.cardSet.cardSeries',
+                    'cardProduct.cardCategory',
+                    'userCard.customer',
+                    'latestStatusHistory.orderItemStatus',
+                    'latestStatusHistory.user',
                 ],
             },
             ...bracketParams(),
@@ -140,7 +139,7 @@ export const submissionGradesSlice = createSlice({
                 if (Number(incomingGrade) > 10) {
                     incomingGrade = '10';
                 }
-                state.allSubmissions[action.payload.itemIndex].humanGradeValues[action.payload.side][
+                state.allSubmissions[action.payload.itemIndex].userCard.humanGradeValues[action.payload.side][
                     action.payload.part
                 ] = incomingGrade.replace(/,/g, '.');
             }
@@ -151,19 +150,20 @@ export const submissionGradesSlice = createSlice({
         },
         updateExistingCardGradeData: (state, action: PayloadAction<{ id: number; data: any }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
-            state.allSubmissions[itemIndex].gradeDelta = action.payload.data.gradeDelta;
-            state.allSubmissions[itemIndex].grade = action.payload.data.grade;
-            state.allSubmissions[itemIndex].overallValues = action.payload.data.overallValues;
-            state.allSubmissions[itemIndex].humanGradeValues = action.payload.data.humanGradeValues;
+            state.allSubmissions[itemIndex].userCard.gradeDelta = action.payload.data.gradeDelta;
+            state.allSubmissions[itemIndex].userCard.overallGrade = action.payload.data.overallGrade;
+            state.allSubmissions[itemIndex].userCard.overallGradeNickname = action.payload.data.overallGradeNickname;
+            state.allSubmissions[itemIndex].userCard.overallValues = action.payload.data.overallValues;
+            state.allSubmissions[itemIndex].userCard.humanGradeValues = action.payload.data.humanGradeValues;
         },
         updateExistingCardProductData: (state, action: PayloadAction<{ id: number; data: any }>) => {
-            const itemIndex = state.allSubmissions.findIndex((p: any) => p.orderItem.id === action.payload.id);
-            state.allSubmissions[itemIndex].orderItem.declaredValuePerUnit = action.payload.data.declaredValuePerUnit;
-            state.allSubmissions[itemIndex].orderItem.cardProduct = action.payload.data.cardProduct;
+            const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
+            state.allSubmissions[itemIndex].declaredValuePerUnit = action.payload.data.declaredValuePerUnit;
+            state.allSubmissions[itemIndex].cardProduct = action.payload.data.cardProduct;
         },
         updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
-            state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name = action.payload.status;
+            state.allSubmissions[itemIndex].status.orderItemStatus.name = action.payload.status;
 
             if (action.payload.status.toLowerCase() === 'not accepted') {
                 state.viewModes[itemIndex].name = 'not_accepted';
@@ -178,7 +178,7 @@ export const submissionGradesSlice = createSlice({
         resetCardViewMode: (state, action: PayloadAction<{ viewModeIndex: number; topLevelID: number }>) => {
             const viewModeIndex = action.payload.viewModeIndex;
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.topLevelID);
-            const cardStatus = state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name;
+            const cardStatus = state.allSubmissions[itemIndex].status.orderItemStatus.name;
 
             if (cardStatus.toLowerCase() === 'not accepted') {
                 state.viewModes[viewModeIndex] = state.viewModes[viewModeIndex].prevViewMode;
@@ -196,7 +196,7 @@ export const submissionGradesSlice = createSlice({
 
             if (cardStatus.toLowerCase() === 'graded') {
                 state.viewModes[viewModeIndex].name = 'graded';
-                state.allSubmissions[viewModeIndex].humanGradeValues =
+                state.allSubmissions[viewModeIndex].userCard.humanGradeValues =
                     state.viewModes[viewModeIndex].prevViewModeGraded.humanGradeValues;
             }
         },
@@ -246,7 +246,7 @@ export const submissionGradesSlice = createSlice({
                 return { title: '', placeHolder: '' };
             }
             state.viewModes = state.allSubmissions.map((item: any, index: number) => {
-                const status = statuses[item.orderItem.status?.orderItemStatus?.id];
+                const status = statuses[item.status?.orderItemStatus?.id];
                 return {
                     name: status,
                     areNotesRequired: status === 'not_accepted',
@@ -254,7 +254,7 @@ export const submissionGradesSlice = createSlice({
                     itemIndex: index,
                     pressedDone: status !== 'confirmed',
                     isDoneDisabled: true,
-                    notes: item.orderItem.status?.notes,
+                    notes: item.status?.notes,
                     notesPlaceholder: getSectionData(status!)!.placeHolder,
                 };
             });
@@ -271,7 +271,7 @@ export const submissionGradesSlice = createSlice({
             state.hasLoadedAllRobogrades =
                 data.filter(
                     (card: Record<string, any>) =>
-                        card.roboGradeValues.front?.center && card.roboGradeValues.back?.center,
+                        card.userCard?.roboGradeValues.front?.center && card.userCard?.roboGradeValues.back?.center,
                 ).length === data.length;
         },
     },

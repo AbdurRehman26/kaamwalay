@@ -231,7 +231,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                 search,
                 status: all ? 'all' : tabFilter,
                 paymentStatus,
-                couponCode,
+                couponCode: couponCode?.code,
                 tags: abandoned ? 'abandoned' : -1,
             },
         },
@@ -300,6 +300,9 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                     search,
                     status: all ? 'all' : tabFilter,
                     paymentStatus,
+                    couponCode: couponCode?.code,
+                    referredBy: referrerStatus.value,
+                    tags: abandoned ? 'abandoned' : -1,
                 },
             });
 
@@ -307,7 +310,18 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [paymentStatus, dataExportRepository, search, all, tabFilter, notifications, sortFilter]);
+    }, [
+        paymentStatus,
+        dataExportRepository,
+        search,
+        all,
+        tabFilter,
+        notifications,
+        sortFilter,
+        couponCode,
+        referrerStatus,
+        abandoned,
+    ]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
         const isAsc = orderBy === property && orderDirection === 'asc';
@@ -384,7 +398,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
             );
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search, paymentStatus, sortFilter],
+        [search, paymentStatus, sortFilter, couponCode],
     );
 
     useEffect(
@@ -398,7 +412,7 @@ export function SubmissionsTable({ tabFilter, all, search, abandoned }: Submissi
                         search,
                         paymentStatus,
                         referredBy: referrerStatus.value,
-                        couponCode,
+                        couponCode: couponCode?.code,
                     }),
                     1,
                 );

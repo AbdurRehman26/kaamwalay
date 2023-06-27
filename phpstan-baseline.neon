@@ -226,12 +226,12 @@ parameters:
 			path: app/Http/Filters/AdminCustomerSearchFilter.php
 
 		-
-			message: "#^Class App\\\\Http\\\\Filters\\\\AdminModelTaggableSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withAnyTags\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Filters/AdminModelTaggableSearchFilter.php
 
 		-
-			message: "#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withAnyTags\\(\\)#"
+			message: "#^Class App\\\\Http\\\\Filters\\\\AdminModelTaggableSearchFilter implements generic interface Spatie\\\\QueryBuilder\\\\Filters\\\\Filter but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminModelTaggableSearchFilter.php
 
@@ -521,51 +521,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$customer_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$email\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$phone\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$profile_image\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$update_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$wallet\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:getFullName\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$customer_number\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
@@ -616,26 +571,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerShipmentResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
@@ -674,31 +609,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
 			count: 2
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$shipment_date\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$shipping_provider\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$tracking_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$tracking_url\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
@@ -1116,21 +1026,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$code\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$name\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
-
-		-
 			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/CardCategory/CardCategoryCollection.php
@@ -1256,46 +1151,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
@@ -1331,21 +1186,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusResource.php
@@ -1359,36 +1199,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$arrived_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$order_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:orderItems\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
-
-		-
-			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
@@ -1429,111 +1239,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$billingAddress\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$discounted_amount\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$extra_charge_total\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$firstOrderPayment\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$grand_total\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$invoice\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$orderItems\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$order_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$paymentPlan\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$refund_total\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$service_fee\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shippingAddress\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shippingMethod\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shipping_fee\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$user\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:orderItems\\(\\)\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$code\\.$#"
@@ -3034,11 +2739,6 @@ parameters:
 			message: "#^Method App\\\\Services\\\\Admin\\\\Order\\\\OrderItemService\\:\\:markItemsAsPending\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/Admin/Order/OrderItemService.php
-
-		-
-			message: "#^Parameter \\#1 \\$column of method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Order\\>\\:\\:having\\(\\) expects Closure\\|string, Illuminate\\\\Contracts\\\\Database\\\\Query\\\\Expression given\\.$#"
-			count: 3
-			path: app/Services/Admin/Report/MarketingReport/MarketingReport.php
 
 		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"

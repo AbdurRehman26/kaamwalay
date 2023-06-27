@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Admin\Order\StoreOrderRequest;
 use App\Http\Requests\API\V3\Admin\Order\UpdateShippingAddressRequest;
 use App\Http\Resources\API\V3\Admin\Order\OrderCreateResource;
-use App\Http\Resources\API\V3\Admin\Order\UserCardResource;
+use App\Http\Resources\API\V3\Admin\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\V3\Admin\OrderListResource;
 use App\Http\Resources\API\V3\Admin\OrderResource;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
@@ -89,7 +89,7 @@ class OrderController extends Controller
             );
         }
 
-        return UserCardResource::collection($userCards);
+        return OrderItemResource::collection($userCards);
     }
 
     public function createFolders(Order $order): JsonResponse

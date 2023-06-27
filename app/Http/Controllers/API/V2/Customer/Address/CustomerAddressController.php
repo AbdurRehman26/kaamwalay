@@ -17,7 +17,7 @@ class CustomerAddressController extends V1CustomerAddressController
     {
         return new CustomerAddressResource($this->customerAddressService->create($request->validated()));
     }
-    
+
     public function update(CustomerAddress $address, UpdateCustomerAddressRequest $request): CustomerAddressResource
     {
         return new CustomerAddressResource($this->customerAddressService->update($address, $request->validated()));

@@ -29,9 +29,7 @@ export function SubmissionsGrade() {
     const allSubmissions = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
 
     function getGradedCards() {
-        const gradedCards = allSubmissions.filter(
-            (item: any) => item.orderItem?.status?.orderItemStatus?.name !== 'Confirmed',
-        );
+        const gradedCards = allSubmissions.filter((item: any) => item.status.orderItemStatus.name !== 'Confirmed');
         return gradedCards.length;
     }
     useSidebarHidden();

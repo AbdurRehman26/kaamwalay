@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.15.0 - 2023-06-27
+
+### What's Changed
+
+- Feature: Salesrep Stats Closes Notification by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1069
+- Release v3.15.0 by @thenabeel in https://github.com/woozard/robograding/pull/1070
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.14.0...v3.15.0
+
 ## v3.14.0 - 2023-06-25
 
 ### What's Changed

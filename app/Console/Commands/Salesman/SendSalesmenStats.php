@@ -51,9 +51,9 @@ class SendSalesmenStats extends Command
      */
     protected function getData(string $startDate, string $endDate): Collection
     {
-        return Order::join('users', 'users.id', 'orders.salesman_id')
+        return Order::paid()
+            ->join('users', 'users.id', 'orders.salesman_id')
             ->whereNotNull('orders.salesman_id')
-            ->whereNotNull('orders.paid_at')
             ->select(DB::raw('CONCAT(users.first_name, " ", users.last_name) as full_name'), DB::raw('sum(orders.grand_total) as total'))
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->groupBy('orders.salesman_id')

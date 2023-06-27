@@ -6,14 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class TopSalesmenStatsNotification extends Notification
+class SalesmenStatsNotification extends Notification
 {
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(public array $topSalesmenStats)
+    public function __construct(public array $salesmenStats)
     {
         //
     }
@@ -39,11 +39,11 @@ class TopSalesmenStatsNotification extends Notification
 
     protected function getContent(): string
     {
-        $monthYear = Carbon::parse($this->topSalesmenStats['date'])->format('F-Y');
+        $monthYear = Carbon::parse($this->salesmenStats['date'])->format('F-Y');
         $content = "Month: {$monthYear}\n";
 
-        foreach ($this->topSalesmenStats['data'] as $topSalesmenStat) {
-            $content .= "\n$topSalesmenStat[full_name], \$$topSalesmenStat[total]";
+        foreach ($this->salesmenStats['data'] as $salesmenStat) {
+            $content .= "\n$salesmenStat[full_name], \$$salesmenStat[total]";
         }
 
         return $content;

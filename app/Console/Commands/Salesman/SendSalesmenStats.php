@@ -3,28 +3,28 @@
 namespace App\Console\Commands\Salesman;
 
 use App\Models\Order;
-use App\Notifications\Salesman\TopSalesmenStatsNotification;
+use App\Notifications\Salesman\SalesmenStatsNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-class SendTopSalesmenStats extends Command
+class SendSalesmenStats extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'salesman:send-top-salesmen-stats {date? : YYYY-MM-DD format}';
+    protected $signature = 'salesman:send-salesmen-stats {date? : YYYY-MM-DD format}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send top salesmen stats daily at 12:20 am';
+    protected $description = 'Send salesmen stats daily at 12:20 am';
 
     /**
      * Execute the console command.
@@ -34,12 +34,12 @@ class SendTopSalesmenStats extends Command
         $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
         $topSalesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
 
-        $this->info('Top Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
+        $this->info('Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
 
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new TopSalesmenStatsNotification($topSalesmenStats));
+            ->notify(new SalesmenStatsNotification($topSalesmenStats));
 
-        $this->info('Top Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Completed');
+        $this->info('Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Completed');
 
         return 0;
     }
@@ -53,11 +53,11 @@ class SendTopSalesmenStats extends Command
     {
         return Order::join('users', 'users.id', 'orders.salesman_id')
             ->whereNotNull('orders.salesman_id')
+            ->whereNotNull('orders.paid_at')
             ->select(DB::raw('CONCAT(users.first_name, " ", users.last_name) as full_name'), DB::raw('sum(orders.grand_total) as total'))
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->groupBy('orders.salesman_id')
             ->orderByDesc('total')
-            ->limit(10)
             ->get();
     }
 }

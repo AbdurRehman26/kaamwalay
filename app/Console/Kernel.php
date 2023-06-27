@@ -9,7 +9,7 @@ use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Console\Commands\ReferralProgram\SendTopReferrersStats;
 use App\Console\Commands\RevenueStats\SendUnpaidOrdersStats;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
-use App\Console\Commands\Salesman\SendTopSalesmenStats;
+use App\Console\Commands\Salesman\SendSalesmenStats;
 use App\Console\Commands\SendAdminReports;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
             ->dailyAt('00:20');
-        $schedule->command(SendTopSalesmenStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
+        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
             ->dailyAt('00:20');
     }
 

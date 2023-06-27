@@ -132,7 +132,22 @@ return [
 
     'meilisearch' => [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => env('MEILISEARCH_KEY', null),
+        'key' => env('MEILISEARCH_KEY'),
+        'index-settings' => [
+            'card_products' => [
+                'searchableAttributes' => ['name', 'short_name', 'long_name'],
+                'rankingRules' => [
+                    'words',
+                    'typo',
+                    'proximity',
+                    'attribute',
+                    'sort',
+                    'exactness',
+                    'card_number_order:asc',
+                    'name:asc'
+                ],
+            ],
+        ],
     ],
 
 ];

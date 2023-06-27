@@ -46,6 +46,12 @@ return [
         'algolia_public_key' => [
             'value' => env('ALGOLIA_PUBLIC_KEY'),
         ],
+        'meilisearch_public_host' => [
+            'value' => env('MEILISEARCH_PUBLIC_HOST'),
+        ],
+        'meilisearch_public_key' => [
+            'value' => env('MEILISEARCH_PUBLIC_KEY'),
+        ],
         'google_analytics_tracking_code' => [
             'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
         ],

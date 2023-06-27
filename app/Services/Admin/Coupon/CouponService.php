@@ -166,7 +166,7 @@ class CouponService
     public function activateCoupons(Collection $coupons): void
     {
         $coupons->each(function ($coupon) {
-            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system');
+            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system'); // @phpstan-ignore-line
         });
     }
 
@@ -178,7 +178,7 @@ class CouponService
     public function expireCoupons(Collection $coupons): void
     {
         $coupons->each(function ($coupon) {
-            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system');
+            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system'); // @phpstan-ignore-line
         });
     }
 

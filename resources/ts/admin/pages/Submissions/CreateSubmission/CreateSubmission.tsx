@@ -114,6 +114,17 @@ export function CreateSubmission() {
         })();
     }, [customerId, dispatch]);
 
+    useEffect(() => {
+        if (serviceLevels.length > 0) {
+            const { id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice } =
+                serviceLevels[0];
+
+            dispatch(
+                setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
+            );
+        }
+    }, [dispatch, serviceLevels]);
+
     const handleServiceLevel = (serviceLevelId: number) => {
         const selectedServiceLevel = serviceLevels.filter((item) => item?.id === Number(serviceLevelId));
         const level = {

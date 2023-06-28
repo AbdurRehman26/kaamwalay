@@ -43,7 +43,7 @@ class SalesmenStatsNotification extends Notification
         $content = "Month: {$monthYear}\n";
 
         foreach ($this->salesmenStats['data'] as $salesmenStat) {
-            $content .= "\n$salesmenStat[full_name], \$$salesmenStat[total]";
+            $content .= "\n$salesmenStat[full_name], \$$salesmenStat[total] ($salesmenStat[number_of_orders])";
         }
 
         return $content;

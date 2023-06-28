@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.15.1 - 2023-06-28
+
+### What's Changed
+
+- Hotfix: Salesreps Stats Notification Improvements by @thenabeel in https://github.com/woozard/robograding/pull/1072
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.0...v3.15.1
+
 ## v3.15.0 - 2023-06-27
 
 ### What's Changed

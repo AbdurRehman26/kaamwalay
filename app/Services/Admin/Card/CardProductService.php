@@ -42,7 +42,7 @@ class CardProductService
         'Italian',
         'Spanish',
         'Portuguese',
-        '(South) Korean',
+        'Korean',
         'Thai',
         'Traditional Chinese',
         'Russian',

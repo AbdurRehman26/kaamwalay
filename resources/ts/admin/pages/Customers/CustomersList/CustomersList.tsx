@@ -1,5 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Table from '@mui/material/Table';
@@ -697,31 +698,37 @@ export function CustomersList() {
                     </LoadingButton>
                 </Grid>
             </Grid>
-            <TableContainer>
-                <Table>
-                    <EnhancedTableHead
-                        onRequestSort={handleRequestSort}
-                        order={order}
-                        orderBy={orderBy}
-                        headCells={headings}
-                    />
+            {customers.isLoading ? (
+                <Grid container padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Grid>
+            ) : (
+                <TableContainer>
+                    <Table>
+                        <EnhancedTableHead
+                            onRequestSort={handleRequestSort}
+                            order={order}
+                            orderBy={orderBy}
+                            headCells={headings}
+                        />
 
-                    <TableBody>
-                        {customers.data.map((customer) => (
-                            <CustomerTableRow
-                                customer={customer}
-                                salesReps={salesReps}
-                                onEditCustomer={handleEditCustomerOption}
-                            />
-                        ))}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination {...customers.paginationProps} />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+                        <TableBody>
+                            {customers.data.map((customer) => (
+                                <CustomerTableRow
+                                    customer={customer}
+                                    salesReps={salesReps}
+                                    onEditCustomer={handleEditCustomerOption}
+                                />
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination {...customers.paginationProps} />
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
+            )}
             <EditCustomerDetailsDialog
                 endpointUrl={`admin/customer/${customer.id}`}
                 endpointVersion={'v3'}

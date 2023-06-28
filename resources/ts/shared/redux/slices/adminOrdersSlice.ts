@@ -161,15 +161,15 @@ export const setOrderShipment = createAsyncThunk<
 >('setOrderShipment', async (input: ChangeOrderShipmentDto, thunkAPI) => {
     const ordersRepository = app(OrdersRepository);
     try {
-        const orderShipment = await ordersRepository.setShipment(input);
-        const order = await ordersRepository.show(input.orderId, {
+        await ordersRepository.setShipment(input);
+        const order = await ordersRepository.getOrder(input.orderId, {
             params: {
-                include: ['orderStatus', 'orderStatusHistory.orderStatus'],
+                include: ['orderStatus', 'orderStatusHistory.orderStatus', 'orderShipment'],
             },
         });
 
         return {
-            orderShipment: instanceToPlain(orderShipment) as ShipmentEntity,
+            orderShipment: instanceToPlain(order.orderShipment) as ShipmentEntity,
             orderStatus: instanceToPlain(order.orderStatus) as OrderStatusEntity,
             orderStatusHistory: instanceToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
             orderId: input.orderId,

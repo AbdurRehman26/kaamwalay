@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.15.2 - 2023-07-03
+
+### What's Changed
+
+- Hotfix: Updated the video in header on homepage by @thenabeel in https://github.com/woozard/robograding/pull/1075
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.1...v3.15.2
+
 ## v3.15.1 - 2023-06-28
 
 ### What's Changed

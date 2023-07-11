@@ -10,6 +10,7 @@
  *
  *  @apiParamExample {json} Request-Example:
  *  {
+ *      "card_category_type_id": 1,
  *      "name": "Pokemon",
  *      "image_url": "https://www.reilly.com/vel-facere-fugit-beatae-inventore-molestiae",
  *  }

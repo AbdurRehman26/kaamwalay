@@ -30,7 +30,7 @@ test('an admin can create card category', function () {
     ]);
 
     $this->postJson(route('v3.admin.cards.categories.store'), [
-        'card_category_type' => $this->cardCategoryType->id,
+        'card_category_type_id' => $this->cardCategoryType->id,
         'name' => 'Lorem Ipsum',
         'image_url' => 'https://mann.org/quia-quos-et-nihil.html',
     ])->assertSuccessful()

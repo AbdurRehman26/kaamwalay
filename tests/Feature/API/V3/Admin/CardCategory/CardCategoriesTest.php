@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CardCategoryType;
 use App\Models\User;
 
 beforeEach(function () {
@@ -10,6 +11,9 @@ beforeEach(function () {
     $this->user = User::factory()
         ->admin()
         ->withRole(config('permission.roles.admin'))
+        ->create();
+
+    $this->cardCategoryType = CardCategoryType::factory()
         ->create();
 
     $this->actingAs($this->user);
@@ -26,6 +30,7 @@ test('an admin can create card category', function () {
     ]);
 
     $this->postJson(route('v3.admin.cards.categories.store'), [
+        'card_category_type' => $this->cardCategoryType->id,
         'name' => 'Lorem Ipsum',
         'image_url' => 'https://mann.org/quia-quos-et-nihil.html',
     ])->assertSuccessful()

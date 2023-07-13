@@ -248,8 +248,8 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     <TableCell>
                                         <Typography variant={'body2'}>
                                             <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
-                                                Insured Shipping:
-                                                {/* <Tooltip title={'Insured Shipping'} placement={'top'}> */}
+                                                Shipping:
+                                                {/* <Tooltip title={'Shipping'} placement={'top'}> */}
                                                 {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} /> */}
                                                 {/* </Tooltip> */}
                                             </Box>
@@ -261,7 +261,26 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
-
+                                {data.shippingInsuranceFee > 0 ? (
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant={'body2'}>
+                                                <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
+                                                    Insurance:
+                                                </Box>
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align={'right'}>
+                                            <Typography
+                                                variant={'body2'}
+                                                align={'right'}
+                                                className={font.fontWeightMedium}
+                                            >
+                                                {formatCurrency(data.shippingInsuranceFee)}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : null}
                                 {data.cleaningFee > 0 ? (
                                     <TableRow>
                                         <TableCell>

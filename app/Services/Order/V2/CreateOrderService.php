@@ -28,6 +28,7 @@ use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
+use App\Services\ShippingInsuranceFee\ShippingInsuranceFeeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -96,6 +97,7 @@ class CreateOrderService
         $this->storeShippingFee();
         $this->storeServiceFee();
         $this->storeCleaningFee();
+        $this->storeShippingInsuranceFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
@@ -219,7 +221,7 @@ class CreateOrderService
 
     protected function storeGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee + $this->order->shipping_insurance_fee;
         $this->order->grand_total = $this->order->grand_total_before_discount - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
@@ -323,6 +325,15 @@ class CreateOrderService
             $this->order->markAsPaid();
 
             OrderPaid::dispatch($this->order);
+        }
+    }
+
+    protected function storeShippingInsuranceFee(): void
+    {
+        if (! empty($this->data['has_shipping_insurance'])) {
+            $this->order->shipping_insurance_fee = (new ShippingInsuranceFeeService($this->order))->calculate();
+            $this->order->has_shipping_insurance = (bool) $this->data['has_shipping_insurance'];
+            $this->order->save();
         }
     }
 }

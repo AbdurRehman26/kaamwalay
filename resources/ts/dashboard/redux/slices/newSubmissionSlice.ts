@@ -82,6 +82,8 @@ export interface ShippingSubmissionState {
     availableCountriesList: { name: string; code: string; id: number; phoneCode: string }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
+    hasShippingInsurance: boolean;
+    shippingInsuranceFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -384,6 +386,8 @@ const initialState: NewSubmissionSliceState = {
         saveForLater: true,
         disableAllShippingInputs: true,
         useCustomShippingAddress: false,
+        hasShippingInsurance: true,
+        shippingInsuranceFee: 0,
     },
     step04Data: {
         paymentMethodId: 0,
@@ -686,6 +690,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         requiresCleaning: currentSubmission.step02Data.requiresCleaning
             ? currentSubmission.step02Data.requiresCleaning
             : false,
+        hasShippingInsurance: currentSubmission.step03Data.hasShippingInsurance ?? false,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
@@ -793,6 +798,12 @@ export const newSubmissionSlice = createSlice({
         },
         setCleaningFee: (state, action: PayloadAction<number>) => {
             state.step02Data.cleaningFee = action.payload;
+        },
+        setHasShippingInsurance: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.hasShippingInsurance = action.payload;
+        },
+        setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.shippingInsuranceFee = action.payload;
         },
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
@@ -1007,6 +1018,9 @@ export const newSubmissionSlice = createSlice({
                 ),
             };
 
+            state.step03Data.hasShippingInsurance = action.payload.hasShippingInsurance;
+            state.step03Data.shippingInsuranceFee = action.payload.shippingInsuranceFee;
+
             const billingAddress = action.payload.billingAddress
                 ? action.payload.billingAddress
                 : action.payload.shippingAddress;
@@ -1161,6 +1175,8 @@ export const {
     setSaveShippingAddress,
     setRequiresCleaning,
     setCleaningFee,
+    setHasShippingInsurance,
+    setShippingInsuranceFee,
     updateShippingAddressField,
     markCardAsSelected,
     markCardAsUnselected,

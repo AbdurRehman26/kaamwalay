@@ -175,7 +175,7 @@ class OrderPaymentService
 
     protected function updateGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee + $this->order->shipping_insurance_fee;
         $this->order->grand_total = (
             $this->order->service_fee
             + $this->order->shipping_fee
@@ -184,6 +184,7 @@ class OrderPaymentService
             - $this->order->refund_total
             + $this->order->extra_charge_total
             + $this->order->cleaning_fee
+            + $this->order->shipping_insurance_fee
         );
 
         GrandTotalValidator::validate($this->order);

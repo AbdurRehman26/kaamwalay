@@ -23,6 +23,7 @@ class OrderResource extends BaseResource
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'cleaning_fee' => $this->cleaning_fee,
+            'shipping_insurance_fee' => $this->shipping_insurance_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => $this->whenLoaded('user', UserResource::class),
@@ -50,6 +51,7 @@ class OrderResource extends BaseResource
             'payment_status' => $this->payment_status,
             'order_step' => $this->order_step,
             'requires_cleaning' => $this->requires_cleaning,
+            'has_shipping_insurance' => $this->has_shipping_insurance,
             'estimated_delivery_start_at' => $this->estimated_delivery_start_at,
             'estimated_delivery_end_at' => $this->estimated_delivery_end_at,
         ];

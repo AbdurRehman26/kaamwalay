@@ -62,7 +62,7 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
                 <Radio className={'radioButton'} checked={selected} />
                 <Grid container display={'flex'} flexDirection={'column'}>
                     <Grid item container>
-                        <Typography mx={1} variant={'subtitle1'} fontWeight={500} fontSize={14} color={'textPrimary'}>
+                        <Typography mx={1} variant={'subtitle1'} fontWeight={500} color={'textPrimary'}>
                             {shippingMethod.name}
                         </Typography>
                         <Grid item className={'methodIcon'}>

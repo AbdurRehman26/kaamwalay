@@ -13,6 +13,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
+import { ShippingInsurance } from '@shared/components/NewSubmission/ShippingInsurance';
 import { useAuth } from '@shared/hooks/useAuth';
 import {
     getCountriesList,
@@ -372,6 +373,10 @@ export function InsuredShippingMethod() {
                     <CircularProgress />
                 </Grid>
             ) : null}
+
+            <ShippingInsurance />
+            <Divider sx={{ marginBottom: '24px' }} />
+
             {existingAddresses.length > 0 ? (
                 <>
                     <Typography ml={2.5} className={classes.sectionLabel}>

@@ -1,5 +1,6 @@
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ButtonBase from '@mui/material/ButtonBase';
+import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -21,6 +22,13 @@ const mappedIcons: Record<string, ReactNode> = {
     vault_storage: <SafeSquare />,
 };
 
+const mappedDescriptions: Record<string, ReactNode> = {
+    // eslint-disable-next-line camelcase
+    insured_shipping: "We'll ship your cards back to you.",
+    // eslint-disable-next-line camelcase
+    vault_storage: "We'll storage your cards in AGS Vault.",
+};
+
 export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
     const handleClick = useCallback(() => onSelect(shippingMethod), [onSelect, shippingMethod]);
 
@@ -30,11 +38,22 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
             className={cx({ selected })}
             style={{ border: selected ? '3px solid #20BFB8' : '1px solid #ddd' }}
         >
-            <Radio checked={selected} />
-            {mappedIcons[shippingMethod.code] || <LocalShippingIcon />}
-            <Typography ml={1} variant={'subtitle1'} fontWeight={500} color={selected ? 'primary' : 'textPrimary'}>
-                {shippingMethod.name}
-            </Typography>
+            <Radio className={'radioButton'} checked={selected} />
+            <Grid container display={'flex'} flexDirection={'column'}>
+                <Grid item container>
+                    <Typography mx={1} variant={'subtitle1'} fontWeight={500} color={'textPrimary'}>
+                        {shippingMethod.name}
+                    </Typography>
+                    <Grid item className={'methodIcon'}>
+                        {mappedIcons[shippingMethod.code] || <LocalShippingIcon />}
+                    </Grid>
+                </Grid>
+                <Grid item container>
+                    <Typography ml={1} variant={'subtitle1'} fontWeight={400} fontSize={12} className={'description'}>
+                        {mappedDescriptions[shippingMethod.code]}
+                    </Typography>
+                </Grid>
+            </Grid>
         </Root>
     );
 }
@@ -51,9 +70,21 @@ const Root = styled(ButtonBase)(({ theme }) => ({
     '.MuiSvgIcon-root': {
         color: theme.palette.text.secondary,
     },
-    '&.selected': {
+    '.description': {
+        color: theme.palette.text.secondary,
+    },
+    '.methodIcon': {
+        maxWidth: '20px',
         '.MuiSvgIcon-root': {
-            color: theme.palette.primary.main,
+            width: '100%',
+        },
+    },
+    '&.selected': {
+        border: '2px solid ' + theme.palette.primary.main,
+        '.radioButton': {
+            '.MuiSvgIcon-root': {
+                color: theme.palette.primary.main,
+            },
         },
     },
 }));

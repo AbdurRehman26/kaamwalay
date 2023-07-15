@@ -24,7 +24,6 @@ beforeEach(function () {
 });
 
 test('an admin can create card category', function () {
-
     Http::fake([
         '*/categories/*' => Http::response($this->sampleGetCategoriesResponse, 200, []),
     ]);
@@ -39,11 +38,13 @@ test('an admin can create card category', function () {
                 'name',
                 'image_url',
             ],
+        ])
+        ->assertJsonFragment([
+            'card_category_type_id' => $this->cardCategoryType->id,
         ]);
 });
 
 test('a customer cannot create card category', function () {
-    
     $customerUser = User::factory()
     ->withRole(config('permission.roles.customer'))
     ->create();

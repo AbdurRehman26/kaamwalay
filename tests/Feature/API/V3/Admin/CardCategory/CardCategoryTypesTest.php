@@ -11,19 +11,20 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->user = User::factory()
+    $admin = User::factory()
         ->admin()
         ->withRole(config('permission.roles.admin'))
         ->create();
 
-    $this->cardCategoryType = CardCategoryType::factory()
-        ->count(10)
-        ->create();
-
-    actingAs($this->user);
+    actingAs($admin);
 });
 
 test('an admin can get card category types', function () {
+
+    CardCategoryType::factory()
+        ->count(10)
+        ->create();
+
     getJson(route('v3.admin.cards.category-types.index'))->assertSuccessful()
         ->assertJsonStructure([
             'data' => [
@@ -36,11 +37,11 @@ test('an admin can get card category types', function () {
 });
 
 test('a customer cannot get card category types', function () {
-    $customerUser = User::factory()
+    $customer = User::factory()
         ->withRole(config('permission.roles.customer'))
         ->create();
 
-    actingAs($customerUser);
+    actingAs($customer);
 
     getJson(route('v3.admin.cards.category-types.index'))->assertForbidden();
 });

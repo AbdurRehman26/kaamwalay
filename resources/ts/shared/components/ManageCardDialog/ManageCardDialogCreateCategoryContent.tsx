@@ -168,7 +168,7 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                 open={openDropDown}
                                 onOpen={() => setOpenDropDown(true)}
                                 onClose={() => setOpenDropDown(false)}
-                                placeholder={'Service Level'}
+                                placeholder={''}
                                 key={cardCategoryTypeId}
                                 onChange={(e: any) => setCardCategoryTypeId(e.target.value)}
                             >

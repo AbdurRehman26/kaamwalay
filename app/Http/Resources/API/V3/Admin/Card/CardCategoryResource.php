@@ -21,6 +21,7 @@ class CardCategoryResource extends BaseResource
             'id' => $this->id,
             'name' => $this->name,
             'image_url' => $this->image_url,
+            'card_category_type_id' => $this->card_category_type_id,
         ];
     }
 }

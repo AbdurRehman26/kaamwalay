@@ -45,7 +45,7 @@ test('an admin can create card category', function () {
 
     assertDatabaseHas('card_categories', [
         'name' => 'Lorem Ipsum',
-        'card_category_type_id' => $this->categoryType->id,
+        'card_category_type_id' => $this->cardCategoryType->id,
     ]);
 
 });

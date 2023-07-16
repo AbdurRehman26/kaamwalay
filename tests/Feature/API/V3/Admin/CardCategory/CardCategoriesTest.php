@@ -3,6 +3,8 @@
 use App\Models\CardCategoryType;
 use App\Models\User;
 
+use function Pest\Laravel\assertDatabaseHas;
+
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
@@ -24,6 +26,7 @@ beforeEach(function () {
 });
 
 test('an admin can create card category', function () {
+
     Http::fake([
         '*/categories/*' => Http::response($this->sampleGetCategoriesResponse, 200, []),
     ]);
@@ -38,13 +41,17 @@ test('an admin can create card category', function () {
                 'name',
                 'image_url',
             ],
-        ])
-        ->assertJsonFragment([
-            'card_category_type_id' => $this->cardCategoryType->id,
         ]);
+
+    assertDatabaseHas('card_categories', [
+        'name' => 'Lorem Ipsum',
+        'card_category_type_id' => $this->categoryType->id,
+    ]);
+
 });
 
 test('a customer cannot create card category', function () {
+
     $customerUser = User::factory()
     ->withRole(config('permission.roles.customer'))
     ->create();

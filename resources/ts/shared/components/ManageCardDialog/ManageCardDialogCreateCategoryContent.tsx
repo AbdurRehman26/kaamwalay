@@ -161,25 +161,38 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                 />
                             </FormControl>
 
-                            <Select
-                                style={{ marginTop: 20 }}
-                                fullWidth
-                                defaultValue={cardCategoryTypeId}
-                                open={openDropDown}
-                                onOpen={() => setOpenDropDown(true)}
-                                onClose={() => setOpenDropDown(false)}
-                                placeholder={''}
-                                key={cardCategoryTypeId}
-                                onChange={(e: any) => setCardCategoryTypeId(e.target.value)}
-                            >
-                                {cardCategoryTypes.map((item: CardCategoryEntity) => (
-                                    <MenuItem key={item.id} value={item.id}>
-                                        <div style={{ display: 'flex', fontSize: '14px' }}>
-                                            <span style={{ fontWeight: 500 }}>{item.name}</span>
-                                        </div>
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            <FormControl>
+                                <FormHelperText
+                                    sx={{
+                                        marginTop: 2,
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        marginLeft: 0,
+                                        marginBottom: margin,
+                                    }}
+                                >
+                                    Category Type*
+                                </FormHelperText>
+                                <Select
+                                    style={{ minWidth: '231px' }}
+                                    fullWidth
+                                    defaultValue={cardCategoryTypeId}
+                                    open={openDropDown}
+                                    onOpen={() => setOpenDropDown(true)}
+                                    onClose={() => setOpenDropDown(false)}
+                                    placeholder={''}
+                                    key={cardCategoryTypeId}
+                                    onChange={(e: any) => setCardCategoryTypeId(e.target.value)}
+                                >
+                                    {cardCategoryTypes.map((item: CardCategoryEntity) => (
+                                        <MenuItem key={item.id} value={item.id}>
+                                            <div style={{ display: 'flex', fontSize: '14px' }}>
+                                                <span style={{ fontWeight: 500 }}>{item.name}</span>
+                                            </div>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
                 </Box>

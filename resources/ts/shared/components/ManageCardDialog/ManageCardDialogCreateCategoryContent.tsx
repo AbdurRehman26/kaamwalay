@@ -69,7 +69,6 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
         const endpoint = apiService.createEndpoint('/admin/cards/category-types', { version: 'v3' });
         const responseItem = await endpoint.get('');
         setCardCategoryTypes(responseItem.data);
-        setCardCategoryTypeId(responseItem.data[0].id);
     }, [apiService]);
 
     useEffect(() => {
@@ -88,8 +87,8 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
 
     const handleNewCategoryNameChange = useCallback((e) => setNewCategoryName(e.target.value), []);
     const showSaveButton = useMemo(() => {
-        return !!(newCategoryLogo && newCategoryName);
-    }, [newCategoryLogo, newCategoryName]);
+        return !!(newCategoryLogo && newCategoryName && cardCategoryTypeId);
+    }, [cardCategoryTypeId, newCategoryLogo, newCategoryName]);
 
     const handleAddCategory = async () => {
         const endpoint = apiService.createEndpoint('/admin/cards/categories', { version: 'v3' });
@@ -176,14 +175,15 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                 <Select
                                     style={{ minWidth: '231px' }}
                                     fullWidth
-                                    defaultValue={cardCategoryTypeId}
+                                    value={cardCategoryTypeId || 'none'}
                                     open={openDropDown}
                                     onOpen={() => setOpenDropDown(true)}
                                     onClose={() => setOpenDropDown(false)}
-                                    placeholder={''}
-                                    key={cardCategoryTypeId}
                                     onChange={(e: any) => setCardCategoryTypeId(e.target.value)}
                                 >
+                                    <MenuItem value="none" disabled>
+                                        Select Category Type
+                                    </MenuItem>
                                     {cardCategoryTypes.map((item: CardCategoryEntity) => (
                                         <MenuItem key={item.id} value={item.id}>
                                             <div style={{ display: 'flex', fontSize: '14px' }}>

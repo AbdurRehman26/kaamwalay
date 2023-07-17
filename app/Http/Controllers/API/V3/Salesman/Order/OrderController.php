@@ -5,14 +5,14 @@ namespace App\Http\Controllers\API\V3\Salesman\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V3\Salesman\Order\StoreOrderRequest;
 use App\Http\Requests\API\V3\Salesman\Order\UpdateShippingAddressRequest;
-use App\Http\Resources\API\V3\Salesman\Order\OrderResource;
 use App\Http\Resources\API\V3\Salesman\Order\OrderCreateResource;
+use App\Http\Resources\API\V3\Salesman\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Salesman\V3\Order\CreateOrderService;
 use App\Services\Salesman\V3\OrderService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Exception;
 
 class OrderController extends Controller
 {

@@ -239,6 +239,12 @@ export function AddedSubmissionCards() {
     const shippingFee = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.shippingFee);
     const cleaningFee = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.cleaningFee);
     const requiresCleaning = useAppSelector((state) => state.salesRepCreateOrderSlice.step02Data.requiresCleaning);
+    const hasShippingInsurance = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step03Data.hasShippingInsurance,
+    );
+    const shippingInsuranceFee = useAppSelector(
+        (state) => state.salesRepCreateOrderSlice.step03Data.shippingInsuranceFee,
+    );
     const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const finalShippingAddress =
@@ -356,12 +362,17 @@ export function AddedSubmissionCards() {
     };
 
     function getPreviewTotal() {
-        const previewTotal =
-            numberOfSelectedCards * finalPrice +
-            Number(cleaningFee) +
-            shippingFee -
-            Number(isCouponApplied ? discountedValue : 0) -
-            appliedCredit;
+        const previewTotal = Number(
+            (
+                numberOfSelectedCards * finalPrice +
+                Number(cleaningFee) +
+                Number(shippingInsuranceFee) +
+                shippingFee -
+                Number(isCouponApplied ? discountedValue : 0) -
+                appliedCredit
+            ).toFixed(2),
+        );
+
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }
@@ -539,9 +550,7 @@ export function AddedSubmissionCards() {
                     style={{ marginTop: '16px', marginBottom: !requiresCleaning ? '16px' : '0px' }}
                 >
                     <Typography className={classes.rowLeftText}>
-                        {shippingMethod?.code === ShippingMethodType.InsuredShipping
-                            ? 'Insured Shipping: '
-                            : 'Storage Fee:'}
+                        {shippingMethod?.code === ShippingMethodType.InsuredShipping ? 'Shipping: ' : 'Storage Fee:'}
                     </Typography>
                     <NumberFormat
                         value={shippingMethod?.code === ShippingMethodType.InsuredShipping ? shippingFee : 0}
@@ -552,6 +561,19 @@ export function AddedSubmissionCards() {
                         prefix={'$'}
                     />
                 </div>
+                {hasShippingInsurance ? (
+                    <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                        <Typography className={classes.rowLeftText}>Insurance:</Typography>
+                        <NumberFormat
+                            value={shippingInsuranceFee}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
+                    </div>
+                ) : null}
                 {requiresCleaning ? (
                     <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                         <Typography className={classes.rowLeftText}>Cleaning Fee:</Typography>

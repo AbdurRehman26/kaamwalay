@@ -1,6 +1,5 @@
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,7 +13,9 @@ import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useRepository } from '@shared/hooks/useRepository';
 import {
     initializeShippingMethod,
+    setHasShippingInsurance,
     setShippingFee,
+    setShippingInsuranceFee,
     setShippingMethod,
 } from '@shared/redux/slices/salesRepCreateOrderSlice';
 import { ShippingMethodsRepository } from '@shared/repositories/ShippingMethodsRepository';
@@ -44,6 +45,10 @@ export function ShippingMethods() {
             dispatch(setShippingMethod(instanceToPlain(method) as ShippingMethodEntity));
             if (method.code === ShippingMethodType.VaultStorage) {
                 dispatch(setShippingFee(0));
+                dispatch(setHasShippingInsurance(false));
+                dispatch(setShippingInsuranceFee(0));
+            } else if (method.code === ShippingMethodType.InsuredShipping) {
+                dispatch(setHasShippingInsurance(true));
             }
         },
         [dispatch],
@@ -61,21 +66,21 @@ export function ShippingMethods() {
         <Stack>
             <Grid ml={2.5} container direction={'row'} alignItems={'center'} pt={3} pb={1.5}>
                 <Typography variant={'subtitle1'} fontWeight={500} mr={1}>
-                    Insured Shipping or Vault Storage?
+                    Shipping or Vault Storage?
                 </Typography>
                 <Tooltip
                     title={
                         <Stack>
                             <Typography variant={'caption'} mb={2}>
                                 Please tell us if you would like to have your cards shipped back to you once they are
-                                graded (Insured Shipping) or would you like to store your cards in the AGS Vault?
+                                graded (Shipping) or would you rather store them in the AGS Vault (Vault Storage)?
                             </Typography>
 
                             <Typography variant={'caption'} fontWeight={700}>
                                 What is Vault Storage?
                             </Typography>
                             <Typography variant={'caption'} mb={2}>
-                                Vault storage allows you to safely store your cards in our AGS vault. Rather than
+                                Vault storage allows you to safely store your cards in our AGS Vault. Rather than
                                 shipping it back after grading, we will store your slabbed card in a level-8 security
                                 safe.
                             </Typography>
@@ -105,7 +110,6 @@ export function ShippingMethods() {
                     ) : null,
                 )}
             </Grid>
-            <Divider />
 
             {shippingMethod?.code && mappedContent[shippingMethod?.code] ? mappedContent[shippingMethod?.code] : null}
         </Stack>

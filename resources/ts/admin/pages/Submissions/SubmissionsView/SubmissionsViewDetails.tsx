@@ -110,7 +110,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            Insurance: hasShippingInsurance ? 'Yes' : 'No',
+            'Insurance:': hasShippingInsurance ? 'Yes' : 'No',
             ...(owner?.fullName && {
                 'Owner:': [
                     <>

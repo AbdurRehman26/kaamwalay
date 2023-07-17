@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth', 'role:salesman'])->group(function () {
+
+    Route::apiResource('orders', OrderController::class)
+        ->only(['show', 'store'])
+        ->names([
+            'show' => 'salesman.orders.show',
+            'store' => 'salesman.orders.store',
+        ]);
+
     Route::prefix('orders')->group(function () {
         Route::prefix('{order}')->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');

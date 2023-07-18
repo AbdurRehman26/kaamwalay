@@ -9,6 +9,7 @@
  * @apiUse Authorization
  *
  * @apiParam {Boolean} [requires_cleaning] If customer opts in for cleaning, value can be 1, 0, true, false
+ * @apiParam {Boolean} [has_shipping_insurance] If customer opts in for insurance, value can be 1, 0, true, false
  *
  * @apiParamExample {json} Request-Example:
  *      {
@@ -65,6 +66,7 @@
  *          },
  *          "payment_by_wallet": 10.00,
  *          "requires_cleaning": 1,
+ *          "has_shipping_insurance": true,
  *      }
  *
  * @apiSuccess {Object} data Order object
@@ -182,6 +184,8 @@
  *            "discounted_amount" : 40.00,
  *            "service_fee": 2556,
  *            "shipping_fee": 43,
+ *            "shipping_insurance_fee": 10.0,
+ *            "has_shipping_insurance": true,
  *            "grand_total": 263,
  *            "amount_paid_from_wallet": 10.00
  *        }

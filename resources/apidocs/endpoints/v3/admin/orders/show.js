@@ -251,7 +251,9 @@
  *       "payment_status":2,
  *       "requires_cleaning":false,
  *       "salesman_commission":null,
- *       "referral_commission":2
+ *       "referral_commission":2,
+ *       "shipping_insurance_fee": 10.0,
+ *       "has_shipping_insurance": true
  *    }
  * }
  */

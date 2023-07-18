@@ -1,7 +1,7 @@
 /**
- * @api {post} /v3/admin/orders Create Order
+ * @api {post} /v3/salesman/orders Create Order
  * @apiName Create Order
- * @apiGroup Admin Orders
+ * @apiGroup Salesman Orders
  *
  * @apiVersion 3.0.0
  *

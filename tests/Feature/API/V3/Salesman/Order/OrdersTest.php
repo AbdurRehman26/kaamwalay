@@ -1,14 +1,14 @@
 <?php
 
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Models\User;
-use App\Models\PaymentPlan;
-use App\Models\CardProduct;
-use App\Models\ShippingMethod;
 use App\Models\PaymentMethod;
+use App\Models\PaymentPlan;
 use App\Models\Salesman;
+use App\Models\ShippingMethod;
+use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 

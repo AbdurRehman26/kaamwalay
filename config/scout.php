@@ -147,6 +147,14 @@ return [
                     'name:asc'
                 ],
             ],
+            'user_cards' => [
+                'searchableAttributes' => ['card_name', 'searchable_name', 'owner_name', 'certificate_number'],
+                'filterableAttributes' => ['card_category', 'grade', 'grade_overall'],
+                'sortableAttributes' => ['shipped_at_timestamp'],
+                'typoTolerance' => [
+                    'disableOnAttributes' => ['certificate_number'],
+                ],
+            ],
         ],
     ],
 

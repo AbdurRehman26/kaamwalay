@@ -75,7 +75,10 @@ function SubmissionStep02Content() {
     } = useConfiguration();
 
     const searchClient = useMemo(
-        () => instantMeiliSearch(meilisearchPublicHost, meilisearchPublicKey),
+        () =>
+            instantMeiliSearch(meilisearchPublicHost, meilisearchPublicKey, {
+                finitePagination: true,
+            }),
         [meilisearchPublicHost, meilisearchPublicKey],
     );
 

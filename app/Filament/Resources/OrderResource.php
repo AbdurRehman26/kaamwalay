@@ -55,6 +55,9 @@ class OrderResource extends Resource
                 TextInput::make('amount_paid_from_wallet'),
                 TextInput::make('grand_total_before_discount'),
                 TextInput::make('discounted_amount'),
+                Forms\Components\Checkbox::make('has_shipping_insurance')
+                    ->label('Has Shipping Insurance'),
+                TextInput::make('shipping_insurance_fee'),
                 TextInput::make('payment_method_discounted_amount'),
                 TextInput::make('extra_charge_total')
                     ->required(),

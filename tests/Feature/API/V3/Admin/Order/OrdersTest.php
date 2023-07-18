@@ -35,6 +35,8 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
+    config(['robograding.collector_coin_discount_percentage' => 1]);
+
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
@@ -370,6 +372,85 @@ test('an admin can place order for an user and mark it paid immediately', functi
             'grand_total',
         ],
     ]);
+});
+
+test('an admin can place order for an user with shipping insurance', function () {
+    Event::fake();
+
+    $customer = User::factory()->create();
+
+    $response = $this->postJson('/api/v3/admin/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+        'has_shipping_insurance' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'has_shipping_insurance',
+            'shipping_insurance_fee',
+            'grand_total',
+        ],
+    ]);
+    $response->assertJsonPath('data.shipping_insurance_fee', 10);
+
 });
 
 test('correct service level price is assigned according to price ranges', function (int $numberOfCards, $priceRangeIndex) {

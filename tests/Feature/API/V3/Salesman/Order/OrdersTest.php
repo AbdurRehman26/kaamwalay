@@ -4,6 +4,11 @@ use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\User;
+use App\Models\PaymentPlan;
+use App\Models\CardProduct;
+use App\Models\ShippingMethod;
+use App\Models\PaymentMethod;
+use App\Models\Salesman;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -15,12 +20,102 @@ beforeEach(function () {
     ]);
     Event::fake();
 
+    config(['robograding.collector_coin_discount_percentage' => 1]);
+
     $this->user = User::factory()->withRole(config('permission.roles.salesman'))->create();
+    Salesman::create(['user_id' => $this->user->id, 'commission_type' => 0, 'commission_value' => 10]);
+
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
+    $this->cardProduct = CardProduct::factory()->create();
+    $this->shippingMethod = ShippingMethod::factory()->insured()->create();
+    $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->actingAs($this->user);
 });
 
 uses()->group('salesman', 'salesman_orders');
+
+test('a salesman can place order for a user with shipping insurance', function () {
+    Event::fake();
+
+    $customer = User::factory()->create();
+    $customer->salesman()->associate($this->user)->save();
+
+    $response = $this->postJson('/api/v3/salesman/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+        'has_shipping_insurance' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'has_shipping_insurance',
+            'shipping_insurance_fee',
+            'grand_total',
+            'user',
+            'created_by',
+        ],
+    ]);
+
+    $response->assertJsonPath('data.shipping_insurance_fee', 10);
+});
 
 test('a salesman can update order shipping address', function () {
     $order = Order::factory()->create([

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Admin\Cards\CardCategoriesController;
 use App\Http\Controllers\API\V3\Admin\Cards\CardCategoryController;
+use App\Http\Controllers\API\V3\Admin\Cards\CardCategoryTypeController;
 use App\Http\Controllers\API\V3\Admin\CustomerController;
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
@@ -54,6 +55,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::prefix('cards')->group(function () {
             Route::post('categories', [CardCategoryController::class, 'store'])->name('cards.categories.store');
+            Route::get('category-types', [CardCategoryTypeController::class, 'index'])->name('cards.category-types.index');
         });
    
     Route::prefix('customer')->group(function () {

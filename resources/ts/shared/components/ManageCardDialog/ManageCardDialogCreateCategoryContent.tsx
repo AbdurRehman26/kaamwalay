@@ -4,11 +4,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { batch } from 'react-redux';
 import ImageUploader from '@shared/components/ImageUploader';
+import { CardCategoryEntity } from '@shared/entities/CardCategoryTypeEntity';
 import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -49,15 +52,29 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
     const filesRepository = useRepository(FilesRepository);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [openDropDown, setOpenDropDown] = useState(false);
 
     const Notifications = useNotifications();
     // New category section
     const [newCategoryLogo, setNewCategoryLogo] = useState<File | null>(null);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [cardCategoryTypeId, setCardCategoryTypeId] = useState('');
+    const [cardCategoryTypes, setCardCategoryTypes] = useState([]);
 
     const apiService = useInjectable(APIService);
 
     const dispatch = useSharedDispatch();
+
+    const fetchCategoryTypes = useCallback(async () => {
+        const endpoint = apiService.createEndpoint('/admin/cards/category-types', { version: 'v3' });
+        const responseItem = await endpoint.get('');
+        setCardCategoryTypes(responseItem.data);
+    }, [apiService]);
+
+    useEffect(() => {
+        fetchCategoryTypes();
+    }, [fetchCategoryTypes]);
+
     const handleClose = useCallback(() => {
         dispatch(manageCardDialogActions.setOpen(false));
         props.onCancel?.();
@@ -70,8 +87,8 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
 
     const handleNewCategoryNameChange = useCallback((e) => setNewCategoryName(e.target.value), []);
     const showSaveButton = useMemo(() => {
-        return !!(newCategoryLogo && newCategoryName);
-    }, [newCategoryLogo, newCategoryName]);
+        return !!(newCategoryLogo && newCategoryName && cardCategoryTypeId);
+    }, [cardCategoryTypeId, newCategoryLogo, newCategoryName]);
 
     const handleAddCategory = async () => {
         const endpoint = apiService.createEndpoint('/admin/cards/categories', { version: 'v3' });
@@ -80,6 +97,7 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
             const categoriesLogo = await filesRepository.uploadFile(newCategoryLogo!);
 
             const DTO = {
+                cardCategoryTypeId: cardCategoryTypeId,
                 name: newCategoryName,
                 imageUrl: categoriesLogo,
             };
@@ -140,6 +158,40 @@ export function ManageCardDialogCreateCategoryContent(props: ManageCardDialogCre
                                     fullWidth
                                     sx={{ minWidth: '231px' }}
                                 />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormHelperText
+                                    sx={{
+                                        marginTop: 2,
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        marginLeft: 0,
+                                        marginBottom: margin,
+                                    }}
+                                >
+                                    Category Type*
+                                </FormHelperText>
+                                <Select
+                                    style={{ minWidth: '231px' }}
+                                    fullWidth
+                                    value={cardCategoryTypeId || 'none'}
+                                    open={openDropDown}
+                                    onOpen={() => setOpenDropDown(true)}
+                                    onClose={() => setOpenDropDown(false)}
+                                    onChange={(e: any) => setCardCategoryTypeId(e.target.value)}
+                                >
+                                    <MenuItem value="none" disabled>
+                                        Select Category Type
+                                    </MenuItem>
+                                    {cardCategoryTypes.map((item: CardCategoryEntity) => (
+                                        <MenuItem key={item.id} value={item.id}>
+                                            <div style={{ display: 'flex', fontSize: '14px' }}>
+                                                <span style={{ fontWeight: 500 }}>{item.name}</span>
+                                            </div>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             </FormControl>
                         </Grid>
                     </Grid>

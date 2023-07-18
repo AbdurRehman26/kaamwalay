@@ -18,6 +18,7 @@ class CardCategoryService
         if(! empty($response)) {
             return CardCategory::create([
                 'name' => $data['name'],
+                'card_category_type_id' => $data['card_category_type_id'],
                 'image_url' => $data['image_url'],
             ]);
         }

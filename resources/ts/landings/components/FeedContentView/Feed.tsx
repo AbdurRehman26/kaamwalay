@@ -7,10 +7,7 @@ import FeedSearch from './FeedSearch';
 export function Feed() {
     const { appEnv, meilisearchPublicHost, meilisearchPublicKey } = useConfiguration();
     const searchClient = useMemo(
-        () =>
-            instantMeiliSearch(meilisearchPublicHost, meilisearchPublicKey, {
-                finitePagination: true,
-            }),
+        () => instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!),
         [meilisearchPublicHost, meilisearchPublicKey],
     );
     return (

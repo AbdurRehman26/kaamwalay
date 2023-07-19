@@ -175,7 +175,7 @@ export function CreateSubmission() {
 
     const searchClient = useMemo(
         () =>
-            instantMeiliSearch(meilisearchPublicHost, meilisearchPublicKey, {
+            instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!, {
                 finitePagination: true,
             }),
         [meilisearchPublicHost, meilisearchPublicKey],

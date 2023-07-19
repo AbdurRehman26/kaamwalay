@@ -94,7 +94,7 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
                         style={{ textDecoration: 'underline' }}
                         onClick={handleDialog}
                     >
-                        What is vault storage?
+                        What is Vault Storage?
                     </Typography>
                     <SubmissionShippingDetailDialog shippingMethod={shippingMethod} paid={false} />
                 </>

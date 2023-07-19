@@ -142,7 +142,7 @@ const OptionButton = styled(ButtonBase)(({ theme }) => ({
     '.value': {
         color: theme.palette.primary.main,
         fontSize: '16px',
-        fontWeight: 500,
+        fontWeight: 600,
         lineHeight: '20px',
     },
     '.description': {

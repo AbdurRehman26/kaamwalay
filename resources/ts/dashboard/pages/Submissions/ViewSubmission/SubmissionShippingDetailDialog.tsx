@@ -60,7 +60,7 @@ export default function SubmissionShippingDetailDialog({ shippingMethod, paid }:
 
     const title = useMemo(() => {
         if (shippingMethod?.code === ShippingMethodType.VaultStorage) {
-            return <Typography className={'Title'}>What is vault storage?</Typography>;
+            return <Typography className={'Title'}>What is Vault Storage?</Typography>;
         }
     }, [shippingMethod]);
 

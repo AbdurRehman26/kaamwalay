@@ -53,6 +53,7 @@ class RefundSuccessfulListener implements ShouldQueue
                 'TOTAL_AMOUNT' => number_format(($order->grand_total - $order->amount_paid_from_wallet), 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
+                'INSURANCE_FEE' => $order->shipping_insurance_fee ? '$' . number_format($order->shipping_insurance_fee, 2) : 'N/A',
                 'EXTRA_CHARGE_TOTAL' => $order->extra_charge_total ? '$' . number_format($order->extra_charge_total, 2) : 'N/A',
                 'CARD' => $paymentOptionInformation,
                 'NOTES' => $order->lastOrderPayment->notes,

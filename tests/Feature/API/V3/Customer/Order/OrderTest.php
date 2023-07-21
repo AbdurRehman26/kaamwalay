@@ -19,7 +19,7 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
-    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);

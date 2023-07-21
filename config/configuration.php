@@ -97,8 +97,8 @@ return [
         'feature_order_cleaning_fee_max_cap' => [
             'value' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
         ],
-        'feature_order_insurance_shipping_fee_percentage' => [
-            'value' => env('FEATURE_ORDER_INSURANCE_SHIPPING_FEE_PERCENTAGE'),
+        'feature_order_shipping_insurance_fee_percentage' => [
+            'value' => env('FEATURE_ORDER_SHIPPING_INSURANCE_FEE_PERCENTAGE'),
         ],
         'feature_referral_discount_percentage' => [
             'auth' => true,

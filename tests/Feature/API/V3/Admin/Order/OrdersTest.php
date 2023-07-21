@@ -35,7 +35,7 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
-    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 

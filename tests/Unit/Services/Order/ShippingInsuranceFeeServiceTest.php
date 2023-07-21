@@ -5,34 +5,31 @@ use App\Models\OrderItem;
 use App\Services\ShippingInsuranceFee\ShippingInsuranceFeeService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-beforeEach(function () {
+it('should calculate shipping insurance fee for an order based on configurable percentage', function (int $shippingFeePercentage, float $expectedShippingInsuranceFee) {
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => $shippingFeePercentage]);
 
-    $this->order = Order::factory()->create();
+    $order = Order::factory()->create();
     OrderItem::factory()->count(4)->state(new Sequence(
         [
             'declared_value_total' => 10,
-            'order_id' => $this->order->id,
+            'order_id' => $order->id,
         ],
         [
             'declared_value_total' => 15,
-            'order_id' => $this->order->id,
+            'order_id' => $order->id,
         ],
         [
             'declared_value_total' => 20,
-            'order_id' => $this->order->id,
+            'order_id' => $order->id,
         ],
         [
             'declared_value_total' => 25,
-            'order_id' => $this->order->id,
+            'order_id' => $order->id,
         ]
     ))->create();
-});
 
-it('should calculate proper shipping insurance for an order based on configurable percentage', function (int $shippingFeePercentage, float $expectedResult) {
-    config(['robograding.feature_order_insurance_shipping_fee_percentage' => $shippingFeePercentage]);
-
-    $service = new ShippingInsuranceFeeService($this->order);
-    expect($service->calculate())->toBe($expectedResult);
+    $service = new ShippingInsuranceFeeService($order);
+    expect($service->calculate())->toBe($expectedShippingInsuranceFee);
 })->with([
     [1, 0.7],
     [2, 1.4],

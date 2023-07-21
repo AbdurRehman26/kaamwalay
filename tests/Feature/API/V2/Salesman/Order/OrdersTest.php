@@ -420,9 +420,10 @@ test('a salesman can place order for a user', function () {
     $response->assertJsonPath('data.created_by.id', $this->user->id);
     $response->assertJsonPath('data.salesman.id', $this->user->id);
 });
+
 test('a salesman can place order for a user with shipping insurance', function () {
     Event::fake();
-    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
 
     $customer = User::factory()->create();
     $customer->salesman()->associate($this->user)->save();

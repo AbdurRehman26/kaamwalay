@@ -1,8 +1,8 @@
 <?php
 
-use App\Services\ShippingInsuranceFee\ShippingInsuranceFeeService;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\ShippingInsuranceFee\ShippingInsuranceFeeService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 beforeEach(function () {

@@ -12,7 +12,7 @@ class ShippingInsuranceFeeService
 
     public function calculate(): float
     {
-        return $this->order->orderItems()->sum('declared_value_total') * config('robograding.feature_order_insurance_shipping_fee_percentage') / 100;
+        return round(($this->order->orderItems()->sum('declared_value_total') * config('robograding.feature_order_insurance_shipping_fee_percentage')) / 100, 2);
     }
 
 }

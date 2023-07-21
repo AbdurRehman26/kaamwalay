@@ -1,12 +1,9 @@
-import { AxiosRequestConfig } from 'axios';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
 import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { app } from '@shared/lib/app';
-import { APIService } from '@shared/services/APIService';
 import { toApiPropertiesObject } from '../../lib/utils/toApiPropertiesObject';
 import { Repository } from '../Repository';
 
@@ -14,21 +11,6 @@ import { Repository } from '../Repository';
 export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'salesman/orders/:orderId';
     readonly model = OrderEntity;
-
-    public async getOrder(
-        resourceId: any,
-        config?: AxiosRequestConfig,
-        transformModel?: ClassConstructor<OrderEntity>,
-    ): Promise<OrderEntity> {
-        const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(this.endpointPath, {
-            version: 'v3',
-        });
-
-        const { data } = await endpoint.get(`/${resourceId}`, config);
-
-        return this.toEntity(data, null, transformModel);
-    }
 
     async addCard(input: AddCardToOrderDto) {
         const { orderId, cardProductId: cardId, value } = input;

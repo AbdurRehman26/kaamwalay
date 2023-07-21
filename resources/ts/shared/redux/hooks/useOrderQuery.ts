@@ -2,7 +2,7 @@ import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useShowQuery } from '@shared/hooks/useShowQuery';
 import { getOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { showOrderAction } from '@shared/redux/slices/ordersSlice';
-import { salesRepGetOrder } from '@shared/redux/slices/salesRepOrdersSlice';
+import { showSalesRepOrderAction } from '@shared/redux/slices/salesRepOrdersSlice';
 import { ThunkShowActionArg } from '@shared/types/ThunkShowActionArg';
 
 export function useOrderQuery(options: ThunkShowActionArg) {
@@ -14,5 +14,5 @@ export function useAdminOrderQuery(options: ThunkShowActionArg) {
 }
 
 export function useSalesRepOrderQuery(options: ThunkShowActionArg) {
-    return useShowQuery(salesRepGetOrder, OrderEntity, (state) => state.salesRepOrders, options);
+    return useShowQuery(showSalesRepOrderAction, OrderEntity, (state) => state.salesRepOrders, options);
 }

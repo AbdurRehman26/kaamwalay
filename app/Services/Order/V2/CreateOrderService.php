@@ -330,9 +330,9 @@ class CreateOrderService
 
     protected function storeShippingInsuranceFee(): void
     {
-        if (! empty($this->data['has_shipping_insurance'])) {
+        if (! empty($this->data['requires_shipping_insurance'])) {
             $this->order->shipping_insurance_fee = (new ShippingInsuranceFeeService($this->order))->calculate();
-            $this->order->has_shipping_insurance = (bool) $this->data['has_shipping_insurance'];
+            $this->order->requires_shipping_insurance = (bool) $this->data['requires_shipping_insurance'];
             $this->order->save();
         }
     }

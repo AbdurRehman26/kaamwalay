@@ -4,7 +4,6 @@ use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\Salesman;
 use App\Models\ShippingMethod;
@@ -20,15 +19,10 @@ beforeEach(function () {
     ]);
     Event::fake();
 
-    config(['robograding.collector_coin_discount_percentage' => 1]);
+    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
 
     $this->user = User::factory()->withRole(config('permission.roles.salesman'))->create();
     Salesman::create(['user_id' => $this->user->id, 'commission_type' => 0, 'commission_value' => 10]);
-
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
-    $this->cardProduct = CardProduct::factory()->create();
-    $this->shippingMethod = ShippingMethod::factory()->insured()->create();
-    $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->actingAs($this->user);
 });
@@ -38,25 +32,30 @@ uses()->group('salesman', 'salesman_orders');
 test('a salesman can place order for a user with shipping insurance', function () {
     Event::fake();
 
+
+    $paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
+    $cardProduct = CardProduct::factory()->create();
+    $shippingMethod = ShippingMethod::factory()->insured()->create();
+
     $customer = User::factory()->create();
     $customer->salesman()->associate($this->user)->save();
 
     $response = $this->postJson('/api/v3/salesman/orders', [
         'user_id' => $customer->id,
         'payment_plan' => [
-            'id' => $this->paymentPlan->id,
+            'id' => $paymentPlan->id,
         ],
         'items' => [
             [
                 'card_product' => [
-                    'id' => $this->cardProduct->id,
+                    'id' => $cardProduct->id,
                 ],
                 'quantity' => 1,
                 'declared_value_per_unit' => 500,
             ],
             [
                 'card_product' => [
-                    'id' => $this->cardProduct->id,
+                    'id' => $cardProduct->id,
                 ],
                 'quantity' => 1,
                 'declared_value_per_unit' => 500,
@@ -88,10 +87,10 @@ test('a salesman can place order for a user with shipping insurance', function (
             'id' => null,
         ],
         'shipping_method' => [
-            'id' => $this->shippingMethod->id,
+            'id' => $shippingMethod->id,
         ],
         'pay_now' => false,
-        'has_shipping_insurance' => true,
+        'requires_shipping_insurance' => true,
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
@@ -106,7 +105,7 @@ test('a salesman can place order for a user with shipping insurance', function (
             'shipping_method',
             'service_fee',
             'shipping_fee',
-            'has_shipping_insurance',
+            'requires_shipping_insurance',
             'shipping_insurance_fee',
             'grand_total',
             'user',

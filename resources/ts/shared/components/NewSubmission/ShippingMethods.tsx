@@ -12,7 +12,7 @@ import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useRepository } from '@shared/hooks/useRepository';
 import {
     initializeShippingMethod,
-    setHasShippingInsurance,
+    setRequiresShippingInsurance,
     setShippingFee,
     setShippingInsuranceFee,
     setShippingMethod,
@@ -45,10 +45,10 @@ export function ShippingMethods() {
             dispatch(setShippingMethod(instanceToPlain(method) as ShippingMethodEntity));
             if (method.code === ShippingMethodType.VaultStorage) {
                 dispatch(setShippingFee(0));
-                dispatch(setHasShippingInsurance(false));
+                dispatch(setRequiresShippingInsurance(false));
                 dispatch(setShippingInsuranceFee(0));
             } else if (method.code === ShippingMethodType.InsuredShipping) {
-                dispatch(setHasShippingInsurance(true));
+                dispatch(setRequiresShippingInsurance(true));
             }
         },
         [dispatch],

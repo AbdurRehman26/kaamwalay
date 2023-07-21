@@ -14,7 +14,7 @@ class StoreOrderRequest extends V2StoreOrderRequest
         $rules = parent::rules();
 
         return array_merge($rules, [
-            'has_shipping_insurance' => ['sometimes', 'boolean'],
+            'requires_shipping_insurance' => ['sometimes', 'boolean'],
         ]);
     }
 }

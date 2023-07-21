@@ -35,7 +35,7 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
-    config(['robograding.collector_coin_discount_percentage' => 1]);
+    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
@@ -374,7 +374,7 @@ test('an admin can place order for an user and mark it paid immediately', functi
     ]);
 });
 
-test('an admin can place order for an user with shipping insurance', function () {
+test('an admin can place order for a user with shipping insurance', function () {
     Event::fake();
 
     $customer = User::factory()->create();
@@ -429,7 +429,7 @@ test('an admin can place order for an user with shipping insurance', function ()
             'id' => $this->shippingMethod->id,
         ],
         'pay_now' => false,
-        'has_shipping_insurance' => true,
+        'requires_shipping_insurance' => true,
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
@@ -444,13 +444,13 @@ test('an admin can place order for an user with shipping insurance', function ()
             'shipping_method',
             'service_fee',
             'shipping_fee',
-            'has_shipping_insurance',
+            'requires_shipping_insurance',
             'shipping_insurance_fee',
             'grand_total',
         ],
     ]);
     $response->assertJsonPath('data.shipping_insurance_fee', 10);
-
+    $response->assertJsonPath('data.requires_shipping_insurance', true);
 });
 
 test('correct service level price is assigned according to price ranges', function (int $numberOfCards, $priceRangeIndex) {

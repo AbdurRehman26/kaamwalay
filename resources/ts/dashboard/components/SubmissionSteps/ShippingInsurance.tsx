@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { setHasShippingInsurance, setShippingInsuranceFee } from '@dashboard/redux/slices/newSubmissionSlice';
+import { setRequiresShippingInsurance, setShippingInsuranceFee } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -27,7 +27,9 @@ const useStyles = makeStyles(
     { name: 'ShippingInsurance' },
 );
 export function ShippingInsurance() {
-    const hasShippingInsurance = useAppSelector((state) => state.newSubmission.step03Data.hasShippingInsurance);
+    const requiresShippingInsurance = useAppSelector(
+        (state) => state.newSubmission.step03Data.requiresShippingInsurance,
+    );
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const classes = useStyles();
@@ -43,15 +45,15 @@ export function ShippingInsurance() {
     }, [featureOrderInsuranceShippingFeePercentage, selectedCards]);
 
     useEffect(() => {
-        if (hasShippingInsurance) {
+        if (requiresShippingInsurance) {
             dispatch(setShippingInsuranceFee(fullShippingInsuranceDisplay));
         } else {
             dispatch(setShippingInsuranceFee(0));
         }
-    }, [dispatch, fullShippingInsuranceDisplay, hasShippingInsurance]);
+    }, [dispatch, fullShippingInsuranceDisplay, requiresShippingInsurance]);
 
-    const updateHasShippingInsurance = (selected: boolean) => {
-        dispatch(setHasShippingInsurance(selected));
+    const updateRequiresShippingInsurance = (selected: boolean) => {
+        dispatch(setRequiresShippingInsurance(selected));
     };
 
     return (
@@ -68,10 +70,10 @@ export function ShippingInsurance() {
             </Grid>
             <Grid mb={'24px'}>
                 <OptionButton
-                    onClick={() => updateHasShippingInsurance(true)}
-                    className={hasShippingInsurance ? 'selected' : ''}
+                    onClick={() => updateRequiresShippingInsurance(true)}
+                    className={requiresShippingInsurance ? 'selected' : ''}
                 >
-                    <Radio className={'radioButton'} checked={hasShippingInsurance} />
+                    <Radio className={'radioButton'} checked={requiresShippingInsurance} />
                     <Grid container display={'flex'} flexDirection={'column'} pt={1}>
                         <Grid item container display={'flex'} flexDirection={'row'}>
                             <Grid item xs={10}>
@@ -110,10 +112,10 @@ export function ShippingInsurance() {
                     </Grid>
                 </OptionButton>
                 <OptionButton
-                    onClick={() => updateHasShippingInsurance(false)}
-                    className={!hasShippingInsurance ? 'selected' : ''}
+                    onClick={() => updateRequiresShippingInsurance(false)}
+                    className={!requiresShippingInsurance ? 'selected' : ''}
                 >
-                    <Radio className={'radioButton'} checked={!hasShippingInsurance} />
+                    <Radio className={'radioButton'} checked={!requiresShippingInsurance} />
                     <Grid container display={'flex'} flexDirection={'column'} pt={1}>
                         <Typography className={'optionTitle'}>No Shipping Insurance</Typography>
                     </Grid>

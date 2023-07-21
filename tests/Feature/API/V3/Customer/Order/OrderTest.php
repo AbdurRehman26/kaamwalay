@@ -19,7 +19,7 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
-    config(['robograding.collector_coin_discount_percentage' => 1]);
+    config(['robograding.feature_order_insurance_shipping_fee_percentage' => 1]);
 
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
@@ -157,7 +157,7 @@ test('a customer can place order with shipping insurance', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-        'has_shipping_insurance' => true,
+        'requires_shipping_insurance' => true,
     ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
@@ -172,13 +172,14 @@ test('a customer can place order with shipping insurance', function () {
             'shipping_method',
             'service_fee',
             'shipping_fee',
-            'has_shipping_insurance',
+            'requires_shipping_insurance',
             'shipping_insurance_fee',
             'grand_total',
         ],
     ]);
 
     $response->assertJsonPath('data.shipping_insurance_fee', 10);
+    $response->assertJsonPath('data.requires_shipping_insurance', true);
 
 });
 

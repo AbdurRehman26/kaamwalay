@@ -24,7 +24,7 @@
  *                "service_fee": 20,
  *                "shipping_fee": 43,
  *                "shipping_insurance_fee": 10.0,
- *                "has_shipping_insurance": true
+ *                "requires_shipping_insurance": true
  *                "grand_total": 263,
  *                "extra_charge_total": 0,
  *                "refund_total": 0,

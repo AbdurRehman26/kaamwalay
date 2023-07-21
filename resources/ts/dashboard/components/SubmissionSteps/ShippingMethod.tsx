@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
     getShippingFee,
     setDialog,
-    setHasShippingInsurance,
+    setRequiresShippingInsurance,
     setShippingInsuranceFee,
 } from '@dashboard/redux/slices/newSubmissionSlice';
 
@@ -45,10 +45,10 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
         onSelect(shippingMethod);
         if (shippingMethod.code === ShippingMethodType.VaultStorage) {
             dispatch(getShippingFee(selectedCards));
-            dispatch(setHasShippingInsurance(false));
+            dispatch(setRequiresShippingInsurance(false));
             dispatch(setShippingInsuranceFee(0));
         } else if (shippingMethod.code === ShippingMethodType.InsuredShipping) {
-            dispatch(setHasShippingInsurance(true));
+            dispatch(setRequiresShippingInsurance(true));
         }
     }, [shippingMethod, onSelect, dispatch, selectedCards]);
 

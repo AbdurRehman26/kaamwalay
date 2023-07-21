@@ -42,7 +42,7 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodCode: string;
-    hasShippingInsurance: boolean;
+    requiresShippingInsurance: boolean;
     shippingInsuranceFee: number;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
@@ -98,7 +98,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         owner,
         referrer,
         orderCustomerShipment,
-        hasShippingInsurance,
+        requiresShippingInsurance,
         shippingInsuranceFee,
     } = props;
 
@@ -110,7 +110,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            'Insurance:': hasShippingInsurance ? 'Yes' : 'No',
+            'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
             ...(owner?.fullName && {
                 'Owner:': [
                     <>
@@ -141,7 +141,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             salesmanCommission,
             referralCommission,
             referrer,
-            hasShippingInsurance,
+            requiresShippingInsurance,
         ],
     );
 

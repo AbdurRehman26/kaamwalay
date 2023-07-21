@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->boolean('has_shipping_insurance')
+            $table->boolean('requires_shipping_insurance')
                 ->default(false)
                 ->after('requires_cleaning')
                 ->comment('Shows if Full Shipping Insurance has been selected');
@@ -29,7 +29,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn([
-                'has_shipping_insurance',
+                'requires_shipping_insurance',
                 'shipping_insurance_fee',
             ]);
         });

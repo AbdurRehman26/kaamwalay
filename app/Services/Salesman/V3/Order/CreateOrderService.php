@@ -31,8 +31,8 @@ class CreateOrderService extends V2CreateOrderService
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
         $this->storeServiceFee();
-        $this->storeShippingInsuranceFee();
         $this->storeCleaningFee();
+        $this->storeShippingInsuranceFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->associateSalesman();

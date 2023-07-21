@@ -40,7 +40,7 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodCode: string;
-    hasShippingInsurance: boolean;
+    requiresShippingInsurance: boolean;
     shippingInsuranceFee: number;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
@@ -90,7 +90,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         admin,
         salesmanCommission,
         owner,
-        hasShippingInsurance,
+        requiresShippingInsurance,
         shippingInsuranceFee,
     } = props;
 
@@ -102,13 +102,13 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
-            'Insurance:': hasShippingInsurance ? 'Yes' : 'No',
+            'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
             ...(owner?.fullName && {
                 'Owner:': owner?.fullName,
             }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission, hasShippingInsurance],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission, requiresShippingInsurance],
     );
 
     const customerInfo = useMemo(

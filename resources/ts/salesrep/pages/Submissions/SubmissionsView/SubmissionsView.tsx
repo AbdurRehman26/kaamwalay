@@ -95,7 +95,7 @@ export function SubmissionsView() {
                 createdBy={data?.createdBy}
                 owner={data?.owner}
                 salesmanCommission={data?.salesmanCommission}
-                hasShippingInsurance={data?.hasShippingInsurance}
+                requiresShippingInsurance={data?.requiresShippingInsurance}
                 shippingInsuranceFee={data?.shippingInsuranceFee}
             />
             <Divider />

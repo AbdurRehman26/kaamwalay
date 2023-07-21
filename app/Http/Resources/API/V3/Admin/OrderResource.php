@@ -81,7 +81,7 @@ class OrderResource extends BaseResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
-            'has_shipping_insurance' => $this->has_shipping_insurance,
+            'requires_shipping_insurance' => $this->requires_shipping_insurance,
             'salesman_commission' => $this->salesman_commission,
             'referral_commission' => $this->referral_total_commission,
             'tags' => $this->whenLoaded('tags', TagResource::collection($this->tags)),

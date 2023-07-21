@@ -25,7 +25,7 @@
  *             "status": "Placed",
  *             "service_fee": 18,
  *             "shipping_insurance_fee": 10.0,
- *             "has_shipping_insurance": true
+ *             "requires_shipping_insurance": true
  *             "shipping_fee": 14,
  *             "cleaning_fee": 0,
  *             "grand_total": 20,

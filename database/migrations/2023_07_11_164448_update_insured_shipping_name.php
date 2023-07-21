@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $now = now();
-
-        DB::table('shipping_methods')->where(['code' => 'insured_shipping'])->update(['name' => 'Shipping', 'updated_at' => $now]);
+        DB::table('shipping_methods')->where(['code' => 'insured_shipping'])->update(['name' => 'Shipping', 'updated_at' => now()]);
     }
 
     /**
@@ -21,8 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $now = now();
-
-        DB::table('shipping_methods')->where(['code' => 'insured_shipping'])->update(['name' => 'Insured Shipping', 'updated_at' => $now]);
+        DB::table('shipping_methods')->where(['code' => 'insured_shipping'])->update(['name' => 'Insured Shipping', 'updated_at' => now()]);
     }
 };

@@ -239,7 +239,9 @@ export function AddedSubmissionCards() {
     const shippingFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.shippingFee);
     const cleaningFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.cleaningFee);
     const requiresCleaning = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.requiresCleaning);
-    const hasShippingInsurance = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.hasShippingInsurance);
+    const requiresShippingInsurance = useAppSelector(
+        (state) => state.adminCreateOrderSlice.step03Data.requiresShippingInsurance,
+    );
     const shippingInsuranceFee = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.shippingInsuranceFee);
 
     const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
@@ -558,7 +560,7 @@ export function AddedSubmissionCards() {
                         prefix={'$'}
                     />
                 </div>
-                {hasShippingInsurance ? (
+                {requiresShippingInsurance ? (
                     <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                         <Typography className={classes.rowLeftText}>Insurance:</Typography>
                         <NumberFormat

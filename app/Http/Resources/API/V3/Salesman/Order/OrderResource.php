@@ -17,7 +17,7 @@ class OrderResource extends V2OrderResource
 
         return array_merge($data, [
             'shipping_insurance_fee' => $this->shipping_insurance_fee,
-            'has_shipping_insurance' => $this->has_shipping_insurance,
+            'requires_shipping_insurance' => $this->requires_shipping_insurance,
         ]);
     }
 }

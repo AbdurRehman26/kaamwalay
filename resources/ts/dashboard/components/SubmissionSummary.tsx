@@ -163,7 +163,9 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const requiresCleaning = useAppSelector((state) => state.newSubmission.step02Data.requiresCleaning);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
-    const hasShippingInsurance = useAppSelector((state) => state.newSubmission.step03Data.hasShippingInsurance);
+    const requiresShippingInsurance = useAppSelector(
+        (state) => state.newSubmission.step03Data.requiresShippingInsurance,
+    );
     const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
 
     const shippingMethod = useAppSelector(
@@ -337,7 +339,7 @@ function SubmissionSummary() {
                                 />
                             </div>
 
-                            {hasShippingInsurance ? (
+                            {requiresShippingInsurance ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Insurance: </Typography>
                                     <NumberFormat
@@ -532,7 +534,7 @@ function SubmissionSummary() {
                                 />
                             </div>
 
-                            {hasShippingInsurance ? (
+                            {requiresShippingInsurance ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Insurance: </Typography>
                                     <NumberFormat

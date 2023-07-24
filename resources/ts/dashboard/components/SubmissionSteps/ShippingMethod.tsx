@@ -35,7 +35,7 @@ const mappedDescriptions: Record<string, ReactNode> = {
     // eslint-disable-next-line camelcase
     insured_shipping: "We'll ship your cards back to you.",
     // eslint-disable-next-line camelcase
-    vault_storage: "We'll storage your cards in AGS Vault.",
+    vault_storage: "We'll store your cards in AGS Vault.",
 };
 export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);

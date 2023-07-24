@@ -95,6 +95,8 @@ export function SubmissionsView() {
                 createdBy={data?.createdBy}
                 owner={data?.owner}
                 salesmanCommission={data?.salesmanCommission}
+                requiresShippingInsurance={data?.requiresShippingInsurance}
+                shippingInsuranceFee={data?.shippingInsuranceFee}
             />
             <Divider />
             <RefundsAndExtraCharges

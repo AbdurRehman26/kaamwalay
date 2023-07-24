@@ -42,7 +42,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                 selectAddress.close();
                 loadingModal.open({
                     state: 'loading',
-                    message: 'Switching to Insured Shipping...',
+                    message: 'Switching to Shipping...',
                 });
 
                 try {
@@ -68,7 +68,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
 
                     loadingModal.setData({
                         state: 'loaded',
-                        message: 'Successfully switched to Insured Shipping.',
+                        message: 'Successfully switched to Shipping.',
                     });
                     await delay(2000);
                 } catch (e) {
@@ -89,7 +89,7 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
         if (orderId) {
             loadingModal.open({
                 state: 'loading',
-                message: 'Switching to Insured Shipping...',
+                message: 'Switching to Vault Storage...',
             });
             try {
                 const { shippingMethod, shippingAddress, shippingFee, grandTotal, serviceFee, invoice } =
@@ -154,15 +154,15 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
                     ) : (
                         <>
                             You have opted to store your cards in the AGS Vault, which means they will be stored in a
-                            secure safe within the AGS Card Vault. You can switch to standard insured shipping at any
-                            point by clicking the button below.
+                            secure safe within the AGS Card Vault. You can switch to standard shipping at any point by
+                            clicking the button below.
                         </>
                     )}
                 </Typography>
                 {!paid ? (
                     <>
                         <Button variant={'outlined'} color={'primary'} {...selectAddress.buttonProps}>
-                            Switch to Insured Shipping
+                            Switch to Shipping
                         </Button>
                         <SelectAddressDialog onSubmit={handleSelectAddress} {...selectAddress.dialogProps} />
                     </>
@@ -184,16 +184,23 @@ export function SubmissionShippingMethod({ orderId, shippingMethod, paid, order 
 
     return (
         <>
-            <SubmissionShippingDetailDialog shippingMethod={shippingMethod} paid={paid} />
+            {shippingMethod?.code !== 'insured_shipping' ? (
+                <SubmissionShippingDetailDialog shippingMethod={shippingMethod} paid={paid} />
+            ) : null}
             <Stack py={1} alignItems={'flex-start'}>
                 <Typography variant={'body1'} fontWeight={500} sx={{ fontSize: '14px' }}>
                     Shipping/Storage Selection
                 </Typography>
                 <Grid container alignItems={'center'}>
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
-                        {shippingMethod?.name ?? 'Insured Shipping'}
+                        {shippingMethod?.name ?? 'Shipping'}
                     </Typography>
-                    <InfoIcon sx={{ ml: 1, color: 'rgba(0, 0, 0, 0.54)', cursor: 'pointer' }} onClick={handleDialog} />
+                    {shippingMethod?.code !== 'insured_shipping' ? (
+                        <InfoIcon
+                            sx={{ ml: 1, color: 'rgba(0, 0, 0, 0.54)', cursor: 'pointer' }}
+                            onClick={handleDialog}
+                        />
+                    ) : null}
                 </Grid>
                 {content}
             </Stack>

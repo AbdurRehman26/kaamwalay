@@ -61,6 +61,7 @@ class StoreOrderRequest extends FormRequest
             ],
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
             'requires_cleaning' => ['sometimes', 'boolean'],
+            'requires_shipping_insurance' => ['sometimes', 'boolean'],
             'pay_now' => ['required', 'boolean'],
             'payment_method' => ['required_if:pay_now,true', 'array'],
             'payment_method.id' => ['required_if:pay_now,true', 'integer', 'exists:payment_methods,id'],

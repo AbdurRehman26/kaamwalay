@@ -48,6 +48,7 @@ class OrderService extends V1OrderService
         $data["ORDER_ITEMS"] = $items;
         $data["SUBTOTAL"] = number_format($order->service_fee, 2);
         $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["INSURANCE_FEE"] = $order->shipping_insurance_fee ? '$' . number_format($order->shipping_insurance_fee, 2) : 'N/A';
         $data["TOTAL"] = number_format($order->grand_total, 2);
 
         $data["SERVICE_LEVEL"] = $paymentPlan->price;
@@ -89,6 +90,7 @@ class OrderService extends V1OrderService
 
         $data['SUBTOTAL'] = number_format($order->service_fee, 2);
         $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data["INSURANCE_FEE"] = $order->shipping_insurance_fee ? '$' . number_format($order->shipping_insurance_fee, 2) : 'N/A';
         $data['TOTAL'] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
 
         $data['SERVICE_LEVEL'] = $paymentPlan->price;
@@ -218,7 +220,7 @@ class OrderService extends V1OrderService
 
     protected function recalculateGrandTotal(Order &$order): self
     {
-        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee;
+        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee + $order->shipping_insurance_fee;
         $order->grand_total = $order->grand_total_before_discount - $order->discounted_amount - $order->payment_method_discounted_amount;
 
         return $this;

@@ -108,6 +108,7 @@ class OrderService extends V1OrderService
         $data["ORDER_ITEMS"] = $items;
         $data["SUBTOTAL"] = number_format($order->service_fee, 2);
         $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["INSURANCE_FEE"] = $order->shipping_insurance_fee ? '$' . number_format($order->shipping_insurance_fee, 2) : 'N/A';
         $data["TOTAL"] = number_format($order->grand_total, 2);
 
         $data["SERVICE_LEVEL"] = $paymentPlan->price;

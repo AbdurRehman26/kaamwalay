@@ -79,6 +79,7 @@ class CreateOrderService extends BaseCreateOrderService
         $this->storeShippingFee();
         $this->storeServiceFee();
         $this->storeCleaningFee();
+        $this->storeShippingInsuranceFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);

@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
+import { ShippingInsurance } from '@salesrep/components/NewSubmission/ShippingInsurance';
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
 import React, { useEffect, useState } from 'react';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
@@ -382,6 +383,10 @@ export function InsuredShippingMethod() {
                     <CircularProgress />
                 </Grid>
             ) : null}
+
+            <ShippingInsurance />
+            <Divider sx={{ marginBottom: '24px' }} />
+
             {existingAddresses.length > 0 ? (
                 <>
                     <Typography ml={2.5} className={classes.sectionLabel}>

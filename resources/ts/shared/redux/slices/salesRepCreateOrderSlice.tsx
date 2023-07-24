@@ -93,6 +93,8 @@ export interface ShippingSubmissionState {
     availableCountriesList: { name: string; code: string; id: number; phoneCode: string }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
+    requiresShippingInsurance: boolean;
+    shippingInsuranceFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -257,6 +259,8 @@ const initialState: SalesRepNewOrderSliceState = {
         ],
         fetchingStatus: null,
         saveForLater: true,
+        requiresShippingInsurance: true,
+        shippingInsuranceFee: 0,
         disableAllShippingInputs: false,
         useCustomShippingAddress: false,
     },
@@ -388,6 +392,7 @@ export const createOrder = createAsyncThunk('salesRepCreateOrderSlice/createOrde
         requiresCleaning: currentSubmission.step02Data.requiresCleaning
             ? currentSubmission.step02Data.requiresCleaning
             : false,
+        requiresShippingInsurance: currentSubmission.step03Data.requiresShippingInsurance ?? false,
         paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : {},
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
@@ -593,6 +598,12 @@ export const salesRepCreateOrderSlice = createSlice({
         setCleaningFee: (state, action: PayloadAction<number>) => {
             state.step02Data.cleaningFee = action.payload;
         },
+        setRequiresShippingInsurance: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.requiresShippingInsurance = action.payload;
+        },
+        setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.shippingInsuranceFee = action.payload;
+        },
         setPayNow: (state, action: PayloadAction<boolean>) => {
             state.payNow = action.payload;
         },
@@ -716,6 +727,8 @@ export const {
     changeSelectedCardQty,
     changeSelectedCardValue,
     setCleaningFee,
+    setRequiresShippingInsurance,
+    setShippingInsuranceFee,
     setRequiresCleaning,
     markCardAsUnselected,
     setCouponCode,

@@ -40,6 +40,8 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodCode: string;
+    requiresShippingInsurance: boolean;
+    shippingInsuranceFee: number;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
@@ -88,6 +90,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         admin,
         salesmanCommission,
         owner,
+        requiresShippingInsurance,
+        shippingInsuranceFee,
     } = props;
 
     const classes = useStyles();
@@ -98,12 +102,13 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Shipping Method': 'Insured',
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
+            'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
             ...(owner?.fullName && {
                 'Owner:': owner?.fullName,
             }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission, requiresShippingInsurance],
     );
 
     const customerInfo = useMemo(
@@ -135,6 +140,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             ...(Number(cleaningFee) > 0 && { 'Cleaning Fee:': formatCurrency(cleaningFee) }),
+            ...(Number(shippingInsuranceFee) > 0 && { 'Insurance:': formatCurrency(shippingInsuranceFee) }),
             'Total:': formatCurrency(grandTotal),
         }),
         [
@@ -148,6 +154,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             refundsTotal,
             amountPaidFromWallet,
             grandTotal,
+            shippingInsuranceFee,
         ],
     );
 

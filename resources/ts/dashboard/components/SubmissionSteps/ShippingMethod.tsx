@@ -1,6 +1,7 @@
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -84,18 +85,18 @@ export function ShippingMethod({ shippingMethod, onSelect, selected }: Props) {
             </Root>
             {shippingMethod.code === 'vault_storage' ? (
                 <>
-                    <Typography
+                    <Link
                         fontSize={12}
                         fontWeight={400}
                         lineHeight={'20px'}
                         letterSpacing={'0.2px'}
                         color={'#0000008A'}
                         mt={1}
-                        style={{ textDecoration: 'underline' }}
+                        style={{ textDecoration: 'underline', cursor: 'pointer' }}
                         onClick={handleDialog}
                     >
                         What is Vault Storage?
-                    </Typography>
+                    </Link>
                     <SubmissionShippingDetailDialog shippingMethod={shippingMethod} paid={false} />
                 </>
             ) : null}

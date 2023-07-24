@@ -34,15 +34,15 @@ export function ShippingInsurance() {
     const dispatch = useAppDispatch();
     const classes = useStyles();
     const [fullShippingInsuranceDisplay, setFullShippingInsuranceDisplay] = useState(0);
-    const { featureOrderInsuranceShippingFeePercentage } = useConfiguration();
+    const { featureOrderShippingInsuranceFeePercentage } = useConfiguration();
 
     useEffect(() => {
         const totalDeclaredValue = selectedCards.reduce(
             (prev, curr) => prev + (curr?.qty ?? 0) * (curr?.value ?? 0),
             0,
         );
-        setFullShippingInsuranceDisplay((totalDeclaredValue * featureOrderInsuranceShippingFeePercentage) / 100);
-    }, [featureOrderInsuranceShippingFeePercentage, selectedCards]);
+        setFullShippingInsuranceDisplay((totalDeclaredValue * featureOrderShippingInsuranceFeePercentage) / 100);
+    }, [featureOrderShippingInsuranceFeePercentage, selectedCards]);
 
     useEffect(() => {
         if (requiresShippingInsurance) {

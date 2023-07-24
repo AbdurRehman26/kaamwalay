@@ -19,5 +19,5 @@ export class ConfigurationEntity {
     public featureReferralDiscountPercentage!: number;
     public featureOrderCleaningFeePerCard!: number;
     public featureOrderCleaningFeeMaxCap!: number;
-    public featureOrderInsuranceShippingFeePercentage!: number;
+    public featureOrderShippingInsuranceFeePercentage!: number;
 }

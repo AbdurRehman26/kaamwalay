@@ -13,6 +13,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { useAuth } from '@shared/hooks/useAuth';
+import { ShippingInsurance } from '@dashboard/components/SubmissionSteps/ShippingInsurance';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getCountriesList,
@@ -364,11 +365,14 @@ export function InsuredShippingMethod() {
 
     return (
         <div className={classes.leftSideContainer}>
+            <Divider />
             {isLoadingAddresses ? (
                 <Grid container alignItems={'center'} justifyContent={'center'} p={3}>
                     <CircularProgress />
                 </Grid>
             ) : null}
+            <ShippingInsurance />
+
             {existingAddresses.length > 0 ? (
                 <>
                     <Typography className={classes.sectionLabel}>Existing Addresses</Typography>

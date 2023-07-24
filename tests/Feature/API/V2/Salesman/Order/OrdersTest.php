@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
+use App\Models\Salesman;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
@@ -27,6 +28,7 @@ beforeEach(function () {
     ]);
 
     $this->user = User::factory()->withSalesmanRole()->create();
+    Salesman::create(['user_id' => $this->user->id, 'commission_type' => 0, 'commission_value' => 10]);
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
         ['order_status_id' => OrderStatus::PLACED, 'salesman_id' => $this->user->id, 'created_at' => '2022-01-01 00:00:00'],
@@ -417,4 +419,88 @@ test('a salesman can place order for a user', function () {
     $response->assertJsonPath('data.user.id', $customer->id);
     $response->assertJsonPath('data.created_by.id', $this->user->id);
     $response->assertJsonPath('data.salesman.id', $this->user->id);
+});
+
+test('a salesman can place order for a user with shipping insurance', function () {
+    Event::fake();
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
+
+    $customer = User::factory()->create();
+    $customer->salesman()->associate($this->user)->save();
+
+    $response = $this->postJson('/api/v2/salesman/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+        'requires_shipping_insurance' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'requires_shipping_insurance',
+            'shipping_insurance_fee',
+            'grand_total',
+            'user',
+            'created_by',
+        ],
+    ]);
+
+    $response->assertJsonPath('data.shipping_insurance_fee', 10);
+    $response->assertJsonPath('data.requires_shipping_insurance', true);
 });

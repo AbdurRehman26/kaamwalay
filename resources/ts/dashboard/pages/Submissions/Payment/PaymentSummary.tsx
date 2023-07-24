@@ -184,6 +184,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
+    const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
     const extraChargesTotal = useAppSelector((state) => state.newSubmission.extraChargesTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
@@ -255,6 +256,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 shippingFee -
                 Number(isCouponApplied ? discountedValue : 0) -
                 refundTotal +
+                Number(shippingInsuranceFee) +
                 Number(cleaningFee) +
                 extraChargesTotal -
                 appliedCredit
@@ -451,7 +453,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
 
                     <div className={classes.row} style={{ marginTop: '16px' }}>
                         {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
-                            <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                            <Typography className={classes.rowLeftText}>Shipping: </Typography>
                         ) : null}
 
                         {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
@@ -473,6 +475,20 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                             <Typography className={classes.rowLeftText}>Extra Charges: </Typography>
                             <NumberFormat
                                 value={extraChargesTotal}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </div>
+                    ) : null}
+
+                    {(shippingInsuranceFee ?? 0) > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Insurance: </Typography>
+                            <NumberFormat
+                                value={shippingInsuranceFee}
                                 className={classes.rowRightBoldText}
                                 displayType={'text'}
                                 thousandSeparator

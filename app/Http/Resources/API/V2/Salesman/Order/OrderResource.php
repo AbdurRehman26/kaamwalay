@@ -54,6 +54,8 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
  * @property mixed $requires_cleaning
+ * @property mixed $requires_shipping_insurance
+ * @property mixed $shipping_insurance_fee
  * @property mixed $salesman_commission
  * @property OrderPaymentStatusEnum $payment_status
  * @method orderItems()
@@ -114,6 +116,8 @@ class OrderResource extends BaseResource
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
+            'shipping_insurance_fee' => $this->shipping_insurance_fee,
+            'requires_shipping_insurance' => $this->requires_shipping_insurance,
         ];
     }
 

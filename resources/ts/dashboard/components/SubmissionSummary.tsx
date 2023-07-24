@@ -163,6 +163,11 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const requiresCleaning = useAppSelector((state) => state.newSubmission.step02Data.requiresCleaning);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
+    const requiresShippingInsurance = useAppSelector(
+        (state) => state.newSubmission.step03Data.requiresShippingInsurance,
+    );
+    const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
+
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
@@ -229,6 +234,7 @@ function SubmissionSummary() {
             (
                 numberOfSelectedCards * finalPrice +
                 Number(cleaningFee) +
+                Number(shippingInsuranceFee) +
                 shippingFee -
                 Number(isCouponApplied ? discountedValue : 0) -
                 appliedCredit
@@ -317,7 +323,7 @@ function SubmissionSummary() {
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
-                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                    <Typography className={classes.rowLeftText}>Shipping: </Typography>
                                 ) : null}
 
                                 {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
@@ -332,6 +338,20 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {requiresShippingInsurance ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Insurance: </Typography>
+                                    <NumberFormat
+                                        value={shippingInsuranceFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
 
                             {requiresCleaning ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
@@ -497,7 +517,7 @@ function SubmissionSummary() {
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
-                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                    <Typography className={classes.rowLeftText}>Shipping: </Typography>
                                 ) : null}
 
                                 {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
@@ -513,6 +533,20 @@ function SubmissionSummary() {
                                     prefix={'$'}
                                 />
                             </div>
+
+                            {requiresShippingInsurance ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Insurance: </Typography>
+                                    <NumberFormat
+                                        value={shippingInsuranceFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
 
                             {requiresCleaning ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>

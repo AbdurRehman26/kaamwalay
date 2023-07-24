@@ -19,6 +19,8 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
+
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->paymentPlanRanges = PaymentPlanRange::factory()->count(5)->state(new Sequence(
@@ -101,6 +103,84 @@ test('a customer can place order', function () {
             'grand_total',
         ],
     ]);
+});
+
+test('a customer can place order with shipping insurance', function () {
+    $this->actingAs($this->user);
+    Event::fake();
+
+    $response = $this->postJson('/api/v3/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'requires_shipping_insurance' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'requires_shipping_insurance',
+            'shipping_insurance_fee',
+            'grand_total',
+        ],
+    ]);
+
+    $response->assertJsonPath('data.shipping_insurance_fee', 10);
+    $response->assertJsonPath('data.requires_shipping_insurance', true);
+
 });
 
 test('an order needs data', function () {

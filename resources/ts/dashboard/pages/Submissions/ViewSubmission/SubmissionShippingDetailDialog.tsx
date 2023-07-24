@@ -60,9 +60,7 @@ export default function SubmissionShippingDetailDialog({ shippingMethod, paid }:
 
     const title = useMemo(() => {
         if (shippingMethod?.code === ShippingMethodType.VaultStorage) {
-            return <Typography className={'Title'}>What is vault storage?</Typography>;
-        } else {
-            return <Typography className={'Title'}>What is insured shipping?</Typography>;
+            return <Typography className={'Title'}>What is Vault Storage?</Typography>;
         }
     }, [shippingMethod]);
 
@@ -71,7 +69,7 @@ export default function SubmissionShippingDetailDialog({ shippingMethod, paid }:
             return (
                 <Stack>
                     <Typography mb={2.5} className={'Content'}>
-                        Since you have already paid, you cannot switch from Vault Storage to Insured Shipping from the
+                        Since you have already paid, you cannot switch from Vault Storage to Shipping from the
                         submission page.
                     </Typography>
                     <Typography className={'Content'}>
@@ -87,16 +85,6 @@ export default function SubmissionShippingDetailDialog({ shippingMethod, paid }:
                     after grading, we will store your slabbed cards in a level-8 secrity safe. Vault storage is
                     completely free and you can opt to have your cards shipped back to you at any point, by simply
                     paying a shipping fee.
-                </Typography>
-            );
-        } else {
-            return (
-                <Typography className={'Content'}>
-                    AGS insurance begins to apply to your cards once we receive them up to the point that they are
-                    marked delivered back to you by our carrier. It covers any loss or damage that might occur to your
-                    cards (up to their full value) while they are in our possession or in transit back to you. AGS
-                    insurance does not apply to stolen packages (after delivery) or to any shipments you make to AGS. If
-                    you want to insure your shipments to AGS, you have to do that independently with your carrier.
                 </Typography>
             );
         }

@@ -49,6 +49,7 @@ interface SubmissionsViewDetailsProps {
     createdBy?: AdminUserEntity;
     owner?: SalesRepEntity;
     salesmanCommission?: number;
+    shippingMethod: string;
 }
 
 const useStyles = makeStyles(
@@ -92,6 +93,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         owner,
         requiresShippingInsurance,
         shippingInsuranceFee,
+        shippingMethod,
     } = props;
 
     const classes = useStyles();
@@ -99,7 +101,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         () => ({
             'Service level:': `${formatCurrency(serviceLevelFee)} / Card`,
             'No. of Cards:': numberOfCards,
-            'Shipping Method': 'Insured',
+            'Shipping/Storage': shippingMethod,
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
             'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
@@ -108,7 +110,16 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             }),
             ...(salesmanCommission && { 'Commission:': formatCurrency(salesmanCommission) }),
         }),
-        [declaredValue, numberOfCards, placedAt, serviceLevelFee, owner, salesmanCommission, requiresShippingInsurance],
+        [
+            declaredValue,
+            numberOfCards,
+            placedAt,
+            serviceLevelFee,
+            owner,
+            salesmanCommission,
+            requiresShippingInsurance,
+            shippingMethod,
+        ],
     );
 
     const customerInfo = useMemo(

@@ -54,6 +54,7 @@ interface SubmissionsViewDetailsProps {
     salesmanCommission?: number;
     referralCommission?: number;
     orderCustomerShipment?: ShipmentEntity | null;
+    shippingMethod: string;
 }
 
 const useStyles = makeStyles(
@@ -100,6 +101,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         orderCustomerShipment,
         requiresShippingInsurance,
         shippingInsuranceFee,
+        shippingMethod,
     } = props;
 
     const classes = useStyles();
@@ -107,7 +109,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         () => ({
             'Service level:': `${formatCurrency(serviceLevelFee)} / Card`,
             'No. of Cards:': numberOfCards,
-            'Shipping Method': 'Insured',
+            'Shipping/Storage': shippingMethod,
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
             'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
@@ -142,6 +144,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             referralCommission,
             referrer,
             requiresShippingInsurance,
+            shippingMethod,
         ],
     );
 

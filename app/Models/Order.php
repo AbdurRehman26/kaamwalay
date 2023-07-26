@@ -79,6 +79,8 @@ class Order extends Model implements Exportable, Taggable
         'estimated_delivery_end_at',
         'created_by',
         'referral_total_commission',
+        'requires_shipping_insurance',
+        'shipping_insurance_fee',
     ];
 
     /**
@@ -123,6 +125,8 @@ class Order extends Model implements Exportable, Taggable
         'created_by' => 'integer',
         'discounted_amount' => 'float',
         'referral_total_commission' => 'float',
+        'requires_shipping_insurance' => 'boolean',
+        'shipping_insurance_fee' => 'float',
     ];
 
     protected $appends = [

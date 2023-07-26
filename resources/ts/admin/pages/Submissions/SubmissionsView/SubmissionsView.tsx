@@ -107,6 +107,9 @@ export function SubmissionsView() {
                 salesmanCommission={data?.salesmanCommission}
                 referralCommission={data?.referralCommission}
                 orderCustomerShipment={data?.orderCustomerShipment}
+                requiresShippingInsurance={data?.requiresShippingInsurance}
+                shippingInsuranceFee={data?.shippingInsuranceFee}
+                shippingMethod={data?.shippingMethod?.name}
             />
             <Divider />
             <RefundsAndExtraCharges

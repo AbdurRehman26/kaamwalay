@@ -29,6 +29,7 @@ export class HomeController extends Controller implements CanSetup<HomeControlle
         if (videoElement) {
             const video = document.createElement('video');
             video.autoplay = true;
+            video.playsInline = true;
             video.loop = true;
             video.muted = true;
             video.classList.add('Home-video');

@@ -78,6 +78,7 @@ class CreateOrderService extends BaseCreateOrderService
         $this->storeShippingFee();
         $this->storeServiceFee();
         $this->storeCleaningFee();
+        $this->storeShippingInsuranceFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->associateSalesman();

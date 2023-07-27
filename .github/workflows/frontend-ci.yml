@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -65,7 +65,7 @@ jobs:
             ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore eslint cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .eslintrc.json
@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -99,7 +99,7 @@ jobs:
             ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore typescript cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .tsbuildinfo
@@ -123,7 +123,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock

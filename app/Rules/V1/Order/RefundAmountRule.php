@@ -57,7 +57,6 @@ class RefundAmountRule implements Rule, DataAwareRule
             return $order->grand_total_to_be_paid;
         }
 
-        return
-            $firstOrderPayment->amount - $order->refunds()->where('payment_method_id', $firstOrderPayment)->sum('amount');
+        return $firstOrderPayment->amount - $order->refunds()->where('payment_method_id', $firstOrderPayment)->sum('amount');
     }
 }

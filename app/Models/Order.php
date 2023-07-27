@@ -719,8 +719,7 @@ class Order extends Model implements Exportable, Taggable
 
     public function isEligibleToMarkAsShipped(): bool
     {
-        return
-            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid();
+        return $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid();
     }
 
     public function isShipped(): bool

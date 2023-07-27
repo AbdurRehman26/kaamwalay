@@ -145,7 +145,7 @@ return [
                     'sort',
                     'exactness',
                     'card_number_order:asc',
-                    'name:asc'
+                    'name:asc',
                 ],
             ],
             'user_cards' => [

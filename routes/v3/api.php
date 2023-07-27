@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\API\V3\Auth\LoginController;
+use App\Http\Controllers\API\V3\Auth\RegisterController;
 use App\Http\Controllers\API\V3\Customer\Order\OrderController;
 use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
-use App\Http\Controllers\API\V3\Customer\ReferrerPayoutController;
-use App\Http\Controllers\API\V3\Customer\PushNotificationController;
-use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
-use App\Http\Controllers\API\V3\Auth\LoginController;
-use App\Http\Controllers\API\V3\Customer\RefereeCouponController;
-use App\Http\Controllers\API\V3\Auth\RegisterController;
 use App\Http\Controllers\API\V3\Customer\Order\UpdateOrderShippingMethodController;
+use App\Http\Controllers\API\V3\Customer\PushNotificationController;
+use App\Http\Controllers\API\V3\Customer\RefereeCouponController;
+use App\Http\Controllers\API\V3\Customer\ReferralProgramController;
+use App\Http\Controllers\API\V3\Customer\ReferrerPayoutController;
 
 Route::prefix('auth')->group(function () {
     Route::middleware('auth')->get('me', [LoginController::class, 'me'])->name('auth.me');

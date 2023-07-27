@@ -39,7 +39,7 @@ class MarkOldOrdersAsCancelled extends Command
                 ->whereDate('created_at', '<=', $date)
                 ->get()
                 ->tap(function ($collection) {
-                    $this->info('Found ' . $collection->count() . ' Orders');
+                    $this->info('Found '.$collection->count().' Orders');
                 })
                 ->each(fn (Order $order) => $orderService->cancelOrder($order, $adminUser));
 

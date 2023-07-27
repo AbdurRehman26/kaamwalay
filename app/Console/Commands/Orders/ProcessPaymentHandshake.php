@@ -22,7 +22,6 @@ class ProcessPaymentHandshake extends Command
      */
     protected $description = 'Process payment handshake for pending order payments to get updated payment status';
 
-
     /**
      * Execute the console command.
      */

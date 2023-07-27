@@ -33,7 +33,7 @@ test('customer can not login with admin route', function () {
     ]);
 
     $response->assertUnauthorized();
-    $response->assertJsonStructure([ 'error' ]);
+    $response->assertJsonStructure(['error']);
     $response->assertJsonPath('error', (new AuthenticationException)->getMessage());
 })->group('auth');
 
@@ -46,6 +46,6 @@ test('admin can not login with invalid password', function () {
     ]);
 
     $response->assertUnauthorized();
-    $response->assertJsonStructure([ 'error' ]);
+    $response->assertJsonStructure(['error']);
     $response->assertJsonPath('error', (new AuthenticationException)->getMessage());
 })->group('auth');

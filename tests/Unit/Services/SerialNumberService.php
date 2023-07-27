@@ -18,7 +18,7 @@ it('should generate serial numbers correctly based on a class', function () {
     {
         public static function getPrefixSerialNumber(): string
         {
-            return  "CC";
+            return 'CC';
         }
     }
 

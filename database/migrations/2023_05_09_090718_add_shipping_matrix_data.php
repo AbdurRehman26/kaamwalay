@@ -403,7 +403,7 @@ return new class extends Migration
                 'YE',
                 'ZM',
                 'ZW',
-                'SL'
+                'SL',
             ])->pluck('id')->toArray()
         )->delete();
     }

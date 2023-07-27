@@ -46,13 +46,13 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
                 'TOTAL_AMOUNT' => number_format(($order->grand_total - $order->amount_paid_from_wallet), 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
-                'INSURANCE_FEE' => $order->shipping_insurance_fee ? '$' . number_format($order->shipping_insurance_fee, 2) : 'N/A',
+                'INSURANCE_FEE' => $order->shipping_insurance_fee ? '$'.number_format($order->shipping_insurance_fee, 2) : 'N/A',
                 'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
                 'EXTRA_CHARGE_TOTAL' => number_format($order->extra_charge_total, 2),
-                'REFUNDED_AMOUNT_TOTAL' => $order->refund_total ? '-$' . number_format($order->refund_total, 2) : 'N/A',
+                'REFUNDED_AMOUNT_TOTAL' => $order->refund_total ? '-$'.number_format($order->refund_total, 2) : 'N/A',
                 'NOTES' => $orderPayment->notes,
-                'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
-                'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
+                'CARD' => $card ? ($card['brand'].' ending in '.$card['last4']) : 'N/A',
+                'SUBMISSION_URL' => config('app.url').'/dashboard/submissions/'.$order->id.'/view',
             ],
         );
     }

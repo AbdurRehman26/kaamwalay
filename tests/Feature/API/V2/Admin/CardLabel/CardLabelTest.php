@@ -23,7 +23,6 @@ beforeEach(function () {
 
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
 
-
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::GRADED,
     ]);
@@ -71,7 +70,7 @@ beforeEach(function () {
 });
 
 test('an admin can get card label details', function () {
-    $this->getJson('/api/v2/admin/cards/' . $this->cardLabel->card_product_id .'/label')
+    $this->getJson('/api/v2/admin/cards/'.$this->cardLabel->card_product_id.'/label')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -87,12 +86,12 @@ test('an admin can get card label details', function () {
 
 test('customers can not get card labels data', function () {
     $this->actingAs($this->customer);
-    $this->getJson('/api/v2/admin/cards/' . $this->cardLabel->card_product_id .'/label')
+    $this->getJson('/api/v2/admin/cards/'.$this->cardLabel->card_product_id.'/label')
         ->assertForbidden();
 });
 
 test('an admin can update card label details', function () {
-    $this->putJson('/api/v2/admin/cards/labels/'. $this->cardLabel->id, [
+    $this->putJson('/api/v2/admin/cards/labels/'.$this->cardLabel->id, [
         'line_one' => '2022 Lorem',
         'line_two' => 'Lorem Ipsum',
         'line_three' => 'Dolor',
@@ -118,7 +117,7 @@ test('an admin can update card label details', function () {
 
 test('customers can not update card labels data', function () {
     $this->actingAs($this->customer);
-    $this->putJson('/api/v2/admin/cards/labels/'. $this->cardLabel->id, [
+    $this->putJson('/api/v2/admin/cards/labels/'.$this->cardLabel->id, [
         'line_one' => '2022 Lorem',
         'line_two' => 'Lorem Ipsum',
         'line_three' => 'Dolor',
@@ -128,7 +127,7 @@ test('customers can not update card labels data', function () {
 });
 
 test('an admin can get order labels details', function () {
-    $this->getJson('/api/v2/admin/orders/'. $this->order->id .'/labels')
+    $this->getJson('/api/v2/admin/orders/'.$this->order->id.'/labels')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [[
@@ -148,13 +147,13 @@ test('an admin can get order labels details', function () {
 
 test('customers can not get order labels data', function () {
     $this->actingAs($this->customer);
-    $this->getJson('/api/v2/admin/orders/'. $this->order->id .'/labels')
+    $this->getJson('/api/v2/admin/orders/'.$this->order->id.'/labels')
         ->assertForbidden();
 });
 
 test('an admin can export and update order label details', function () {
     Storage::fake('s3');
-    $this->putJson('/api/v2/admin/orders/'. $this->order->id.'/labels', [
+    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/labels', [
         'data' => [
             [
                 'certificate_number' => '000000100',
@@ -188,7 +187,7 @@ test('an admin can export and update order label details', function () {
 
 test('customers can not update order labels data', function () {
     $this->actingAs($this->customer);
-    $this->putJson('/api/v2/admin/orders/'. $this->order->id.'/labels', [
+    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/labels', [
         'data' => [
             [
                 'certificate_number' => '000000100',

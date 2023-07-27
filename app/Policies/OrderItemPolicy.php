@@ -11,6 +11,6 @@ class OrderItemPolicy
 
     public function review(User $user)
     {
-        return $user->isAdmin() ;
+        return $user->isAdmin();
     }
 }

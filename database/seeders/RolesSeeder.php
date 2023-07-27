@@ -15,7 +15,7 @@ class RolesSeeder extends Seeder
         foreach (config('permission.roles') as $role) {
             Role::updateOrCreate([
                 'name' => $role,
-                'guard_name' => 'api'
+                'guard_name' => 'api',
             ]);
         }
     }

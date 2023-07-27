@@ -35,7 +35,7 @@ class CardSeries extends Model
     }
 
     /**
-     * @param  Builder <CardSeries> $query
+     * @param  Builder <CardSeries>  $query
      * @return Builder <CardSeries>
      */
     public function scopeCategory(Builder $query, CardCategory $cardCategory): Builder

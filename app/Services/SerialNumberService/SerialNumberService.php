@@ -25,10 +25,8 @@ class SerialNumberService
      * For a string of which length it's less or equal with 3, the subject will become prefix transformed to uppercase
      * For a string bigger than 3, only uppercase letters will be picked after subject is transformed to PascalCase
      * with max. amount of 3 letter.
-     *
-     * @param CanBeSerialNumbered|string $subject
      */
-    public static function for(CanBeSerialNumbered | string $subject, ?int $value = null, int $len = 8, string $pad = '0'): SerialNumber
+    public static function for(CanBeSerialNumbered|string $subject, int $value = null, int $len = 8, string $pad = '0'): SerialNumber
     {
         if (class_exists($subject) && method_exists($subject, 'getPrefixSerialNumber')) {
             // If subject it's a class and implements CanBeSerialNumbered interface.
@@ -56,7 +54,7 @@ class SerialNumberService
         return self::for(self::PREFIX_MAP[$name], ...$arguments);
     }
 
-    public function get(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0'): SerialNumber
+    public function get(CanBeSerialNumbered|string $subject, $value, int $len = 8, string $pad = '0'): SerialNumber
     {
         return self::for($subject, $value, $len, $pad);
     }

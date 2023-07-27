@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ShippingFeeService
 {
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null, ?array $shippingAddress = []): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ShippingMethod $shippingMethod = null, ?array $shippingAddress = []): float
     {
         $shippingFee = match ($shippingMethod?->code) {
             ShippingMethod::VAULT_STORAGE => VaultShippingFeeCalculator::calculate(),
@@ -19,9 +19,9 @@ class ShippingFeeService
         };
 
         if (request()->user()) {
-            Cache::put('shippingFee-' . request()->user()->id, $shippingFee, now()->addWeek());
+            Cache::put('shippingFee-'.request()->user()->id, $shippingFee, now()->addWeek());
         } else {
-            Cache::put('shippingFee-' . request()->ip(), $shippingFee, now()->addWeek());
+            Cache::put('shippingFee-'.request()->ip(), $shippingFee, now()->addWeek());
         }
 
         return $shippingFee;

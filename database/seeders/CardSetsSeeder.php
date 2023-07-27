@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class CardSetsSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      */
@@ -29,7 +28,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH05-Battle-Styles',
                 'updated_at' => '2021-08-07 19:03:45',
-            ],             
+            ],
             [
                 'cards_number' => 72,
                 'card_category_id' => 1,
@@ -46,12 +45,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH45-Shining-Fates',
                 'updated_at' => '2021-08-07 19:03:45',
-            ],             
+            ],
             [
                 'cards_number' => 25,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'A set featuring every starter and Pikachu to commemorate the 25th anniversary of Pokemon. The set also includes Holographic versions of each card. Each booster pack found in Happy Meals included 4 cards (3 normal and one Holo).',
+                'description' => 'A set featuring every starter and Pikachu to commemorate the 25th anniversary of Pokemon. The set also includes Holographic versions of each card. Each booster pack found in Happy Meals included 4 cards (3 normal and one Holo).',
                 'id' => 3,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-25th-Anniversary.logo.300.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-25th-Anniversary.logo.300.png',
@@ -63,7 +62,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/MCD21-McDonalds-25th-Anniversary',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 185,
                 'card_category_id' => 1,
@@ -80,7 +79,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH4-Vivid-Voltage',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 73,
                 'card_category_id' => 1,
@@ -97,7 +96,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH3-Champions-Path',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 5,
                 'card_category_id' => 1,
@@ -114,7 +113,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH35-Pokemon-Futsal-Promos',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 189,
                 'card_category_id' => 1,
@@ -131,7 +130,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH3-Darkness-Ablaze',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 192,
                 'card_category_id' => 1,
@@ -148,7 +147,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH2-Rebel-Clash',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 111,
                 'card_category_id' => 1,
@@ -165,7 +164,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SWSH-Sword-Shield-Promos',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 202,
                 'card_category_id' => 1,
@@ -182,7 +181,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 1,
                 'set_url' => 'https://www.pokellector.com/sets/SH01-Sword-Shield',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 236,
                 'card_category_id' => 1,
@@ -199,7 +198,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/CEC-Cosmic-Eclipse',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -208,7 +207,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 12,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2019.logo.290.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2019.logo.290.png',
-            'name' => 'McDonald\'s Collection (2019)',
+                'name' => 'McDonald\'s Collection (2019)',
                 'release_date' => '2019-10-15',
                 'release_date_formatted' => 'Oct 15th 2019',
                 'release_year' => 2019,
@@ -216,7 +215,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/MCD9-McDonalds-Collection-2019',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 68,
                 'card_category_id' => 1,
@@ -233,7 +232,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/HIF-Hidden-Fates',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 236,
                 'card_category_id' => 1,
@@ -250,7 +249,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/UMI-Unified-Minds',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 214,
                 'card_category_id' => 1,
@@ -267,7 +266,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/UNB-Unbroken-Bonds',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 18,
                 'card_category_id' => 1,
@@ -284,7 +283,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/DET-Detective-Pikachu',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 181,
                 'card_category_id' => 1,
@@ -301,12 +300,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/SM9-Team-Up',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 214,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'The largest Pokemon TCG set to date (both in English and Japanese)',
+                'description' => 'The largest Pokemon TCG set to date (both in English and Japanese)',
                 'id' => 18,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Lost-Thunder.logo.259.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Lost-Thunder.logo.259.png',
@@ -318,16 +317,16 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/LOT-Lost-Thunder',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'Cards available via Happy Meals (or purchased direct) from participating McDonald\'s Restaurants throughout the USA',
+                'description' => 'Cards available via Happy Meals (or purchased direct) from participating McDonald\'s Restaurants throughout the USA',
                 'id' => 19,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2018.logo.265.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2018.logo.265.png',
-            'name' => 'McDonald\'s Collection (2018)',
+                'name' => 'McDonald\'s Collection (2018)',
                 'release_date' => '2018-10-19',
                 'release_date_formatted' => 'Oct 19th 2018',
                 'release_year' => 2018,
@@ -335,7 +334,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/MCD8-McDonalds-Collection-2018',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 70,
                 'card_category_id' => 1,
@@ -352,7 +351,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/DRM-Dragon-Majesty',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 168,
                 'card_category_id' => 1,
@@ -369,7 +368,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/CES-Celestial-Storm',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 131,
                 'card_category_id' => 1,
@@ -386,7 +385,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/FLI-Forbidden-Light',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 156,
                 'card_category_id' => 1,
@@ -403,7 +402,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/UPR-Ultra-Prism',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 111,
                 'card_category_id' => 1,
@@ -420,7 +419,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/CIN-Crimson-Invasion',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 73,
                 'card_category_id' => 1,
@@ -437,7 +436,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/SLG-Shining-Legends',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 147,
                 'card_category_id' => 1,
@@ -454,7 +453,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/BSH-Burning-Shadows',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -463,7 +462,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 27,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2017.logo.230.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2017.logo.230.png',
-            'name' => 'McDonald\'s Collection (2017)',
+                'name' => 'McDonald\'s Collection (2017)',
                 'release_date' => '2017-08-03',
                 'release_date_formatted' => 'Aug 3rd 2017',
                 'release_year' => 2017,
@@ -471,7 +470,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/MCD7-McDonalds-Collection-2017',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 145,
                 'card_category_id' => 1,
@@ -488,7 +487,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/GRI-Guardians-Rising',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 244,
                 'card_category_id' => 1,
@@ -505,7 +504,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/SM-Sun-Moon-Promos',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 149,
                 'card_category_id' => 1,
@@ -522,7 +521,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 2,
                 'set_url' => 'https://www.pokellector.com/sets/SUM-Sun-Moon',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 108,
                 'card_category_id' => 1,
@@ -539,7 +538,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/EVO-Evolutions',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -548,7 +547,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 32,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2016.logo.207.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2016.logo.207.png',
-            'name' => 'McDonald\'s Collection (2016)',
+                'name' => 'McDonald\'s Collection (2016)',
                 'release_date' => '2016-08-20',
                 'release_date_formatted' => 'Aug 20th 2016',
                 'release_year' => 2016,
@@ -556,7 +555,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/MCD6-McDonalds-Collection-2016',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 114,
                 'card_category_id' => 1,
@@ -573,7 +572,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/STS-Steam-Siege',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 124,
                 'card_category_id' => 1,
@@ -590,7 +589,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/FCO-Fates-Collide',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 83,
                 'card_category_id' => 1,
@@ -607,7 +606,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/GEN-Generations',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 122,
                 'card_category_id' => 1,
@@ -624,7 +623,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/BKP-BREAKPoint',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -633,7 +632,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 37,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2015.logo.182.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2015.logo.182.png',
-            'name' => 'McDonald\'s Collection (2015)',
+                'name' => 'McDonald\'s Collection (2015)',
                 'release_date' => '2015-11-27',
                 'release_date_formatted' => 'Nov 27th 2015',
                 'release_year' => 2015,
@@ -641,7 +640,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/MCD5-McDonalds-Collection-2015',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 162,
                 'card_category_id' => 1,
@@ -658,7 +657,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/BKT-XY-BREAKthrough',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 98,
                 'card_category_id' => 1,
@@ -675,7 +674,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/AOR-Ancient-Origins',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 108,
                 'card_category_id' => 1,
@@ -692,12 +691,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/ROS-Roaring-Skies',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 34,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'The english version of "Magma Gang vs Aqua Gang: Double Crisis" arrives in the USA in special blister packs (no booster boxes) and with reverse holos to make collecting even more challenging :)',
+                'description' => 'The english version of "Magma Gang vs Aqua Gang: Double Crisis" arrives in the USA in special blister packs (no booster boxes) and with reverse holos to make collecting even more challenging :)',
                 'id' => 41,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Double-Crisis.logo.172.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Double-Crisis.logo.172.png',
@@ -709,7 +708,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/DCR-Double-Crisis',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 160,
                 'card_category_id' => 1,
@@ -726,7 +725,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/PRC-Primal-Clash',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 119,
                 'card_category_id' => 1,
@@ -743,12 +742,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/PHF-Phantom-Forces',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 111,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'Our counterpart to Japan\'s Rising Fist, this set focuses heavily on fighting (especially Lucario and Machamp) and grass pokemon (heracross], and even includes special energy for both.',
+                'description' => 'Our counterpart to Japan\'s Rising Fist, this set focuses heavily on fighting (especially Lucario and Machamp) and grass pokemon (heracross], and even includes special energy for both.',
                 'id' => 44,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Furious-Fists.logo.159.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Furious-Fists.logo.159.png',
@@ -760,16 +759,16 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/FFI-Furious-Fists',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'After skipping 2013 (in the US at least) the Pokemon TCG is back at McDonald\'s with a new set of cards.',
+                'description' => 'After skipping 2013 (in the US at least) the Pokemon TCG is back at McDonald\'s with a new set of cards.',
                 'id' => 45,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Collection-2014.logo.158.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Collection-2014.logo.158.png',
-            'name' => 'McDonald\'s Collection (2014)',
+                'name' => 'McDonald\'s Collection (2014)',
                 'release_date' => '2014-05-23',
                 'release_date_formatted' => 'May 23rd 2014',
                 'release_year' => 2014,
@@ -777,7 +776,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/MCD4-McDonalds-Collection-2014',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 106,
                 'card_category_id' => 1,
@@ -794,7 +793,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/FLF-XY-Flashfire',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 45,
                 'card_category_id' => 1,
@@ -811,7 +810,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/KSS-Kalos-Starter-Set',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 211,
                 'card_category_id' => 1,
@@ -828,7 +827,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/XY-XY-Promos',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 146,
                 'card_category_id' => 1,
@@ -845,12 +844,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 3,
                 'set_url' => 'https://www.pokellector.com/sets/XY-XY',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 25,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'Radiant collection is the equivalent of Japan\'s Shiny Collection, except it was bundled with Legendary Treasures (which was EX Battle Boost)',
+                'description' => 'Radiant collection is the equivalent of Japan\'s Shiny Collection, except it was bundled with Legendary Treasures (which was EX Battle Boost)',
                 'id' => 50,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Radiant-Collection.logo.148.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Radiant-Collection.logo.148.png',
@@ -862,12 +861,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/RC-Radiant-Collection',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 113,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'The last set of the BW era, this is comprised of Japan\'s EX Battle Boost cards as well as Shiny Collection as a subset (Radiant Collection, which is indexed separately)',
+                'description' => 'The last set of the BW era, this is comprised of Japan\'s EX Battle Boost cards as well as Shiny Collection as a subset (Radiant Collection, which is indexed separately)',
                 'id' => 51,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Legendary-Treasures.logo.138.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Legendary-Treasures.logo.138.png',
@@ -879,7 +878,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/LTR-Legendary-Treasures',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 101,
                 'card_category_id' => 1,
@@ -896,7 +895,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/PLB-Plasma-Blast',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 116,
                 'card_category_id' => 1,
@@ -913,7 +912,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/PLF-Plasma-Freeze',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 135,
                 'card_category_id' => 1,
@@ -930,12 +929,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/PLS-Plasma-Storm',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 149,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'Boundaries Crossed is the 7th set from the Black & White Series and features the boundary PokÃ©mon Kyurem (in black and white form) as well as Keldeo',
+                'description' => 'Boundaries Crossed is the 7th set from the Black & White Series and features the boundary PokÃ©mon Kyurem (in black and white form) as well as Keldeo',
                 'id' => 55,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Boundaries-Crossed.logo.7.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Boundaries-Crossed.logo.7.png',
@@ -947,12 +946,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/BCR-Boundaries-Crossed',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 20,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'Dragon Vault is a special mini-set of 20 cards (and a secret rare) -- all of which are the new Dragon type and holographic!',
+                'description' => 'Dragon Vault is a special mini-set of 20 cards (and a secret rare) -- all of which are the new Dragon type and holographic!',
                 'id' => 56,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Dragon-Vault.logo.8.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Dragon-Vault.logo.8.png',
@@ -964,7 +963,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/DRV-Dragon-Vault',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 124,
                 'card_category_id' => 1,
@@ -981,7 +980,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/DRX-Dragons-Exalted',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 108,
                 'card_category_id' => 1,
@@ -998,7 +997,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/DEX-Dark-Explorers',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 99,
                 'card_category_id' => 1,
@@ -1015,7 +1014,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/NXD-Next-Destinies',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 101,
                 'card_category_id' => 1,
@@ -1032,7 +1031,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/NVI-Noble-Victories',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 98,
                 'card_category_id' => 1,
@@ -1049,7 +1048,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/EPO-Emerging-Powers',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 114,
                 'card_category_id' => 1,
@@ -1066,7 +1065,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 4,
                 'set_url' => 'https://www.pokellector.com/sets/BLW-Black-White',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -1075,7 +1074,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 63,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Promos-2013.logo.147.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Promos-2013.logo.147.png',
-            'name' => 'McDonald\'s Collection (2013)',
+                'name' => 'McDonald\'s Collection (2013)',
                 'release_date' => '2013-11-01',
                 'release_date_formatted' => 'Nov 1st 2013',
                 'release_year' => 2013,
@@ -1083,16 +1082,16 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 5,
                 'set_url' => 'https://www.pokellector.com/sets/MCD-McDonalds-Collection-2013',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'These cards were found inside Happy Meals (along with a toy) through July 5th 2012. They are reprints of cards found in the B&W series.',
+                'description' => 'These cards were found inside Happy Meals (along with a toy) through July 5th 2012. They are reprints of cards found in the B&W series.',
                 'id' => 64,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Promos-2012.logo.11.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Promos-2012.logo.11.png',
-            'name' => 'McDonald\'s Collection (2012)',
+                'name' => 'McDonald\'s Collection (2012)',
                 'release_date' => '2012-06-15',
                 'release_date_formatted' => 'Jun 15th 2012',
                 'release_year' => 2012,
@@ -1100,7 +1099,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 5,
                 'set_url' => 'https://www.pokellector.com/sets/MCD-McDonalds-Collection-2012',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 12,
                 'card_category_id' => 1,
@@ -1109,7 +1108,7 @@ class CardSetsSeeder extends Seeder
                 'id' => 65,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/McDonalds-Promos-2011.logo.10.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/McDonalds-Promos-2011.logo.10.png',
-            'name' => 'McDonald\'s Collection (2011)',
+                'name' => 'McDonald\'s Collection (2011)',
                 'release_date' => '2011-06-17',
                 'release_date_formatted' => 'Jun 17th 2011',
                 'release_year' => 2011,
@@ -1117,7 +1116,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 5,
                 'set_url' => 'https://www.pokellector.com/sets/MCD-McDonalds-Collection-2011',
                 'updated_at' => '2021-08-07 19:03:46',
-            ],             
+            ],
             [
                 'cards_number' => 101,
                 'card_category_id' => 1,
@@ -1134,7 +1133,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 5,
                 'set_url' => 'https://www.pokellector.com/sets/BW-Black-White-Promos',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 95,
                 'card_category_id' => 1,
@@ -1151,7 +1150,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 6,
                 'set_url' => 'https://www.pokellector.com/sets/CL-Call-of-Legends',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 102,
                 'card_category_id' => 1,
@@ -1168,7 +1167,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 7,
                 'set_url' => 'https://www.pokellector.com/sets/TM-HS-Triumphant',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 90,
                 'card_category_id' => 1,
@@ -1185,7 +1184,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 7,
                 'set_url' => 'https://www.pokellector.com/sets/UD-HS-Undaunted',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 95,
                 'card_category_id' => 1,
@@ -1202,7 +1201,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 7,
                 'set_url' => 'https://www.pokellector.com/sets/UL-HS-Unleashed',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 25,
                 'card_category_id' => 1,
@@ -1219,7 +1218,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 7,
                 'set_url' => 'https://www.pokellector.com/sets/HGSS-HeartGold-SoulSilver-Promos',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 123,
                 'card_category_id' => 1,
@@ -1236,7 +1235,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 7,
                 'set_url' => 'https://www.pokellector.com/sets/HGSS-HeartGold-SoulSilver',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 16,
                 'card_category_id' => 1,
@@ -1253,7 +1252,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 8,
                 'set_url' => 'https://www.pokellector.com/sets/RUM-Pokemon-Rumble',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 99,
                 'card_category_id' => 1,
@@ -1270,7 +1269,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 8,
                 'set_url' => 'https://www.pokellector.com/sets/AR-Platinum-Arceus',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 147,
                 'card_category_id' => 1,
@@ -1287,7 +1286,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 8,
                 'set_url' => 'https://www.pokellector.com/sets/SV-Platinum-Supreme-Victors',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 111,
                 'card_category_id' => 1,
@@ -1304,7 +1303,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 8,
                 'set_url' => 'https://www.pokellector.com/sets/RR-Platinum-Rising-Rivals',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 127,
                 'card_category_id' => 1,
@@ -1321,7 +1320,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 8,
                 'set_url' => 'https://www.pokellector.com/sets/PL-Platinum',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1338,7 +1337,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP9-POP-Series-9',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1355,7 +1354,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP8-POP-Series-8',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1372,7 +1371,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP7-POP-Series-7',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1389,7 +1388,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP6-POP-Series-6',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1406,7 +1405,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP5-POP-Series-5',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1423,12 +1422,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP4-POP-Series-4',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'The shortest-lived of all the POP series (4 months],  all of the rare cards have holographic versions and were available through several waves of promotional items, such as Value Packs and Collector Tins. ',
+                'description' => 'The shortest-lived of all the POP series (4 months],  all of the rare cards have holographic versions and were available through several waves of promotional items, such as Value Packs and Collector Tins. ',
                 'id' => 84,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/POP-Series-3.logo.70.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/POP-Series-3.logo.70.png',
@@ -1440,7 +1439,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP3-POP-Series-3',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1457,7 +1456,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP2-POP-Series-2',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 17,
                 'card_category_id' => 1,
@@ -1474,7 +1473,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/POP1-POP-Series-1',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 40,
                 'card_category_id' => 1,
@@ -1491,7 +1490,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 9,
                 'set_url' => 'https://www.pokellector.com/sets/NPR-Nintendo-Promos',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 100,
                 'card_category_id' => 1,
@@ -1508,7 +1507,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/SF-Stormfront',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 146,
                 'card_category_id' => 1,
@@ -1525,7 +1524,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/LA-Legends-Awakened',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 100,
                 'card_category_id' => 1,
@@ -1542,7 +1541,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/MD-Majestic-Dawn',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 106,
                 'card_category_id' => 1,
@@ -1559,7 +1558,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/GE-Great-Encounters',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 132,
                 'card_category_id' => 1,
@@ -1576,7 +1575,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/SW-Secret-Wonders',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 123,
                 'card_category_id' => 1,
@@ -1593,7 +1592,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/MT-Mysterious-Treasures',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 56,
                 'card_category_id' => 1,
@@ -1610,7 +1609,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/DP-DP-Black-Star-Promos',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 130,
                 'card_category_id' => 1,
@@ -1627,7 +1626,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 10,
                 'set_url' => 'https://www.pokellector.com/sets/DP-Diamond-Pearl',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 108,
                 'card_category_id' => 1,
@@ -1644,7 +1643,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/PK-EX-Power-Keepers',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 101,
                 'card_category_id' => 1,
@@ -1661,7 +1660,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/DF-EX-Dragon-Frontiers',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 100,
                 'card_category_id' => 1,
@@ -1678,7 +1677,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/CG-EX-Crystal-Guardians',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 110,
                 'card_category_id' => 1,
@@ -1695,7 +1694,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/HP-EX-Holon-Phantoms',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 92,
                 'card_category_id' => 1,
@@ -1712,7 +1711,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/LM-EX-Legend-Maker',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 113,
                 'card_category_id' => 1,
@@ -1729,7 +1728,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/DS-EX-Delta-Species',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 28,
                 'card_category_id' => 1,
@@ -1746,7 +1745,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/UFU-EX-Unseen-Forces-Unown-Collection',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 115,
                 'card_category_id' => 1,
@@ -1763,7 +1762,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/UF-EX-Unseen-Forces',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 106,
                 'card_category_id' => 1,
@@ -1780,7 +1779,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/EM-EX-Emerald',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 107,
                 'card_category_id' => 1,
@@ -1797,7 +1796,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/DX-EX-Deoxys',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 109,
                 'card_category_id' => 1,
@@ -1814,7 +1813,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/RR-EX-Team-Rocket-Returns',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 112,
                 'card_category_id' => 1,
@@ -1831,7 +1830,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/RG-EX-FireRed-LeafGreen',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 101,
                 'card_category_id' => 1,
@@ -1848,7 +1847,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/HL-EX-Hidden-Legends',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 95,
                 'card_category_id' => 1,
@@ -1865,7 +1864,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/MA-EX-Team-Magma-vs-Team-Aqua',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 97,
                 'card_category_id' => 1,
@@ -1882,7 +1881,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/DR-EX-Dragon',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 100,
                 'card_category_id' => 1,
@@ -1899,7 +1898,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/SS-EX-Sandstorm',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 109,
                 'card_category_id' => 1,
@@ -1916,7 +1915,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 11,
                 'set_url' => 'https://www.pokellector.com/sets/RS-EX-Ruby-Sapphire',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 144,
                 'card_category_id' => 1,
@@ -1933,7 +1932,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 12,
                 'set_url' => 'https://www.pokellector.com/sets/SK-Skyridge',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 147,
                 'card_category_id' => 1,
@@ -1950,7 +1949,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 12,
                 'set_url' => 'https://www.pokellector.com/sets/AQ-Aquapolis',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 9,
                 'card_category_id' => 1,
@@ -1967,7 +1966,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 12,
                 'set_url' => 'https://www.pokellector.com/sets/BEST-Best-of-Game',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 165,
                 'card_category_id' => 1,
@@ -1984,7 +1983,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 12,
                 'set_url' => 'https://www.pokellector.com/sets/EX-Expedition',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 110,
                 'card_category_id' => 1,
@@ -2001,7 +2000,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 13,
                 'set_url' => 'https://www.pokellector.com/sets/LC-Legendary-Collection',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 105,
                 'card_category_id' => 1,
@@ -2018,7 +2017,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 14,
                 'set_url' => 'https://www.pokellector.com/sets/N4-Neo-Destiny',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 64,
                 'card_category_id' => 1,
@@ -2035,12 +2034,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 14,
                 'set_url' => 'https://www.pokellector.com/sets/N3-Neo-Revelation',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 18,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'These cards were packaged together by WoTC into a single set inside a folder containing artwork from the original artwork (which is used for each card)',
+                'description' => 'These cards were packaged together by WoTC into a single set inside a folder containing artwork from the original artwork (which is used for each card)',
                 'id' => 120,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Southern-Islands.logo.124.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Southern-Islands.logo.124.png',
@@ -2052,7 +2051,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 14,
                 'set_url' => 'https://www.pokellector.com/sets/SI-Southern-Islands',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 75,
                 'card_category_id' => 1,
@@ -2069,12 +2068,12 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 14,
                 'set_url' => 'https://www.pokellector.com/sets/N2-Neo-Discovery',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 111,
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:02:59',
-            'description' => 'This is the first set to include Gen II (Johto Region) pokemon',
+                'description' => 'This is the first set to include Gen II (Johto Region) pokemon',
                 'id' => 122,
                 'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/sets_images/Neo-Genesis.logo.113.png',
                 'image_path' => 'https://den-media.pokellector.com/logos/Neo-Genesis.logo.113.png',
@@ -2086,7 +2085,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 14,
                 'set_url' => 'https://www.pokellector.com/sets/N1-Neo-Genesis',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 132,
                 'card_category_id' => 1,
@@ -2103,7 +2102,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 15,
                 'set_url' => 'https://www.pokellector.com/sets/G2-Gym-Challenge',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 132,
                 'card_category_id' => 1,
@@ -2120,7 +2119,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 15,
                 'set_url' => 'https://www.pokellector.com/sets/G1-Gym-Heroes',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 82,
                 'card_category_id' => 1,
@@ -2137,7 +2136,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 16,
                 'set_url' => 'https://www.pokellector.com/sets/TR-Team-Rocket',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 130,
                 'card_category_id' => 1,
@@ -2154,7 +2153,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 16,
                 'set_url' => 'https://www.pokellector.com/sets/B2-Base-Set-2',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 62,
                 'card_category_id' => 1,
@@ -2171,7 +2170,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 16,
                 'set_url' => 'https://www.pokellector.com/sets/FO-Fossil',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 53,
                 'card_category_id' => 1,
@@ -2188,7 +2187,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 16,
                 'set_url' => 'https://www.pokellector.com/sets/WOTC-Wizards-of-the-Coast-Promos',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 64,
                 'card_category_id' => 1,
@@ -2205,7 +2204,7 @@ class CardSetsSeeder extends Seeder
                 'card_series_id' => 16,
                 'set_url' => 'https://www.pokellector.com/sets/JU-Jungle',
                 'updated_at' => '2021-08-07 19:03:47',
-            ],             
+            ],
             [
                 'cards_number' => 102,
                 'card_category_id' => 1,
@@ -2224,7 +2223,6 @@ class CardSetsSeeder extends Seeder
                 'updated_at' => '2021-08-07 19:03:47',
             ],
         ]);
-        
-        
+
     }
 }

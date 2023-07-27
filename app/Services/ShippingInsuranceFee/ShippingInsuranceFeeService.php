@@ -14,5 +14,4 @@ class ShippingInsuranceFeeService
     {
         return round(($this->order->orderItems()->sum('declared_value_total') * config('robograding.feature_order_shipping_insurance_fee_percentage')) / 100, 2);
     }
-
 }

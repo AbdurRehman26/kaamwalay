@@ -9,7 +9,7 @@ class RevenueStatsDaily extends Model
 {
     use HasFactory;
 
-    protected $table = "revenue_stats_daily";
+    protected $table = 'revenue_stats_daily';
 
     /**
      * The attributes that are mass assignable.

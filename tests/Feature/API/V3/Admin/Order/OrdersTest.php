@@ -134,7 +134,7 @@ beforeEach(function () {
     $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
+        base_path().'/tests/stubs/AGS_card_grades_collection_200.json'
     ), associative: true);
 
     $this->actingAs($this->user);
@@ -253,9 +253,9 @@ test('an admin can place order for an user', function () {
             'phone' => '1234567890',
             'flat' => '43',
             'save_for_later' => true,
-        ],[
-                'order_id' => $this->orders[1]->id,
-            ],
+        ], [
+            'order_id' => $this->orders[1]->id,
+        ],
         'billing_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -685,9 +685,9 @@ test('an admin can create folders manually', function () {
     Bus::fake();
 
     $order = Order::factory()->create();
-    
+
     $this->postJson(route('v3.admin.orders.create-folders', ['order' => $order]))
-    ->assertSuccessful();
+        ->assertSuccessful();
 
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
     Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);

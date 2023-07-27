@@ -23,5 +23,4 @@ class CardProductDeletedListener
     {
         $this->popReportService->deleteCardPopReport($event->cardProduct);
     }
-
 }

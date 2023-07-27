@@ -28,7 +28,7 @@ class SalesmanCommissionPaymentController extends Controller
         StoreSalesmanCommissionPaymentRequest $request
     ): SalesmanCommissionPaymentResource {
         throw_unless($salesman->isSalesman(), UserIsNotSalesmanException::class);
-        
+
         $salesmanCommissionPayment = $this->salesmanCommissionPaymentService->payCommission(
             $salesman,
             auth()->user(),

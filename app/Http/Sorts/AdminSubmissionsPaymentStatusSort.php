@@ -18,7 +18,7 @@ class AdminSubmissionsPaymentStatusSort implements Sort
         $direction = $descending ? 'DESC' : 'ASC';
 
         $query->select('orders.*')
-            ->addSelect(DB::raw("if(payment_status = ".OrderPaymentStatusEnum::PENDING->value.", 'Pending', if(payment_status = ".OrderPaymentStatusEnum::DUE->value.", 'Payment due', 'Paid')) as payment_status_name"))
+            ->addSelect(DB::raw('if(payment_status = '.OrderPaymentStatusEnum::PENDING->value.", 'Pending', if(payment_status = ".OrderPaymentStatusEnum::DUE->value.", 'Payment due', 'Paid')) as payment_status_name"))
             ->orderBy('payment_status_name', $direction);
     }
 }

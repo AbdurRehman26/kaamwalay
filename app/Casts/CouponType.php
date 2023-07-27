@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class CouponType implements CastsAttributes
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function get(Model $model, string $key, mixed $value, array $attributes)
     {
@@ -17,7 +17,7 @@ class CouponType implements CastsAttributes
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function set(Model $model, string $key, mixed $value, array $attributes)
     {

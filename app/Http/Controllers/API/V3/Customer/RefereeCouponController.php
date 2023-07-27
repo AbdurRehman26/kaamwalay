@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RefereeCouponController extends Controller
 {
-    public function show(RefereeCouponService $refereeCouponService): JsonResponse | CouponResource
+    public function show(RefereeCouponService $refereeCouponService): JsonResponse|CouponResource
     {
         try {
             return new CouponResource($refereeCouponService->getRefereeCoupon());

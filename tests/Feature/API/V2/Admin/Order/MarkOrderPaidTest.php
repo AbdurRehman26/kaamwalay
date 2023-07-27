@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -12,7 +11,6 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function Pest\Laravel\postJson;
 
 uses(WithFaker::class);

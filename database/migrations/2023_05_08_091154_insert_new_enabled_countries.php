@@ -202,7 +202,7 @@ return new class extends Migration
             ['code' => 'VA', 'name' => 'Vatican City', 'phone_code' => '379', 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now],
             ['code' => 'YE', 'name' => 'Yemen', 'phone_code' => '967', 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now],
             ['code' => 'ZM', 'name' => 'Zambia', 'phone_code' => '260', 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now],
-            ['code' => 'ZW', 'name' => 'Zimbabwe', 'phone_code' => '263', 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now]
+            ['code' => 'ZW', 'name' => 'Zimbabwe', 'phone_code' => '263', 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now],
         ]);
     }
 
@@ -402,7 +402,7 @@ return new class extends Migration
             'VA',
             'YE',
             'ZM',
-            'ZW'
+            'ZW',
         ])->delete();
     }
 };

@@ -27,17 +27,17 @@ beforeEach(function () {
         ->create(new Sequence(
             function () {
                 return [
-                'payment_method_id' => 1,
-                'order_status_id' => $this->faker->randomElement([
-                    OrderStatus::PLACED,
-                    OrderStatus::CONFIRMED,
-                    OrderStatus::GRADED,
-                    OrderStatus::SHIPPED,
-                ]),
-                'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
-                'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
-                'payment_status' => $this->faker->randomElement([0,1,2]),
-            ];
+                    'payment_method_id' => 1,
+                    'order_status_id' => $this->faker->randomElement([
+                        OrderStatus::PLACED,
+                        OrderStatus::CONFIRMED,
+                        OrderStatus::GRADED,
+                        OrderStatus::SHIPPED,
+                    ]),
+                    'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
+                    'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
+                    'payment_status' => $this->faker->randomElement([0, 1, 2]),
+                ];
             }
         ));
 
@@ -101,9 +101,9 @@ it('counts daily paid orders cards', function () {
         'users.email',
         Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
     )
-    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
-    ->sum('order_items.quantity');
+        ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay()])
+        ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal();
 
@@ -115,9 +115,9 @@ it('counts monthly paid orders cards', function () {
         'users.email',
         Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
     )
-    ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-    ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
-    ->sum('order_items.quantity');
+        ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+        ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal();
 

@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class CouponDateRange implements CastsAttributes
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @retrun Carbon
      */
     public function get(Model $model, string $key, mixed $value, array $attributes)
@@ -18,7 +19,7 @@ class CouponDateRange implements CastsAttributes
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function set(Model $model, string $key, mixed $value, array $attributes)
     {

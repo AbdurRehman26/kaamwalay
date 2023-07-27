@@ -26,7 +26,7 @@ class CardSurface extends Model
     }
 
     /**
-     * @param  Builder <CardSurface> $query
+     * @param  Builder <CardSurface>  $query
      * @return Builder <CardSurface>
      */
     public function scopeCardCategory(Builder $query, int $categoryId): Builder
@@ -38,7 +38,7 @@ class CardSurface extends Model
     }
 
     /**
-     * @param  Builder <CardSurface> $query
+     * @param  Builder <CardSurface>  $query
      * @return Builder <CardSurface>
      */
     public function scopeSearch(Builder $query, string $value): Builder

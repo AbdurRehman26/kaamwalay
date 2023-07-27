@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 /**
  * @mixin CardCategoryType
  */
-
 class CardCategoryTypeResource extends BaseResource
 {
     /**

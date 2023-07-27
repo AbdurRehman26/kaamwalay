@@ -19,20 +19,20 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
 
     protected function getSenderItemId(array $itemData): string
     {
-        return date('Ymdhis'). '-' .$itemData['id'];
+        return date('Ymdhis').'-'.$itemData['id'];
     }
 
     protected function getItemsRequestData(array $items): array
     {
         return array_map(function ($item) {
             return [
-                "receiver" => $item['payout_account'],
-                "amount" => [
-                    "currency" => "USD",
-                    "value" => $item['amount'],
+                'receiver' => $item['payout_account'],
+                'amount' => [
+                    'currency' => 'USD',
+                    'value' => $item['amount'],
                 ],
-                "recipient_type" => "EMAIL",
-                "sender_item_id" => $this->getSenderItemId($item),
+                'recipient_type' => 'EMAIL',
+                'sender_item_id' => $this->getSenderItemId($item),
             ];
         }, $items);
     }
@@ -44,11 +44,12 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
         }, $items));
 
         return [
-            "sender_batch_id" => "RefPayouts-".date('Ymdhis').'-'.$idsString,
-            "email_subject" => "Payout from AGS Partner Program!",
-            "email_message" => "You have received your payout from AGS Partner Program. Keep referring for more!",
+            'sender_batch_id' => 'RefPayouts-'.date('Ymdhis').'-'.$idsString,
+            'email_subject' => 'Payout from AGS Partner Program!',
+            'email_message' => 'You have received your payout from AGS Partner Program. Keep referring for more!',
         ];
     }
+
     public function pay(array $items, array $data = []): array
     {
         try {
@@ -56,8 +57,8 @@ class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, 
             $senderBatchHeaderData = $this->getSenderBatchHeaderData($items);
 
             $requestData = [
-                "items" => $itemsData,
-                "sender_batch_header" => $senderBatchHeaderData,
+                'items' => $itemsData,
+                'sender_batch_header' => $senderBatchHeaderData,
             ];
 
             $response = $this->client->createBatchPayout($requestData);

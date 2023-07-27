@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class CardSeriesSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      */
@@ -75,7 +74,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/HeartGold-SoulSilver.logo.34.png',
                 'name' => 'HeartGold SoulSilver Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -84,7 +83,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Platinum.logo.38.png',
                 'name' => 'Platinum Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -93,7 +92,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Nintendo-Promos.logo.50.png',
                 'name' => 'Nintendo Promos Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -102,7 +101,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Diamond-Pearl.logo.42.png',
                 'name' => 'Diamond & Pearl Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -111,7 +110,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Ruby-Sapphire.logo.49.png',
                 'name' => 'EX Ruby & Sapphire Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -120,7 +119,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/e-Card.logo.108.png',
                 'name' => 'e-Card Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -129,7 +128,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Legendary-Collection.logo.112.png',
                 'name' => 'Legendary Collection Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -138,7 +137,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Neo-Genesis.logo.113.png',
                 'name' => 'Neo Genesis Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -147,7 +146,7 @@ class CardSeriesSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Gym-Heroes.logo.117.png',
                 'name' => 'Gym Heroes Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ],             
+            ],
             [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
@@ -158,7 +157,6 @@ class CardSeriesSeeder extends Seeder
                 'updated_at' => '2021-08-07 19:10:36',
             ],
         ]);
-        
-        
+
     }
 }

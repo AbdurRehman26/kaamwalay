@@ -20,7 +20,9 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
+
     public int $maxExceptions = 3;
+
     protected const ENDPOINT = '/create_folders';
 
     /**
@@ -39,7 +41,7 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
      */
     public function handle(OrderService $orderService): void
     {
-        Log::info('Creating folders on AGS Local Machine: ' . $this->order->order_number);
+        Log::info('Creating folders on AGS Local Machine: '.$this->order->order_number);
 
         $folders = [$this->order->order_number];
         $certificates = $orderService->getOrderCertificates($this->order);
@@ -49,7 +51,7 @@ class CreateOrderFoldersOnAGSLocalMachine implements ShouldQueue
         }
 
         try {
-            $response = Http::post(config('services.ags.local_machine_base_url') . self::ENDPOINT, $folders);
+            $response = Http::post(config('services.ags.local_machine_base_url').self::ENDPOINT, $folders);
 
             if (! $response->successful()) {
                 $this->release(5);

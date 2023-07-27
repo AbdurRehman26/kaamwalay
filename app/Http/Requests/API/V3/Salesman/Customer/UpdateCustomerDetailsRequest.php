@@ -14,6 +14,7 @@ class UpdateCustomerDetailsRequest extends FormRequest
 
         return $user->salesman()->exists() && $user->salesman()->is(auth()->user());
     }
+
     /**
      * Get the validation rules that apply to the request.
      *

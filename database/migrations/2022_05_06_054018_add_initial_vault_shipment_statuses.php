@@ -31,7 +31,7 @@ return new class extends Migration
                 'description' => 'Vault Shipment is Canceled',
                 'created_at' => new Datetime(),
                 'updated_at' => new Datetime(),
-            ]
+            ],
         ]);
     }
 

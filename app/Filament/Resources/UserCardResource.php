@@ -30,9 +30,9 @@ class UserCardResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('user_id')
                     ->required(),
-//                Forms\Components\TextInput::make('human_grade_values'),
-//                Forms\Components\TextInput::make('robo_grade_values'),
-//                Forms\Components\TextInput::make('overall_values'),
+                //                Forms\Components\TextInput::make('human_grade_values'),
+                //                Forms\Components\TextInput::make('robo_grade_values'),
+                //                Forms\Components\TextInput::make('overall_values'),
                 Forms\Components\TextInput::make('overall_grade'),
                 Forms\Components\TextInput::make('overall_grade_nickname')
                     ->maxLength(255),

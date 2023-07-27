@@ -4,9 +4,7 @@ use App\Models\Order;
 use App\Models\SalesmanCommissionPayment;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 

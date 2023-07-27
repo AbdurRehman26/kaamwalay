@@ -69,18 +69,18 @@ class OrderPaymentResource extends BaseResource
     {
         return [
             'payer' => [
-                "email" => $response['payer']['email_address'] ?? "N/A",
-                "name" => $response['payer']['name']['given_name'] ?? "N/A",
+                'email' => $response['payer']['email_address'] ?? 'N/A',
+                'name' => $response['payer']['name']['given_name'] ?? 'N/A',
             ],
         ];
     }
-    
+
     protected function collectorCoinData(array $response): array
     {
         return [
             'transaction' => [
                 'amount' => $response['amount'],
-                'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
+                'hash' => substr($response['txn_hash'], 0, 5).'...'.substr($response['txn_hash'], -4),
                 'complete_hash' => $response['txn_hash'],
             ],
         ];

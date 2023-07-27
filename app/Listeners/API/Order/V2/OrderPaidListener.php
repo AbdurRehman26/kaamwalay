@@ -49,7 +49,7 @@ class OrderPaidListener implements ShouldQueue
                 EmailService::TEMPLATE_SLUG_REFEREE_COMMISSION_EARNING,
                 [
                     'REFERRER_NAME' => $event->order->user->referredBy->first_name,
-                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
+                    'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/referrals',
                 ]
             );
         }
@@ -69,7 +69,7 @@ class OrderPaidListener implements ShouldQueue
 
     protected function processForAbandonedOrder(OrderPaid $event): void
     {
-        if($event->order->tagExists('abandoned')) {
+        if ($event->order->tagExists('abandoned')) {
             $event->order->detachTag('abandoned');
         }
     }

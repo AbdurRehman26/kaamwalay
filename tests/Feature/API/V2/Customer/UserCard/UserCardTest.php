@@ -54,7 +54,6 @@ beforeEach(function () {
         ))
         ->create();
 
-
     OrderItemStatusHistory::factory()->count(3)->sequence(
         ['order_item_status_id' => $items[0]->order_item_status_id, 'order_item_id' => $items[0]->id, 'user_id' => $this->user->id, 'created_at' => '2021-10-07 10:00:00'],
         ['order_item_status_id' => $items[1]->order_item_status_id, 'order_item_id' => $items[1]->id, 'user_id' => $this->user->id, 'created_at' => '2021-10-07 10:00:05'],
@@ -77,7 +76,7 @@ test('customers can see their cards', function () {
 });
 
 test('customers can see their card details', function () {
-    $response = $this->getJson('/api/v2/customer/cards/' . $this->userCards[0]->id);
+    $response = $this->getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
     $response->assertStatus(200);
 });
@@ -86,7 +85,7 @@ test('a customer can not see details of a card owned by others', function () {
     $otherUser = User::factory()->create();
     $this->actingAs($otherUser);
 
-    $response = $this->getJson('/api/v2/customer/cards/' . $this->userCards[0]->id);
+    $response = $this->getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
     $response->assertForbidden();
 });
@@ -141,7 +140,7 @@ it('filters cards by name', function () {
     $this->userCards[0]->orderItem->cardProduct->update([
         'name' => $searchName,
     ]);
-    $this->getJson('/api/v2/customer/cards?filter[search]=' . $searchName)
+    $this->getJson('/api/v2/customer/cards?filter[search]='.$searchName)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([

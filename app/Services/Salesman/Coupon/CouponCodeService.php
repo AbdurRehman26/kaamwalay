@@ -9,7 +9,9 @@ use Illuminate\Support\Str;
 class CouponCodeService
 {
     protected const COUPON_CODE_PREFIX = 'AGS';
+
     protected const COUPON_CODE_MAX_LENGTH = 12;
+
     protected const COUPON_LENGTH_WITHOUT_PREFIX = 9;
 
     public function exists(string $code): bool
@@ -34,7 +36,7 @@ class CouponCodeService
 
     private function generate(): string
     {
-        return self::COUPON_CODE_PREFIX . Str::upper(Str::random(self::COUPON_LENGTH_WITHOUT_PREFIX));
+        return self::COUPON_CODE_PREFIX.Str::upper(Str::random(self::COUPON_LENGTH_WITHOUT_PREFIX));
     }
 
     private function generateValidCoupon(): string

@@ -5,8 +5,6 @@ namespace Database\Factories;
 use App\Models\CommissionStructure;
 use App\Models\Order;
 use App\Models\Referrer;
-use App\Models\UserCard;
-use App\Models\VaultShipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReferrerEarnedCommissionFactory extends Factory

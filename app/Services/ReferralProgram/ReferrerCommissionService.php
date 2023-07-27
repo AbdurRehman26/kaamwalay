@@ -61,6 +61,7 @@ class ReferrerCommissionService
             throw $e;
         }
     }
+
     public static function processOrderReferralCommissions(Order $order): void
     {
         if ($order->user->referredBy()->exists()) {

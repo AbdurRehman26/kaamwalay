@@ -78,7 +78,7 @@ class SendScheduledEmail implements ShouldQueue
         }
 
         if (empty($status)) {
-            throw new Exception('Email could not be sent. Response: ' . $response->body());
+            throw new Exception('Email could not be sent. Response: '.$response->body());
         }
 
         $this->scheduledEmail->is_sent = 1;
@@ -114,7 +114,7 @@ class SendScheduledEmail implements ShouldQueue
             return $this->checkClass;
         }
 
-        $className = 'App\\Services\\Email\\Check\\' . $this->scheduledEmail->check_class;
+        $className = 'App\\Services\\Email\\Check\\'.$this->scheduledEmail->check_class;
 
         return $this->checkClass = new $className;
     }

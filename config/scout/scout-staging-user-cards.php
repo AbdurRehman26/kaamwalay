@@ -20,7 +20,7 @@ return [
         'card_name',
         'searchable_name',
         'owner_name',
-        'certificate_number'
+        'certificate_number',
     ],
 
     /*

@@ -9,7 +9,6 @@ use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\PaymentPlan;
 use App\Models\User;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 
@@ -72,10 +71,8 @@ beforeEach(function () {
         ->withRole(config('permission.roles.customer'))
         ->create();
 
-
     $this->actingAs($this->user);
 });
-
 
 it('calculates coupon discount', function () {
     actingAs($this->user);
@@ -111,12 +108,12 @@ it('calculates coupon discount', function () {
             ],
         ]
     )->assertOk()
-    ->assertJsonStructure([
-        'data' => [
-            'coupon',
-            'discounted_amount',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
 });
 
 it('calculates coupon discount of limited usage coupon', function () {

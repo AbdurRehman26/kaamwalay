@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\CardCategoryType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CardCategoryTypeFactory extends Factory

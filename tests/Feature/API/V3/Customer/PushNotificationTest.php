@@ -2,9 +2,7 @@
 
 use App\Models\DatabaseNotification;
 use App\Models\User;
-
 use Illuminate\Database\Eloquent\Factories\Sequence;
-
 use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;

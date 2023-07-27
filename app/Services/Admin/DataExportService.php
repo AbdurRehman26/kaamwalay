@@ -43,7 +43,7 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
 
         if (method_exists($this->model, 'exportSort')) {
             $query->allowedSorts($this->model->exportSort());
-        };
+        }
 
         return $query;
     }
@@ -60,6 +60,6 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
 
     protected function generateFilePath(): string
     {
-        return self::DIRECTORY . '/' . Str::lower(class_basename($this->model)) . '-' . now()->toDateString() . '-' . Str::uuid() . '.xlsx';
+        return self::DIRECTORY.'/'.Str::lower(class_basename($this->model)).'-'.now()->toDateString().'-'.Str::uuid().'.xlsx';
     }
 }

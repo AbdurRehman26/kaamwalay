@@ -56,7 +56,7 @@ return [
 
     'mailchimp' => [
         'api_key' => env('MAILCHIMP_API_KEY'),
-        'server' => env('MAILCHIMP_SERVER')
+        'server' => env('MAILCHIMP_SERVER'),
     ],
 
     'hubspot' => [

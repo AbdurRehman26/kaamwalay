@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\CardCategory;
 use App\Models\CardSeries;
-use App\Models\CardSet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CardSetFactory extends Factory

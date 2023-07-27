@@ -4,7 +4,6 @@ use App\Jobs\ProcessImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use function Pest\Laravel\getJson;
-
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,12 +22,12 @@ test('a customer can update his profile', function () {
     $this->actingAs($this->user);
 
     putJson(route('v2.customer.profile'), [
-            'first_name' => 'first',
-            'last_name' => 'Last',
-            'email_subscription' => true,
-            'phone' => '1234567890',
-            'username' => 'test24',
-            'profile_image' => 'https://via.placeholder.com/150',
+        'first_name' => 'first',
+        'last_name' => 'Last',
+        'email_subscription' => true,
+        'phone' => '1234567890',
+        'username' => 'test24',
+        'profile_image' => 'https://via.placeholder.com/150',
     ])->assertSuccessful()->assertStatus(200)->assertJsonStructure([
         'data' => [
             'id',
@@ -94,8 +93,8 @@ test('a customer can deactivate their account', function () {
     Http::fake([
         // Faking AGS update user API
         'ags.api/users/me/' => Http::response([
-            "app_status" => 1,
-            "app_message" => 'OK',
+            'app_status' => 1,
+            'app_message' => 'OK',
         ]),
     ]);
 
@@ -114,14 +113,13 @@ test('a customer can deactivate their account', function () {
     getJson(route('v2.auth.me'))->assertUnauthorized();
 });
 
-
 test('a customer can delete their account', function () {
     Http::fake([
         // Faking AGS update user API
         'ags.api/users/me/' => Http::response([
-            "app_status" => 1,
-            "app_message" => [
-                "Removed successfully",
+            'app_status' => 1,
+            'app_message' => [
+                'Removed successfully',
             ],
         ], Response::HTTP_NO_CONTENT),
     ]);
@@ -148,9 +146,9 @@ test('a customer cannot delete their account if ags fail', function () {
     Http::fake([
         // Faking AGS update user API
         'ags.api/users/me/' => Http::response([
-            "app_status" => 0,
-            "app_message" => [
-                "Removed successfully",
+            'app_status' => 0,
+            'app_message' => [
+                'Removed successfully',
             ],
         ]),
     ]);

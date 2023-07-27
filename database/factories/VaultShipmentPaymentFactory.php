@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Order;
-use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
 use App\Models\VaultShipment;
 use Illuminate\Database\Eloquent\Factories\Factory;

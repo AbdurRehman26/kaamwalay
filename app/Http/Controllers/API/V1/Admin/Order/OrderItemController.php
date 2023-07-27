@@ -24,9 +24,9 @@ class OrderItemController extends Controller
     {
         return new JsonResponse([
             'data' => [
-               'order_item' => new OrderItemCollection(
-                   $order->orderItems
-               ),
+                'order_item' => new OrderItemCollection(
+                    $order->orderItems
+                ),
                 'order' => [
                     'id' => $order->id,
                     'order_number' => $order->order_number,
@@ -44,7 +44,7 @@ class OrderItemController extends Controller
         return new OrderItemResource($result);
     }
 
-    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, OrderService $orderService): OrderItemResource | JsonResponse
+    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, OrderService $orderService): OrderItemResource|JsonResponse
     {
         $this->authorize('review', $order);
 
@@ -62,7 +62,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemService $orderItemService): OrderItemResource | JsonResponse
+    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemService $orderItemService): OrderItemResource|JsonResponse
     {
         $this->authorize('review', $order);
 
@@ -80,7 +80,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatusBulk(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection | JsonResponse
+    public function changeStatusBulk(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
     {
         $this->authorize('review', $order);
 

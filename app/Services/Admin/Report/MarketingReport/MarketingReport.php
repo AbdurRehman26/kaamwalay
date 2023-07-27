@@ -31,11 +31,11 @@ abstract class MarketingReport implements Reportable
             'Number of customers who order 25-50 cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 25, 50),
             'Number of customers who order 50 - 100 cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 50, 100),
             'Number of customers that order 100+ cards' => $this->getCustomersWithCardsBetween($fromDate, $toDate, 100),
-            'Average number of days taken from confirmation to grading' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'graded_at') . ' Day(s)',
-            'Average number of days taken from confirmation to shipping' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'shipped_at') . ' Day(s)',
-            'Average number of days taken from grading to shipping' => $this->getAvgDaysFromGradingToShipping($fromDate, $toDate)  . ' Day(s)',
-            'Average time from submission to payment' => $this->getAvgDaysFromSubmissionToPayment($fromDate, $toDate)  . ' Day(s)',
-            'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate)  . ' Day(s)',
+            'Average number of days taken from confirmation to grading' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'graded_at').' Day(s)',
+            'Average number of days taken from confirmation to shipping' => $this->getAvgDaysFromConfirmationTo($fromDate, $toDate, 'shipped_at').' Day(s)',
+            'Average number of days taken from grading to shipping' => $this->getAvgDaysFromGradingToShipping($fromDate, $toDate).' Day(s)',
+            'Average time from submission to payment' => $this->getAvgDaysFromSubmissionToPayment($fromDate, $toDate).' Day(s)',
+            'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate).' Day(s)',
             '% of signups that make submission' => $this->getPercentageOfSignupThatMadeSubmission($fromDate, $toDate),
             '% of submissions that don`t make payment' => $this->getPercentageOfSubmissionThatDontMakePayment($fromDate, $toDate),
         ], $this->getCardsBreakdownByCategoryFormatted($fromDate, $toDate));
@@ -49,19 +49,19 @@ abstract class MarketingReport implements Reportable
     protected function getAvgCardsGraded(DateTime $fromDate, DateTime $toDate): int
     {
         $totalCustomers = Order::whereBetween('graded_at', [$fromDate, $toDate])
-                ->distinct('user_id')
-                ->paid()
-                ->where('order_status_id', '>=', OrderStatus::GRADED)
-                ->count();
+            ->distinct('user_id')
+            ->paid()
+            ->where('order_status_id', '>=', OrderStatus::GRADED)
+            ->count();
 
         if (! $totalCustomers) {
             return $totalCustomers;
         }
 
         return OrderItem::join('orders', 'orders.id', 'order_items.order_id')
-                ->whereBetween('orders.graded_at', [$fromDate, $toDate])
-                ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-                ->count() / $totalCustomers;
+            ->whereBetween('orders.graded_at', [$fromDate, $toDate])
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->count() / $totalCustomers;
     }
 
     protected function getTotalRepeatCustomers(DateTime $fromDate, DateTime $toDate): int
@@ -98,37 +98,37 @@ abstract class MarketingReport implements Reportable
         ];
 
         return Order::join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-                ->select(DB::raw("AVG(DATEDIFF(orders.$statusOfOrder, order_status_histories.created_at)) as avg"))
-                ->where('orders.order_status_id', '>=', $orderColumns[$statusOfOrder])
-                ->where('order_status_histories.order_status_id', '=', OrderStatus::CONFIRMED)
-                ->whereBetween("orders.$statusOfOrder", [$fromDate, $toDate])
-                ->first()
+            ->select(DB::raw("AVG(DATEDIFF(orders.$statusOfOrder, order_status_histories.created_at)) as avg"))
+            ->where('orders.order_status_id', '>=', $orderColumns[$statusOfOrder])
+            ->where('order_status_histories.order_status_id', '=', OrderStatus::CONFIRMED)
+            ->whereBetween("orders.$statusOfOrder", [$fromDate, $toDate])
+            ->first()
                 ->avg ?? 0;
     }
 
     protected function getAvgDaysFromGradingToShipping(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(shipped_at, graded_at)) as avg"))
-                ->whereBetween('orders.shipped_at', [$fromDate, $toDate])
-                ->first()
+        return Order::select(DB::raw('AVG(DATEDIFF(shipped_at, graded_at)) as avg'))
+            ->whereBetween('orders.shipped_at', [$fromDate, $toDate])
+            ->first()
                 ->avg ?? 0;
     }
 
     protected function getAvgDaysFromSubmissionToPayment(DateTime $fromDate, DateTime $toDate): int
     {
-        return Order::select(DB::raw("AVG(DATEDIFF(paid_at, created_at)) as avg"))
-                ->paid()
-                ->betweenDates($fromDate, $toDate)
-                ->first()
+        return Order::select(DB::raw('AVG(DATEDIFF(paid_at, created_at)) as avg'))
+            ->paid()
+            ->betweenDates($fromDate, $toDate)
+            ->first()
                 ->avg ?? 0;
     }
 
     protected function getAvgDaysFromSignupToSubmission(DateTime $fromDate, DateTime $toDate): int
     {
-        return User::select(DB::raw("AVG(DATEDIFF(orders.created_at, users.created_at)) as avg"))
-                ->join('orders', 'orders.user_id', '=', 'users.id')
-                ->whereBetween('users.created_at', [$fromDate, $toDate])
-                ->first()->avg ?? 0;
+        return User::select(DB::raw('AVG(DATEDIFF(orders.created_at, users.created_at)) as avg'))
+            ->join('orders', 'orders.user_id', '=', 'users.id')
+            ->whereBetween('users.created_at', [$fromDate, $toDate])
+            ->first()->avg ?? 0;
     }
 
     protected function getPercentageOfSignupThatMadeSubmission(DateTime $fromDate, DateTime $toDate): float
@@ -140,8 +140,8 @@ abstract class MarketingReport implements Reportable
         }
 
         return (float) number_format((User::whereHas('orders')
-                    ->whereBetween('created_at', [$fromDate, $toDate])
-                    ->count() / $totalUsers) * 100, 2);
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->count() / $totalUsers) * 100, 2);
     }
 
     protected function getPercentageOfSubmissionThatDontMakePayment(DateTime $fromDate, DateTime $toDate): float
@@ -161,7 +161,7 @@ abstract class MarketingReport implements Reportable
         $cardsBreakdown = $this->getCardsBreakdownByCategory($fromDate, $toDate);
 
         foreach ($cardsBreakdown as $item) {
-            $data['Number of ' . $item->name . ' cards'] = $item->quantity;
+            $data['Number of '.$item->name.' cards'] = $item->quantity;
         }
 
         return $data;

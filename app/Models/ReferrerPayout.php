@@ -56,7 +56,7 @@ class ReferrerPayout extends Model
     }
 
     /**
-     * @param  Builder <ReferrerPayout> $query
+     * @param  Builder <ReferrerPayout>  $query
      * @return Builder <ReferrerPayout>
      */
     public function scopeForUser(Builder $query, User $user): Builder

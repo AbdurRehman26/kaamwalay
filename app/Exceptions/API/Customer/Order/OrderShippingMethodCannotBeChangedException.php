@@ -16,7 +16,7 @@ class OrderShippingMethodCannotBeChangedException extends Exception
     protected $code = Response::HTTP_FORBIDDEN;
 
     /**
-     * @param Request|array $request
+     * @param  Request|array  $request
      */
     public function render($request): JsonResponse
     {

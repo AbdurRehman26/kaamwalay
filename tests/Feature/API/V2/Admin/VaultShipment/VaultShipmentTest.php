@@ -7,7 +7,6 @@ use App\Models\VaultShipment;
 use Bus;
 use Database\Seeders\RolesSeeder;
 use Event;
-
 use function Pest\Laravel\seed;
 
 beforeEach(function () {
@@ -60,12 +59,12 @@ test('an admin update vault shipment', function () {
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])->assertSuccessful()
-    ->assertJsonStructure([
-        'data' => [
-            'shipping_provider',
-            'tracking_number',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'shipping_provider',
+                'tracking_number',
+            ],
+        ]);
 });
 
 test('vault shipment update with valid data', function () {

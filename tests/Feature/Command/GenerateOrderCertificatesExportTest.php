@@ -2,9 +2,7 @@
 
 use App\Models\Order;
 use App\Models\OrderStatus;
-
 use Illuminate\Database\Eloquent\Factories\Sequence;
-
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
@@ -15,7 +13,7 @@ beforeEach(function () {
 it('generates order certificates export for specific order', function () {
     $order = Order::factory()->create(['order_status_id' => OrderStatus::GRADED]);
 
-    $this->artisan('orders:generate-certificates-export ' . $order->order_number)->assertExitCode(0);
+    $this->artisan('orders:generate-certificates-export '.$order->order_number)->assertExitCode(0);
     assertDatabaseHas('order_certificates', ['order_id' => $order->id]);
 });
 

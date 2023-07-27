@@ -2,10 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\OrderState;
-use App\Models\OrderStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderStatusFactory extends Factory
 {

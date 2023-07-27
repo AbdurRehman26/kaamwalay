@@ -33,7 +33,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource|JsonResponse
     {
         try {
             $createOrderService = resolve(CreateOrderService::class);

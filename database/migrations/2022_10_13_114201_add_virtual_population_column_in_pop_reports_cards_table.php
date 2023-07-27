@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('pop_reports_cards', function (Blueprint $table) {
             $table->integer('population')
-                ->storedAs("(`total` + `total_plus`)")
+                ->storedAs('(`total` + `total_plus`)')
                 ->index();
         });
     }

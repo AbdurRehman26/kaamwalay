@@ -58,7 +58,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping
             $wholeRowData = [
                 Carbon::parse($order->date)->format('m/d/Y'),
                 $order->order_number,
-                $order->paymentPlan->price . ' / Card',
+                $order->paymentPlan->price.' / Card',
                 $order->paymentPlan->turnaround,
                 $orderItem->cardProduct->getSearchableName(),
                 $orderItem->quantity,

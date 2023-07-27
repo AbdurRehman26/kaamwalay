@@ -34,19 +34,17 @@ class SendSalesmenStats extends Command
         $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
         $salesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
 
-        $this->info('Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
+        $this->info('Salesmen Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
             ->notify(new SalesmenStatsNotification($salesmenStats));
 
-        $this->info('Salesmen Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Completed');
+        $this->info('Salesmen Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Completed');
 
         return 0;
     }
 
     /**
-     * @param  string  $startDate
-     * @param  string  $endDate
      * @return Collection<int,Order>
      */
     protected function getData(string $startDate, string $endDate): Collection

@@ -15,7 +15,6 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {
@@ -71,7 +70,7 @@ it('returns orders list for salesman', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('/api/v2/salesman/orders/' . $this->orders[0]->id .'?include=customer,orderItems')
+    $this->getJson('/api/v2/salesman/orders/'.$this->orders[0]->id.'?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -99,7 +98,7 @@ test('orders throws error for roles other than salesman', function () {
 });
 
 it('filters orders by id', function () {
-    $this->getJson('/api/v2/salesman/orders?filter[order_id]=' . $this->orders[0]->id)
+    $this->getJson('/api/v2/salesman/orders?filter[order_id]='.$this->orders[0]->id)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -288,7 +287,7 @@ it('returns orders order by desc grand_total', function () {
 
 test('orders are filterable by customer first name', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/v2/salesman/orders?include=customer&filter[customer_name]=' . $user->first_name)
+    $this->getJson('/api/v2/salesman/orders?include=customer&filter[customer_name]='.$user->first_name)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -298,7 +297,7 @@ test('orders are filterable by customer first name', function () {
 
 test('orders are filterable by customer ID', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/v2/salesman/orders?include=customer&filter[customer_id]=' . $user->id)
+    $this->getJson('/api/v2/salesman/orders?include=customer&filter[customer_id]='.$user->id)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -309,7 +308,7 @@ test('orders are filterable by customer ID', function () {
 it(
     'returns orders filtered after searching the order with order number, customer number and user Name',
     function (string $value) {
-        $this->getJson('/api/v2/salesman/orders?include=orderStatusHistory&filter[search]=' . $value)
+        $this->getJson('/api/v2/salesman/orders?include=orderStatusHistory&filter[search]='.$value)
             ->assertOk()
             ->assertJsonFragment([
                 'id' => $this->orders[0]->id,
@@ -328,7 +327,7 @@ it('returns only orders with filtered payment status', function ($data) {
         ['id' => 102, 'payment_status' => OrderPaymentStatusEnum::DUE, 'salesman_id' => $this->user->id],
     ))->create();
 
-    $this->getJson('/api/v2/salesman/orders?filter[payment_status]=' . $data['payment_status'])
+    $this->getJson('/api/v2/salesman/orders?filter[payment_status]='.$data['payment_status'])
         ->assertOk()
         ->assertJsonCount($data['count'], ['data'])
         ->assertJsonFragment([

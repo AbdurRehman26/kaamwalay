@@ -19,7 +19,7 @@ uses(WithFaker::class);
 beforeEach(function () {
     seed(RolesSeeder::class);
     $this->user = User::factory()
-    ->withSalesmanRole()
+        ->withSalesmanRole()
         ->create();
 
     $this->coupons = Coupon::factory(10)->create();
@@ -91,7 +91,7 @@ test('salesman can create coupon for specific payment plan', function () {
     actingAs($this->user);
 
     $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
-    
+
     postJson(route('v2.salesman.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
@@ -191,7 +191,7 @@ test('salesman can not create coupon with fixed value more than service level', 
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => true,
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
     ])
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
@@ -207,7 +207,7 @@ test('salesman can not create coupon with end date less than the start date of c
         'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => false,
         'available_till' => now()->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
     ])
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
@@ -224,7 +224,7 @@ test('salesman can create coupon with same start and end date date of coupon ava
         'is_permanent' => false,
         'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
     ])
         ->assertCreated();
 });
@@ -241,7 +241,7 @@ test('salesman can create coupon with today start date', function () {
         'is_permanent' => false,
         'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
     ])
         ->assertCreated();
 });
@@ -257,7 +257,7 @@ test('salesman can not create coupon with past start date', function () {
         'available_from' => now()->subDays(2)->toDateString(),
         'is_permanent' => false,
         'available_till' => now()->addDays(2)->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
     ])
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
@@ -301,7 +301,7 @@ test('salesman can create coupon min card count constraint', function () {
         'is_permanent' => false,
         'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
         'has_minimum_cards_threshold' => 1,
         'min_threshold_value' => 10,
     ])
@@ -320,7 +320,7 @@ test('salesman can not create coupon min card count constraint of less than 2', 
         'is_permanent' => false,
         'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
-        'couponables' => [1,2,3],
+        'couponables' => [1, 2, 3],
         'has_minimum_cards_threshold' => 1,
         'min_threshold_value' => 1,
     ])

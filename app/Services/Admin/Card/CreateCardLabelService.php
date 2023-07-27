@@ -15,15 +15,25 @@ use Illuminate\Support\Str;
 class CreateCardLabelService
 {
     protected OrderItem $orderItem;
+
     protected CardProduct $cardProduct;
+
     protected CardCategory $category;
+
     protected CardSeries $cardSeries;
+
     protected CardSet $cardSet;
+
     protected string $cardSeriesName;
+
     protected string $cardSetName;
+
     protected string $editionName;
+
     protected string $language;
+
     protected string $categoryName;
+
     protected int $year;
 
     public function createLabelsForOrder(Order $order): void
@@ -74,7 +84,7 @@ class CreateCardLabelService
         $card_number = '#';
 
         if (! Str::contains($card_number_order, ['CN'])) {
-            $card_number = '#'. $card_number_order;
+            $card_number = '#'.$card_number_order;
         }
 
         if (
@@ -82,7 +92,7 @@ class CreateCardLabelService
             $this->language === 'ENGLISH' &&
             Str::lower($this->cardSetName) == 'radiant collection'
         ) {
-            $card_number = '#RC' . $card_number_order;
+            $card_number = '#RC'.$card_number_order;
         }
 
         return $card_number;
@@ -128,9 +138,9 @@ class CreateCardLabelService
 
             if ($this->language === 'JAPANESE') {
                 if (Str::contains($this->cardSeriesName, 'PROMOS')) {
-                    if ((strlen($this->year . $categoryName . $this->language) + 5) < 22) {
+                    if ((strlen($this->year.$categoryName.$this->language) + 5) < 22) {
                         $label_line_one = [$this->year, $categoryName, $this->language];
-                    } elseif (strlen($this->year . $this->cardProduct->getCategoryAbbreviation() . $this->language) < 22) {
+                    } elseif (strlen($this->year.$this->cardProduct->getCategoryAbbreviation().$this->language) < 22) {
                         $label_line_one = [$this->year, $categoryName, $this->cardProduct->getLanguageAbbreviation()];
                     } else {
                         $label_line_one = [$this->year, strlen($this->cardProduct->getCategoryAbbreviation()), $this->cardProduct->getLanguageAbbreviation()];
@@ -138,7 +148,7 @@ class CreateCardLabelService
                 } elseif ($this->year <= 2001 && $this->cardSeriesName !== 'E-CARD ERA') {
                     $label_line_one = [$this->year, $categoryName, $this->language];
                 } elseif ($this->year >= 2001 && $this->cardSeriesName !== 'NEO ERA') {
-                    if ((strlen($this->year . $categoryName . $this->language . $this->cardProduct->getSeriesNickname())) < 22) {
+                    if ((strlen($this->year.$categoryName.$this->language.$this->cardProduct->getSeriesNickname())) < 22) {
                         $label_line_one = [$this->year, $categoryName, $this->language, $this->cardProduct->getSeriesNickname()];
                     } else {
                         $label_line_one = [$this->year, $categoryName, $this->cardProduct->getLanguageAbbreviation(), $this->cardProduct->getSeriesNickname()];
@@ -163,7 +173,7 @@ class CreateCardLabelService
                     $label_line_one = [$this->year, $categoryName];
                 }
             } elseif ($this->cardSeriesName === 'CRYPTID NATION' && ! Str::contains($this->cardSetName, 'PROMOS')) {
-                if (strlen($this->year . $categoryName . $this->cardSet->name) < 30) {
+                if (strlen($this->year.$categoryName.$this->cardSet->name) < 30) {
                     $label_line_one = [$this->year, $categoryName, $this->cardSetName];
                 } else {
                     $label_line_one = [$this->year, $categoryName, $this->cardProduct->getSetNickname()];
@@ -188,7 +198,7 @@ class CreateCardLabelService
         $surface = Str::upper($this->cardProduct->surface);
 
         if ($this->categoryName == 'POKEMON' && Str::contains($card_name, 'VMAX')) {
-            $card_name = "FA/" . $card_name;
+            $card_name = 'FA/'.$card_name;
         }
 
         $label_line_two = [$card_name];
@@ -253,7 +263,7 @@ class CreateCardLabelService
                 if ($this->editionName === 'UNLIMITED') {
                     $label_line_three = [$this->cardSetName];
                 } else {
-                    if ((strlen($this->cardSet->name . $this->cardProduct->edition) + 4) < 28) {
+                    if ((strlen($this->cardSet->name.$this->cardProduct->edition) + 4) < 28) {
                         $label_line_three = [$this->cardSetName, '-', $this->editionName];
                     } else {
                         $label_line_three = [$this->cardProduct->getSetNickname(), ' - ', $this->cardProduct->getEditionAbbreviation()];
@@ -336,7 +346,7 @@ class CreateCardLabelService
     {
         $length = strlen(implode('', $label_line_one));
 
-        if ($length > 30 && count($label_line_one) > 2 && (int)($label_line_one[0])) {
+        if ($length > 30 && count($label_line_one) > 2 && (int) ($label_line_one[0])) {
             $label_line_one[2] = $this->cardProduct->getSetNickname();
         }
 

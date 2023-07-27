@@ -48,7 +48,7 @@ class TaggableController extends Controller
      */
     protected function getModelInstance(string $model): Taggable
     {
-        $class = '\\App\\Models\\' . ucfirst($model);
+        $class = '\\App\\Models\\'.ucfirst($model);
         $instance = new $class;
 
         if (! $instance instanceof Taggable) {

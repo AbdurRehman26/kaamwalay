@@ -60,7 +60,7 @@ trait HasOrderPayments
         $this->save();
     }
 
-    public function createOrderPayment(array $data, User $user, ?int $paymentMethodId = null): void
+    public function createOrderPayment(array $data, User $user, int $paymentMethodId = null): void
     {
         $this->orderPayments()->create(
             [

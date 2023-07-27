@@ -14,9 +14,7 @@ use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use Illuminate\Support\Facades\Config;
-
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 
@@ -150,7 +148,7 @@ test('a customer can see his order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v2/customer/orders/'.$order->id);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -162,7 +160,6 @@ test('a customer can see his order', function () {
         'extra_charge_total' => 0,
     ]);
 });
-
 
 test('a customer only see own orders', function () {
     Event::fake([
@@ -197,7 +194,7 @@ test('a customer cannot see order by another customer', function () {
     $order = Order::factory()->for($someOtherCustomer)->create();
 
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v2/customer/orders/'.$order->id);
 
     $response->assertForbidden();
 });
@@ -213,7 +210,7 @@ test('a customer can see invoice in order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v2/customer/orders/'.$order->id);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -273,7 +270,7 @@ test('a customer can not complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -446,7 +443,7 @@ it('can calculate collector coin price for an order', function () {
 
     $response = $this->json(
         'GET',
-        '/api/v2/customer/orders/' . $order->id . '/collector-coin',
+        '/api/v2/customer/orders/'.$order->id.'/collector-coin',
         [
             'payment_blockchain_network' => 97,
             'payment_by_wallet' => 2,
@@ -475,7 +472,7 @@ it('throws error if using unsupported network', function () {
 
     $response = $this->json(
         'GET',
-        '/api/v2/customer/orders/' . $order->id . '/collector-coin',
+        '/api/v2/customer/orders/'.$order->id.'/collector-coin',
         [
             'payment_blockchain_network' => 1,
             'payment_by_wallet' => 2,
@@ -680,7 +677,6 @@ test('a customer can update order billing address', function () {
         ->assertOk();
 });
 
-
 test('a customer can not update other user\'s billing address', function () {
     $order = Order::factory()
         ->has(OrderItem::factory())
@@ -866,7 +862,6 @@ test('a customer can request cleaning service with correct cleaning fee', functi
         [500, 100],
     ]);
 
-
 test('cleaning fee should be calculated when needed', function (int $numberOfCards, int $cleaningFee, bool $isCleaningRequired) {
     Config::set('robograding.feature_order_cleaning_fee_per_card', 5);
     Config::set('robograding.feature_order_cleaning_fee_max_cap', 100);
@@ -933,10 +928,10 @@ test('cleaning fee should be calculated when needed', function (int $numberOfCar
 test('a customer can see estimated delivery date in order', function () {
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
-    
-    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+
+    $response = $this->getJson('/api/v2/customer/orders/'.$order->id);
     $response->assertStatus(200);
-        
+
     $response->assertJsonFragment([
         'id' => $order->id,
         'order_number' => $order->order_number,
@@ -987,7 +982,7 @@ it('can calculate collector coin price for an order with coupon code', function 
 
     $this->json(
         'GET',
-        '/api/v2/customer/orders/' . $order->id . '/collector-coin',
+        '/api/v2/customer/orders/'.$order->id.'/collector-coin',
         [
             'payment_blockchain_network' => 97,
             'payment_by_wallet' => 0,

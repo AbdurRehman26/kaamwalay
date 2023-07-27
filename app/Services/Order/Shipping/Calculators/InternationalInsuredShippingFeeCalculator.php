@@ -79,6 +79,7 @@ class InternationalInsuredShippingFeeCalculator
             'apply_shipping_rules' => true,
         ];
     }
+
     protected static function getShippingSettings(): array
     {
         return [

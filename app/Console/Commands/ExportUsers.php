@@ -31,7 +31,7 @@ class ExportUsers extends Command
     {
         $this->info('Exporting...');
 
-        $filePath = 'exports/users-' . Str::uuid() . '.csv';
+        $filePath = 'exports/users-'.Str::uuid().'.csv';
         (new UsersExport)->store($filePath, 's3', Excel::CSV);
 
         $this->info(Storage::disk('s3')->url($filePath));

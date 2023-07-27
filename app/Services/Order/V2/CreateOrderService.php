@@ -37,6 +37,7 @@ use Throwable;
 class CreateOrderService
 {
     protected Order $order;
+
     protected array $data;
 
     public function __construct(
@@ -60,7 +61,7 @@ class CreateOrderService
             return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+            Log::error($e->getMessage()."\n File:".$e->getFile()."\n Line:".$e->getLine());
 
             throw $e;
         }
@@ -294,7 +295,7 @@ class CreateOrderService
         }
     }
 
-    protected function storeWalletPaymentAmount(float|null $amount): void
+    protected function storeWalletPaymentAmount(?float $amount): void
     {
         if (! empty($amount)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);

@@ -6,13 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -49,13 +49,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Restore yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -65,7 +65,7 @@ jobs:
             ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore eslint cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .eslintrc.json
@@ -83,13 +83,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock
@@ -99,7 +99,7 @@ jobs:
             ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore typescript cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .tsbuildinfo
@@ -117,13 +117,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             yarn.lock

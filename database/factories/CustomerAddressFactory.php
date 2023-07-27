@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Country;
-use App\Models\CustomerAddress;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

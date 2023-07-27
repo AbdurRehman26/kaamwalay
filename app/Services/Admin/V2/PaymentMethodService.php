@@ -9,6 +9,7 @@ class PaymentMethodService
 {
     /**
      * @return Collection<int, PaymentMethod>
+     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */

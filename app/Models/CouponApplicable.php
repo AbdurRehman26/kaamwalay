@@ -12,11 +12,14 @@ class CouponApplicable extends Model
     use HasFactory;
 
     const FOR_PAYMENT_PLANS = 2;
+
     const FOR_USERS = 3;
+
     const COUPON_APPLICABLE_WITH_ENTITIES = [
         self::FOR_PAYMENT_PLANS,
         self::FOR_USERS,
     ];
+
     const ENTITIES_MAPPING = [
         self::FOR_PAYMENT_PLANS => 'payment_plans',
         self::FOR_USERS => 'users',

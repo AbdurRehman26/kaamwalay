@@ -26,8 +26,8 @@ class CouponController extends Controller
             $coupon = $this->couponService->returnCouponIfValid(
                 $couponCode,
                 array_merge($request->only('couponables_id', 'items_count'), [
-                'user_id' => auth()->user()->id,
-            ])
+                    'user_id' => auth()->user()->id,
+                ])
             );
 
             return new CouponResource($coupon);
@@ -73,11 +73,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new CouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new CouponResource($coupon),
+        ],
         ]);
     }
 
@@ -111,11 +110,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new CouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new CouponResource($coupon),
+        ],
         ]);
     }
 

@@ -3,7 +3,6 @@
 use App\Models\CardCategoryType;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
@@ -19,7 +18,7 @@ beforeEach(function () {
     $this->actingAs($this->user);
 
     $this->sampleGetCategoriesResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_get_categories_response_200.json'
+        base_path().'/tests/stubs/AGS_get_categories_response_200.json'
     ), associative: true);
 });
 
@@ -51,8 +50,8 @@ test('an admin can create card category', function () {
 
 test('a customer cannot create card category', function () {
     $customerUser = User::factory()
-    ->withRole(config('permission.roles.customer'))
-    ->create();
+        ->withRole(config('permission.roles.customer'))
+        ->create();
 
     $this->actingAs($customerUser);
 

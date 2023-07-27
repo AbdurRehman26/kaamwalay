@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Resources\API\V1\Customer\User;
 
 use Illuminate\Http\Request;

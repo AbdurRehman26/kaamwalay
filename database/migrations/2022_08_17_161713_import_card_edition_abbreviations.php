@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,10 +12,10 @@ return new class extends Migration
         $editionAbbreviations = [
             'Kickstarter' => 'KS',
             '1st Edition' => '1ST ED',
-            '2nd Edition' => '2ND ED'
+            '2nd Edition' => '2ND ED',
         ];
 
-        foreach ($editionAbbreviations as $key => $abbreviation){
+        foreach ($editionAbbreviations as $key => $abbreviation) {
             $abbreviations[] = [
                 'name' => $key,
                 'abbreviation' => $abbreviation,

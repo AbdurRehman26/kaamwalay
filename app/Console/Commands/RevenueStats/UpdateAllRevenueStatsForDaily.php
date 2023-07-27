@@ -26,8 +26,8 @@ class UpdateAllRevenueStatsForDaily extends Command
 
     public function handle(): int
     {
-        $this->info("Revenue Stats For Previously Missed Dates Starting...");
-        Log::info("Revenue Stats For Previously Missed Dates Starting...");
+        $this->info('Revenue Stats For Previously Missed Dates Starting...');
+        Log::info('Revenue Stats For Previously Missed Dates Starting...');
 
         $lastRevenueDate = Carbon::now()->toDateString();
 
@@ -41,16 +41,16 @@ class UpdateAllRevenueStatsForDaily extends Command
             ->pluck('created_at')
             ->each(function (Carbon $date) {
                 $formattedDate = $date->toDateString();
-                Log::info("Revenue Stats for Date : " . $formattedDate . " Adding.");
+                Log::info('Revenue Stats for Date : '.$formattedDate.' Adding.');
 
                 //                $revenueStatsService->addStats($formattedDate);
 
-                Log::info("Revenue Stats for Date : " . $formattedDate . " Added.");
-                $this->info("Revenue Stats for Date : " . $formattedDate . " Added.");
+                Log::info('Revenue Stats for Date : '.$formattedDate.' Added.');
+                $this->info('Revenue Stats for Date : '.$formattedDate.' Added.');
             });
 
-        $this->info("Revenue Stats Daily For Previously Missed Dates Completed.");
-        Log::info("Revenue Stats Daily For Previously Missed Dates Completed.");
+        $this->info('Revenue Stats Daily For Previously Missed Dates Completed.');
+        Log::info('Revenue Stats Daily For Previously Missed Dates Completed.');
 
         return 0;
     }

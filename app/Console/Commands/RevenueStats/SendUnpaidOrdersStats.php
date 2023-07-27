@@ -32,12 +32,12 @@ class SendUnpaidOrdersStats extends Command
     {
         $currentDate = (Carbon::parse($this->argument('date')))->format('Y-m-d');
 
-        $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Starting');
+        $this->log('Unpaid Stats Daily for Date : '.$currentDate.' Starting');
 
         $unpaidDailyStats = $unpaidOrdersStatsService->calculateDailyStats($currentDate);
         $unpaidDailyCardsTotal = $unpaidOrdersStatsService->calculateDailyCardsTotal();
 
-        $this->log('Unpaid Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
+        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Starting');
 
         $unpaidMonthlyStats = $unpaidOrdersStatsService->calculateMonthlyStats($currentDate);
         $unpaidMonthlyCardsTotal = $unpaidOrdersStatsService->calculateMonthlyCardsTotal();
@@ -47,8 +47,8 @@ class SendUnpaidOrdersStats extends Command
                 ->notify(new UnpaidOrdersStats($unpaidDailyStats, $unpaidMonthlyStats, $unpaidDailyCardsTotal, $unpaidMonthlyCardsTotal));
         }
 
-        $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Completed');
-        $this->log('Unpaid Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Completed');
+        $this->log('Unpaid Stats Daily for Date : '.$currentDate.' Completed');
+        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Completed');
 
         return 0;
     }

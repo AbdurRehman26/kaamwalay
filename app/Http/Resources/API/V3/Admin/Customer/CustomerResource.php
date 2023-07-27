@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin User
+ *
  * @property mixed $referrer
  */
 class CustomerResource extends V2CustomerResource

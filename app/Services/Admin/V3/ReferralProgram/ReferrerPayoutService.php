@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Admin\V3\ReferralProgram;
 
 use App\Events\API\Admin\ReferralProgram\PayoutCompletedEvent;
@@ -13,6 +14,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ReferrerPayoutService
 {
     protected const PER_PAGE = 10;
+
     /**
      * Payment Providers available for the application
      **/

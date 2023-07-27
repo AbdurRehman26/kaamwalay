@@ -9,6 +9,7 @@ use App\Notifications\PushNotification;
 class OrderStatusChangedNotification extends PushNotification
 {
     protected const INTENT = 'SUBMISSION_DETAIL_VIEW';
+
     protected const STATUS_MAP = [
         OrderStatus::PLACED => 'placed',
         OrderStatus::CONFIRMED => 'confirmed',
@@ -29,12 +30,12 @@ class OrderStatusChangedNotification extends PushNotification
 
     protected function getTitle(): string
     {
-        return 'Submission ' . ucfirst(self::STATUS_MAP[$this->order->order_status_id]);
+        return 'Submission '.ucfirst(self::STATUS_MAP[$this->order->order_status_id]);
     }
 
     protected function getBody(): string
     {
-        return "Your submission # {$this->order->order_number} has been " . self::STATUS_MAP[$this->order->order_status_id];
+        return "Your submission # {$this->order->order_number} has been ".self::STATUS_MAP[$this->order->order_status_id];
     }
 
     protected function getIntent(): array

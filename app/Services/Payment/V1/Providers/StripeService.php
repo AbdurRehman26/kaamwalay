@@ -21,11 +21,14 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
+
     public const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+
     protected const ERROR_PARAMETER_CUSTOMER = 'customer';
+
     protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
-    public function createSetupIntent(User $user): array | SetupIntent
+    public function createSetupIntent(User $user): array|SetupIntent
     {
         try {
             return $user->createSetupIntent(['customer' => $user->stripe_id]);
@@ -43,7 +46,7 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
     /**
      * @return array | Collection <int, \Laravel\Cashier\PaymentMethod>
      */
-    public function getUserPaymentMethods(User $user): array | Collection
+    public function getUserPaymentMethods(User $user): array|Collection
     {
         try {
             return $user->paymentMethods();

@@ -10,6 +10,7 @@ use JsonSerializable;
 class UserCardListCollection extends ResourceCollection
 {
     public $collects = UserCardListResource::class;
+
     /**
      * Transform the resource collection into an array.
      *

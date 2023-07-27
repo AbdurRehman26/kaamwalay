@@ -37,7 +37,7 @@ test('user can not login with invalid email', function () {
     ]);
 
     $response->assertStatus(401);
-    $response->assertJsonStructure([ 'error' ]);
+    $response->assertJsonStructure(['error']);
     $response->assertJsonPath('error', 'The email or password is invalid.');
 })->group('auth');
 
@@ -53,7 +53,7 @@ test('user can not login with invalid password', function () {
     ]);
 
     $response->assertStatus(401);
-    $response->assertJsonStructure([ 'error' ]);
+    $response->assertJsonStructure(['error']);
     $response->assertJsonPath('error', 'The email or password is invalid.');
 })->group('auth');
 
@@ -77,7 +77,7 @@ test('ags user can login', function () {
     $firstName = 'firstname';
     $lastName = 'lastname';
     Http::fake([
-        config('services.ags.base_url') . '/login/' => Http::response([
+        config('services.ags.base_url').'/login/' => Http::response([
             'access_token' => 'token',
             'user' => [
                 'username' => 'test',
@@ -161,7 +161,7 @@ test('ags user can login and have wallet created', function () {
     $firstName = 'firstname';
     $lastName = 'lastname';
     Http::fake([
-        config('services.ags.base_url') . '/login/' => Http::response([
+        config('services.ags.base_url').'/login/' => Http::response([
             'access_token' => 'token',
             'user' => [
                 'username' => 'test',

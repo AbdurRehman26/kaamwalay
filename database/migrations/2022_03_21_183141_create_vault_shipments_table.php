@@ -1,16 +1,11 @@
 <?php
 
-use App\Models\Coupon;
-use App\Models\OrderAddress;
-use App\Models\ShippingMethod;
-use App\Models\User;
-use App\Models\VaultShipmentItem;
-use App\Models\VaultShipmentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */

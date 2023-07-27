@@ -45,7 +45,7 @@ class OrderStatusHistoryService
         OrderStatus|int $orderStatus,
         Order|int $order,
         User|int $user = null,
-        ?string $notes = null
+        string $notes = null
     ): OrderStatusHistory|Model {
         if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -89,7 +89,7 @@ class OrderStatusHistoryService
                 [
                     'order_status_id' => $orderStatusId,
                 ],
-                $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()]: [],
+                $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()] : [],
             ));
 
         // TODO: replace find with the model.

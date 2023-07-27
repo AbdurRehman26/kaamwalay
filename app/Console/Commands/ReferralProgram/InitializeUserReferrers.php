@@ -31,7 +31,7 @@ class InitializeUserReferrers extends Command
         $referrerService = new ReferrerService();
 
         foreach ($users as $user) {
-            $this->info('Processing user '. $user->id);
+            $this->info('Processing user '.$user->id);
             $referrerService->create($user);
         }
 

@@ -53,19 +53,19 @@ beforeEach(function () {
     ]);
 
     $this->sampleGetCategoryResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_get_category_response_200.json'
+        base_path().'/tests/stubs/AGS_get_category_response_200.json'
     ), associative: true);
 
     $this->sampleGetSeriesResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_get_series_response_200.json'
+        base_path().'/tests/stubs/AGS_get_series_response_200.json'
     ), associative: true);
 
     $this->sampleGetSetResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_get_set_response_200.json'
+        base_path().'/tests/stubs/AGS_get_set_response_200.json'
     ), associative: true);
 
     $this->sampleCreateCardResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_create_card_response_200.json'
+        base_path().'/tests/stubs/AGS_create_card_response_200.json'
     ), associative: true);
 
     $this->actingAs($this->user);
@@ -97,20 +97,20 @@ test('an admin can create cards manually', function () {
 
     $response->assertSuccessful();
     $response->assertJsonFragment([
-        'long_name' => "2021 Pokemon Sword & Shield Series Battle Styles 001",
-        'short_name' => "1st Edition - Holo - Lorem",
-        'name' => "Lorem Ipsum",
-        'card_category_name' => "Pokemon",
-        'card_set_name' => "Battle Styles",
-        'card_series_name' => "Sword & Shield Series",
-        'release_date' => "2021-03-19T00:00:00.000000Z",
+        'long_name' => '2021 Pokemon Sword & Shield Series Battle Styles 001',
+        'short_name' => '1st Edition - Holo - Lorem',
+        'name' => 'Lorem Ipsum',
+        'card_category_name' => 'Pokemon',
+        'card_set_name' => 'Battle Styles',
+        'card_series_name' => 'Sword & Shield Series',
+        'release_date' => '2021-03-19T00:00:00.000000Z',
         'release_year' => 2021,
-        'card_number_order' => "001",
-        'image_path' => "http://www.google.com",
-        'language' => "English",
-        'variant' => "Lorem",
-        'surface' => "Holo",
-        'edition' => "1st Edition",
+        'card_number_order' => '001',
+        'image_path' => 'http://www.google.com',
+        'language' => 'English',
+        'variant' => 'Lorem',
+        'surface' => 'Holo',
+        'edition' => '1st Edition',
         'added_by_customer' => false,
     ]);
 });
@@ -169,10 +169,10 @@ test('an admin can update cards manually', function () {
 
     $response->assertSuccessful();
     $response->assertJsonFragment([
-        'language' => "Japanese",
-        'variant' => "Lorem",
-        'surface' => "Holo",
-        'edition' => "Shadowless",
+        'language' => 'Japanese',
+        'variant' => 'Lorem',
+        'surface' => 'Holo',
+        'edition' => 'Shadowless',
     ]);
 });
 
@@ -181,11 +181,11 @@ test('an admin can delete a card', function () {
     Http::fake([
         '*/find-card/*' => Http::response($this->sampleCreateCardResponse, 200, []),
         '*/cards/*' => Http::response([
-                "app_status" => 1,
-                "app_message" => [
-                    "Removed successfully",
-                ],
-            ], 204),
+            'app_status' => 1,
+            'app_message' => [
+                'Removed successfully',
+            ],
+        ], 204),
     ]);
 
     $response = $this->deleteJson(route('v2.admin.card-products.destroy', ['cardProduct' => $this->card]));

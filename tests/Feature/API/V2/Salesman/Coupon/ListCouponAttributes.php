@@ -12,7 +12,7 @@ uses(WithFaker::class);
 beforeEach(function () {
     seed(RolesSeeder::class);
     $this->user = User::factory()
-    ->withSalesmanRole()
+        ->withSalesmanRole()
         ->create();
 });
 

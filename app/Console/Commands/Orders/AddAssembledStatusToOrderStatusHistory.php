@@ -34,7 +34,7 @@ class AddAssembledStatusToOrderStatusHistory extends Command
             Order::where('order_status_id', OrderStatus::SHIPPED)
                 ->get()
                 ->tap(function ($collection) {
-                    $this->info('Found ' . $collection->count() . ' Orders with shipped status');
+                    $this->info('Found '.$collection->count().' Orders with shipped status');
                 })
                 ->each(function (Order $order) {
                     /** @var OrderStatusHistory $shippedOrderHistory */

@@ -16,8 +16,8 @@ class OrderPaymentProcessedNotification extends Notification
     }
 
     /**
-      * Get the notification's delivery channels.
-      */
+     * Get the notification's delivery channels.
+     */
     public function via(mixed $notifiable): array
     {
         return ['slack'];
@@ -72,11 +72,11 @@ class OrderPaymentProcessedNotification extends Notification
         }
 
         if ($this->order->user?->referredBy) {
-            $message = $message . "\nPartner: {$this->order->user->referredBy->email}";
+            $message = $message."\nPartner: {$this->order->user->referredBy->email}";
         }
 
         if ($this->order->salesman) {
-            $message = $message . "\nSalesman: {$this->order->salesman->email}";
+            $message = $message."\nSalesman: {$this->order->salesman->email}";
         }
 
         return $message;
@@ -112,7 +112,7 @@ class OrderPaymentProcessedNotification extends Notification
             ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
             ->get()
             ->map(function ($values) {
-                return $values['quantity'] . ' ' . $values['name'];
+                return $values['quantity'].' '.$values['name'];
             })
             ->join(' ');
     }

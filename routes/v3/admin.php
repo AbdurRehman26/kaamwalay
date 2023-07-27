@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\API\V3\Admin\Cards\CardCategoriesController;
 use App\Http\Controllers\API\V3\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V3\Admin\Cards\CardCategoryTypeController;
 use App\Http\Controllers\API\V3\Admin\CustomerController;
 use App\Http\Controllers\API\V3\Admin\Order\OrderController;
 use App\Http\Controllers\API\V3\Admin\Order\PaymentPlanController;
+use App\Http\Controllers\API\V3\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V3\Admin\ReferralProgramController;
 use App\Http\Controllers\API\V3\Admin\ReferrerPayoutController;
-use App\Http\Controllers\API\V3\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V3\Admin\TaggableController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,11 +52,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             'show' => 'customers.show',
         ]);
 
-        Route::prefix('cards')->group(function () {
-            Route::post('categories', [CardCategoryController::class, 'store'])->name('cards.categories.store');
-            Route::get('category-types', [CardCategoryTypeController::class, 'index'])->name('cards.category-types.index');
-        });
-   
+    Route::prefix('cards')->group(function () {
+        Route::post('categories', [CardCategoryController::class, 'store'])->name('cards.categories.store');
+        Route::get('category-types', [CardCategoryTypeController::class, 'index'])->name('cards.category-types.index');
+    });
+
     Route::prefix('customer')->group(function () {
         Route::get('/{user}/referral/sign-ups', [ReferralProgramController::class, 'getSignUps'])->name('customer.referral.sign-ups');
         Route::get('/{user}/referral/commission-earnings', [ReferralProgramController::class, 'getCommissionEarnings'])->name('customer.commission-earnings');
@@ -67,7 +66,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     Route::prefix('referral-program')->group(function () {
-        Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index','store'])
+        Route::apiResource('payouts', ReferrerPayoutController::class)->only(['index', 'store'])
             ->names([
                 'index' => 'referral.payouts.index',
                 'store' => 'referral.payouts.store',

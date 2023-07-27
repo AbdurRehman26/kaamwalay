@@ -71,10 +71,10 @@ it('can verify completion of collector coin paid order', function () {
     $cacheDriver = app('cache')->driver();
     Cache::shouldReceive('driver')->andReturn($cacheDriver);
     Cache::shouldReceive('get')
-        ->with('cc-payment-' . $order->id, Mockery::any())
+        ->with('cc-payment-'.$order->id, Mockery::any())
         ->andReturn(['amount' => 120, 'network' => 97]);
 
-    $response = $this->postJson('/api/v2/customer/orders/' . $order->id . '/payments/' . $bscTestTransactionHash);
+    $response = $this->postJson('/api/v2/customer/orders/'.$order->id.'/payments/'.$bscTestTransactionHash);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([

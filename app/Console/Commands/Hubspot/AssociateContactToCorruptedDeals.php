@@ -63,14 +63,14 @@ class AssociateContactToCorruptedDeals extends Command
             $this->info('Processing matched deals ...');
 
             $deals->each(function ($deal) use ($hubspotClient, $since) {
-                $this->info('Processing deal: ' . $deal->properties->dealname->value);
+                $this->info('Processing deal: '.$deal->properties->dealname->value);
 
                 $sinceDateTimeString = Carbon::createFromTimestamp($since)->toDateTimeString();
                 $dealNameArray = explode(' ', $deal->properties->dealname->value);
 
                 if (count($dealNameArray) === 3) {
                     $user = User::where('first_name', $dealNameArray[0])
-                        ->where('last_name', $dealNameArray[1] . ' ' . $dealNameArray[2])
+                        ->where('last_name', $dealNameArray[1].' '.$dealNameArray[2])
                         ->where('created_at', '>=', $sinceDateTimeString)
                         ->first();
                 } elseif (count($dealNameArray) === 2) {

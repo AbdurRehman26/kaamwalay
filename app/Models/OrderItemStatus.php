@@ -11,10 +11,15 @@ class OrderItemStatus extends Model
     use HasFactory;
 
     public const PENDING = 1;
+
     public const MISSING = 2;
+
     public const NOT_ACCEPTED = 3;
+
     public const CONFIRMED = 4;
+
     public const GRADED = 5;
+
     public const CANCELLED = 6;
 
     /**

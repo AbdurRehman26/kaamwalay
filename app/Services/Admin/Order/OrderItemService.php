@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 class OrderItemService
 {
     public function __construct(
-        private  UserCardService $userCardService,
+        private UserCardService $userCardService,
         private CardGradingService $cardGradingService
     ) {
     }
@@ -86,6 +86,7 @@ class OrderItemService
 
     /**
      * @return Collection<int,OrderItem>
+     *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
     public function markItemsAsCancelled(Order $order, User $user): Collection
@@ -95,6 +96,7 @@ class OrderItemService
 
     /**
      * @return Collection<int,OrderItem>
+     *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
     protected function marketItemsAs(Order $order, array $items, User $user, string|int $status): Collection
@@ -102,7 +104,7 @@ class OrderItemService
         $processedItems = [];
         foreach ($items as $item) {
             $orderItem = OrderItem::find($item);
-            $processedItems[] = $this->changeStatus($order, $orderItem, ["status" => $status], $user);
+            $processedItems[] = $this->changeStatus($order, $orderItem, ['status' => $status], $user);
         }
 
         return collect($processedItems);

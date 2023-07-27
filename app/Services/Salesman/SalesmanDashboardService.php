@@ -86,11 +86,11 @@ class SalesmanDashboardService
                 return $user->salesmanProfile->salesmanEarnedCommissions()->whereBetween('created_at', [$startDate, $endDate])->sum('commission');
             case 'commission_paid':
                 return $user->salesmanCommissionPayments()->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
-            case 'commission_unpaid': {
+            case 'commission_unpaid':
                 $salesmanStatsService = resolve(SalesmanDashboardService::class);
 
                 return $salesmanStatsService->getCommissionsEarned($user) - $user->receivedCommissionTotal();
-            }
+
             case 'orders':
                 return $user->salesmanOrders()->paid()->whereBetween('created_at', [$startDate, $endDate])->count();
             case 'cards':

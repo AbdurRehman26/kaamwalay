@@ -9,7 +9,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentPlan;
 use App\Models\User;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
@@ -53,15 +52,14 @@ beforeEach(function () {
         ->create();
 });
 
-
 test('customer checks for valid coupon', function () {
     actingAs($this->user);
 
     getJson(route('v2.coupon.verify', [
-            $this->coupon->code,
-            'couponables_type' => 'service_level',
-            'couponables_id' => $this->paymentPlan->id,
-        ]))
+        $this->coupon->code,
+        'couponables_type' => 'service_level',
+        'couponables_id' => $this->paymentPlan->id,
+    ]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -75,7 +73,7 @@ test('customer checks for valid coupon', function () {
 test('customer checks for invalid coupon code', function () {
     actingAs($this->user);
 
-    getJson(route('v2.coupon.verify', $this->coupon->code . 'test'))
+    getJson(route('v2.coupon.verify', $this->coupon->code.'test'))
         ->assertStatus(422);
 });
 
@@ -161,7 +159,6 @@ test('customer checks for valid coupon code having more or equal required cards 
         'order_id' => $order->id,
     ]);
 
-
     postJson(route('v2.orders.coupon.discount', [
         'order' => $order,
         'coupon' => ['code' => $coupon->code],
@@ -190,7 +187,6 @@ test('customer checks for valid coupon code having less than the required cards 
         'order_id' => $order->id,
         'quantity' => 2,
     ]);
-
 
     postJson(route('v2.orders.coupon.discount', [
         'order' => $order,

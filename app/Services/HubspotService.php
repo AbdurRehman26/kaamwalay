@@ -148,7 +148,7 @@ class HubspotService
     protected function updateDealStage(Order $order, array $propertiesToUpdate): void
     {
         $deal = HubspotDeal::where('user_email', $order->user->email)->first();
-        
+
         if (! $deal) {
             Log::error('Hubspot deal not found', [
                 'user_email' => $order->user->email,

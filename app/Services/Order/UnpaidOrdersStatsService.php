@@ -35,9 +35,9 @@ class UnpaidOrdersStatsService
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
     {
         return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-        ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->where(function (Builder $query) {
-            $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
-        })->sum('order_items.quantity');
+            ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->where(function (Builder $query) {
+                $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
+            })->sum('order_items.quantity');
     }
 
     public function calculateMonthlyStats(string $currentDate): array
@@ -54,7 +54,7 @@ class UnpaidOrdersStatsService
 
     /**
      * @return Builder<Order>
-    */
+     */
     protected function dailyUnpaidOrders(string $currentDate): Builder
     {
         return $this->orders()->forDate($currentDate);
@@ -62,7 +62,7 @@ class UnpaidOrdersStatsService
 
     /**
      * @return Builder<Order>
-    */
+     */
     protected function monthlyUnpaidOrders(string $currentDate): Builder
     {
         return $this->orders()->forMonth($currentDate);

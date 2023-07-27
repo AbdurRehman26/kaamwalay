@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
     ]);
-    
+
     $this->paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges()->create(['max_protection_amount' => 300]);
     $this->cardProduct = CardProduct::factory()->create();
 
@@ -59,13 +59,12 @@ beforeEach(function () {
         ->withRole(config('permission.roles.admin'))
         ->create();
 
-
     $this->actingAs($this->user);
 });
 
 it('calculates coupon discount for order', function () {
     postJson(
-        '/api/v2/admin/orders/'. $this->order->id .'/coupons/calculate-discount',
+        '/api/v2/admin/orders/'.$this->order->id.'/coupons/calculate-discount',
         [
             'coupon' => [
                 'id' => $this->coupon->id,
@@ -73,10 +72,10 @@ it('calculates coupon discount for order', function () {
             ],
         ]
     )->assertOk()
-    ->assertJsonStructure([
-        'data' => [
-            'coupon',
-            'discounted_amount',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
 });

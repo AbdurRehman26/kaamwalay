@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\CardCategory;
 use App\Models\CardSet;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\CardProduct;
 
 class CardProductFactory extends Factory
 {
@@ -16,9 +15,9 @@ class CardProductFactory extends Factory
     {
         return [
             'name' => $this->faker->firstName(),
-            "edition" => '1st Edition',
-            "surface" => 'Reverse Holo',
-            "variant" => 'Next Destinies Stage 1 Blisters',
+            'edition' => '1st Edition',
+            'surface' => 'Reverse Holo',
+            'variant' => 'Next Destinies Stage 1 Blisters',
             'card_set_id' => CardSet::factory(),
             'card_category_id' => CardCategory::factory(),
             'rarity' => 'Common',

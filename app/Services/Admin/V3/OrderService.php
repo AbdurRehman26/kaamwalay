@@ -16,7 +16,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService extends V2OrderService
 {
-    public function getOrder(int $orderId): Model | QueryBuilder
+    public function getOrder(int $orderId): Model|QueryBuilder
     {
         return QueryBuilder::for(Order::class)
             ->allowedIncludes(Order::getAllowedAdminIncludes())
@@ -45,6 +45,7 @@ class OrderService extends V2OrderService
 
     /**
      * @return LengthAwarePaginator<UserCard>
+     *
      * @throws IncorrectOrderStatus
      */
     public function getPaginatedCardsForGrading(Order $order): LengthAwarePaginator

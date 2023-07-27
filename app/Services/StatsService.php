@@ -35,7 +35,7 @@ class StatsService
                 return '';
         }
 
-        return $startDate . ' 00:00:00';
+        return $startDate.' 00:00:00';
     }
 
     public function getEndDate(string $timeFilter, string $customDate = ''): string
@@ -67,6 +67,6 @@ class StatsService
                 return '';
         }
 
-        return $endDate . ' 23:59:59';
+        return $endDate.' 23:59:59';
     }
 }

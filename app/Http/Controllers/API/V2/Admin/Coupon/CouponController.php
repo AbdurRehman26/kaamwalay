@@ -99,11 +99,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new CouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new CouponResource($coupon),
+        ],
         ]);
     }
 
@@ -136,11 +135,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new VerifyCouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new VerifyCouponResource($coupon),
+        ],
         ]);
     }
 }

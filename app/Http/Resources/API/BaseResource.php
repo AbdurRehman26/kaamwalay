@@ -53,7 +53,7 @@ class BaseResource extends JsonResource
 
         if (in_array($relationship, $include, true)) {
             $data = $this->resource->{$internal} ?? $default;
-            if ($data && ! ($data instanceof  MissingValue)) {
+            if ($data && ! ($data instanceof MissingValue)) {
                 if (is_string($resource) && class_exists($resource)) {
                     return new $resource($data);
                 }

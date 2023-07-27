@@ -16,7 +16,9 @@ class OrderPayment extends Model
     use HasFactory, ActivityLog;
 
     public const TYPE_ORDER_PAYMENT = 1;
+
     public const TYPE_EXTRA_CHARGE = 2;
+
     public const TYPE_REFUND = 3;
 
     /**
@@ -92,17 +94,17 @@ class OrderPayment extends Model
     }
 
     /**
-     * @param  Builder <OrderPayment> $query
+     * @param  Builder <OrderPayment>  $query
      * @return Builder <OrderPayment>
      */
     public function scopeIgnoreOrdersBySpecificAdmins(Builder $query): Builder
     {
         return $query->join('users', function ($join) {
             $join->on('orders.user_id', '=', 'users.id')
-                    ->whereNotIn(
-                        'users.email',
-                        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
-                    );
+                ->whereNotIn(
+                    'users.email',
+                    Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+                );
         });
     }
 

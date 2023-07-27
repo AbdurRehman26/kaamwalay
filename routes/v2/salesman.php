@@ -16,15 +16,14 @@ use App\Http\Controllers\API\V2\Admin\Address\CountryController;
 use App\Http\Controllers\API\V2\Admin\Address\StateController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardProductController;
-use App\Http\Controllers\API\V2\Admin\Cards\CardRarityController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V2\Admin\Cards\CardSetController;
-use App\Http\Controllers\API\V2\Admin\Cards\CardSurfaceController;
 use App\Http\Controllers\API\V2\Admin\Salesman\SalesmanDashboardController;
+use App\Http\Controllers\API\V2\Salesman\Address\CustomerAddressController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponableEntityController;
+use App\Http\Controllers\API\V2\Salesman\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V2\Salesman\Coupon\CouponController;
 use App\Http\Controllers\API\V2\Salesman\Coupon\CouponStatusController;
-use App\Http\Controllers\API\V2\Salesman\Coupon\CouponApplicableController;
-use App\Http\Controllers\API\V2\Salesman\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\V2\Salesman\CustomerController;
 use App\Http\Controllers\API\V2\Salesman\Order\OrderController;
 use App\Http\Controllers\API\V2\Salesman\Order\PaymentMethodController;
@@ -32,7 +31,6 @@ use App\Http\Controllers\API\V2\Salesman\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Salesman\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Salesman\Order\ShippingMethodController;
 use App\Http\Controllers\API\V2\Salesman\SalesmanCommissionPaymentController;
-use App\Http\Controllers\API\V2\Salesman\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Salesman\Wallet\CustomerWalletController;
 
 Route::middleware(['auth', 'role:salesman'])->group(function () {
@@ -92,7 +90,7 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
         'verify' => 'salesman.coupons.verify',
         'calculateDiscountForOrder' => 'salesman.coupons.calculateDiscountForOrder',
         'calculateDiscount' => 'salesman.coupons.calculateDiscount',
-    ]);;
+    ]);
     Route::put('coupons/{coupon}/change-status', CouponStatusController::class)
         ->name('salesman.coupons.change-status');
     Route::get('coupon-applicables', CouponApplicableController::class)->name('salesman.coupon.applicables');
@@ -119,11 +117,10 @@ Route::middleware(['auth', 'role:salesman'])->group(function () {
         ]);
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store'])->names([
             'index' => 'salesman.sets.index',
-            'store' => 'salesman.sets.store'
+            'store' => 'salesman.sets.store',
         ]);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
         Route::post('/', [CardProductController::class, 'store'])->name('salesman.card-products.store');
     });
-
 
 });

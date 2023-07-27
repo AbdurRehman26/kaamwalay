@@ -20,7 +20,7 @@ class OrderCertificateService
 
     protected function generateFileAndUploadToCloud(Order $order): string
     {
-        $filePath = 'order-certificates/' . $order->order_number . '_certificate_' . Str::uuid() . '.xlsx';
+        $filePath = 'order-certificates/'.$order->order_number.'_certificate_'.Str::uuid().'.xlsx';
         Excel::store(new OrdersCertificateExport($order), $filePath, 's3', ExcelWriter::XLSX);
 
         return Storage::disk('s3')->url($filePath);

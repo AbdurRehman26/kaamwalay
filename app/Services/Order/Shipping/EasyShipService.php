@@ -31,9 +31,13 @@ class EasyShipService
     ];
 
     public const BOX_BASE_WEIGHT = 0.25;
+
     public const SLIP_BASE_WEIGHT = 0.0625;
+
     public const CARD_BASE_WEIGHT = 0.0625;
+
     public const MAX_CARDS_PER_SLIP = 4;
+
     public const MAX_CARDS_PER_BOX = 42;
 
     public function calculatePackageWeight(int $cardsNumber, int $packageType): float
@@ -76,9 +80,9 @@ class EasyShipService
             }
         }
 
-
         return $parcels;
     }
+
     public function getRates(array $originAddress, array $destinationAddress, string $incoterms, array $insurance, array $courierSelection, array $shippingSettings, array $parcels): array
     {
         return $this->easyShipClient->getRates($originAddress, $destinationAddress, $incoterms, $insurance, $courierSelection, $shippingSettings, $parcels);
@@ -87,7 +91,7 @@ class EasyShipService
     public function calculateDefaultPrice(array $parcels, string $countryCode): float
     {
         $shippingMatrix = Cache::remember(
-            'shipping-matrix-' . $countryCode,
+            'shipping-matrix-'.$countryCode,
             now()->addMonth(),
             fn () => ShippingMatrix::join('countries', 'countries.id', '=', 'shipping_matrices.country_id')->where('countries.code', $countryCode)->first()
         );

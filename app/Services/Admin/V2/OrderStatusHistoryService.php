@@ -32,7 +32,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         OrderStatus|int $orderStatus,
         Order|int $order,
         User|int $user = null,
-        ?string $notes = null
+        string $notes = null
     ): OrderStatusHistory|Model {
         if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -146,7 +146,7 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             $order->estimated_delivery_end_at = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
             $order->save();
         } catch (Exception $e) {
-            Log::error('Could Not Calculate Order Estimated Date :' . $order->order_number, [
+            Log::error('Could Not Calculate Order Estimated Date :'.$order->order_number, [
                 'message' => $e->getMessage(),
             ]);
             report($e);

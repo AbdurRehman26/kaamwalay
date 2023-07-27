@@ -42,7 +42,7 @@ class CreateOrderService extends BaseCreateOrderService
             return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+            Log::error($e->getMessage()."\n File:".$e->getFile()."\n Line:".$e->getLine());
 
             throw $e;
         }

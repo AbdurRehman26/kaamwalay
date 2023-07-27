@@ -31,7 +31,7 @@ class OrderService
             ->paginate($itemsPerPage);
     }
 
-    public function getOrder(int $orderId): Model | QueryBuilder
+    public function getOrder(int $orderId): Model|QueryBuilder
     {
         return QueryBuilder::for(Order::class)
             ->allowedIncludes(Order::getAllowedSalesmanIncludes())

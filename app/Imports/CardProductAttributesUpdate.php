@@ -17,7 +17,7 @@ class CardProductAttributesUpdate implements ToCollection, WithHeadingRow
         foreach ($rows as $key => $row) {
             $cardProduct = CardProduct::where('card_reference_id', '=', $row['card_id']);
 
-            echo 'Excel key fetched:' . $key . "\n";
+            echo 'Excel key fetched:'.$key."\n";
 
             throw_if(! $cardProduct->count());
 

@@ -12,14 +12,14 @@ class SerialNumber
 
     public function __construct(
         private string $prefix,
-        private int    $length = 8,
+        private int $length = 8,
         private string $padding = '0',
     ) {
     }
 
     private function build(): string
     {
-        return ($this->prefix ?? '') . Str::padLeft((string) $this->value, $this->length, $this->padding);
+        return ($this->prefix ?? '').Str::padLeft((string) $this->value, $this->length, $this->padding);
     }
 
     public function setValue(?int $value): self

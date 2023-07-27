@@ -101,11 +101,11 @@ class PopReportService
         $allCardSeries = CardSeries::all();
 
         foreach ($allCardSeries as $cardSeries) {
-            $this->info('Updating reports for card series ' . $cardSeries->id);
+            $this->info('Updating reports for card series '.$cardSeries->id);
 
             $this->updateSeriesReport($cardSeries);
 
-            $this->info('Updating reports for card series ' . $cardSeries->id . ' completed');
+            $this->info('Updating reports for card series '.$cardSeries->id.' completed');
         }
     }
 
@@ -145,14 +145,14 @@ class PopReportService
             ->select('card_sets.*')
             ->get();
 
-        $this->info('Total sets to be processed: ' . count($cardSets));
+        $this->info('Total sets to be processed: '.count($cardSets));
 
         foreach ($cardSets as $cardSet) {
-            $this->info('Updating reports for card sets ' . $cardSet->id);
+            $this->info('Updating reports for card sets '.$cardSet->id);
 
             $this->updateSetsReport($cardSet);
 
-            $this->info('Updating reports for card sets ' . $cardSet->id . ' completed');
+            $this->info('Updating reports for card sets '.$cardSet->id.' completed');
         }
     }
 
@@ -191,7 +191,7 @@ class PopReportService
             })
             ->get();
 
-        $this->info('Total cards to be processed: ' . count($cardProducts));
+        $this->info('Total cards to be processed: '.count($cardProducts));
 
         $this->updateMultipleCardProductsReports($cardProducts);
     }
@@ -372,7 +372,7 @@ class PopReportService
                     $reportsTableArray['total'] += 1;
                 }
             } catch (\Exception $e) {
-                Log::info("User Card not added for id " . $userCard->id);
+                Log::info('User Card not added for id '.$userCard->id);
                 Log::info($e->getMessage());
             }
         }
@@ -404,7 +404,7 @@ class PopReportService
     }
 
     /**
-     * @param  Builder <CardSet>|Builder <CardSeries>|Builder <CardProduct>|Builder <UserCard> $query
+     * @param  Builder <CardSet>|Builder <CardSeries>|Builder <CardProduct>|Builder <UserCard>  $query
      * @return Builder <CardSet>|Builder <CardSeries>|Builder <CardProduct>|Builder <UserCard>
      */
     protected function isCardInformationComplete(Builder $query): Builder

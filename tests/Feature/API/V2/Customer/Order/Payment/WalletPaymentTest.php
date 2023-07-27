@@ -42,7 +42,6 @@ beforeEach(function () {
     $this->order->grand_total = $grandTotal;
     $this->order->save();
 
-
     Wallet::factory()->create([
         'user_id' => $this->user->id,
         'balance' => $grandTotal + 1,

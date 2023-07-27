@@ -46,7 +46,6 @@ class CardLabelService
         return $cardLabel->fresh();
     }
 
-
     public function updateAndExportLabels(Order $order, array $data): string
     {
         $exportLabels = [];

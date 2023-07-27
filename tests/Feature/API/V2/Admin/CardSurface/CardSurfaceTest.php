@@ -5,7 +5,6 @@ use App\Models\CardSurface;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
@@ -119,7 +118,7 @@ test('a customer cannot create card surface', function () {
         'name' => 'Lorem Ipsum',
         'card_category_id' => $this->categories[0]->id,
     ])
-    ->assertStatus(403);
+        ->assertStatus(403);
 });
 
 test('a guest cannot create card surface', function () {

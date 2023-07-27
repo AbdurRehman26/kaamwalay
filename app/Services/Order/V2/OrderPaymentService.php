@@ -17,6 +17,7 @@ use Throwable;
 class OrderPaymentService
 {
     protected Order $order;
+
     protected array $data;
 
     public function __construct(
@@ -107,7 +108,6 @@ class OrderPaymentService
 
         $orderPayment->save();
 
-
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
         if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
             $partialPayment = OrderPayment::firstOrNew([
@@ -161,7 +161,7 @@ class OrderPaymentService
         }
     }
 
-    protected function updateWalletPaymentAmount(float|null $amount): void
+    protected function updateWalletPaymentAmount(?float $amount): void
     {
         if ($this->order->hasCreditApplied() && empty($amount)) {
             $this->order->amount_paid_from_wallet = 0;

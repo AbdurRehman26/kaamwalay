@@ -14,7 +14,7 @@ class MarketingQuarterlyReport extends MarketingReport
 
     public function getReportTitle(): string
     {
-        return "Marketing Report (Quarterly)";
+        return 'Marketing Report (Quarterly)';
     }
 
     public function getReportData(): array

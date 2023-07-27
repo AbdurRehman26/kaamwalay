@@ -40,7 +40,7 @@ class UpdateTotalCardsInCouponStatCommand extends Command
                     if ($couponStat) {
                         $couponStat->total_cards = $totalCards;
                         $couponStat->save();
-                        $this->info('Total cards stat updated for coupon:' . $couponLog->coupon_id);
+                        $this->info('Total cards stat updated for coupon:'.$couponLog->coupon_id);
                     }
                 });
         });

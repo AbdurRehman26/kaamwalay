@@ -12,7 +12,6 @@ class UserCardResource extends BaseResource
     /**
      * Transform the resource into an array.
      */
-
     public function toArray(Request $request): array
     {
         // @phpstan-ignore-next-line

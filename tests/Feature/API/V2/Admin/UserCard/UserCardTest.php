@@ -26,9 +26,9 @@ beforeEach(function () {
     ]);
 
     $this->userCards = UserCard::factory()->count(3)->sequence(
-        [ 'order_item_id' => $orderItems[0]->id, 'certificate_number' => '00000001'],
-        [ 'order_item_id' => $orderItems[1]->id, 'certificate_number' => '00000002'],
-        [ 'order_item_id' => $orderItems[2]->id, 'certificate_number' => '00000003S'],
+        ['order_item_id' => $orderItems[0]->id, 'certificate_number' => '00000001'],
+        ['order_item_id' => $orderItems[1]->id, 'certificate_number' => '00000002'],
+        ['order_item_id' => $orderItems[2]->id, 'certificate_number' => '00000003S'],
     )->create();
 
     $this->user = User::factory()
@@ -51,7 +51,7 @@ test('admins can get certificates list', function () {
 });
 
 test('admins can get single certificate', function () {
-    $response = $this->getJson('/api/v2/admin/certificates/' . $this->userCards[0]->certificate_number);
+    $response = $this->getJson('/api/v2/admin/certificates/'.$this->userCards[0]->certificate_number);
 
     $response->assertSuccessful()
         ->assertJsonStructure([
@@ -88,7 +88,7 @@ test('a customer can not get certificates list', function () {
 test('a customer can not get single certificate', function () {
     $this->actingAs($this->customer);
 
-    $response = $this->getJson('/api/v2/admin/certificates/' . $this->userCards[0]->certificate_number);
+    $response = $this->getJson('/api/v2/admin/certificates/'.$this->userCards[0]->certificate_number);
 
     $response->assertForbidden();
 });

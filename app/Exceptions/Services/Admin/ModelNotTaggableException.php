@@ -16,7 +16,7 @@ class ModelNotTaggableException extends Exception
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     /**
-     * @param Request|array $request
+     * @param  Request|array  $request
      */
     public function render($request): JsonResponse
     {

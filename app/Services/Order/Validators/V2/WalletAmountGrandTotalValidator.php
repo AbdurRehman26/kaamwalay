@@ -4,7 +4,6 @@ namespace App\Services\Order\Validators\V2;
 
 use App\Exceptions\API\Customer\Wallet\InvalidCreditAppliedAmountException;
 use App\Models\Order;
-
 use function throw_if;
 
 class WalletAmountGrandTotalValidator

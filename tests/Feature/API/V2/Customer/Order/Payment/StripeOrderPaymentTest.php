@@ -30,7 +30,7 @@ beforeEach(function () {
     ]);
 
     $this->actingAs($user);
-    
+
     $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
     \Illuminate\Support\Facades\Bus::fake();
@@ -70,7 +70,7 @@ test('user can verify a successful payment', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => Str::random(25),
     ]);
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments/" . Str::random(25));
+    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments/".Str::random(25));
     $response->assertOk();
     $response->assertJson([
         'message' => 'Payment verified successfully',
@@ -103,7 +103,7 @@ test('provider fee is set after a successful payment', function () {
 
     $response->assertOk();
     $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
-    
+
     $totalAmount = $this->order->grand_total_cents;
     $actualFee = round((float) (
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT

@@ -15,6 +15,7 @@ class UpdateHumanGradesInAgs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
+
     public int $backoff = 300; //seconds
 
     public function __construct(public UserCard $card)

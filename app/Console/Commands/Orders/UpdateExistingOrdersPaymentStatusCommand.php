@@ -33,7 +33,7 @@ class UpdateExistingOrdersPaymentStatusCommand extends Command
             ->whereNotIn('order_status_id', [OrderStatus::PAYMENT_PENDING, OrderStatus::CANCELLED])
             ->get()
             ->tap(function ($collection) {
-                $this->info('Found ' . $collection->count() . ' Orders');
+                $this->info('Found '.$collection->count().' Orders');
             })
             ->each
             ->update([

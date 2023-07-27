@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Carbon\Carbon;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,8 +15,8 @@ return new class extends Migration
 
         $now = Carbon::now()->toDateTimeString();
         DB::table('shipping_matrices')->insert([
-            [ 'country_id' => $australiaId, 'box_default_value' => 55.65, 'slip_default_value' => 24.55, 'created_at' => $now, 'updated_at' => $now],
-            [ 'country_id' => $canadaId, 'box_default_value' => 47.3, 'slip_default_value' => 26.33, 'created_at' => $now, 'updated_at' => $now],
+            ['country_id' => $australiaId, 'box_default_value' => 55.65, 'slip_default_value' => 24.55, 'created_at' => $now, 'updated_at' => $now],
+            ['country_id' => $canadaId, 'box_default_value' => 47.3, 'slip_default_value' => 26.33, 'created_at' => $now, 'updated_at' => $now],
         ]);
     }
 

@@ -14,7 +14,7 @@ class MarketingWeeklyReport extends MarketingReport
 
     public function getReportTitle(): string
     {
-        return "Marketing Report (Weekly)";
+        return 'Marketing Report (Weekly)';
     }
 
     public function getReportData(): array

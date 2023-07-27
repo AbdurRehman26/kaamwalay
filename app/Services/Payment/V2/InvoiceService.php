@@ -29,9 +29,9 @@ class InvoiceService
 
     protected function getInvoiceData(Order $order): array
     {
-        $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/invoiceLogo.png')));
-        $agsLogo = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
-        $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number);
+        $logoData = 'data:image/png;base64,'.base64_encode(file_get_contents(resource_path('assets/logos/invoiceLogo.png')));
+        $agsLogo = 'data:image/png;base64,'.base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
+        $barcode = 'data:image/png;base64,'.BarcodeService::generate($order->order_number);
 
         $orderPayment = $order->firstOrderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
@@ -76,8 +76,8 @@ class InvoiceService
     {
         return [
             'payer' => [
-                "email" => $response['payer']['email_address'] ?? "N/A",
-                "name" => $response['payer']['name']['given_name'] ?? "N/A",
+                'email' => $response['payer']['email_address'] ?? 'N/A',
+                'name' => $response['payer']['name']['given_name'] ?? 'N/A',
             ],
         ];
     }
@@ -87,7 +87,7 @@ class InvoiceService
      */
     protected function uploadToCloud(string $pdfData): string
     {
-        $filePath = 'invoice/' . Str::uuid() . '.pdf';
+        $filePath = 'invoice/'.Str::uuid().'.pdf';
 
         if (Storage::disk('s3')->put($filePath, $pdfData)) {
             return Storage::disk('s3')->url($filePath);
@@ -135,7 +135,7 @@ class InvoiceService
         return json_decode(json_encode([
             'transaction' => [
                 'amount' => $paymentResponse->amount,
-                'hash' => substr($orderPayment->payment_provider_reference_id, 0, 5) . '...' . substr($orderPayment->payment_provider_reference_id, -4),
+                'hash' => substr($orderPayment->payment_provider_reference_id, 0, 5).'...'.substr($orderPayment->payment_provider_reference_id, -4),
             ],
         ]));
     }

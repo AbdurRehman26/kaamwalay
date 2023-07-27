@@ -4,7 +4,6 @@ namespace App\Services\Card\Validators;
 
 use App\Exceptions\Services\CardsNotFoundException;
 use App\Models\CardProduct;
-
 use function throw_if;
 
 class CardProductsIdsExistValidator

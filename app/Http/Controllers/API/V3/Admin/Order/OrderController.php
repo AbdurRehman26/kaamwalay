@@ -42,7 +42,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource|JsonResponse
     {
         try {
             $createOrderService = resolve(CreateOrderService::class);
@@ -70,7 +70,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function getGrades(Request $request, Order $order): AnonymousResourceCollection | JsonResponse
+    public function getGrades(Request $request, Order $order): AnonymousResourceCollection|JsonResponse
     {
         $this->authorize('review', $order);
 

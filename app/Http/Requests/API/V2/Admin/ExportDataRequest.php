@@ -24,8 +24,8 @@ class ExportDataRequest extends FormRequest
                 'required',
                 'string',
                 function ($attribute, $value, $fail) {
-                    if (! class_exists('\\App\\Models\\' . ucfirst($value))) {
-                        $fail('The ' . $attribute . ' is invalid.');
+                    if (! class_exists('\\App\\Models\\'.ucfirst($value))) {
+                        $fail('The '.$attribute.' is invalid.');
                     }
                 },
             ],

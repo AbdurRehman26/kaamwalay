@@ -47,9 +47,6 @@ class ProfileController extends V1ProfileController
         return response()->json(compact('success'));
     }
 
-    /**
-     * @return JsonResponse|UserResource
-     */
     public function toggleMarketingNotifications(ToggleMarketingNotificationsRequest $request, CustomerProfileService $customerProfileService): JsonResponse|UserResource
     {
         try {

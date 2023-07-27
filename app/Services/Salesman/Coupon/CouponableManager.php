@@ -19,7 +19,7 @@ final class CouponableManager
     public static function getInstance(): self
     {
         if (is_null(self::$instance)) {
-            return self::$instance = new static();
+            return self::$instance = new self();
         }
 
         return self::$instance;
@@ -51,6 +51,6 @@ final class CouponableManager
 
     protected function createEntityClassName(string $entity): string
     {
-        return __NAMESPACE__ . '\\Couponables\\Couponable' . Str::singular(Str::ucfirst(Str::camel($entity))) . 'Service';
+        return __NAMESPACE__.'\\Couponables\\Couponable'.Str::singular(Str::ucfirst(Str::camel($entity))).'Service';
     }
 }

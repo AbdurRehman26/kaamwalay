@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 class MandrillClient
 {
     protected string $baseUrl;
+
     protected string $apiKey;
 
     public function __construct()
@@ -32,7 +33,7 @@ class MandrillClient
 
     protected function sendRequest(array $recipients, string $subject, string $templateName, array $templateContent): Response
     {
-        return Http::post($this->baseUrl . '/send-template', [
+        return Http::post($this->baseUrl.'/send-template', [
             'key' => $this->apiKey,
             'template_name' => $templateName,
             'template_content' => [],

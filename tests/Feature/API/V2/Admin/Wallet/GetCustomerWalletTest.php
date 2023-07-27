@@ -2,8 +2,6 @@
 
 use App\Models\User;
 use App\Models\Wallet;
-
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 

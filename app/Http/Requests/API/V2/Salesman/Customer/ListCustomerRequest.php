@@ -25,7 +25,7 @@ class ListCustomerRequest extends FormRequest
         ];
     }
 
-    protected function validateSubmissionFilter(string|null $value): bool
+    protected function validateSubmissionFilter(?string $value): bool
     {
         if (is_null($value) ||
             (

@@ -36,12 +36,12 @@ class ReferrerPayoutResource extends Resource
                 Tables\Columns\TextColumn::make('payout_account')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('payment_method')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('amount')->sortable()->searchable(),
-                    Tables\Columns\TextColumn::make('initiated_at')
-                        ->dateTime()
-                        ->sortable(),
-                    Tables\Columns\TextColumn::make('completed_at')
-                        ->dateTime()
-                        ->sortable(),
+                Tables\Columns\TextColumn::make('initiated_at')
+                    ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('completed_at')
+                    ->dateTime()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('referrer_payout_status_id')->sortable(),
                 Tables\Columns\TextColumn::make('paid_by')->sortable(),
                 Tables\Columns\TextColumn::make('transaction_id')->sortable()->searchable(),

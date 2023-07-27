@@ -29,38 +29,37 @@ class InitializePopReports extends Command
             '0'
         );
 
-        if ($selectedOption === "All") {
+        if ($selectedOption === 'All') {
             $popReportService->initializePopReportsForAll();
         }
 
         /* For Series */
-        if ($selectedOption === "Series") {
-            $this->info("Initializing Values for Series");
+        if ($selectedOption === 'Series') {
+            $this->info('Initializing Values for Series');
 
             $popReportService->initializePopReportsForCardSeries();
 
-            $this->info("Initializing Values for Series Completed");
+            $this->info('Initializing Values for Series Completed');
         }
 
         /* For Sets */
 
-        if ($selectedOption === "Sets") {
-            $this->info("Initializing Values for Sets");
+        if ($selectedOption === 'Sets') {
+            $this->info('Initializing Values for Sets');
 
             $popReportService->initializePopReportsForCardSets();
 
-            $this->info("Initializing Values for Sets Completed");
+            $this->info('Initializing Values for Sets Completed');
         }
-
 
         /* For Cards */
 
-        if ($selectedOption === "Cards") {
-            $this->info("Initializing Values for Cards");
+        if ($selectedOption === 'Cards') {
+            $this->info('Initializing Values for Cards');
 
             $popReportService->initializePopReportsForCards();
 
-            $this->info("Initializing Values for Cards Completed");
+            $this->info('Initializing Values for Cards Completed');
         }
 
         return 0;

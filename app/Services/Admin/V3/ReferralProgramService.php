@@ -62,6 +62,7 @@ class ReferralProgramService
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('amount');
     }
+
     public function getStat(array $data): float
     {
         $statsService = new StatsService();
@@ -91,8 +92,8 @@ class ReferralProgramService
     public function getReferrers(): LengthAwarePaginator
     {
         $query = User::join('referrers', 'referrers.user_id', 'users.id')
-                    ->where('successful_signups', '>', 0)
-                    ->select('users.*');
+            ->where('successful_signups', '>', 0)
+            ->select('users.*');
 
         return QueryBuilder::for($query)
             ->allowedFilters(User::getAllowedAdminReferrerFilters())
@@ -120,9 +121,9 @@ class ReferralProgramService
         $itemsPerPage = request('per_page');
 
         $query = Order::excludeCancelled()
-                ->join('users', 'users.id', 'orders.user_id')
-                ->whereNotNull('users.referred_by')
-                ->select('orders.*');
+            ->join('users', 'users.id', 'orders.user_id')
+            ->whereNotNull('users.referred_by')
+            ->select('orders.*');
 
         return QueryBuilder::for($query)
             ->allowedFilters(Order::getAllowedAdminFilters())

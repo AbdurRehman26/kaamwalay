@@ -48,7 +48,7 @@ it('initializes POP Reports For Series, Sets and Cards.', function () {
     })->select('card_products.*')->count();
 
     $this->artisan('pop-reports:initialize')
-        ->expectsQuestion('Initialize Report Values for :', "All")
+        ->expectsQuestion('Initialize Report Values for :', 'All')
         ->assertExitCode(0);
 
     $this->assertDatabaseCount('pop_reports_series', CardSeries::count());

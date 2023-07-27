@@ -27,7 +27,7 @@ class SendReferrerEmailOnRefereeRegistrationListener implements ShouldQueue
                 EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP],
                 EmailService::TEMPLATE_SLUG_REFEREE_REFERRAL_SIGN_UP,
                 [
-                    'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/referrals',
+                    'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/referrals',
                 ]
             );
         }

@@ -56,7 +56,7 @@ class OrderService
             ->paginate($itemsPerPage);
     }
 
-    public function getOrder(int $orderId): Model | QueryBuilder
+    public function getOrder(int $orderId): Model|QueryBuilder
     {
         return QueryBuilder::for(Order::class)
             ->allowedIncludes(Order::getAllowedAdminIncludes())
@@ -66,15 +66,15 @@ class OrderService
     public function getOrderCertificates(Order|int $order): array
     {
         $certificates = UserCard::select('certificate_number')
-        ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
-        ->where('order_items.order_id', getModelId($order))->get();
+            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->where('order_items.order_id', getModelId($order))->get();
 
         return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
     /**
      * @return Builder<UserCard>
-    */
+     */
     protected function getCertificatesDataQuery(): Builder
     {
         return UserCard::select([
@@ -86,9 +86,9 @@ class OrderService
             'card_products.variant',
             'card_products.card_reference_id',
         ])
-        ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
-        ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
-        ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id');
+            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id');
     }
 
     public function getOrderCertificatesData(Order|int $order): array
@@ -115,7 +115,7 @@ class OrderService
             'declared_value_total' => $value,
         ]);
 
-        return $this->orderItemService->changeStatus($order, $newItem, ["status" => "confirmed"], $user);
+        return $this->orderItemService->changeStatus($order, $newItem, ['status' => 'confirmed'], $user);
     }
 
     public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem
@@ -153,6 +153,7 @@ class OrderService
 
     /**
      * @return Collection <int, UserCard>
+     *
      * @throws IncorrectOrderStatus
      */
     public function getGrades(Order $order): Collection
@@ -196,68 +197,68 @@ class OrderService
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();
         $data['CUSTOMER_EMAIL'] = $order->user->email;
         $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
-        $data["TIME"] = $order->created_at->format('h:m A');
+        $data['TIME'] = $order->created_at->format('h:m A');
 
         $items = [];
         foreach ($orderItems as $orderItem) {
             $card = $orderItem->cardProduct;
             $items[] = [
-                "CARD_IMAGE_URL" => $card->image_path,
-                "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $this->getCardFullName($card),
-                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
-                "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+                'CARD_IMAGE_URL' => $card->image_path,
+                'CARD_NAME' => $card->name,
+                'CARD_FULL_NAME' => $this->getCardFullName($card),
+                'CARD_VALUE' => number_format($orderItem->declared_value_per_unit, 2),
+                'CARD_QUANTITY' => $orderItem->quantity,
+                'CARD_COST' => number_format($orderItem->quantity * $paymentPlan->price, 2),
             ];
         }
 
-        $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data['ORDER_ITEMS'] = $items;
+        $data['SUBTOTAL'] = number_format($order->service_fee, 2);
+        $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['TOTAL'] = number_format($order->grand_total, 2);
 
-        $data["SERVICE_LEVEL"] = $paymentPlan->price;
-        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
-        $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+        $data['SERVICE_LEVEL'] = $paymentPlan->price;
+        $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
+        $data['DATE'] = $order->created_at->format('m/d/Y');
+        $data['TOTAL_DECLARED_VALUE'] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
-        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+        $data['SHIPPING_ADDRESS'] = $this->getAddressData($order->shippingAddress);
+        $data['BILLING_ADDRESS'] = $this->getAddressData($order->billingAddress);
 
-        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['PAYMENT_METHOD'] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
     }
 
     protected function getCardFullName(CardProduct $card): string
     {
-        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
+        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name.' (Added Manually)';
     }
 
     protected function getAddressData(OrderAddress $address): array
     {
         return [
-            "ID" => $address->id,
-            "FULL_NAME" => $address->first_name . " " . $address->last_name,
-            "ADDRESS" => $address->address,
-            "CITY" => $address->city,
-            "STATE" => $address->state,
-            "ZIP" => $address->zip,
-            "COUNTRY" => $address->country->code,
-            "PHONE" => $address->phone,
+            'ID' => $address->id,
+            'FULL_NAME' => $address->first_name.' '.$address->last_name,
+            'ADDRESS' => $address->address,
+            'CITY' => $address->city,
+            'STATE' => $address->state,
+            'ZIP' => $address->zip,
+            'COUNTRY' => $address->country->code,
+            'PHONE' => $address->phone,
         ];
     }
 
     protected function getOrderPaymentText(array $orderPayment): string
     {
         if (array_key_exists('card', $orderPayment)) {
-            return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
+            return ucfirst($orderPayment['card']['brand']).' ending in '.$orderPayment['card']['last4'];
         } elseif (array_key_exists('payer', $orderPayment)) {
-            return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+            return $orderPayment['payer']['email']."\n".$orderPayment['payer']['name'];
         } elseif (array_key_exists('transaction', $orderPayment)) {
             return 'Collector Coin';
         }

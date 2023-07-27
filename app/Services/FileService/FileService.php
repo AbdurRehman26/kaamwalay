@@ -31,10 +31,10 @@ class FileService
         ]);
     }
 
-    protected function getSignedUrl(string $key, string $contentType, ?string $bucket = null): string
+    protected function getSignedUrl(string $key, string $contentType, string $bucket = null): string
     {
         $client = $this->getStorageClient();
-        $expiry = "+10 minutes";
+        $expiry = '+10 minutes';
 
         if ($bucket && ! auth()->user()->isAdmin()) {
             $bucket = null;
@@ -65,17 +65,17 @@ class FileService
 
         $now = Carbon::now();
         $extension = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
-        $hash = sha1($file->getFileName()."_".$file->getSize()."_".$file->getContentType());
+        $hash = sha1($file->getFileName().'_'.$file->getSize().'_'.$file->getContentType());
         $data = [
-            "uid" => $userId,
-            "year" => $now->year,
-            "mon" => $now->month,
-            "day" => $now->day,
-            "hour" => $now->hour,
-            "min" => $now->minute,
-            "sec" => $now->second,
-            "ext" => $extension,
-            "hash" => $hash,
+            'uid' => $userId,
+            'year' => $now->year,
+            'mon' => $now->month,
+            'day' => $now->day,
+            'hour' => $now->hour,
+            'min' => $now->minute,
+            'sec' => $now->second,
+            'ext' => $extension,
+            'hash' => $hash,
         ];
 
         $segments = [

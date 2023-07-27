@@ -42,7 +42,7 @@ test('an salesman can see specific payment plan', function () {
             'discount_percentage',
             'max_protection_amount',
             'turnaround',
-            'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+            'price_ranges' => ['*' => ['id', 'min_cards', 'max_cards', 'price']],
             'min_price',
             'max_price',
         ],

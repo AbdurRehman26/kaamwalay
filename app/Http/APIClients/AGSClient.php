@@ -24,7 +24,7 @@ class AGSClient
 
     public function login(array $data): array
     {
-        $response = Http::post($this->getBaseUrl() . '/login/', $data);
+        $response = Http::post($this->getBaseUrl().'/login/', $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -34,7 +34,7 @@ class AGSClient
 
     public function register(array $data): array
     {
-        $response = Http::post(url: $this->getBaseUrl() . '/registration/', data: $data);
+        $response = Http::post(url: $this->getBaseUrl().'/registration/', data: $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -44,7 +44,7 @@ class AGSClient
 
     public function updateUserData(string $token, array $data): array
     {
-        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl().'/users/me/', data: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -55,7 +55,7 @@ class AGSClient
 
     public function changePassword(string $token, array $data): array
     {
-        $response = Http::withToken($token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+        $response = Http::withToken($token)->post(url: $this->getBaseUrl().'/password/change/', data: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -66,7 +66,7 @@ class AGSClient
 
     public function getGrades(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl() . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
+        $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl().self::API_VERSION_2.'/robograding/scan-results/', query: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -78,7 +78,7 @@ class AGSClient
     public function updateHumanGrades(string $certificateId, array $payload)
     {
         $response = Http::withToken($this->getAuthToken())
-            ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
+            ->patch($this->getBaseUrl().self::API_VERSION_2.'/robograding/certificates/?certificate_id='.$certificateId, $payload);
         if ($response->successful()) {
             return $response->json();
         }
@@ -92,8 +92,8 @@ class AGSClient
 
     public function createCertificates(array $data)
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/', [
-            "data" => $data,
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().self::API_VERSION_2.'/robograding/certificates/', [
+            'data' => $data,
         ]);
 
         if ($response->successful()) {
@@ -105,7 +105,7 @@ class AGSClient
 
     public function getCardCategory(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/categories/', $data);
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl().'/categories/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -116,7 +116,7 @@ class AGSClient
 
     public function createCardCategory(string $name): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/categories/', ["name" => $name]);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().'/categories/', ['name' => $name]);
 
         if ($response->successful()) {
             return $response->json();
@@ -127,7 +127,7 @@ class AGSClient
 
     public function getCardSeries(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/series/', $data);
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl().'/series/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -138,7 +138,7 @@ class AGSClient
 
     public function createCardSeries(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/series/', $data);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().'/series/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -149,7 +149,7 @@ class AGSClient
 
     public function getCardSet(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/sets/', $data);
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl().'/sets/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -160,7 +160,7 @@ class AGSClient
 
     public function createCardSet(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/sets/', $data);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().'/sets/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -171,7 +171,7 @@ class AGSClient
 
     public function createCard(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/cards/', $data);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().'/cards/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -182,7 +182,7 @@ class AGSClient
 
     public function createCardLabel(array $data): array
     {
-        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/card-labels/', $data);
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl().'/card-labels/', $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -236,7 +236,7 @@ class AGSClient
             'is_active' => false,
         ];
 
-        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl().'/users/me/', data: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -247,7 +247,7 @@ class AGSClient
 
     public function deleteProfile(string $token): array
     {
-        $response = Http::withToken($token)->delete(url: $this->getBaseUrl() . '/users/me/');
+        $response = Http::withToken($token)->delete(url: $this->getBaseUrl().'/users/me/');
 
         if ($response->status() === SymfonyResponse::HTTP_NO_CONTENT) {
             return ['success' => true];
@@ -263,7 +263,7 @@ class AGSClient
             'card_reference_id' => $cardReference,
         ];
         $response = Http::withToken($this->getAuthToken())
-            ->post($this->getBaseUrl() . $route, $payload);
+            ->post($this->getBaseUrl().$route, $payload);
 
         if ($response->successful()) {
             return $response->json();
@@ -274,9 +274,9 @@ class AGSClient
 
     public function updateCard(array $data, int|string $cardId): array
     {
-        $route = '/cards/' . $cardId . '/';
+        $route = '/cards/'.$cardId.'/';
         $response = Http::withToken($this->getAuthToken())
-            ->patch($this->getBaseUrl() . $route, $data);
+            ->patch($this->getBaseUrl().$route, $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -287,8 +287,8 @@ class AGSClient
 
     public function deleteCard(int|string $cardId): array
     {
-        $route = '/cards/' . $cardId . '/';
-        $response = Http::withToken($this->getAuthToken())->delete($this->getBaseUrl() . $route);
+        $route = '/cards/'.$cardId.'/';
+        $response = Http::withToken($this->getAuthToken())->delete($this->getBaseUrl().$route);
 
         if ($response->status() === SymfonyResponse::HTTP_NO_CONTENT) {
             return ['success' => true];
@@ -299,9 +299,9 @@ class AGSClient
 
     public function updateUserDataByUsername(string $username, array $data): array
     {
-        $route = self::API_VERSION_2 . '/robograding/users/' . $username .'/';
+        $route = self::API_VERSION_2.'/robograding/users/'.$username.'/';
         $response = Http::withToken($this->getAuthToken())
-            ->patch(url: $this->getBaseUrl() . $route, data: $data);
+            ->patch(url: $this->getBaseUrl().$route, data: $data);
 
         if ($response->successful()) {
             return $response->json();

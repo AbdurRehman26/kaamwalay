@@ -19,7 +19,6 @@ class OrdersLabelExport implements FromArray, WithHeadings, WithStyles
         $sheet->getStyle('1')->getFont()->setBold(true);
     }
 
-
     public function headings(): array
     {
         return [
@@ -36,15 +35,15 @@ class OrdersLabelExport implements FromArray, WithHeadings, WithStyles
         $cardLabelData[] = [];
 
         foreach ($this->data as $data) {
-            $cardLabelData [] = [
-                $data['label_line_one'] . "\n" . $data['label_line_two'] . "\n" . $data['label_line_three'] . "\n" . $data['card_number'],
-                $data['grade_nickname'] . "\n \n \n" . $data['certificate_id'],
+            $cardLabelData[] = [
+                $data['label_line_one']."\n".$data['label_line_two']."\n".$data['label_line_three']."\n".$data['card_number'],
+                $data['grade_nickname']."\n \n \n".$data['certificate_id'],
                 $data['final_grade'],
-                config('app.url') . '/card/' . $data['certificate_id'],
+                config('app.url').'/card/'.$data['certificate_id'],
                 $data['certificate_id'],
             ];
         }
-        
+
         return $cardLabelData;
     }
 }

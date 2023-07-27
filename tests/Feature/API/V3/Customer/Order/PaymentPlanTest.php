@@ -21,7 +21,7 @@ test('a user can see payment plans', function () {
                 'discount_percentage',
                 'max_protection_amount',
                 'turnaround',
-                'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
+                'price_ranges' => ['*' => ['id', 'min_cards', 'max_cards', 'price']],
                 'min_price',
                 'max_price',
             ],
@@ -39,18 +39,18 @@ test('a user can see specific payment plan', function () {
 
     $response->assertSuccessful()
         ->assertJsonStructure([
-        'data' => [
-            'id',
-            'price',
-            'price_before_discount',
-            'discount_percentage',
-            'max_protection_amount',
-            'turnaround',
-            'price_ranges' => [ '*' => [ 'id', 'min_cards', 'max_cards', 'price' ] ],
-            'min_price',
-            'max_price',
-        ],
-    ]);
+            'data' => [
+                'id',
+                'price',
+                'price_before_discount',
+                'discount_percentage',
+                'max_protection_amount',
+                'turnaround',
+                'price_ranges' => ['*' => ['id', 'min_cards', 'max_cards', 'price']],
+                'min_price',
+                'max_price',
+            ],
+        ]);
 });
 
 test('a guest can get payment plans', function () {

@@ -14,5 +14,5 @@ it('throws exception when order grand total is greater than schema limit', funct
     GrandTotalValidator::validate($order);
 })->throws(
     GrandTotalValueLimitReached::class,
-    'Order grand total must not be greater than $' . MAX_VALUE . '. Please go back and update cards.'
+    'Order grand total must not be greater than $'.MAX_VALUE.'. Please go back and update cards.'
 );

@@ -39,8 +39,8 @@ class OrdersCertificateExport implements FromArray, WithHeadings
             if (empty($orderItem->userCard)) {
                 continue;
             }
-            $array [] = [
-                '#'. $orderItem->userCard->certificate_number . "\n" . $this->getName($orderItem->cardProduct),
+            $array[] = [
+                '#'.$orderItem->userCard->certificate_number."\n".$this->getName($orderItem->cardProduct),
                 $this->order->order_number,
             ];
         }
@@ -50,6 +50,6 @@ class OrdersCertificateExport implements FromArray, WithHeadings
 
     protected function getName(CardProduct $cardProduct): string
     {
-        return $cardProduct->name .  ($cardProduct->surface ? ' - ' . $cardProduct->surface : '');
+        return $cardProduct->name.($cardProduct->surface ? ' - '.$cardProduct->surface : '');
     }
 }

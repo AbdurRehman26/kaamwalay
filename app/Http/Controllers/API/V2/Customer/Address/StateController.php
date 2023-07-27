@@ -17,7 +17,7 @@ class StateController extends Controller
     {
         $countryId = $request->country_id ?? self::DEFAULT_COUNTRY_ID;
 
-        $states = Cache::remember('states-' . $countryId, now()->addWeek(), fn () => State::where('country_id', $countryId)->with('country')->get());
+        $states = Cache::remember('states-'.$countryId, now()->addWeek(), fn () => State::where('country_id', $countryId)->with('country')->get());
 
         return new StateCollection($states);
     }

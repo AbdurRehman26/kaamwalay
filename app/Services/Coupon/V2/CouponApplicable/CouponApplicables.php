@@ -61,10 +61,10 @@ trait CouponApplicables
         }
 
         $user = request()->user();
-        if (Cache::has('shippingFee-' . $user->id)) {
-            return Cache::get('shippingFee-' . $user->id);
-        } elseif (Cache::has('shippingFee-' . request()->ip())) {
-            return Cache::get('shippingFee-' . request()->ip());
+        if (Cache::has('shippingFee-'.$user->id)) {
+            return Cache::get('shippingFee-'.$user->id);
+        } elseif (Cache::has('shippingFee-'.request()->ip())) {
+            return Cache::get('shippingFee-'.request()->ip());
         }
 
         return ShippingFeeService::calculate(
@@ -77,6 +77,6 @@ trait CouponApplicables
     {
         $totalCards = array_sum(array_column($this->getOrderItems($order), 'quantity'));
 
-        return ((int) $coupon->discount_value) < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) :  ($totalCards * $this->getPaymentPlan($order)->price);
+        return ((int) $coupon->discount_value) < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) : ($totalCards * $this->getPaymentPlan($order)->price);
     }
 }

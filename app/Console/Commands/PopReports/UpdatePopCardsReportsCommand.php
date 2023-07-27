@@ -30,7 +30,7 @@ class UpdatePopCardsReportsCommand extends Command
         CardProductsIdsExistValidator::validate($cardsIds);
 
         foreach ($cardsIds as $id) {
-            $this->info("Updating values for card product: ". $id);
+            $this->info('Updating values for card product: '.$id);
             $this->updatePopReports($popReportService, CardProduct::find($id));
         }
 

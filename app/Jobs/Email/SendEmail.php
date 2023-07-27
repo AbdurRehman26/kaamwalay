@@ -51,7 +51,7 @@ class SendEmail implements ShouldQueue
         }
 
         if (empty($status)) {
-            throw new Exception('Email could not be sent. Response: ' . $response->body());
+            throw new Exception('Email could not be sent. Response: '.$response->body());
         }
     }
 }

@@ -109,8 +109,8 @@ test('it returns overall average and nickname', function ($value) {
         $this->service->calculateOverallAverage($value['overall'])
     )->toBe($value['grade']);
 })->with([
-    fn () => (['overall' => ['center' => 6.50,'surface' => 5.00,'edge' => 9.80,'corner' => 2.25], 'grade' => 6.00, 'nickname' => 'EX-MT']),
-    fn () => (['overall' => ['center' => 9.50,'surface' => 7.00,'edge' => 9.00,'corner' => 8.25], 'grade' => 8.50, 'nickname' => 'NM-MT+']),
+    fn () => (['overall' => ['center' => 6.50, 'surface' => 5.00, 'edge' => 9.80, 'corner' => 2.25], 'grade' => 6.00, 'nickname' => 'EX-MT']),
+    fn () => (['overall' => ['center' => 9.50, 'surface' => 7.00, 'edge' => 9.00, 'corner' => 8.25], 'grade' => 8.50, 'nickname' => 'NM-MT+']),
 ]);
 
 test('it returns right rounded values', function () {

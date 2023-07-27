@@ -24,7 +24,7 @@ class CardSetController extends Controller
         );
     }
 
-    public function store(StoreCardSetRequest $request): CardSetResource | JsonResponse
+    public function store(StoreCardSetRequest $request): CardSetResource|JsonResponse
     {
         try {
             $set = $this->cardSetService->create($request->validated());

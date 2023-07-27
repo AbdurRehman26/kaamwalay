@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
  * @property mixed $tracking_number
  * @property mixed $shipping_provider
  * @property mixed $tracking_url
+ *
  * @method vaultShipmentItems()
  */
 class VaultShipmentResource extends BaseResource

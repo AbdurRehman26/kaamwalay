@@ -24,9 +24,9 @@ class ShipStationClient
             return $response->json();
         } catch (Exception $e) {
             report($e);
-            Log::error('Order could not be created on ShipStation: ' . $data['orderNumber'], [
+            Log::error('Order could not be created on ShipStation: '.$data['orderNumber'], [
                 'message' => $e->getMessage(),
-             ]);
+            ]);
 
             return [];
         }

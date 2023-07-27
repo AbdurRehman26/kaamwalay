@@ -20,9 +20,6 @@ abstract class PushNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @param  User  $notifiable
-     * @return array
      */
     public function via(User $notifiable): array
     {
@@ -80,7 +77,10 @@ abstract class PushNotification extends Notification implements ShouldQueue
     }
 
     abstract protected function getTitle(): string;
+
     abstract protected function getBody(): string;
+
     abstract protected function getIntent(): array;
+
     abstract protected function getDatabaseContent(): array;
 }

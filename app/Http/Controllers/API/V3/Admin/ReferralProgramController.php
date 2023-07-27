@@ -28,7 +28,7 @@ class ReferralProgramController extends Controller
 
     public function getOverviewStat(GetReferralProgramStatRequest $request): JsonResponse
     {
-        return new JsonResponse([ 'data' => $this->referralProgramService->getStat($request->validated())]);
+        return new JsonResponse(['data' => $this->referralProgramService->getStat($request->validated())]);
     }
 
     public function listReferrers(ListReferrersRequest $request): AnonymousResourceCollection
@@ -63,6 +63,6 @@ class ReferralProgramController extends Controller
 
     public function getReferrerStat(GetReferralStatRequest $request, User $user): JsonResponse
     {
-        return new JsonResponse([ 'data' => $this->referrerService->getReferrerStat($user, $request->validated())]);
+        return new JsonResponse(['data' => $this->referrerService->getReferrerStat($user, $request->validated())]);
     }
 }

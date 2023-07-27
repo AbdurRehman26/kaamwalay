@@ -19,7 +19,7 @@ uses()->group('admin', 'grading');
 
 it('stores the human grades with calculations of overall and does not update data on AGS', function () {
     Http::fake();
-    $this->putJson('/api/v2/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -35,8 +35,8 @@ it('stores the human grades with calculations of overall and does not update dat
             ],
         ],
     ])
-    ->assertOk()
-    ->assertJsonFragment(['center' => 3.4]);
+        ->assertOk()
+        ->assertJsonFragment(['center' => 3.4]);
 
     Http::assertNothingSent();
 });
@@ -44,7 +44,7 @@ it('stores the human grades with calculations of overall and does not update dat
 it('stores the human grades and dispatches update call to AGS', function () {
     Bus::fake();
 
-    $this->putJson('/api/v2/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -60,9 +60,9 @@ it('stores the human grades and dispatches update call to AGS', function () {
             ],
         ],
     ])
-    ->assertOk()
-    ->assertJsonCount(4, 'data.overall_values')
-    ->assertJsonCount(2, 'data.grade');
+        ->assertOk()
+        ->assertJsonCount(4, 'data.overall_values')
+        ->assertJsonCount(2, 'data.grade');
 
     Bus::assertDispatched(UpdateHumanGradesInAgs::class);
 });
@@ -70,7 +70,7 @@ it('stores the human grades and dispatches update call to AGS', function () {
 it('updates overall grade based on delta value', function () {
     Http::fake();
 
-    $this->putJson('/api/v2/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -87,7 +87,7 @@ it('updates overall grade based on delta value', function () {
         ],
         'grade_delta' => 2.5,
     ])
-    ->assertOk()
-    ->assertJsonFragment(['grade' => 5.0])
-    ->assertJsonFragment(['nickname' => 'EX']);
+        ->assertOk()
+        ->assertJsonFragment(['grade' => 5.0])
+        ->assertJsonFragment(['nickname' => 'EX']);
 });

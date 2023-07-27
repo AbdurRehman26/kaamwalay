@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->text('notes')->nullable();
 
-            $table->unique(['order_item_status_id','order_item_id'], 'order_item_status_histories_unique');
+            $table->unique(['order_item_status_id', 'order_item_id'], 'order_item_status_histories_unique');
             $table->timestamps();
         });
     }

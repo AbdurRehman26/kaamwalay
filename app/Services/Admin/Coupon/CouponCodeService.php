@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class CouponCodeService
 {
     protected const COUPON_LENGTH_WITHOUT_PREFIX = 9;
+
     protected int $couponLength = self::COUPON_LENGTH_WITHOUT_PREFIX;
 
     public function exists(string $code): bool

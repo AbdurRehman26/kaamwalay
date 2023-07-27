@@ -57,7 +57,7 @@ class PaypalClient
         return $this->getInstance()
             ->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->post('/v2/checkout/orders/' . $paypalOrderId . '/capture?', [
+            ->post('/v2/checkout/orders/'.$paypalOrderId.'/capture?', [
                 // This is required, without this, the API was not working.
                 'application_context' => [
                     'return_url' => '',
@@ -76,7 +76,7 @@ class PaypalClient
         return $this->getInstance()
             ->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->post('/v2/payments/captures/' . $paymentCaptureId . '/refund?', $refundData)
+            ->post('/v2/payments/captures/'.$paymentCaptureId.'/refund?', $refundData)
             ->throw()
             ->json();
     }
@@ -100,7 +100,7 @@ class PaypalClient
     {
         return $this->getInstance()->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->get('/v1/payments/payouts/'. $payoutBatchId, $data)
+            ->get('/v1/payments/payouts/'.$payoutBatchId, $data)
             ->throw()
             ->json();
     }
@@ -112,14 +112,14 @@ class PaypalClient
     {
         return $this->getInstance()->withToken($this->getAccessToken())
             ->withHeaders($this->headers())
-            ->get('/v1/payments/payouts-item/'. $payoutItemId)
+            ->get('/v1/payments/payouts-item/'.$payoutItemId)
             ->throw()
             ->json();
     }
 
     protected function userAgent(): string
     {
-        return "RG-PHP HTTP/1.1";
+        return 'RG-PHP HTTP/1.1';
     }
 
     protected function headers(): array

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\CardCategory;
-use App\Models\CardSeries;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CardSeriesFactory extends Factory

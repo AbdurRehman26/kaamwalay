@@ -21,16 +21,16 @@ class RevenueStatsService
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
         $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
 
-        Log::info("Calculation For Daily Stats Started");
+        Log::info('Calculation For Daily Stats Started');
         $this->addStats($currentDate, $orderPayments, $revenue);
-        Log::info("Calculation For Daily Stats Completed");
+        Log::info('Calculation For Daily Stats Completed');
 
         return $revenue;
     }
@@ -61,16 +61,16 @@ class RevenueStatsService
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
         $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
 
-        Log::info("Calculation For Monthly Stats Started");
+        Log::info('Calculation For Monthly Stats Started');
         $this->addStats($currentDate, $orderPayments, $revenue);
-        Log::info("Calculation For Monthly Stats Completed");
+        Log::info('Calculation For Monthly Stats Completed');
 
         return $revenue;
     }
@@ -92,10 +92,10 @@ class RevenueStatsService
             $revenue['profit'] !== $revenueData['profit'] ||
             round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)
         ) {
-            Log::info("Discrepancy found in the revenue stats");
-            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue']);
-            Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);
-            Log::info("Updating Revenue Stats");
+            Log::info('Discrepancy found in the revenue stats');
+            Log::info('Revenue stats in database ->  Profit: '.$revenue['profit'].',  Revenue: '.$revenue['revenue']);
+            Log::info('Revenue stats in calculated from Orders ->  Profit: '.$revenueData['profit'].',  Revenue: '.$revenueData['revenue']);
+            Log::info('Updating Revenue Stats');
 
             $revenue->profit = $revenueData['profit'];
             $revenue->revenue = $revenueData['revenue'];

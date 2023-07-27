@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
  * @property int $id
  * @property string $name
  * @property string $email
+ *
  * @method getFullName()
  */
 class CustomerResource extends BaseResource

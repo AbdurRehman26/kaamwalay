@@ -36,7 +36,7 @@ return [
     |
     */
 
-    'customRanking' => ['asc(card_number_order)','asc(name)'],
+    'customRanking' => ['asc(card_number_order)', 'asc(name)'],
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'attributesForFaceting' => ['card_category_name','card_series_name','card_set_name','release_year'],
+    'attributesForFaceting' => ['card_category_name', 'card_series_name', 'card_set_name', 'release_year'],
 
     /*
     |--------------------------------------------------------------------------

@@ -47,7 +47,7 @@ class CardSetService
         return $set;
     }
 
-    protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
+    protected function getSeriesFromAgs(string $seriesName, string $categoryName): ?int
     {
         return $this->agsService->getCardSeries([
             'exact_name' => $seriesName,

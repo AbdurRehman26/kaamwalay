@@ -77,7 +77,7 @@ class Wallet extends Model
         float $amount,
         WalletTransactionReason $reason,
         int $userId,
-        ?Order $order = null
+        Order $order = null
     ): void {
         event(new TransactionHappened(
             $this->id,

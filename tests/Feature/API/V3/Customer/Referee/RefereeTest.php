@@ -6,7 +6,6 @@ use App\Models\CouponApplicable;
 use App\Models\CouponStatus;
 use App\Models\Referrer;
 use App\Models\User;
-
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {

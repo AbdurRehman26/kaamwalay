@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PopReportsCardFactory extends Factory

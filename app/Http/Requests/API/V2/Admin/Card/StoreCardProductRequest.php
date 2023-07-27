@@ -18,7 +18,7 @@ class StoreCardProductRequest extends FormRequest
         return [
             'image_path' => ['required', 'string'],
             'name' => ['required', 'string'],
-            'category' => ['required','exists:card_categories,id'],
+            'category' => ['required', 'exists:card_categories,id'],
             'release_date' => ['required', 'date'],
             'series_id' => ['required', 'integer', 'exists:card_series,id'],
             'set_id' => ['required', 'integer', 'exists:card_sets,id'],

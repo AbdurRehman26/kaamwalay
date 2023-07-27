@@ -31,7 +31,7 @@ class UpdateCardReportCommand extends Command
             $cards = $this->searchCardsWithMissingPopReports($popReportService);
 
             foreach ($cards as $card) {
-                $this->info("Updating values for card product: ". $card->id);
+                $this->info('Updating values for card product: '.$card->id);
                 $this->updatePopReports($popReportService, $card);
             }
         } else {

@@ -145,7 +145,6 @@ class VaultShipment extends Model
         return $query->where('vault_shipments.user_id', $user->id);
     }
 
-
     public static function getAllowedIncludes(): array
     {
         return [

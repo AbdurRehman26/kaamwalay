@@ -8,7 +8,6 @@ use App\Models\CouponStatus;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
@@ -54,15 +53,14 @@ beforeEach(function () {
         ->create();
 });
 
-
 test('salesman checks for valid coupon', function () {
     actingAs($this->user);
 
     getJson(route('v2.salesman.coupon.verify', [
-            $this->coupon->code,
-            'couponables_type' => 'service_level',
-            'couponables_id' => $this->paymentPlan->id,
-        ]))
+        $this->coupon->code,
+        'couponables_type' => 'service_level',
+        'couponables_id' => $this->paymentPlan->id,
+    ]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -76,7 +74,7 @@ test('salesman checks for valid coupon', function () {
 test('salesman checks for invalid coupon code', function () {
     actingAs($this->user);
 
-    getJson(route('v2.salesman.coupon.verify', $this->coupon->code . 'test'))
+    getJson(route('v2.salesman.coupon.verify', $this->coupon->code.'test'))
         ->assertStatus(422);
 });
 

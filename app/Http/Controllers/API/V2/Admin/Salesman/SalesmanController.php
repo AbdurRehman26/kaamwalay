@@ -74,6 +74,6 @@ class SalesmanController extends Controller
 
     public function getStat(GetSalesmanStatRequest $request, User $user): JsonResponse
     {
-        return new JsonResponse([ 'data' => $this->salesmanService->getStat($user, $request->validated())]);
+        return new JsonResponse(['data' => $this->salesmanService->getStat($user, $request->validated())]);
     }
 }

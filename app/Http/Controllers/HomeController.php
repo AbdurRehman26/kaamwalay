@@ -21,7 +21,7 @@ class HomeController extends Controller
             'homepage:payment_plans',
             now()->addMonth(),
             fn () => PaymentPlan::join('payment_plan_ranges', 'payment_plan_ranges.payment_plan_id', '=', 'payment_plans.id')
-            ->orderBy('payment_plans.display_position')->get()
+                ->orderBy('payment_plans.display_position')->get()
         );
 
         return view('landings.home.view', compact('categories', 'paymentPlans'));

@@ -121,6 +121,8 @@ class OrderItemService
     }
 
     /**
+     * @return Collection<int,OrderItem>
+     *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
     public function markItemsAsConfirmed(Order $order, array $items, User $user): Collection

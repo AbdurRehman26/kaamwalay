@@ -28,6 +28,7 @@ class CardProductResource extends BaseResource
             'surface' => $this->surface,
             'edition' => $this->edition,
             'added_by_customer' => ! $this->isCardInformationComplete(),
+            'added_manually' => $this->added_manually,
         ];
     }
 }

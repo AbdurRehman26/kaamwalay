@@ -12,6 +12,7 @@ use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V1\OrderService;
 use Illuminate\Http\JsonResponse;
@@ -85,7 +86,11 @@ class OrderItemController extends Controller
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemService->markItemsAsPending($order, $request->items, $request->user());
+
+            $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code){
+                'confirmed' => $orderItemService->markItemsAsConfirmed($order, $request->items, $request->user()),
+                default => $orderItemService->markItemsAsPending($order, $request->items, $request->user())
+            };
 
             return new OrderItemCollection($result);
         } catch (OrderItemDoesNotBelongToOrder $e) {

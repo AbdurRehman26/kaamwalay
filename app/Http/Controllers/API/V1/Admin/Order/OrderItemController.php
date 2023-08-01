@@ -87,7 +87,7 @@ class OrderItemController extends Controller
 
         try {
 
-            $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code){
+            $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code) {
                 'confirmed' => $orderItemService->markItemsAsConfirmed($order, $request->items, $request->user()),
                 default => $orderItemService->markItemsAsPending($order, $request->items, $request->user())
             };

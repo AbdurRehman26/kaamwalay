@@ -3,6 +3,7 @@
 use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
@@ -11,6 +12,8 @@ use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+
+use function PHPUnit\Framework\assertEquals;
 
 uses(WithFaker::class);
 uses()->group('admin');
@@ -248,16 +251,20 @@ test('status update fails with wrong desired status', function () {
 });
 
 test('an admin can mark multiple order items as pending', function () {
-    $orderItem = OrderItem::factory()->create();
+    $orderItem = OrderItem::factory()->create([
+        'order_item_status_id' => OrderItemStatus::factory()->create(['code' => 'confirmed'])->id
+    ]);
 
     $this->actingAs($this->user);
 
     $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/bulk/change-status', [
         'items' => [$orderItem->id],
-        'status' => OrderStatus::CONFIRMED,
+        'status' => OrderItemStatus::PENDING,
     ]);
 
     $response->assertStatus(200);
+    assertEquals($orderItem->refresh()->order_item_status_id, OrderItemStatus::PENDING);
+
 });
 test('a customer can not mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();

@@ -12,7 +12,6 @@ use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function PHPUnit\Framework\assertEquals;
 
 uses(WithFaker::class);
@@ -252,7 +251,7 @@ test('status update fails with wrong desired status', function () {
 
 test('an admin can mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create([
-        'order_item_status_id' => OrderItemStatus::factory()->create(['code' => 'confirmed'])->id
+        'order_item_status_id' => OrderItemStatus::factory()->create(['code' => 'confirmed'])->id,
     ]);
 
     $this->actingAs($this->user);

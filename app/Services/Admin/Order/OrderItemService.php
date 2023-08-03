@@ -89,6 +89,16 @@ class OrderItemService
      *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
+    public function markItemsAsConfirmed(Order $order, array $items, User $user): Collection
+    {
+        return $this->markItemsAs($order, $items, $user, 'confirmed');
+    }
+
+    /**
+     * @return Collection<int,OrderItem>
+     *
+     * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
+     */
     public function markItemsAsCancelled(Order $order, User $user): Collection
     {
         return $this->markItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
@@ -118,15 +128,5 @@ class OrderItemService
         ]);
 
         return $orderItemStatusHistory->save();
-    }
-
-    /**
-     * @return Collection<int,OrderItem>
-     *
-     * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
-     */
-    public function markItemsAsConfirmed(Order $order, array $items, User $user): Collection
-    {
-        return $this->markItemsAs($order, $items, $user, 'confirmed');
     }
 }

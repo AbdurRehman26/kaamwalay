@@ -180,7 +180,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                         <Box pl={1}>
                             <LoadingButton
                                 loading={loading}
-                                disabled={!items.length || items.some((item) => item.cardProduct.addedManually)}
+                                disabled={!items.length || items.some((item) => item.cardProduct.addedByCustomer)}
                                 onClick={onConfirmAll}
                                 variant={'outlined'}
                                 color={'primary'}

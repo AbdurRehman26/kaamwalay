@@ -36,7 +36,6 @@ export class CardProductEntity extends Entity {
     public shortName!: string;
     public longName!: string;
     public addedByCustomer!: boolean;
-    public addedManually!: boolean;
     public surface!: CardSurface;
     public variant!: string;
     public language!: string;

@@ -36,11 +36,13 @@ const useStyles = makeStyles(
             backgroundColor: '#f9f9f9',
             borderBottom: '1px solid #e0e0e0',
             padding: theme.spacing(1.5, 2),
-            '& > .MuiCardHeader-content': {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-            },
+        },
+        headerContent: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        heading: {
+            flexGrow: 1,
         },
         content: {
             padding: '0 !important',
@@ -171,8 +173,9 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
             <Card variant={'outlined'} className={classes.root}>
                 <CardHeader
                     className={classes.header}
+                    classes={{ content: classes.headerContent }}
                     title={
-                        <Typography variant={'body1'}>
+                        <Typography variant={'body1'} className={classes.heading}>
                             <span className={font.fontWeightMedium}>Unconfirmed Cards</span> ({(items || []).length})
                         </Typography>
                     }

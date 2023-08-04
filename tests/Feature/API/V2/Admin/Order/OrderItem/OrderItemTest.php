@@ -249,22 +249,28 @@ test('status update fails with wrong desired status', function () {
     ]);
 });
 
-test('an admin can mark multiple order items as pending', function () {
-    $orderItem = OrderItem::factory()->create([
-        'order_item_status_id' => OrderItemStatus::factory()->create(['code' => 'confirmed'])->id,
-    ]);
+test('an admin can mark multiple order items as pending or confirmed', function (string $oldStatusCode, int $updatedStatusId) {
+    $order = \App\Models\Order::factory()->create();
+    $orderItems = OrderItem::factory(5)
+        ->for($order)
+        ->create([
+            'order_item_status_id' => OrderItemStatus::factory()->create(['code' => $oldStatusCode])->id,
+        ]);
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/bulk/change-status', [
-        'items' => [$orderItem->id],
-        'status' => OrderItemStatus::PENDING,
+    $response = $this->postJson('/api/v2/admin/orders/'.$order->id.'/items/bulk/change-status', [
+        'items' => $orderItems->pluck('id'),
+        'status' => $updatedStatusId,
     ]);
 
     $response->assertStatus(200);
-    assertEquals($orderItem->refresh()->order_item_status_id, OrderItemStatus::PENDING);
+    assertEquals($orderItems->random()->refresh()->order_item_status_id, $updatedStatusId);
+})->with([
+    'pending' => ['confirmed', OrderItemStatus::PENDING],
+    'confirmed' => ['pending', OrderItemStatus::CONFIRMED],
+]);
 
-});
 test('a customer can not mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();
 

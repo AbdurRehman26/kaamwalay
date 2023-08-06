@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\IncorrectOrderItemStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\AddExtraCardRequest;
 use App\Http\Requests\API\V1\Admin\Order\ChangeItemsStatusBulkRequest;
@@ -89,11 +90,12 @@ class OrderItemController extends Controller
 
             $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code) {
                 'confirmed' => $orderItemService->markItemsAsConfirmed($order, $request->items, $request->user()),
-                'pending' => $orderItemService->markItemsAsPending($order, $request->items, $request->user())
+                'pending' => $orderItemService->markItemsAsPending($order, $request->items, $request->user()),
+                default => throw new IncorrectOrderItemStatus()
             };
 
             return new OrderItemCollection($result);
-        } catch (OrderItemDoesNotBelongToOrder $e) {
+        } catch (OrderItemDoesNotBelongToOrder|IncorrectOrderItemStatus $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

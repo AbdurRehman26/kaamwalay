@@ -41,6 +41,11 @@ parameters:
 			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemDoesNotBelongToOrder.php
 
 		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\IncorrectOrderItemsStatus\\:\\:\\$message has no type specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderItem/IncorrectOrderItemsStatus.php
+
+		-
 			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemIsNotGraded\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemIsNotGraded.php

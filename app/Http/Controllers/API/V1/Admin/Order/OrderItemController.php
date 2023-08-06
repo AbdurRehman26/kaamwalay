@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\AddExtraCardRequest;
-use App\Http\Requests\API\V1\Admin\Order\MarkItemsPendingRequest;
+use App\Http\Requests\API\V1\Admin\Order\ChangeItemsStatusBulkRequest;
 use App\Http\Requests\API\V1\Admin\Order\OrderItem\ChangeStatusRequest;
 use App\Http\Requests\API\V1\Admin\Order\OrderItem\UpdateOrderItemNotesRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemCollection;
@@ -81,7 +81,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatusBulk(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
+    public function changeStatusBulk(ChangeItemsStatusBulkRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
     {
         $this->authorize('review', $order);
 
@@ -89,7 +89,7 @@ class OrderItemController extends Controller
 
             $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code) {
                 'confirmed' => $orderItemService->markItemsAsConfirmed($order, $request->items, $request->user()),
-                default => $orderItemService->markItemsAsPending($order, $request->items, $request->user())
+                'pending' => $orderItemService->markItemsAsPending($order, $request->items, $request->user())
             };
 
             return new OrderItemCollection($result);

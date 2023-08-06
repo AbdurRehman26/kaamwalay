@@ -6,5 +6,5 @@ use Exception;
 
 class IncorrectOrderItemsStatus extends Exception
 {
-    protected $message = 'Action not allowed for current order item status.';
+    protected $message = 'Action not allowed for order items status.';
 }

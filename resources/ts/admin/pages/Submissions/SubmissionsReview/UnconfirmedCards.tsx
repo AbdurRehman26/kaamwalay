@@ -1,15 +1,21 @@
 import CheckIcon from '@mui/icons-material/Check';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { changeOrderItemNotes, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import {
+    changeOrderItemNotes,
+    changeOrderItemStatus,
+    changeOrderItemsStatus,
+} from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -24,13 +30,19 @@ interface UnconfirmedCardsProps {
 const useStyles = makeStyles(
     (theme) => ({
         root: {
-            marginTop: theme.spacing(3),
             border: '1px solid #e0e0e0',
         },
         header: {
             backgroundColor: '#f9f9f9',
             borderBottom: '1px solid #e0e0e0',
             padding: theme.spacing(1.5, 2),
+        },
+        headerContent: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        heading: {
+            flexGrow: 1,
         },
         content: {
             padding: '0 !important',
@@ -46,6 +58,8 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     const dispatch = useAppDispatch();
     const handlePreview = useCallback((value) => setActiveItemId(value), [setActiveItemId]);
     const handleClosePreview = useCallback(() => setActiveItemId(null), [setActiveItemId]);
+    const [loading, setLoading] = useState(false);
+    const notification = useNotifications();
 
     const handleConfirm = useCallback(
         async (orderItemId) => {
@@ -59,6 +73,16 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         },
         [dispatch, orderId],
     );
+
+    const handleConfirmAll = useCallback(async () => {
+        await dispatch(
+            changeOrderItemsStatus({
+                orderId,
+                orderItemStatus: OrderItemStatusEnum.CONFIRMED,
+                items: items.map((item) => item.id),
+            }),
+        );
+    }, [dispatch, items, orderId]);
 
     const handleSwapCard = useCallback(
         (orderItemId) => {
@@ -133,15 +157,40 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         },
         [dispatch, orderId],
     );
+
+    const onConfirmAll = useCallback(async () => {
+        setLoading(true);
+        try {
+            await handleConfirmAll();
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [handleConfirmAll, notification]);
+
     return (
         <>
             <Card variant={'outlined'} className={classes.root}>
                 <CardHeader
                     className={classes.header}
+                    classes={{ content: classes.headerContent }}
                     title={
-                        <Typography variant={'body1'}>
+                        <Typography variant={'body1'} className={classes.heading}>
                             <span className={font.fontWeightMedium}>Unconfirmed Cards</span> ({(items || []).length})
                         </Typography>
+                    }
+                    subheader={
+                        <Box pl={1}>
+                            <LoadingButton
+                                loading={loading}
+                                disabled={!items.length || items.some((item) => item.cardProduct.addedByCustomer)}
+                                onClick={onConfirmAll}
+                                variant={'outlined'}
+                                color={'primary'}
+                            >
+                                Confirm All
+                            </LoadingButton>
+                        </Box>
                     }
                     disableTypography
                 />

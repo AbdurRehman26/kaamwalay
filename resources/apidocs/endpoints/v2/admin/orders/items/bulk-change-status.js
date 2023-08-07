@@ -1,6 +1,6 @@
 /**
- * @api {post} /v2/admin/orders/11/items/bulk/change-status Bulk Change Order Items Status to Pending
- * @apiName Bulk Change Order Items Status to Pending
+ * @api {post} /v2/admin/orders/11/items/bulk/change-status Bulk Change Order Items Status
+ * @apiName Bulk Change Order Items Status
  * @apiGroup Order Cards
  *
  * @apiVersion 2.0.0
@@ -13,7 +13,7 @@
  * @apiParamExample {json} Request-Example:
  *      {
  *          "items": [6,7]
- *          "status": pending
+ *          "status": pending|confirmed
  *      }
  *
  * @apiSuccess {Object} data Card object

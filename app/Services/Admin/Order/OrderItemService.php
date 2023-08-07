@@ -81,7 +81,17 @@ class OrderItemService
      */
     public function markItemsAsPending(Order $order, array $items, User $user): Collection
     {
-        return $this->marketItemsAs($order, $items, $user, 'pending');
+        return $this->markItemsAs($order, $items, $user, 'pending');
+    }
+
+    /**
+     * @return Collection<int,OrderItem>
+     *
+     * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
+     */
+    public function markItemsAsConfirmed(Order $order, array $items, User $user): Collection
+    {
+        return $this->markItemsAs($order, $items, $user, 'confirmed');
     }
 
     /**
@@ -91,7 +101,7 @@ class OrderItemService
      */
     public function markItemsAsCancelled(Order $order, User $user): Collection
     {
-        return $this->marketItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
+        return $this->markItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
     }
 
     /**
@@ -99,7 +109,7 @@ class OrderItemService
      *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
-    protected function marketItemsAs(Order $order, array $items, User $user, string|int $status): Collection
+    protected function markItemsAs(Order $order, array $items, User $user, string|int $status): Collection
     {
         $processedItems = [];
         foreach ($items as $item) {

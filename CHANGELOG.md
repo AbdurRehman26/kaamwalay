@@ -1,5 +1,34 @@
 # Changelog
 
+## v3.17.0 - 2023-08-08
+
+### What's Changed
+
+- Feature: Integrate Laravel Pint by @thenabeel in https://github.com/woozard/robograding/pull/1085
+- Feature: HubSpot Live Chat Widget by @numair97 in https://github.com/woozard/robograding/pull/1087
+- Feature: Admin | Confirm All In Review Order by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1086
+- Release v3.17.0 by @thenabeel in https://github.com/woozard/robograding/pull/1088
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.16.0...v3.17.0
+
+## v3.16.0 - 2023-07-26
+
+### What's Changed
+
+- Fix: Admin | Missing Loading Icons by @luis-molina in https://github.com/woozard/robograding/pull/1071
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1073
+- Fix: Admin & Sales | Default Service Level on Create Submission by @luis-molina in https://github.com/woozard/robograding/pull/1074
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1076
+- Fix: Homepage | Header video on iPhone Issue by @numair97 in https://github.com/woozard/robograding/pull/1078
+- Feature: Admin | Manual Card Category Type by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1077
+- Feature: Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1079
+- Feature: Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1081
+- Fix:  Admin & Sales Rep | Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1083
+- Fix: Remove Extra Salesrep Files by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1082
+- Release v3.16.0 by @thenabeel in https://github.com/woozard/robograding/pull/1084
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.2...v3.16.0
+
 ## v3.15.2 - 2023-07-03
 
 ### What's Changed

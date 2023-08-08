@@ -13,7 +13,6 @@ use App\Models\User;
 use App\Services\Payment\V3\InvoiceService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery\MockInterface;
-
 use function Pest\Laravel\putJson;
 
 uses(WithFaker::class);
@@ -56,7 +55,6 @@ test('order\'s shipping method can be changed from insured shipping to vault', f
     ])->assertOk();
     expect($this->insuredShippingOrder->refresh()->shippingMethod->code)->toBe(ShippingMethod::VAULT_STORAGE);
 });
-
 
 test('order\'s shipping method can be changed from vault to insured shipping', function () {
     OrderItem::factory()->for($this->vaultShippingOrder)->create();
@@ -218,7 +216,7 @@ test('Invoice is re-generated whenever a shipping method is changed', function (
         'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
     ])->assertOk();
 })
-->with([
-    fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
-    fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
-]);
+    ->with([
+        fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
+        fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
+    ]);

@@ -35,7 +35,7 @@ class PaymentMethod extends Model
     {
         return $this->code === 'collector_coin';
     }
-    
+
     public function scopeVisible(Builder $query): Builder
     {
         return $query->where('is_visible', true);

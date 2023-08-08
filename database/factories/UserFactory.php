@@ -44,8 +44,6 @@ class UserFactory extends Factory
 
     /**
      * Attach role to the newly created user.
-     *
-     * @param string $role
      */
     public function withRole(string $role): static
     {
@@ -58,7 +56,7 @@ class UserFactory extends Factory
     /**
      * Attach role to the newly created user.
      *
-     * @param string $role
+     * @param  string  $role
      */
     public function withSalesmanRole(): static
     {

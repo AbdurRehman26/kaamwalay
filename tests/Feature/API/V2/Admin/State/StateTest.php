@@ -20,11 +20,11 @@ beforeEach(function () {
     $this->states = State::factory()
         ->count(5)
         ->state(new Sequence(
-            [ 'country_id' => $this->countries[0]->id ],
-            [ 'country_id' => $this->countries[0]->id ],
-            [ 'country_id' => $this->countries[0]->id ],
-            [ 'country_id' => $this->countries[1]->id ],
-            [ 'country_id' => $this->countries[1]->id ],
+            ['country_id' => $this->countries[0]->id],
+            ['country_id' => $this->countries[0]->id],
+            ['country_id' => $this->countries[0]->id],
+            ['country_id' => $this->countries[1]->id],
+            ['country_id' => $this->countries[1]->id],
         ))->create();
 
     $this->actingAs($this->user);
@@ -41,7 +41,7 @@ test('an admin can list states', function () {
 });
 
 test('an admin can list states filtered for specific country', function () {
-    $response = $this->getJson('/api/v2/admin/addresses/states?country_id=' . $this->countries[0]->id);
+    $response = $this->getJson('/api/v2/admin/addresses/states?country_id='.$this->countries[0]->id);
 
     $response->assertJsonCount(3, 'data');
 });

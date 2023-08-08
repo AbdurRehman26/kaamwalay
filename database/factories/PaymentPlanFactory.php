@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\PaymentPlan;
 use App\Models\PaymentPlanRange;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\PaymentPlan;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class PaymentPlanFactory extends Factory
@@ -18,7 +17,7 @@ class PaymentPlanFactory extends Factory
         return [
             'price' => $this->faker->numberBetween(20, 5000),
             'max_protection_amount' => $this->faker->numberBetween(500, 10000),
-            'turnaround' => $this->faker->numberBetween(1, 30) . ' Day Turnaround',
+            'turnaround' => $this->faker->numberBetween(1, 30).' Day Turnaround',
             'display_position' => $this->faker->numberBetween(1, 8),
         ];
     }
@@ -26,7 +25,7 @@ class PaymentPlanFactory extends Factory
     /**
      * Attach role to the newly created user.
      *
-     * @param string $role
+     * @param  string  $role
      */
     public function withPaymentPlanRanges(int $price = 18): static
     {

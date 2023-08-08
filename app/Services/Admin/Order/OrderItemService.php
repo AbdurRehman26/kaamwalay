@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 class OrderItemService
 {
     public function __construct(
-        private  UserCardService $userCardService,
+        private UserCardService $userCardService,
         private CardGradingService $cardGradingService
     ) {
     }
@@ -81,28 +81,40 @@ class OrderItemService
      */
     public function markItemsAsPending(Order $order, array $items, User $user): Collection
     {
-        return $this->marketItemsAs($order, $items, $user, 'pending');
+        return $this->markItemsAs($order, $items, $user, 'pending');
     }
 
     /**
      * @return Collection<int,OrderItem>
+     *
+     * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
+     */
+    public function markItemsAsConfirmed(Order $order, array $items, User $user): Collection
+    {
+        return $this->markItemsAs($order, $items, $user, 'confirmed');
+    }
+
+    /**
+     * @return Collection<int,OrderItem>
+     *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
     public function markItemsAsCancelled(Order $order, User $user): Collection
     {
-        return $this->marketItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
+        return $this->markItemsAs($order, $order->orderItems->pluck('id')->toArray(), $user, OrderItemStatus::CANCELLED);
     }
 
     /**
      * @return Collection<int,OrderItem>
+     *
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
-    protected function marketItemsAs(Order $order, array $items, User $user, string|int $status): Collection
+    protected function markItemsAs(Order $order, array $items, User $user, string|int $status): Collection
     {
         $processedItems = [];
         foreach ($items as $item) {
             $orderItem = OrderItem::find($item);
-            $processedItems[] = $this->changeStatus($order, $orderItem, ["status" => $status], $user);
+            $processedItems[] = $this->changeStatus($order, $orderItem, ['status' => $status], $user);
         }
 
         return collect($processedItems);

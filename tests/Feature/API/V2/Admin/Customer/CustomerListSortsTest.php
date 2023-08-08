@@ -4,7 +4,6 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Builder;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
@@ -20,7 +19,7 @@ beforeEach(function () {
 
 it('returns customers list order by asc email', function () {
     actingAs($this->user);
-    $response = getJson(route('v2.customers.index',  [
+    $response = getJson(route('v2.customers.index', [
         'sort' => 'email',
     ]));
 

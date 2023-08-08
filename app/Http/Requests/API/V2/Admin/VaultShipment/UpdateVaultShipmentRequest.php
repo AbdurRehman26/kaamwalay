@@ -16,8 +16,8 @@ class UpdateVaultShipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'shipping_provider' => ['required','string'],
-            'tracking_number' => ['required','string'],
+            'shipping_provider' => ['required', 'string'],
+            'tracking_number' => ['required', 'string'],
         ];
     }
 }

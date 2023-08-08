@@ -128,7 +128,7 @@ test('customer can register and have wallet assigned', function () {
         'phone' => '',
     ]);
     $user = User::whereEmail($email)->first();
-    
+
     expect($user->wallet()->exists())->toBeTrue();
     expect($user->wallet->balance)->toBe(0.0);
 })->group('auth');

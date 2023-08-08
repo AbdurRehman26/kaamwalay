@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\API\V1\Admin\Order;
 
+use App\Exceptions\API\Admin\Order\OrderItem\IncorrectOrderItemsStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\AddExtraCardRequest;
-use App\Http\Requests\API\V1\Admin\Order\MarkItemsPendingRequest;
+use App\Http\Requests\API\V1\Admin\Order\ChangeItemsStatusBulkRequest;
 use App\Http\Requests\API\V1\Admin\Order\OrderItem\ChangeStatusRequest;
 use App\Http\Requests\API\V1\Admin\Order\OrderItem\UpdateOrderItemNotesRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V1\OrderService;
 use Illuminate\Http\JsonResponse;
@@ -24,9 +26,9 @@ class OrderItemController extends Controller
     {
         return new JsonResponse([
             'data' => [
-               'order_item' => new OrderItemCollection(
-                   $order->orderItems
-               ),
+                'order_item' => new OrderItemCollection(
+                    $order->orderItems
+                ),
                 'order' => [
                     'id' => $order->id,
                     'order_number' => $order->order_number,
@@ -44,7 +46,7 @@ class OrderItemController extends Controller
         return new OrderItemResource($result);
     }
 
-    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, OrderService $orderService): OrderItemResource | JsonResponse
+    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, OrderService $orderService): OrderItemResource|JsonResponse
     {
         $this->authorize('review', $order);
 
@@ -62,7 +64,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemService $orderItemService): OrderItemResource | JsonResponse
+    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemService $orderItemService): OrderItemResource|JsonResponse
     {
         $this->authorize('review', $order);
 
@@ -80,15 +82,20 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatusBulk(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection | JsonResponse
+    public function changeStatusBulk(ChangeItemsStatusBulkRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
     {
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemService->markItemsAsPending($order, $request->items, $request->user());
+
+            $result = match (OrderItemStatus::forStatus($request->get('status'))->first()->code) {
+                'confirmed' => $orderItemService->markItemsAsConfirmed($order, $request->items, $request->user()),
+                'pending' => $orderItemService->markItemsAsPending($order, $request->items, $request->user()),
+                default => throw new IncorrectOrderItemsStatus()
+            };
 
             return new OrderItemCollection($result);
-        } catch (OrderItemDoesNotBelongToOrder $e) {
+        } catch (OrderItemDoesNotBelongToOrder|IncorrectOrderItemsStatus $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

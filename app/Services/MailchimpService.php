@@ -12,6 +12,7 @@ use MailchimpMarketing\ApiClient;
 class MailchimpService
 {
     public const LIST_NAME_SIGN_UP_USERS = 'Signed Up Users';
+
     public const LIST_NAME_ORDER_PAID_CUSTOMERS = 'Order Paid Customers';
 
     public function getClient(): ApiClient
@@ -176,7 +177,7 @@ class MailchimpService
 
     protected function buildListName(string $listName): string
     {
-        return 'Robograding ' . ucfirst(app()->environment()) . ' - ' . $listName;
+        return 'Robograding '.ucfirst(app()->environment()).' - '.$listName;
     }
 
     protected function prepareUserDataForList(User $user): array

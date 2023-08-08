@@ -3,6 +3,7 @@
 use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use function PHPUnit\Framework\assertEquals;
 
 uses(WithFaker::class);
 uses()->group('admin');
@@ -32,7 +34,7 @@ test('an admin can get order items information', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->get('/api/v2/admin/orders/' . $orderItem->order_id . '/items');
+    $response = $this->get('/api/v2/admin/orders/'.$orderItem->order_id.'/items');
 
     $response->assertStatus(200);
 });
@@ -50,7 +52,7 @@ test('a customer can not get order items information', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->get('/api/v2/admin/orders/' . $orderItem->order_id . '/items');
+    $response = $this->get('/api/v2/admin/orders/'.$orderItem->order_id.'/items');
 
     $response->assertStatus(403);
 });
@@ -62,7 +64,7 @@ test('an admin can add order item to order', function () {
 
     $newCard = CardProduct::factory()->create();
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items', [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100),
     ]);
@@ -91,7 +93,7 @@ test('a customer can not add order item to order', function () {
 
     $newCard = CardProduct::factory()->create();
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items', [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
@@ -103,7 +105,7 @@ test('a new order item needs data', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items');
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items');
     $response->assertJsonValidationErrors([
         'card_id' => 'The card id field is required.',
         'value' => 'The value field is required.',
@@ -113,7 +115,7 @@ test('a new order item needs data', function () {
 test('an admin can update order item', function () {
     Event::fake();
     Http::fake(['*' => Http::response(json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
+        base_path().'/tests/stubs/AGS_create_certificates_response_200.json'
     ), associative: true))]);
 
     $orderItem = OrderItem::factory()->create();
@@ -122,7 +124,7 @@ test('an admin can update order item', function () {
 
     $newCard = CardProduct::factory()->create();
 
-    $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id, [
+    $response = $this->putJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id, [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat(nbMaxDecimals: 2, min: 1, max: 100000),
     ]);
@@ -153,7 +155,7 @@ test('a customer can not update order item', function () {
 
     $newCard = CardProduct::factory()->create();
 
-    $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id, [
+    $response = $this->putJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id, [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
@@ -169,7 +171,7 @@ test('order item update fails with wrong card parameter', function () {
 
     $newCard = CardProduct::factory()->create();
 
-    $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$otherItem->id, [
+    $response = $this->putJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$otherItem->id, [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
@@ -182,7 +184,7 @@ test('an admin can update an order item status', function () {
 
     $this->actingAs($this->user);
 
-    $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
+    $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id.'/change-status', [
         'status' => 'missing',
         'notes' => 'Lorem',
     ])->assertStatus(200);
@@ -201,7 +203,7 @@ test('a customer can not update an order item status', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id.'/change-status', [
         'status' => 'missing',
         'notes' => 'Lorem',
     ]);
@@ -215,7 +217,7 @@ test('status update fails with wrong card parameter', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$otherItem->id. '/change-status', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$otherItem->id.'/change-status', [
         'status' => 'missing',
         'notes' => 'Lorem',
     ]);
@@ -228,7 +230,7 @@ test('desired status is required for status updated', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status');
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id.'/change-status');
     $response->assertJsonValidationErrors([
         'status' => 'The status field is required.',
     ]);
@@ -239,7 +241,7 @@ test('status update fails with wrong desired status', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/'.$orderItem->id.'/change-status', [
         'status' => 'Lorem',
     ]);
     $response->assertJsonValidationErrors([
@@ -247,18 +249,28 @@ test('status update fails with wrong desired status', function () {
     ]);
 });
 
-test('an admin can mark multiple order items as pending', function () {
-    $orderItem = OrderItem::factory()->create();
+test('an admin can mark multiple order items as pending or confirmed', function (string $oldStatusCode, int $updatedStatusId) {
+    $order = \App\Models\Order::factory()->create();
+    $orderItems = OrderItem::factory(5)
+        ->for($order)
+        ->create([
+            'order_item_status_id' => OrderItemStatus::factory()->create(['code' => $oldStatusCode])->id,
+        ]);
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
-        "items" => [$orderItem->id],
-        "status" => OrderStatus::CONFIRMED,
+    $response = $this->postJson('/api/v2/admin/orders/'.$order->id.'/items/bulk/change-status', [
+        'items' => $orderItems->pluck('id'),
+        'status' => $updatedStatusId,
     ]);
 
     $response->assertStatus(200);
-});
+    assertEquals($orderItems->random()->refresh()->order_item_status_id, $updatedStatusId);
+})->with([
+    'pending' => ['confirmed', OrderItemStatus::PENDING],
+    'confirmed' => ['pending', OrderItemStatus::CONFIRMED],
+]);
+
 test('a customer can not mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();
 
@@ -272,9 +284,9 @@ test('a customer can not mark multiple order items as pending', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
-        "items" => [$orderItem->id],
-        "status" => OrderStatus::CONFIRMED,
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/bulk/change-status', [
+        'items' => [$orderItem->id],
+        'status' => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(403);
@@ -285,7 +297,7 @@ test('items are required for bulk set items as pending', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status');
+    $response = $this->postJson('/api/v2/admin/orders/'.$orderItem->order_id.'/items/bulk/change-status');
 
     $response->assertJsonValidationErrors([
         'items' => 'The items field is required.',
@@ -302,7 +314,7 @@ test('an admin can update an existing order item status notes', function () {
     $this->actingAs($this->user);
     $notes = 'Updating Item Status Notes';
 
-    $this->postJson('/api/v2/admin/orders/' . $orderItem->order->id . '/items/'. $orderItem->id. '/change-status', [
+    $this->postJson('/api/v2/admin/orders/'.$orderItem->order->id.'/items/'.$orderItem->id.'/change-status', [
         'status' => $orderItemStatusHistory->order_item_status_id,
         'notes' => $notes,
     ])->assertStatus(200);
@@ -320,7 +332,7 @@ test('an admin can update an existing order item status notes as empty', functio
 
     $this->actingAs($this->user);
 
-    $this->postJson('/api/v2/admin/orders/' . $orderItem->order->id . '/items/'. $orderItem->id. '/change-status', [
+    $this->postJson('/api/v2/admin/orders/'.$orderItem->order->id.'/items/'.$orderItem->id.'/change-status', [
         'status' => $orderItemStatusHistory->order_item_status_id,
     ])->assertStatus(200);
     $this->assertDatabaseMissing('order_item_status_histories', [
@@ -331,7 +343,7 @@ test('an admin can update an existing order item status notes as empty', functio
 it('can swap card in AGS certificate', function () {
     Event::fake();
     Http::fake(['*' => Http::response(json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
+        base_path().'/tests/stubs/AGS_create_certificates_response_200.json'
     ), associative: true))]);
 
     $userCard = UserCard::factory()->create([

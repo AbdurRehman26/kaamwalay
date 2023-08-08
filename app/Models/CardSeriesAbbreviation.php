@@ -11,7 +11,7 @@ class CardSeriesAbbreviation extends Model
     use HasFactory;
 
     /**
-     * @param  Builder <CardSeriesAbbreviation> $query
+     * @param  Builder <CardSeriesAbbreviation>  $query
      * @return Builder <CardSeriesAbbreviation>
      */
     public function scopeCategory(Builder $query, CardCategory $category): Builder
@@ -20,7 +20,7 @@ class CardSeriesAbbreviation extends Model
     }
 
     /**
-     * @param  Builder <CardSeriesAbbreviation> $query
+     * @param  Builder <CardSeriesAbbreviation>  $query
      * @return Builder <CardSeriesAbbreviation>
      */
     public function scopeLanguage(Builder $query, string $language): Builder

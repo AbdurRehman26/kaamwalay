@@ -22,7 +22,6 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
     /**
      * Handle the event.
      *
-     * @param CustomerRegistered  $event
      * @return void
      */
     public function handle(CustomerRegistered $event)
@@ -34,7 +33,7 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
             EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
             [
-                'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/main',
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/main',
                 'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
             ],
             true,

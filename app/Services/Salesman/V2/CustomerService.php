@@ -50,7 +50,7 @@ class CustomerService
             [[$user->email => $user->first_name ?? '']],
             EmailService::SUBJECT[EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT],
             EmailService::TEMPLATE_CREATED_USER_ACCESS_ACCOUNT,
-            ['ACCESS_URL' => config('app.url') . '/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
+            ['ACCESS_URL' => config('app.url').'/auth/password/create?token='.$token.'&name='.$user->first_name.'&email='.urlencode($user->email)],
         );
     }
 }

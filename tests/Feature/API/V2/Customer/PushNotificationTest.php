@@ -2,7 +2,6 @@
 
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
-
 use function Pest\Laravel\getJson;
 
 test('a customer can get Pusher auth token without platform', function () {

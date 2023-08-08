@@ -43,7 +43,7 @@ class RefereeCouponService
             return $coupon->refresh();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+            Log::error($e->getMessage()."\n File:".$e->getFile()."\n Line:".$e->getLine());
 
             throw $e;
         }
@@ -108,7 +108,7 @@ class RefereeCouponService
         $coupon->couponStats()->save(new CouponStat());
     }
 
-    public function getRefereeCoupon(): object|null
+    public function getRefereeCoupon(): ?object
     {
         $coupon = Coupon::validOnCurrentDate()->whereExists(function ($query) {
             $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by')

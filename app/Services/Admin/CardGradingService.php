@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 class CardGradingService
 {
     protected const FRONT_AVERAGING_RATIO = 0.6;
+
     protected const BACK_AVERAGING_RATIO = 0.4;
 
     public const GRADE_CRITERIA = [

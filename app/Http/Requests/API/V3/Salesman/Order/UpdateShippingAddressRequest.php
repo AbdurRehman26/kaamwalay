@@ -14,6 +14,7 @@ class UpdateShippingAddressRequest extends FormRequest
 
         return $order->salesman()->exists() && $order->salesman()->is(auth()->user());
     }
+
     /**
      * Get the validation rules that apply to the request.
      */

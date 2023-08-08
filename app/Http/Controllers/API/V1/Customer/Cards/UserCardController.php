@@ -23,7 +23,7 @@ class UserCardController extends Controller
         );
     }
 
-    public function show(UserCard $userCard): UserCardResource | JsonResponse
+    public function show(UserCard $userCard): UserCardResource|JsonResponse
     {
         $this->authorize('view', $userCard);
 

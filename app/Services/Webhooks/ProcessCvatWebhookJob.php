@@ -35,7 +35,7 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
     private function processHumanGrades(array $values, CardGradingService $cardGradingService): void
     {
         if (! isset($values['grades'])) {
-            throw new Exception("No grades available.");
+            throw new Exception('No grades available.');
         }
 
         $card = UserCard::whereCertificateNumber($values['certificateId'])->firstOrFail();
@@ -46,24 +46,24 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
 
         $card->update([
             'human_grade_values' => [
-                "back" => [
-                    "edge" => $grades['back_edges_human_grade'],
-                    "center" => $grades['back_centering_human_grade'],
-                    "corner" => $grades['back_corners_human_grade'],
-                    "surface" => $grades['back_surface_human_grade'],
+                'back' => [
+                    'edge' => $grades['back_edges_human_grade'],
+                    'center' => $grades['back_centering_human_grade'],
+                    'corner' => $grades['back_corners_human_grade'],
+                    'surface' => $grades['back_surface_human_grade'],
                 ],
-                "front" => [
-                    "edge" => $grades['front_edges_human_grade'],
-                    "center" => $grades['front_centering_human_grade'],
-                    "corner" => $grades['front_corners_human_grade'],
-                    "surface" => $grades['front_surface_human_grade'],
+                'front' => [
+                    'edge' => $grades['front_edges_human_grade'],
+                    'center' => $grades['front_centering_human_grade'],
+                    'corner' => $grades['front_corners_human_grade'],
+                    'surface' => $grades['front_surface_human_grade'],
                 ],
             ],
             'overall_values' => [
-                "edge" => $grades['overall_edges_grade'],
-                "center" => $grades['overall_centering_grade'],
-                "corner" => $grades['overall_corners_grade'],
-                "surface" => $grades['overall_surface_grade'],
+                'edge' => $grades['overall_edges_grade'],
+                'center' => $grades['overall_centering_grade'],
+                'corner' => $grades['overall_corners_grade'],
+                'surface' => $grades['overall_surface_grade'],
             ],
             'overall_grade' => $adjustedValues['grade'],
             'overall_grade_nickname' => $adjustedValues['nickname'],

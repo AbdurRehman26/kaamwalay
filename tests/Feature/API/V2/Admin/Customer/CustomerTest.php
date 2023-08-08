@@ -89,7 +89,7 @@ test('a customer cannot create customers', function () {
         'email' => 'luis@wooter.com',
         'phone' => '+1234567890',
     ])
-    ->assertStatus(403);
+        ->assertStatus(403);
 });
 
 test('a guest cannot create customers', function () {
@@ -184,9 +184,9 @@ it('can assign a salesman to customer', function () {
         ->create();
 
     postJson(route('v2.customers.assign-salesman', [
-            'salesman' => $salesman,
-            'user' => $customer,
-        ]))
+        'salesman' => $salesman,
+        'user' => $customer,
+    ]))
         ->assertSuccessful();
 });
 

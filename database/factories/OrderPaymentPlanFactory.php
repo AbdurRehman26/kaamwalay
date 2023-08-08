@@ -14,7 +14,7 @@ class OrderPaymentPlanFactory extends Factory
         return [
             'price' => $this->faker->numberBetween(20, 5000),
             'max_protection_amount' => $this->faker->numberBetween(500, 10000),
-            'turnaround' => $this->faker->numberBetween(1, 30) . ' Days',
+            'turnaround' => $this->faker->numberBetween(1, 30).' Days',
         ];
     }
 }

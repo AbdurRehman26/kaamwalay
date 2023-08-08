@@ -29,7 +29,7 @@ beforeEach(function () {
 });
 
 test('an admin can list addresses for specific customer', function () {
-    $response = $this->getJson('/api/v2/admin/customer/'. $this->customers[0]->id .'/addresses');
+    $response = $this->getJson('/api/v2/admin/customer/'.$this->customers[0]->id.'/addresses');
     $response->assertJsonStructure([
         'data' => [['id', 'first_name', 'last_name', 'state']],
     ]);

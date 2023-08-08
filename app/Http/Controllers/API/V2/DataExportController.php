@@ -34,7 +34,7 @@ class DataExportController extends Controller
      */
     protected function getModelInstance(string $model): Exportable
     {
-        $class = '\\App\\Models\\' . ucfirst($model);
+        $class = '\\App\\Models\\'.ucfirst($model);
         $instance = new $class;
 
         if (! $instance instanceof Exportable) {

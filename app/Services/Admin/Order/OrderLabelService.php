@@ -40,7 +40,7 @@ class OrderLabelService
 
     protected function generateFileAndUploadToCloud(Order $order, array $response): string
     {
-        $filePath = 'order-labels/' . $order->order_number . '_label_' . Str::uuid() . '.xlsx';
+        $filePath = 'order-labels/'.$order->order_number.'_label_'.Str::uuid().'.xlsx';
         Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
 
         return Storage::disk('s3')->url($filePath);

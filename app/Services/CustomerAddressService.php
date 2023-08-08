@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerAddressService
 {
-    public function create(array $data) : CustomerAddress
+    public function create(array $data): CustomerAddress
     {
         return CustomerAddress::create(array_merge(
             $data,
@@ -19,7 +19,7 @@ class CustomerAddressService
         ));
     }
 
-    public function update(CustomerAddress $customerAddress, array $data) : CustomerAddress | JsonResponse
+    public function update(CustomerAddress $customerAddress, array $data): CustomerAddress|JsonResponse
     {
         try {
             $customerAddress->update($data);

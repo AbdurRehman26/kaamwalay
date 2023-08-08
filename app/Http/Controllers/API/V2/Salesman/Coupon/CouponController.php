@@ -57,7 +57,6 @@ class CouponController extends Controller
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
-
     public function verify(string $couponCode, VerifyCouponRequest $request): JsonResponse|VerifyCouponResource
     {
         try {
@@ -100,11 +99,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new CouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new CouponResource($coupon),
+        ],
         ]);
     }
 
@@ -137,11 +135,10 @@ class CouponController extends Controller
             };
         }
 
-        return response()->json(['data' =>
-            [
-                'discounted_amount' => $discountedAmount,
-                'coupon' => new VerifyCouponResource($coupon),
-            ],
+        return response()->json(['data' => [
+            'discounted_amount' => $discountedAmount,
+            'coupon' => new VerifyCouponResource($coupon),
+        ],
         ]);
     }
 }

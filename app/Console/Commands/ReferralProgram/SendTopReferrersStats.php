@@ -34,19 +34,17 @@ class SendTopReferrersStats extends Command
         $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
         $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
 
-        $this->info('Top Referrers Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Starting');
+        $this->info('Top Referrers Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
             ->notify(new TopReferrersStatsNotification($topReferrersStats));
 
-        $this->info('Top Referrers Stats for Month : ' . Carbon::parse($endDate)->format('F-Y') . ' Completed');
+        $this->info('Top Referrers Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Completed');
 
         return 0;
     }
 
     /**
-     * @param  string  $startDate
-     * @param  string  $endDate
      * @return Collection<int,ReferrerEarnedCommission>
      */
     protected function getData(string $startDate, string $endDate): Collection

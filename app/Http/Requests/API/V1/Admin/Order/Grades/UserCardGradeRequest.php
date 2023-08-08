@@ -23,7 +23,7 @@ class UserCardGradeRequest extends FormRequest
             'grade_delta' => ['sometimes', 'nullable', 'regex:/^(-)?\d(\.[0|5])?$/', 'numeric'],
             'human_grade_values' => ['required', 'array'],
             'human_grade_values.front' => ['required', 'array'],
-            'human_grade_values.front.center' => ['numeric','max:10','min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'human_grade_values.front.center' => ['numeric', 'max:10', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
             'human_grade_values.front.surface' => ['numeric', 'max:10', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
             'human_grade_values.front.corner' => ['numeric', 'max:10', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
             'human_grade_values.front.edge' => ['numeric', 'max:10', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
@@ -55,15 +55,15 @@ class UserCardGradeRequest extends FormRequest
     {
         $message = 'can only have maximum of 2 decimal places.';
 
-        return[
-            'human_grade_values.front.center.regex' => 'Human Grades front centering ' . $message,
-            'human_grade_values.front.surface.regex' => 'Human Grades front surface ' . $message,
-            'human_grade_values.front.edge.regex' => 'Human Grades front edges ' . $message,
-            'human_grade_values.front.corner.regex' => 'Human Grades front corners ' . $message,
-            'human_grade_values.back.center.regex' => 'Human Grades back centering ' . $message,
-            'human_grade_values.back.surface.regex' => 'Human Grades back surface ' . $message,
-            'human_grade_values.back.edge.regex' => 'Human Grades back edges ' . $message,
-            'human_grade_values.back.corner.regex' => 'Human Grades back corners ' . $message,
+        return [
+            'human_grade_values.front.center.regex' => 'Human Grades front centering '.$message,
+            'human_grade_values.front.surface.regex' => 'Human Grades front surface '.$message,
+            'human_grade_values.front.edge.regex' => 'Human Grades front edges '.$message,
+            'human_grade_values.front.corner.regex' => 'Human Grades front corners '.$message,
+            'human_grade_values.back.center.regex' => 'Human Grades back centering '.$message,
+            'human_grade_values.back.surface.regex' => 'Human Grades back surface '.$message,
+            'human_grade_values.back.edge.regex' => 'Human Grades back edges '.$message,
+            'human_grade_values.back.corner.regex' => 'Human Grades back corners '.$message,
         ];
     }
 }

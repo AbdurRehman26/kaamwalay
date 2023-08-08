@@ -7,7 +7,9 @@ use App\Http\Requests\API\V1\Files\PresignUploadRequest;
 final class UploadFile
 {
     protected string $signedUrl;
+
     protected string $publicUrl;
+
     protected string $key;
 
     public function __construct(
@@ -28,7 +30,7 @@ final class UploadFile
         return new UploadFile(
             $data['file_name'],
             $data['content_type'],
-            (int)$data['size'],
+            (int) $data['size'],
             $data['prefix'] ?? '',
             $data['suffix'] ?? '',
             $data['directory'] ?? '',
@@ -91,7 +93,7 @@ final class UploadFile
     public function getSuffix(string $default): string
     {
         if (! $this->suffix) {
-            return  $default;
+            return $default;
         }
 
         return $this->suffix;

@@ -83,7 +83,7 @@ class CardProduct extends Model
     }
 
     /**
-     * @param  Builder <Model> $query
+     * @param  Builder <Model>  $query
      * @return Builder <Model>
      */
     public function scopeCanBeInitializedInPopReport(Builder $query): Builder
@@ -125,7 +125,7 @@ class CardProduct extends Model
         return $this->card_category_id && $this->card_set_id && ! is_null($this->card_number_order);
     }
 
-    public function getFormattedCardNumber(): string | null
+    public function getFormattedCardNumber(): ?string
     {
         return is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order;
     }
@@ -133,12 +133,12 @@ class CardProduct extends Model
     public function getShortName(): string
     {
         if ($this->isCardInformationComplete()) {
-            $language = $this->language !== 'English' ? $this->language . ' - ' : '';
-            $edition = $this->edition !== 'Unlimited' ? $this->edition . ' - ' : '';
-            $surface = $this->surface ? $this->surface . ' - ' : '';
+            $language = $this->language !== 'English' ? $this->language.' - ' : '';
+            $edition = $this->edition !== 'Unlimited' ? $this->edition.' - ' : '';
+            $surface = $this->surface ? $this->surface.' - ' : '';
             $variant = $this->variant ?: '';
 
-            $shortName = $language . $edition . $surface . $variant;
+            $shortName = $language.$edition.$surface.$variant;
 
             if (str_ends_with($shortName, ' - ')) {
                 $shortName = substr_replace($shortName, '', -3);
@@ -153,9 +153,9 @@ class CardProduct extends Model
     public function getLongName(): ?string
     {
         if ($this->isCardInformationComplete()) {
-            $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
+            $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' : $this->cardSet->cardSeries->name.' ';
 
-            return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $series . $this->cardSet->name . ' ' . $this->card_number_order;
+            return $this->cardSet->release_year.' '.$this->cardCategory->name.' '.$series.$this->cardSet->name.' '.$this->card_number_order;
         }
 
         return $this->description;
@@ -163,11 +163,11 @@ class CardProduct extends Model
 
     public function getSearchableName(): string
     {
-        return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
+        return $this->getLongName().' '.$this->getShortName().' '.$this->name;
     }
 
     /**
-     * @param  Builder <CardProduct> $query
+     * @param  Builder <CardProduct>  $query
      * @return Builder <CardProduct>
      */
     public function scopeCardCategory(Builder $query, int $categoryId): Builder
@@ -179,7 +179,7 @@ class CardProduct extends Model
     }
 
     /**
-     * @param  Builder <CardProduct> $query
+     * @param  Builder <CardProduct>  $query
      * @return Builder <CardProduct>
      */
     public function scopeReleaseDate(Builder $query, string $startDate, string $endDate): Builder
@@ -202,6 +202,7 @@ class CardProduct extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
     public function getCategoryAbbreviation(): string
     {
         if (! in_array(Str::lower($this->cardCategory->name), ['pokemon', 'metazoo'])) {
@@ -222,7 +223,7 @@ class CardProduct extends Model
             ->language($this->language)
             ->where(function ($query) {
                 $query->where('name', $this->cardSet->cardSeries->name)
-                ->orWhere('name', str_replace(' Series', '', $this->cardSet->cardSeries->name));
+                    ->orWhere('name', str_replace(' Series', '', $this->cardSet->cardSeries->name));
             });
 
         if ($seriesAbbreviationQuery->doesntExist()) {
@@ -238,7 +239,7 @@ class CardProduct extends Model
             ->language($this->language)
             ->where(function ($query) {
                 $query->where('name', $this->cardSet->name)
-                ->orWhere('name', str_replace(' Set', '', $this->cardSet->name));
+                    ->orWhere('name', str_replace(' Set', '', $this->cardSet->name));
             });
 
         if ($setAbbreviationQuery->doesntExist()) {
@@ -305,7 +306,7 @@ class CardProduct extends Model
     }
 
     /**
-     * @param  Builder<CardProduct> $query
+     * @param  Builder<CardProduct>  $query
      * @return Builder<CardProduct>
      */
     public function scopeExcludeAddedManually(Builder $query): Builder

@@ -5,7 +5,7 @@ namespace App\Http\Requests\API\V1\Admin\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MarkItemsPendingRequest extends FormRequest
+class ChangeItemsStatusBulkRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -10,6 +10,7 @@ use App\Models\Order;
 
 /**
  * @mixin Order
+ *
  * @property mixed $number_of_cards
  * @property mixed $total_declared_value
  */

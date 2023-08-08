@@ -90,26 +90,26 @@ class UserCardService
         $itemsPerPage = request('per_page');
 
         $query = UserCard::with(['orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory'])
-        ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
-        ->join('orders', 'orders.id', '=', 'order_items.order_id')
-        ->join('card_products', 'card_products.id', '=', 'order_items.card_product_id')
-        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
-        ->where('user_cards.user_id', $user->id)
-        ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
-        ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
-        ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
-        ->select(['user_cards.*']);
+            ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->join('card_products', 'card_products.id', '=', 'order_items.card_product_id')
+            ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+            ->where('user_cards.user_id', $user->id)
+            ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
+            ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
+            ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
+            ->select(['user_cards.*']);
 
         return QueryBuilder::for($query)
-        ->allowedFilters([
-            AllowedFilter::custom('search', new UserCardSearchFilter),
-        ])
-        ->allowedSorts([
-            AllowedSort::field('name', 'card_products.name'),
-            AllowedSort::field('date', 'order_item_status_histories.created_at'),
-        ])
-        ->defaultSort('-order_item_status_histories.created_at')
-        ->paginate($itemsPerPage);
+            ->allowedFilters([
+                AllowedFilter::custom('search', new UserCardSearchFilter),
+            ])
+            ->allowedSorts([
+                AllowedSort::field('name', 'card_products.name'),
+                AllowedSort::field('date', 'order_item_status_histories.created_at'),
+            ])
+            ->defaultSort('-order_item_status_histories.created_at')
+            ->paginate($itemsPerPage);
     }
 
     public function getDataForPublicCardPage(string $certificateId): array
@@ -238,9 +238,9 @@ class UserCardService
             ! empty($data['results'][0]['front_slab_image']) &&
             ! empty($data['results'][0]['back_slab_image'])
         ) {
-            return  [
-                    'front_slab_image' => $data['results'][0]['front_slab_image'],
-                    'back_slab_image' => $data['results'][0]['back_slab_image'],
+            return [
+                'front_slab_image' => $data['results'][0]['front_slab_image'],
+                'back_slab_image' => $data['results'][0]['back_slab_image'],
             ];
         }
 
@@ -370,7 +370,7 @@ class UserCardService
             ->paginate($itemsPerPage);
     }
 
-    public function getCertificate(string $certificateNumber): Model | QueryBuilder
+    public function getCertificate(string $certificateNumber): Model|QueryBuilder
     {
         $query = UserCard::where('certificate_number', $certificateNumber);
 

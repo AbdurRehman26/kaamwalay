@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class RevenueStatsMonthly extends Model
 {
     use HasFactory;
-    
-    protected $table = "revenue_stats_monthly";
+
+    protected $table = 'revenue_stats_monthly';
 
     /**
      * The attributes that are mass assignable.

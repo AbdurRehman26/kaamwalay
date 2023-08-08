@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\OrderItem;
 use App\Models\User;
-use App\Models\UserCard;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserCardFactory extends Factory

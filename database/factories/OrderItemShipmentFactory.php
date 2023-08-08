@@ -2,10 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\OrderItemShipment;
 use App\Models\ShippingMethod;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemShipmentFactory extends Factory
 {

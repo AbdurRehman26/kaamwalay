@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin WalletTransaction
-*/
+ */
 class WalletTransactionResource extends BaseResource
 {
     /**
@@ -32,10 +32,10 @@ class WalletTransactionResource extends BaseResource
         $reason = $this->reason;
 
         return match ($reason) {
-            WalletTransactionReason::REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
+            WalletTransactionReason::REFUND => $this->user->getFullName().' refund to customer\'s wallet',
             WalletTransactionReason::ORDER_PAYMENT => 'Customer used credit on a submission',
-            WalletTransactionReason::WALLET_CREDIT => $this->user->getFullName() . ' credit to customer\'s wallet',
-            WalletTransactionReason::WALLET_DEBIT => $this->user->getFullName() . ' debited from customer\'s wallet',
+            WalletTransactionReason::WALLET_CREDIT => $this->user->getFullName().' credit to customer\'s wallet',
+            WalletTransactionReason::WALLET_DEBIT => $this->user->getFullName().' debited from customer\'s wallet',
             WalletTransactionReason::WALLET_PAYMENT => 'Customer added to to wallet',
         };
     }

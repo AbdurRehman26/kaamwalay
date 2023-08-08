@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('card_category_id')->constrained();
             $table->timestamps();
         });
-        
+
         Schema::enableForeignKeyConstraints();
     }
 

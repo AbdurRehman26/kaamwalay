@@ -24,7 +24,7 @@ class CardSeriesController extends Controller
         );
     }
 
-    public function store(StoreCardSeriesRequest $request): CardSeriesResource | JsonResponse
+    public function store(StoreCardSeriesRequest $request): CardSeriesResource|JsonResponse
     {
         try {
             $series = $this->cardSeriesService->create($request->validated());

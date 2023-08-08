@@ -9,7 +9,6 @@ use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use Database\Seeders\RolesSeeder;
-
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {

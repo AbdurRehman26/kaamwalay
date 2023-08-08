@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderRefundController extends Controller
 {
     /**
-    * @throws FailedRefund
-    */
+     * @throws FailedRefund
+     */
     public function __invoke(
         RefundOrderRequest $request,
         Order $order,

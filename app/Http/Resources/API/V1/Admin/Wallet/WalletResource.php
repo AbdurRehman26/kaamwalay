@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin Wallet
-*/
+ */
 class WalletResource extends BaseResource
 {
     /**

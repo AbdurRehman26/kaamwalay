@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin CardCategory
-*/
-
+ */
 class CardCategoryResource extends BaseResource
 {
     /**

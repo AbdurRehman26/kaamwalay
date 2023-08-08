@@ -6,7 +6,6 @@ use App\Models\OrderStatusHistory;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
@@ -91,7 +90,7 @@ it('returns customers that do not have submissions', function () {
 
 it('filters customers by signup date', function () {
     getJson(route('v2.salesman.customers.index', [
-        'filter[signed_up_between]' => now()->subDays(15)->toDateString() . ', ' . now()->subDays(5)->toDateString(),
+        'filter[signed_up_between]' => now()->subDays(15)->toDateString().', '.now()->subDays(5)->toDateString(),
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])
@@ -102,7 +101,7 @@ it('filters customers by signup date', function () {
 
 it('returns customers that do not lie between signed up date', function () {
     getJson(route('v2.salesman.customers.index', [
-        'filter[signed_up_between]' => now()->subDays(1)->toDateString() . ', ' . now()->addDays(5)->toDateString(),
+        'filter[signed_up_between]' => now()->subDays(1)->toDateString().', '.now()->addDays(5)->toDateString(),
     ]))
         ->assertOk()
         ->assertJsonCount(10, ['data'])
@@ -135,7 +134,7 @@ it('filters customers by name', function () {
 
 it('does not filter customers by incorrect name', function () {
     getJson(route('v2.salesman.customers.index', [
-        'filter[search]' => $this->customer->first_name . 'Testing',
+        'filter[search]' => $this->customer->first_name.'Testing',
     ]))
         ->assertOk()
         ->assertJsonCount(0, ['data']);
@@ -154,7 +153,7 @@ it('filters customers by email', function () {
 
 it('does not filter customers by incorrect email', function () {
     getJson(route('v2.salesman.customers.index', [
-        'filter[search]' => $this->customer->email . 'Testing',
+        'filter[search]' => $this->customer->email.'Testing',
     ]))
         ->assertOk()
         ->assertJsonCount(0, ['data']);
@@ -173,7 +172,7 @@ it('filters customers by customer number', function () {
 
 it('does not filter customers by incorrect customer number', function () {
     getJson(route('v2.salesman.customers.index', [
-        'filter[search]' => $this->customer->customer_number . 'Testing',
+        'filter[search]' => $this->customer->customer_number.'Testing',
     ]))
         ->assertOk()
         ->assertJsonCount(0, ['data']);

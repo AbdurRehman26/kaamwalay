@@ -9,10 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 class PaymentNotVerified extends Exception
 {
     protected $message = 'Payment could not be verified.';
+
     protected $code = Response::HTTP_BAD_REQUEST;
 
     public function render($request): JsonResponse
     {
-        return new JsonResponse([ 'error' => $this->message ], $this->code);
+        return new JsonResponse(['error' => $this->message], $this->code);
     }
 }

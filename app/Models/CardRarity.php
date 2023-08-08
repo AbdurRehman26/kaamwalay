@@ -26,7 +26,7 @@ class CardRarity extends Model
     }
 
     /**
-     * @param  Builder <CardProduct> $query
+     * @param  Builder <CardProduct>  $query
      * @return Builder <CardProduct>
      */
     public function scopeCardCategory(Builder $query, int $categoryId): Builder

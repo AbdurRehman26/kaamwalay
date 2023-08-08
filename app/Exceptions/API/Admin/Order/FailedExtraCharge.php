@@ -11,6 +11,7 @@ class FailedExtraCharge extends Exception
      * @var string
      */
     protected $message = 'We are unable to charge the customer with his last used payment method.';
+
     /**
      * @var int
      */

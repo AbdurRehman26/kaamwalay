@@ -43,6 +43,12 @@
         @production
             <script src="//www.refersion.com/tracker/v3/pub_3752401d5d34d7b7d522.js"></script>
             <script>_refersion();</script>
+
+            @if($appName === 'landings')
+                <!-- Start of HubSpot Embed Code -->
+                <script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/4871937.js"></script>
+                <!-- End of HubSpot Embed Code -->
+            @endif
         @endproduction
     </body>
 </html>

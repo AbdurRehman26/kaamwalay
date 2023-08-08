@@ -19,6 +19,6 @@ class AdminCustomerCardsSort implements Sort
         $query->withSum(['orderItems' => function (Builder $q) {
             $q->where('orders.payment_status', OrderPaymentStatusEnum::PAID);
         }], 'quantity')
-        ->orderBy('order_items_sum_quantity', $direction);
+            ->orderBy('order_items_sum_quantity', $direction);
     }
 }

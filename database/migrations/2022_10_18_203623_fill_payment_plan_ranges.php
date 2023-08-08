@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -12,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         $now = now();
-        
+
         DB::table('payment_plan_ranges')->insert([
             ['payment_plan_id' => 1, 'min_cards' => 1, 'max_cards' => 20, 'price' => 18, 'created_at' => $now, 'updated_at' => $now],
             ['payment_plan_id' => 1, 'min_cards' => 21, 'max_cards' => 50, 'price' => 17, 'created_at' => $now, 'updated_at' => $now],

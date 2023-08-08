@@ -38,11 +38,11 @@ class VaultShipmentService
             'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
             'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
         ]);
-    
+
         $vaultShipment->vaultShipmentItems->each(fn ($item) => $item->userCard->markAsShipped());
-      
+
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
-        
+
         VaultShipmentStatusChangedEvent::dispatch($vaultShipment, VaultShipmentStatus::find(VaultShipmentStatus::SHIPPED));
 
         return $vaultShipment;
@@ -60,10 +60,10 @@ class VaultShipmentService
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string
     {
         return match (strtolower($shippingProvider)) {
-            'usps' => 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels=' . $trackingNumber,
-            'ups' => 'https://wwwapps.ups.com/WebTracking/processRequest?HTMLVersion=5.0&Requester=NES&AgreeToTermsAndConditions=yes&loc=en_US&tracknum=' . $trackingNumber . '/trackdetails',
-            'fedex' => 'https://www.fedex.com/fedextrack/?trknbr=' . $trackingNumber . '&trkqual=2459465000~' . $trackingNumber . '~FX',
-            'dhlexpress' => 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id=' . $trackingNumber,
+            'usps' => 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels='.$trackingNumber,
+            'ups' => 'https://wwwapps.ups.com/WebTracking/processRequest?HTMLVersion=5.0&Requester=NES&AgreeToTermsAndConditions=yes&loc=en_US&tracknum='.$trackingNumber.'/trackdetails',
+            'fedex' => 'https://www.fedex.com/fedextrack/?trknbr='.$trackingNumber.'&trkqual=2459465000~'.$trackingNumber.'~FX',
+            'dhlexpress' => 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id='.$trackingNumber,
             default => null,
         };
     }

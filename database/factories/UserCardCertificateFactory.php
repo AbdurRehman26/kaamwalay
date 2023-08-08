@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\UserCard;
-use App\Models\UserCardCertificate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserCardCertificateFactory extends Factory

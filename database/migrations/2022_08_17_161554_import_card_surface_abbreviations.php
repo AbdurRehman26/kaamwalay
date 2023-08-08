@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -23,10 +21,10 @@ return new class extends Migration
             'Tinsel Holo' => 'TNSL.HOLO',
             'Speckle Holo' => 'SPKLE.HOLO',
             'Sparkle Holo' => 'SPRKL.HOLO',
-            'Crosshatch Holo' => 'XHTCH.HOLO'
+            'Crosshatch Holo' => 'XHTCH.HOLO',
         ];
 
-        foreach ($surfaceAbbreviations as $key => $abbreviation){
+        foreach ($surfaceAbbreviations as $key => $abbreviation) {
             $abbreviations[] = [
                 'name' => $key,
                 'abbreviation' => $abbreviation,

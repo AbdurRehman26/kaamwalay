@@ -66,7 +66,6 @@ beforeEach(function () {
 
     OrderItem::factory()->for($this->order)->count(2)->create(['quantity' => 1]);
 
-
     $this->actingAs($this->user);
 });
 
@@ -136,7 +135,7 @@ it('gives exception when flat coupon value is greater than order', function () {
             'type' => 'flat',
         ]
     );
-    
+
     $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 })->throws(CouponFlatValueDiscountGreaterThanOrder::class, 'Coupon applied value is greater than your order. Please choose another coupon.');
 
@@ -152,6 +151,6 @@ it('calculates stats for coupon', function () {
     $this->couponService->updateCouponStats($this->order->coupon);
     $couponStat = CouponStat::whereCouponId($this->order->coupon->id)->first();
 
-    expect((int)$couponStat->times_used)->toBe(1);
-    expect($this->order->discounted_amount)->toBe((float)$couponStat->total_discount);
+    expect((int) $couponStat->times_used)->toBe(1);
+    expect($this->order->discounted_amount)->toBe((float) $couponStat->total_discount);
 });

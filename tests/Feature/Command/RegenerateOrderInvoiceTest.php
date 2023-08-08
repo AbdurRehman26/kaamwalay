@@ -12,7 +12,7 @@ it('regenerates invoice for specified order', function () {
     $order->refresh();
     expect($order->invoice)->toBeNull();
 
-    $this->artisan('invoice:regenerate ' . $order->order_number)->assertExitCode(0);
+    $this->artisan('invoice:regenerate '.$order->order_number)->assertExitCode(0);
 
     $order->refresh();
     expect($order->invoice)->toBeInstanceOf(Invoice::class);

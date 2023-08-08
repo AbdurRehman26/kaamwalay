@@ -26,7 +26,7 @@ class PayoutInitiatedListener implements ShouldQueue
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED],
             EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_INITIATED,
             [
-                'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/withdrawals',
             ]
         );
     }

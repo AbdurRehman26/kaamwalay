@@ -20,9 +20,13 @@ class Coupon extends Model
     use HasFactory, SoftDeletes;
 
     const TYPE_FIXED = 1;
+
     const TYPE_PERCENTAGE = 2;
+
     const TYPE_FLAT = 3;
+
     const TYPE_FREE_CARDS = 4;
+
     const COUPON_TYPE_MAPPING = [
         'fixed' => self::TYPE_FIXED,
         'percentage' => self::TYPE_PERCENTAGE,
@@ -63,7 +67,7 @@ class Coupon extends Model
     ];
 
     /**
-     * @param  Builder <Coupon> $query
+     * @param  Builder <Coupon>  $query
      * @return Builder <Coupon>
      */
     public function scopeExcludeSystemGeneratedCoupons(Builder $query): Builder
@@ -88,7 +92,7 @@ class Coupon extends Model
 
     public function couponAble(): HasOne
     {
-        return $this->hasOne(Couponable::class, );
+        return $this->hasOne(Couponable::class);
     }
 
     public function couponStats(): HasOne
@@ -163,15 +167,15 @@ class Coupon extends Model
         return $query;
     }
 
-    public function scopeValidForUserLimit(Builder $query, string $couponCode, User $user):  Builder
+    public function scopeValidForUserLimit(Builder $query, string $couponCode, User $user): Builder
     {
         return $query->whereNull('coupons.usage_allowed_per_user')
-                ->orWhereNotExists(function ($subQuery) use ($couponCode, $user) {
-                    $subQuery->from('coupons')
-                        ->leftJoin('coupon_logs', 'coupon_logs.coupon_id', '=', 'coupons.id')
-                        ->where('coupon_logs.user_id', '=', $user->id)
-                        ->where('coupons.code', '=', $couponCode);
-                });
+            ->orWhereNotExists(function ($subQuery) use ($couponCode, $user) {
+                $subQuery->from('coupons')
+                    ->leftJoin('coupon_logs', 'coupon_logs.coupon_id', '=', 'coupons.id')
+                    ->where('coupon_logs.user_id', '=', $user->id)
+                    ->where('coupons.code', '=', $couponCode);
+            });
     }
 
     public function scopeStatus(Builder $query, string|int $status): Builder
@@ -191,7 +195,7 @@ class Coupon extends Model
     }
 
     /**
-     * @param  Builder <Coupon> $query
+     * @param  Builder <Coupon>  $query
      * @return Builder <Coupon>
      */
     public function scopeNotCreatedBy(Builder $query, string|int $id): Builder

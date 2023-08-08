@@ -10,6 +10,7 @@ class ShippingMethod extends Model
     use HasFactory;
 
     public const INSURED_SHIPPING = 'insured_shipping';
+
     public const VAULT_STORAGE = 'vault_storage';
 
     /**

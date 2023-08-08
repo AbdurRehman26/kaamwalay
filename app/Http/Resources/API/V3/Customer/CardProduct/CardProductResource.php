@@ -9,7 +9,7 @@ use App\Models\CardProduct;
 
 /**
  * @mixin CardProduct
-*/
+ */
 class CardProductResource extends BaseResource
 {
     public function toArray($request): array

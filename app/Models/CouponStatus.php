@@ -12,8 +12,11 @@ class CouponStatus extends Model
     use HasFactory;
 
     const STATUS_QUEUED = 1;
+
     const STATUS_ACTIVE = 2;
+
     const STATUS_INACTIVE = 3;
+
     const STATUS_EXPIRED = 4;
 
     protected $fillable = [

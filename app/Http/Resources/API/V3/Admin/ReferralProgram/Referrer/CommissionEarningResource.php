@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin Order
+ *
  * @property mixed $commission
  */
-
 class CommissionEarningResource extends BaseResource
 {
     /**
@@ -25,7 +25,7 @@ class CommissionEarningResource extends BaseResource
             'full_name' => $this->user->getFullName(),
             'profile_image' => $this->user->profile_image,
             'paid_at' => $this->formatDate($this->paid_at),
-            'cards' => (int)$this->orderItems()->sum('quantity'),
+            'cards' => (int) $this->orderItems()->sum('quantity'),
             'submission_total' => $this->grand_total,
             'commission' => $this->commission,
         ];

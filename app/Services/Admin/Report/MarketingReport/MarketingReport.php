@@ -182,7 +182,6 @@ abstract class MarketingReport implements Reportable
             ->get();
     }
 
-
     protected function getSignUpsRow(DateTime $fromDate, DateTime $toDate, DateTime $previousFromDate, DateTime $previousToDate): string
     {
         $previousValue = $this->getSignUpsAmount($previousFromDate, $previousToDate);
@@ -190,8 +189,9 @@ abstract class MarketingReport implements Reportable
 
         $diffPercentage = $this->calculatePercentageChange($previousValue, $currentValue);
 
-        return "$currentValue (". ($diffPercentage > 0 ? "+" : "") ."$diffPercentage%)";
+        return "$currentValue (".($diffPercentage > 0 ? '+' : '')."$diffPercentage%)";
     }
+
     protected function getSignUpsAmount(DateTime $fromDate, DateTime $toDate): int
     {
         return User::whereBetween('created_at', [$fromDate, $toDate])->count();

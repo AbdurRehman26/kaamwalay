@@ -192,6 +192,7 @@ abstract class MarketingReport implements Reportable
 
         return "$currentValue (". ($diffPercentage > 0 ? "+" : "") ."$diffPercentage%)";
     }
+
     protected function getSignUpsAmount(DateTime $fromDate, DateTime $toDate): int
     {
         return User::whereBetween('created_at', [$fromDate, $toDate])->count();

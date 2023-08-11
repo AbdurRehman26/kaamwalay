@@ -28,6 +28,8 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
 
     $fromDate = $reportable['fromDate'];
     $toDate = $reportable['toDate'];
+    $previousFromDate = $reportable['previousFromDate'];
+    $previousToDate = $reportable['previousToDate'];
 
     $differenceInDays = $fromDate->diff($toDate)->days;
     $categories = CardCategory::factory()->count(3)->create();
@@ -144,10 +146,11 @@ it('validates reports data for weekly, monthly and quarterly', function ($report
             ->count() / User::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
 
         '% of submissions that don`t make payment' => (float) number_format((Order::whereNull('paid_at')->whereBetween('created_at', [$fromDate, $toDate])->count() / Order::whereBetween('created_at', [$fromDate, $toDate])->count()) * 100, 2),
+        'Number of signups' => '4 (+100%)',
 
     ], $categoriesArray);
 
-    $reportData = $report->getDataForReport($fromDate, $toDate);
+    $reportData = $report->getDataForReport($fromDate, $toDate, $previousFromDate, $previousToDate);
 
     expect($reportData)->toBe($resultArray);
 })->with('reportable')->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');
@@ -165,6 +168,8 @@ dataset('reportable', function () {
             'report' => resolve(MarketingYearlyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfYear(),
+            'previousFromDate' => Carbon::create($this->date)->subYear()->firstOfYear()->startOfDay(),
+            'previousToDate' => Carbon::create($this->date)->subYear()->endOfYear()->endOfDay(),
         ];
     };
 
@@ -174,6 +179,8 @@ dataset('reportable', function () {
             'report' => resolve(MarketingWeeklyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfQuarter(),
+            'previousFromDate' => Carbon::create($this->date)->subWeeks(2)->startOfDay(),
+            'previousToDate' => Carbon::create($this->date)->subWeek()->subDay()->endOfDay(),
         ];
     };
 
@@ -183,6 +190,8 @@ dataset('reportable', function () {
             'report' => resolve(MarketingMonthlyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->endOfMonth(),
+            'previousFromDate' => Carbon::create($this->date)->subMonths(2)->startOfMonth(),
+            'previousToDate' => Carbon::create($this->date)->subMonths(2)->endOfMonth(),
         ];
     };
 
@@ -192,6 +201,8 @@ dataset('reportable', function () {
             'report' => resolve(MarketingQuarterlyReport::class),
             'fromDate' => $this->date,
             'toDate' => Carbon::create($this->date)->addWeek()->startOfDay(),
+            'previousFromDate' => Carbon::create($this->date)->subQuarters(2)->startOfQuarter(),
+            'previousToDate' => Carbon::create($this->date)->subQuarters(2)->endOfQuarter(),
         ];
     };
 });

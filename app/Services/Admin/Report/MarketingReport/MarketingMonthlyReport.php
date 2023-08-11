@@ -19,6 +19,6 @@ class MarketingMonthlyReport extends MarketingReport
 
     public function getReportData(): array
     {
-        return $this->getDataForReport(now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth());
+        return $this->getDataForReport(now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth(), now()->subMonths(2)->startOfMonth(), now()->subMonths(2)->endOfMonth());
     }
 }

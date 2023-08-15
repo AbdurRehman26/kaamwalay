@@ -69,18 +69,18 @@ trait CouponApplicables
 
         return ShippingFeeService::calculate(
             array_sum(array_column($this->getOrderItems($order), 'declared_value_per_unit')),
-            array_sum($this->getOrderItemsQuantity($order))
+            $this->getOrderItemsQuantity($order)
         );
     }
 
-    public function getOrderItemsQuantity(Order|array $order): array
+    public function getOrderItemsQuantity(Order|array $order): float|int
     {
-        return array_column($this->getOrderItems($order), 'quantity');
+        return array_sum(array_column($this->getOrderItems($order), 'quantity'));
     }
 
     protected function getFreeCardsDiscount(Coupon $coupon, Order|array $order): float
     {
-        $totalCards = array_sum($this->getOrderItemsQuantity($order));
+        $totalCards = $this->getOrderItemsQuantity($order);
 
         return ((int) $coupon->discount_value) < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) : ($totalCards * $this->getPaymentPlan($order)->price);
     }

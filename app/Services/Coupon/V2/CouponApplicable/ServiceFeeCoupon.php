@@ -18,7 +18,7 @@ class ServiceFeeCoupon implements CouponApplicableInterface
     public function getFlatDiscount(Coupon $coupon, Order|array $order): float
     {
         $insuredShipping = $this->getShippingFee($order);
-        $serviceFee = $this->getPaymentPlan($order)->price * array_sum($this->getOrderItemsQuantity($order));
+        $serviceFee = $this->getPaymentPlan($order)->price * $this->getOrderItemsQuantity($order);
 
         throw_if($coupon->discount_value > ($serviceFee + $insuredShipping), CouponFlatValueDiscountGreaterThanOrder::class);
 
@@ -27,7 +27,7 @@ class ServiceFeeCoupon implements CouponApplicableInterface
 
     public function getPercentageDiscount(Coupon $coupon, Order|array $order): float
     {
-        $serviceFee = $this->getPaymentPlan($order)->price * array_sum($this->getOrderItemsQuantity($order));
+        $serviceFee = $this->getPaymentPlan($order)->price * $this->getOrderItemsQuantity($order);
 
         return ($coupon->discount_value * $serviceFee) / 100;
     }

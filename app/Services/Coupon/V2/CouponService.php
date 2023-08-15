@@ -11,13 +11,14 @@ use App\Models\CouponStat;
 use App\Models\Order;
 use App\Services\Coupon\V2\CouponApplicable\ServiceFeeCoupon;
 use App\Services\Coupon\V2\CouponApplicable\ServiceLevelCoupon;
+use App\Services\Coupon\V2\CouponApplicable\UserReferralCoupon;
 
 class CouponService
 {
     protected array $couponApplicables = [
         'service_level' => ServiceLevelCoupon::class,
         'service_fee' => ServiceFeeCoupon::class,
-        'user' => ServiceFeeCoupon::class,
+        'user' => UserReferralCoupon::class,
     ];
 
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon

@@ -104,6 +104,7 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql -u root -proot -e 'CREATE DATABASE IF NOT EXISTS robograding;'
+          mysql --version
 
       - name: Restore vendor cache
         id: cache-vendor

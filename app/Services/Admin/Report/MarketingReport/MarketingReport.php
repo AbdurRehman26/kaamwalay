@@ -22,7 +22,7 @@ abstract class MarketingReport implements Reportable
         return 'marketing-report';
     }
 
-    public function getDataForReport(DateTime $fromDate, DateTime $toDate): array
+    public function getDataForReport(DateTime $fromDate, DateTime $toDate, DateTime $previousFromDate, DateTime $previousToDate): array
     {
         return array_merge([
             'Average order amount' => '$'.$this->getAvgOrderAmount($fromDate, $toDate),
@@ -38,6 +38,7 @@ abstract class MarketingReport implements Reportable
             'Average time from signup to submission' => $this->getAvgDaysFromSignupToSubmission($fromDate, $toDate).' Day(s)',
             '% of signups that make submission' => $this->getPercentageOfSignupThatMadeSubmission($fromDate, $toDate),
             '% of submissions that don`t make payment' => $this->getPercentageOfSubmissionThatDontMakePayment($fromDate, $toDate),
+            'Number of signups' => $this->getSignUpsRow($fromDate, $toDate, $previousFromDate, $previousToDate),
         ], $this->getCardsBreakdownByCategoryFormatted($fromDate, $toDate));
     }
 
@@ -179,5 +180,34 @@ abstract class MarketingReport implements Reportable
             ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
             ->orderBy('quantity', 'desc')
             ->get();
+    }
+
+    protected function getSignUpsRow(DateTime $fromDate, DateTime $toDate, DateTime $previousFromDate, DateTime $previousToDate): string
+    {
+        $previousValue = $this->getSignUpsAmount($previousFromDate, $previousToDate);
+        $currentValue = $this->getSignUpsAmount($fromDate, $toDate);
+
+        $diffPercentage = $this->calculatePercentageChange($previousValue, $currentValue);
+
+        return "$currentValue (".($diffPercentage > 0 ? '+' : '')."$diffPercentage%)";
+    }
+
+    protected function getSignUpsAmount(DateTime $fromDate, DateTime $toDate): int
+    {
+        return User::whereBetween('created_at', [$fromDate, $toDate])->count();
+    }
+
+    protected function calculatePercentageChange(float $previousValue, float $currentValue): float
+    {
+        $difference = $currentValue - $previousValue;
+
+        // Increase percentage can only be calculated if there is a previous value greater than 0 to avoid a division by 0
+        // because of this, if previous value was 0, and current value is greater than 0,
+        // we could considerate increase as 100%. If both are 0, then return 0
+        if ($previousValue == 0) {
+            return $currentValue == 0 ? 0 : 100;
+        }
+
+        return round(($difference / $previousValue) * 100, 2);
     }
 }

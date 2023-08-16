@@ -23,7 +23,7 @@ class UpdateRevenueStats extends Command
      *
      * @var string
      */
-    protected $description = 'Update Revenue and Profit Stats Daily at 12:20 am';
+    protected $description = 'Update Revenue and Profit Stats Daily at 12:05 am';
 
     /**
      * Execute the console command.
@@ -31,7 +31,7 @@ class UpdateRevenueStats extends Command
     public function handle(RevenueStatsService $revenueStatsService): int
     {
         $currentDate = (
-            Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
+            Carbon::parse($this->argument('date')) ?? Carbon::now('America/New_York')->subDays(1)
         )->format('Y-m-d');
 
         $this->log('Revenue Stats Daily for Date : '.$currentDate.' Starting');

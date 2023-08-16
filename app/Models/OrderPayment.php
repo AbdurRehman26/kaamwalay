@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class OrderPayment extends Model
 {
@@ -83,6 +84,27 @@ class OrderPayment extends Model
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('order_payments.created_at', [$monthStart, $monthEnd]);
+    }
+
+    /**
+     * @param  Builder <OrderPayment>  $query
+     * @return Builder <OrderPayment>
+     */
+    public function scopeForAmericanTimezoneDate(Builder $query, string $date): Builder
+    {
+        return $query->whereDate(DB::raw("CONVERT_TZ(order_payments.created_at, 'UTC', 'America/New_York')"), $date);
+    }
+
+    /**
+     * @param  Builder <OrderPayment>  $query
+     * @return Builder <OrderPayment>
+     */
+    public function scopeForAmericanTimezoneMonth(Builder $query, string $date): Builder
+    {
+        $monthStart = Carbon::parse($date)->firstOfMonth();
+        $monthEnd = Carbon::parse($date)->endOfMonth();
+
+        return $query->whereBetween(DB::raw("CONVERT_TZ(order_payments.created_at, 'UTC', 'America/New_York')"), [$monthStart, $monthEnd]);
     }
 
     public function scopeForValidPaidOrders(Builder $query): Builder

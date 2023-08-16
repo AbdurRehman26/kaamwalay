@@ -16,13 +16,13 @@ class RevenueStatsService
     public function addDailyStats(string $currentDate): RevenueStatsDaily
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forDate($currentDate)
+            ->forAmericanTimezoneDate($currentDate)
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
@@ -37,12 +37,12 @@ class RevenueStatsService
 
     public function calculateDailyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
+        return $this->calculateCardsTotal(now('America/New_York')->subDays(1)->startOfDay(), now('America/New_York')->subDays(1)->endOfDay());
     }
 
     public function calculateMonthlyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
+        return $this->calculateCardsTotal(now('America/New_York')->subDays(1)->startOfMonth(), now('America/New_York')->subDays(1)->endOfMonth());
     }
 
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
@@ -50,19 +50,20 @@ class RevenueStatsService
         return Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
             'users.email',
             Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
-        )->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
+        )->join('order_items', 'order_items.order_id', '=', 'orders.id')
+        ->whereBetween("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')", [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forMonth($currentDate)
+            ->forAmericanTimezoneMonth($currentDate)
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = '.OrderPayment::TYPE_REFUND.' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
@@ -93,8 +94,8 @@ class RevenueStatsService
             round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)
         ) {
             Log::info('Discrepancy found in the revenue stats');
-            Log::info('Revenue stats in database ->  Profit: '.$revenue['profit'].',  Revenue: '.$revenue['revenue']);
-            Log::info('Revenue stats in calculated from Orders ->  Profit: '.$revenueData['profit'].',  Revenue: '.$revenueData['revenue']);
+            Log::info('Revenue stats in database ->  Profit: ' . $revenue['profit'] . ',  Revenue: ' . $revenue['revenue']);
+            Log::info('Revenue stats in calculated from Orders ->  Profit: ' . $revenueData['profit'] . ',  Revenue: ' . $revenueData['revenue']);
             Log::info('Updating Revenue Stats');
 
             $revenue->profit = $revenueData['profit'];

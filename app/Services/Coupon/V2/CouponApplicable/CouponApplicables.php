@@ -30,11 +30,11 @@ trait CouponApplicables
         if (! empty($order['payment_plan']['id'])) {
             $paymentPlan = PaymentPlan::find($order['payment_plan']['id']);
             // @phpstan-ignore-next-line
-            $totalItems = collect($order['items'])->sum('quantity');
         } else {
             $paymentPlan = PaymentPlan::find($order->payment_plan_id);
-            $totalItems = $order->orderItems()->sum('quantity');
         }
+        $totalItems = $this->getOrderItemsQuantity($order);
+
         $priceRanges = $paymentPlan->paymentPlanRanges;
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {

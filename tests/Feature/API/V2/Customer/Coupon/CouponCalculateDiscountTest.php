@@ -29,11 +29,31 @@ beforeEach(function () {
             ]
         );
 
+    $couponApplicableUser = CouponApplicable::factory()
+        ->create(
+            [
+                'code' => 'user',
+                'label' => 'User',
+                'is_active' => 1,
+            ]
+        );
+
+    $this->referralCoupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
+                'type' => 'percentage',
+                'code' => 'REFERRAL_COUPON',
+                'discount_value' => 35,
+                'coupon_applicable_id' => $couponApplicableUser->id,
+            ]
+        );
+
     $this->coupon = Coupon::factory()
         ->create(
             [
                 'coupon_applicable_id' => $couponApplicable->id,
-                'coupon_status_id' => 2,
+                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
             ]
         );
 
@@ -41,7 +61,7 @@ beforeEach(function () {
         ->create(
             [
                 'coupon_applicable_id' => $couponApplicable->id,
-                'coupon_status_id' => 2,
+                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
                 'type' => 'free_cards',
                 'code' => 'FREE_CARDS',
                 'discount_value' => 2,
@@ -64,6 +84,19 @@ beforeEach(function () {
                 'couponables_type' => Couponable::COUPONABLE_TYPES['service_level'],
                 'couponables_id' => $this->paymentPlan->id,
 
+            ]
+        );
+
+    $this->referee = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
+
+    $this->referralCouponable = Couponable::factory()
+        ->create(
+            [
+                'coupon_id' => $this->referralCoupon->id,
+                'couponables_type' => Couponable::COUPONABLE_TYPES['user'],
+                'couponables_id' => $this->referee->id,
             ]
         );
 
@@ -238,5 +271,59 @@ it('calculates coupon discount for free cards', function () {
             ],
         ])->assertJsonFragment([
             'discounted_amount' => 40,
+        ]);
+});
+
+it('calculates discount for user referral coupon', function () {
+    actingAs($this->referee);
+    $paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges(20)->create([
+        'price' => 20,
+        'max_protection_amount' => 300,
+    ]);
+
+    // 20 is the limit for the cards
+    $serviceFee = 20 * 20;
+
+    $discountedAmount = ($this->referralCoupon->discount_value * $serviceFee) / 100;
+
+
+    postJson(
+        route('v2.coupon.discount'),
+        [
+            'coupon' => [
+                'id' => $this->referralCoupon->id,
+                'code' => $this->referralCoupon->code,
+            ],
+            'couponables_type' => $this->referralCouponable->code,
+
+            'payment_plan' => [
+                'id' => $paymentPlan->id,
+            ],
+            'items' => [
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 100,
+                    'declared_value_per_unit' => 20,
+                ],
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 100,
+                    'declared_value_per_unit' => 20,
+                ],
+            ],
+        ]
+    )
+        ->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ])->assertJsonFragment([
+            'discounted_amount' => $discountedAmount,
         ]);
 });

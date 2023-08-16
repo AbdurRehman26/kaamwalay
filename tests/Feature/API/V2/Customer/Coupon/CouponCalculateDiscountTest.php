@@ -286,7 +286,6 @@ it('calculates discount for user referral coupon', function () {
 
     $discountedAmount = ($this->referralCoupon->discount_value * $serviceFee) / 100;
 
-
     postJson(
         route('v2.coupon.discount'),
         [

@@ -16,7 +16,7 @@ class RevenueStatsService
     public function addDailyStats(string $currentDate): RevenueStatsDaily
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forAmericanTimezoneDate($currentDate)
+            ->forDate($currentDate)
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([

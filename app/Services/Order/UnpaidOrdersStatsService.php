@@ -58,7 +58,7 @@ class UnpaidOrdersStatsService
      */
     protected function dailyUnpaidOrders(string $currentDate): Builder
     {
-        return $this->orders()->forAmericanTimezoneDate($currentDate);
+        return $this->orders()->forDate($currentDate);
     }
 
     /**
@@ -66,7 +66,7 @@ class UnpaidOrdersStatsService
      */
     protected function monthlyUnpaidOrders(string $currentDate): Builder
     {
-        return $this->orders()->forAmericanTimezoneMonth($currentDate);
+        return $this->orders()->forMonth($currentDate);
     }
 
     /**

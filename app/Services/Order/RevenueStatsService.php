@@ -50,17 +50,13 @@ class RevenueStatsService
         return Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
             'users.email',
             Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
-        )->join('order_items', 'order_items.order_id', '=', 'orders.id')
-            ->whereBetween(
-                DB::raw("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')"),
-                [$startTime, $endTime]
-            )->sum('order_items.quantity');
+        )->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forAmericanTimezoneMonth($currentDate)
+            ->forMonth($currentDate)
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([

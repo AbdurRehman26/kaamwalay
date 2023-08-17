@@ -36,9 +36,7 @@ class UnpaidOrdersStatsService
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
     {
         return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
-            ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-            ->whereBetween(DB::raw("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')"), [$startTime, $endTime])
-            ->where(function (Builder $query) {
+            ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->where(function (Builder $query) {
                 $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
             })->sum('order_items.quantity');
     }

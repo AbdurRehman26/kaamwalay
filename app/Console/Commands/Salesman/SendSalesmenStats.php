@@ -53,7 +53,7 @@ class SendSalesmenStats extends Command
             ->join('users', 'users.id', 'orders.salesman_id')
             ->whereNotNull('orders.salesman_id')
             ->select(DB::raw('CONCAT(users.first_name, " ", users.last_name) as full_name'), DB::raw('COUNT(*) as number_of_orders'), DB::raw('SUM(orders.grand_total) as total'))
-            ->whereBetween(DB::raw("CONVERT_TZ(orders.paid_at, 'UTC', 'America/New_York')"), [$startDate, $endDate])
+            ->whereBetween('orders.paid_at', [$startDate, $endDate])
             ->groupBy('orders.salesman_id')
             ->orderByDesc('total')
             ->get();

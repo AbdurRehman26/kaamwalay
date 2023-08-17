@@ -59,7 +59,7 @@ class SendTopReferrersStats extends Command
         return ReferrerEarnedCommission::join('orders', 'orders.id', '=', 'referrer_earned_commissions.order_id')
             ->join('referrers', 'referrers.id', '=', 'referrer_earned_commissions.referrer_id')
             ->join('users', 'users.id', '=', 'referrers.user_id')
-            ->whereBetween(DB::raw("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')"), [$startDate, $endDate])
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->groupBy('referrer_earned_commissions.referrer_id')
             ->select(DB::raw('CONCAT(users.first_name, " ", users.last_name) as full_name'), DB::raw('sum(orders.grand_total) as total'))
             ->orderByDesc('total')

@@ -24,7 +24,7 @@ class SendSalesmenStats extends Command
      *
      * @var string
      */
-    protected $description = 'Send salesmen stats daily at 12:20 am';
+    protected $description = 'Send salesmen stats daily at 12:05 am';
 
     /**
      * Execute the console command.

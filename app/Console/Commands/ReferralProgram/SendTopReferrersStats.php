@@ -24,7 +24,7 @@ class SendTopReferrersStats extends Command
      *
      * @var string
      */
-    protected $description = 'Send top referrers stats daily at 12:20 am';
+    protected $description = 'Send top referrers stats daily at 12:05 am';
 
     /**
      * Execute the console command.

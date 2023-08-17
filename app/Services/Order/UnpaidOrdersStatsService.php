@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class UnpaidOrdersStatsService
 {

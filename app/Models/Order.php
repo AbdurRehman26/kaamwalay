@@ -693,7 +693,7 @@ class Order extends Model implements Exportable, Taggable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
-     /**
+    /**
      * @param  Builder <Order>  $query
      * @return Builder <Order>
      */

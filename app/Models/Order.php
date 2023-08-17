@@ -693,6 +693,27 @@ class Order extends Model implements Exportable, Taggable
         return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 
+     /**
+     * @param  Builder <Order>  $query
+     * @return Builder <Order>
+     */
+    public function scopeForAmericanTimezoneDate(Builder $query, string $date): Builder
+    {
+        return $query->whereDate(DB::raw("CONVERT_TZ(created_at, 'UTC', 'America/New_York')"), $date);
+    }
+
+    /**
+     * @param  Builder <Order>  $query
+     * @return Builder <Order>
+     */
+    public function scopeForAmericanTimezoneMonth(Builder $query, string $date): Builder
+    {
+        $monthStart = Carbon::parse($date)->firstOfMonth();
+        $monthEnd = Carbon::parse($date)->endOfMonth();
+
+        return $query->whereBetween(DB::raw("CONVERT_TZ(created_at, 'UTC', 'America/New_York')"), [$monthStart, $monthEnd]);
+    }
+
     /**
      * @param  Builder <Order>  $query
      * @return Builder <Order>

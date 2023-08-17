@@ -51,7 +51,10 @@ class RevenueStatsService
             'users.email',
             Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
         )->join('order_items', 'order_items.order_id', '=', 'orders.id')
-        ->whereBetween("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')", [$startTime, $endTime])->sum('order_items.quantity');
+            ->whereBetween(
+                DB::raw("CONVERT_TZ(orders.created_at, 'UTC', 'America/New_York')"),
+                [$startTime, $endTime]
+            )->sum('order_items.quantity');
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly

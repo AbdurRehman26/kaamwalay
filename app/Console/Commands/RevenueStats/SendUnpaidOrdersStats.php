@@ -23,7 +23,7 @@ class SendUnpaidOrdersStats extends Command
      *
      * @var string
      */
-    protected $description = 'Send unpaid orders stats daily at 12:20 am';
+    protected $description = 'Send unpaid orders stats daily at 12:05 am';
 
     /**
      * Execute the console command.

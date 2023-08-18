@@ -63,7 +63,7 @@ class RefereeCouponService
                     'name' => $code,
                     'created_by' => $user->id,
                     'is_system_generated' => 1,
-                    'max_cards_discount_allowed' => 20
+                    'max_cards_discount_allowed' => 20,
                 ],
                 $this->generateCouponData()
             )

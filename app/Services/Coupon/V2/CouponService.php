@@ -11,7 +11,6 @@ use App\Models\CouponStat;
 use App\Models\Order;
 use App\Services\Coupon\V2\CouponApplicable\ServiceFeeCoupon;
 use App\Services\Coupon\V2\CouponApplicable\ServiceLevelCoupon;
-use App\Services\Coupon\V2\CouponApplicable\UserReferralCoupon;
 
 class CouponService
 {

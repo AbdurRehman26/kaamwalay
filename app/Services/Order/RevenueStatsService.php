@@ -37,12 +37,12 @@ class RevenueStatsService
 
     public function calculateDailyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(now('America/New_York')->subDays(1)->startOfDay(), now('America/New_York')->subDays(1)->endOfDay());
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
     }
 
     public function calculateMonthlyCardsTotal(): int
     {
-        return $this->calculateCardsTotal(now('America/New_York')->subDays(1)->startOfMonth(), now('America/New_York')->subDays(1)->endOfMonth());
+        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
     }
 
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int

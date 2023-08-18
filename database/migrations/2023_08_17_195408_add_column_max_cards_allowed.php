@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->unsignedInteger('max_discount_applicable_items')->nullable();
+            $table->unsignedInteger('max_discount_applicable_items')->after('min_threshold_value')->nullable();
         });
     }
 

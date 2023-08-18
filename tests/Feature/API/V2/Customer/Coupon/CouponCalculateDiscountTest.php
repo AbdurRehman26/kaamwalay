@@ -46,6 +46,7 @@ beforeEach(function () {
                 'code' => 'REFERRAL_COUPON',
                 'discount_value' => 35,
                 'coupon_applicable_id' => $couponApplicableUser->id,
+                'max_cards_discount_allowed' => 20,
             ]
         );
 
@@ -282,8 +283,8 @@ it('calculates discount for user referral coupon', function () {
     ]);
 
     // 20 is the limit for the cards
-    $serviceFee = 20 * 20;
-
+    // 19 price for cards in 21-50 range
+    $serviceFee = 20 * 19;
     $discountedAmount = ($this->referralCoupon->discount_value * $serviceFee) / 100;
 
     postJson(
@@ -303,14 +304,14 @@ it('calculates discount for user referral coupon', function () {
                     'card_product' => [
                         'id' => $this->cardProduct->id,
                     ],
-                    'quantity' => 100,
+                    'quantity' => 20,
                     'declared_value_per_unit' => 20,
                 ],
                 [
                     'card_product' => [
                         'id' => $this->cardProduct->id,
                     ],
-                    'quantity' => 100,
+                    'quantity' => 20,
                     'declared_value_per_unit' => 20,
                 ],
             ],

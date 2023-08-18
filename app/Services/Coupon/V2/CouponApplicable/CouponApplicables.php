@@ -33,8 +33,7 @@ trait CouponApplicables
         } else {
             $paymentPlan = PaymentPlan::find($order->payment_plan_id);
         }
-        $totalItems = $this->getOrderItems($order);
-
+        $totalItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
         $priceRanges = $paymentPlan->paymentPlanRanges;
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {

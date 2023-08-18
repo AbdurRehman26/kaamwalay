@@ -72,14 +72,15 @@ trait CouponApplicables
         );
     }
 
-    public function getMaxOrderItemsQuantity(Order|array $order, Coupon $coupon): float|int
+    public function getOrderItemsQuantityApplicableForDiscount(Order|array $order, Coupon $coupon): int
     {
-        return $coupon->max_cards_discount_allowed ?? array_sum(array_column($this->getOrderItems($order), 'quantity'));
+        $totalOrderItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
+        return $coupon->max_discount_applicable_items ? min($coupon->max_discount_applicable_items, $totalOrderItems) : $totalOrderItems;
     }
 
     protected function getFreeCardsDiscount(Coupon $coupon, Order|array $order): float
     {
-        $totalCards = $this->getMaxOrderItemsQuantity($order, $coupon);
+        $totalCards = $this->getOrderItemsQuantityApplicableForDiscount($order, $coupon);
 
         return ((int) $coupon->discount_value) < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) : ($totalCards * $this->getPaymentPlan($order)->price);
     }

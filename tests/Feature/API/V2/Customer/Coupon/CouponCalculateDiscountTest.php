@@ -46,7 +46,7 @@ beforeEach(function () {
                 'code' => 'REFERRAL_COUPON',
                 'discount_value' => 35,
                 'coupon_applicable_id' => $couponApplicableUser->id,
-                'max_cards_discount_allowed' => 20,
+                'max_discount_applicable_items' => 20,
             ]
         );
 

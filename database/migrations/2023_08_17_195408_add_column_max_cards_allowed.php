@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->unsignedInteger('max_cards_discount_allowed')->nullable();
+            $table->unsignedInteger('max_discount_applicable_items')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->dropColumn('max_cards_discount_allowed');
+            $table->dropColumn('max_discount_applicable_items');
         });
     }
 };

@@ -30,7 +30,7 @@ class UpdateRevenueStats extends Command
      */
     public function handle(RevenueStatsService $revenueStatsService): int
     {
-        $currentDate = Carbon::parse($this->argument('date'))->format('Y-m-d');
+        $currentDate = (Carbon::parse($this->argument('date')))->format('Y-m-d');
 
         $this->log('Revenue Stats Daily for Date : '.$currentDate.' Starting');
 

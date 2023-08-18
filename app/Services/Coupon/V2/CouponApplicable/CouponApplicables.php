@@ -33,7 +33,7 @@ trait CouponApplicables
         } else {
             $paymentPlan = PaymentPlan::find($order->payment_plan_id);
         }
-        $totalItems = $this->getOrderItemsQuantity($order);
+        $totalItems = $this->getOrderItems($order);
 
         $priceRanges = $paymentPlan->paymentPlanRanges;
 

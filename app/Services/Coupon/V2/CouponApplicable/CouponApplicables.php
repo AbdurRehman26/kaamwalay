@@ -75,6 +75,7 @@ trait CouponApplicables
     public function getOrderItemsQuantityApplicableForDiscount(Order|array $order, Coupon $coupon): int
     {
         $totalOrderItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
+
         return $coupon->max_discount_applicable_items ? min($coupon->max_discount_applicable_items, $totalOrderItems) : $totalOrderItems;
     }
 

@@ -275,16 +275,11 @@ it('calculates coupon discount for free cards', function () {
         ]);
 });
 
-it('calculates discount for user referral coupon', function () {
-    actingAs($this->referee);
-    $paymentPlan = PaymentPlan::factory()->withPaymentPlanRanges(20)->create([
-        'price' => 20,
-        'max_protection_amount' => 300,
-    ]);
+it('calculates discount for user referral coupon for different card quantities', function (mixed $paymentPlanRange) {
 
-    // 20 is the limit for the cards
-    // 19 price for cards in 21-50 range
-    $serviceFee = 20 * 19;
+    actingAs($this->referee);
+
+    $serviceFee = min($paymentPlanRange->min_cards, 20) * $paymentPlanRange->price;
     $discountedAmount = ($this->referralCoupon->discount_value * $serviceFee) / 100;
 
     postJson(
@@ -297,21 +292,14 @@ it('calculates discount for user referral coupon', function () {
             'couponables_type' => $this->referralCouponable->code,
 
             'payment_plan' => [
-                'id' => $paymentPlan->id,
+                'id' => $paymentPlanRange->paymentPlan->id,
             ],
             'items' => [
                 [
                     'card_product' => [
                         'id' => $this->cardProduct->id,
                     ],
-                    'quantity' => 20,
-                    'declared_value_per_unit' => 20,
-                ],
-                [
-                    'card_product' => [
-                        'id' => $this->cardProduct->id,
-                    ],
-                    'quantity' => 20,
+                    'quantity' => $paymentPlanRange->min_cards,
                     'declared_value_per_unit' => 20,
                 ],
             ],
@@ -326,4 +314,9 @@ it('calculates discount for user referral coupon', function () {
         ])->assertJsonFragment([
             'discounted_amount' => $discountedAmount,
         ]);
-});
+})->with([
+    fn() => $this->paymentPlan->paymentPlanRanges[0],
+    fn() => $this->paymentPlan->paymentPlanRanges[1],
+    fn() => $this->paymentPlan->paymentPlanRanges[2],
+    fn() => $this->paymentPlan->paymentPlanRanges[3],
+]);

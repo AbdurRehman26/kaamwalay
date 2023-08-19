@@ -315,8 +315,8 @@ it('calculates discount for user referral coupon for different card quantities',
             'discounted_amount' => $discountedAmount,
         ]);
 })->with([
-    fn() => $this->paymentPlan->paymentPlanRanges[0],
-    fn() => $this->paymentPlan->paymentPlanRanges[1],
-    fn() => $this->paymentPlan->paymentPlanRanges[2],
-    fn() => $this->paymentPlan->paymentPlanRanges[3],
+    fn () => $this->paymentPlan->paymentPlanRanges[0],
+    fn () => $this->paymentPlan->paymentPlanRanges[1],
+    fn () => $this->paymentPlan->paymentPlanRanges[2],
+    fn () => $this->paymentPlan->paymentPlanRanges[3],
 ]);

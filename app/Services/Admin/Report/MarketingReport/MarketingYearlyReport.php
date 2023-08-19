@@ -19,6 +19,6 @@ class MarketingYearlyReport extends MarketingReport
 
     public function getReportData(): array
     {
-        return $this->getDataForReport(now()->subYear()->firstOfYear()->startOfDay(), now()->subYear()->lastOfYear()->endOfDay());
+        return $this->getDataForReport(now()->subYear()->firstOfYear()->startOfDay(), now()->subYear()->lastOfYear()->endOfDay(), now()->subYears(2)->firstOfYear()->startOfDay(), now()->subYears(2)->lastOfYear()->endOfDay());
     }
 }

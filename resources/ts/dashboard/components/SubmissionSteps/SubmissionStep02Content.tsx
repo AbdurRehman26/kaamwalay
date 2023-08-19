@@ -1,3 +1,4 @@
+import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -10,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -67,16 +67,19 @@ function SubmissionStep02Content() {
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const {
         appEnv,
-        algoliaAppId,
-        algoliaPublicKey,
+        meilisearchPublicHost,
+        meilisearchPublicKey,
         searchCardCategoriesCustomer,
         featureOrderCleaningFeePerCard,
         featureOrderCleaningFeeMaxCap,
     } = useConfiguration();
 
     const searchClient = useMemo(
-        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
-        [algoliaAppId, algoliaPublicKey],
+        () =>
+            instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!, {
+                finitePagination: true,
+            }),
+        [meilisearchPublicHost, meilisearchPublicKey],
     );
 
     function setShippingFee() {

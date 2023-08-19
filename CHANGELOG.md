@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.18.0 - 2023-08-19
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1089
+- Feature: Marketing Report | Number of signups and increase/decrease % by @luis-molina in https://github.com/woozard/robograding/pull/1091
+- Feature: MeiliSearch Integration by @thenabeel in https://github.com/woozard/robograding/pull/1080
+- Release v3.18.0 by @thenabeel in https://github.com/woozard/robograding/pull/1094
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.17.0...v2.18.0
+
 ## v3.17.0 - 2023-08-08
 
 ### What's Changed

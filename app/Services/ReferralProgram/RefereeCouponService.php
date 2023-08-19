@@ -18,7 +18,7 @@ use Throwable;
 
 class RefereeCouponService
 {
-    private const MAX_DISCOUNT_APPLICABLE_ITEMS = 20;
+    protected const MAX_DISCOUNT_APPLICABLE_ITEMS = 20;
 
     public function __construct(
         protected CouponCodeService $couponCodeService,

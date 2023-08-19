@@ -12,7 +12,7 @@ return new class extends Migration
     {
         DB::table('coupons')->where([
             'is_system_generated' => 1,
-            'coupon_applicable_id' => CouponApplicable::FOR_USERS
+            'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ])->update(['max_discount_applicable_items' => 20, 'updated_at' => now()]);
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     {
         DB::table('coupons')->where([
             'is_system_generated' => 1,
-            'coupon_applicable_id' => CouponApplicable::FOR_USERS
+            'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ])->update(['max_discount_applicable_items' => null, 'updated_at' => now()]);
     }
 };

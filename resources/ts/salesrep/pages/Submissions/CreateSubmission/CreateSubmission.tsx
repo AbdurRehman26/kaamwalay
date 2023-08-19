@@ -1,3 +1,4 @@
+import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -18,7 +19,6 @@ import { ApplyPromoCode } from '@salesrep/components/NewSubmission/ApplyPromoCod
 import { CardsSearchResults } from '@salesrep/components/NewSubmission/CardsSearchResults';
 import { ShippingMethods } from '@salesrep/components/NewSubmission/ShippingMethods';
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
-import algoliaSearch from 'algoliasearch';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
@@ -156,21 +156,19 @@ export function CreateSubmission() {
     };
 
     function getMaxProtectionAmount(maxProtectionAmount: any) {
-        const formattedMaxProtectionAmount =
-            maxProtectionAmount >= 1000000
-                ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(
-                      maxProtectionAmount,
-                  )
-                : maxProtectionAmount;
-
-        return formattedMaxProtectionAmount;
+        return maxProtectionAmount >= 1000000
+            ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(maxProtectionAmount)
+            : maxProtectionAmount;
     }
 
-    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer } = useConfiguration();
+    const { appEnv, meilisearchPublicHost, meilisearchPublicKey, searchCardCategoriesCustomer } = useConfiguration();
 
     const searchClient = useMemo(
-        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
-        [algoliaAppId, algoliaPublicKey],
+        () =>
+            instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!, {
+                finitePagination: true,
+            }),
+        [meilisearchPublicHost, meilisearchPublicKey],
     );
 
     const dispatchRequiresCleaning = setRequiresCleaning(!requiresCleaning);

@@ -29,27 +29,6 @@ beforeEach(function () {
             ]
         );
 
-    $couponApplicableUser = CouponApplicable::factory()
-        ->create(
-            [
-                'code' => 'user',
-                'label' => 'User',
-                'is_active' => 1,
-            ]
-        );
-
-    $this->referralCoupon = Coupon::factory()
-        ->create(
-            [
-                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
-                'type' => 'percentage',
-                'code' => 'REFERRAL_COUPON',
-                'discount_value' => 35,
-                'coupon_applicable_id' => $couponApplicableUser->id,
-                'max_discount_applicable_items' => 20,
-            ]
-        );
-
     $this->coupon = Coupon::factory()
         ->create(
             [
@@ -85,19 +64,6 @@ beforeEach(function () {
                 'couponables_type' => Couponable::COUPONABLE_TYPES['service_level'],
                 'couponables_id' => $this->paymentPlan->id,
 
-            ]
-        );
-
-    $this->referee = User::factory()
-        ->withRole(config('permission.roles.customer'))
-        ->create();
-
-    $this->referralCouponable = Couponable::factory()
-        ->create(
-            [
-                'coupon_id' => $this->referralCoupon->id,
-                'couponables_type' => Couponable::COUPONABLE_TYPES['user'],
-                'couponables_id' => $this->referee->id,
             ]
         );
 
@@ -275,36 +241,52 @@ it('calculates coupon discount for free cards', function () {
         ]);
 });
 
-it('calculates discount for user referral coupon for different card quantities', function (mixed $paymentPlanRange) {
+it('calculates discount for coupons with max discount applicable items', function (\App\Models\PaymentPlanRange $paymentPlanRange, int $maxDiscountApplicableItems) {
+    $couponApplicableUser = CouponApplicable::factory()->create([
+        'code' => 'user',
+        'label' => 'User',
+        'is_active' => 1,
+    ]);
 
-    actingAs($this->referee);
+    $coupon = Coupon::factory()->create([
+        'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
+        'type' => 'percentage',
+        'code' => 'REFERRAL_COUPON',
+        'discount_value' => 35,
+        'coupon_applicable_id' => $couponApplicableUser->id,
+        'max_discount_applicable_items' => $maxDiscountApplicableItems,
+    ]);
 
-    $serviceFee = min($paymentPlanRange->min_cards, 20) * $paymentPlanRange->price;
-    $discountedAmount = ($this->referralCoupon->discount_value * $serviceFee) / 100;
+    $couponable = Couponable::factory()->create([
+        'coupon_id' => $coupon->id,
+        'couponables_type' => Couponable::COUPONABLE_TYPES['user'],
+        'couponables_id' => $this->user->id,
+    ]);
 
-    postJson(
-        route('v2.coupon.discount'),
-        [
-            'coupon' => [
-                'id' => $this->referralCoupon->id,
-                'code' => $this->referralCoupon->code,
-            ],
-            'couponables_type' => $this->referralCouponable->code,
+    actingAs($this->user);
 
-            'payment_plan' => [
-                'id' => $paymentPlanRange->paymentPlan->id,
-            ],
-            'items' => [
-                [
-                    'card_product' => [
-                        'id' => $this->cardProduct->id,
-                    ],
-                    'quantity' => $paymentPlanRange->min_cards,
-                    'declared_value_per_unit' => 20,
+    $serviceFee = min($paymentPlanRange->min_cards, $maxDiscountApplicableItems) * $paymentPlanRange->price;
+    $discountedAmount = ($coupon->discount_value * $serviceFee) / 100;
+
+    postJson(route('v2.coupon.discount'), [
+        'coupon' => [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+        ],
+        'couponables_type' => $couponable->code,
+        'payment_plan' => [
+            'id' => $paymentPlanRange->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
                 ],
+                'quantity' => $paymentPlanRange->min_cards,
+                'declared_value_per_unit' => 20,
             ],
-        ]
-    )
+        ],
+    ])
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -315,8 +297,8 @@ it('calculates discount for user referral coupon for different card quantities',
             'discounted_amount' => $discountedAmount,
         ]);
 })->with([
-    fn () => $this->paymentPlan->paymentPlanRanges[0],
-    fn () => $this->paymentPlan->paymentPlanRanges[1],
-    fn () => $this->paymentPlan->paymentPlanRanges[2],
-    fn () => $this->paymentPlan->paymentPlanRanges[3],
+    [fn () => $this->paymentPlan->paymentPlanRanges[0], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[1], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[2], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[3], 20],
 ]);

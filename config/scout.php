@@ -132,7 +132,31 @@ return [
 
     'meilisearch' => [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => env('MEILISEARCH_KEY', null),
+        'key' => env('MEILISEARCH_KEY'),
+        'index-settings' => [
+            'card_products' => [
+                'searchableAttributes' => ['name', 'short_name', 'long_name'],
+                'filterableAttributes' => ['card_category_name'],
+                'rankingRules' => [
+                    'words',
+                    'typo',
+                    'proximity',
+                    'attribute',
+                    'sort',
+                    'exactness',
+                    'card_number_order:asc',
+                    'name:asc',
+                ],
+            ],
+            'user_cards' => [
+                'searchableAttributes' => ['card_name', 'searchable_name', 'owner_name', 'certificate_number'],
+                'filterableAttributes' => ['card_category', 'grade', 'grade_overall'],
+                'sortableAttributes' => ['shipped_at_timestamp'],
+                'typoTolerance' => [
+                    'disableOnAttributes' => ['certificate_number'],
+                ],
+            ],
+        ],
     ],
 
 ];

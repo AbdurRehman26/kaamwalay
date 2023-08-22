@@ -53,6 +53,7 @@ class Coupon extends Model
         'deleted_at',
         'min_threshold_type',
         'min_threshold_value',
+        'max_discount_applicable_items',
     ];
 
     protected $casts = [

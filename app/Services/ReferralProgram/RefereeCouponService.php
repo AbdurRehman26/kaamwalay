@@ -18,6 +18,8 @@ use Throwable;
 
 class RefereeCouponService
 {
+    protected const MAX_DISCOUNT_APPLICABLE_ITEMS = 20;
+
     public function __construct(
         protected CouponCodeService $couponCodeService,
         protected CouponStatusService $couponStatusService
@@ -63,6 +65,7 @@ class RefereeCouponService
                     'name' => $code,
                     'created_by' => $user->id,
                     'is_system_generated' => 1,
+                    'max_discount_applicable_items' => self::MAX_DISCOUNT_APPLICABLE_ITEMS,
                 ],
                 $this->generateCouponData()
             )

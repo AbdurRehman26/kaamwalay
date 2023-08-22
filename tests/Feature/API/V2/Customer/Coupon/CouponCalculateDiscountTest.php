@@ -241,7 +241,7 @@ it('calculates coupon discount for free cards', function () {
         ]);
 });
 
-it('calculates discount for coupons with max discount applicable items', function (\App\Models\PaymentPlanRange $paymentPlanRange, int $maxDiscountApplicableItems) {
+it('calculates discount for coupons with max discount applicable items', function (App\Models\PaymentPlanRange $paymentPlanRange, int $maxDiscountApplicableItems) {
     $couponApplicableUser = CouponApplicable::factory()->create([
         'code' => 'user',
         'label' => 'User',

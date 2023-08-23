@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\SalesmanCommission\SalesmanCommissionService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+
 use function PHPUnit\Framework\assertEquals;
 
 beforeEach(function () {

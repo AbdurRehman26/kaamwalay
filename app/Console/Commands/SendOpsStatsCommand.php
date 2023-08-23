@@ -83,8 +83,6 @@ class SendOpsStatsCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @param  Carbon  $starDateTime
-     * @param  Carbon  $endDateTime
      * @return Collection<int,OrderItem>
      */
     protected function getTotalGradedCardsByGrader(Carbon $starDateTime, Carbon $endDateTime): Collection
@@ -93,8 +91,6 @@ class SendOpsStatsCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @param  Carbon  $starDateTime
-     * @param  Carbon  $endDateTime
      * @return Collection<int,OrderItem>
      */
     protected function getTotalReviewedCardsByReviewer(Carbon $starDateTime, Carbon $endDateTime): Collection
@@ -112,9 +108,6 @@ class SendOpsStatsCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @param  Carbon  $starDateTime
-     * @param  Carbon  $endDateTime
-     * @param  int  $orderItemStatus
      * @return Collection<int,OrderItem>
      */
     protected function getCardsBreakdownByUser(Carbon $starDateTime, Carbon $endDateTime, int $orderItemStatus): Collection

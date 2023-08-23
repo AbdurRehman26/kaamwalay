@@ -2,13 +2,13 @@
 
 use App\Notifications\OpsStatsNotification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 it('sends OPS stats', function () {
     Notification::fake();
 
-    $this->artisan("ops:send-stats", [
+    $this->artisan('ops:send-stats', [
         'startDateTime' => Carbon::now()->subDay(),
         'endDateTime' => Carbon::now(),
     ])->assertExitCode(0);

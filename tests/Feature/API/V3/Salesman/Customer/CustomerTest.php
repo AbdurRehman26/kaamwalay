@@ -5,6 +5,7 @@ use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\putJson;
 

@@ -11,6 +11,7 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+
 use function Pest\Laravel\postJson;
 
 uses(WithFaker::class);

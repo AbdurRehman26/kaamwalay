@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\ReferralProgram\ReferralCodeGeneratorService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 

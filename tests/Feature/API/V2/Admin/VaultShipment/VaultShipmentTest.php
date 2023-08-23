@@ -7,6 +7,7 @@ use App\Models\VaultShipment;
 use Bus;
 use Database\Seeders\RolesSeeder;
 use Event;
+
 use function Pest\Laravel\seed;
 
 beforeEach(function () {

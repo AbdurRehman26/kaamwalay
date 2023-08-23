@@ -4,10 +4,11 @@ use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
+use Symfony\Component\HttpFoundation\Response;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
-use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     $this->seed([

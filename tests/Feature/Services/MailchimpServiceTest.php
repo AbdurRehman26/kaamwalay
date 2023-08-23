@@ -6,6 +6,7 @@ use App\Models\MailchimpList;
 use App\Models\User;
 use App\Services\MailchimpService;
 use Mockery;
+
 use function Pest\Laravel\assertDatabaseCount;
 
 beforeEach(function () {

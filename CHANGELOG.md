@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.19.0 - 2023-08-23
+
+### What's Changed
+
+- Feature: Referral Coupon Discount Cap by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1092
+- Feature: OPS Stats to Slack by @thenabeel in https://github.com/woozard/robograding/pull/1095
+- Release v2.19.0 by @thenabeel in https://github.com/woozard/robograding/pull/1096
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v2.18.0...v3.19.0
+
 ## v2.18.0 - 2023-08-19
 
 ### What's Changed

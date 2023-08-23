@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserCard;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Model;
+
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 

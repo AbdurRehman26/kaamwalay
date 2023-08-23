@@ -15,6 +15,7 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {

@@ -8,6 +8,7 @@ use App\Models\PopReportsCard;
 use App\Models\PopReportsSeries;
 use App\Models\PopReportsSet;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\getJson;
 
 test('a guest can receive enabled card categories for pop report page', function () {

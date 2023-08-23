@@ -47,6 +47,7 @@ return [
     'slack' => [
         'channel_webhooks' => [
             'closes_ags' => env('SLACK_CHANNEL_WEBHOOK_CLOSES_AGS'),
+            'ops_ags' => env('SLACK_CHANNEL_WEBHOOK_OPS_AGS'),
         ],
     ],
 

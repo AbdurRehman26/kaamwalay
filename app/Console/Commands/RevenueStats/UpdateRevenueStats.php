@@ -16,7 +16,7 @@ class UpdateRevenueStats extends Command
      *
      * @var string
      */
-    protected $signature = 'revenue-stats:calculate-for-day {date? : YYYY-MM-DD format}';
+    protected $signature = 'revenue-stats:calculate-for-day {startDateTime : YYYY-MM-DD H:m:s format} {endDateTime : YYYY-MM-DD H:m:s format}';
 
     /**
      * The console command description.
@@ -30,25 +30,26 @@ class UpdateRevenueStats extends Command
      */
     public function handle(RevenueStatsService $revenueStatsService): int
     {
-        $currentDate = (Carbon::parse($this->argument('date')))->format('Y-m-d');
+        $starDateTime = Carbon::parse($this->argument('startDateTime'));
+        $endDateTime = Carbon::parse($this->argument('endDateTime'));
 
-        $this->log('Revenue Stats Daily for Date : '.$currentDate.' Starting');
+        $this->log('Revenue Stats Daily for Date : '.$starDateTime->format('Y-m-d').' Starting');
 
-        $revenueStats = $revenueStatsService->addDailyStats($currentDate);
-        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal();
+        $revenueStats = $revenueStatsService->addDailyStats($starDateTime, $endDateTime);
+        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal($starDateTime, $endDateTime);
 
-        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Starting');
+        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($starDateTime)->format('F-Y').' Starting');
 
-        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);
-        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal();
+        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($starDateTime);
+        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal($starDateTime);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly, $paidDailyCardsTotal, $paidMonthlyCardsTotal));
         }
 
-        $this->log('Revenue Stats Daily for Date : '.$currentDate.' Completed');
-        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Completed');
+        $this->log('Revenue Stats Daily for Date : '.$starDateTime->format('Y-m-d').' Completed');
+        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($starDateTime)->format('F-Y').' Completed');
 
         return 0;
     }

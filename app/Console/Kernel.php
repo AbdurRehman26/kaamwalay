@@ -26,9 +26,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command('cache:prune-stale-tags')->hourly();
-        $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
+        $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');
-        $schedule->command(SendUnpaidOrdersStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
+        $schedule->command(SendUnpaidOrdersStats::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');
         $schedule->command(SendScheduledEmails::class)->everyFifteenMinutes();
         $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();
@@ -36,9 +36,9 @@ class Kernel extends ConsoleKernel
         $schedule->command(ProcessPaymentHandshake::class, ['--email=platform@robograding.com'])->everyFiveMinutes();
         $schedule->command(SendAdminReports::class)->dailyAt('00:20')->environments(['production', 'local', 'testing']);
         $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
-        $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
+        $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');
-        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
+        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');
         $schedule->command(SendOpsStatsCommand::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');

@@ -32,14 +32,15 @@ class RevenueStatsUpdated extends Notification
 
     public function toSlack($notifiable)
     {
+        $date = Carbon::parse($this->revenueStatsDaily->event_at)->format('Y-m-d');
         $monthYear = Carbon::parse($this->revenueStatsMonthly->event_at)->format('F-Y');
 
         return (new SlackMessage)
             ->from('Robograding', ':bar_chart:')
             ->success()
-            ->attachment(function ($attachment) use ($monthYear) {
+            ->attachment(function ($attachment) use ($monthYear, $date) {
                 $attachment->title('Revenue Stats')
-                    ->content("Date: {$this->revenueStatsDaily['event_at']}, Revenue: \${$this->revenueStatsDaily['revenue']}, Total Cards: {$this->paidDailyCardsTotal} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly['revenue']}, Total Cards: {$this->paidMonthlyCardsTotal}");
+                    ->content("Date: {$date}, Revenue: \${$this->revenueStatsDaily['revenue']}, Total Cards: {$this->paidDailyCardsTotal} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly['revenue']}, Total Cards: {$this->paidMonthlyCardsTotal}");
             });
     }
 }

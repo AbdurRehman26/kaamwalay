@@ -7,16 +7,17 @@ use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
 use DateTime;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Str;
 
 class RevenueStatsService
 {
-    public function addDailyStats(string $currentDate): RevenueStatsDaily
+    public function addDailyStats(Carbon $starDateTime, Carbon $endDateTime): RevenueStatsDaily
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forDate($currentDate)
+            ->whereBetween('order_payments.created_at', [$starDateTime, $endDateTime])
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
@@ -26,23 +27,26 @@ class RevenueStatsService
             ])
             ->get();
 
-        $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
+        $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $starDateTime]);
 
         Log::info('Calculation For Daily Stats Started');
-        $this->addStats($currentDate, $orderPayments, $revenue);
+        $this->addStats($starDateTime, $orderPayments, $revenue);
         Log::info('Calculation For Daily Stats Completed');
 
         return $revenue;
     }
 
-    public function calculateDailyCardsTotal(): int
+    public function calculateDailyCardsTotal(Carbon $starDateTime, Carbon $endDateTime): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
+        return $this->calculateCardsTotal($starDateTime, $endDateTime);
     }
 
-    public function calculateMonthlyCardsTotal(): int
+    public function calculateMonthlyCardsTotal($currentDate): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+
+        return $this->calculateCardsTotal($monthStart, $monthEnd);
     }
 
     public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
@@ -53,7 +57,7 @@ class RevenueStatsService
         )->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->sum('order_items.quantity');
     }
 
-    public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
+    public function addMonthlyStats(Carbon $currentDate): RevenueStatsMonthly
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)

@@ -14,10 +14,10 @@ use Str;
 
 class RevenueStatsService
 {
-    public function addDailyStats(Carbon $starDateTime, Carbon $endDateTime): RevenueStatsDaily
+    public function addDailyStats(Carbon $startDateTime, Carbon $endDateTime): RevenueStatsDaily
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->whereBetween('order_payments.created_at', [$starDateTime, $endDateTime])
+            ->whereBetween('order_payments.created_at', [$startDateTime, $endDateTime])
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
@@ -27,21 +27,21 @@ class RevenueStatsService
             ])
             ->get();
 
-        $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $starDateTime]);
+        $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $startDateTime]);
 
         Log::info('Calculation For Daily Stats Started');
-        $this->addStats($starDateTime, $orderPayments, $revenue);
+        $this->addStats($startDateTime, $orderPayments, $revenue);
         Log::info('Calculation For Daily Stats Completed');
 
         return $revenue;
     }
 
-    public function calculateDailyCardsTotal(Carbon $starDateTime, Carbon $endDateTime): int
+    public function calculateDailyCardsTotal(Carbon $startDateTime, Carbon $endDateTime): int
     {
-        return $this->calculateCardsTotal($starDateTime, $endDateTime);
+        return $this->calculateCardsTotal($startDateTime, $endDateTime);
     }
 
-    public function calculateMonthlyCardsTotal($currentDate): int
+    public function calculateMonthlyCardsTotal(Carbon $currentDate): int
     {
         $monthStart = Carbon::parse($currentDate)->firstOfMonth();
         $monthEnd = Carbon::parse($currentDate)->endOfMonth();
@@ -49,7 +49,7 @@ class RevenueStatsService
         return $this->calculateCardsTotal($monthStart, $monthEnd);
     }
 
-    public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
+    public function calculateCardsTotal(Carbon $startTime, Carbon $endTime): int
     {
         return Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
             'users.email',

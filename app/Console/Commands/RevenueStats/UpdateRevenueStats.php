@@ -30,26 +30,26 @@ class UpdateRevenueStats extends Command
      */
     public function handle(RevenueStatsService $revenueStatsService): int
     {
-        $starDateTime = Carbon::parse($this->argument('startDateTime'));
+        $startDateTime = Carbon::parse($this->argument('startDateTime'));
         $endDateTime = Carbon::parse($this->argument('endDateTime'));
 
-        $this->log('Revenue Stats Daily for Date : '.$starDateTime->format('Y-m-d').' Starting');
+        $this->log('Revenue Stats Daily for Date : '.$startDateTime->format('Y-m-d').' Starting');
 
-        $revenueStats = $revenueStatsService->addDailyStats($starDateTime, $endDateTime);
-        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal($starDateTime, $endDateTime);
+        $revenueStats = $revenueStatsService->addDailyStats($startDateTime, $endDateTime);
+        $paidDailyCardsTotal = $revenueStatsService->calculateDailyCardsTotal($startDateTime, $endDateTime);
 
-        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($starDateTime)->format('F-Y').' Starting');
+        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($startDateTime)->format('F-Y').' Starting');
 
-        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($starDateTime);
-        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal($starDateTime);
+        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($startDateTime);
+        $paidMonthlyCardsTotal = $revenueStatsService->calculateMonthlyCardsTotal($startDateTime);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly, $paidDailyCardsTotal, $paidMonthlyCardsTotal));
         }
 
-        $this->log('Revenue Stats Daily for Date : '.$starDateTime->format('Y-m-d').' Completed');
-        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($starDateTime)->format('F-Y').' Completed');
+        $this->log('Revenue Stats Daily for Date : '.$startDateTime->format('Y-m-d').' Completed');
+        $this->log('Revenue Stats Daily for Month : '.Carbon::parse($startDateTime)->format('F-Y').' Completed');
 
         return 0;
     }

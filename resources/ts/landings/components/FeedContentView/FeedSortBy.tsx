@@ -128,10 +128,10 @@ export function FeedSortBy() {
     const { appEnv } = useConfiguration();
     return (
         <CustomSortBy
-            defaultRefinement={sort ? sort : `${appEnv}_user_cards`}
+            defaultRefinement={sort ? sort : `${appEnv}_user_cards:shipped_at_timestamp:desc`}
             items={[
-                { value: `${appEnv}_user_cards`, label: 'Most Recent' },
-                { value: `${appEnv}_user_cards_Ascending`, label: 'Oldest' },
+                { value: `${appEnv}_user_cards:shipped_at_timestamp:desc`, label: 'Most Recent' },
+                { value: `${appEnv}_user_cards:shipped_at_timestamp:asc`, label: 'Oldest' },
             ]}
         />
     );

@@ -1,6 +1,6 @@
+import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import Box from '@mui/material/Box';
 import makeStyles from '@mui/styles/makeStyles';
-import algoliaSearch from 'algoliasearch';
 import React, { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import ManagerCardDialogSelectedCardPreview from '@shared/components/ManageCardDialog/ManagerCardDialogSelectedCardPreview';
@@ -27,12 +27,15 @@ const useStyles = makeStyles(
  */
 export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: ForwardedRef<HTMLDivElement>) => {
     const classes = useStyles();
-    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesAdmin } = useConfiguration();
+    const { appEnv, meilisearchPublicHost, meilisearchPublicKey, searchCardCategoriesAdmin } = useConfiguration();
     const selectedCard = useAppSelector((state) => state.manageCardDialog.selectedCard);
 
     const searchClient = useMemo(
-        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
-        [algoliaAppId, algoliaPublicKey],
+        () =>
+            instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!, {
+                finitePagination: true,
+            }),
+        [meilisearchPublicHost, meilisearchPublicKey],
     );
 
     return (

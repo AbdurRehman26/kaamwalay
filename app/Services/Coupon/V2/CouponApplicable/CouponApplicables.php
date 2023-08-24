@@ -30,11 +30,10 @@ trait CouponApplicables
         if (! empty($order['payment_plan']['id'])) {
             $paymentPlan = PaymentPlan::find($order['payment_plan']['id']);
             // @phpstan-ignore-next-line
-            $totalItems = collect($order['items'])->sum('quantity');
         } else {
             $paymentPlan = PaymentPlan::find($order->payment_plan_id);
-            $totalItems = $order->orderItems()->sum('quantity');
         }
+        $totalItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
         $priceRanges = $paymentPlan->paymentPlanRanges;
 
         $priceRange = $priceRanges->first(function ($item, $key) use ($totalItems) {
@@ -73,9 +72,16 @@ trait CouponApplicables
         );
     }
 
+    public function getOrderItemsQuantityApplicableForDiscount(Order|array $order, Coupon $coupon): int
+    {
+        $totalOrderItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
+
+        return $coupon->max_discount_applicable_items ? min($coupon->max_discount_applicable_items, $totalOrderItems) : $totalOrderItems;
+    }
+
     protected function getFreeCardsDiscount(Coupon $coupon, Order|array $order): float
     {
-        $totalCards = array_sum(array_column($this->getOrderItems($order), 'quantity'));
+        $totalCards = $this->getOrderItemsQuantityApplicableForDiscount($order, $coupon);
 
         return ((int) $coupon->discount_value) < $totalCards ? ($coupon->discount_value * $this->getPaymentPlan($order)->price) : ($totalCards * $this->getPaymentPlan($order)->price);
     }

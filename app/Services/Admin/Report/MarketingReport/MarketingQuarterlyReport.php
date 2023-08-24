@@ -19,6 +19,6 @@ class MarketingQuarterlyReport extends MarketingReport
 
     public function getReportData(): array
     {
-        return $this->getDataForReport(now()->subQuarter()->startOfQuarter(), now()->subQuarter()->endOfQuarter());
+        return $this->getDataForReport(now()->subQuarter()->startOfQuarter(), now()->subQuarter()->endOfQuarter(), now()->subQuarters(2)->startOfQuarter(), now()->subQuarters(2)->endOfQuarter());
     }
 }

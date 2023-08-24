@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { orderBy } from 'lodash';
 import { useState } from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -224,7 +225,7 @@ const CustomRefinementList = connectRefinementList(({ items, refine }) => {
                             }}
                         >
                             <Typography sx={item.isRefined ? styles.SelectedText : styles.NotSelectedText}>
-                                <Checkbox checked={item.isRefined ? true : false} />
+                                <Checkbox checked={!!item.isRefined} />
                                 {item.label}
                             </Typography>
                         </MenuItem>
@@ -244,7 +245,12 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
         <>
             <FeeCategoryBox>
                 <Grid className={'FilterBar'}>
-                    <CustomRefinementList attribute={'card_category'} defaultRefinement={category} limit={100} />
+                    <CustomRefinementList
+                        attribute={'card_category'}
+                        defaultRefinement={category}
+                        limit={100}
+                        transformItems={(items) => orderBy(items, 'label', 'asc')}
+                    />
                     <FeedGrade />
                     {category.length > 0 ? <FeedClearCategories /> : null}
                 </Grid>

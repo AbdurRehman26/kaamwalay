@@ -55,7 +55,7 @@ beforeEach(function () {
 it('calculates daily unpaid orders stats', function () {
     $orders = $this->ordersForTests;
     $startDateTime = Carbon::now()->subDay();
-    $endDateTime =  Carbon::now();
+    $endDateTime = Carbon::now();
 
     $expectedUnpaidTotal = $orders->whereBetween('created_at', [$startDateTime, $endDateTime])->sum('grand_total');
 

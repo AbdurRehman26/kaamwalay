@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay()])
             ->timezone('America/New_York')->dailyAt('00:05');
-        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay(), Carbon::now()])
+        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay()])
             ->timezone('America/New_York')->dailyAt('00:05');
         $schedule->command(SendOpsStatsCommand::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');

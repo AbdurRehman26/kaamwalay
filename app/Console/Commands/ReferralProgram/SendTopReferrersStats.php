@@ -17,7 +17,7 @@ class SendTopReferrersStats extends Command
      *
      * @var string
      */
-    protected $signature = 'referrer:send-top-referrers-stats {date? : YYYY-MM-DD format}';
+    protected $signature = 'referrer:send-top-referrers-stats {date : YYYY-MM-DD H:m:s format}';
 
     /**
      * The console command description.
@@ -31,8 +31,9 @@ class SendTopReferrersStats extends Command
      */
     public function handle(): int
     {
-        $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
-        $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
+        $endDate = (Carbon::parse($this->argument('date')));
+
+        $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth(), $endDate)];
 
         $this->info('Top Referrers Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 

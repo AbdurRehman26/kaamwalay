@@ -54,11 +54,12 @@ beforeEach(function () {
 
 it('calculates daily unpaid orders stats', function () {
     $orders = $this->ordersForTests;
-    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
+    $startDateTime = Carbon::now()->subDay();
+    $endDateTime =  Carbon::now();
 
-    $expectedUnpaidTotal = $orders->forDate($randomOrderDate)->sum('grand_total');
+    $expectedUnpaidTotal = $orders->whereBetween('created_at', [$startDateTime, $endDateTime])->sum('grand_total');
 
-    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($randomOrderDate);
+    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($startDateTime, $endDateTime);
 
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
@@ -66,11 +67,11 @@ it('calculates daily unpaid orders stats', function () {
 
 it('calculates monthly unpaid orders stats for the current month', function () {
     $orders = $this->ordersForTests;
-    $randomOrderDate = $orders->inRandomOrder()->first()->created_at->toDateString();
+    $startDateTime = Carbon::now()->subDay();
 
-    $expectedUnpaidTotal = $orders->forMonth($randomOrderDate)->sum('grand_total');
+    $expectedUnpaidTotal = $orders->forMonth($startDateTime)->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($randomOrderDate);
+    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($startDateTime);
 
     expect($unpaidMonthlyStats['unpaid_total'])->toBeGreaterThan(0)
         ->and($unpaidMonthlyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
@@ -84,7 +85,7 @@ it('counts daily unpaid orders cards', function () {
             $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
         })->sum('order_items.quantity');
 
-    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal();
+    $cardTotal = $this->unpaidOrdersStatsService->calculateDailyCardsTotal(Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay());
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');
@@ -97,7 +98,7 @@ it('counts monthly unpaid orders cards', function () {
             $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
         })->sum('order_items.quantity');
 
-    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal();
+    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth());
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

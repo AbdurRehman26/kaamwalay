@@ -48,7 +48,7 @@ beforeEach(function () {
 
 it('adds daily revenue stats', function () {
     $startDateTime = Carbon::now()->subDay();
-    $endDateTime =  Carbon::now();
+    $endDateTime = Carbon::now();
 
     $orders = Order::whereBetween('created_at', [$startDateTime, $endDateTime])
         ->where('payment_status', OrderPaymentStatusEnum::PAID->value)

@@ -8,7 +8,7 @@ it('sends salesmen stats daily', function () {
     Notification::fake();
 
     $this->artisan('salesman:send-salesmen-stats', [
-        'date' => Carbon::now()->subDay()
+        'date' => Carbon::now()->subDay(),
     ])
         ->assertExitCode(0);
 

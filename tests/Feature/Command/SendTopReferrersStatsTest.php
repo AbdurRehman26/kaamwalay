@@ -8,7 +8,7 @@ it('sends top referrers stats daily', function () {
     Notification::fake();
 
     $this->artisan('referrer:send-top-referrers-stats', [
-        'date' => Carbon::now()->subDay()
+        'date' => Carbon::now()->subDay(),
     ])
         ->assertExitCode(0);
 

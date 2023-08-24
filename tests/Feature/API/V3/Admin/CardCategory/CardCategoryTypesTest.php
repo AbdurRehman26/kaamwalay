@@ -3,6 +3,7 @@
 use App\Models\CardCategoryType;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 

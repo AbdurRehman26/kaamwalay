@@ -119,7 +119,7 @@ export const PriceCard = ({ data }: props) => {
         <Grid sx={{ margin: '64px 30px 0' }}>
             <Slider {...settings}>
                 {data?.map((item: any) => (
-                    <SliderHolder>
+                    <SliderHolder key={item.id}>
                         <div className={'HomePriceColumn'}>
                             <h4 className={'HomePriceHeadline'}>
                                 ${item?.price} <span className={'small'}>/Card</span>

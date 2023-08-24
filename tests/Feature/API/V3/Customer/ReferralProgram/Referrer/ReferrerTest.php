@@ -11,6 +11,7 @@ use App\Services\ReferralProgram\ReferrerService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+
 use function Pest\Laravel\getJson;
 
 uses(WithFaker::class);

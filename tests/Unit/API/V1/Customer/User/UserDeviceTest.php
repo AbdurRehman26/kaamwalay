@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\UserDevice;
+
 use function Pest\Laravel\assertDatabaseCount;
 
 test('user device is created once with same platform', function () {

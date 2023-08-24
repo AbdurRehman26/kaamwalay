@@ -1,4 +1,6 @@
 import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { app } from '@shared/lib/app';
+import { APIService } from '@shared/services/APIService';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
 import { ValidateMethodParamsAsync } from '../decorators/ValidateMethodParams';
@@ -24,7 +26,10 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
 
     @ValidateMethodParamsAsync()
     public async postLogin(input: LoginRequestDto) {
-        const { data } = await this.endpoint.post('/login', input);
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint('/auth/login', { version: 'v2' });
+
+        const { data } = await endpoint.post('', input);
         return plainToInstance(AuthenticatedUserEntity, data);
     }
 

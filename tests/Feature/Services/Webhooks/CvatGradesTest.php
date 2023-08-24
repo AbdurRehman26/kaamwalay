@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\UserCard;
+
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {

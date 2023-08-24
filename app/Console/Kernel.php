@@ -11,6 +11,7 @@ use App\Console\Commands\RevenueStats\SendUnpaidOrdersStats;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\Salesman\SendSalesmenStats;
 use App\Console\Commands\SendAdminReports;
+use App\Console\Commands\SendOpsStatsCommand;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -38,6 +39,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
             ->timezone('America/New_York')->dailyAt('00:05');
         $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
+            ->timezone('America/New_York')->dailyAt('00:05');
+        $schedule->command(SendOpsStatsCommand::class, [Carbon::now()->subDay(), Carbon::now()])
             ->timezone('America/New_York')->dailyAt('00:05');
     }
 

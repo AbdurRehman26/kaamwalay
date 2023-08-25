@@ -6,7 +6,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useEffect, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';

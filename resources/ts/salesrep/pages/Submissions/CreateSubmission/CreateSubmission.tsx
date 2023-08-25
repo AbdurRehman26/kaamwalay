@@ -20,7 +20,7 @@ import { CardsSearchResults } from '@salesrep/components/NewSubmission/CardsSear
 import { ShippingMethods } from '@salesrep/components/NewSubmission/ShippingMethods';
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
 import React, { useEffect, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CleaningFee from '@shared/components/CleaningFee';
@@ -140,8 +140,6 @@ export function CreateSubmission() {
         ReactGA.event({
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
-            dimension1: 'Level',
-            metric1: level.id,
         });
     };
 

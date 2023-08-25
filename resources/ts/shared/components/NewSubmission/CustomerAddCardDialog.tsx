@@ -15,7 +15,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import ImageUploader from '@shared/components/ImageUploader';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { useEndpoint } from '@shared/hooks/useEndpoint';

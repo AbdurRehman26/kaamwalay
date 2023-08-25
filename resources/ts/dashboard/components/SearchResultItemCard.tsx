@@ -11,7 +11,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';

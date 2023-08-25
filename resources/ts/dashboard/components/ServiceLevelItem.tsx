@@ -3,7 +3,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -155,8 +155,6 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
         ReactGA.event({
             category: EventCategories.ServiceLevels,
             action: ServiceLevelEvents.pressed,
-            dimension1: 'Level',
-            metric1: id,
         });
     }, [dispatch, id, maxProtectionAmount, price, turnaround, type, priceRanges, minPrice, maxPrice]);
 

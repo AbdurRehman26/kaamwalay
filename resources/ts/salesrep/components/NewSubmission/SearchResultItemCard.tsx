@@ -12,7 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
 import React, { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { markCardAsUnselected } from '@shared/redux/slices/salesRepCreateOrderSlice';

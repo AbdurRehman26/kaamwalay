@@ -7,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Hit } from 'react-instantsearch-core';
 import { Hits, Stats } from 'react-instantsearch-dom';
 import { AuthDialog } from '@shared/components/AuthDialog';

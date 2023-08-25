@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/AuthDialog/styles';

@@ -13,7 +13,7 @@ import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';

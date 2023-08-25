@@ -12,13 +12,13 @@ if (app()->environment("production")) {
 
 @production
     <!-- Google Tag Manager -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PD4D1FYBBD"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY908XVCZX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', 'G-PD4D1FYBBD');
+        gtag('config', 'G-ZY908XVCZX');
     </script>
     <!-- End Google Tag Manager -->
 

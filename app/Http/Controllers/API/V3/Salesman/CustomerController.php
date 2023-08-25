@@ -13,6 +13,7 @@ class CustomerController extends Controller
     public function __construct(protected CustomerService $customerService)
     {
     }
+
     public function update(UpdateCustomerDetailsRequest $request, User $user): CustomerResource
     {
         return new CustomerResource($this->customerService->updateCustomer($user, $request->validated()));

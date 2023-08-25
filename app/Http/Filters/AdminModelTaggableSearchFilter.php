@@ -9,7 +9,7 @@ class AdminModelTaggableSearchFilter implements Filter
 {
     public function __invoke(Builder $query, mixed $value, string $property): void
     {
-        if ($value === '-1') {
+        if (strval($value) === '-1') {
             $query->doesntHave('tags');
         } else {
             $query->withAnyTags($value);

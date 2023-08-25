@@ -44,7 +44,7 @@ class OrderController extends Controller
     /**
      * @throws Throwable
      */
-    public function processShipment(UpdateShipmentRequest $request, Order $order): OrderResource | JsonResponse
+    public function processShipment(UpdateShipmentRequest $request, Order $order): OrderResource|JsonResponse
     {
         throw_unless($order->isPaid(), OrderCanNotBeMarkedAsShipped::class);
 
@@ -89,8 +89,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource|JsonResponse
     {
         try {
             $createOrderService = resolve(CreateOrderService::class);
@@ -171,7 +170,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function updateShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderShipmentResource | JsonResponse
+    public function updateShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderShipmentResource|JsonResponse
     {
         try {
             $result = $shipmentService->updateShipment($order, $request->shipping_provider, $request->tracking_number);
@@ -192,7 +191,7 @@ class OrderController extends Controller
         return new OrderResource($this->orderService->updateNotes($order, $request->notes));
     }
 
-    public function getGrades(Request $request, Order $order): UserCardCollection | JsonResponse
+    public function getGrades(Request $request, Order $order): UserCardCollection|JsonResponse
     {
         $this->authorize('review', $order);
 

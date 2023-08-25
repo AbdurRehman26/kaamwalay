@@ -35,6 +35,8 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
+    config(['robograding.feature_order_shipping_insurance_fee_percentage' => 1]);
+
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
@@ -132,7 +134,7 @@ beforeEach(function () {
     $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
+        base_path().'/tests/stubs/AGS_card_grades_collection_200.json'
     ), associative: true);
 
     $this->actingAs($this->user);
@@ -178,7 +180,7 @@ it('returns order details', function () {
 test('an admin can get order cards grades', function () {
     Bus::fake();
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'orderItem,orderItem.cardProduct.cardSet.cardSeries,orderItem.cardProduct.cardCategory,customer']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'cardProduct.cardSet.cardSeries,cardProduct.cardCategory,userCard.customer']))
         ->assertOk();
 
     Bus::assertDispatched(GetCardGradesFromAgs::class);
@@ -190,7 +192,7 @@ test('it dispatches get grades from AGS job when admin fetches grades', function
     UserCard::factory()->create([
         'order_item_id' => $this->orders[1]->orderItems->first()->id,
     ]);
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'orderItem,orderItem.cardProduct.cardSet.cardSeries,orderItem.cardProduct.cardCategory,customer']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'cardProduct.cardSet.cardSeries,cardProduct.cardCategory,userCard.customer']))
         ->assertOk()
         ->assertJsonFragment([
             'robo_grade_values' => null,
@@ -206,7 +208,7 @@ test('an admin can get order cards if AGS API returns grades', function () {
         'order_item_id' => $orderItemId,
         'certificate_number' => '09000000',
     ]);
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'orderItem,orderItem.cardProduct.cardSet.cardSeries,orderItem.cardProduct.cardCategory,customer']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include' => 'cardProduct.cardSet.cardSeries,cardProduct.cardCategory,userCard.customer']))
         ->assertJsonFragment([
             'center' => '2.00',
         ])
@@ -251,9 +253,9 @@ test('an admin can place order for an user', function () {
             'phone' => '1234567890',
             'flat' => '43',
             'save_for_later' => true,
-        ],[
-                'order_id' => $this->orders[1]->id,
-            ],
+        ], [
+            'order_id' => $this->orders[1]->id,
+        ],
         'billing_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -370,6 +372,85 @@ test('an admin can place order for an user and mark it paid immediately', functi
             'grand_total',
         ],
     ]);
+});
+
+test('an admin can place order for a user with shipping insurance', function () {
+    Event::fake();
+
+    $customer = User::factory()->create();
+
+    $response = $this->postJson('/api/v3/admin/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+        'requires_shipping_insurance' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'requires_shipping_insurance',
+            'shipping_insurance_fee',
+            'grand_total',
+        ],
+    ]);
+    $response->assertJsonPath('data.shipping_insurance_fee', 10);
+    $response->assertJsonPath('data.requires_shipping_insurance', true);
 });
 
 test('correct service level price is assigned according to price ranges', function (int $numberOfCards, $priceRangeIndex) {
@@ -538,7 +619,7 @@ test('an admin can get paginated cards for grading', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems->first()->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include[]' => 'orderItem']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'include[]' => 'userCard']))
         ->assertJsonStructure([
             'data',
             'links',
@@ -556,7 +637,7 @@ test('an admin can paginate through cards results', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems[2]->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 2, 'page' => 2, 'include[]' => 'orderItem']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'per_page' => 2, 'page' => 2, 'include[]' => 'userCard']))
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
@@ -573,7 +654,7 @@ test('an admin can filter by item to revise', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems[2]->id;
 
-    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'filter[order_item_id]' => $orderItemId, 'include[]' => 'orderItem']))
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id, 'filter[id]' => $orderItemId, 'include[]' => 'userCard']))
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'id' => $orderItemId,
@@ -604,9 +685,9 @@ test('an admin can create folders manually', function () {
     Bus::fake();
 
     $order = Order::factory()->create();
-    
+
     $this->postJson(route('v3.admin.orders.create-folders', ['order' => $order]))
-    ->assertSuccessful();
+        ->assertSuccessful();
 
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
     Bus::assertDispatchedTimes(CreateOrderFoldersOnAGSLocalMachine::class);

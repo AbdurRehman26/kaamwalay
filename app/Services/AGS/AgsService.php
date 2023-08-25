@@ -92,8 +92,6 @@ class AgsService
         ]);
     }
 
-    
-
     /**
      * @deprecated Grades on public page are now shown directly from Robograding
      */
@@ -136,11 +134,11 @@ class AgsService
      */
     protected function getCardFullName(array $card): string
     {
-        return Carbon::parse($card['pokemon_set']['release_date'])->year . ' ' .
-            $card['category']['name'] . ' ' .
-            $card['pokemon_serie']['name'] . ' ' .
-            $card['pokemon_set']['name'] . ' ' .
-            $card['card_number_order'] . ' ' .
+        return Carbon::parse($card['pokemon_set']['release_date'])->year.' '.
+            $card['category']['name'].' '.
+            $card['pokemon_serie']['name'].' '.
+            $card['pokemon_set']['name'].' '.
+            $card['card_number_order'].' '.
             $card['name'];
     }
 

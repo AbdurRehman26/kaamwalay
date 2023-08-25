@@ -54,8 +54,11 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $user_id
  * @property mixed $requires_cleaning
+ * @property mixed $requires_shipping_insurance
+ * @property mixed $shipping_insurance_fee
  * @property mixed $salesman_commission
  * @property OrderPaymentStatusEnum $payment_status
+ *
  * @method orderItems()
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
@@ -70,8 +73,8 @@ class OrderResource extends BaseResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'number_of_cards' => (int)$this->orderItems()->sum('quantity'),
-            'total_declared_value' => (float)$this->orderItems()->sum('declared_value_total'),
+            'number_of_cards' => (int) $this->orderItems()->sum('quantity'),
+            'total_declared_value' => (float) $this->orderItems()->sum('declared_value_total'),
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'cleaning_fee' => $this->cleaning_fee,
@@ -114,6 +117,8 @@ class OrderResource extends BaseResource
             'payment_status' => $this->payment_status,
             'requires_cleaning' => $this->requires_cleaning,
             'salesman_commission' => $this->salesman_commission,
+            'shipping_insurance_fee' => $this->shipping_insurance_fee,
+            'requires_shipping_insurance' => $this->requires_shipping_insurance,
         ];
     }
 

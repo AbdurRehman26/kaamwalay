@@ -8,7 +8,6 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Models\Wallet;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -17,6 +16,7 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\seed;
@@ -31,7 +31,6 @@ uses(WithFaker::class);
  * 4. Partial refund needs to be made to an unpaid order which has both existing refund and extra charge.
  * 5. Ensure that refund to wallet is not possible when order is unpaid.
  */
-
 beforeEach(function () {
     seed([
         RolesSeeder::class,

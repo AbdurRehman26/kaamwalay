@@ -9,5 +9,5 @@ export class ShippingMethodEntity extends Entity {
 export const DefaultShippingMethodEntity = {
     id: 1,
     code: ShippingMethodType.InsuredShipping,
-    name: 'Insured Shipping',
+    name: 'Shipping',
 } as ShippingMethodEntity;

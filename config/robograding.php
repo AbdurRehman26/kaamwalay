@@ -28,5 +28,6 @@ return [
     'feature_order_wallet_credit_percentage' => env('FEATURE_ORDER_WALLET_CREDIT_PERCENTAGE'),
     'feature_order_cleaning_fee_per_card' => env('FEATURE_ORDER_CLEANING_FEE_PER_CARD'),
     'feature_order_cleaning_fee_max_cap' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
-    'feature_referral_discount_percentage' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE', 35)
+    'feature_order_shipping_insurance_fee_percentage' => env('FEATURE_ORDER_SHIPPING_INSURANCE_FEE_PERCENTAGE'),
+    'feature_referral_discount_percentage' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE', 35),
 ];

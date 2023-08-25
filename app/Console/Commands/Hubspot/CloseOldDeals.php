@@ -35,7 +35,7 @@ class CloseOldDeals extends Command
         $hasMore = true;
 
         if (empty(config('services.hubspot.pipline_stage_id_new_customer'))) {
-            $this->info("Deal stage is not set");
+            $this->info('Deal stage is not set');
 
             return 0;
         }

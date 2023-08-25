@@ -20,10 +20,11 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\seed;
-use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
@@ -272,7 +273,7 @@ test('admin can refund the order total when order has partial refund to wallet',
         'created_at' => now()->addMinute(),
     ]);
 
-    postJson(route('v1.payments.refund', ['order' => $this->order]), [
+    postJson(route('v2.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total - 10,
         'add_to_wallet' => false,

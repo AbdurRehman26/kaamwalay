@@ -37,15 +37,15 @@ class ExportOrders extends Command
 
         $date = $this->argument('date');
 
-        Log::info("Orders Export started for  date: ". $date);
+        Log::info('Orders Export started for  date: '.$date);
 
-        $filePath = 'exports/orders-' . $date . '-' . Str::uuid() . '.csv';
+        $filePath = 'exports/orders-'.$date.'-'.Str::uuid().'.csv';
         Excel::store(new OrdersExport($date), $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
         $filePathUrl = Storage::disk('s3')->url($filePath);
         $this->info($filePathUrl);
         $this->info('Export completed.');
 
-        Log::info("Orders Export Completed for date: ". $date);
+        Log::info('Orders Export Completed for date: '.$date);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))

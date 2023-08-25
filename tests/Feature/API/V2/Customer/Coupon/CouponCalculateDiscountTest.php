@@ -34,7 +34,7 @@ beforeEach(function () {
         ->create(
             [
                 'coupon_applicable_id' => $couponApplicable->id,
-                'coupon_status_id' => 2,
+                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
             ]
         );
 
@@ -42,7 +42,7 @@ beforeEach(function () {
         ->create(
             [
                 'coupon_applicable_id' => $couponApplicable->id,
-                'coupon_status_id' => 2,
+                'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
                 'type' => 'free_cards',
                 'code' => 'FREE_CARDS',
                 'discount_value' => 2,
@@ -72,10 +72,8 @@ beforeEach(function () {
         ->withRole(config('permission.roles.customer'))
         ->create();
 
-
     $this->actingAs($this->user);
 });
-
 
 it('calculates coupon discount', function () {
     actingAs($this->user);
@@ -111,12 +109,12 @@ it('calculates coupon discount', function () {
             ],
         ]
     )->assertOk()
-    ->assertJsonStructure([
-        'data' => [
-            'coupon',
-            'discounted_amount',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
 });
 
 it('calculates coupon discount of limited usage coupon', function () {
@@ -243,3 +241,65 @@ it('calculates coupon discount for free cards', function () {
             'discounted_amount' => 40,
         ]);
 });
+
+it('calculates discount for coupons with max discount applicable items', function (App\Models\PaymentPlanRange $paymentPlanRange, int $maxDiscountApplicableItems) {
+    $couponApplicableUser = CouponApplicable::factory()->create([
+        'code' => 'user',
+        'label' => 'User',
+        'is_active' => 1,
+    ]);
+
+    $coupon = Coupon::factory()->create([
+        'coupon_status_id' => CouponStatus::STATUS_ACTIVE,
+        'type' => 'percentage',
+        'code' => 'REFERRAL_COUPON',
+        'discount_value' => 35,
+        'coupon_applicable_id' => $couponApplicableUser->id,
+        'max_discount_applicable_items' => $maxDiscountApplicableItems,
+    ]);
+
+    $couponable = Couponable::factory()->create([
+        'coupon_id' => $coupon->id,
+        'couponables_type' => Couponable::COUPONABLE_TYPES['user'],
+        'couponables_id' => $this->user->id,
+    ]);
+
+    actingAs($this->user);
+
+    $serviceFee = min($paymentPlanRange->min_cards, $maxDiscountApplicableItems) * $paymentPlanRange->price;
+    $discountedAmount = ($coupon->discount_value * $serviceFee) / 100;
+
+    postJson(route('v2.coupon.discount'), [
+        'coupon' => [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+        ],
+        'couponables_type' => $couponable->code,
+        'payment_plan' => [
+            'id' => $paymentPlanRange->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => $paymentPlanRange->min_cards,
+                'declared_value_per_unit' => 20,
+            ],
+        ],
+    ])
+        ->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ])->assertJsonFragment([
+            'discounted_amount' => $discountedAmount,
+        ]);
+})->with([
+    [fn () => $this->paymentPlan->paymentPlanRanges[0], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[1], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[2], 20],
+    [fn () => $this->paymentPlan->paymentPlanRanges[3], 20],
+]);

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\V1\Auth\ChangePasswordController;
+use App\Http\Controllers\API\V2\Auth\ChangePasswordController;
 use App\Http\Controllers\API\V2\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;
@@ -66,13 +66,13 @@ Route::prefix('customer')->group(function () {
     });
     Route::middleware('auth')->group(function () {
         Route::apiResource('addresses', CustomerAddressController::class)
-        ->names([
-            'index' => 'customer.addresses.index',
-            'show' => 'customer.addresses.show',
-            'store' => 'customer.addresses.store',
-            'update' => 'customer.addresses.update',
-            'destroy' => 'customer.addresses.delete',
-        ]);
+            ->names([
+                'index' => 'customer.addresses.index',
+                'show' => 'customer.addresses.show',
+                'store' => 'customer.addresses.store',
+                'update' => 'customer.addresses.update',
+                'destroy' => 'customer.addresses.delete',
+            ]);
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);

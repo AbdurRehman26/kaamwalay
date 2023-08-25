@@ -10,9 +10,9 @@ use App\Models\User;
 use App\Services\Admin\V3\ReferralProgram\ReferrerPayoutService;
 use App\Services\ReferralProgram\ReferralCodeGeneratorService;
 use Database\Seeders\RolesSeeder;
-
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
@@ -39,7 +39,7 @@ beforeEach(function () {
     ))->create();
 
     $this->batchPayoutSuccessfulResponse = Http::response(json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_create_batch_payout_response.json'
+        base_path().'/tests/stubs/Paypal_create_batch_payout_response.json'
     ), associative: true));
 
     Http::fake(['https://paypal.api/v1/oauth2*' => Http::response(['access_token' => 'Lorem'])]);
@@ -175,7 +175,7 @@ test('a batch payout is processed and stores data into DB', function () {
     Http::fake(['https://paypal.api/v1/payments/payouts' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_batch_payout_details_response.json'
+        base_path().'/tests/stubs/Paypal_batch_payout_details_response.json'
     ), associative: true);
 
     $baseResponse['items'][0]['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[0]->id;
@@ -194,7 +194,7 @@ test('a batch payout is processed and stores data into DB', function () {
 
 test('if batch fails, the amounts are returned to referrer withdrawable commission', function () {
     Http::fake(['https://paypal.api/v1/payments/*' => Http::response(json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_create_batch_payout_fail_response.json'
+        base_path().'/tests/stubs/Paypal_create_batch_payout_fail_response.json'
     ), associative: true))]);
 
     $payout = ReferrerPayout::find($this->referrerPayouts[0]->id);
@@ -211,7 +211,7 @@ test('if batch call is successful but item fails, the amount is returned to refe
     Http::fake(['https://paypal.api/v1/payments/payouts' => $this->batchPayoutSuccessfulResponse]);
 
     $baseResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_batch_payout_details_fail_response.json'
+        base_path().'/tests/stubs/Paypal_batch_payout_details_fail_response.json'
     ), associative: true);
 
     $baseResponse['items'][0]['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[0]->id;
@@ -241,7 +241,7 @@ it('process payouts handshake', function () {
 test('handshake cron is handled and stores data into DB', function () {
     Event::fake();
     $baseResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_payout_item_details_response.json'
+        base_path().'/tests/stubs/Paypal_payout_item_details_response.json'
     ), associative: true);
 
     $baseResponse['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[1]->id;
@@ -258,7 +258,7 @@ test('handshake cron is handled and stores data into DB', function () {
 
 test('if item transaction fails in handshake, the amount is returned to referrer', function () {
     $baseResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/Paypal_payout_item_details_fail_response.json'
+        base_path().'/tests/stubs/Paypal_payout_item_details_fail_response.json'
     ), associative: true);
 
     $baseResponse['payout_item']['sender_item_id'] .= '-'.$this->referrerPayouts[1]->id;

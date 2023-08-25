@@ -18,5 +18,4 @@ class ShippingMatrixFactory extends Factory
             'slip_default_value' => $this->faker->randomFloat(2, 1, 100),
         ];
     }
-
 }

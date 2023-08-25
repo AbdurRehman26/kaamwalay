@@ -14,11 +14,11 @@ class MarketingWeeklyReport extends MarketingReport
 
     public function getReportTitle(): string
     {
-        return "Marketing Report (Weekly)";
+        return 'Marketing Report (Weekly)';
     }
 
     public function getReportData(): array
     {
-        return $this->getDataForReport(now()->subWeek()->startOfDay(), now()->subDay()->endOfDay());
+        return $this->getDataForReport(now()->subWeek()->startOfDay(), now()->subDay()->endOfDay(), now()->subWeeks(2)->startOfDay(), now()->subWeek()->subDay()->endOfDay());
     }
 }

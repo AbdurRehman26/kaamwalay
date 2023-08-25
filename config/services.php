@@ -47,6 +47,7 @@ return [
     'slack' => [
         'channel_webhooks' => [
             'closes_ags' => env('SLACK_CHANNEL_WEBHOOK_CLOSES_AGS'),
+            'ops_ags' => env('SLACK_CHANNEL_WEBHOOK_OPS_AGS'),
         ],
     ],
 
@@ -56,7 +57,7 @@ return [
 
     'mailchimp' => [
         'api_key' => env('MAILCHIMP_API_KEY'),
-        'server' => env('MAILCHIMP_SERVER')
+        'server' => env('MAILCHIMP_SERVER'),
     ],
 
     'hubspot' => [

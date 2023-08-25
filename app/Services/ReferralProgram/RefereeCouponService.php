@@ -18,6 +18,8 @@ use Throwable;
 
 class RefereeCouponService
 {
+    protected const MAX_DISCOUNT_APPLICABLE_ITEMS = 20;
+
     public function __construct(
         protected CouponCodeService $couponCodeService,
         protected CouponStatusService $couponStatusService
@@ -43,7 +45,7 @@ class RefereeCouponService
             return $coupon->refresh();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+            Log::error($e->getMessage()."\n File:".$e->getFile()."\n Line:".$e->getLine());
 
             throw $e;
         }
@@ -63,6 +65,7 @@ class RefereeCouponService
                     'name' => $code,
                     'created_by' => $user->id,
                     'is_system_generated' => 1,
+                    'max_discount_applicable_items' => self::MAX_DISCOUNT_APPLICABLE_ITEMS,
                 ],
                 $this->generateCouponData()
             )
@@ -108,7 +111,7 @@ class RefereeCouponService
         $coupon->couponStats()->save(new CouponStat());
     }
 
-    public function getRefereeCoupon(): object|null
+    public function getRefereeCoupon(): ?object
     {
         $coupon = Coupon::validOnCurrentDate()->whereExists(function ($query) {
             $query->from('couponables')->whereColumn('couponables.couponables_id', 'coupons.created_by')

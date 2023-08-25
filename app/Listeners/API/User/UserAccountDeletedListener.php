@@ -25,7 +25,6 @@ class UserAccountDeletedListener implements ShouldQueue
         //
     }
 
-
     public function handle(UserAccountDeletedEvent $event): void
     {
         $userId = $event->userId;
@@ -54,6 +53,7 @@ class UserAccountDeletedListener implements ShouldQueue
 
         /**
          * Delete user's payment methods
+         *
          * @var $user User
          */
         $user = User::find($userId);

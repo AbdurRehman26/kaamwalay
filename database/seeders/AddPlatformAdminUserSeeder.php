@@ -19,7 +19,7 @@ class AddPlatformAdminUserSeeder extends Seeder
                 'first_name' => 'Robograding',
                 'last_name' => 'Platform',
                 'email' => 'platform@robograding.com',
-                'username' => 'robograding.platform'
+                'username' => 'robograding.platform',
             ]);
     }
 }

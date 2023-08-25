@@ -66,23 +66,26 @@ function CustomGradeStepper(props: CustomGradeStepperProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState(false);
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[props.itemIndex]?.humanGradeValues,
+        (state) => state.submissionGradesSlice.allSubmissions[props.itemIndex]?.userCard?.humanGradeValues,
     );
 
-    const cardID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[props.itemIndex].id);
+    const cardID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[props.itemIndex].userCard?.id);
+    const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[props.itemIndex].id);
 
     const updateBackendDelta = useCallback(
         async (newDelta: number) => {
             setIsLoading(true);
-            const endpoint = apiService.createEndpoint(`admin/orders/${props.orderID}/cards/${cardID}/grades`);
+            const endpoint = apiService.createEndpoint(`admin/orders/${props.orderID}/cards/${cardID}/grades`, {
+                version: 'v3',
+            });
             const response = await endpoint.put('', {
                 humanGradeValues: humanGrades,
                 gradeDelta: newDelta,
             });
-            dispatch(updateExistingCardGradeData({ id: cardID, data: response.data }));
+            dispatch(updateExistingCardGradeData({ id: itemID, data: response.data }));
             setIsLoading(false);
         },
-        [apiService, cardID, dispatch, humanGrades, props.orderID],
+        [apiService, cardID, dispatch, humanGrades, itemID, props.orderID],
     );
 
     const handleGradeChange = useCallback(

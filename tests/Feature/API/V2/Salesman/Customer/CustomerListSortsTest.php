@@ -22,7 +22,7 @@ beforeEach(function () {
 
 it('returns customers list order by asc email', function () {
     actingAs($this->user);
-    $response = getJson(route('v2.salesman.customers.index',  [
+    $response = getJson(route('v2.salesman.customers.index', [
         'sort' => 'email',
     ]));
 

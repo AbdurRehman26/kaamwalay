@@ -30,6 +30,6 @@ class ReportMail extends Mailable
 
     protected function getTemplateName(): string
     {
-        return $this->prefix . $this->templateInfo['name'];
+        return $this->prefix.$this->templateInfo['name'];
     }
 }

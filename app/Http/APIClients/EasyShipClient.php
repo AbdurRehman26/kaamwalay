@@ -9,6 +9,7 @@ use Log;
 class EasyShipClient
 {
     protected string $baseUrl;
+
     protected string $apiKey;
 
     public function __construct()
@@ -31,13 +32,13 @@ class EasyShipClient
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Authorization' => 'Bearer '.$this->apiKey,
             ])->timeout(5)->retry(3, 500)
-                ->post($this->baseUrl . '/rates', $data);
+                ->post($this->baseUrl.'/rates', $data);
 
             return $response->json()['rates'];
         } catch (Exception $e) {
-            Log::error('Request International Rates, User ID: ' . auth()->user()?->id);
+            Log::error('Request International Rates, User ID: '.auth()->user()?->id);
             Log::error('EasyShip rates request:', $data);
             report($e);
 

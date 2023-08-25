@@ -32,7 +32,7 @@ class RegenerateOrderInvoice extends Command
     public function handle(InvoiceService $invoiceService): int
     {
         $orderNumber = $this->argument('orderNumber');
-        $this->info('Regenerating invoice for order # ' . $orderNumber);
+        $this->info('Regenerating invoice for order # '.$orderNumber);
 
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
 

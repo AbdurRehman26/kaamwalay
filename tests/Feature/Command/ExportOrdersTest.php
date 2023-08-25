@@ -10,6 +10,6 @@ it('generates export', function () {
     Storage::fake('s3');
     Notification::fake();
 
-    $this->artisan('orders:export ' . Carbon::now()->format('Y-m-d'))
+    $this->artisan('orders:export '.Carbon::now()->format('Y-m-d'))
         ->assertExitCode(0);
 });

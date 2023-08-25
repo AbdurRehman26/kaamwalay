@@ -75,5 +75,5 @@ it('a customer can remove coupon from order payment page', function () {
 
     expect($this->order->coupon_id)->toBeNull()
         ->and($this->order->discounted_amount)->toBe(0.0)
-        ->and($this->order->grand_total)->toBe((float)$this->order->grand_total_before_discount);
+        ->and($this->order->grand_total)->toBe((float) $this->order->grand_total_before_discount);
 });

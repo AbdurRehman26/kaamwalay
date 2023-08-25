@@ -9,11 +9,11 @@ use Spatie\Dropbox\Exceptions\BadRequest;
 class DropboxService
 {
     protected Client $client;
+
     protected string $rootPath;
 
     public function __construct()
     {
-        // @phpstan-ignore-next-line
         $this->client = new Client(new AutoRefreshDropboxTokenService());
         $this->rootPath = config('services.dropbox.root_path');
     }
@@ -24,12 +24,12 @@ class DropboxService
     public function createFolderBatch(array $paths): array
     {
         $paths = collect($paths)->map(function (string $path) {
-            return $this->rootPath . $this->normalizePath($path);
+            return $this->rootPath.$this->normalizePath($path);
         })->toArray();
 
         return $this->client->rpcEndpointRequest('files/create_folder_batch', [
             'paths' => $paths,
-             // 'force_async' => true, //Enable this if async flow needs to be tested locally
+            // 'force_async' => true, //Enable this if async flow needs to be tested locally
         ]);
     }
 

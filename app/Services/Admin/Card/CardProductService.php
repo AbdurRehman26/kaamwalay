@@ -42,7 +42,7 @@ class CardProductService
         'Italian',
         'Spanish',
         'Portuguese',
-        '(South) Korean',
+        'Korean',
         'Thai',
         'Traditional Chinese',
         'Russian',
@@ -133,17 +133,17 @@ class CardProductService
         }
     }
 
-    protected function getCategoryFromAgs(string $categoryName): int | null
+    protected function getCategoryFromAgs(string $categoryName): ?int
     {
         return $this->agsService->getCardCategory(['exact_name' => $categoryName])['results'][0]['id'];
     }
 
-    protected function getSeriesFromAgs(string $seriesName, string $categoryName): int | null
+    protected function getSeriesFromAgs(string $seriesName, string $categoryName): ?int
     {
         return $this->agsService->getCardSeries(['exact_name' => $seriesName, 'exact_category_name' => $categoryName])['results'][0]['id'];
     }
 
-    protected function getSetFromAgs(int $seriesId, string $setName): int | null
+    protected function getSetFromAgs(int $seriesId, string $setName): ?int
     {
         return $this->agsService->getCardSet([
             'exact_name' => $setName,

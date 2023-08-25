@@ -13,8 +13,11 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
+
     public const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+
     protected const ERROR_PARAMETER_CUSTOMER = 'customer';
+
     protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function charge(Order $order, array $data = []): array
@@ -128,15 +131,15 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
     protected function paidPaymentIntent(Order $order): object
     {
         return (object) [
-            "charges" => collect([
+            'charges' => collect([
                 (object) [
-                    "id" => "ch_3JPMybJCai8r8pbf0PSZNf2Y",
-                    "amount" => $order->grand_total_cents,
-                    "amount_captured" => $order->grand_total_cents,
-                    "outcome" => (object) [
-                        "type" => "authorized",
+                    'id' => 'ch_3JPMybJCai8r8pbf0PSZNf2Y',
+                    'amount' => $order->grand_total_cents,
+                    'amount_captured' => $order->grand_total_cents,
+                    'outcome' => (object) [
+                        'type' => 'authorized',
                     ],
-                    "paid" => true,
+                    'paid' => true,
                 ],
             ]),
         ];
@@ -270,24 +273,24 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
         ];
 
         $response = [
-            "id" => "re_3JkPiHJCai8r8pbf0rt1gnjI",
-            "object" => "refund",
-            "amount" => 100,
-            "balance_transaction" => "txn_3JkPiHJCai8r8pbf0W60PefH",
-            "charge" => "ch_3JkPiHJCai8r8pbf0zKiypJJ",
-            "created" => 1634225868,
-            "currency" => "usd",
-            "metadata" => [
-                "Order ID" => "33",
-                "Order #" => "RG000000033",
-                "Notes" => "Test",
+            'id' => 're_3JkPiHJCai8r8pbf0rt1gnjI',
+            'object' => 'refund',
+            'amount' => 100,
+            'balance_transaction' => 'txn_3JkPiHJCai8r8pbf0W60PefH',
+            'charge' => 'ch_3JkPiHJCai8r8pbf0zKiypJJ',
+            'created' => 1634225868,
+            'currency' => 'usd',
+            'metadata' => [
+                'Order ID' => '33',
+                'Order #' => 'RG000000033',
+                'Notes' => 'Test',
             ],
-            "payment_intent" => "pi_3JkPiHJCai8r8pbf0jHacjUB",
-            "reason" => null,
-            "receipt_number" => null,
-            "source_transfer_reversal" => null,
-            "status" => "succeeded",
-            "transfer_reversal" => null,
+            'payment_intent' => 'pi_3JkPiHJCai8r8pbf0jHacjUB',
+            'reason' => null,
+            'receipt_number' => null,
+            'source_transfer_reversal' => null,
+            'status' => 'succeeded',
+            'transfer_reversal' => null,
         ];
 
         return [

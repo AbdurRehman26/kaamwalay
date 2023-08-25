@@ -60,12 +60,12 @@ test('an admin update vault shipment', function () {
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])->assertSuccessful()
-    ->assertJsonStructure([
-        'data' => [
-            'shipping_provider',
-            'tracking_number',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'shipping_provider',
+                'tracking_number',
+            ],
+        ]);
 });
 
 test('vault shipment update with valid data', function () {

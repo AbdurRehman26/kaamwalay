@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-
 use Database\Seeders\RolesSeeder;
+
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
@@ -12,12 +12,12 @@ beforeEach(function () {
     $this->admin = User::factory()->withRole(config('permission.roles.admin'))->create();
 });
 
-it("should not allow guest users to presign files", function () {
+it('should not allow guest users to presign files', function () {
     $response = postJson('/api/v2/files/presign');
     $response->assertUnauthorized();
 });
 
-it("should not presign correctly due to the missing details", function () {
+it('should not presign correctly due to the missing details', function () {
     $this->actingAs($this->user);
     $response = postJson('/api/v2/files/presign');
     $response->assertUnprocessable();
@@ -28,7 +28,7 @@ it("should not presign correctly due to the missing details", function () {
     ]);
 });
 
-it("should presign correctly", function () {
+it('should presign correctly', function () {
     Storage::fake('s3');
 
     $this->actingAs($this->user);
@@ -66,7 +66,7 @@ it('should correctly presign custom path file', function () {
     $response->assertJsonPath('data.key', 'custom-prefix/custom-dir/custom-suffix.jpg');
 });
 
-it("should not let normal user to change bucket", function () {
+it('should not let normal user to change bucket', function () {
     Storage::fake('s3');
 
     $this->actingAs($this->user);
@@ -81,8 +81,7 @@ it("should not let normal user to change bucket", function () {
     expect($response->json('data.signed_url'))->not->toContain('test-bucket');
 });
 
-
-it("should let admin user to change bucket", function () {
+it('should let admin user to change bucket', function () {
     Storage::fake('s3');
 
     $this->actingAs($this->admin);

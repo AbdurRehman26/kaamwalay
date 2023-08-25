@@ -21,6 +21,7 @@ class CreateOrderFoldersOnDropbox implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
+
     public int $maxExceptions = 3;
 
     /**
@@ -40,7 +41,7 @@ class CreateOrderFoldersOnDropbox implements ShouldQueue
      */
     public function handle(OrderService $orderService, DropboxService $dropboxService): void
     {
-        Log::info('Creating folders on Dropbox: ' . $this->order->order_number);
+        Log::info('Creating folders on Dropbox: '.$this->order->order_number);
 
         // If asyncJobId exists, job previously ran for folders creation, so we need to inquire status from Dropbox
         if (! empty($this->asyncJobId)) {

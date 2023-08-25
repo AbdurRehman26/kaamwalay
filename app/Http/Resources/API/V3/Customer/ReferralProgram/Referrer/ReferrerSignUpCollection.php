@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Resources\API\V3\Customer\ReferralProgram\Referrer;
 
 use Illuminate\Http\Request;

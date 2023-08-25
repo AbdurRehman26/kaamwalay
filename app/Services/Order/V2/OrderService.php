@@ -29,35 +29,36 @@ class OrderService extends V1OrderService
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
-        $data["SHIPPING_INSTRUCTIONS_URL"] = config('app.url') . '/dashboard/submissions/' . $order->id . '/confirmation';
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
+        $data['SHIPPING_INSTRUCTIONS_URL'] = config('app.url').'/dashboard/submissions/'.$order->id.'/confirmation';
 
         $items = [];
         foreach ($orderItems as $orderItem) {
             $card = $orderItem->cardProduct;
             $items[] = [
-                "CARD_IMAGE_URL" => $card->image_path,
-                "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $this->getCardFullName($card),
-                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
-                "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+                'CARD_IMAGE_URL' => $card->image_path,
+                'CARD_NAME' => $card->name,
+                'CARD_FULL_NAME' => $this->getCardFullName($card),
+                'CARD_VALUE' => number_format($orderItem->declared_value_per_unit, 2),
+                'CARD_QUANTITY' => $orderItem->quantity,
+                'CARD_COST' => number_format($orderItem->quantity * $paymentPlan->price, 2),
             ];
         }
 
-        $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data['ORDER_ITEMS'] = $items;
+        $data['SUBTOTAL'] = number_format($order->service_fee, 2);
+        $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['INSURANCE_FEE'] = $order->shipping_insurance_fee ? '$'.number_format($order->shipping_insurance_fee, 2) : 'N/A';
+        $data['TOTAL'] = number_format($order->grand_total, 2);
 
-        $data["SERVICE_LEVEL"] = $paymentPlan->price;
-        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
-        $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+        $data['SERVICE_LEVEL'] = $paymentPlan->price;
+        $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
+        $data['DATE'] = $order->created_at->format('m/d/Y');
+        $data['TOTAL_DECLARED_VALUE'] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = ! empty($order->shippingAddress) ? $this->getAddressData($order->shippingAddress) : [];
-        $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
-        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['SHIPPING_ADDRESS'] = ! empty($order->shippingAddress) ? $this->getAddressData($order->shippingAddress) : [];
+        $data['BILLING_ADDRESS'] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
+        $data['PAYMENT_METHOD'] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
     }
@@ -68,16 +69,16 @@ class OrderService extends V1OrderService
 
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
-        $data["TOTAL"] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
-        $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
-        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
-        $data['SUBMISSION_URL'] = config('app.url') . '/dashboard/submissions/' . $order->id . '/view';
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
+        $data['TOTAL'] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
+        $data['BILLING_ADDRESS'] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
+        $data['PAYMENT_METHOD'] = $this->getOrderPaymentText($orderPayment);
+        $data['SUBMISSION_URL'] = config('app.url').'/dashboard/submissions/'.$order->id.'/view';
 
         return $data;
     }
 
-    public function getDataForCustomerPaymentReminder(Order $order):array
+    public function getDataForCustomerPaymentReminder(Order $order): array
     {
         $data = [];
 
@@ -89,12 +90,13 @@ class OrderService extends V1OrderService
 
         $data['SUBTOTAL'] = number_format($order->service_fee, 2);
         $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['INSURANCE_FEE'] = $order->shipping_insurance_fee ? '$'.number_format($order->shipping_insurance_fee, 2) : 'N/A';
         $data['TOTAL'] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
 
         $data['SERVICE_LEVEL'] = $paymentPlan->price;
         $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
         $data['DATE'] = $order->created_at->format('m/d/Y');
-        $data['SUBMISSION_PAYMENT_URL'] = config('app.url') . '/dashboard/submissions/' . $order->id . '/pay';
+        $data['SUBMISSION_PAYMENT_URL'] = config('app.url').'/dashboard/submissions/'.$order->id.'/pay';
 
         return $data;
     }
@@ -122,7 +124,7 @@ class OrderService extends V1OrderService
             return 0.0;
         }
 
-        Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_' . $order->order_number, [
+        Log::info('CC_PAYMENT_CALC_PRICE_REQUEST_'.$order->order_number, [
             'paymentBlockchainNetwork' => $paymentBlockchainNetwork,
             'orderTotal' => $order->grand_total_before_discount,
             'ccDiscount' => $this->getCollectorCoinDiscount($order, $orderPayable),
@@ -134,7 +136,7 @@ class OrderService extends V1OrderService
         ]);
 
         Cache::put(
-            'cc-payment-' . $order->id,
+            'cc-payment-'.$order->id,
             ['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork],
             300
         );
@@ -218,7 +220,7 @@ class OrderService extends V1OrderService
 
     protected function recalculateGrandTotal(Order &$order): self
     {
-        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee;
+        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee + $order->shipping_insurance_fee;
         $order->grand_total = $order->grand_total_before_discount - $order->discounted_amount - $order->payment_method_discounted_amount;
 
         return $this;
@@ -267,7 +269,7 @@ class OrderService extends V1OrderService
                     'FIRST_NAME' => $order->user->first_name,
                     'TRACKING_NUMBER' => $order->orderShipment->tracking_number,
                     'TRACKING_URL' => $order->orderShipment->tracking_url,
-                    'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
+                    'SUBMISSION_URL' => config('app.url').'/dashboard/submissions/'.$order->id.'/view',
                 ],
                 'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED,
             ];
@@ -276,7 +278,7 @@ class OrderService extends V1OrderService
         return [
             'data' => [
                 'ORDER_NUMBER' => $order->order_number,
-                'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
+                'SUBMISSION_URL' => config('app.url').'/dashboard/submissions/'.$order->id.'/view',
             ],
             'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
         ];

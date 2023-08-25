@@ -5,11 +5,12 @@ use App\Enums\Salesman\CommissionTypeEnum;
 use App\Models\Order;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Symfony\Component\HttpFoundation\Response;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
-use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     $this->seed([
@@ -167,7 +168,7 @@ test('a customer cannot create salesmen', function () {
         'email' => 'luis@wooter.com',
         'phone' => '+1234567890',
     ])
-    ->assertStatus(403);
+        ->assertStatus(403);
 });
 
 test('a guest cannot create salesmen', function () {

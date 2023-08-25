@@ -17,7 +17,7 @@ class CardProductController extends Controller
     {
     }
 
-    public function store(StoreCardProductRequest $request): CardProductResource | JsonResponse
+    public function store(StoreCardProductRequest $request): CardProductResource|JsonResponse
     {
         try {
             $card = $this->cardProductService->create(

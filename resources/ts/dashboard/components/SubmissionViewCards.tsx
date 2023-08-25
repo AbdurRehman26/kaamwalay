@@ -204,7 +204,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         </Typography>
                                                     </Box>
 
-                                                    {item.certificateNumber ? (
+                                                    {item.userCard?.certificateNumber ? (
                                                         <Box>
                                                             <Typography
                                                                 variant={'caption'}
@@ -218,7 +218,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                                 color={'textSecondary'}
                                                                 className={classes.cardDataKeyValue}
                                                             >
-                                                                &nbsp;{item.certificateNumber}
+                                                                &nbsp;{item.userCard?.certificateNumber}
                                                             </Typography>
                                                         </Box>
                                                     ) : null}
@@ -267,7 +267,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
                                             target={'_blank'}
-                                            href={`/feed/${item.certificateNumber}/view`}
+                                            href={`/feed/${item.userCard?.certificateNumber}/view`}
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
@@ -292,7 +292,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                     {item?.userCard?.overallGrade ? (
                                                         <MuiLink
                                                             target={'_blank'}
-                                                            href={`/feed/${item.certificateNumber}/view`}
+                                                            href={`/feed/${item.userCard?.certificateNumber}/view`}
                                                             rel={'noreferrer'}
                                                             underline={'hover'}
                                                             variant={'body2'}

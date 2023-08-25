@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 
 class ReferrerPayoutController extends Controller
 {
-    public function index(ReferrerPayoutService $referrerPayoutService): AnonymousResourceCollection | JsonResponse
+    public function index(ReferrerPayoutService $referrerPayoutService): AnonymousResourceCollection|JsonResponse
     {
         try {
             return ReferrerPayoutResource::collection($referrerPayoutService->getReferrerPayouts());
@@ -27,7 +27,7 @@ class ReferrerPayoutController extends Controller
         }
     }
 
-    public function store(StoreReferrerPayoutRequest $request, ReferrerPayoutService $referrerPayoutService): ReferrerPayoutResource | JsonResponse
+    public function store(StoreReferrerPayoutRequest $request, ReferrerPayoutService $referrerPayoutService): ReferrerPayoutResource|JsonResponse
     {
         try {
             return new ReferrerPayoutResource(

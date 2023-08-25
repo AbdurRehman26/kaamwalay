@@ -33,7 +33,7 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
         if (! $user) {
             return false;
         }
-    
+
         $referees = $user->referees;
 
         // Send Remainder if user has no referees

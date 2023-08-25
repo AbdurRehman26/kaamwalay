@@ -4,7 +4,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
-
 use App\Models\UserCard;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -24,7 +23,7 @@ it('generates order label for specific order', function () {
         UserCard::factory()->for($orderItem)->create();
     }
 
-    $this->artisan('orders:generate-label ' . $order->order_number)->assertExitCode(0);
+    $this->artisan('orders:generate-label '.$order->order_number)->assertExitCode(0);
     assertDatabaseHas('order_labels', ['order_id' => $order->id]);
     assertDatabaseCount('card_labels', count($orderItems));
 });

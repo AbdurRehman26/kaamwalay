@@ -42,9 +42,7 @@ const CustomStats = connectStats(({ nbHits, query }: { nbHits: any; query: any }
             ) : (
                 <Typography sx={styles.searchValues}>{query ? `Search results for “${query}”` : ``}</Typography>
             )}
-            <Typography sx={styles.CountStyle}>
-                {`${nbHits.toLocaleString()}  ${query ? `results` : `cards`}`}
-            </Typography>
+            {query ? <Typography sx={styles.CountStyle}>{`${nbHits.toLocaleString()} results`}</Typography> : null}
         </div>
     );
 });

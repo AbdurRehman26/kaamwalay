@@ -46,7 +46,6 @@ class PaymentServiceProvider extends ServiceProvider implements DeferrableProvid
         });
     }
 
-
     public function provides(): array
     {
         return [V1StripeService::class, V2StripeService::class];

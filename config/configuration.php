@@ -46,6 +46,12 @@ return [
         'algolia_public_key' => [
             'value' => env('ALGOLIA_PUBLIC_KEY'),
         ],
+        'meilisearch_public_host' => [
+            'value' => env('MEILISEARCH_PUBLIC_HOST'),
+        ],
+        'meilisearch_public_key' => [
+            'value' => env('MEILISEARCH_PUBLIC_KEY'),
+        ],
         'google_analytics_tracking_code' => [
             'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
         ],
@@ -96,6 +102,9 @@ return [
         ],
         'feature_order_cleaning_fee_max_cap' => [
             'value' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
+        ],
+        'feature_order_shipping_insurance_fee_percentage' => [
+            'value' => env('FEATURE_ORDER_SHIPPING_INSURANCE_FEE_PERCENTAGE'),
         ],
         'feature_referral_discount_percentage' => [
             'auth' => true,

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\OrderItem;
+use Illuminate\Database\Seeder;
 
 class UpdateMultipleOrderItemsSeeder extends Seeder
 {
@@ -13,11 +13,11 @@ class UpdateMultipleOrderItemsSeeder extends Seeder
     public function run(): void
     {
         $currentDateTime = new \Datetime();
-        $items = OrderItem::where('quantity','>',1)->get();
+        $items = OrderItem::where('quantity', '>', 1)->get();
 
-        foreach($items as $item){
+        foreach ($items as $item) {
             $quantity = $item->quantity;
-            for($i = 0; $i < $quantity - 1; $i++){
+            for ($i = 0; $i < $quantity - 1; $i++) {
                 $newItem = $item->replicate();
                 $newItem->quantity = 1;
                 $newItem->created_at = $currentDateTime;

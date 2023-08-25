@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { initializeShippingMethod, setIsNextDisabled, setShippingMethod } from '../../redux/slices/newSubmissionSlice';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
-import ShippingMethodDetail from './ShippingMethodDetail';
 
 const mappedContent: Record<string, ReactNode> = {
     // eslint-disable-next-line camelcase
@@ -53,27 +52,28 @@ export function ShippingMethods() {
         <Stack>
             <Grid container direction={'row'} alignItems={'center'} py={3}>
                 <Typography variant={'subtitle1'} fontWeight={500} mr={1}>
-                    Insured Shipping or Vault Storage?
+                    Shipping or Vault Storage?
                 </Typography>
                 <Tooltip
                     title={
                         <Stack>
                             <Typography variant={'caption'} mb={2}>
                                 Please tell us if you would like to have your cards shipped back to you once they are
-                                graded (Insured Shipping) or would you like to store your cards in the AGS Vault?
+                                graded (Shipping) or would you rather store them in the AGS Vault (Vault Storage)?
                             </Typography>
 
                             <Typography variant={'caption'} fontWeight={700}>
                                 What is Vault Storage?
                             </Typography>
                             <Typography variant={'caption'} mb={2}>
-                                Vault storage allows you to safely store your cards in our AGS vault. Rather than
+                                Vault storage allows you to safely store your cards in our AGS Vault. Rather than
                                 shipping it back after grading, we will store your slabbed card in a level-8 security
                                 safe.
                             </Typography>
 
                             <Typography variant={'caption'} mb={2}>
-                                You can opt to have your card shipped to you at any point.
+                                You can have your cards shipped back to you at any point, by simply paying the shipping
+                                fee.
                             </Typography>
 
                             <Typography variant={'caption'}>Vault storage is completely FREE.</Typography>
@@ -96,7 +96,6 @@ export function ShippingMethods() {
                     ) : null,
                 )}
             </Grid>
-            <ShippingMethodDetail />
 
             {shippingMethod?.code && mappedContent[shippingMethod?.code] ? mappedContent[shippingMethod?.code] : null}
         </Stack>

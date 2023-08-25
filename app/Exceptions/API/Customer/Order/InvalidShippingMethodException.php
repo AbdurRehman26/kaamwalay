@@ -16,7 +16,7 @@ class InvalidShippingMethodException extends Exception
     protected $code = Response::HTTP_BAD_REQUEST;
 
     /**
-     * @param Request|array $request
+     * @param  Request|array  $request
      */
     public function render($request): JsonResponse
     {

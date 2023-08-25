@@ -33,8 +33,8 @@ test('a referrer can withdraw his commission', function () {
     actingAs($this->user);
 
     postJson(route('v3.payouts.store', [
-            'payout_account' => $this->faker->email(),
-        ]))
+        'payout_account' => $this->faker->email(),
+    ]))
         ->assertSuccessful()
         ->assertJsonStructure(['data' => [
             'payout_account',

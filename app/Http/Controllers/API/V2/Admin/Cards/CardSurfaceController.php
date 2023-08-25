@@ -18,7 +18,7 @@ class CardSurfaceController extends Controller
     public function __construct(private CardSurfaceService $cardSurfaceService)
     {
     }
-    
+
     public function index(): CardSurfaceCollection
     {
         return new CardSurfaceCollection($this->cardSurfaceService->getCardSurfaces());

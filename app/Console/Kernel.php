@@ -9,7 +9,9 @@ use App\Console\Commands\ReferralProgram\ProcessPayoutsHandshake;
 use App\Console\Commands\ReferralProgram\SendTopReferrersStats;
 use App\Console\Commands\RevenueStats\SendUnpaidOrdersStats;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
+use App\Console\Commands\Salesman\SendSalesmenStats;
 use App\Console\Commands\SendAdminReports;
+use App\Console\Commands\SendOpsStatsCommand;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -36,6 +38,10 @@ class Kernel extends ConsoleKernel
         $schedule->command(ProcessPayoutsHandshake::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(SendTopReferrersStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
             ->dailyAt('00:20');
+        $schedule->command(SendSalesmenStats::class, [Carbon::now()->subDay()->format('Y-m-d')])
+            ->dailyAt('00:20');
+        $schedule->command(SendOpsStatsCommand::class, [Carbon::now()->subDay(), Carbon::now()])
+            ->timezone('America/New_York')->dailyAt('00:05');
     }
 
     /**
@@ -43,7 +49,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

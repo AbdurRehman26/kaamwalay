@@ -17,6 +17,7 @@ class WalletProjector extends Projector
     public function __construct(protected WalletService $service)
     {
     }
+
     public function onWalletCreated(WalletCreated $event): void
     {
         $this->service->createWallet($event->attributes);

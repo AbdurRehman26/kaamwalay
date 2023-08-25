@@ -17,6 +17,7 @@ use Throwable;
 class OrderPaymentService
 {
     protected Order $order;
+
     protected array $data;
 
     public function __construct(
@@ -107,7 +108,6 @@ class OrderPaymentService
 
         $orderPayment->save();
 
-
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
         if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
             $partialPayment = OrderPayment::firstOrNew([
@@ -161,7 +161,7 @@ class OrderPaymentService
         }
     }
 
-    protected function updateWalletPaymentAmount(float|null $amount): void
+    protected function updateWalletPaymentAmount(?float $amount): void
     {
         if ($this->order->hasCreditApplied() && empty($amount)) {
             $this->order->amount_paid_from_wallet = 0;
@@ -175,7 +175,7 @@ class OrderPaymentService
 
     protected function updateGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee + $this->order->shipping_insurance_fee;
         $this->order->grand_total = (
             $this->order->service_fee
             + $this->order->shipping_fee
@@ -184,6 +184,7 @@ class OrderPaymentService
             - $this->order->refund_total
             + $this->order->extra_charge_total
             + $this->order->cleaning_fee
+            + $this->order->shipping_insurance_fee
         );
 
         GrandTotalValidator::validate($this->order);

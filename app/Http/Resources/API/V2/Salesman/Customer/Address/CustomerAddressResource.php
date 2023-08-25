@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 /**
  * @mixin CustomerAddress
  */
-
 class CustomerAddressResource extends BaseResource
 {
     /**

@@ -24,11 +24,13 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 {
     // Status Values
     public const FAILED = '0';
+
     public const COMPLETED = '1';
 
     protected const RETRY_WAIT_SECONDS = 3;
+
     protected const MAX_RETRIES_NUMBER = 10;
-    
+
     protected Web3 $web3;
 
     protected int $paymentBlockChainNetworkId;
@@ -87,7 +89,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             //Get Collector Coin amount from USD (Order grand total)
             $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
-            
+
             $transactionData = $this->getTransaction($data['transaction_hash']);
 
             $this->validateTransaction($data, $transactionData);
@@ -104,7 +106,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
             ];
-        } catch (OrderPaymentIsIncorrect | TransactionHashIsAlreadyInUse | TransactionDetailsCouldNotBeObtained $e) {
+        } catch (OrderPaymentIsIncorrect|TransactionHashIsAlreadyInUse|TransactionDetailsCouldNotBeObtained $e) {
             return [
                 'message' => $e->getMessage(),
             ];
@@ -141,7 +143,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $divider = 1;
 
         $baseUrl = 'https://api.coingecko.com/api/v3/simple/token_price';
-        $networkData = config('web3networks.' . $paymentBlockChainNetworkId, 97); #Use Binance Smart Chain Testnet as default
+        $networkData = config('web3networks.'.$paymentBlockChainNetworkId, 97); //Use Binance Smart Chain Testnet as default
 
         if ($networkData['is_testnet']) {
             $divider = config('robograding.web3.testnet_token_value');
@@ -149,11 +151,11 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
         $web3BscToken = $networkData['collector_coin_token'];
         if ($paymentBlockChainNetworkId === 56) { //Is BSC
-            $response = Http::get($baseUrl . '/binance-smart-chain?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
+            $response = Http::get($baseUrl.'/binance-smart-chain?contract_addresses='.$web3BscToken.'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
         } elseif ($paymentBlockChainNetworkId === 1) { //Is ETH
-            $response = Http::get($baseUrl . '/ethereum?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
+            $response = Http::get($baseUrl.'/ethereum?contract_addresses='.$web3BscToken.'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
         }
@@ -178,7 +180,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             PaymentBlockchainNetworkNotSupported::class
         );
 
-        $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
+        $this->web3 = new Web3(config('web3networks.'.$this->paymentBlockChainNetworkId.'.rpc_urls')[0]);
     }
 
     /**
@@ -217,7 +219,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $amountThresholdPercentage = 2.0;
 
         // Verify that transaction is going to correct destination and amount is between 2% range
-        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->paymentBlockChainNetworkId. '.collector_coin_wallet'))
+        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.'.$this->paymentBlockChainNetworkId.'.collector_coin_wallet'))
         || $transactionData['token_amount'] < $data['amount'] * (1 - ($amountThresholdPercentage / 100))
         || $transactionData['token_amount'] > $data['amount'] * (1 + ($amountThresholdPercentage / 100))) {
             throw new OrderPaymentIsIncorrect;
@@ -232,9 +234,9 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
     {
         $duplicatePayments = OrderPayment::whereRelation('paymentMethod', 'code', 'collector_coin')
-        ->where('id', '<>', $order->firstOrderPayment->id)
-        ->where('payment_provider_reference_id', $transactionHash)
-        ->count();
+            ->where('id', '<>', $order->firstOrderPayment->id)
+            ->where('payment_provider_reference_id', $transactionHash)
+            ->count();
 
         if ($duplicatePayments > 0) {
             throw new TransactionHashIsAlreadyInUse;

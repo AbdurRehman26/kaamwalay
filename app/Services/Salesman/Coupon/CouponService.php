@@ -34,6 +34,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 class CouponService
 {
     protected const COUPONABLES_REQUEST_KEY = 'couponables';
+
     protected const LIST_COUPONS_PER_PAGE = 15;
 
     protected array $couponApplicables = [
@@ -157,6 +158,7 @@ class CouponService
 
         return $coupon;
     }
+
     // @phpstan-ignore-next-line
     public function getQueuedCouponsNearingActivation(): Collection
     {
@@ -169,7 +171,7 @@ class CouponService
     public function activateCoupons(Collection $coupons): void
     {
         $coupons->each(function ($coupon) {
-            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system');
+            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system'); // @phpstan-ignore-line
         });
     }
 
@@ -183,7 +185,7 @@ class CouponService
     public function expireCoupons(Collection $coupons): void
     {
         $coupons->each(function ($coupon) {
-            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system');
+            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system'); // @phpstan-ignore-line
         });
     }
 

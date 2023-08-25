@@ -79,6 +79,8 @@ class Order extends Model implements Exportable, Taggable
         'estimated_delivery_end_at',
         'created_by',
         'referral_total_commission',
+        'requires_shipping_insurance',
+        'shipping_insurance_fee',
     ];
 
     /**
@@ -123,6 +125,8 @@ class Order extends Model implements Exportable, Taggable
         'created_by' => 'integer',
         'discounted_amount' => 'float',
         'referral_total_commission' => 'float',
+        'requires_shipping_insurance' => 'boolean',
+        'shipping_insurance_fee' => 'float',
     ];
 
     protected $appends = [
@@ -386,7 +390,7 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
      */
     public function scopeForSalesman(Builder $query, User $user): Builder
@@ -406,9 +410,9 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
-    */
+     */
     public function scopePaid(Builder $query): Builder
     {
         return $query->where('payment_status', OrderPaymentStatusEnum::PAID);
@@ -471,9 +475,9 @@ class Order extends Model implements Exportable, Taggable
             )
         );
     }
+
     /**
      * @param  Builder<Order>  $query
-     * @param  string  $coupon
      * @return Builder<Order>
      */
     public function scopeCouponCode(Builder $query, string $coupon): Builder
@@ -491,7 +495,6 @@ class Order extends Model implements Exportable, Taggable
 
     /**
      * @param  Builder<Order>  $query
-     * @param  string|int  $salesmanId
      * @return Builder<Order>
      */
     public function scopeSalesmanId(Builder $query, string|int $salesmanId): Builder
@@ -561,7 +564,7 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
      */
     public function scopeExcludeCancelled(Builder $query): Builder
@@ -570,8 +573,8 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-    * @return Builder <Order>
-    */
+     * @return Builder <Order>
+     */
     public function exportQuery(): Builder
     {
         return self::query()
@@ -670,18 +673,18 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
-    */
+     */
     public function scopeForDate(Builder $query, string $date): Builder
     {
         return $query->whereDate('created_at', $date);
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
-    */
+     */
     public function scopeForMonth(Builder $query, string $date): Builder
     {
         $monthStart = Carbon::parse($date)->firstOfMonth();
@@ -691,7 +694,7 @@ class Order extends Model implements Exportable, Taggable
     }
 
     /**
-     * @param  Builder <Order> $query
+     * @param  Builder <Order>  $query
      * @return Builder <Order>
      */
     public function scopeBetweenDates(Builder $query, DateTime $fromDate, DateTime $toDate): Builder
@@ -716,9 +719,7 @@ class Order extends Model implements Exportable, Taggable
 
     public function isEligibleToMarkAsShipped(): bool
     {
-        return (
-            $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid()
-        );
+        return $this->orderStatus()->value('id') === OrderStatus::ASSEMBLED && $this->isPaid();
     }
 
     public function isShipped(): bool

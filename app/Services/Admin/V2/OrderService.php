@@ -86,39 +86,40 @@ class OrderService extends V1OrderService
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();
         $data['CUSTOMER_EMAIL'] = $order->user->email;
         $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
-        $data["TIME"] = $order->created_at->format('h:m A');
+        $data['TIME'] = $order->created_at->format('h:m A');
 
         $items = [];
         foreach ($orderItems as $orderItem) {
             $card = $orderItem->cardProduct;
             $items[] = [
-                "CARD_IMAGE_URL" => $card->image_path,
-                "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $this->getCardFullName($card),
-                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
-                "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+                'CARD_IMAGE_URL' => $card->image_path,
+                'CARD_NAME' => $card->name,
+                'CARD_FULL_NAME' => $this->getCardFullName($card),
+                'CARD_VALUE' => number_format($orderItem->declared_value_per_unit, 2),
+                'CARD_QUANTITY' => $orderItem->quantity,
+                'CARD_COST' => number_format($orderItem->quantity * $paymentPlan->price, 2),
             ];
         }
 
-        $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data['ORDER_ITEMS'] = $items;
+        $data['SUBTOTAL'] = number_format($order->service_fee, 2);
+        $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['INSURANCE_FEE'] = $order->shipping_insurance_fee ? '$'.number_format($order->shipping_insurance_fee, 2) : 'N/A';
+        $data['TOTAL'] = number_format($order->grand_total, 2);
 
-        $data["SERVICE_LEVEL"] = $paymentPlan->price;
-        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
-        $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+        $data['SERVICE_LEVEL'] = $paymentPlan->price;
+        $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
+        $data['DATE'] = $order->created_at->format('m/d/Y');
+        $data['TOTAL_DECLARED_VALUE'] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = $order->shippingAddress ? $this->getAddressData($order->shippingAddress) : [];
-        $data["BILLING_ADDRESS"] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
+        $data['SHIPPING_ADDRESS'] = $order->shippingAddress ? $this->getAddressData($order->shippingAddress) : [];
+        $data['BILLING_ADDRESS'] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
 
-        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['PAYMENT_METHOD'] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
     }
@@ -224,6 +225,7 @@ class OrderService extends V1OrderService
 
     /**
      * @return Collection <int, UserCard>
+     *
      * @throws IncorrectOrderStatus
      */
     public function getGrades(Order $order): Collection
@@ -238,8 +240,9 @@ class OrderService extends V1OrderService
     }
 
     /**
-     * @throws IncorrectOrderStatus
      * @return Collection<int, UserCard>
+     *
+     * @throws IncorrectOrderStatus
      */
     public function getCardsForGrading(Order $order): Collection
     {

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\ReferralProgram\ReferralCodeGeneratorService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 
@@ -27,8 +28,8 @@ beforeEach(function () {
     $admin = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->user = User::factory()
         ->withRole(config('permission.roles.customer'))->create([
-        'referred_by' => $this->referrers[0]->user_id,
-    ]);
+            'referred_by' => $this->referrers[0]->user_id,
+        ]);
 
     $this->orders = Order::factory()->count(2)->state(new Sequence(
         ['payment_status' => OrderPaymentStatusEnum::PAID, 'order_status_id' => OrderStatus::PLACED, 'user_id' => $this->user->id, 'created_at' => '2022-01-01 00:00:00'],
@@ -116,7 +117,7 @@ it('filters referrers by referral status', function () {
     $count = Referrer::where('is_referral_active', 0)->count();
 
     getJson(route('v3.admin.referral-program.referrers', [
-        'filter[is_referral_active]' => "0",
+        'filter[is_referral_active]' => '0',
     ]))
         ->assertOk()
         ->assertJsonCount($count, ['data'])

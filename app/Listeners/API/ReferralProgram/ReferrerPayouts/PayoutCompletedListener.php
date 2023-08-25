@@ -26,7 +26,7 @@ class PayoutCompletedListener implements ShouldQueue
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED],
             EmailService::TEMPLATE_SLUG_REFEREE_PAYOUT_COMPLETED,
             [
-                'REDIRECT_URL' => config('app.url') . '/dashboard/referral-program/withdrawals',
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/withdrawals',
             ]
         );
     }

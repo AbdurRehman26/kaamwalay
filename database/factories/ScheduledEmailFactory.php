@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\ScheduledEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ScheduledEmailFactory extends Factory

@@ -54,36 +54,36 @@ class OrderService
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
-        $data["SHIPPING_INSTRUCTIONS_URL"] = config('app.url') . '/dashboard/submissions/' . $order->id . '/confirmation';
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
+        $data['SHIPPING_INSTRUCTIONS_URL'] = config('app.url').'/dashboard/submissions/'.$order->id.'/confirmation';
 
         $items = [];
         foreach ($orderItems as $orderItem) {
             $card = $orderItem->cardProduct;
             $items[] = [
-                "CARD_IMAGE_URL" => $card->image_path,
-                "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $this->getCardFullName($card),
-                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
-                "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+                'CARD_IMAGE_URL' => $card->image_path,
+                'CARD_NAME' => $card->name,
+                'CARD_FULL_NAME' => $this->getCardFullName($card),
+                'CARD_VALUE' => number_format($orderItem->declared_value_per_unit, 2),
+                'CARD_QUANTITY' => $orderItem->quantity,
+                'CARD_COST' => number_format($orderItem->quantity * $paymentPlan->price, 2),
             ];
         }
 
-        $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data['ORDER_ITEMS'] = $items;
+        $data['SUBTOTAL'] = number_format($order->service_fee, 2);
+        $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['TOTAL'] = number_format($order->grand_total, 2);
 
-        $data["SERVICE_LEVEL"] = $paymentPlan->price;
-        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
-        $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+        $data['SERVICE_LEVEL'] = $paymentPlan->price;
+        $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
+        $data['DATE'] = $order->created_at->format('m/d/Y');
+        $data['TOTAL_DECLARED_VALUE'] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
-        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+        $data['SHIPPING_ADDRESS'] = $this->getAddressData($order->shippingAddress);
+        $data['BILLING_ADDRESS'] = $this->getAddressData($order->billingAddress);
 
-        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+        $data['PAYMENT_METHOD'] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
     }
@@ -96,7 +96,7 @@ class OrderService
         if (! $orderPayment) {
             return 0;
         }
-        
+
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd($paymentBlockchainNetwork, $order->grand_total_to_be_paid);
         $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
         $orderPayment->update();
@@ -106,29 +106,29 @@ class OrderService
 
     protected function getCardFullName(CardProduct $card): string
     {
-        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
+        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name.' (Added Manually)';
     }
 
     protected function getAddressData(OrderAddress $address): array
     {
         return [
-            "ID" => $address->id,
-            "FULL_NAME" => $address->first_name . " " . $address->last_name,
-            "ADDRESS" => $address->address,
-            "CITY" => $address->city,
-            "STATE" => $address->state,
-            "ZIP" => $address->zip,
-            "COUNTRY" => $address->country->code,
-            "PHONE" => $address->phone,
+            'ID' => $address->id,
+            'FULL_NAME' => $address->first_name.' '.$address->last_name,
+            'ADDRESS' => $address->address,
+            'CITY' => $address->city,
+            'STATE' => $address->state,
+            'ZIP' => $address->zip,
+            'COUNTRY' => $address->country->code,
+            'PHONE' => $address->phone,
         ];
     }
 
     protected function getOrderPaymentText(array $orderPayment): string
     {
         if (array_key_exists('card', $orderPayment)) {
-            return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
+            return ucfirst($orderPayment['card']['brand']).' ending in '.$orderPayment['card']['last4'];
         } elseif (array_key_exists('payer', $orderPayment)) {
-            return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+            return $orderPayment['payer']['email']."\n".$orderPayment['payer']['name'];
         } elseif (array_key_exists('transaction', $orderPayment)) {
             return 'Collector Coin';
         }

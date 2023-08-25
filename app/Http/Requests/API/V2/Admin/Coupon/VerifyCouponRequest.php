@@ -21,7 +21,7 @@ class VerifyCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'couponables_type' => [ 'sometimes', Rule::in(['service_level'])],
+            'couponables_type' => ['sometimes', Rule::in(['service_level'])],
             'couponables_id' => 'sometimes',
         ];
     }

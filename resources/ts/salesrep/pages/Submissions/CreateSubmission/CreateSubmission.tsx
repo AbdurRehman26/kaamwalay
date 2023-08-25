@@ -1,3 +1,4 @@
+import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -18,7 +19,6 @@ import { ApplyPromoCode } from '@salesrep/components/NewSubmission/ApplyPromoCod
 import { CardsSearchResults } from '@salesrep/components/NewSubmission/CardsSearchResults';
 import { ShippingMethods } from '@salesrep/components/NewSubmission/ShippingMethods';
 import { useAppDispatch, useAppSelector } from '@salesrep/redux/hooks';
-import algoliaSearch from 'algoliasearch';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga4';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
@@ -110,6 +110,17 @@ export function CreateSubmission() {
         })();
     }, [customerId, dispatch]);
 
+    useEffect(() => {
+        if (serviceLevels.length > 0) {
+            const { id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice } =
+                serviceLevels[0];
+
+            dispatch(
+                setServiceLevel({ id, price, turnaround, type, maxProtectionAmount, priceRanges, minPrice, maxPrice }),
+            );
+        }
+    }, [dispatch, serviceLevels]);
+
     const handleServiceLevel = (serviceLevelId: number) => {
         const selectedServiceLevel = serviceLevels.filter((item) => item?.id === Number(serviceLevelId));
         const level = {
@@ -143,21 +154,19 @@ export function CreateSubmission() {
     };
 
     function getMaxProtectionAmount(maxProtectionAmount: any) {
-        const formattedMaxProtectionAmount =
-            maxProtectionAmount >= 1000000
-                ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(
-                      maxProtectionAmount,
-                  )
-                : maxProtectionAmount;
-
-        return formattedMaxProtectionAmount;
+        return maxProtectionAmount >= 1000000
+            ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(maxProtectionAmount)
+            : maxProtectionAmount;
     }
 
-    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer } = useConfiguration();
+    const { appEnv, meilisearchPublicHost, meilisearchPublicKey, searchCardCategoriesCustomer } = useConfiguration();
 
     const searchClient = useMemo(
-        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
-        [algoliaAppId, algoliaPublicKey],
+        () =>
+            instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!, {
+                finitePagination: true,
+            }),
+        [meilisearchPublicHost, meilisearchPublicKey],
     );
 
     const dispatchRequiresCleaning = setRequiresCleaning(!requiresCleaning);

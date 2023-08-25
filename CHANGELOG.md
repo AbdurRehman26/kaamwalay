@@ -1,5 +1,136 @@
 # Changelog
 
+## v3.17.0 - 2023-08-08
+
+### What's Changed
+
+- Feature: Integrate Laravel Pint by @thenabeel in https://github.com/woozard/robograding/pull/1085
+- Feature: HubSpot Live Chat Widget by @numair97 in https://github.com/woozard/robograding/pull/1087
+- Feature: Admin | Confirm All In Review Order by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1086
+- Release v3.17.0 by @thenabeel in https://github.com/woozard/robograding/pull/1088
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.16.0...v3.17.0
+
+## v3.16.0 - 2023-07-26
+
+### What's Changed
+
+- Fix: Admin | Missing Loading Icons by @luis-molina in https://github.com/woozard/robograding/pull/1071
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1073
+- Fix: Admin & Sales | Default Service Level on Create Submission by @luis-molina in https://github.com/woozard/robograding/pull/1074
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1076
+- Fix: Homepage | Header video on iPhone Issue by @numair97 in https://github.com/woozard/robograding/pull/1078
+- Feature: Admin | Manual Card Category Type by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1077
+- Feature: Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1079
+- Feature: Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1081
+- Fix:  Admin & Sales Rep | Shipping Insurance by @luis-molina in https://github.com/woozard/robograding/pull/1083
+- Fix: Remove Extra Salesrep Files by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1082
+- Release v3.16.0 by @thenabeel in https://github.com/woozard/robograding/pull/1084
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.2...v3.16.0
+
+## v3.15.2 - 2023-07-03
+
+### What's Changed
+
+- Hotfix: Updated the video in header on homepage by @thenabeel in https://github.com/woozard/robograding/pull/1075
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.1...v3.15.2
+
+## v3.15.1 - 2023-06-28
+
+### What's Changed
+
+- Hotfix: Salesreps Stats Notification Improvements by @thenabeel in https://github.com/woozard/robograding/pull/1072
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.15.0...v3.15.1
+
+## v3.15.0 - 2023-06-27
+
+### What's Changed
+
+- Feature: Salesrep Stats Closes Notification by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1069
+- Release v3.15.0 by @thenabeel in https://github.com/woozard/robograding/pull/1070
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.14.0...v3.15.0
+
+## v3.14.0 - 2023-06-25
+
+### What's Changed
+
+- Fix: Vault Storage Help Texts by @luis-molina in https://github.com/woozard/robograding/pull/1063
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1066
+- Feature: Customer | Manual Card | Update Notice by @numair97 in https://github.com/woozard/robograding/pull/1067
+- Fix: Mark Assembled and Shipped UI Feedback by @luis-molina in https://github.com/woozard/robograding/pull/1064
+- Release v3.14.0 by @thenabeel in https://github.com/woozard/robograding/pull/1068
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.13.1...v3.14.0
+
+## v3.13.1 - 2023-06-22
+
+### What's Changed
+
+- Hotfix: Add Military States by @thenabeel in https://github.com/woozard/robograding/pull/1065
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.13.0...v3.13.1
+
+## v3.13.0 - 2023-06-06
+
+### What's Changed
+
+- Feature: Rarities and Surfaces In Alphabetical Order in Dropdown  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1048
+- Refactor: Remove API v1 by @thenabeel in https://github.com/woozard/robograding/pull/1049
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1054
+- Feature: Enable all countries for shipping by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1052
+- Fix: Admin | Dont Generate Certificates for Not Accepted Cards by @luis-molina in https://github.com/woozard/robograding/pull/1051
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1056
+- Fix: Admin | Dont Generate Certificates for Not Accepted Cards by @luis-molina in https://github.com/woozard/robograding/pull/1058
+- Fix: Admin | Export Filters by @luis-molina in https://github.com/woozard/robograding/pull/1059
+- Feature: New Pricing June 2023 by @thenabeel in https://github.com/woozard/robograding/pull/1060
+- Release v3.13.0 by @thenabeel in https://github.com/woozard/robograding/pull/1061
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.2...v3.13.0
+
+## v3.12.2 - 2023-05-11
+
+### What's Changed
+
+- Hotfix: New Pricing May 2023 by @thenabeel in https://github.com/woozard/robograding/pull/1055
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.1...v3.12.2
+
+## v3.12.1 - 2023-05-09
+
+### What's Changed
+
+- Hotfix: Salesrep name in customers export by @thenabeel in https://github.com/woozard/robograding/pull/1047
+- Hotfix: View Grades Link in Customer Submission Details by @luis-molina in https://github.com/woozard/robograding/pull/1053
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.12.0...v3.12.1
+
+## v3.12.0 - 2023-05-03
+
+### What's Changed
+
+- Fix: Changes to Estimated Delivery on Customer Submission Details Page by @numair97 in https://github.com/woozard/robograding/pull/1031
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1033
+- Feature: Top Partners Closes Notification by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1034
+- Feature: Admins Create Folders Manually by @aliwooter in https://github.com/woozard/robograding/pull/1035
+- Feature: Abandoned Submissions by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1004
+- Fix : Top Partners Closes Notifications Empty Line by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1039
+- Fix: Broken navigation from Payment Page to Submisison Flow by @luis-molina in https://github.com/woozard/robograding/pull/1036
+- Feature: Public Card Page - Share to Instagram by @numair97 in https://github.com/woozard/robograding/pull/1037
+- Fix : Abandoned Submissions API Doc issue by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1040
+- Feature: Improve Customer Order API endpoints by @luis-molina in https://github.com/woozard/robograding/pull/1030
+- Hotfix: Deleted User Check Referral by @aliwooter in https://github.com/woozard/robograding/pull/1042
+- Fix: Issues In Public Card Page by @numair97 in https://github.com/woozard/robograding/pull/1043
+- Fix: Customer Order APIs | Frontend Bugs by @luis-molina in https://github.com/woozard/robograding/pull/1044
+- Fix : Styling issue for submissions list by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1041
+- Maser into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1045
+- Release v3.12.0 by @thenabeel in https://github.com/woozard/robograding/pull/1046
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.11.0...v3.12.0
+
 ## v3.11.0 - 2023-04-27
 
 ### What's Changed

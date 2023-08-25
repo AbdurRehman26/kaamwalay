@@ -2,7 +2,6 @@
 
 use App\Models\DatabaseNotification;
 use App\Models\User;
-
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\assertDatabaseMissing;

@@ -93,6 +93,8 @@ export interface ShippingSubmissionState {
     availableCountriesList: { name: string; code: string; id: number; phoneCode: string }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
+    requiresShippingInsurance: boolean;
+    shippingInsuranceFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -169,45 +171,14 @@ const initialState: AdminNewOrderSliceState = {
         availableServiceLevels: [],
         selectedServiceLevelId: 0,
         selectedServiceLevel: {
-            id: 1,
+            id: -1,
             type: 'card',
-            maxProtectionAmount: 200,
-            turnaround: '20 Business Days',
-            price: 18,
-            priceRanges: [
-                {
-                    id: 1,
-                    minCards: 1,
-                    maxCards: 20,
-                    price: 18,
-                },
-                {
-                    id: 2,
-                    minCards: 21,
-                    maxCards: 50,
-                    price: 17,
-                },
-                {
-                    id: 3,
-                    minCards: 51,
-                    maxCards: 100,
-                    price: 16,
-                },
-                {
-                    id: 4,
-                    minCards: 101,
-                    maxCards: 200,
-                    price: 15,
-                },
-                {
-                    id: 5,
-                    minCards: 201,
-                    maxCards: null,
-                    price: 14,
-                },
-            ],
-            maxPrice: 18,
-            minPrice: 14,
+            maxProtectionAmount: 0,
+            turnaround: '',
+            price: 0,
+            priceRanges: [],
+            maxPrice: 0,
+            minPrice: 0,
         },
         status: 'success',
     },
@@ -288,6 +259,8 @@ const initialState: AdminNewOrderSliceState = {
         ],
         fetchingStatus: null,
         saveForLater: true,
+        requiresShippingInsurance: true,
+        shippingInsuranceFee: 0,
         disableAllShippingInputs: false,
         useCustomShippingAddress: false,
     },
@@ -419,6 +392,7 @@ export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder',
         requiresCleaning: currentSubmission.step02Data.requiresCleaning
             ? currentSubmission.step02Data.requiresCleaning
             : false,
+        requiresShippingInsurance: currentSubmission.step03Data.requiresShippingInsurance ?? false,
         paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : {},
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
@@ -621,6 +595,12 @@ export const adminCreateOrderSlice = createSlice({
         setCleaningFee: (state, action: PayloadAction<number>) => {
             state.step02Data.cleaningFee = action.payload;
         },
+        setRequiresShippingInsurance: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.requiresShippingInsurance = action.payload;
+        },
+        setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.shippingInsuranceFee = action.payload;
+        },
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
@@ -748,6 +728,8 @@ export const {
     changeSelectedCardValue,
     setRequiresCleaning,
     setCleaningFee,
+    setRequiresShippingInsurance,
+    setShippingInsuranceFee,
     markCardAsUnselected,
     setCouponCode,
     updatePaymentMethodId,

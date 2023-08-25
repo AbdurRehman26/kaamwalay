@@ -17,7 +17,7 @@ trait OrderCommissionTrait
 
     public static function getPercentageCommission(Order $order, CommissionStructure $commissionStructure): float
     {
-        return (($commissionStructure->percentage_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total)) / 100);
+        return ($commissionStructure->percentage_value * ($order->grand_total - $order->refund_total + $order->extra_charge_total)) / 100;
     }
 
     public static function getFixedCommission(Order $order, CommissionStructure $commissionStructure): float

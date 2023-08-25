@@ -60,12 +60,13 @@ class UserCard extends Model
             'card_image' => $this->orderItem->cardProduct->image_path,
             'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
             'certificate_number' => $this->certificate_number,
-            'owner_name' => $this->user->username,
+            'owner_name' => $this->user?->username,
             'grade_nickname' => $this->overall_grade_nickname,
             'grade_overall' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
-            'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
+            'grade' => $this->overall_grade_nickname.' '.$this->overall_grade,
             'shipped_at' => $this->orderItem->order->shipped_at,
+            'shipped_at_timestamp' => $this->orderItem->order->shipped_at->unix(),
         ];
     }
 
@@ -76,6 +77,7 @@ class UserCard extends Model
             AllowedFilter::exact('order_item_id'),
         ];
     }
+
     public static function allowedIncludes(): array
     {
         return [
@@ -95,11 +97,10 @@ class UserCard extends Model
 
     public function shouldBeSearchable(): bool
     {
-        return (
+        return
             $this->orderItem->order_item_status_id === OrderItemStatus::GRADED
             && $this->orderItem->order->order_status_id === OrderStatus::SHIPPED
-            && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists()
-        );
+            && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists();
     }
 
     public function wasSearchableBeforeUpdate(): bool

@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Orders;
 
 use App\Models\User;
-use App\Services\Payment\V1\PaymentHandshakeService;
+use App\Services\Payment\V2\PaymentHandshakeService;
 use Illuminate\Console\Command;
 
 class ProcessPaymentHandshake extends Command
@@ -21,7 +21,6 @@ class ProcessPaymentHandshake extends Command
      * @var string
      */
     protected $description = 'Process payment handshake for pending order payments to get updated payment status';
-
 
     /**
      * Execute the console command.

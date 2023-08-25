@@ -79,7 +79,7 @@ trait ReferrableTrait
 
     public static function getAllowedAdminReferrerSorts(): array
     {
-        return  [
+        return [
             AllowedSort::custom('submissions', new AdminCustomerSubmissionsSort),
             AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
             AllowedSort::custom('wallet', new AdminCustomerWalletSort),

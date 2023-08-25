@@ -57,7 +57,6 @@ test('order\'s shipping method can be changed from insured shipping to vault', f
     expect($this->insuredShippingOrder->refresh()->shippingMethod->code)->toBe(ShippingMethod::VAULT_STORAGE);
 });
 
-
 test('order\'s shipping method can be changed from vault to insured shipping', function () {
     OrderItem::factory()->for($this->vaultShippingOrder)->create();
     putJson(route('v3.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
@@ -218,7 +217,7 @@ test('Invoice is re-generated whenever a shipping method is changed', function (
         'customer_address' => ['id' => CustomerAddress::factory()->for($this->user)->for($this->country)->create()->id],
     ])->assertOk();
 })
-->with([
-    fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
-    fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
-]);
+    ->with([
+        fn () => [$this->vaultShippingOrder, $this->insuredShippingMethod],
+        fn () => [$this->insuredShippingOrder, $this->vaultShippingMethod],
+    ]);

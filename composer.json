@@ -15,6 +15,7 @@
         "filament/filament": "^2.16",
         "flowframe/laravel-trend": "^0.1.0",
         "guzzlehttp/guzzle": "^7.3",
+        "http-interop/http-factory-guzzle": "^1.2",
         "hubspot/hubspot-php": "^4.0",
         "laravel-notification-channels/pusher-push-notifications": "^4.1",
         "laravel/cashier": "^14.7",
@@ -25,6 +26,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mailchimp/marketing": "*",
+        "meilisearch/meilisearch-php": "^1.2",
         "opcodesio/log-viewer": "^1.9",
         "picqer/php-barcode-generator": "^2.2",
         "predis/predis": "^1.1",
@@ -46,7 +48,7 @@
         "barryvdh/laravel-debugbar": "^3.8",
         "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.15",
-        "friendsofphp/php-cs-fixer": "^3.6",
+        "laravel/pint": "^1.10",
         "laravel/sail": "^1.18",
         "laravel/telescope": "^4.12",
         "mockery/mockery": "^1.4.4",
@@ -100,7 +102,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": false
         }
     },
     "minimum-stability": "stable",

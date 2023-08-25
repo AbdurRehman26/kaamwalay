@@ -11,7 +11,9 @@ class VaultShipmentStatus extends Model
     use HasFactory;
 
     public const PENDING = 1;
+
     public const SHIPPED = 2;
+
     public const CANCELED = 3;
 
     protected $fillable = [

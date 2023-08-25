@@ -3,6 +3,8 @@ export class ConfigurationEntity {
     public appUrl!: string;
     public algoliaAppId!: string;
     public algoliaPublicKey!: string;
+    public meilisearchPublicHost!: string;
+    public meilisearchPublicKey!: string;
     public stripeKey!: string;
     public googleAnalyticsTrackingCode!: string;
     public collectorCoinDiscountPercentage!: string;
@@ -17,4 +19,5 @@ export class ConfigurationEntity {
     public featureReferralDiscountPercentage!: number;
     public featureOrderCleaningFeePerCard!: number;
     public featureOrderCleaningFeeMaxCap!: number;
+    public featureOrderShippingInsuranceFeePercentage!: number;
 }

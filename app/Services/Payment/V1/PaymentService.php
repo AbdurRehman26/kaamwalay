@@ -26,7 +26,7 @@ class PaymentService
 
     /**
      * Payment Providers available for the application
-    **/
+     **/
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
@@ -194,7 +194,7 @@ class PaymentService
 
     /**
      * @throws Throwable
-    */
+     */
     protected function canProcessExtraCharge(): bool
     {
         return config('robograding.feature_order_extra_charge_enabled') === true;

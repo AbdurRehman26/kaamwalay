@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Order;
-use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletPayment;
 use Illuminate\Database\Migrations\Migration;

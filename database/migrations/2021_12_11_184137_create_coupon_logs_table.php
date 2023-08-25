@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Coupon;
-use App\Models\Couponable;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;

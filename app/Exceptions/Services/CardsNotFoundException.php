@@ -20,10 +20,10 @@ class CardsNotFoundException extends Exception
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     /**
-     * @param Request|array $request
+     * @param  Request|array  $request
      */
     public function render($request): JsonResponse
     {
-        return new JsonResponse([ 'error' => $this->message ], $this->code);
+        return new JsonResponse(['error' => $this->message], $this->code);
     }
 }

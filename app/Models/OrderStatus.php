@@ -12,11 +12,17 @@ class OrderStatus extends Model
     use HasFactory;
 
     public const PAYMENT_PENDING = 1;
+
     public const PLACED = 2;
+
     public const CONFIRMED = 3;
+
     public const GRADED = 4;
+
     public const SHIPPED = 5;
+
     public const CANCELLED = 6;
+
     public const ASSEMBLED = 7;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;

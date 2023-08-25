@@ -14,6 +14,6 @@ class SalesmanDashboardController
 
     public function getStat(GetSalesmanStatRequest $request): JsonResponse
     {
-        return new JsonResponse([ 'data' => $this->salesmanDashboardService->getStat(auth()->user(), $request->validated())]);
+        return new JsonResponse(['data' => $this->salesmanDashboardService->getStat(auth()->user(), $request->validated())]);
     }
 }

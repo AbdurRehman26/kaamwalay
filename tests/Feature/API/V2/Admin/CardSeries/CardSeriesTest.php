@@ -38,7 +38,7 @@ test('admins can get card series list', function () {
 });
 
 test('admins can filter card series list by category', function () {
-    $response = $this->getJson('/api/v2/admin/cards/series?category_id=' . $this->categories[0]->id);
+    $response = $this->getJson('/api/v2/admin/cards/series?category_id='.$this->categories[0]->id);
 
     $response->assertSuccessful();
     $response->assertJsonCount(2, ['data']);

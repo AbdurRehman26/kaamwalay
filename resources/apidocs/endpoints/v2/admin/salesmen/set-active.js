@@ -1,6 +1,6 @@
 /**
- * @api {post} /api/v2/admin/salesman/{user}/set-active Mark active/inactive
- * @apiName Mark active/inactive
+ * @api {post} /api/v2/admin/salesman/{user}/set-active Mark Active/Inactive
+ * @apiName Mark Active or Inactive
  * @apiGroup Admin Salesmen
  *
  * @apiVersion 2.0.0

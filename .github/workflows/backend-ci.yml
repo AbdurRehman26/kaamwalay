@@ -12,14 +12,33 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Fix style
-        uses: docker://oskarstark/php-cs-fixer-ga
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          args: --config=.php-cs-fixer.php --allow-risky=yes
+          php-version: 8.2
+          extensions:
+            dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif,
+            iconv, imagick
+          coverage: none
+
+      - name: Restore vendor cache
+        id: cache-vendor
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-interaction --no-suggest
+
+      - name: Fix style
+        run: vendor/bin/pint
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -33,7 +52,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -46,7 +67,7 @@ jobs:
 
       - name: Restore vendor cache
         id: cache-vendor
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
@@ -54,7 +75,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-vendor.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
+        run: composer install --prefer-dist --no-interaction --no-suggest
 
       - name: Run static analysis
         run: vendor/bin/phpstan analyze
@@ -66,7 +87,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -84,7 +107,7 @@ jobs:
 
       - name: Restore vendor cache
         id: cache-vendor
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
@@ -92,7 +115,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-vendor.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
+        run: composer install --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
         run: vendor/bin/pest --parallel

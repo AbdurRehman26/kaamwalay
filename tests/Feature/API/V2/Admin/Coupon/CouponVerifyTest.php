@@ -57,15 +57,14 @@ beforeEach(function () {
         ->create();
 });
 
-
 test('admin checks for valid coupon', function () {
     actingAs($this->user);
 
     getJson(route('v2.admin.coupon.verify', [
-            $this->coupon->code,
-            'couponables_type' => 'service_level',
-            'couponables_id' => $this->paymentPlan->id,
-        ]))
+        $this->coupon->code,
+        'couponables_type' => 'service_level',
+        'couponables_id' => $this->paymentPlan->id,
+    ]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -79,7 +78,7 @@ test('admin checks for valid coupon', function () {
 test('admin checks for invalid coupon code', function () {
     actingAs($this->user);
 
-    getJson(route('v2.admin.coupon.verify', $this->coupon->code . 'test'))
+    getJson(route('v2.admin.coupon.verify', $this->coupon->code.'test'))
         ->assertStatus(422);
 });
 
@@ -165,7 +164,6 @@ test('admin checks for valid coupon code having more or equal required cards cou
         'order_id' => $order->id,
     ]);
 
-
     postJson(route('v2.admin.orders.coupon.discount', [
         'order' => $order,
         'coupon' => ['code' => $coupon->code],
@@ -194,7 +192,6 @@ test('admin checks for valid coupon code having less than the required cards cou
         'order_id' => $order->id,
         'quantity' => 2,
     ]);
-
 
     postJson(route('v2.admin.orders.coupon.discount', [
         'order' => $order,

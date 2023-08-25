@@ -42,7 +42,7 @@ class CreateOrderService extends BaseCreateOrderService
             return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage() . "\n File:" . $e->getFile() . "\n Line:" . $e->getLine());
+            Log::error($e->getMessage()."\n File:".$e->getFile()."\n Line:".$e->getLine());
 
             throw $e;
         }
@@ -79,6 +79,7 @@ class CreateOrderService extends BaseCreateOrderService
         $this->storeShippingFee();
         $this->storeServiceFee();
         $this->storeCleaningFee();
+        $this->storeShippingInsuranceFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);

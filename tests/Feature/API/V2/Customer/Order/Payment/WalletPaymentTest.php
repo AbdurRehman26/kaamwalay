@@ -9,6 +9,7 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
@@ -41,7 +42,6 @@ beforeEach(function () {
     $this->order->amount_paid_from_wallet = $grandTotal;
     $this->order->grand_total = $grandTotal;
     $this->order->save();
-
 
     Wallet::factory()->create([
         'user_id' => $this->user->id,

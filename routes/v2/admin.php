@@ -116,12 +116,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::apiResource('sets', CardSetController::class)->only(['index', 'store']);
         Route::apiResource('rarities', CardRarityController::class)->only(['index', 'store', 'show', 'update']);
         Route::apiResource('surfaces', CardSurfaceController::class)->only(['index', 'store', 'show', 'update'])
-        ->names([
-            'index' => 'surfaces.index',
-            'store' => 'surfaces.store',
-            'show' => 'surfaces.show',
-            'update' => 'surfaces.update',
-        ]);
+            ->names([
+                'index' => 'surfaces.index',
+                'store' => 'surfaces.store',
+                'show' => 'surfaces.show',
+                'update' => 'surfaces.update',
+            ]);
         Route::put('/labels/{label}', [CardLabelController::class, 'update']);
         Route::get('{cardProduct}/label', [CardLabelController::class, 'getCardProductLabel']);
         Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
@@ -147,7 +147,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('verify/{coupon:code}', [CouponController::class, 'verify'])->name('admin.coupon.verify');
         Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('admin.coupon.discount');
     });
-    
+
     // Customers
     Route::apiResource('customers', CustomerController::class)->only(['index', 'store', 'show'])
         ->names([
@@ -183,7 +183,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
             ->name('customer.wallet.history');
     });
-    
+
     // Vault Shipment
     Route::prefix('vault-shipments')->group(function () {
         Route::get('/', [VaultShipmentController::class, 'index'])->name('admin.vault-shipments.index');

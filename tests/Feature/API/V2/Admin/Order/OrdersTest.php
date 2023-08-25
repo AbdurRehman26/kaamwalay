@@ -88,7 +88,7 @@ beforeEach(function () {
     $this->paymentMethod = PaymentMethod::factory()->create(['code' => 'manual']);
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
-        base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
+        base_path().'/tests/stubs/AGS_card_grades_collection_200.json'
     ), associative: true);
     $this->actingAs($this->user);
 });
@@ -111,7 +111,7 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('/api/v2/admin/orders/' . $this->orders[0]->id .'?include=customer,orderItems')
+    $this->getJson('/api/v2/admin/orders/'.$this->orders[0]->id.'?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -141,7 +141,7 @@ test('order details throws error for roles other than admin', function () {
 });
 
 it('filters orders by id', function () {
-    $this->getJson('/api/v2/admin/orders?filter[order_id]=' . $this->orders[0]->id)
+    $this->getJson('/api/v2/admin/orders?filter[order_id]='.$this->orders[0]->id)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -330,7 +330,7 @@ it('returns orders order by desc grand_total', function () {
 
 test('orders are filterable by customer first name', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/v2/admin/orders?include=customer&filter[customer_name]=' . $user->first_name)
+    $this->getJson('/api/v2/admin/orders?include=customer&filter[customer_name]='.$user->first_name)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -340,7 +340,7 @@ test('orders are filterable by customer first name', function () {
 
 test('orders are filterable by customer ID', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/v2/admin/orders?include=customer&filter[customer_id]=' . $user->id)
+    $this->getJson('/api/v2/admin/orders?include=customer&filter[customer_id]='.$user->id)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -349,7 +349,7 @@ test('orders are filterable by customer ID', function () {
 });
 
 test('an admin can update order notes', function () {
-    $response = $this->putJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/notes', [
+    $response = $this->putJson('/api/v2/admin/orders/'.$this->orders[0]->id.'/notes', [
         'notes' => 'Lorem Ipsum',
     ])->assertOk();
 });
@@ -359,7 +359,7 @@ test('a customer can not update order notes', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->putJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/notes', [
+    $response = $this->putJson('/api/v2/admin/orders/'.$this->orders[0]->id.'/notes', [
         'notes' => 'Lorem Ipsum',
     ])->assertForbidden();
 });
@@ -367,7 +367,7 @@ test('a customer can not update order notes', function () {
 test('an admin can get order cards grades', function () {
     Bus::fake();
 
-    $this->getJson('/api/v2/admin/orders/' . $this->orders[1]->id . '/grades')->assertOk();
+    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')->assertOk();
 
     Bus::assertDispatched(GetCardGradesFromAgs::class);
 });
@@ -377,20 +377,20 @@ test('a customer can not get order cards grades', function () {
 
     $this->actingAs($customerUser);
 
-    $this->getJson('/api/v2/admin/orders/' . $this->orders[1]->id . '/grades')
-    ->assertForbidden();
+    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
+        ->assertForbidden();
 });
 
 it('can not get order grades if order is not reviewed', function () {
-    $response = $this->getJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/grades');
-    $response->assertJsonStructure([ 'error' ]);
+    $response = $this->getJson('/api/v2/admin/orders/'.$this->orders[0]->id.'/grades');
+    $response->assertJsonStructure(['error']);
     $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
 
 it(
     'returns orders filtered after searching the order with order number, customer number and user Name',
     function (string $value) {
-        $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[search]=' . $value)
+        $this->getJson('/api/v2/admin/orders?include=orderStatusHistory&filter[search]='.$value)
             ->assertOk()
             ->assertJsonFragment([
                 'id' => $this->orders[0]->id,
@@ -408,7 +408,7 @@ test('an admin can complete review of an order', function () {
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
     Bus::fake();
-    $response = $this->postJson('/api/v2/admin/orders/' . $this->orders[0]->id . '/status-history', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$this->orders[0]->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -426,7 +426,7 @@ test('an admin can not complete review of an order if error occurred with AGS cl
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
-    $this->postJson('/api/v2/admin/orders/' . $this->orders[1]->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertStatus(422);
 });
@@ -437,7 +437,7 @@ test('it dispatches get grades from AGS job when admin fetches grades', function
     UserCard::factory()->create([
         'order_item_id' => $this->orders[1]->orderItems->first()->id,
     ]);
-    $this->getJson('/api/v2/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
         ->assertOk()
         ->assertJsonFragment([
             'robo_grade_values' => null,
@@ -446,8 +446,6 @@ test('it dispatches get grades from AGS job when admin fetches grades', function
     Bus::assertDispatched(GetCardGradesFromAgs::class);
 });
 
-
-
 test('an admin can get order cards if AGS API returns grades', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
     $orderItemId = $this->orders[1]->orderItems->first()->id;
@@ -455,9 +453,9 @@ test('an admin can get order cards if AGS API returns grades', function () {
         'order_item_id' => $orderItemId,
         'certificate_number' => '09000000',
     ]);
-    $this->getJson('/api/v2/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
         ->assertJsonFragment([
-                'center' => '2.00',
+            'center' => '2.00',
         ])
         ->assertJsonFragment([
             'id' => $orderItemId,
@@ -471,7 +469,7 @@ it('should send an event when order status gets changed', function () {
 
     /** @var Order $order */
     $order = Order::factory()->create();
-    $response = $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $response = $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -487,7 +485,7 @@ it('dispatches jobs for creating folders on dropbox and AGS local machine when a
     Bus::fake();
 
     $order = Order::factory()->create();
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -501,7 +499,7 @@ it('dispatches job for creating order certificates export when an order is revie
     Bus::fake();
 
     $order = Order::factory()->create();
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -511,7 +509,7 @@ it('dispatches job for creating order certificates export when an order is revie
 test('order can not be shipped if its not paid', function () {
     /** @var Order $order */
     $order = Order::factory()->create();
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::SHIPPED,
     ])->assertUnprocessable();
 });
@@ -523,7 +521,7 @@ test('order can be shipped if its not paid', function () {
         'payment_status' => OrderPaymentStatusEnum::PAID,
         'order_status_id' => OrderStatus::ASSEMBLED,
     ]);
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::SHIPPED,
     ])->assertOk();
 
@@ -534,7 +532,7 @@ test('order can be cancelled if it is not paid', function () {
     Event::fake();
     /** @var Order $order */
     $order = Order::factory()->create();
-    deleteJson('/api/v2/admin/orders/' . $order->id)->assertNoContent();
+    deleteJson('/api/v2/admin/orders/'.$order->id)->assertNoContent();
     $order->refresh();
     expect($order->isCancelled())->toBeTrue();
 });
@@ -542,7 +540,7 @@ test('order can be cancelled if it is not paid', function () {
 test('order can not be cancelled if it is paid', function () {
     /** @var Order $order */
     $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
-    deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
+    deleteJson('/api/v2/admin/orders/'.$order->id)->assertUnprocessable();
     $order->refresh();
     expect($order->isCancelled())->toBeFalse();
 });
@@ -550,7 +548,7 @@ test('order can not be cancelled if it is paid', function () {
 test('order can not be cancelled if it is already cancelled', function () {
     /** @var Order $order */
     $order = Order::factory()->create(['order_status_id' => OrderStatus::CANCELLED]);
-    deleteJson('/api/v2/admin/orders/' . $order->id)->assertUnprocessable();
+    deleteJson('/api/v2/admin/orders/'.$order->id)->assertUnprocessable();
 });
 
 it('returns only orders with filtered payment status', function ($data) {
@@ -560,7 +558,7 @@ it('returns only orders with filtered payment status', function ($data) {
         ['id' => 102, 'payment_status' => OrderPaymentStatusEnum::DUE],
     ))->create();
 
-    $this->getJson('/api/v2/admin/orders?filter[payment_status]=' . $data['payment_status'])
+    $this->getJson('/api/v2/admin/orders?filter[payment_status]='.$data['payment_status'])
         ->assertOk()
         ->assertJsonCount($data['count'], ['data'])
         ->assertJsonFragment([
@@ -580,7 +578,7 @@ it('admin can mark graded order as assembled', function () {
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::GRADED,
     ]);
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::ASSEMBLED,
     ])->assertOk();
 });
@@ -593,7 +591,7 @@ it('admin can not mark ungraded order as assembled', function () {
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::ASSEMBLED,
     ])->assertUnprocessable();
 });
@@ -611,7 +609,7 @@ it('calculates estimated delivery date when admins marks the order as reviewed',
     $estimatedDeliveryStartAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_min);
     $estimatedDeliveryEndAt = Carbon::now()->addWeekdays($paymentPlan->estimated_delivery_days_max);
 
-    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v2/admin/orders/'.$order->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertOk();
 

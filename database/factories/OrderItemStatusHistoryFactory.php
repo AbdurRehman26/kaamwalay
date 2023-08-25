@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
-use App\Models\OrderItemStatusHistory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

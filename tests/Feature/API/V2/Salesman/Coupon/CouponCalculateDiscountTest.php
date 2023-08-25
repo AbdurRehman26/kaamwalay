@@ -64,10 +64,8 @@ beforeEach(function () {
         ->withSalesmanRole()
         ->create();
 
-
     $this->actingAs($this->user);
 });
-
 
 it('calculates coupon discount', function () {
     actingAs($this->user);
@@ -103,12 +101,12 @@ it('calculates coupon discount', function () {
             ],
         ]
     )->assertOk()
-    ->assertJsonStructure([
-        'data' => [
-            'coupon',
-            'discounted_amount',
-        ],
-    ]);
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
 });
 
 it('calculates coupon discount of limited usage coupon', function () {

@@ -26,7 +26,7 @@ test('an admin can update order shipment', function () {
         'shipping_method_id' => 1,
     ]);
 
-    $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
+    $this->postJson('/api/v2/admin/orders/'.$this->order->id.'/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])
@@ -48,7 +48,7 @@ test('an admin can update order shipment', function () {
 test('an admin can not update order shipment an unpaid order', function () {
     Event::fake();
 
-    $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
+    $this->postJson('/api/v2/admin/orders/'.$this->order->id.'/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])
@@ -59,7 +59,7 @@ test('a customer can not update order shipment', function () {
     $customerUser = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->actingAs($customerUser);
 
-    $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
+    $this->postJson('/api/v2/admin/orders/'.$this->order->id.'/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])

@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\API\V2\Admin\Card;
 
-use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest as V1StoreCardProductRequest;
 use App\Services\Admin\Card\CardProductService;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreCardProductRequest extends V1StoreCardProductRequest
+class StoreCardProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,14 +18,11 @@ class StoreCardProductRequest extends V1StoreCardProductRequest
         return [
             'image_path' => ['required', 'string'],
             'name' => ['required', 'string'],
-            'category' => ['required','exists:card_categories,id'],
+            'category' => ['required', 'exists:card_categories,id'],
             'release_date' => ['required', 'date'],
             'series_id' => ['required', 'integer', 'exists:card_series,id'],
             'set_id' => ['required', 'integer', 'exists:card_sets,id'],
-            'card_number' => [
-                'required',
-                'string',
-            ],
+            'card_number' => ['required', 'string'],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
             'rarity' => ['required', 'string', Rule::exists('card_rarities', 'name')->where(function ($query) {
                 return $query->where('card_category_id', $this->category);

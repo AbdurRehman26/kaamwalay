@@ -119,7 +119,7 @@ test('a customer cannot create card surface', function () {
         'name' => 'Lorem Ipsum',
         'card_category_id' => $this->categories[0]->id,
     ])
-    ->assertStatus(403);
+        ->assertStatus(403);
 });
 
 test('a guest cannot create card surface', function () {

@@ -2,14 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\CardProduct;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderItemStatus;
-use App\Models\OrderItemShipment;
 use App\Models\OrderItemCustomerShipment;
+use App\Models\OrderItemShipment;
+use App\Models\OrderItemStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory
 {

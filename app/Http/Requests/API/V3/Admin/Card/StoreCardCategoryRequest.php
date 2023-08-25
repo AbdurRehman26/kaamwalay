@@ -14,6 +14,7 @@ class StoreCardCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'card_category_type_id' => ['required', 'exists:card_category_types,id'],
             'name' => ['required', 'unique:card_categories'],
             'image_url' => ['required', 'string'],
         ];

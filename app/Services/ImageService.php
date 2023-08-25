@@ -41,10 +41,10 @@ class ImageService
         $ext = substr($imageUrl, strrpos($imageUrl, '.'));
 
         // Build full path for downloaded image (on local)
-        $localFullPath = self::TEMPORARY_FILE_PATH . $imageName . $ext;
+        $localFullPath = self::TEMPORARY_FILE_PATH.$imageName.$ext;
 
         // Build cloud full path
-        $cloudFullPath = $directory . '/' . $imageName . '.' . $outputExt;
+        $cloudFullPath = $directory.'/'.$imageName.'.'.$outputExt;
 
         //Download file from URL and save image on local
         Storage::put($localFullPath, file_get_contents($imageUrl));
@@ -75,7 +75,7 @@ class ImageService
         }
 
         if ($outputQuality > 0 && $outputQuality < 100) {
-            $optimizations[] = '-m' . $outputQuality;
+            $optimizations[] = '-m'.$outputQuality;
         }
 
         // Load image from storage using full path

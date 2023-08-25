@@ -20,12 +20,12 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
     {
         try {
             $requestData = [
-                "intent" => "CAPTURE",
-                "purchase_units" => [[
-                    "reference_id" => $order->order_number,
-                    "amount" => [
-                        "value" => $order->grand_total_to_be_paid,
-                        "currency_code" => "USD",
+                'intent' => 'CAPTURE',
+                'purchase_units' => [[
+                    'reference_id' => $order->order_number,
+                    'amount' => [
+                        'value' => $order->grand_total_to_be_paid,
+                        'currency_code' => 'USD',
                     ],
                 ]],
             ];
@@ -41,8 +41,6 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
             return ['message' => $e->getMessage()];
         }
     }
-
-
 
     public function verify(Order $order, string $paymentIntentId): bool
     {
@@ -75,7 +73,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
                     'response' => json_encode($data),
                     'amount' => $order->grand_total_to_be_paid,
                     'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-                    'notes' => 'Paypal Payment for ' . $order->order_number,
+                    'notes' => 'Paypal Payment for '.$order->order_number,
                 ]);
 
                 return true;

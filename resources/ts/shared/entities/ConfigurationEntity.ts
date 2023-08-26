@@ -1,8 +1,6 @@
 export class ConfigurationEntity {
     public appEnv!: string;
     public appUrl!: string;
-    public algoliaAppId!: string;
-    public algoliaPublicKey!: string;
     public meilisearchPublicHost!: string;
     public meilisearchPublicKey!: string;
     public stripeKey!: string;

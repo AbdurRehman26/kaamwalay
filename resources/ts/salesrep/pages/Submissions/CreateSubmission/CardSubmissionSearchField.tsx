@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AlgoliaSearchWrapper(props: any) {
+function MeiliSearchWrapper(props: any) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
 
@@ -100,7 +100,7 @@ function AlgoliaSearchWrapper(props: any) {
         </div>
     );
 }
-const CustomSearchBox = connectSearchBox(AlgoliaSearchWrapper);
+const CustomSearchBox = connectSearchBox(MeiliSearchWrapper);
 
 export function CardSubmissionSearchField() {
     const classes = useStyles();

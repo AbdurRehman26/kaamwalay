@@ -40,12 +40,6 @@ return [
         'stripe_key' => [
             'value' => env('STRIPE_KEY'),
         ],
-        'algolia_app_id' => [
-            'value' => env('ALGOLIA_APP_ID'),
-        ],
-        'algolia_public_key' => [
-            'value' => env('ALGOLIA_PUBLIC_KEY'),
-        ],
         'meilisearch_public_host' => [
             'value' => env('MEILISEARCH_PUBLIC_HOST'),
         ],

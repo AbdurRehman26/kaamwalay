@@ -30,9 +30,9 @@ class ListCardProducts extends ListRecords
             BulkAction::make('reindex')
                 ->action(function (Collection $records) {
                     $records->each->searchable(); // @phpstan-ignore-line
-                    $this->notify('success', 'Records have been re-indexed on Algolia.');
+                    $this->notify('success', 'Records have been re-indexed on search engine.');
                 })
-                ->label('Reindex on Algolia')
+                ->label('Reindex on search engine')
                 ->icon('heroicon-o-document-add')
                 ->deselectRecordsAfterCompletion()
                 ->requiresConfirmation(),

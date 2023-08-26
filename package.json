@@ -40,7 +40,6 @@
         "@stripe/react-stripe-js": "1.7.0",
         "@stripe/stripe-js": "1.25.0",
         "@types/facebook-pixel": "0.0.24",
-        "algoliasearch": "4.13.0",
         "axios": "0.26.1",
         "buffer": "^6.0.3",
         "card-validator": "8.1.1",

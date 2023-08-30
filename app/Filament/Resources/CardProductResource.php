@@ -8,9 +8,13 @@ use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Notifications\Notification;
 
 class CardProductResource extends Resource
 {
@@ -105,9 +109,28 @@ class CardProductResource extends Resource
                 TextColumn::make('added_by'),
             ])
             ->filters([
-                //
+                SelectFilter::make('card_category_id')
+                    ->relationship('cardCategory', 'name')
+                    ->label('Category'),
+                SelectFilter::make('card_set_id')
+                    ->relationship('cardSet', 'name')
+                    ->label('Set'),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->bulkActions([
+                BulkAction::make('reindex')
+                    ->action(function (Collection $records) {
+                        $records->each->searchable(); // @phpstan-ignore-line
+                        Notification::make()
+                            ->title('Records have been re-indexed on search engine.')
+                            ->success()
+                            ->send();
+                    })
+                    ->label('Reindex on search engine')
+                    ->icon('heroicon-o-document-plus')
+                    ->deselectRecordsAfterCompletion()
+                    ->requiresConfirmation(),
+            ]);
     }
 
     public static function getRelations(): array

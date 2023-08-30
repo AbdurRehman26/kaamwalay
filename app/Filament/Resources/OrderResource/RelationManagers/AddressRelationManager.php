@@ -9,7 +9,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
 
-abstract class AddressRelationManager extends RelationManager
+class AddressRelationManager extends RelationManager
 {
     public function form(Form $form): Form
     {

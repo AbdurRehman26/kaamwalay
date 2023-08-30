@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
@@ -84,10 +85,20 @@ class OrderResource extends Resource
                 TextColumn::make('user.customer_number')->label('Customer'),
                 TextColumn::make('order_items_count')->counts('orderItems'),
                 TextColumn::make('orderStatus.name')->label('Status'),
-                TextColumn::make('grand_total')->money('usd', true)->label('Amount Paid'),
+                TextColumn::make('grand_total')->money('usd')->label('Amount Paid'),
             ])
             ->filters([
-                //
+                SelectFilter::make('order_status_id')
+                    ->options([
+                        1 => 'Payment Pending',
+                        2 => 'Placed',
+                        3 => 'Reviewed',
+                        4 => 'Graded',
+                        5 => 'Shipped',
+                        6 => 'Cancelled',
+                        7 => 'Assembled',
+                    ])
+                    ->label('Status'),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([

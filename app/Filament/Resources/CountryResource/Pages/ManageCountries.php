@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\CountryResource\Pages;
 
 use App\Filament\Resources\CountryResource;
-use Filament\Pages\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
 
 class ManageCountries extends ManageRecords
@@ -13,7 +13,7 @@ class ManageCountries extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

@@ -18,7 +18,7 @@ abstract class AddressResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return AddressRelationManager::form($form);
+        return (new AddressRelationManager)->form($form);
     }
 
     public static function table(Table $table): Table

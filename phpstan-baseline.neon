@@ -11,11 +11,6 @@ parameters:
 			path: app/Casts/CouponType.php
 
 		-
-			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
-			count: 1
-			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
-
-		-
 			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/IncorrectOrderStatus.php
@@ -2262,16 +2257,6 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:paymentMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
-			count: 1
-			path: app/Models/OrderPayment.php
-
-		-
-			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Models/OrderPayment.php
-
-		-
-			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Models/OrderPayment.php
 

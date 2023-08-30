@@ -5,34 +5,37 @@ namespace App\Services\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use DateTime;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class UnpaidOrdersStatsService
 {
-    public function calculateDailyStats(string $currentDate): array
+    public function calculateDailyStats(Carbon $startDateTime, Carbon $endDateTime): array
     {
-        $unpaidOrders = $this->dailyUnpaidOrders($currentDate)
+        $unpaidOrders = $this->dailyUnpaidOrders($startDateTime, $endDateTime)
             ->sum('grand_total');
 
         return [
             'unpaid_total' => $unpaidOrders,
-            'date' => $currentDate,
-            'total_orders' => $this->dailyOrdersCount($currentDate),
+            'date' => $startDateTime,
+            'total_orders' => $this->dailyOrdersCount($startDateTime, $endDateTime),
         ];
     }
 
-    public function calculateDailyCardsTotal(): int
+    public function calculateDailyCardsTotal(Carbon $startDateTime, Carbon $endDateTime): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfDay(), now()->subDays(1)->endOfDay());
+        return $this->calculateCardsTotal($startDateTime, $endDateTime);
     }
 
-    public function calculateMonthlyCardsTotal(): int
+    public function calculateMonthlyCardsTotal(Carbon $currentDate): int
     {
-        return $this->calculateCardsTotal(now()->subDays(1)->startOfMonth(), now()->subDays(1)->endOfMonth());
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+
+        return $this->calculateCardsTotal($monthStart, $monthEnd);
     }
 
-    public function calculateCardsTotal(DateTime $startTime, DateTime $endTime): int
+    public function calculateCardsTotal(Carbon $startTime, Carbon $endTime): int
     {
         return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')->whereBetween('orders.created_at', [$startTime, $endTime])->where(function (Builder $query) {
@@ -40,7 +43,7 @@ class UnpaidOrdersStatsService
             })->sum('order_items.quantity');
     }
 
-    public function calculateMonthlyStats(string $currentDate): array
+    public function calculateMonthlyStats(Carbon $currentDate): array
     {
         $unpaidOrders = $this->monthlyUnpaidOrders($currentDate)
             ->sum('grand_total');
@@ -55,9 +58,9 @@ class UnpaidOrdersStatsService
     /**
      * @return Builder<Order>
      */
-    protected function dailyUnpaidOrders(string $currentDate): Builder
+    protected function dailyUnpaidOrders(Carbon $startDateTime, Carbon $endDateTime): Builder
     {
-        return $this->orders()->forDate($currentDate);
+        return $this->orders($startDateTime, $endDateTime);
     }
 
     /**
@@ -65,22 +68,25 @@ class UnpaidOrdersStatsService
      */
     protected function monthlyUnpaidOrders(string $currentDate): Builder
     {
-        return $this->orders()->forMonth($currentDate);
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+
+        return $this->orders($monthStart, $monthEnd);
     }
 
     /**
      * @return Builder<Order>
      */
-    protected function orders(): Builder
+    protected function orders(Carbon $startDateTime, Carbon $endDateTime): Builder
     {
         return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
             $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
-        });
+        })->whereBetween('created_at', [$startDateTime, $endDateTime]);
     }
 
-    protected function dailyOrdersCount(string $currentDate): int
+    protected function dailyOrdersCount(Carbon $startDateTime, Carbon $endDateTime): int
     {
-        return $this->dailyUnpaidOrders($currentDate)->count();
+        return $this->dailyUnpaidOrders($startDateTime, $endDateTime)->count();
     }
 
     protected function monthlyOrdersCount(string $currentDate): int

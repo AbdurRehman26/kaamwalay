@@ -4,8 +4,8 @@ namespace App\Console\Commands\RevenueStats;
 
 use App\Notifications\UnpaidOrdersStats;
 use App\Services\Order\UnpaidOrdersStatsService;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -16,39 +16,40 @@ class SendUnpaidOrdersStats extends Command
      *
      * @var string
      */
-    protected $signature = 'unpaid-orders-stats:calculate-for-day {date? : YYYY-MM-DD format}';
+    protected $signature = 'unpaid-orders-stats:calculate-for-day {startDateTime : YYYY-MM-DD H:m:s format} {endDateTime : YYYY-MM-DD H:m:s format}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send unpaid orders stats daily at 12:20 am';
+    protected $description = 'Send unpaid orders stats daily at 12:05 am';
 
     /**
      * Execute the console command.
      */
     public function handle(UnpaidOrdersStatsService $unpaidOrdersStatsService): int
     {
-        $currentDate = (Carbon::parse($this->argument('date')))->format('Y-m-d');
+        $startDateTime = Carbon::parse($this->argument('startDateTime'));
+        $endDateTime = Carbon::parse($this->argument('endDateTime'));
 
-        $this->log('Unpaid Stats Daily for Date : '.$currentDate.' Starting');
+        $this->log('Unpaid Stats Daily for Date : '.$startDateTime->format('Y-m-d').' Starting');
 
-        $unpaidDailyStats = $unpaidOrdersStatsService->calculateDailyStats($currentDate);
-        $unpaidDailyCardsTotal = $unpaidOrdersStatsService->calculateDailyCardsTotal();
+        $unpaidDailyStats = $unpaidOrdersStatsService->calculateDailyStats($startDateTime, $endDateTime);
+        $unpaidDailyCardsTotal = $unpaidOrdersStatsService->calculateDailyCardsTotal($startDateTime, $endDateTime);
 
-        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Starting');
+        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($startDateTime)->format('F-Y').' Starting');
 
-        $unpaidMonthlyStats = $unpaidOrdersStatsService->calculateMonthlyStats($currentDate);
-        $unpaidMonthlyCardsTotal = $unpaidOrdersStatsService->calculateMonthlyCardsTotal();
+        $unpaidMonthlyStats = $unpaidOrdersStatsService->calculateMonthlyStats($startDateTime);
+        $unpaidMonthlyCardsTotal = $unpaidOrdersStatsService->calculateMonthlyCardsTotal($startDateTime);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new UnpaidOrdersStats($unpaidDailyStats, $unpaidMonthlyStats, $unpaidDailyCardsTotal, $unpaidMonthlyCardsTotal));
         }
 
-        $this->log('Unpaid Stats Daily for Date : '.$currentDate.' Completed');
-        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($currentDate)->format('F-Y').' Completed');
+        $this->log('Unpaid Stats Daily for Date : '.$startDateTime->format('Y-m-d').' Completed');
+        $this->log('Unpaid Stats Daily for Month : '.Carbon::parse($startDateTime)->format('F-Y').' Completed');
 
         return 0;
     }

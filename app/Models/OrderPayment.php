@@ -72,11 +72,6 @@ class OrderPayment extends Model
         };
     }
 
-    public function scopeForDate(Builder $query, string $date): Builder
-    {
-        return $query->whereDate('order_payments.created_at', $date);
-    }
-
     public function scopeForMonth(Builder $query, string $date): Builder
     {
         $monthStart = Carbon::parse($date)->firstOfMonth();

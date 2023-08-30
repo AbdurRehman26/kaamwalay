@@ -3,14 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 abstract class AddressResource extends Resource
 {
-    protected static ?string $navigationIcon = 'heroicon-o-location-marker';
+    protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
     protected static ?string $navigationGroup = 'User Management';
 

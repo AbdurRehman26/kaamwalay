@@ -33,7 +33,7 @@ class ListCardProducts extends ListRecords
                     $this->notify('success', 'Records have been re-indexed on search engine.');
                 })
                 ->label('Reindex on search engine')
-                ->icon('heroicon-o-document-add')
+                ->icon('heroicon-o-document-plus')
                 ->deselectRecordsAfterCompletion()
                 ->requiresConfirmation(),
         ];

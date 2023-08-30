@@ -10,7 +10,7 @@ class ManageCardSurfaces extends ManageRecords
 {
     protected static string $resource = CardSurfaceResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

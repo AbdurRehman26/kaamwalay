@@ -22,6 +22,7 @@ use App\Traits\ReferrableTrait;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Panel;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -513,7 +514,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return self::getAllowedAdminSorts();
     }
 
-    public function canAccessFilament(): bool
+    public function canAccessPanel(Panel $panel): bool
     {
         return $this->isSuperAdmin();
     }

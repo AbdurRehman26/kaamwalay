@@ -5,16 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserCardResource\Pages;
 use App\Models\UserCard;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 class UserCardResource extends Resource
 {
     protected static ?string $model = UserCard::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $recordTitleAttribute = 'certificate_number';
 

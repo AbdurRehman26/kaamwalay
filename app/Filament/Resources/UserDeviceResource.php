@@ -4,16 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserDeviceResource\Pages;
 use App\Models\UserDevice;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 class UserDeviceResource extends Resource
 {
     protected static ?string $model = UserDevice::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-device-mobile';
+    protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
 
     protected static ?string $navigationGroup = 'User Management';
 

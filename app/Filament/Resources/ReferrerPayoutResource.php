@@ -5,9 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ReferrerPayoutResource\Pages;
 use App\Models\ReferrerPayout;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 class ReferrerPayoutResource extends Resource

@@ -3,17 +3,24 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
-use Filament\Widgets\LineChartWidget;
+use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class PaidOrdersChart extends LineChartWidget
+class PaidOrdersChart extends ChartWidget
 {
+    protected static ?string $pollingInterval = null;
+
     protected static ?int $sort = 2;
 
     public ?string $filter = 'last_12_months';
 
-    protected function getHeading(): string
+    protected function getType(): string
+    {
+        return 'line';
+    }
+
+    public function getHeading(): string
     {
         return 'Total Paid Orders';
     }
@@ -35,7 +42,7 @@ class PaidOrdersChart extends LineChartWidget
 
         $data = Trend::query(
             Order::query()
-                ->placed()
+                ->paid()
         )
             ->between(
                 start: $start,

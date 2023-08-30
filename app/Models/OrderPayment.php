@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class OrderPayment extends Model
 {
-    use HasFactory, ActivityLog;
+    use ActivityLog, HasFactory;
 
     public const TYPE_ORDER_PAYMENT = 1;
 

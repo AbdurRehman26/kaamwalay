@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Notifications\Notification;
+use Filament\Tables\Table;
 
 class CardProductResource extends Resource
 {

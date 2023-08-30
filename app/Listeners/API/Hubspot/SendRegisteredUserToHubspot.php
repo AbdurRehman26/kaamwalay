@@ -7,7 +7,7 @@ use App\Services\HubspotService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserToHubspot implements ShouldQueue, ShouldBeEncrypted
+class SendRegisteredUserToHubspot implements ShouldBeEncrypted, ShouldQueue
 {
     public function __construct(protected HubspotService $hubspotService)
     {

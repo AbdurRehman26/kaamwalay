@@ -48,9 +48,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int $paid_orders_count
  * @property-read int $order_items_sum_quantity
  */
-class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
+class User extends Authenticatable implements Exportable, ExportableWithSort, FilamentUser, HasAvatar, JWTSubject
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes, ReferrableTrait;
+    use Billable, CanHaveCoupons, CanResetPassword, FindSimilarUsernames, HasFactory, HasRoles, Notifiable, ReferrableTrait, SoftDeletes;
 
     public string $pushNotificationType = 'users';
 

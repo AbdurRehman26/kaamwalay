@@ -5,8 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 abstract class AddressResource extends Resource
 {

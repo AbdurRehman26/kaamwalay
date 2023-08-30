@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 
-class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
+class RegisterWithAGS implements ShouldBeEncrypted, ShouldQueue
 {
     public function __construct(protected AgsService $agsService)
     {

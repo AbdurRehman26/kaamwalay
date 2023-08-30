@@ -10,7 +10,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class OrderStatusHistory extends Model
 {
-    use HasFactory, ActivityLog;
+    use ActivityLog, HasFactory;
 
     protected $fillable = [
         'order_id',

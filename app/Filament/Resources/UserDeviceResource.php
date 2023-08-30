@@ -7,6 +7,7 @@ use App\Models\UserDevice;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables;
 use Filament\Tables\Table;
 
 class UserDeviceResource extends Resource

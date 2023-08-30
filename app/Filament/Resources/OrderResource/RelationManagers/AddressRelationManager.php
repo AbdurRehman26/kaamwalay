@@ -6,8 +6,8 @@ use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 abstract class AddressRelationManager extends RelationManager
 {

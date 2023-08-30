@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentPlan extends Model
 {
-    use HasFactory, CanHaveCoupons, SoftDeletes;
+    use CanHaveCoupons, HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

@@ -14,7 +14,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class UserCard extends Model
 {
-    use HasFactory, ActivityLog, Searchable;
+    use ActivityLog, HasFactory, Searchable;
 
     protected $fillable = [
         'order_item_id',

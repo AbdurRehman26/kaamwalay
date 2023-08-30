@@ -6,8 +6,8 @@ use App\Filament\Resources\UserDeviceResource\Pages;
 use App\Models\UserDevice;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 class UserDeviceResource extends Resource
 {

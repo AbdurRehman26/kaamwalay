@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderShipment extends Model
 {
-    use HasFactory, ActivityLog;
+    use ActivityLog, HasFactory;
 
     /**
      * The attributes that are mass assignable.

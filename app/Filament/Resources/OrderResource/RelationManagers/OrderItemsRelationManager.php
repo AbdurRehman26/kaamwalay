@@ -5,9 +5,9 @@ namespace App\Filament\Resources\OrderResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class OrderItemsRelationManager extends RelationManager
 {

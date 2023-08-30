@@ -7,14 +7,14 @@ use App\Models\CardProduct;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Collection;
-use Filament\Notifications\Notification;
 
 class CardProductResource extends Resource
 {

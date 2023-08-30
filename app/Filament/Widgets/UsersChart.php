@@ -3,17 +3,24 @@
 namespace App\Filament\Widgets;
 
 use App\Models\User;
-use Filament\Widgets\LineChartWidget;
+use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class UsersChart extends LineChartWidget
+class UsersChart extends ChartWidget
 {
+    protected static ?string $pollingInterval = null;
+
     protected static ?int $sort = 3;
 
     public ?string $filter = 'last_12_months';
 
-    protected function getHeading(): string
+    protected function getType(): string
+    {
+        return 'line';
+    }
+
+    public function getHeading(): string
     {
         return 'Total Users';
     }

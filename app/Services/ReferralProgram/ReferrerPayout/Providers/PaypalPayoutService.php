@@ -11,7 +11,7 @@ use App\Services\ReferralProgram\ReferrerPayout\Providers\Contracts\ReferrerPayo
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 
-class PaypalPayoutService implements ReferrerPayoutProviderServicePayInterface, ReferrerPayoutProviderServiceHandshakeInterface
+class PaypalPayoutService implements ReferrerPayoutProviderServiceHandshakeInterface, ReferrerPayoutProviderServicePayInterface
 {
     public function __construct(protected PaypalClient $client)
     {

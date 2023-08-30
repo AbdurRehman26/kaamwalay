@@ -34,7 +34,7 @@ use Spatie\QueryBuilder\AllowedSort;
 
 class Order extends Model implements Exportable, Taggable
 {
-    use HasFactory, ActivityLog, HasOrderPayments, HasTags;
+    use ActivityLog, HasFactory, HasOrderPayments, HasTags;
 
     /**
      * The attributes that are mass assignable.

@@ -7,7 +7,7 @@ use App\Services\HubspotService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ChangeDealStageForOrderPlacedUserHubspot implements ShouldQueue, ShouldBeEncrypted
+class ChangeDealStageForOrderPlacedUserHubspot implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.

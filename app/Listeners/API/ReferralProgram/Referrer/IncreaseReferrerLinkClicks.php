@@ -7,7 +7,7 @@ use App\Services\ReferralProgram\ReferrerService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class IncreaseReferrerLinkClicks implements ShouldQueue, ShouldBeEncrypted
+class IncreaseReferrerLinkClicks implements ShouldBeEncrypted, ShouldQueue
 {
     public function __construct(protected ReferrerService $referrerService)
     {

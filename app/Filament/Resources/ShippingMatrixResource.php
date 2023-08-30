@@ -5,16 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ShippingMatrixResource\Pages;
 use App\Models\ShippingMatrix;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 class ShippingMatrixResource extends Resource
 {
     protected static ?string $model = ShippingMatrix::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-table';
+    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
     protected static ?string $navigationGroup = 'Order Management';
 

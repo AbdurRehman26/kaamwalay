@@ -2,8 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Actions\Action;
 use Filament\Forms;
-use Filament\Pages\Actions\Action;
 use Filament\Pages\Page;
 use Pusher\PushNotifications\PushNotifications;
 
@@ -18,7 +18,7 @@ class PushNotification extends Page
     /**
      * @throws \Exception
      */
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('push')

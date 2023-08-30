@@ -5,16 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CardRarityResource\Pages;
 use App\Models\CardRarity;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 class CardRarityResource extends Resource
 {
     protected static ?string $model = CardRarity::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Card Management';
 

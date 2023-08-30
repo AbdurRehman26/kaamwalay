@@ -20,7 +20,7 @@ use Web3\Exceptions\TransporterException;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
-class CollectorCoinService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface, PaymentProviderHandshakeInterface
+class CollectorCoinService implements PaymentProviderHandshakeInterface, PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     // Status Values
     public const FAILED = '0';

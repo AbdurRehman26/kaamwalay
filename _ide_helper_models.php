@@ -478,6 +478,7 @@ namespace App\Models{
  * @property float|null $capped_amount
  * @property \App\Enums\Coupon\CouponMinThresholdTypeEnum $min_threshold_type 0 => No threshold, 1 => card count, 2 => amount
  * @property int $min_threshold_value when 0 it means no threshold
+ * @property int|null $max_discount_applicable_items
  * @property int $is_system_generated
  * @property $available_from
  * @property |null $available_till if its null then the coupon is permanent
@@ -524,6 +525,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereIsCapped($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereIsSystemGenerated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMaxDiscountApplicableItems($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMaxUsageAllowed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinThresholdValue($value)
@@ -852,6 +854,7 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float $cleaning_fee
+ * @property float $shipping_insurance_fee
  * @property float|null $grand_total
  * @property float|null $amount_paid_from_wallet
  * @property string|null $grand_total_before_discount
@@ -875,6 +878,7 @@ namespace App\Models{
  * @property int|null $salesman_id
  * @property float $referral_total_commission
  * @property bool $requires_cleaning Refers to card cleaning service
+ * @property bool $requires_shipping_insurance Shows if Full Shipping Insurance has been selected
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
  * @property \Illuminate\Support\Carbon|null $estimated_delivery_start_at
@@ -925,8 +929,10 @@ namespace App\Models{
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
  * @property-read \App\Models\User|null $salesman
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Spatie\Tags\Tag> $tags
  * @property-read \App\Models\OrderAddress|null $shippingAddress
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
+ * @property-read int|null $tags_count
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Order betweenDates(\DateTime $fromDate, \DateTime $toDate)
  * @method static \Illuminate\Database\Eloquent\Builder|Order couponCode(string $coupon)
@@ -978,6 +984,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReferralTotalCommission($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresCleaning($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresShippingInsurance($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanCommission($value)
@@ -985,12 +992,18 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingInsuranceFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingOrderAddressId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withAllTags(\ArrayAccess|\Spatie\Tags\Tag|array|string $tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withAllTagsOfAnyType($tags)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withAnyTags(\ArrayAccess|\Spatie\Tags\Tag|array|string $tags, ?string $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withAnyTagsOfAnyType($tags)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withoutTags(\ArrayAccess|\Spatie\Tags\Tag|array|string $tags, ?string $type = null)
  */
-	class Order extends \Eloquent implements \App\Contracts\Exportable {}
+	class Order extends \Eloquent implements \App\Contracts\Exportable, \App\Contracts\Taggable {}
 }
 
 namespace App\Models{
@@ -1287,7 +1300,6 @@ namespace App\Models{
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrderPaymentFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forMonth(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forValidPaidOrders()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment ignoreOrdersBySpecificAdmins()

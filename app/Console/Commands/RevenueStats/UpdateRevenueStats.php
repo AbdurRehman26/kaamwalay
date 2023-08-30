@@ -4,8 +4,8 @@ namespace App\Console\Commands\RevenueStats;
 
 use App\Notifications\RevenueStatsUpdated;
 use App\Services\Order\RevenueStatsService;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 

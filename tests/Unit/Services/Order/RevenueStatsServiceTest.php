@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\V1\PaymentService;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;

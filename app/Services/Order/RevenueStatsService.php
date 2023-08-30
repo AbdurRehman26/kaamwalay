@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Str;

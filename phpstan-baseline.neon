@@ -2261,16 +2261,6 @@ parameters:
 			path: app/Models/OrderPayment.php
 
 		-
-			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Models/OrderPayment.php
-
-		-
-			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Models/OrderPayment.php
-
-		-
 			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForMonth\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Models/OrderPayment.php

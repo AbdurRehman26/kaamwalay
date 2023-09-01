@@ -19,9 +19,9 @@
             </div>
         </div>
         <div class="Home-sectionColumn Home-sectionColumn--half">
-            <a href="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" data-type="image" data-gallery="details" data-effect="zoom"
+            <a href="{{ asset('assets/images/landings/home/detailsPoster.svg') }}" data-type="image" data-gallery="details" data-effect="zoom"
                class="Home-sectionImageHolder glightbox" data-aos="fade-left">
-                <img src="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" alt="Detail"
+                <img src="{{ asset('assets/images/landings/home/detailsPoster.svg') }}" alt="Detail"
                      class="Home-sectionImage" />
             </a>
         </div>

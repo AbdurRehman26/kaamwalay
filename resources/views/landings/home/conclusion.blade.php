@@ -29,6 +29,14 @@
                 <img src="{{ asset('assets/images/landings/home/card04.jpg') }}" alt="" data-aos="fade"
                     data-aos-delay="50" class="Home-cardImage" />
             </div>
+            <div class="Home-cardColumn">
+                <img src="{{ asset('assets/images/landings/home/card05.svg') }}" alt="" data-aos="fade"
+                    class="Home-cardImage" />
+            </div>
+            <div class="Home-cardColumn">
+                <img src="{{ asset('assets/images/landings/home/card06.svg') }}" alt="" data-aos="fade"
+                    class="Home-cardImage" />
+            </div>
         </div>
     </div>
 </section>

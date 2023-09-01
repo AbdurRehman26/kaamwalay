@@ -106,6 +106,6 @@ return [
         ],
         'feature_referral_max_discount_items' => [
             'value' => env('FEATURE_REFERRAL_MAX_DISCOUNT_ITEMS'),
-        ]
+        ],
     ],
 ];

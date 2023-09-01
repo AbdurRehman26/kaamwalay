@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
@@ -177,6 +178,226 @@ it('returns order details', function () {
         ]);
 });
 
+test('orders throws error for roles other than admin', function () {
+    $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
+        ->getJson(route('v3.admin.orders.index'))
+        ->assertForbidden();
+});
+
+test('order details throws error for roles other than admin', function () {
+    $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
+        ->getJson(route('v3.admin.orders.show', ['order' => 1]))
+        ->assertForbidden();
+});
+
+it('filters orders by id', function () {
+    $this->getJson(route('v3.admin.orders.index', ['filter[order_id]' => $this->orders[0]->id]))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'id' => $this->orders[0]->id,
+        ]);
+});
+
+it('returns only placed orders', function () {
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'orderStatusHistory', 'filter[status]' => 'placed']))
+        ->assertOk()
+        ->assertJsonFragment([
+            'order_status_id' => OrderStatus::PLACED,
+        ]);
+});
+
+it('returns only reviewed orders', function () {
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'orderStatusHistory', 'filter[status]' => 'confirmed']))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'order_status_id' => OrderStatus::CONFIRMED,
+        ]);
+});
+
+it('returns only graded orders', function () {
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'orderStatusHistory', 'filter[status]' => 'graded']))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'order_status_id' => OrderStatus::GRADED,
+        ]);
+});
+
+it('returns only shipped orders', function () {
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'orderStatusHistory', 'filter[status]' => 'shipped']))
+        ->assertOk()
+        ->assertJsonCount(1, ['data'])
+        ->assertJsonFragment([
+            'order_status_id' => OrderStatus::SHIPPED,
+        ]);
+});
+
+it('returns orders order by asc order_number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'order_number']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('order_number')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc order_number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-order_number']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('order_number', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc created_at', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'created_at']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('created_at')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc created_at', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-created_at']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('created_at', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc arrived_at', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'arrived_at']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('arrived_at')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc arrived_at', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-arrived_at']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('arrived_at', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc customer_number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'customer_number']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('users', 'users.id', 'orders.user_id')->orderBy('users.customer_number', 'ASC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc customer_number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-customer_number']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('users', 'users.id', 'orders.user_id')->orderBy('users.customer_number', 'DESC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc cards number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'cards']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'quantity')->orderBy('order_items_sum_quantity', 'ASC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc cards number', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-cards']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'quantity')->orderBy('order_items_sum_quantity', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc status', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'status']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('order_statuses', 'order_statuses.id', 'orders.order_status_id')->orderBy('order_statuses.name', 'ASC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc status', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-status']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::join('order_statuses', 'order_statuses.id', 'orders.order_status_id')->orderBy('order_statuses.name', 'DESC')->select('orders.*')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc total_declared_value', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'total_declared_value']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'declared_value_total')->orderBy('order_items_sum_declared_value_total', 'ASC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc total_declared_value', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-total_declared_value']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::withSum('orderItems', 'declared_value_total')->orderBy('order_items_sum_declared_value_total', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by asc grand_total', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => 'grand_total']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('grand_total')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+it('returns orders order by desc grand_total', function () {
+    $response = $this->getJson(route('v3.admin.orders.index', ['sort' => '-grand_total']))
+        ->assertOk();
+    $this->assertEquals(
+        Order::orderBy('grand_total', 'DESC')->pluck('id')->toArray(),
+        collect($response->getData()->data)->pluck('id')->toArray()
+    );
+});
+
+test('orders are filterable by customer first name', function () {
+    $user = $this->orders[0]->user;
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'customer', 'filter[customer_name]' => $user->first_name]))
+        ->assertOk()
+        ->assertJsonCount($user->orders->count(), ['data'])
+        ->assertJsonFragment([
+            'email' => $user->email,
+        ]);
+});
+
+test('orders are filterable by customer ID', function () {
+    $user = $this->orders[0]->user;
+    $this->getJson(route('v3.admin.orders.index', ['include' => 'customer', 'filter[customer_id]' => $user->id]))
+        ->assertOk()
+        ->assertJsonCount($user->orders->count(), ['data'])
+        ->assertJsonFragment([
+            'email' => $user->email,
+        ]);
+});
+
 test('an admin can get order cards grades', function () {
     Bus::fake();
 
@@ -216,6 +437,41 @@ test('an admin can get order cards if AGS API returns grades', function () {
             'id' => $orderItemId,
         ]);
 });
+
+it(
+    'returns orders filtered after searching the order with order number, customer number and user Name',
+    function (string $value) {
+        $this->getJson(route('v3.admin.orders.index', ['include' => 'orderStatusHistory', 'filter[search]' => $value]))
+            ->assertOk()
+            ->assertJsonFragment([
+                'id' => $this->orders[0]->id,
+            ]);
+    }
+)->with([
+    fn () => $this->orders[0]->order_number,
+    fn () => $this->orders[0]->user->customer_number,
+    fn () => $this->orders[0]->user->first_name,
+    fn () => '000000100', // cert number of the first order's first item
+]);
+
+it('returns only orders with filtered payment status', function ($data) {
+    $this->orders = Order::factory()->count(3)->state(new Sequence(
+        ['id' => 100, 'payment_status' => OrderPaymentStatusEnum::PENDING],
+        ['id' => 101, 'payment_status' => OrderPaymentStatusEnum::PAID],
+        ['id' => 102, 'payment_status' => OrderPaymentStatusEnum::DUE],
+    ))->create();
+
+    $this->getJson(route('v3.admin.orders.index', ['filter[payment_status]' => $data['payment_status']]))
+        ->assertOk()
+        ->assertJsonCount($data['count'], ['data'])
+        ->assertJsonFragment([
+            'id' => $data['id'], 'payment_status' => $data['payment_status'],
+        ]);
+})->with([
+    fn () => ['id' => 100, 'count' => 6, 'payment_status' => OrderPaymentStatusEnum::PENDING->value],
+    fn () => ['id' => 101, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::PAID->value],
+    fn () => ['id' => 102, 'count' => 1, 'payment_status' => OrderPaymentStatusEnum::DUE->value],
+]);
 
 test('an admin can place order for an user', function () {
     Event::fake();

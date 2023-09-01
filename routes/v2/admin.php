@@ -97,7 +97,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::post('generate-label', [OrderController::class, 'generateLabel']);
         });
     });
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::apiResource('orders', OrderController::class)->only(['store', 'destroy']);
 
     Route::prefix('addresses')->group(function () {
         Route::apiResource('countries', CountryController::class)->only(['index'])->names([

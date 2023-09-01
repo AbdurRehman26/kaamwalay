@@ -75,20 +75,6 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function index(): OrderListCollection
-    {
-        $orders = $this->orderService->getOrders();
-
-        return new OrderListCollection($orders);
-    }
-
-    public function show(int $orderId): OrderResource
-    {
-        $order = $this->orderService->getOrder($orderId);
-
-        return new OrderResource($order);
-    }
-
     public function store(StoreOrderRequest $request): OrderCreateResource|JsonResponse
     {
         try {

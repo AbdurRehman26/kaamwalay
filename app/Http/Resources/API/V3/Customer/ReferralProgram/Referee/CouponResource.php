@@ -20,6 +20,7 @@ class CouponResource extends BaseResource
             'available_from' => $this->available_from,
             'available_till' => $this->available_till,
             'discount_value' => $this->discount_value,
+            'max_discount_applicable_items' => $this->max_discount_applicable_items,
         ];
     }
 }

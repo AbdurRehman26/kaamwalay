@@ -104,5 +104,8 @@ return [
             'auth' => true,
             'value' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE'),
         ],
+        'feature_referral_max_discount_items' => [
+            'value' => env('FEATURE_REFERRAL_MAX_DISCOUNT_ITEMS'),
+        ]
     ],
 ];

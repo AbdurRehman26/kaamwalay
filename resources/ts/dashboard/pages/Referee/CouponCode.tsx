@@ -139,6 +139,8 @@ interface CouponType {
     discountValue: string;
 
     code: string;
+
+    maxDiscountApplicableItems: string;
 }
 
 export function CouponCode() {
@@ -152,6 +154,7 @@ export function CouponCode() {
         availableTill: '',
         discountValue: '',
         code: '',
+        maxDiscountApplicableItems: '',
     });
 
     const onClickSubmitButton = () => {
@@ -255,7 +258,21 @@ export function CouponCode() {
                             </Typography>
                         </Tooltip>
 
-                        <Divider />
+                        <Typography
+                            fontFamily={'Roboto'}
+                            fontWeight={400}
+                            color={'#0000008A'}
+                            fontSize={16}
+                            letterSpacing={'0.15px'}
+                            margin={'1px'}
+                            variant={'body1'}
+                            align={'center'}
+                        >
+                            {coupon?.discountValue}% off will only apply to the first{' '}
+                            {coupon?.maxDiscountApplicableItems} cards in your submission.
+                        </Typography>
+
+                        <Divider style={{ width: '30%', margin: '10px 0px 20px 0px' }} />
 
                         <Typography
                             margin={1}

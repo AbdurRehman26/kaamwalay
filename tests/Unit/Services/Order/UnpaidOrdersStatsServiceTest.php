@@ -60,7 +60,7 @@ it('calculates daily unpaid orders stats', function () {
     $expectedUnpaidTotal = $orders->whereBetween('created_at', [$startDateTime, $endDateTime])->sum('grand_total');
 
     $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($startDateTime, $endDateTime);
-    
+
     expect($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');
 

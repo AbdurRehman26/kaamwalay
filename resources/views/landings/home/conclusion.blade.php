@@ -14,27 +14,27 @@
     <div class="container Home-sectionContainer">
         <div class="Home-cardImages">
             <div class="Home-cardColumn hide-tablet">
-                <img src="{{ asset('assets/images/landings/home/card01.jpg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card01.png') }}" alt="" data-aos="fade"
                     class="Home-cardImage" />
             </div>
             <div class="Home-cardColumn">
-                <img src="{{ asset('assets/images/landings/home/card02.jpg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card02.png') }}" alt="" data-aos="fade"
                     data-aos-delay="50" class="Home-cardImage" />
             </div>
             <div class="Home-cardColumn">
-                <img src="{{ asset('assets/images/landings/home/card03.jpg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card03.png') }}" alt="" data-aos="fade"
                     class="Home-cardImage" />
             </div>
             <div class="Home-cardColumn hide-tablet">
-                <img src="{{ asset('assets/images/landings/home/card04.jpg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card04.png') }}" alt="" data-aos="fade"
                     data-aos-delay="50" class="Home-cardImage" />
             </div>
             <div class="Home-cardColumn">
-                <img src="{{ asset('assets/images/landings/home/card05.svg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card05.png') }}" alt="" data-aos="fade"
                     class="Home-cardImage" />
             </div>
             <div class="Home-cardColumn">
-                <img src="{{ asset('assets/images/landings/home/card06.svg') }}" alt="" data-aos="fade"
+                <img src="{{ asset('assets/images/landings/home/card06.png') }}" alt="" data-aos="fade"
                     class="Home-cardImage" />
             </div>
         </div>

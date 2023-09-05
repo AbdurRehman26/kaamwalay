@@ -10,18 +10,18 @@
 
 @media screen and (min-width: 1025px) {
     .Home-cardImages .Home-cardColumn:not(:nth-child(2), :nth-child(3), :nth-child(4), :nth-child(5)) .Home-cardImage {
-        max-width: 24vh !important;
-        max-height: 38vh !important;
+        max-width: 24vh;
+        max-height: 38vh;
     }
 
     .Home-cardImages .Home-cardColumn:not(:nth-child(1), :nth-child(3), :nth-child(4), :nth-child(6)) .Home-cardImage {
-        max-width: 20vh !important;
-        max-height: 34vh !important;
+        max-width: 20vh;
+        max-height: 34vh;
     }
 
     .Home-cardImages .Home-cardColumn .Home-cardImage {
-        max-width: 18vh !important;
-        max-height: 28vh !important;
+        max-width: 18vh;
+        max-height: 28vh;
         position: relative;
         top: 10px;
     }

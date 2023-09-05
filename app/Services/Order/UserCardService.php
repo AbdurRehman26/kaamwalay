@@ -319,7 +319,7 @@ class UserCardService
      */
     protected function preparePreciseValue(float $gradeValue): float
     {
-        if (floor($gradeValue) === $gradeValue) {
+        if ($gradeValue === floor($gradeValue)) {
             return floor($gradeValue);
         } else {
             return round($gradeValue, 1);

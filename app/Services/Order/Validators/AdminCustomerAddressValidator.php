@@ -14,7 +14,7 @@ class AdminCustomerAddressValidator
     {
         if (! empty($data['customer_address']['id'])) {
             throw_unless(
-                CustomerAddress::find($data['customer_address']['id'])->user_id === $data['user_id'],
+                $data['user_id'] === CustomerAddress::find($data['customer_address']['id'])->user_id,
                 ErrorInCustomerAddress::class
             );
         }

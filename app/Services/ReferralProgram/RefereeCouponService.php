@@ -89,7 +89,7 @@ class RefereeCouponService
             'discount_value' => Coupon::getRefereeCouponDiscount(),
             'usage_allowed_per_user' => 1,
             'max_usage_allowed' => 1,
-            'description' => 'Referral Discount (Applied to first ' . config('robograding.feature_referral_max_discount_items') . ' cards)',
+            'description' => 'Referral Discount (Applied to first '.config('robograding.feature_referral_max_discount_items').' cards)',
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ];
     }

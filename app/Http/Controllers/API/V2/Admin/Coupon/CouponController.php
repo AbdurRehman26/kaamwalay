@@ -10,7 +10,7 @@ use App\Http\Requests\API\V2\Admin\Coupon\CalculateCouponDiscountForOrderRequest
 use App\Http\Requests\API\V2\Admin\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\V2\Admin\Coupon\StoreCouponRequest;
 use App\Http\Requests\API\V2\Admin\Coupon\VerifyCouponRequest;
-use App\Http\Resources\API\V1\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\V2\Admin\Coupon\VerifyCouponResource;
 use App\Models\Coupon;

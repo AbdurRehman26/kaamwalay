@@ -36,7 +36,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::put('update-shipping-address', [OrderController::class, 'updateShippingAddress'])->name('orders.update-shipping-address');
             Route::get('grades', [OrderController::class, 'getGrades'])->name('orders.get-grades');
             Route::post('create-folders', [OrderController::class, 'createFolders'])->name('orders.create-folders');
-            Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
+            Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues'])->name('orders.cards.update-grading-values');
         });
 
     });

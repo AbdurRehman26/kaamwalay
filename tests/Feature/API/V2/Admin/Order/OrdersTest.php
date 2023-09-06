@@ -2,7 +2,6 @@
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
-use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderCertificateExport;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
@@ -111,29 +110,6 @@ test('a customer can not update order notes', function () {
     ])->assertForbidden();
 });
 
-test('an admin can get order cards grades', function () {
-    Bus::fake();
-
-    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')->assertOk();
-
-    Bus::assertDispatched(GetCardGradesFromAgs::class);
-});
-
-test('a customer can not get order cards grades', function () {
-    $customerUser = User::factory()->withRole(config('permission.roles.customer'))->create();
-
-    $this->actingAs($customerUser);
-
-    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
-        ->assertForbidden();
-});
-
-it('can not get order grades if order is not reviewed', function () {
-    $response = $this->getJson('/api/v2/admin/orders/'.$this->orders[0]->id.'/grades');
-    $response->assertJsonStructure(['error']);
-    $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
-});
-
 test('an admin can complete review of an order', function () {
     Http::fake([
         'ags.api/*/certificates/*' => Http::response(['data']),
@@ -160,37 +136,6 @@ test('an admin can not complete review of an order if error occurred with AGS cl
     $this->postJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertStatus(422);
-});
-
-test('it dispatches get grades from AGS job when admin fetches grades', function () {
-    Bus::fake();
-
-    UserCard::factory()->create([
-        'order_item_id' => $this->orders[1]->orderItems->first()->id,
-    ]);
-    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
-        ->assertOk()
-        ->assertJsonFragment([
-            'robo_grade_values' => null,
-        ]);
-
-    Bus::assertDispatched(GetCardGradesFromAgs::class);
-});
-
-test('an admin can get order cards if AGS API returns grades', function () {
-    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
-    $orderItemId = $this->orders[1]->orderItems->first()->id;
-    UserCard::factory()->create([
-        'order_item_id' => $orderItemId,
-        'certificate_number' => '09000000',
-    ]);
-    $this->getJson('/api/v2/admin/orders/'.$this->orders[1]->id.'/grades')
-        ->assertJsonFragment([
-            'center' => '2.00',
-        ])
-        ->assertJsonFragment([
-            'id' => $orderItemId,
-        ]);
 });
 
 it('should send an event when order status gets changed', function () {

@@ -2,6 +2,7 @@
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V3\OrderShippingAddressChangedEvent;
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\GetCardGradesFromAgs;
@@ -405,6 +406,21 @@ test('an admin can get order cards grades', function () {
         ->assertOk();
 
     Bus::assertDispatched(GetCardGradesFromAgs::class);
+});
+
+test('a customer can not get order cards grades', function () {
+    $customerUser = User::factory()->withRole(config('permission.roles.customer'))->create();
+
+    $this->actingAs($customerUser);
+
+    $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[1]->id]))
+        ->assertForbidden();
+});
+
+it('can not get order grades if order is not reviewed', function () {
+    $response = $this->getJson(route('v3.admin.orders.get-grades', ['order' => $this->orders[0]->id]));
+    $response->assertJsonStructure(['error']);
+    $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
 
 test('it dispatches get grades from AGS job when admin fetches grades', function () {

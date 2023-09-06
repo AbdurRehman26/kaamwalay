@@ -27,5 +27,4 @@ class UserCardController extends Controller
 
         return new UserCardResource($certificate);
     }
-
 }

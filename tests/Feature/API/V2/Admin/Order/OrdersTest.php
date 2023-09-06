@@ -5,7 +5,6 @@ use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Jobs\Admin\Order\CreateOrderCertificateExport;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnAGSLocalMachine;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
-use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;

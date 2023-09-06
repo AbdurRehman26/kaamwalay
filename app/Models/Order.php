@@ -519,9 +519,9 @@ class Order extends Model implements Exportable, Taggable
 
     public function isEligibleToMarkAsGraded(): bool
     {
-        return $this->orderItems()->count() === (
+        return (
             $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
-        );
+        ) === $this->orderItems()->count();
     }
 
     public function orderShipment(): BelongsTo

@@ -26,6 +26,7 @@ class CreateRefereeCoupon implements ShouldBeEncrypted
                     'REDIRECT_URL' => config('app.url').'/dashboard/submissions/new?coupon='.$coupon->code,
                     'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
                     'DISCOUNT_PROMO_CODE' => $coupon->code,
+                    'CARDS_APPLICABLE_FOR_DISCOUNT' => $coupon->max_discount_applicable_items,
                 ]
             );
         }

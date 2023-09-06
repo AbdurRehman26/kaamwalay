@@ -12,7 +12,8 @@
             </div>
             <div>
                 <h1 class="ReferralHome-sectionTitle">Sign Up to Claim <span> {{ config('robograding.feature_referral_discount_percentage') }}% OFF </span> Your First Submission</h1>
-                <h2 class="ReferralHome-sectionSubtitle">You’re one step away from unbelievable savings.</h2>
+                <h2 class="ReferralHome-sectionSubtitle">You’re one step away from unbelievable savings. Sign up today and get {{ config('robograding.feature_referral_discount_percentage') }}% off* your fist submission.</h2>
+                <h2 class="ReferralHome-sectionCaption">*Offer applies to the first {{ config('robograding.feature_referral_max_discount_items') }} cards in your submission.</h2>
             </div>
         </div>
         <div class="ReferralHome-mainRight">

@@ -191,7 +191,7 @@ export function Main() {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const dispatch = useAppDispatch();
     const referrer = useAppSelector((state) => state.referralProgramSlice.referrerDetail.referrer);
-    const { featureReferralDiscountPercentage } = useConfiguration();
+    const { featureReferralDiscountPercentage, featureReferralMaxDiscountItems } = useConfiguration();
 
     useEffect(() => {
         dispatch(getReferrerDetail());
@@ -229,66 +229,72 @@ export function Main() {
             <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Grid width={'100%'}>
                     {referrer?.isReferralActive ? (
-                        <ShareBox>
-                            <Typography className={'ShareLinkText'}>Share Link</Typography>
-                            <TabContext value={value}>
-                                <TabList
-                                    variant="scrollable"
-                                    onChange={handleChange}
-                                    aria-label="share-tabs"
-                                    classes={{
-                                        indicator: classes.indicator,
-                                    }}
-                                    className={'TabList'}
-                                >
-                                    <Tab
-                                        className={'Tab'}
-                                        icon={<InsertLinkOutlinedIcon />}
-                                        value="share-link"
-                                        aria-label="share-link"
-                                    />
-                                    <Tab
-                                        className={'Tab'}
-                                        icon={<FacebookOutlinedIcon />}
-                                        value="facebook"
-                                        aria-label="facebook"
-                                    />
-                                    <Tab
-                                        className={'Tab'}
-                                        icon={<TwitterIcon />}
-                                        value="twitter"
-                                        aria-label="twitter"
-                                    />
-                                    <Tab
-                                        className={'Tab'}
-                                        icon={<LinkedInIcon />}
-                                        value="linkedin"
-                                        aria-label="linkedin"
-                                    />
-                                    <Tab
-                                        className={'Tab'}
-                                        icon={<WhatsAppIcon />}
-                                        value="whatsapp"
-                                        aria-label="whatsapp"
-                                    />
-                                </TabList>
-                                <TabPanel value="share-link">
-                                    <Copylink referralUrl={referrer?.referralUrl} />
-                                </TabPanel>
-                                <TabPanel value="facebook">
-                                    <SocialShare name="Facebook" referralUrl={referrer?.referralUrl} />
-                                </TabPanel>
-                                <TabPanel value="twitter">
-                                    <SocialShare name="Twitter" referralUrl={referrer?.referralUrl} />
-                                </TabPanel>
-                                <TabPanel value="linkedin">
-                                    <SocialShare name="Linkedin" referralUrl={referrer?.referralUrl} />
-                                </TabPanel>
-                                <TabPanel value="whatsapp">
-                                    <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
-                                </TabPanel>
-                            </TabContext>
-                        </ShareBox>
+                        <>
+                            <ShareBox>
+                                <Typography className={'ShareLinkText'}>Share Link</Typography>
+                                <TabContext value={value}>
+                                    <TabList
+                                        variant="scrollable"
+                                        onChange={handleChange}
+                                        aria-label="share-tabs"
+                                        classes={{
+                                            indicator: classes.indicator,
+                                        }}
+                                        className={'TabList'}
+                                    >
+                                        <Tab
+                                            className={'Tab'}
+                                            icon={<InsertLinkOutlinedIcon />}
+                                            value="share-link"
+                                            aria-label="share-link"
+                                        />
+                                        <Tab
+                                            className={'Tab'}
+                                            icon={<FacebookOutlinedIcon />}
+                                            value="facebook"
+                                            aria-label="facebook"
+                                        />
+                                        <Tab
+                                            className={'Tab'}
+                                            icon={<TwitterIcon />}
+                                            value="twitter"
+                                            aria-label="twitter"
+                                        />
+                                        <Tab
+                                            className={'Tab'}
+                                            icon={<LinkedInIcon />}
+                                            value="linkedin"
+                                            aria-label="linkedin"
+                                        />
+                                        <Tab
+                                            className={'Tab'}
+                                            icon={<WhatsAppIcon />}
+                                            value="whatsapp"
+                                            aria-label="whatsapp"
+                                        />
+                                    </TabList>
+                                    <TabPanel value="share-link">
+                                        <Copylink referralUrl={referrer?.referralUrl} />
+                                    </TabPanel>
+                                    <TabPanel value="facebook">
+                                        <SocialShare name="Facebook" referralUrl={referrer?.referralUrl} />
+                                    </TabPanel>
+                                    <TabPanel value="twitter">
+                                        <SocialShare name="Twitter" referralUrl={referrer?.referralUrl} />
+                                    </TabPanel>
+                                    <TabPanel value="linkedin">
+                                        <SocialShare name="Linkedin" referralUrl={referrer?.referralUrl} />
+                                    </TabPanel>
+                                    <TabPanel value="whatsapp">
+                                        <SocialShare name="Whatsapp" referralUrl={referrer?.referralUrl} />
+                                    </TabPanel>
+                                </TabContext>
+                            </ShareBox>
+                            <Typography sx={styles.SmallText}>
+                                *The {featureReferralDiscountPercentage}% discount will apply to up to{' '}
+                                {featureReferralMaxDiscountItems} cards in the first submission of whoever you refer.
+                            </Typography>
+                        </>
                     ) : (
                         <ReferralDeactivateBanner />
                     )}

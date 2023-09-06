@@ -18,4 +18,5 @@ export class ConfigurationEntity {
     public featureOrderCleaningFeePerCard!: number;
     public featureOrderCleaningFeeMaxCap!: number;
     public featureOrderShippingInsuranceFeePercentage!: number;
+    public featureReferralMaxDiscountItems!: number;
 }

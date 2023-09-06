@@ -18,8 +18,6 @@ use Throwable;
 
 class RefereeCouponService
 {
-    protected const MAX_DISCOUNT_APPLICABLE_ITEMS = 20;
-
     public function __construct(
         protected CouponCodeService $couponCodeService,
         protected CouponStatusService $couponStatusService
@@ -65,7 +63,7 @@ class RefereeCouponService
                     'name' => $code,
                     'created_by' => $user->id,
                     'is_system_generated' => 1,
-                    'max_discount_applicable_items' => self::MAX_DISCOUNT_APPLICABLE_ITEMS,
+                    'max_discount_applicable_items' => config('robograding.feature_referral_max_discount_items'),
                 ],
                 $this->generateCouponData()
             )
@@ -91,7 +89,7 @@ class RefereeCouponService
             'discount_value' => Coupon::getRefereeCouponDiscount(),
             'usage_allowed_per_user' => 1,
             'max_usage_allowed' => 1,
-            'description' => 'Submission discount referred by an user',
+            'description' => 'Referral Discount (Applied to first '.config('robograding.feature_referral_max_discount_items').' cards)',
             'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         ];
     }

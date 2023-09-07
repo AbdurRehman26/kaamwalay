@@ -19,7 +19,7 @@ uses()->group('admin', 'grading');
 
 it('stores the human grades with calculations of overall and does not update data on AGS', function () {
     Http::fake();
-    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
+    $this->putJson(route('v3.admin.orders.cards.update-grading-values', ['order' => $this->order->id, 'card' => $this->userCard->id]), [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -44,7 +44,7 @@ it('stores the human grades with calculations of overall and does not update dat
 it('stores the human grades and dispatches update call to AGS', function () {
     Bus::fake();
 
-    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
+    $this->putJson(route('v3.admin.orders.cards.update-grading-values', ['order' => $this->order->id, 'card' => $this->userCard->id]), [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -61,8 +61,7 @@ it('stores the human grades and dispatches update call to AGS', function () {
         ],
     ])
         ->assertOk()
-        ->assertJsonCount(4, 'data.overall_values')
-        ->assertJsonCount(2, 'data.grade');
+        ->assertJsonCount(4, 'data.overall_values');
 
     Bus::assertDispatched(UpdateHumanGradesInAgs::class);
 });
@@ -70,7 +69,7 @@ it('stores the human grades and dispatches update call to AGS', function () {
 it('updates overall grade based on delta value', function () {
     Http::fake();
 
-    $this->putJson('/api/v2/admin/orders/'.$this->order->id.'/cards/'.$this->userCard->id.'/grades', [
+    $this->putJson(route('v3.admin.orders.cards.update-grading-values', ['order' => $this->order->id, 'card' => $this->userCard->id]), [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -88,6 +87,6 @@ it('updates overall grade based on delta value', function () {
         'grade_delta' => 2.5,
     ])
         ->assertOk()
-        ->assertJsonFragment(['grade' => 5.0])
-        ->assertJsonFragment(['nickname' => 'EX']);
+        ->assertJsonFragment(['overall_grade' => 5.0])
+        ->assertJsonFragment(['overall_grade_nickname' => 'EX']);
 });

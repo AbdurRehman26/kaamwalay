@@ -76,10 +76,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::post('items', [OrderItemController::class, 'store']);
             Route::put('items/{orderItem}/notes', [OrderItemController::class, 'updateNotes'])
                 ->name('update.orderItem.notes');
-            Route::get('grades', [OrderController::class, 'getGrades']);
             Route::post('shipment', [OrderController::class, 'processShipment'])->name('admin.orders.update-shipment');
-
-            Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
 
             Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
             Route::post('payments/extra-charge', OrderExtraChargeController::class)
@@ -97,7 +94,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::post('generate-label', [OrderController::class, 'generateLabel']);
         });
     });
-    Route::apiResource('orders', OrderController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::apiResource('orders', OrderController::class)->only(['store', 'destroy']);
 
     Route::prefix('addresses')->group(function () {
         Route::apiResource('countries', CountryController::class)->only(['index'])->names([

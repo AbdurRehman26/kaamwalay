@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
-use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeCancelled;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\Order\OrderIsAlreadyCancelled;
@@ -16,11 +15,8 @@ use App\Http\Requests\API\V2\Admin\Order\UpdateBillingAddressRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateNotesRequest;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderCreateResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
-use App\Http\Resources\API\V2\Admin\Order\UserCardCollection;
-use App\Jobs\Admin\Order\GetCardGradesFromAgs;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderLabelService;
@@ -29,7 +25,6 @@ use App\Services\Admin\V2\CreateOrderService;
 use App\Services\Admin\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,20 +66,6 @@ class OrderController extends Controller
         }
 
         $order->refresh()->load('orderShipment');
-
-        return new OrderResource($order);
-    }
-
-    public function index(): OrderListCollection
-    {
-        $orders = $this->orderService->getOrders();
-
-        return new OrderListCollection($orders);
-    }
-
-    public function show(int $orderId): OrderResource
-    {
-        $order = $this->orderService->getOrder($orderId);
 
         return new OrderResource($order);
     }
@@ -189,27 +170,5 @@ class OrderController extends Controller
     public function updateNotes(UpdateNotesRequest $request, Order $order): OrderResource
     {
         return new OrderResource($this->orderService->updateNotes($order, $request->notes));
-    }
-
-    public function getGrades(Request $request, Order $order): UserCardCollection|JsonResponse
-    {
-        $this->authorize('review', $order);
-
-        try {
-            GetCardGradesFromAgs::dispatchIf(
-                $order->canBeGraded() && $request->boolean('from_ags', true),
-                $order
-            );
-            $userCards = $this->orderService->getCardsForGrading($order);
-        } catch (IncorrectOrderStatus $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                $e->getCode()
-            );
-        }
-
-        return new UserCardCollection($userCards);
     }
 }

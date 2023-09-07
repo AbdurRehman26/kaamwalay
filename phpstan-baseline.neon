@@ -666,36 +666,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$arrived_at\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$grand_total\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$orderItems\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$order_number\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
-
-		-
 			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentCollection.php
@@ -864,66 +834,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$updated_at\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$ai_model_numbers\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$generated_images\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$grade_delta\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$grading_id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$human_grade_values\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$id\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$orderItem\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$overall_grade_nickname\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$robo_grade_values\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$updated_at\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$user\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:getRoundedOverallValues\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
 
 		-
 			message: "#^PHPDoc tag @return with type array\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|JsonSerializable is not subtype of native type array\\.$#"

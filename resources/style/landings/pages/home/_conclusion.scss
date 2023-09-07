@@ -8,44 +8,6 @@
     }
 }
 
-@media screen and (min-width: 1025px) {
-    .Home-cardImages .Home-cardColumn:not(:nth-child(2), :nth-child(3), :nth-child(4), :nth-child(5)) .Home-cardImage {
-        max-width: 24vh;
-        max-height: 38vh;
-    }
-
-    .Home-cardImages .Home-cardColumn:not(:nth-child(1), :nth-child(3), :nth-child(4), :nth-child(6)) .Home-cardImage {
-        max-width: 20vh;
-        max-height: 34vh;
-    }
-
-    .Home-cardImages .Home-cardColumn .Home-cardImage {
-        max-width: 18vh;
-        max-height: 28vh;
-        position: relative;
-        top: 10px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .Home-cardImages .Home-cardColumn:nth-child(4),
-    :nth-child(6) .Home-cardImage {
-        display: none;
-    }
-    .Home-cardImages .Home-cardColumn:nth-child(1) .Home-cardImage,
-    .Home-cardImages .Home-cardColumn:nth-child(5) .Home-cardImage {
-        top: 10px;
-    }
-    .Home-cardImages .Home-cardColumn:nth-child(2) .Home-cardImage,
-    .Home-cardImages .Home-cardColumn:nth-child(3) .Home-cardImage {
-        top: 20px;
-        max-height: 117px;
-    }
-    .Home-cardImages .Home-cardColumn .Home-cardImage {
-        position: relative;
-    }
-}
-
 .Home-cardColumn {
     width: 25%;
     display: inline-flex;
@@ -71,8 +33,58 @@
     }
 }
 
+.hide-tablet {
+    @media screen and (max-width: 767px) {
+        display: none;
+    }
+}
+
+.Home-cardImage-Large {
+    @media screen and (min-width: 1025px) {
+        max-width: 24vh;
+        max-height: 38vh;
+    }
+    @media screen and (max-width: 767px) {
+        top: 15px;
+        max-height: 100%;
+    }
+}
+
+.Home-cardImage-Medium {
+    @media screen and (min-width: 1025px) {
+        max-width: 20vh;
+        max-height: 34vh;
+    }
+    @media screen and (max-width: 767px) {
+        top: 15px;
+        max-height: 117px;
+    }
+}
+
+.Home-cardImage-Medium-Mobile {
+    @media screen and (max-width: 767px) {
+        top: 15px;
+        max-height: 100%;
+    }
+}
+
+.Home-cardImage-Small {
+    @media screen and (min-width: 1025px) {
+        max-width: 18vh;
+        max-height: 28vh;
+    }
+    @media screen and (max-width: 767px) {
+        top: 15px;
+        max-height: 117px;
+    }
+}
+
 .Home-cardImage {
-    max-width: 80%;
+    position: relative;
+
+    @media screen and (min-width: 1025px) {
+        top: 10px;
+    }
 
     @media screen and (max-width: 768px) {
         max-width: 100%;

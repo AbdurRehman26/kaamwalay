@@ -13,29 +13,29 @@
 
     <div class="container Home-sectionContainer">
         <div class="Home-cardImages">
-            <div class="Home-cardColumn hide-tablet">
+            <div class="Home-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card01.png') }}" alt="" data-aos="fade"
-                    class="Home-cardImage" />
+                    class="Home-cardImage Home-cardImage-Large" />
             </div>
             <div class="Home-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card02.png') }}" alt="" data-aos="fade"
-                    data-aos-delay="50" class="Home-cardImage" />
+                    data-aos-delay="50" class="Home-cardImage Home-cardImage-Medium" />
             </div>
             <div class="Home-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card03.png') }}" alt="" data-aos="fade"
-                    class="Home-cardImage" />
+                    class="Home-cardImage Home-cardImage-Small" />
             </div>
             <div class="Home-cardColumn hide-tablet">
                 <img src="{{ asset('assets/images/landings/home/card04.png') }}" alt="" data-aos="fade"
-                    data-aos-delay="50" class="Home-cardImage" />
+                    data-aos-delay="50" class="Home-cardImage Home-cardImage-Small" />
             </div>
             <div class="Home-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card05.png') }}" alt="" data-aos="fade"
-                    class="Home-cardImage" />
+                    class="Home-cardImage Home-cardImage-Medium Home-cardImage-Medium-Mobile" />
             </div>
-            <div class="Home-cardColumn">
+            <div class="Home-cardColumn hide-tablet">
                 <img src="{{ asset('assets/images/landings/home/card06.png') }}" alt="" data-aos="fade"
-                    class="Home-cardImage" />
+                    class="Home-cardImage Home-cardImage-Large" />
             </div>
         </div>
     </div>

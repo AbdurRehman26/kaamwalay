@@ -17,7 +17,7 @@
             </div>
             <div class="ReferralHome-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card02.jpg') }}" alt="" data-aos="fade"
-                    data-aos-delay="50" class="Home-cardImage" />
+                    data-aos-delay="50" class="ReferralHome-cardImage" />
             </div>
             <div class="ReferralHome-cardColumn">
                 <img src="{{ asset('assets/images/landings/home/card03.jpg') }}" alt="" data-aos="fade"

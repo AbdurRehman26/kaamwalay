@@ -1,7 +1,23 @@
 .Home-details {
+    @media screen and (min-width: 1024px) {
+        padding: 0px 0px 220px 0px;
+    }
+
     @media screen and (max-width: 1199px) {
         padding-top: 72px;
         padding-bottom: 92px;
+    }
+
+    .Home-sectionColumn-first {
+        @media screen and (min-width: 1024px) {
+            padding: 240px 0px 180px 0px;
+        }
+    }
+
+    .Home-sectionColumn-second {
+        @media screen and (min-width: 1024px) {
+            padding: 90px 0px;
+        }
     }
 
     .Home-sectionImageHolder {
@@ -9,8 +25,15 @@
             margin-top: 56px;
             margin-bottom: 0;
             padding-bottom: 0;
+        }
 
-            .Home-sectionImage {
+        .Home-sectionImage {
+            @media screen and (min-width: 1024px) {
+                max-width: 600px;
+                max-height: 700px;
+            }
+
+            @media screen and (max-width: 1199px) {
                 position: relative;
                 width: 100%;
                 object-fit: cover;

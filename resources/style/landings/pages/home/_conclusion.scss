@@ -9,27 +9,12 @@
 }
 
 .Home-cardColumn {
-    width: 25%;
     display: inline-flex;
     align-items: flex-end;
     justify-content: center;
-    padding: 0 14px;
 
     @media screen and (max-width: 768px) {
         padding: 0 4px;
-    }
-}
-
-.Home-cardImages {
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: 94px;
-
-    @media screen and (max-width: 768px) {
-        margin-top: 54px;
-        flex-wrap: wrap;
     }
 }
 
@@ -39,53 +24,38 @@
     }
 }
 
-.Home-cardImage-Large {
-    @media screen and (min-width: 1025px) {
-        max-width: 24vh;
-        max-height: 38vh;
-    }
-    @media screen and (max-width: 767px) {
-        top: 15px;
-        max-height: 100%;
+.Home-cardColumn-Large {
+    @media screen and (min-width: 1024px) {
+        width: 25%;
     }
 }
 
-.Home-cardImage-Medium {
-    @media screen and (min-width: 1025px) {
-        max-width: 20vh;
-        max-height: 34vh;
-    }
-    @media screen and (max-width: 767px) {
-        top: 15px;
-        max-height: 117px;
+.Home-cardColumn-Medium {
+    @media screen and (min-width: 1024px) {
+        width: 22%;
     }
 }
 
-.Home-cardImage-Medium-Mobile {
-    @media screen and (max-width: 767px) {
-        top: 15px;
-        max-height: 100%;
+.Home-cardColumn-Small {
+    @media screen and (min-width: 1024px) {
+        width: 20%;
     }
 }
 
-.Home-cardImage-Small {
-    @media screen and (min-width: 1025px) {
-        max-width: 18vh;
-        max-height: 28vh;
-    }
-    @media screen and (max-width: 767px) {
-        top: 15px;
-        max-height: 117px;
+.Home-cardImages {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 94px;
+    @media screen and (max-width: 768px) {
+        margin-top: 54px;
     }
 }
 
 .Home-cardImage {
-    position: relative;
-
-    @media screen and (min-width: 1025px) {
-        top: 10px;
-    }
-
+    max-width: 90%;
+    margin-bottom: -10px;
     @media screen and (max-width: 768px) {
         max-width: 100%;
     }

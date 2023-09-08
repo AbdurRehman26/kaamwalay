@@ -1,7 +1,6 @@
 .Home-details {
     @media screen and (min-width: 1024px) {
-        padding: 0px 0px;
-        padding-bottom: 220px;
+        padding: 0px 0px 220px 0px;
     }
 
     @media screen and (max-width: 1199px) {
@@ -9,13 +8,13 @@
         padding-bottom: 92px;
     }
 
-    .Home-sectionColumn--half:nth-child(1) {
+    .Home-sectionColumn-first {
         @media screen and (min-width: 1024px) {
             padding: 240px 0px 180px 0px;
         }
     }
 
-    .Home-sectionColumn--half:nth-child(2) {
+    .Home-sectionColumn-second {
         @media screen and (min-width: 1024px) {
             padding: 90px 0px;
         }
@@ -30,8 +29,8 @@
 
         .Home-sectionImage {
             @media screen and (min-width: 1024px) {
-                max-width: 622px;
-                max-height: 710px;
+                max-width: 600px;
+                max-height: 700px;
             }
 
             @media screen and (max-width: 1199px) {

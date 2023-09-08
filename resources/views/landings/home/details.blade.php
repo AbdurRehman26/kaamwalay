@@ -7,7 +7,7 @@
              height="420">
     </div>
     <div class="container Home-sectionContainer">
-        <div class="Home-sectionColumn Home-sectionColumn--half" data-aos="fade">
+        <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn-first" data-aos="fade">
             <h4 class="Home-sectionContentCaption">Transparent grading</h4>
             <h3 class="Home-sectionContentHeadline">Get a detailed grade breakdown.</h3>
             <p class="Home-sectionContentText">When you grade your card with us, you will also get a breakdown of
@@ -18,7 +18,7 @@
                     {{-- JS runtime actions --}}
             </div>
         </div>
-        <div class="Home-sectionColumn Home-sectionColumn--half">
+        <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn-second">
             <a href="{{ asset('assets/images/landings/home/detailsPoster.png') }}" data-type="image" data-gallery="details" data-effect="zoom"
                class="Home-sectionImageHolder glightbox" data-aos="fade-left">
                 <img src="{{ asset('assets/images/landings/home/detailsPoster.png') }}" alt="Detail"

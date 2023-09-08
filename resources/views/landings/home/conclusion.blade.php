@@ -25,7 +25,7 @@
                 <img src="{{ asset('assets/images/landings/home/card03.png') }}" alt="" data-aos="fade"
                     class="Home-cardImage " />
             </div>
-            <div class="Home-cardColumn  Home-cardColumn-Small hide-tablet">
+            <div class="Home-cardColumn Home-cardColumn-Small hide-tablet">
                 <img src="{{ asset('assets/images/landings/home/card04.png') }}" alt="" data-aos="fade"
                     data-aos-delay="50" class="Home-cardImage" />
             </div>

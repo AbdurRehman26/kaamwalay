@@ -17,7 +17,7 @@ import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { TableSortType } from '@shared/constants/TableSortType';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useAdminOrdersListQuery } from '@shared/redux/hooks/useAdminOrdersListQuery';
 
 interface Props {
     label: string;
@@ -151,7 +151,7 @@ export function SalesRepViewSubmissionsTab() {
     const [orderBy, setOrderBy] = useState<string>('created_at');
     const [sortFilter, setSortFilter] = useState('-created_at');
 
-    const orders$ = useListAdminOrdersQuery({
+    const orders$ = useAdminOrdersListQuery({
         params: {
             include: [
                 'orderStatus',

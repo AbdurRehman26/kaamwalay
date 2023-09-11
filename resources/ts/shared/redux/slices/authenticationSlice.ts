@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';

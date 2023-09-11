@@ -7,7 +7,7 @@ use App\Services\MailchimpService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
+class SendRegisteredUserToMailchimp implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.

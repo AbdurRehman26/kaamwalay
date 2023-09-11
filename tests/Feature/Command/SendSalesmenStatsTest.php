@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Notification;
 it('sends salesmen stats daily', function () {
     Notification::fake();
 
-    $this->artisan('salesman:send-salesmen-stats '.Carbon::now()->subDay()->format('Y-m-d'))
+    $this->artisan('salesman:send-salesmen-stats', [
+        'date' => Carbon::now()->subDay(),
+    ])
         ->assertExitCode(0);
 
     Notification::assertSentTimes(SalesmenStatsNotification::class, 1);

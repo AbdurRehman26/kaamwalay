@@ -6,7 +6,7 @@ use App\Models\Order;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 
-class RefundAmountRule implements Rule, DataAwareRule
+class RefundAmountRule implements DataAwareRule, Rule
 {
     protected array $data = [];
 

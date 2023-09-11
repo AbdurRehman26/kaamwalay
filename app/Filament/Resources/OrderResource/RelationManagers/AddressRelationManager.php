@@ -4,14 +4,14 @@ namespace App\Filament\Resources\OrderResource\RelationManagers;
 
 use App\Models\State;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
-abstract class AddressRelationManager extends RelationManager
+class AddressRelationManager extends RelationManager
 {
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -51,7 +51,7 @@ abstract class AddressRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

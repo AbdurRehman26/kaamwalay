@@ -11,7 +11,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { markCardAsUnselected } from '@shared/redux/slices/adminCreateOrderSlice';
@@ -156,9 +156,9 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         <Typography variant={'body2'} className={font.fontWeightBold} align={'left'}>
                             {name}
                         </Typography>
-                        {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from algolia
+                        {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from meilisearch
                         the client has no control over this data, therefore it won't result in an XSS.
-                        We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
+                        We're using this because meilisearch is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
                         which we can then style to display the searched term bolded in the results*/}
                         <div title={shortNameWithoutHtmlTags}>
                             <Typography

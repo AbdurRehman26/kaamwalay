@@ -28,14 +28,15 @@ class UnpaidOrdersStats extends Notification
 
     public function toSlack(mixed $notifiable): SlackMessage
     {
+        $date = Carbon::parse($this->unpaidDailyStats['date'])->format('Y-m-d');
         $monthYear = Carbon::parse($this->unpaidMonthlyStats['date'])->format('F-Y');
 
         return (new SlackMessage)
             ->from('Robograding', ':bar_chart:')
             ->success()
-            ->attachment(function ($attachment) use ($monthYear) {
+            ->attachment(function ($attachment) use ($monthYear, $date) {
                 $attachment->title('Unpaid Orders Stats')
-                    ->content("Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}), Total Cards: {$this->dailyTotalCards}\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']}), Total Cards: {$this->monthlyTotalCards}");
+                    ->content("Date: {$date}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}), Total Cards: {$this->dailyTotalCards}\nMonth: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']}), Total Cards: {$this->monthlyTotalCards}");
             });
     }
 }

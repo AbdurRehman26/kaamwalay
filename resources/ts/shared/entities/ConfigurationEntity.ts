@@ -1,8 +1,6 @@
 export class ConfigurationEntity {
     public appEnv!: string;
     public appUrl!: string;
-    public algoliaAppId!: string;
-    public algoliaPublicKey!: string;
     public meilisearchPublicHost!: string;
     public meilisearchPublicKey!: string;
     public stripeKey!: string;
@@ -20,4 +18,5 @@ export class ConfigurationEntity {
     public featureOrderCleaningFeePerCard!: number;
     public featureOrderCleaningFeeMaxCap!: number;
     public featureOrderShippingInsuranceFeePercentage!: number;
+    public featureReferralMaxDiscountItems!: number;
 }

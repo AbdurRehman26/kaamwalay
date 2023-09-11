@@ -17,22 +17,22 @@ class SendSalesmenStats extends Command
      *
      * @var string
      */
-    protected $signature = 'salesman:send-salesmen-stats {date? : YYYY-MM-DD format}';
+    protected $signature = 'salesman:send-salesmen-stats {date : YYYY-MM-DD H:m:s format}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send salesmen stats daily at 12:20 am';
+    protected $description = 'Send salesmen stats daily at 12:05 am';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $endDate = (Carbon::parse($this->argument('date')))->endOfDay()->format('Y-m-d');
-        $salesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->format('Y-m-d'), $endDate)];
+        $endDate = (Carbon::parse($this->argument('date')));
+        $salesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth(), $endDate)];
 
         $this->info('Salesmen Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 

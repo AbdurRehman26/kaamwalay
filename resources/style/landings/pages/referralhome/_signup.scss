@@ -112,6 +112,19 @@
 .ReferralHome-sectionSubtitle {
     font-size: 20px;
     line-height: 28px;
+    max-width: 630px;
+    letter-spacing: 0.15px;
+    margin-bottom: 16px;
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+.ReferralHome-sectionCaption {
+    font-size: 14px;
+    line-height: 28px;
+    max-width: 630px;
     letter-spacing: 0.15px;
     margin-bottom: 46px;
     @media screen and (max-width: 767px) {
@@ -121,7 +134,8 @@
 }
 
 .ReferralHome-sectionTitle,
-.ReferralHome-sectionSubtitle {
+.ReferralHome-sectionSubtitle,
+.ReferralHome-sectionCaption {
     color: #fff;
 }
 

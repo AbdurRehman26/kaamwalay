@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { PropsWithChildren, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useNotifications } from '@shared/hooks/useNotifications';

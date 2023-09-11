@@ -40,12 +40,6 @@ return [
         'stripe_key' => [
             'value' => env('STRIPE_KEY'),
         ],
-        'algolia_app_id' => [
-            'value' => env('ALGOLIA_APP_ID'),
-        ],
-        'algolia_public_key' => [
-            'value' => env('ALGOLIA_PUBLIC_KEY'),
-        ],
         'meilisearch_public_host' => [
             'value' => env('MEILISEARCH_PUBLIC_HOST'),
         ],
@@ -109,6 +103,9 @@ return [
         'feature_referral_discount_percentage' => [
             'auth' => true,
             'value' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE'),
+        ],
+        'feature_referral_max_discount_items' => [
+            'value' => env('FEATURE_REFERRAL_MAX_DISCOUNT_ITEMS'),
         ],
     ],
 ];

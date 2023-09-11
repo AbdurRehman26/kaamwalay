@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class OrderPayment extends Model
 {
-    use HasFactory, ActivityLog;
+    use ActivityLog, HasFactory;
 
     public const TYPE_ORDER_PAYMENT = 1;
 
@@ -70,11 +70,6 @@ class OrderPayment extends Model
             self::TYPE_REFUND => 'refund',
             default => 'order_payment',
         };
-    }
-
-    public function scopeForDate(Builder $query, string $date): Builder
-    {
-        return $query->whereDate('order_payments.created_at', $date);
     }
 
     public function scopeForMonth(Builder $query, string $date): Builder

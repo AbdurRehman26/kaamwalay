@@ -35,6 +35,7 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
             [
                 'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/main',
                 'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
+                'CARDS_APPLICABLE_FOR_DISCOUNT' => config('robograding.feature_referral_max_discount_items'),
             ],
             true,
             'CreateReferrerReminderCheck',

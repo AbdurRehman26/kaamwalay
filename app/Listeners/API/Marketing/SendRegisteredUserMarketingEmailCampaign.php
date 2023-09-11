@@ -7,7 +7,7 @@ use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserMarketingEmailCampaign implements ShouldQueue, ShouldBeEncrypted
+class SendRegisteredUserMarketingEmailCampaign implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.

@@ -34,7 +34,7 @@ use Spatie\QueryBuilder\AllowedSort;
 
 class Order extends Model implements Exportable, Taggable
 {
-    use HasFactory, ActivityLog, HasOrderPayments, HasTags;
+    use ActivityLog, HasFactory, HasOrderPayments, HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -519,9 +519,9 @@ class Order extends Model implements Exportable, Taggable
 
     public function isEligibleToMarkAsGraded(): bool
     {
-        return $this->orderItems()->count() === (
+        return (
             $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
-        );
+        ) === $this->orderItems()->count();
     }
 
     public function orderShipment(): BelongsTo

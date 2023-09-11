@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';

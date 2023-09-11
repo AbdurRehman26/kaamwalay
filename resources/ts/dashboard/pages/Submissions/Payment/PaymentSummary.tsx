@@ -7,7 +7,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import { round } from 'lodash';
 import React, { useState } from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
@@ -220,28 +220,36 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     );
 
     const sendECommerceDataToGA = () => {
-        ReactGA.plugin.require('ecommerce');
         ReactGA.event({
             category: EventCategories.Submissions,
             action: SubmissionEvents.placed,
         });
 
-        ReactGA.plugin.execute('ecommerce', 'addItem', {
-            id: String(orderID),
-            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
-            category: 'Cards',
-            price: String(currentSelectedLevelPrice),
-            quantity: String(numberOfSelectedCards),
+        ReactGA.gtag('event', 'add_to_cart', {
+            items: [
+                {
+                    // eslint-disable-next-line
+                    item_id: String(orderID),
+                    // eslint-disable-next-line
+                    item_name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+                    // eslint-disable-next-line
+                    item_category: 'Cards',
+                    price: currentSelectedLevelPrice,
+                    quantity: numberOfSelectedCards,
+                },
+            ],
         });
 
-        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
-            id: String(orderID), // Doing these type coercions because GA wants this data as string
-            revenue: String(grandTotal),
-            shipping: String(shippingFee),
+        ReactGA.gtag('event', 'purchase', {
+            // eslint-disable-next-line
+            transaction_id: String(orderID),
+            value: grandTotal,
+            currency: 'USD',
+            shipping: shippingFee,
         });
 
-        ReactGA.plugin.execute('ecommerce', 'send', null);
-        ReactGA.plugin.execute('ecommerce', 'clear', null);
+        ReactGA.gtag('event', 'send', null);
+        ReactGA.gtag('event', 'clear', null);
     };
 
     function getPreviewTotal() {

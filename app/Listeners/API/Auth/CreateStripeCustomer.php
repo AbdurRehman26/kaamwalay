@@ -7,7 +7,7 @@ use App\Services\Payment\V1\Providers\StripeService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CreateStripeCustomer implements ShouldQueue, ShouldBeEncrypted
+class CreateStripeCustomer implements ShouldBeEncrypted, ShouldQueue
 {
     public function __construct(protected StripeService $stripeService)
     {

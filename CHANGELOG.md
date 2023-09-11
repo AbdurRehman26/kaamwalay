@@ -1,5 +1,44 @@
 # Changelog
 
+## v3.20.0 - 2023-09-11
+
+### What's Changed
+
+- Fix: Login | User is not able to login in mobile view by @numair97 in https://github.com/woozard/robograding/pull/1057
+- Feature: Migrated Google UA to GA4 by @numair97 in https://github.com/woozard/robograding/pull/1050
+- Refactor: Removed Algolia by @thenabeel in https://github.com/woozard/robograding/pull/1097
+- Feature: Closes  | Update Timing Strategy by @numair97 in https://github.com/woozard/robograding/pull/1093
+- Feature: Upgrade Filament to v3 by @thenabeel in https://github.com/woozard/robograding/pull/1098
+- Feature: Referral discount cap information by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1099
+- Refactor: Admin | Remove Order Listing and Show v2 APIs by @luis-molina in https://github.com/woozard/robograding/pull/1100
+- Feature: Homepage UI Updates by @numair97 in https://github.com/woozard/robograding/pull/1102
+- Fix: Css Issues In HomePage by @numair97 in https://github.com/woozard/robograding/pull/1103
+- Fix: Images Issue In Referral Home Page by @numair97 in https://github.com/woozard/robograding/pull/1105
+- Release v3.20.0 by @thenabeel in https://github.com/woozard/robograding/pull/1104
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.19.0...v3.20.0
+
+## v3.19.0 - 2023-08-23
+
+### What's Changed
+
+- Feature: Referral Coupon Discount Cap by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1092
+- Feature: OPS Stats to Slack by @thenabeel in https://github.com/woozard/robograding/pull/1095
+- Release v2.19.0 by @thenabeel in https://github.com/woozard/robograding/pull/1096
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v2.18.0...v3.19.0
+
+## v2.18.0 - 2023-08-19
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1089
+- Feature: Marketing Report | Number of signups and increase/decrease % by @luis-molina in https://github.com/woozard/robograding/pull/1091
+- Feature: MeiliSearch Integration by @thenabeel in https://github.com/woozard/robograding/pull/1080
+- Release v3.18.0 by @thenabeel in https://github.com/woozard/robograding/pull/1094
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.17.0...v2.18.0
+
 ## v3.17.0 - 2023-08-08
 
 ### What's Changed

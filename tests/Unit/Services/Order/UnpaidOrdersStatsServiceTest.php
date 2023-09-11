@@ -46,29 +46,30 @@ beforeEach(function () {
     })->toArray();
 
     OrderStatusHistory::insert($orderStatusHistoryData);
-
-    $this->ordersForTests = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
-        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
-    });
 });
 
 it('calculates daily unpaid orders stats', function () {
-    $orders = $this->ordersForTests;
     $startDateTime = Carbon::now()->subDay();
     $endDateTime = Carbon::now();
 
-    $expectedUnpaidTotal = $orders->whereBetween('created_at', [$startDateTime, $endDateTime])->sum('grand_total');
+    $expectedUnpaidTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) use ($startDateTime, $endDateTime) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED)->whereBetween('created_at', [$startDateTime, $endDateTime]);
+    })->sum('grand_total');
 
     $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($startDateTime, $endDateTime);
 
-    expect($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
+    expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
+    ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
-    $orders = $this->ordersForTests;
     $startDateTime = Carbon::now()->subDay();
+    $monthStart = Carbon::parse($startDateTime)->firstOfMonth();
+    $monthEnd = Carbon::parse($startDateTime)->endOfMonth();
 
-    $expectedUnpaidTotal = $orders->forMonth($startDateTime)->sum('grand_total');
+    $expectedUnpaidTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) use ($monthStart, $monthEnd) {
+        $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED)->whereBetween('created_at', [$monthStart, $monthEnd]);
+    })->sum('grand_total');;
 
     $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($startDateTime);
 

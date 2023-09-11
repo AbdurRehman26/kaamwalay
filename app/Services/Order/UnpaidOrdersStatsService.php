@@ -79,9 +79,9 @@ class UnpaidOrdersStatsService
      */
     protected function orders(Carbon $startDateTime, Carbon $endDateTime): Builder
     {
-        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) {
-            $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
-        })->whereBetween('created_at', [$startDateTime, $endDateTime]);
+        return Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) use ($startDateTime, $endDateTime) {
+            $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED)->whereBetween('created_at', [$startDateTime, $endDateTime]);
+        });
     }
 
     protected function dailyOrdersCount(Carbon $startDateTime, Carbon $endDateTime): int

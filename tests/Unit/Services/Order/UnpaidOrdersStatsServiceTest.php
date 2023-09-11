@@ -59,7 +59,7 @@ it('calculates daily unpaid orders stats', function () {
     $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($startDateTime, $endDateTime);
 
     expect($unpaidDailyStats['unpaid_total'])->toBeGreaterThan(0)
-    ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
+        ->and($unpaidDailyStats['unpaid_total'])->toBe($expectedUnpaidTotal);
 })->group('unpaid-orders-stats');
 
 it('calculates monthly unpaid orders stats for the current month', function () {
@@ -69,7 +69,7 @@ it('calculates monthly unpaid orders stats for the current month', function () {
 
     $expectedUnpaidTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) use ($monthStart, $monthEnd) {
         $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED)->whereBetween('created_at', [$monthStart, $monthEnd]);
-    })->sum('grand_total');;
+    })->sum('grand_total');
 
     $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($startDateTime);
 

@@ -390,9 +390,10 @@ export const CardAddDialog = (props: CardAddDialogProps) => {
 
         setIsLoading(true);
         try {
-            const cardPublicImage = updateCard?.imagePath
-                ? updateCard.imagePath
-                : await filesRepository.uploadFile(selectedCardPhoto!);
+            const cardPublicImage =
+                selectedCardPhoto !== updateCard?.imagePath
+                    ? await filesRepository.uploadFile(selectedCardPhoto!)
+                    : updateCard?.imagePath;
             const DTO = {
                 imagePath: cardPublicImage,
                 name: cardName || updateCard?.cardSetName,

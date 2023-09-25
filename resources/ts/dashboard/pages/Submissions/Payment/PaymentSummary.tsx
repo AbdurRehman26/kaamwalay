@@ -364,6 +364,95 @@ export function PaymentSummary(props: PaymentSummaryProps) {
         }
     };
 
+    const handleAffirmPayment = async () => {
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
+        if (!stripe) {
+            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
+            return;
+        }
+        try {
+            setIsStripePaymentLoading(true);
+
+            // Try to charge the customer
+            await endpoint.post('', {
+                paymentByWallet: appliedCredit,
+                paymentProviderReference: {
+                    id: stripePaymentMethod,
+                },
+                paymentMethod: {
+                    id: paymentMethodID,
+                },
+                ...(couponCode && {
+                    coupon: {
+                        code: isCouponApplied ? couponCode : -1,
+                    },
+                    paymentPlan: {
+                        id: originalPaymentPlanId,
+                    },
+                }),
+            });
+
+            setIsStripePaymentLoading(false);
+            dispatch(clearSubmissionState());
+            dispatch(invalidateOrders());
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: SubmissionEvents.paid,
+            });
+            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                value: grandTotal,
+                currency: 'USD',
+            });
+            sendECommerceDataToGA();
+            googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
+            pushDataToRefersion(orderSubmission, user$);
+            window.location.href = `/dashboard/submissions/${orderID}/view`;
+        } catch (err: any) {
+            if ('message' in err?.response?.data) {
+                setIsStripePaymentLoading(false);
+                notifications.exception(err, 'Payment Failed');
+            }
+            // Charge was failed by back-end so we try to charge him on the front-end
+            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
+            const intent = err.response.data.paymentIntent;
+            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
+            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
+                // eslint-disable-next-line camelcase
+                payment_method: intent.paymentMethod,
+            });
+
+            // Checking if something else failed.
+            // Eg: Insufficient funds, 3d auth failed by user, etc
+            if (chargeResult.error) {
+                notifications.error(chargeResult?.error?.message!, 'Error');
+                setIsStripePaymentLoading(false);
+            } else {
+                // We're all good!
+                if (chargeResult.paymentIntent.status === 'succeeded') {
+                    const verifyOrderEndpoint = apiService.createEndpoint(
+                        `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
+                    );
+                    verifyOrderEndpoint.post('').then(() => {
+                        setIsStripePaymentLoading(false);
+                        dispatch(clearSubmissionState());
+                        dispatch(invalidateOrders());
+                        ReactGA.event({
+                            category: EventCategories.Submissions,
+                            action: SubmissionEvents.paid,
+                        });
+                        trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                            value: grandTotal,
+                            currency: 'USD',
+                        });
+                        sendECommerceDataToGA();
+                        pushDataToRefersion(orderSubmission, user$);
+                        window.location.href = `/dashboard/submissions/${orderID}/view`;
+                    });
+                }
+            }
+        }
+    };
+
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.bodyContainer}>
@@ -382,6 +471,17 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}
                         {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
+                        {paymentMethodID === 7 ? (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isStripePaymentLoading || !isCouponValid}
+                                onClick={handleAffirmPayment}
+                                sx={{ height: 48 }}
+                            >
+                                {isStripePaymentLoading ? 'Loading...' : 'PAY WITH AFFIRM'}
+                            </Button>
+                        ) : null}
                     </>
                 </div>
 

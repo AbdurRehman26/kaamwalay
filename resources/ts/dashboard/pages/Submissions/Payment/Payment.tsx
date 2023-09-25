@@ -981,6 +981,39 @@ export function Payment() {
                                     </Typography>
                                 </div>
                             ) : null}
+
+                            {paymentMethodId === 7 ? (
+                                <div className={classes.sectionContainer}>
+                                    <Typography className={classes.sectionLabel}>Pay With Affirm</Typography>
+                                    <Typography variant={'caption'}>
+                                        Pay with 4 interest-free payments every two weeks or choose a monthly payment
+                                        plan.
+                                    </Typography>
+
+                                    <Typography component={'div'}>
+                                        <ul>
+                                            <li>
+                                                <Typography variant={'caption'}>
+                                                    No interest for the four payments
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant={'caption'}>No hidden fees</Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant={'caption'}>
+                                                    No impact on your credit score
+                                                </Typography>
+                                            </li>
+                                            <li>
+                                                <Typography variant={'caption'}>
+                                                    Set up easy, automatic payments
+                                                </Typography>
+                                            </li>
+                                        </ul>
+                                    </Typography>
+                                </div>
+                            ) : null}
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>

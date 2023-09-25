@@ -2,6 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import { ReactComponent as AffirmLogo } from '@shared/assets/affirmLogo.svg';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -120,8 +121,9 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                 ) : (
                     <div />
                 )}
+                {methodId === 7 ? <AffirmLogo /> : <div />}
 
-                {methodId === 1 ? (
+                {methodId === 1 || methodId === 7 ? (
                     <div className={classes.rightSide}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}

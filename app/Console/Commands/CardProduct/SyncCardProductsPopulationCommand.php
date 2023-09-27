@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\CardProduct;
 
-use Illuminate\Console\Command;
 use DB;
+use Illuminate\Console\Command;
 
 class SyncCardProductsPopulationCommand extends Command
 {

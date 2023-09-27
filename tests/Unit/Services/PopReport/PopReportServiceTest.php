@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\Order;

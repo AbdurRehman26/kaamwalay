@@ -217,6 +217,9 @@ class PopReportService
         $reportsTableArray = $this->accumulateReportRow($userCards);
 
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
+
+        $cardProduct->population = $reportsTableArray['total'] + $reportsTableArray['total_plus'];
+        $cardProduct->save();
     }
 
     public function updateMultipleSeriesReports(Collection $cardSeries): void

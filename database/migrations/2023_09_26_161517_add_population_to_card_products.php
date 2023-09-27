@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('card_products', function (Blueprint $table) {
             $table->unsignedInteger('population')->default(0)->after('description');
+            $table->index('population');
         });
     }
 
@@ -22,6 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('card_products', function (Blueprint $table) {
+            $table->dropIndex('card_products_population_index');
             $table->dropColumn('population');
         });
     }

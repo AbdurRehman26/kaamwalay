@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::table('card_products', function (Blueprint $table) {
             $table->unsignedInteger('population')->default(0)->after('description');
-            $table->index('population');
         });
+
+        DB::statement('ALTER TABLE card_products ADD INDEX card_products_population_index (population DESC)');
     }
 
     /**

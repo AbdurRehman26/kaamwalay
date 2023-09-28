@@ -20,7 +20,7 @@ return new class extends Migration
     public function down(): void
     {
         DB::table('card_products')->update([
-            'population' => 0
+            'population' => 0,
         ]);
     }
 };

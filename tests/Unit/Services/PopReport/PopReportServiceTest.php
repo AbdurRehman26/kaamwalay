@@ -52,7 +52,6 @@ test('get cards report list', function () {
 });
 
 test('card product population gets updated same as pop report', function () {
-
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::GRADED,
     ]);

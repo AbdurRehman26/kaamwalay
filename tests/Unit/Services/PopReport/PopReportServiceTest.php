@@ -70,4 +70,4 @@ test('card product population gets updated same as pop report', function () {
 
     expect($orderItem->cardProduct->population)->toBe($orderItem->cardProduct->popReportsCard->population);
     expect($orderItem->cardProduct->population)->toBe(1);
-});
+})->skip(fn () => DB::getDriverName() !== 'mysql', 'Only runs when using mysql');

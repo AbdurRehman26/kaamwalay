@@ -217,6 +217,12 @@ class PopReportService
         $reportsTableArray = $this->accumulateReportRow($userCards);
 
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
+
+        // Here we update the population for the respective card product directly
+        // This is because we are able to take advantage that the population values have just been calculated above
+        // That way we have the population for POP and CardProduct in sync without having to do extra queries
+        $cardProduct->population = $reportsTableArray['total'] + $reportsTableArray['total_plus'];
+        $cardProduct->save();
     }
 
     public function updateMultipleSeriesReports(Collection $cardSeries): void

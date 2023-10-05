@@ -74,7 +74,7 @@ it('adds daily revenue stats', function () {
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
-    $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth(), now()->addMonth(-1)->endOfMonth()])
+    $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth()->addHours(4), now()->addMonth(-1)->endOfMonth()->addHours(4)])
         ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
         ->get();
 
@@ -117,7 +117,7 @@ it('counts monthly paid orders cards', function () {
         Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
     )
         ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth()->addHours(4), Carbon::now()->subDays(1)->endOfMonth()->addHours(4)])
         ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal(Carbon::now());

@@ -32,7 +32,7 @@ class SendSalesmenStats extends Command
     public function handle(): int
     {
         $endDate = (Carbon::parse($this->argument('date')));
-        $salesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth(), $endDate)];
+        $salesmenStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->addHours(4), $endDate)];
 
         $this->info('Salesmen Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 

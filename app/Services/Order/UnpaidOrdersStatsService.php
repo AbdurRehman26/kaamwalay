@@ -29,8 +29,8 @@ class UnpaidOrdersStatsService
 
     public function calculateMonthlyCardsTotal(Carbon $currentDate): int
     {
-        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
-        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth()->addHours(4);
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth()->addHours(4);
 
         return $this->calculateCardsTotal($monthStart, $monthEnd);
     }
@@ -68,8 +68,8 @@ class UnpaidOrdersStatsService
      */
     protected function monthlyUnpaidOrders(string $currentDate): Builder
     {
-        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
-        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth()->addHours(4);
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth()->addHours(4);
 
         return $this->orders($monthStart, $monthEnd);
     }

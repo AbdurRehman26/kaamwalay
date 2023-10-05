@@ -44,6 +44,7 @@ class CardProduct extends Model
         'description',
         'added_manually',
         'added_by',
+        'population',
     ];
 
     /**

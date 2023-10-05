@@ -19,7 +19,6 @@ use App\Models\CardSurface;
 use App\Services\AGS\AgsService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -162,8 +161,6 @@ class CardProductService
                 'cardSet.cardSeries',
                 'cardCategory.cardCategoryType',
             ])
-            ->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
-            ->addSelect(DB::raw('card_products.*, pop_reports_cards.population'))
             ->excludeAddedManually()
             ->allowedFilters([
                 AllowedFilter::scope('card_category'),

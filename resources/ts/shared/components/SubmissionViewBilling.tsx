@@ -25,6 +25,7 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
     paymentMethodCode: string;
+    paymentMethodId: number;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     orderCustomerShipment?: ShipmentEntity | null;
@@ -80,6 +81,7 @@ export function SubmissionViewBilling({
     payment,
     coupon,
     paymentMethodCode,
+    paymentMethodId,
     paymentStatus,
     walletPayment,
     orderCustomerShipment,
@@ -102,6 +104,12 @@ export function SubmissionViewBilling({
 
     const { cardIcon, cardBrand } = useMemo(() => {
         if (paymentMethodCode === 'stripe') {
+            if (paymentMethodId === 7) {
+                return {
+                    cardIcon: getPaymentIcon(''),
+                    cardBrand: getPaymentTitle('affirm'),
+                };
+            }
             return {
                 cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
                 cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
@@ -126,9 +134,13 @@ export function SubmissionViewBilling({
             cardIcon: '',
             cardBrand: '',
         };
-    }, [card?.brand, paymentMethodCode]);
+    }, [card?.brand, paymentMethodCode, paymentMethodId]);
 
     const paymentHeading = useMemo(() => {
+        if (paymentMethodId === 7) {
+            return `Affirm`;
+        }
+
         if (paymentMethodCode === 'stripe') {
             return `${cardBrand} ending in ${card?.last4}`;
         }
@@ -146,9 +158,14 @@ export function SubmissionViewBilling({
         }
 
         return 'Unknown card';
-    }, [card?.last4, cardBrand, paymentMethodCode, payer?.name]);
+    }, [paymentMethodId, paymentMethodCode, cardBrand, card?.last4, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
+        console.log(paymentMethodId);
+        if (paymentMethodId === 7) {
+            return `Affirm`;
+        }
+
         if (paymentMethodCode === 'stripe') {
             return `Expires ${card?.expMonth}/${card?.expYear}`;
         }
@@ -162,7 +179,7 @@ export function SubmissionViewBilling({
         }
 
         return null;
-    }, [card?.expMonth, card?.expYear, paymentMethodCode, payer?.email, payment?.transaction?.hash]);
+    }, [paymentMethodId, paymentMethodCode, card?.expMonth, card?.expYear, payer?.email, payment?.transaction?.hash]);
 
     const handleAddressEdit = useCallback(() => {
         setIsEditAddressDialogOpen(true);

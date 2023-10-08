@@ -60,4 +60,9 @@ class PaymentMethod extends Model
     {
         return $this->code === 'paypal';
     }
+
+    public function isAffirm(): bool
+    {
+        return $this->id === 7;
+    }
 }

@@ -91,7 +91,8 @@ class OrderPaymentService
             'payment_method_id' => $this->order->paymentMethod->id,
             'amount' => $this->order->grand_total_to_be_paid,
         ];
-        if ($this->order->paymentMethod->code === 'stripe') {
+
+        if ($this->order->paymentMethod->code === 'stripe' && $this->order->paymentMethod->id !== 7) {
             $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
             $orderPaymentData = array_merge(
                 $orderPaymentData,

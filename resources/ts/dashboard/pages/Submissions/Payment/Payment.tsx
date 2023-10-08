@@ -39,6 +39,7 @@ import {
     getStatesList,
     orderToNewSubmission,
     setBillingAddress,
+    setDisplayAffirmMethod,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
@@ -333,6 +334,7 @@ export function Payment() {
     const [isUpdateAddressButtonEnabled, setIsUpdateAddressButtonEnabled] = useState(false);
     const [canUseShippingAsBilling, setCanUseShippingAsBilling] = useState(true);
     const notifications = useNotifications();
+    const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
 
     const order = useOrderQuery({
         resourceId: Number(id),
@@ -475,6 +477,7 @@ export function Payment() {
         dispatch(updatePaymentMethodId(response.data[0].id));
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
+        dispatch(setDisplayAffirmMethod());
     }
 
     const parseName = (fullName: any) => {
@@ -641,14 +644,16 @@ export function Payment() {
                                             <CircularProgress color={'secondary'} />
                                         </div>
                                     ) : null}
-                                    {availablePaymentMethods.map((item: any) => (
-                                        <PaymentMethodItem
-                                            key={item.id}
-                                            isSelected={paymentMethodId === item.id}
-                                            methodName={item.name}
-                                            methodId={item.id}
-                                        />
-                                    ))}
+                                    {availablePaymentMethods.map((item: any) =>
+                                        (item.id === 7 && displayAffirm) || item.id !== 7 ? (
+                                            <PaymentMethodItem
+                                                key={item.id}
+                                                isSelected={paymentMethodId === item.id}
+                                                methodName={item.name}
+                                                methodId={item.id}
+                                            />
+                                        ) : null,
+                                    )}
                                 </div>
                             </div>
                             <Divider light />
@@ -982,7 +987,7 @@ export function Payment() {
                                 </div>
                             ) : null}
 
-                            {paymentMethodId === 7 ? (
+                            {displayAffirm && paymentMethodId === 7 ? (
                                 <div className={classes.sectionContainer}>
                                     <Typography className={classes.sectionLabel}>Pay With Affirm</Typography>
                                     <Typography variant={'caption'}>

@@ -141,4 +141,17 @@ class PaymentService extends V1PaymentService
                 return $orderPayment;
             });
     }
+
+    public function createPaymentIntent(Order $order, array $optionalData = []): array
+    {
+        $this->hasProvider($order);
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->createPaymentIntent($this->order, $optionalData);
+
+        $this->updateOrderPayment($this->order->firstOrderPayment, $data);
+
+        return $data;
+    }
 }

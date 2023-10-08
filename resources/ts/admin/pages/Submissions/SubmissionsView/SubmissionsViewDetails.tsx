@@ -42,6 +42,7 @@ interface SubmissionsViewDetailsProps {
     discountedAmount: string;
     amountPaidFromWallet: string;
     paymentMethodCode: string;
+    paymentMethodId: number;
     requiresShippingInsurance: boolean;
     shippingInsuranceFee: number;
     coupon: OrderCouponEntity;
@@ -89,6 +90,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         discountedAmount,
         paymentMethodDiscountedAmount,
         paymentMethodCode,
+        paymentMethodId,
         coupon,
         amountPaidFromWallet,
         walletPayment,
@@ -217,6 +219,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 coupon={coupon}
                 payment={payment}
                 paymentMethodCode={paymentMethodCode}
+                paymentMethodId={paymentMethodId}
                 walletPayment={walletPayment}
                 paymentStatus={paymentStatus}
                 orderCustomerShipment={orderCustomerShipment}

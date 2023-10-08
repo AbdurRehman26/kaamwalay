@@ -6,6 +6,8 @@ import { DefaultShippingMethodEntity, ShippingMethodEntity } from '@shared/entit
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
+const AFFIRM_MINIMUM_AMOUNT = 50;
+
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -111,6 +113,7 @@ export interface NewSubmissionSliceState {
     paymentMethodDiscountedAmount: number;
     orderTransactionHash: string;
     confirmedCollectorCoinPayment: boolean;
+    confirmedAffirmPayment: boolean;
     currentStep: number;
     shippingMethod: ShippingMethodEntity | null;
     previewTotal: number;
@@ -145,12 +148,14 @@ export interface NewSubmissionSliceState {
     billingAddress: any;
     stepValidations: boolean[];
     dialog: boolean;
+    displayAffirm: boolean;
 }
 
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
     totalInAgs: 0,
     confirmedCollectorCoinPayment: false,
+    confirmedAffirmPayment: false,
     orderTransactionHash: '',
     grandTotal: 0,
     refundTotal: 0,
@@ -435,6 +440,7 @@ const initialState: NewSubmissionSliceState = {
     billingAddress: [],
     stepValidations: [true, false, false, false, false],
     dialog: false,
+    displayAffirm: false,
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -580,6 +586,22 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         return {
             message: response.data.message,
             transactionHash: input.txHash,
+        };
+    },
+);
+
+export const getAffirmPaymentStatus = createAsyncThunk(
+    'newSubmission/getAffirmPaymentStatus',
+    async (input: { orderID: number; paymentIntentId: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${input.orderID}/payments/${input.paymentIntentId}`,
+        );
+        const response = await endpoint.post('');
+
+        return {
+            message: response.data.message,
+            transactionHash: input.paymentIntentId,
         };
     },
 );
@@ -867,6 +889,9 @@ export const newSubmissionSlice = createSlice({
         setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
             state.step04Data.useShippingAddressAsBillingAddress = action.payload;
         },
+        setDisplayAffirmMethod: (state) => {
+            state.displayAffirm = state.grandTotal > AFFIRM_MINIMUM_AMOUNT;
+        },
         updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
             // @ts-ignore
             state.step04Data.selectedBillingAddress[action.payload.fieldName] = action.payload.newValue;
@@ -1093,6 +1118,9 @@ export const newSubmissionSlice = createSlice({
             state.confirmedCollectorCoinPayment = action.payload.message === 'Payment verified successfully';
             state.orderTransactionHash = action.payload.transactionHash;
         },
+        [getAffirmPaymentStatus.fulfilled as any]: (state, action) => {
+            state.confirmedAffirmPayment = action.payload.message === 'Payment verified successfully';
+        },
         [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';
         },
@@ -1212,4 +1240,5 @@ export const {
     setStepValidation,
     setShippingMethod,
     initializeShippingMethod,
+    setDisplayAffirmMethod,
 } = newSubmissionSlice.actions;

@@ -132,6 +132,7 @@ export function ViewSubmission() {
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
                 paymentMethodCode={data?.orderPayment?.paymentMethod?.code}
+                paymentMethodId={data?.orderPayment?.paymentMethod?.id}
                 paymentStatus={data?.paymentStatus}
                 walletPayment={data?.amountPaidFromWallet}
                 mode={'customer'}

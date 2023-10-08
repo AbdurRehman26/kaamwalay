@@ -80,4 +80,44 @@ class OrderPaymentController extends Controller
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
     }
+
+    /**
+     * @throws Throwable
+     */
+    public function createPaymentIntent(
+        StoreOrderPaymentRequest $request,
+        Order $order,
+        OrderPaymentService $orderPaymentService
+    ): JsonResponse {
+
+        throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
+            'message' => 'Coupon is either expired or invalid.',
+        ]));
+
+        throw_unless($order->isPayable('v2'), OrderNotPayable::class);
+
+        try {
+            DB::beginTransaction();
+
+            $orderPaymentService->createPayments($order, $request->validated());
+
+            $response = $this->paymentService->createPaymentIntent($order, $request->all());
+
+            DB::commit();
+
+            return new JsonResponse(['intent' => $response['payment_provider_reference_id']]);
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            return new JsonResponse(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                Response::HTTP_PAYMENT_REQUIRED
+            );
+        }
+    }
+
 }

@@ -76,6 +76,7 @@ export function SubmissionsView() {
             <Divider />
             <SubmissionsViewDetails
                 serviceLevelFee={data.paymentPlan?.price}
+                paymentMethodId={data?.orderPayment?.paymentMethod?.id}
                 paymentMethodCode={data?.orderPayment?.paymentMethod?.code}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}

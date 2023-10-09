@@ -32,7 +32,14 @@ class SendTopReferrersStats extends Command
     public function handle(): int
     {
         $endDate = (Carbon::parse($this->argument('date')));
-        $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(Carbon::parse($endDate)->startOfMonth()->addHours(4), $endDate)];
+        $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(
+            /*
+             * Obtains the start of the month based on the provided $endDate,
+             * then adjusts the resulting date by adding 4 hours for time zone considerations.
+             */
+            Carbon::parse($endDate)->startOfMonth()->addHours(4), 
+            $endDate
+            )];
 
         $this->info('Top Referrers Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 

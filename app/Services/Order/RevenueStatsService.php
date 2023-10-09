@@ -42,6 +42,10 @@ class RevenueStatsService
 
     public function calculateMonthlyCardsTotal(Carbon $currentDate): int
     {
+        /*
+         * Obtains the start and end of the month based on the provided $currentDate,
+         * then adjusts the resulting date by adding 4 hours for time zone considerations.
+         */
         $monthStart = Carbon::parse($currentDate)->firstOfMonth()->addHours(4);
         $monthEnd = Carbon::parse($currentDate)->endOfMonth()->addHours(4);
 
@@ -58,6 +62,10 @@ class RevenueStatsService
 
     public function addMonthlyStats(Carbon $currentDate): RevenueStatsMonthly
     {
+        /*
+         * Obtains the start and end of the month based on the provided $currentDate,
+         * then adjusts the resulting date by adding 4 hours for time zone considerations.
+         */
         $monthStart = Carbon::parse($currentDate)->firstOfMonth()->addHours(4);
         $monthEnd = Carbon::parse($currentDate)->endOfMonth()->addHours(4);
 

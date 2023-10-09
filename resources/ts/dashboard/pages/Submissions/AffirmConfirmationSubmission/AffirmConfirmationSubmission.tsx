@@ -1,17 +1,25 @@
 import Grid from '@mui/material/Grid';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import ReactGA from 'react-ga4';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAffirmPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { ConfirmationLoadingSidebar } from '../CollectorCoinConfirmationSubmission/ConfirmationLoadingSidebar';
-import { useConfirmationSubmissionStyles } from './style';
+import { useConfirmationSubmissionStyles } from '../CollectorCoinConfirmationSubmission/style';
 
 export function AffirmConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();
     const [query] = useLocationQuery<{ payment_intent: string }>();
+    const user$ = useAuth().user;
 
     const classes = useConfirmationSubmissionStyles();
     const dispatch = useAppDispatch();
@@ -22,11 +30,63 @@ export function AffirmConfirmationSubmission() {
         resourceId: Number(id),
     });
 
+    const sendECommerceDataToGA = useCallback(() => {
+        ReactGA.event({
+            category: EventCategories.Submissions,
+            action: SubmissionEvents.placed,
+        });
+
+        ReactGA.gtag('event', 'add_to_cart', {
+            items: [
+                {
+                    // eslint-disable-next-line
+                    item_id: String(id),
+                    // eslint-disable-next-line
+                    item_name: `${data?.paymentPlan?.turnaround} turnaround with $${data?.paymentPlan?.maxProtectionAmount} insurance`,
+                    // eslint-disable-next-line
+                    item_category: 'Cards',
+                    price: data?.paymentPlan?.price,
+                    quantity: data?.numberOfCards,
+                },
+            ],
+        });
+
+        ReactGA.gtag('event', 'purchase', {
+            // eslint-disable-next-line
+            transaction_id: String(id),
+            value: data?.grandTotal,
+            currency: 'USD',
+            shipping: data?.shippingFee,
+        });
+
+        ReactGA.gtag('event', 'send', null);
+        ReactGA.gtag('event', 'clear', null);
+    }, [
+        data?.grandTotal,
+        data?.numberOfCards,
+        data?.paymentPlan?.maxProtectionAmount,
+        data?.paymentPlan?.price,
+        data?.paymentPlan?.turnaround,
+        data?.shippingFee,
+        id,
+    ]);
+
     useEffect(() => {
         if (isPaymentSuccessful) {
-            // window.location.href = `/dashboard/submissions/${id}/view`
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: SubmissionEvents.paid,
+            });
+            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                value: data?.grandTotal,
+                currency: 'USD',
+            });
+            sendECommerceDataToGA();
+            googleTagManager({ event: 'google-ads-purchased', value: data?.grandTotal });
+            pushDataToRefersion(data, user$);
+            window.location.href = `/dashboard/submissions/${id}/view`;
         }
-    }, [dispatch, isPaymentSuccessful, id, navigate]);
+    }, [dispatch, isPaymentSuccessful, id, navigate, data, sendECommerceDataToGA, user$]);
 
     useRetry(
         async () => {

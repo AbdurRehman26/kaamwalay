@@ -170,6 +170,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
+    const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
 
     const { timeInMs, featureOrderWalletCreditPercentage, featureOrderWalletCreditEnabled } = props;
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
@@ -365,7 +366,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     };
 
     const handleAffirmPayment = async () => {
-        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/create-payment-intent`);
         if (!stripe) {
             // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
             return;
@@ -374,11 +375,8 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             setIsStripePaymentLoading(true);
 
             // Try to charge the customer
-            await endpoint.post('', {
+            const res = await endpoint.post('', {
                 paymentByWallet: appliedCredit,
-                paymentProviderReference: {
-                    id: stripePaymentMethod,
-                },
                 paymentMethod: {
                     id: paymentMethodID,
                 },
@@ -395,60 +393,29 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             setIsStripePaymentLoading(false);
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action: SubmissionEvents.paid,
-            });
-            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                value: grandTotal,
-                currency: 'USD',
-            });
-            sendECommerceDataToGA();
-            googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
-            pushDataToRefersion(orderSubmission, user$);
-            window.location.href = `/dashboard/submissions/${orderID}/view`;
+            const { data } = res;
+
+            stripe
+                .confirmAffirmPayment(data.intent, {
+                    // eslint-disable-next-line camelcase
+                    payment_method: {
+                        // eslint-disable-next-line camelcase
+                        billing_details: {},
+                    },
+
+                    // eslint-disable-next-line camelcase
+                    return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
+                })
+                .then((result) => {
+                    if (result.error) {
+                        // Inform the customer that there was an error.
+                        console.log(result.error.message);
+                    }
+                });
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');
-            }
-            // Charge was failed by back-end so we try to charge him on the front-end
-            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            const intent = err.response.data.paymentIntent;
-            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
-            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
-                // eslint-disable-next-line camelcase
-                payment_method: intent.paymentMethod,
-            });
-
-            // Checking if something else failed.
-            // Eg: Insufficient funds, 3d auth failed by user, etc
-            if (chargeResult.error) {
-                notifications.error(chargeResult?.error?.message!, 'Error');
-                setIsStripePaymentLoading(false);
-            } else {
-                // We're all good!
-                if (chargeResult.paymentIntent.status === 'succeeded') {
-                    const verifyOrderEndpoint = apiService.createEndpoint(
-                        `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
-                    );
-                    verifyOrderEndpoint.post('').then(() => {
-                        setIsStripePaymentLoading(false);
-                        dispatch(clearSubmissionState());
-                        dispatch(invalidateOrders());
-                        ReactGA.event({
-                            category: EventCategories.Submissions,
-                            action: SubmissionEvents.paid,
-                        });
-                        trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                            value: grandTotal,
-                            currency: 'USD',
-                        });
-                        sendECommerceDataToGA();
-                        pushDataToRefersion(orderSubmission, user$);
-                        window.location.href = `/dashboard/submissions/${orderID}/view`;
-                    });
-                }
             }
         }
     };
@@ -471,7 +438,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}
                         {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
-                        {paymentMethodID === 7 ? (
+                        {paymentMethodID === 7 && displayAffirm ? (
                             <Button
                                 variant="contained"
                                 color="primary"

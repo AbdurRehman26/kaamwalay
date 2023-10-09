@@ -161,7 +161,6 @@ export function SubmissionViewBilling({
     }, [paymentMethodId, paymentMethodCode, cardBrand, card?.last4, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
-        console.log(paymentMethodId);
         if (paymentMethodId === 7) {
             return `Affirm`;
         }

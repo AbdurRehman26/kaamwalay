@@ -336,6 +336,13 @@ export function Payment() {
     const notifications = useNotifications();
     const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
 
+    const affirmSubtitles = [
+        'No interest for the four payments',
+        'No hidden fees',
+        'No impact on your credit score',
+        'Set up easy, automatic payments',
+    ];
+
     const order = useOrderQuery({
         resourceId: Number(id),
         config: {
@@ -990,31 +997,20 @@ export function Payment() {
                             {displayAffirm && paymentMethodId === 7 ? (
                                 <div className={classes.sectionContainer}>
                                     <Typography className={classes.sectionLabel}>Pay With Affirm</Typography>
-                                    <Typography variant={'caption'}>
+                                    <Typography variant={'caption'} sx={{ fontSize: 14 }}>
                                         Pay with 4 interest-free payments every two weeks or choose a monthly payment
                                         plan.
                                     </Typography>
 
                                     <Typography component={'div'}>
                                         <ul>
-                                            <li>
-                                                <Typography variant={'caption'}>
-                                                    No interest for the four payments
-                                                </Typography>
-                                            </li>
-                                            <li>
-                                                <Typography variant={'caption'}>No hidden fees</Typography>
-                                            </li>
-                                            <li>
-                                                <Typography variant={'caption'}>
-                                                    No impact on your credit score
-                                                </Typography>
-                                            </li>
-                                            <li>
-                                                <Typography variant={'caption'}>
-                                                    Set up easy, automatic payments
-                                                </Typography>
-                                            </li>
+                                            {affirmSubtitles.map((subtitle) => (
+                                                <li>
+                                                    <Typography sx={{ fontSize: 14 }} variant={'caption'}>
+                                                        {subtitle}
+                                                    </Typography>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </Typography>
                                 </div>

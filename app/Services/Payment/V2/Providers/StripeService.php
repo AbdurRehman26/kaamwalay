@@ -22,10 +22,10 @@ class StripeService extends V1StripeService
         $charge = $paymentIntent->charges?->first();
 
         if (
-            ( $order->paymentMethod->isAffirm() && $paymentIntent->status === 'succeeded' )
+            ($order->paymentMethod->isAffirm() && $paymentIntent->status === 'succeeded')
             ||
             (
-                !empty($charge)
+                ! empty($charge)
                 && $charge->amount === $this->getAmount($order)
                 && $charge->outcome->type === 'authorized'
             )

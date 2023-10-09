@@ -6,6 +6,7 @@ import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
@@ -20,6 +21,7 @@ export function AffirmConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();
     const [query] = useLocationQuery<{ payment_intent: string }>();
     const user$ = useAuth().user;
+    const notifications = useNotifications();
 
     const classes = useConfirmationSubmissionStyles();
     const dispatch = useAppDispatch();
@@ -73,6 +75,7 @@ export function AffirmConfirmationSubmission() {
 
     useEffect(() => {
         if (isPaymentSuccessful) {
+            notifications.success('Payment verified successfully.');
             ReactGA.event({
                 category: EventCategories.Submissions,
                 action: SubmissionEvents.paid,
@@ -86,7 +89,7 @@ export function AffirmConfirmationSubmission() {
             pushDataToRefersion(data, user$);
             window.location.href = `/dashboard/submissions/${id}/view`;
         }
-    }, [dispatch, isPaymentSuccessful, id, navigate, data, sendECommerceDataToGA, user$]);
+    }, [dispatch, isPaymentSuccessful, id, navigate, data, sendECommerceDataToGA, user$, notifications]);
 
     useRetry(
         async () => {
@@ -96,7 +99,12 @@ export function AffirmConfirmationSubmission() {
                         orderID: Number(id),
                         paymentIntentId: query.payment_intent ?? '',
                     }),
-                );
+                ).then((res: any) => {
+                    if (res.error) {
+                        notifications.error(res.error.message);
+                        window.location.href = `/dashboard/submissions`;
+                    }
+                });
             }
         },
         () => !isPaymentSuccessful,

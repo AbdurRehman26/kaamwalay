@@ -39,7 +39,7 @@ class SendSalesmenStats extends Command
              */
             Carbon::parse($endDate)->startOfMonth()->addHours(4),
             $endDate
-            )];
+        )];
 
         $this->info('Salesmen Stats for Month : '.Carbon::parse($endDate)->format('F-Y').' Starting');
 

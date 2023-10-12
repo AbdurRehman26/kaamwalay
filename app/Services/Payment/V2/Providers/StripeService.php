@@ -25,8 +25,7 @@ class StripeService extends V1StripeService
             ($order->paymentMethod->isAffirm() && $paymentIntent->status === 'succeeded')
             ||
             (
-                ! is_null($charge)
-                && $charge->amount === $this->getAmount($order)
+                $charge->amount === $this->getAmount($order)
                 && $charge->outcome->type === 'authorized'
             )
         ) {

@@ -78,6 +78,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
 
     async refundOrderTransaction(input: RefundOrderTransactionDto) {
         const { notes, amount, addToWallet, orderId } = input;
+
+        // the code is removing commas from the amount string and then converting the modified string to a number using the + operator.
         const body = toApiPropertiesObject({ notes, amount: +amount.replace(/,/g, ''), addToWallet });
         const { data } = await this.endpoint.post(`${orderId}/payments/refund`, body);
         return plainToInstance(OrderRefundEntity, data);

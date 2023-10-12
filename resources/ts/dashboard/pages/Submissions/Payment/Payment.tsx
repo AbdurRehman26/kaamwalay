@@ -39,7 +39,6 @@ import {
     getStatesList,
     orderToNewSubmission,
     setBillingAddress,
-    setDisplayAffirmMethod,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
@@ -484,7 +483,6 @@ export function Payment() {
         dispatch(updatePaymentMethodId(response.data[0].id));
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
-        dispatch(setDisplayAffirmMethod());
     }
 
     const parseName = (fullName: any) => {

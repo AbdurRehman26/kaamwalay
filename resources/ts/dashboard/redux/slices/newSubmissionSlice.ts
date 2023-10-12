@@ -889,8 +889,8 @@ export const newSubmissionSlice = createSlice({
         setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
             state.step04Data.useShippingAddressAsBillingAddress = action.payload;
         },
-        setDisplayAffirmMethod: (state) => {
-            state.displayAffirm = state.grandTotal > AFFIRM_MINIMUM_AMOUNT;
+        setDisplayAffirmMethod: (state, action: PayloadAction<number>) => {
+            state.displayAffirm = action.payload > AFFIRM_MINIMUM_AMOUNT;
         },
         updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
             // @ts-ignore

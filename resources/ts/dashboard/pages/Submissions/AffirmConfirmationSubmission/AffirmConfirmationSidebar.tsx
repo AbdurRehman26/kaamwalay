@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import { font } from '@shared/styles/utils';
-import { useConfirmationSubmissionSidebarStyles } from './style';
+import { useConfirmationSubmissionSidebarStyles } from '../CollectorCoinConfirmationSubmission/style';
 
 export function AffirmConfirmationSidebar() {
     const classes = useConfirmationSubmissionSidebarStyles();

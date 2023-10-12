@@ -94,6 +94,10 @@ class OrderPaymentController extends Controller
             'message' => 'Coupon is either expired or invalid.',
         ]));
 
+        throw_if(! empty($order->canBePaidWithAffirm()), ValidationException::withMessages([
+            'message' => "Minimum order amount for affirm payment method is ". Order::AFFIRM_MIN_AMOUNT,
+        ]));
+
         throw_unless($order->isPayable('v2'), OrderNotPayable::class);
 
         try {

@@ -25,7 +25,11 @@ import { APIService } from '@shared/services/APIService';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { clearSubmissionState, setPreviewTotal } from '@dashboard/redux/slices/newSubmissionSlice';
+import {
+    clearSubmissionState,
+    setDisplayAffirmMethod,
+    setPreviewTotal,
+} from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -271,7 +275,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 appliedCredit
             ).toFixed(2),
         );
-
+        dispatch(setDisplayAffirmMethod(previewTotal));
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }

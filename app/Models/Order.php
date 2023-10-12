@@ -755,6 +755,6 @@ class Order extends Model implements Exportable, Taggable
 
     public function canBePaidWithAffirm(): bool
     {
-        return $this->grand_total - $this->amount_paid_from_wallet < self::AFFIRM_MIN_AMOUNT;
+        return $this->grand_total - $this->amount_paid_from_wallet > self::AFFIRM_MIN_AMOUNT;
     }
 }

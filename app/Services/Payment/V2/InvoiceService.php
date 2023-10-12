@@ -22,9 +22,9 @@ class InvoiceService
         $data = $this->getInvoiceData($order);
         $pdf = PDFService::generate('pdf.invoice', $data);
 
-//        $url = $this->uploadToCloud($pdf->output());
-//
-//        $this->createAndStoreInvoiceRecord($order, $url);
+        //        $url = $this->uploadToCloud($pdf->output());
+        //
+        //        $this->createAndStoreInvoiceRecord($order, $url);
     }
 
     protected function getInvoiceData(Order $order): array

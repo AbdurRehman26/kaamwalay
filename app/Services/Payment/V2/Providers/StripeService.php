@@ -20,7 +20,7 @@ class StripeService extends V1StripeService
     {
 
         if (
-            ( $order->paymentMethod->isAffirm() && $paymentIntent->status === 'succeeded' )
+            ($order->paymentMethod->isAffirm() && $paymentIntent->status === 'succeeded')
             ||
             (
                 /** @var Charge $charge */

@@ -63,6 +63,6 @@ class PaymentMethod extends Model
 
     public function isAffirm(): bool
     {
-        return $this->id === 7;
+        return $this->code === 'stripe_affirm';
     }
 }

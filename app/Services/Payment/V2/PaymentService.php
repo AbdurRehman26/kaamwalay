@@ -28,6 +28,7 @@ class PaymentService extends V1PaymentService
         'collector_coin' => CollectorCoinService::class,
         'wallet' => WalletService::class,
         'manual' => ManualPaymentService::class,
+        'stripe_affirm' => StripeService::class,
     ];
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array

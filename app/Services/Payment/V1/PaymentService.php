@@ -32,6 +32,7 @@ class PaymentService
         'paypal' => PaypalService::class,
         'collector_coin' => CollectorCoinService::class,
         'wallet' => WalletService::class,
+        'stripe_affirm' => StripeService::class,
     ];
 
     public function __construct(

@@ -96,7 +96,7 @@ export function ShippingInsurance() {
                             <List>
                                 <ListItem className={classes.fullInsuranceListItem}>Recommended</ListItem>
                                 <ListItem className={classes.fullInsuranceListItem}>
-                                    Fee: 1% of total declared value
+                                    Fee: {featureOrderShippingInsuranceFeePercentage}% of total declared value
                                 </ListItem>
                                 <ListItem className={classes.fullInsuranceListItem}>
                                     Fully covers any loss or damage that might occur to your cards while in transit back

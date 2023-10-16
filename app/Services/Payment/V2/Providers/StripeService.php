@@ -117,4 +117,39 @@ class StripeService extends V1StripeService
             throw new PaymentMethodNotDeletedException($invalidRequestException->getMessage());
         }
     }
+
+    public function createPaymentIntent(Order $order): array
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        $paymentData = [
+            'payment_method_types[]' => 'affirm',
+            'amount' => $this->getAmount($order),
+            'additional_data' => [
+                'description' => "Payment for Order # {$order->order_number}",
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Order Payment',
+                ],
+            ],
+        ];
+
+        $response = $user->createPayment($order->grand_total_cents, [
+            'payment_method_types[]' => 'affirm',
+        ]);
+
+        $paymentData['payment_intent_id'] = $response->clientSecret();
+
+        return [
+            'success' => true,
+            'request' => $paymentData,
+            'response' => $response->toArray(),
+            'payment_provider_reference_id' => $paymentData['payment_intent_id'],
+            'amount' => $order->grand_total_to_be_paid,
+            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+            'notes' => $paymentData['additional_data']['description'],
+        ];
+    }
 }

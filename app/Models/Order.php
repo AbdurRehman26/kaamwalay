@@ -139,8 +139,6 @@ class Order extends Model implements Exportable, Taggable
         'cleaning_fee' => 0,
     ];
 
-    const AFFIRM_MIN_AMOUNT = 50;
-
     private static function allowedIncludes(): array
     {
         return [
@@ -755,6 +753,6 @@ class Order extends Model implements Exportable, Taggable
 
     public function canBePaidWithAffirm(): bool
     {
-        return $this->grand_total - $this->amount_paid_from_wallet > self::AFFIRM_MIN_AMOUNT;
+        return $this->grand_total - $this->amount_paid_from_wallet > config('robograding.feature_affirm_payment_method_min_amount');
     }
 }

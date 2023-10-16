@@ -25,7 +25,6 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
     paymentMethodCode: string;
-    paymentMethodId: number;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
     orderCustomerShipment?: ShipmentEntity | null;
@@ -81,7 +80,6 @@ export function SubmissionViewBilling({
     payment,
     coupon,
     paymentMethodCode,
-    paymentMethodId,
     paymentStatus,
     walletPayment,
     orderCustomerShipment,
@@ -104,12 +102,6 @@ export function SubmissionViewBilling({
 
     const { cardIcon, cardBrand } = useMemo(() => {
         if (paymentMethodCode === 'stripe') {
-            if (paymentMethodId === 7) {
-                return {
-                    cardIcon: getPaymentIcon(''),
-                    cardBrand: getPaymentTitle('affirm'),
-                };
-            }
             return {
                 cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
                 cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
@@ -130,14 +122,21 @@ export function SubmissionViewBilling({
             };
         }
 
+        if (paymentMethodCode === 'stripe_affirm') {
+            return {
+                cardIcon: getPaymentIcon(''),
+                cardBrand: getPaymentTitle('affirm'),
+            };
+        }
+
         return {
             cardIcon: '',
             cardBrand: '',
         };
-    }, [card?.brand, paymentMethodCode, paymentMethodId]);
+    }, [card?.brand, paymentMethodCode]);
 
     const paymentHeading = useMemo(() => {
-        if (paymentMethodId === 7) {
+        if (paymentMethodCode === 'stripe_affirm') {
             return `Affirm`;
         }
 
@@ -158,10 +157,10 @@ export function SubmissionViewBilling({
         }
 
         return 'Unknown card';
-    }, [paymentMethodId, paymentMethodCode, cardBrand, card?.last4, payer?.name]);
+    }, [paymentMethodCode, cardBrand, card?.last4, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
-        if (paymentMethodId === 7) {
+        if (paymentMethodCode === 'stripe_affirm') {
             return `Affirm`;
         }
 
@@ -178,7 +177,7 @@ export function SubmissionViewBilling({
         }
 
         return null;
-    }, [paymentMethodId, paymentMethodCode, card?.expMonth, card?.expYear, payer?.email, payment?.transaction?.hash]);
+    }, [paymentMethodCode, card?.expMonth, card?.expYear, payer?.email, payment?.transaction?.hash]);
 
     const handleAddressEdit = useCallback(() => {
         setIsEditAddressDialogOpen(true);

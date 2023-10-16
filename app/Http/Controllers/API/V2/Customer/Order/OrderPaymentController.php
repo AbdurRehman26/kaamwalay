@@ -95,7 +95,7 @@ class OrderPaymentController extends Controller
         ]));
 
         throw_if(empty($order->canBePaidWithAffirm()), ValidationException::withMessages([
-            'message' => 'Minimum order amount for affirm payment method is ' . config('robograding.feature_affirm_payment_method_min_amount'),
+            'message' => 'Minimum order amount for affirm payment method is '.config('robograding.feature_affirm_payment_method_min_amount'),
         ]));
 
         throw_unless($order->isPayable('v2'), OrderNotPayable::class);

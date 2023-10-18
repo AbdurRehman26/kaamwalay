@@ -5,6 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as AffirmLogo } from '@shared/assets/affirmLogo.svg';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch } from '../redux/hooks';
 import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
@@ -100,17 +101,24 @@ type PaymentMethodItemProps = {
     isSelected: boolean;
     methodName: string;
     methodId: number;
+    methodCode: string;
 };
 
 function PaymentMethodItem(props: PaymentMethodItemProps) {
     const classes = useStyles(props);
     const dispatch = useAppDispatch();
-    const { methodName, methodId } = props;
+    const { methodName, methodId, methodCode } = props;
     const { collectorCoinDiscountPercentage } = useConfiguration();
-    function handleOnChange() {
-        dispatch(updatePaymentMethodId(methodId));
-    }
 
+    function handleOnChange() {
+        dispatch(
+            updatePaymentMethodId({
+                id: methodId,
+                code: methodCode,
+            }),
+        );
+    }
+    console.log(methodCode, methodId);
     return (
         <ButtonBase className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
@@ -121,9 +129,9 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                 ) : (
                     <div />
                 )}
-                {methodId === 7 ? <AffirmLogo /> : <div />}
+                {methodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? <AffirmLogo /> : <div />}
 
-                {methodId === 1 || methodId === 7 ? (
+                {methodId === 1 || methodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? (
                     <div className={classes.rightSide}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}

@@ -19,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -305,6 +306,7 @@ export function Payment() {
     const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
     const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const paymentMethodCode = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodCode);
     const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
     const useBillingAddressSameAsShipping = useAppSelector(
@@ -480,7 +482,13 @@ export function Payment() {
         setArePaymentMethodsLoading(true);
         const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
         const response = await endpoint.get('');
-        dispatch(updatePaymentMethodId(response.data[0].id));
+        dispatch(
+            updatePaymentMethodId({
+                id: response.data[0].id,
+                code: response.data[0].code,
+            }),
+        );
+
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
     }
@@ -650,9 +658,11 @@ export function Payment() {
                                         </div>
                                     ) : null}
                                     {availablePaymentMethods.map((item: any) =>
-                                        (item.id === 7 && displayAffirm) || item.id !== 7 ? (
+                                        (item.code === PaymentMethodsEnum.STRIPE_AFFIRM && displayAffirm) ||
+                                        item.code !== PaymentMethodsEnum.STRIPE_AFFIRM ? (
                                             <PaymentMethodItem
                                                 key={item.id}
+                                                methodCode={item.code}
                                                 isSelected={paymentMethodId === item.id}
                                                 methodName={item.name}
                                                 methodId={item.id}
@@ -992,7 +1002,7 @@ export function Payment() {
                                 </div>
                             ) : null}
 
-                            {displayAffirm && paymentMethodId === 7 ? (
+                            {displayAffirm && paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? (
                                 <div className={classes.sectionContainer}>
                                     <Typography className={classes.sectionLabel}>Pay With Affirm</Typography>
                                     <Typography variant={'caption'} sx={{ fontSize: 14 }}>

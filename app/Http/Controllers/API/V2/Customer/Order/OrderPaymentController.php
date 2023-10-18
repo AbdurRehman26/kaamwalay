@@ -34,6 +34,10 @@ class OrderPaymentController extends Controller
             'message' => 'Coupon is either expired or invalid.',
         ]));
 
+        throw_if($request->payment_method['id'] === 7 && !$order->canBePaidWithAffirm($request->payment_by_wallet), ValidationException::withMessages([
+            'message' => 'Minimum order amount for affirm payment method is '.config('robograding.feature_affirm_payment_method_min_amount'),
+        ]));
+
         throw_unless($order->isPayable('v2'), OrderNotPayable::class);
 
         try {
@@ -79,48 +83,5 @@ class OrderPaymentController extends Controller
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function createPaymentIntent(
-        StoreOrderPaymentRequest $request,
-        Order $order,
-        OrderPaymentService $orderPaymentService
-    ): JsonResponse {
-
-        throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
-            'message' => 'Coupon is either expired or invalid.',
-        ]));
-
-        throw_if(empty($order->canBePaidWithAffirm()), ValidationException::withMessages([
-            'message' => 'Minimum order amount for affirm payment method is '.config('robograding.feature_affirm_payment_method_min_amount'),
-        ]));
-
-        throw_unless($order->isPayable('v2'), OrderNotPayable::class);
-
-        try {
-            DB::beginTransaction();
-
-            $orderPaymentService->createPayments($order, $request->validated());
-
-            $response = $this->paymentService->createPaymentIntent($order, $request->all());
-
-            DB::commit();
-
-            return new JsonResponse(['intent' => $response['payment_provider_reference_id']]);
-
-        } catch (Exception $e) {
-
-            DB::rollBack();
-
-            return new JsonResponse(
-                [
-                    'message' => $e->getMessage(),
-                ],
-                Response::HTTP_PAYMENT_REQUIRED
-            );
-        }
     }
 }

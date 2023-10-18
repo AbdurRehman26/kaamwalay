@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V1\PaymentService as V1PaymentService;
+use App\Services\Payment\V2\Providers\AffirmService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
 use App\Services\Payment\V2\Providers\ManualPaymentService;
 use App\Services\Payment\V2\Providers\PaypalService;
@@ -28,7 +29,7 @@ class PaymentService extends V1PaymentService
         'collector_coin' => CollectorCoinService::class,
         'wallet' => WalletService::class,
         'manual' => ManualPaymentService::class,
-        'stripe_affirm' => StripeService::class,
+        'stripe_affirm' => AffirmService::class,
     ];
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
@@ -141,18 +142,5 @@ class PaymentService extends V1PaymentService
 
                 return $orderPayment;
             });
-    }
-
-    public function createPaymentIntent(Order $order, array $optionalData = []): array
-    {
-        $this->hasProvider($order);
-
-        $data = resolve($this->providers[
-            $this->order->paymentMethod->code
-        ])->createPaymentIntent($this->order, $optionalData);
-
-        $this->updateOrderPayment($this->order->firstOrderPayment, $data);
-
-        return $data;
     }
 }

@@ -92,6 +92,7 @@ export interface ShippingSubmissionState {
 }
 
 export interface PaymentSubmissionState {
+    paymentMethodCode?: string;
     paymentMethodId: number;
     existingCreditCards?: CreditCard[];
     selectedCreditCard: CreditCard;
@@ -876,8 +877,9 @@ export const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },
-        updatePaymentMethodId: (state, action: PayloadAction<number>) => {
-            state.step04Data.paymentMethodId = action.payload;
+        updatePaymentMethodId: (state, action: PayloadAction<{ id: number; code?: string }>) => {
+            state.step04Data.paymentMethodId = action.payload.id;
+            state.step04Data.paymentMethodCode = action.payload.code;
         },
         setSaveCardForLater: (state, action: PayloadAction<boolean>) => {
             state.step04Data.saveForLater = action.payload;

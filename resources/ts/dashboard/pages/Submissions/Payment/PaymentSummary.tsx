@@ -11,6 +11,7 @@ import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAuth } from '@shared/hooks/useAuth';
@@ -180,6 +181,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const paymentMethodCode = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodCode);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const shippingMethod = useAppSelector(
@@ -370,7 +372,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     };
 
     const handleAffirmPayment = async () => {
-        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/create-payment-intent`);
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
         if (!stripe) {
             // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
             return;
@@ -400,7 +402,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             const { data } = res;
 
             stripe
-                .confirmAffirmPayment(data.intent, {
+                .confirmAffirmPayment(data.paymentIntent, {
                     // eslint-disable-next-line camelcase
                     payment_method: {
                         // eslint-disable-next-line camelcase
@@ -411,12 +413,34 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                     return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
                 })
                 .then((result) => {
+                    console.log(result);
                     if (result.error) {
                         // Inform the customer that there was an error.
                         console.log(result.error.message);
                     }
                 });
         } catch (err: any) {
+            if (err.response.data.success) {
+                stripe
+                    .confirmAffirmPayment(err.response.data.paymentIntent, {
+                        // eslint-disable-next-line camelcase
+                        payment_method: {
+                            // eslint-disable-next-line camelcase
+                            billing_details: {},
+                        },
+
+                        // eslint-disable-next-line camelcase
+                        return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
+                    })
+                    .then((result) => {
+                        console.log(result);
+                        if (result.error) {
+                            // Inform the customer that there was an error.
+                            console.log(result.error.message);
+                        }
+                    });
+            }
+
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');
@@ -442,7 +466,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}
                         {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
-                        {paymentMethodID === 7 && displayAffirm ? (
+                        {paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM && displayAffirm ? (
                             <Button
                                 variant="contained"
                                 color="primary"

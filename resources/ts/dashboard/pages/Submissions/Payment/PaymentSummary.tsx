@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import { round } from 'lodash';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
@@ -198,7 +198,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
-    const { collectorCoinDiscountPercentage } = useConfiguration();
+    const { collectorCoinDiscountPercentage, featureAffirmPaymentMethodMinAmount } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
@@ -277,7 +277,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 appliedCredit
             ).toFixed(2),
         );
-        dispatch(setDisplayAffirmMethod(previewTotal));
+        dispatch(setDisplayAffirmMethod(previewTotal > featureAffirmPaymentMethodMinAmount));
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }
@@ -400,45 +400,10 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
             const { data } = res;
-
-            stripe
-                .confirmAffirmPayment(data.paymentIntent, {
-                    // eslint-disable-next-line camelcase
-                    payment_method: {
-                        // eslint-disable-next-line camelcase
-                        billing_details: {},
-                    },
-
-                    // eslint-disable-next-line camelcase
-                    return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
-                })
-                .then((result) => {
-                    console.log(result);
-                    if (result.error) {
-                        // Inform the customer that there was an error.
-                        console.log(result.error.message);
-                    }
-                });
+            confirmStripeAffirm(data.intent);
         } catch (err: any) {
             if (err.response.data.success) {
-                stripe
-                    .confirmAffirmPayment(err.response.data.paymentIntent, {
-                        // eslint-disable-next-line camelcase
-                        payment_method: {
-                            // eslint-disable-next-line camelcase
-                            billing_details: {},
-                        },
-
-                        // eslint-disable-next-line camelcase
-                        return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
-                    })
-                    .then((result) => {
-                        console.log(result);
-                        if (result.error) {
-                            // Inform the customer that there was an error.
-                            console.log(result.error.message);
-                        }
-                    });
+                confirmStripeAffirm(err.response.data.paymentIntent);
             }
 
             if ('message' in err?.response?.data) {
@@ -447,6 +412,23 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             }
         }
     };
+
+    const confirmStripeAffirm = useCallback(
+        (intent: string) => {
+            // @ts-ignore
+            stripe.confirmAffirmPayment(intent, {
+                // eslint-disable-next-line camelcase
+                payment_method: {
+                    // eslint-disable-next-line camelcase
+                    billing_details: {},
+                },
+
+                // eslint-disable-next-line camelcase
+                return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
+            });
+        },
+        [orderID, stripe],
+    );
 
     return (
         <Paper variant={'outlined'} square className={classes.container}>

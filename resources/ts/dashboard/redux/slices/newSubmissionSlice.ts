@@ -6,8 +6,6 @@ import { DefaultShippingMethodEntity, ShippingMethodEntity } from '@shared/entit
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
-const AFFIRM_MINIMUM_AMOUNT = 50;
-
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -891,8 +889,8 @@ export const newSubmissionSlice = createSlice({
         setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
             state.step04Data.useShippingAddressAsBillingAddress = action.payload;
         },
-        setDisplayAffirmMethod: (state, action: PayloadAction<number>) => {
-            state.displayAffirm = action.payload > AFFIRM_MINIMUM_AMOUNT;
+        setDisplayAffirmMethod: (state, action: PayloadAction<boolean>) => {
+            state.displayAffirm = action.payload;
         },
         updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
             // @ts-ignore

@@ -25,22 +25,17 @@ class StripeService extends V1StripeService
             $charge->amount === $this->getAmount($order)
             && $charge->outcome->type === 'authorized'
         ) {
-            $this->updateOrderPayment($order, $paymentIntent);
+            $order->firstOrderPayment->update([
+                'response' => json_encode($paymentIntent->toArray()),
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+                'amount' => $order->grand_total_to_be_paid,
+                'notes' => "Payment for Order # {$order->order_number}",
+            ]);
 
             return true;
         }
 
         return false;
-    }
-
-    protected function updateOrderPayment(Order $order, PaymentIntent $paymentIntent): void
-    {
-        $order->firstOrderPayment->update([
-            'response' => json_encode($paymentIntent->toArray()),
-            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-            'amount' => $order->grand_total_to_be_paid,
-            'notes' => "Payment for Order # {$order->order_number}",
-        ]);
     }
 
     /**

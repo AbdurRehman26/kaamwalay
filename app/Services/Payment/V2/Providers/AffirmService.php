@@ -5,7 +5,6 @@ namespace App\Services\Payment\V2\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use Stripe\Charge;
 use Stripe\PaymentIntent;
 
 class AffirmService extends StripeService

@@ -9,7 +9,7 @@ import React from 'react';
 import { font } from '@shared/styles/utils';
 import { useConfirmationSubmissionSidebarStyles } from '../CollectorCoinConfirmationSubmission/style';
 
-export function AffirmConfirmationSidebar() {
+export function AffirmConfirmationPanel() {
     const classes = useConfirmationSubmissionSidebarStyles();
 
     return (

@@ -12,10 +12,10 @@ import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import { AffirmConfirmationPanel } from '@dashboard/pages/Submissions/AffirmConfirmationSubmission/AffirmConfirmationPanel';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAffirmPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
-import { ConfirmationLoadingSidebar } from '../CollectorCoinConfirmationSubmission/ConfirmationLoadingSidebar';
-import { useConfirmationSubmissionStyles } from '../CollectorCoinConfirmationSubmission/style';
+import { useConfirmationSubmissionStyles } from './style';
 
 export function AffirmConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();
@@ -113,7 +113,7 @@ export function AffirmConfirmationSubmission() {
     return (
         <Grid container>
             <Grid item className={classes.sidebar} maxWidth={'100% !important'}>
-                <ConfirmationLoadingSidebar />
+                <AffirmConfirmationPanel />
             </Grid>
         </Grid>
     );

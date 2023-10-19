@@ -118,7 +118,7 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
             }),
         );
     }
-    console.log(methodCode, methodId);
+
     return (
         <ButtonBase className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>

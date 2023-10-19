@@ -5,6 +5,8 @@ namespace App\Services\Payment\V2\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
+use Stripe\Charge;
+use Stripe\PaymentIntent;
 
 class AffirmService extends StripeService
 {
@@ -43,5 +45,16 @@ class AffirmService extends StripeService
             'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             'notes' => $paymentData['additional_data']['description'],
         ];
+    }
+
+    protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
+    {
+        if ($paymentIntent->status === 'succeeded') {
+            $this->updateOrderPayment($order, $paymentIntent);
+
+            return true;
+        }
+
+        return false;
     }
 }

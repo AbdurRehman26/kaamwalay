@@ -18,16 +18,6 @@ class StripeService extends V1StripeService
 {
     protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
-        if ($order->paymentMethod->isAffirm()) {
-            if ($paymentIntent->status === 'succeeded') {
-                $this->updateOrderPayment($order, $paymentIntent);
-
-                return true;
-            }
-
-            return false;
-        }
-
         /** @var Charge $charge */
         $charge = $paymentIntent->charges->first();
 

@@ -33,11 +33,7 @@ class SendTopReferrersStats extends Command
     {
         $endDate = (Carbon::parse($this->argument('date')));
         $topReferrersStats = ['date' => $endDate, 'data' => $this->getData(
-            /*
-             * Obtains the start of the month based on the provided $endDate,
-             * then adjusts the resulting date by adding 4 hours for time zone considerations.
-             */
-            Carbon::parse($endDate)->startOfMonth()->addHours(4),
+            Carbon::parse($endDate->format('Y-m-d'), 'America/New_York')->startOfMonth()->setTimezone('UTC'),
             $endDate
         )];
 

@@ -119,7 +119,7 @@ it('counts monthly paid orders cards', function () {
     $startDateTime = Carbon::now()->subDays(1);
     $monthStart = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->startOfMonth()->setTimezone('UTC');
     $monthEnd = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
-    
+
     $expectedCardTotal = Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
         'users.email',
         Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()

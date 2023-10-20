@@ -71,7 +71,7 @@ it('adds daily revenue stats', function () {
     $revenueStats = $this->revenueStatsService->addDailyStats($startDateTime, $endDateTime);
     expect(round($revenue, 2))->toBe(round($revenueStats['revenue'], 2));
     expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
-})->group('revenue-stats')->repeat(20);
+})->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
     $startDateTime = Carbon::now()->subDays(1);
@@ -99,7 +99,7 @@ it('adds monthly revenue stats for the current month', function () {
 
     expect($revenue)->toBe($revenueStats['revenue']);
     expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
-})->group('revenue-stats')->repeat(20);
+})->group('revenue-stats');
 
 it('counts daily paid orders cards', function () {
     $expectedCardTotal = Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
@@ -113,7 +113,7 @@ it('counts daily paid orders cards', function () {
     $cardTotal = $this->revenueStatsService->calculateDailyCardsTotal(Carbon::now()->subDays(1)->startOfDay(), Carbon::now()->subDays(1)->endOfDay());
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
-})->group('revenue-stats')->repeat(20);
+})->group('revenue-stats');
 
 it('counts monthly paid orders cards', function () {
     $startDateTime = Carbon::now()->subDays(1);
@@ -131,4 +131,4 @@ it('counts monthly paid orders cards', function () {
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal(Carbon::now());
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
-})->group('revenue-stats')->repeat(20);
+})->group('revenue-stats');

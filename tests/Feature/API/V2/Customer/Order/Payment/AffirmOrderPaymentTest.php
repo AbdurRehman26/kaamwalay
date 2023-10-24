@@ -22,7 +22,6 @@ beforeEach(function () {
         'code' => 'stripe_affirm',
     ]);
 
-
     $this->order = Order::factory()->create([
         'user_id' => $user->id,
         'coupon_id' => null,
@@ -35,10 +34,10 @@ beforeEach(function () {
 
 test('user can create payment intent with affirm', function () {
     $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
-            'payment_method' => [
-                'id' => 7,
-            ],
-        ])
+        'payment_method' => [
+            'id' => 7,
+        ],
+    ])
         ->dump()
         ->assertStatus(Response::HTTP_PAYMENT_REQUIRED)
         ->assertJsonStructure(['payment_intent']);
@@ -87,12 +86,11 @@ test('provider fee is set after a successful payment', function () {
 
     $totalAmount = $this->order->grand_total_cents;
     $actualFee = round((float) (
-            (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100, 2);
+        (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
+    ) / 100, 2);
 
     expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');
-
 
 test('affirm payment requires grand total to be more than 50', function () {
 
@@ -109,6 +107,6 @@ test('affirm payment requires grand total to be more than 50', function () {
         ],
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonValidationErrors([
-            'message' => 'Minimum order amount for affirm payment method is 50'
+            'message' => 'Minimum order amount for affirm payment method is 50',
         ]);
 })->group('payment');

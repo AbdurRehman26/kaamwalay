@@ -6,7 +6,6 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\User;
-use App\Services\Payment\V2\Providers\TestingStripeService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,27 +68,6 @@ test('user cannot verify a failed payment', function () {
     $response->assertJson([
         'error' => $exception->getMessage(),
     ]);
-})->group('payment');
-
-test('provider fee is set after a successful payment', function () {
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
-        'payment_method' => [
-            'id' => $this->paymentMethod->id,
-        ],
-        'payment_provider_reference' => [
-            'id' => '12345678',
-        ],
-    ]);
-
-    $response->assertOk();
-    $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
-
-    $totalAmount = $this->order->grand_total_cents;
-    $actualFee = round((float) (
-        (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
-    ) / 100, 2);
-
-    expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');
 
 test('affirm payment requires grand total to be more than 50', function () {

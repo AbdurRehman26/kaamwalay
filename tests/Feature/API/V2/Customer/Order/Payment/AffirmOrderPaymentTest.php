@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
+
+    PaymentMethod::where('id', '=', 7)->delete();
+
     Event::fake();
     $user = User::factory()->create([
         'stripe_id' => Str::random(25),

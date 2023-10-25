@@ -38,10 +38,11 @@ class TestingAffirmService extends TestingStripeService
         ];
     }
 
-    protected function paidPaymentIntent($order): object
+    protected function paidPaymentIntent(Order $order): object
     {
         return (object) [
             'status' => 'succeeded',
+            'amount' => $order->grand_total_cents,
         ];
     }
 

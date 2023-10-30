@@ -5,6 +5,7 @@ namespace App\Services\Payment\V2\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
+use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 
 class AffirmService extends StripeService
@@ -44,6 +45,24 @@ class AffirmService extends StripeService
             'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             'notes' => $paymentData['additional_data']['description'],
         ];
+    }
+
+    public function verify(Order $order, string $paymentIntentId): bool
+    {
+        if($order->isPaid()){
+            return true;
+        }
+
+        /** @var User $user */
+        $user = auth()->user();
+
+        try {
+            $paymentIntent = $user->stripe()->paymentIntents->retrieve($paymentIntentId);
+
+            return $this->validateOrderIsPaid($order, $paymentIntent);
+        } catch (ApiErrorException $e) {
+            return false;
+        }
     }
 
     protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool

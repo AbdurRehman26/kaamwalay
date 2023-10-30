@@ -657,6 +657,7 @@ export function Payment() {
                                             <CircularProgress color={'secondary'} />
                                         </div>
                                     ) : null}
+                                    {/* Extra condition for stripe affirm added to hide or show it based on amount */}
                                     {availablePaymentMethods.map((item: any) =>
                                         (item.code === PaymentMethodsEnum.STRIPE_AFFIRM && displayAffirm) ||
                                         item.code !== PaymentMethodsEnum.STRIPE_AFFIRM ? (

@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
-
     PaymentMethod::where('id', '=', 7)->delete();
 
     Event::fake();
@@ -40,10 +39,8 @@ test('user can create payment intent with affirm', function () {
             'id' => 7,
         ],
     ])
-        ->dump()
         ->assertStatus(Response::HTTP_PAYMENT_REQUIRED)
         ->assertJsonStructure(['payment_intent']);
-
 })->group('payment');
 
 test('user can verify a successful affirm payment', function () {
@@ -74,7 +71,6 @@ test('user cannot verify a failed payment', function () {
 })->group('payment');
 
 test('affirm payment requires grand total to be more than 50', function () {
-
     $this->order->update([
         'grand_total' => 49,
     ]);

@@ -19,5 +19,5 @@ export class ConfigurationEntity {
     public featureOrderCleaningFeeMaxCap!: number;
     public featureOrderShippingInsuranceFeePercentage!: number;
     public featureReferralMaxDiscountItems!: number;
-    public featureAffirmPaymentMethodMinAmount!: number;
+    public featureOrderPaymentAffirmMinAmount!: number;
 }

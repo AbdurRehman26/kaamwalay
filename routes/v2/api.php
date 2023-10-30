@@ -81,7 +81,6 @@ Route::prefix('customer')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::get('{orderId}', [OrderController::class, 'show']);
-            Route::post('{order}/create-payment-intent', [OrderPaymentController::class, 'createPaymentIntent']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);

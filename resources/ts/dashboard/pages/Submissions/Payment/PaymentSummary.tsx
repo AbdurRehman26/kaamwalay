@@ -198,7 +198,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
-    const { collectorCoinDiscountPercentage, featureAffirmPaymentMethodMinAmount } = useConfiguration();
+    const { collectorCoinDiscountPercentage, featureOrderPaymentAffirmMinAmount } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
@@ -277,7 +277,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 appliedCredit
             ).toFixed(2),
         );
-        dispatch(setDisplayAffirmMethod(previewTotal > featureAffirmPaymentMethodMinAmount));
+        dispatch(setDisplayAffirmMethod(previewTotal > featureOrderPaymentAffirmMinAmount));
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }

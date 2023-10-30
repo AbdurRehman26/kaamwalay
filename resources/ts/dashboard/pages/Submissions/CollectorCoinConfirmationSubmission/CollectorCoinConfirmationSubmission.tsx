@@ -19,7 +19,7 @@ import { font } from '@shared/styles/utils';
 import { shortenTxnHash } from '@dashboard/components/PayWithAGS/utils';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getCollectorCoinPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
-import { ConfirmationLoadingSidebar } from './ConfirmationLoadingSidebar';
+import { CollectorCoinConfirmationSidebar } from './CollectorCoinConfirmationSidebar';
 import { useConfirmationSubmissionStyles } from './style';
 
 export function CollectorCoinConfirmationSubmission() {
@@ -75,7 +75,7 @@ export function CollectorCoinConfirmationSubmission() {
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>
-                <ConfirmationLoadingSidebar />
+                <CollectorCoinConfirmationSidebar />
             </Grid>
             <Grid item className={classes.content}>
                 <Box paddingTop={3} paddingBottom={2.5}>

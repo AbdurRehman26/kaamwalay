@@ -15,7 +15,7 @@ import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { AffirmConfirmationPanel } from '@dashboard/pages/Submissions/AffirmConfirmationSubmission/AffirmConfirmationPanel';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAffirmPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
-import { useConfirmationSubmissionStyles } from './style';
+import { useConfirmationSubmissionStyles } from '../CollectorCoinConfirmationSubmission/style';
 
 export function AffirmConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();

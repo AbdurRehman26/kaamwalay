@@ -753,6 +753,6 @@ class Order extends Model implements Exportable, Taggable
 
     public function canBePaidWithAffirm(?float $paymentByWallet): bool
     {
-        return $this->grand_total - $paymentByWallet > config('robograding.feature_affirm_payment_method_min_amount');
+        return $this->grand_total - $paymentByWallet > config('robograding.feature_order_payment_affirm_min_amount');
     }
 }

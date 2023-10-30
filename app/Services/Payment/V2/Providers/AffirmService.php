@@ -49,7 +49,7 @@ class AffirmService extends StripeService
 
     public function verify(Order $order, string $paymentIntentId): bool
     {
-        if($order->isPaid()){
+        if ($order->isPaid()) {
             return true;
         }
 

@@ -102,7 +102,7 @@ services:
       exit 0;
       "
   meilisearch:
-    image: 'getmeili/meilisearch:v1.3'
+    image: 'getmeili/meilisearch:v1.2'
     ports:
       - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
     volumes:

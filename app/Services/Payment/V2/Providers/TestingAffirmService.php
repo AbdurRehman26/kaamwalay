@@ -50,7 +50,7 @@ class TestingAffirmService extends TestingStripeService
     {
         if ($paymentIntent->status === 'succeeded') {
             $order->firstOrderPayment->update([
-                'response' => json_encode($paymentIntent->toArray()),
+                'response' => json_encode($paymentIntent),
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'amount' => $order->grand_total_to_be_paid,
                 'notes' => "Payment for Order # {$order->order_number}",

@@ -11,6 +11,7 @@ return new class extends Migration
     {
         DB::table('payment_methods')->insert([
             [
+                'id' => 7,
                 'code' => 'stripe_affirm',
                 'name' => 'Affirm',
                 'is_visible' => true,

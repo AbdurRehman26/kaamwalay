@@ -19,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -305,6 +306,7 @@ export function Payment() {
     const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
     const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const paymentMethodCode = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodCode);
     const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
     const useBillingAddressSameAsShipping = useAppSelector(
@@ -333,6 +335,14 @@ export function Payment() {
     const [isUpdateAddressButtonEnabled, setIsUpdateAddressButtonEnabled] = useState(false);
     const [canUseShippingAsBilling, setCanUseShippingAsBilling] = useState(true);
     const notifications = useNotifications();
+    const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
+
+    const affirmSubtitles = [
+        'No interest for the four payments',
+        'No hidden fees',
+        'No impact on your credit score',
+        'Set up easy, automatic payments',
+    ];
 
     const order = useOrderQuery({
         resourceId: Number(id),
@@ -472,7 +482,13 @@ export function Payment() {
         setArePaymentMethodsLoading(true);
         const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
         const response = await endpoint.get('');
-        dispatch(updatePaymentMethodId(response.data[0].id));
+        dispatch(
+            updatePaymentMethodId({
+                id: response.data[0].id,
+                code: response.data[0].code,
+            }),
+        );
+
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
     }
@@ -641,14 +657,19 @@ export function Payment() {
                                             <CircularProgress color={'secondary'} />
                                         </div>
                                     ) : null}
-                                    {availablePaymentMethods.map((item: any) => (
-                                        <PaymentMethodItem
-                                            key={item.id}
-                                            isSelected={paymentMethodId === item.id}
-                                            methodName={item.name}
-                                            methodId={item.id}
-                                        />
-                                    ))}
+                                    {/* Extra condition for stripe affirm added to hide or show it based on amount */}
+                                    {availablePaymentMethods.map((item: any) =>
+                                        (item.code === PaymentMethodsEnum.STRIPE_AFFIRM && displayAffirm) ||
+                                        item.code !== PaymentMethodsEnum.STRIPE_AFFIRM ? (
+                                            <PaymentMethodItem
+                                                key={item.id}
+                                                methodCode={item.code}
+                                                isSelected={paymentMethodId === item.id}
+                                                methodName={item.name}
+                                                methodId={item.id}
+                                            />
+                                        ) : null,
+                                    )}
                                 </div>
                             </div>
                             <Divider light />
@@ -978,6 +999,28 @@ export function Payment() {
                                     </Typography>
                                     <Typography variant={'subtitle2'}>
                                         All you need is a MetaMask crypto wallet.
+                                    </Typography>
+                                </div>
+                            ) : null}
+
+                            {displayAffirm && paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? (
+                                <div className={classes.sectionContainer}>
+                                    <Typography className={classes.sectionLabel}>Pay With Affirm</Typography>
+                                    <Typography variant={'caption'} sx={{ fontSize: 14 }}>
+                                        Pay with 4 interest-free payments every two weeks or choose a monthly payment
+                                        plan.
+                                    </Typography>
+
+                                    <Typography component={'div'}>
+                                        <ul>
+                                            {affirmSubtitles.map((subtitle) => (
+                                                <li>
+                                                    <Typography sx={{ fontSize: 14 }} variant={'caption'}>
+                                                        {subtitle}
+                                                    </Typography>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </Typography>
                                 </div>
                             ) : null}

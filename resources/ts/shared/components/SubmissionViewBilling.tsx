@@ -8,6 +8,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import EditOrderAddressDialog from '@shared/components/EditOrderAddressDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { RolesEnum } from '@shared/constants/RolesEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
@@ -88,7 +89,9 @@ export function SubmissionViewBilling({
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
-    const hasPayment = ['stripe', 'paypal', 'collector_coin', 'manual'].includes(paymentMethodCode); // Checking if one of our supported payment methods is on the order
+    const hasPayment = ['stripe', PaymentMethodsEnum.STRIPE_AFFIRM, 'paypal', 'collector_coin', 'manual'].includes(
+        paymentMethodCode,
+    ); // Checking if one of our supported payment methods is on the order
     const { id } = useParams<'id'>();
     const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
     const [isEditAddressDialogOpen, setIsEditAddressDialogOpen] = useState(false);
@@ -122,6 +125,13 @@ export function SubmissionViewBilling({
             };
         }
 
+        if (paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM) {
+            return {
+                cardIcon: getPaymentIcon(''),
+                cardBrand: getPaymentTitle('affirm'),
+            };
+        }
+
         return {
             cardIcon: '',
             cardBrand: '',
@@ -129,6 +139,10 @@ export function SubmissionViewBilling({
     }, [card?.brand, paymentMethodCode]);
 
     const paymentHeading = useMemo(() => {
+        if (paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM) {
+            return `Affirm`;
+        }
+
         if (paymentMethodCode === 'stripe') {
             return `${cardBrand} ending in ${card?.last4}`;
         }
@@ -146,9 +160,13 @@ export function SubmissionViewBilling({
         }
 
         return 'Unknown card';
-    }, [card?.last4, cardBrand, paymentMethodCode, payer?.name]);
+    }, [paymentMethodCode, cardBrand, card?.last4, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
+        if (paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM) {
+            return `Affirm`;
+        }
+
         if (paymentMethodCode === 'stripe') {
             return `Expires ${card?.expMonth}/${card?.expYear}`;
         }
@@ -162,7 +180,7 @@ export function SubmissionViewBilling({
         }
 
         return null;
-    }, [card?.expMonth, card?.expYear, paymentMethodCode, payer?.email, payment?.transaction?.hash]);
+    }, [paymentMethodCode, card?.expMonth, card?.expYear, payer?.email, payment?.transaction?.hash]);
 
     const handleAddressEdit = useCallback(() => {
         setIsEditAddressDialogOpen(true);

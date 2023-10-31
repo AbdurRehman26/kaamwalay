@@ -750,4 +750,9 @@ class Order extends Model implements Exportable, Taggable
             [OrderStatus::GRADED, OrderStatus::ASSEMBLED, OrderStatus::SHIPPED]
         );
     }
+
+    public function canBePaidWithAffirm(?float $paymentByWallet): bool
+    {
+        return $this->grand_total - $paymentByWallet > config('robograding.feature_order_payment_affirm_min_amount');
+    }
 }

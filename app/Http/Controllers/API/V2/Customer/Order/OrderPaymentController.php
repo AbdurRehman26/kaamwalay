@@ -34,6 +34,10 @@ class OrderPaymentController extends Controller
             'message' => 'Coupon is either expired or invalid.',
         ]));
 
+        throw_if($request->payment_method['id'] === 7 && ! $order->canBePaidWithAffirm($request->payment_by_wallet), ValidationException::withMessages([
+            'message' => 'Minimum order amount for affirm payment method is '.config('robograding.feature_order_payment_affirm_min_amount'),
+        ]));
+
         throw_unless($order->isPayable('v2'), OrderNotPayable::class);
 
         try {

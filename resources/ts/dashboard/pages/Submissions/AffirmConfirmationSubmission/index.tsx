@@ -1,0 +1,1 @@
+export { AffirmConfirmationSubmission } from './AffirmConfirmationSubmission';

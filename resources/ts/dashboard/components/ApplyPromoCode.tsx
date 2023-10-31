@@ -84,7 +84,11 @@ export function ApplyPromoCode() {
                 }
                 // When using paypal, and we update the applied coupon code, it won't change the discount for that user.
                 // so here, we are resetting the payment method selection
-                dispatch(updatePaymentMethodId(1));
+                dispatch(
+                    updatePaymentMethodId({
+                        id: 1,
+                    }),
+                );
             } catch (error: any) {
                 dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));

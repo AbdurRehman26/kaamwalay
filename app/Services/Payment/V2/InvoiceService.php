@@ -43,6 +43,7 @@ class InvoiceService
                     $orderPayment
                 ),
                 $order->paymentMethod->isManual() => $this->getManualPaymentResponse(),
+                $order->paymentMethod->isAffirm() => $paymentResponse,
                 default => $this->getStripePaymentResponse($paymentResponse),
             };
         }

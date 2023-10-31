@@ -107,5 +107,8 @@ return [
         'feature_referral_max_discount_items' => [
             'value' => env('FEATURE_REFERRAL_MAX_DISCOUNT_ITEMS'),
         ],
+        'feature_order_payment_affirm_min_amount' => [
+            'value' => env('FEATURE_ORDER_PAYMENT_AFFIRM_MIN_AMOUNT', 50),
+        ],
     ],
 ];

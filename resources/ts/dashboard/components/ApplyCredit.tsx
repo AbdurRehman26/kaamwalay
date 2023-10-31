@@ -30,7 +30,11 @@ export function ApplyCredit() {
         setLocalAppliedCredit(value);
         // When using paypal, and we update the applied credit, it won't change the applied credit for that user.
         // so here, we are resetting the payment method selection
-        dispatch(updatePaymentMethodId(1));
+        dispatch(
+            updatePaymentMethodId({
+                id: 1,
+            }),
+        );
     }
 
     const errorMessage = useMemo(() => {

@@ -32,7 +32,7 @@ beforeEach(function () {
 test('user can create payment intent with affirm', function () {
     $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
         'payment_method' => [
-            'id' => 7,
+            'id' => $this->paymentMethod->id,
         ],
     ])
         ->assertStatus(Response::HTTP_PAYMENT_REQUIRED)
@@ -42,7 +42,7 @@ test('user can create payment intent with affirm', function () {
 test('user can verify a successful affirm payment', function () {
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 7,
+        'payment_method_id' => $this->paymentMethod->id,
         'payment_provider_reference_id' => Str::random(25),
     ]);
     $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments/".Str::random(25));
@@ -55,7 +55,7 @@ test('user can verify a successful affirm payment', function () {
 test('user cannot verify a failed payment', function () {
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 7,
+        'payment_method_id' => $this->paymentMethod->id,
         'payment_provider_reference_id' => 'incomplete',
     ]);
     $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments/incomplete");

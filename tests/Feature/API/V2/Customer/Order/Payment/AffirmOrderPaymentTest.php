@@ -4,6 +4,7 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -15,6 +16,8 @@ beforeEach(function () {
     $user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);
+
+    $this->paymentMethod = PaymentMethod::whereCode('stripe_affirm')->first();
 
     $this->order = Order::factory()->create([
         'user_id' => $user->id,

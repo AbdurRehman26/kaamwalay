@@ -33,6 +33,11 @@ export function CollectorCoinConfirmationSubmission() {
 
     const { isLoading, data } = useOrderQuery({
         resourceId: Number(id),
+        config: {
+            params: {
+                include: ['orderPayment'],
+            },
+        },
     });
 
     const handleTransactionHashClick = useCallback(

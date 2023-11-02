@@ -342,7 +342,6 @@
                         @elseif(property_exists($orderPayment,'manual'))
                             Manual Payment
                             <br/>
-                        @endif
                         @elseif(property_exists($orderPayment,'affirm'))
                             Affirm Payment
                             <br/>

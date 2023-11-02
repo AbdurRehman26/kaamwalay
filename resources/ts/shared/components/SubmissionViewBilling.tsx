@@ -164,7 +164,7 @@ export function SubmissionViewBilling({
 
     const paymentSubheading = useMemo(() => {
         if (paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM) {
-            return `Affirm`;
+            return ``;
         }
 
         if (paymentMethodCode === 'stripe') {

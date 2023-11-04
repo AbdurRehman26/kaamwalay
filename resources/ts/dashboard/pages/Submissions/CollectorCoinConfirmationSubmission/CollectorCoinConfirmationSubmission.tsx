@@ -33,6 +33,30 @@ export function CollectorCoinConfirmationSubmission() {
 
     const { isLoading, data } = useOrderQuery({
         resourceId: Number(id),
+        config: {
+            params: {
+                include: [
+                    'paymentPlan',
+                    'orderCustomerShipment',
+                    'invoice',
+                    'extraCharges',
+                    'refunds',
+                    'orderShipment',
+                    'orderItems',
+                    'orderStatus',
+                    'coupon',
+                    'customer',
+                    'shippingMethod',
+                    'shippingAddress.country',
+                    'billingAddress.country',
+                    'orderPayment.paymentMethod',
+                    'orderItems.cardProduct.cardSet.cardSeries',
+                    'orderItems.cardProduct.cardCategory',
+                    'orderItems.userCard',
+                    'orderItems.orderItemStatus',
+                ],
+            },
+        },
     });
 
     const handleTransactionHashClick = useCallback(

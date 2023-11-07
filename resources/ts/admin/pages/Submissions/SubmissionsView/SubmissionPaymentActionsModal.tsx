@@ -39,7 +39,7 @@ export default function SubmissionPaymentActionsModal({
     const dispatch = useAppDispatch();
 
     const handleChangeAmount = useCallback((e: any) => {
-        setAmount(e.target.value);
+        setAmount(e.value);
     }, []);
 
     const handleChangeNotes = useCallback((e: any) => {
@@ -94,7 +94,7 @@ export default function SubmissionPaymentActionsModal({
                     </Typography>
                     <NumberFormatTextField
                         value={amount}
-                        onChange={handleChangeAmount}
+                        onValueChange={handleChangeAmount}
                         size="small"
                         variant="outlined"
                         placeholder={'0.00'}

@@ -42,8 +42,8 @@ class RevenueStatsService
 
     public function calculateMonthlyCardsTotal(Carbon $currentDate): int
     {
-        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
-        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
+        $monthStart = Carbon::parse($currentDate->format('Y-m-d'), 'America/New_York')->firstOfMonth()->setTimezone('UTC');
+        $monthEnd = Carbon::parse($currentDate->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
 
         return $this->calculateCardsTotal($monthStart, $monthEnd);
     }
@@ -58,8 +58,11 @@ class RevenueStatsService
 
     public function addMonthlyStats(Carbon $currentDate): RevenueStatsMonthly
     {
+        $monthStart = Carbon::parse($currentDate->format('Y-m-d'), 'America/New_York')->firstOfMonth()->setTimezone('UTC');
+        $monthEnd = Carbon::parse($currentDate->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
+
         $orderPayments = OrderPayment::forValidPaidOrders()
-            ->forMonth($currentDate)
+            ->whereBetween('order_payments.created_at', [$monthStart, $monthEnd])
             ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([

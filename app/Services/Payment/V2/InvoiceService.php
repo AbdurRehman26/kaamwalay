@@ -43,6 +43,7 @@ class InvoiceService
                     $orderPayment
                 ),
                 $order->paymentMethod->isManual() => $this->getManualPaymentResponse(),
+                $order->paymentMethod->isAffirm() => $this->getAffirmResponse(),
                 default => $this->getStripePaymentResponse($paymentResponse),
             };
         }
@@ -144,6 +145,13 @@ class InvoiceService
     {
         return json_decode(json_encode([
             'manual' => true,
+        ]));
+    }
+
+    protected function getAffirmResponse(): object
+    {
+        return json_decode(json_encode([
+            'affirm' => true,
         ]));
     }
 }

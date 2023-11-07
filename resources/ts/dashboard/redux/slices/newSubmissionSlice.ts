@@ -90,6 +90,7 @@ export interface ShippingSubmissionState {
 }
 
 export interface PaymentSubmissionState {
+    paymentMethodCode?: string;
     paymentMethodId: number;
     existingCreditCards?: CreditCard[];
     selectedCreditCard: CreditCard;
@@ -111,6 +112,7 @@ export interface NewSubmissionSliceState {
     paymentMethodDiscountedAmount: number;
     orderTransactionHash: string;
     confirmedCollectorCoinPayment: boolean;
+    confirmedAffirmPayment: boolean;
     currentStep: number;
     shippingMethod: ShippingMethodEntity | null;
     previewTotal: number;
@@ -145,12 +147,14 @@ export interface NewSubmissionSliceState {
     billingAddress: any;
     stepValidations: boolean[];
     dialog: boolean;
+    displayAffirm: boolean;
 }
 
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
     totalInAgs: 0,
     confirmedCollectorCoinPayment: false,
+    confirmedAffirmPayment: false,
     orderTransactionHash: '',
     grandTotal: 0,
     refundTotal: 0,
@@ -435,6 +439,7 @@ const initialState: NewSubmissionSliceState = {
     billingAddress: [],
     stepValidations: [true, false, false, false, false],
     dialog: false,
+    displayAffirm: false,
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -580,6 +585,22 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         return {
             message: response.data.message,
             transactionHash: input.txHash,
+        };
+    },
+);
+
+export const getAffirmPaymentStatus = createAsyncThunk(
+    'newSubmission/getAffirmPaymentStatus',
+    async (input: { orderID: number; paymentIntentId: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${input.orderID}/payments/${input.paymentIntentId}`,
+        );
+        const response = await endpoint.post('');
+
+        return {
+            message: response.data.message,
+            transactionHash: input.paymentIntentId,
         };
     },
 );
@@ -854,8 +875,9 @@ export const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },
-        updatePaymentMethodId: (state, action: PayloadAction<number>) => {
-            state.step04Data.paymentMethodId = action.payload;
+        updatePaymentMethodId: (state, action: PayloadAction<{ id: number; code?: string }>) => {
+            state.step04Data.paymentMethodId = action.payload.id;
+            state.step04Data.paymentMethodCode = action.payload.code;
         },
         setSaveCardForLater: (state, action: PayloadAction<boolean>) => {
             state.step04Data.saveForLater = action.payload;
@@ -866,6 +888,9 @@ export const newSubmissionSlice = createSlice({
         },
         setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
             state.step04Data.useShippingAddressAsBillingAddress = action.payload;
+        },
+        setDisplayAffirmMethod: (state, action: PayloadAction<boolean>) => {
+            state.displayAffirm = action.payload;
         },
         updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
             // @ts-ignore
@@ -1093,6 +1118,9 @@ export const newSubmissionSlice = createSlice({
             state.confirmedCollectorCoinPayment = action.payload.message === 'Payment verified successfully';
             state.orderTransactionHash = action.payload.transactionHash;
         },
+        [getAffirmPaymentStatus.fulfilled as any]: (state, action) => {
+            state.confirmedAffirmPayment = action.payload.message === 'Payment verified successfully';
+        },
         [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';
         },
@@ -1212,4 +1240,5 @@ export const {
     setStepValidation,
     setShippingMethod,
     initializeShippingMethod,
+    setDisplayAffirmMethod,
 } = newSubmissionSlice.actions;

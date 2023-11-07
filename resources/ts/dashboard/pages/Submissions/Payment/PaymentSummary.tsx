@@ -6,11 +6,12 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import { round } from 'lodash';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAuth } from '@shared/hooks/useAuth';
@@ -25,7 +26,11 @@ import { APIService } from '@shared/services/APIService';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { clearSubmissionState, setPreviewTotal } from '@dashboard/redux/slices/newSubmissionSlice';
+import {
+    clearSubmissionState,
+    setDisplayAffirmMethod,
+    setPreviewTotal,
+} from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -170,11 +175,13 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
+    const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
 
     const { timeInMs, featureOrderWalletCreditPercentage, featureOrderWalletCreditEnabled } = props;
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const paymentMethodCode = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodCode);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const shippingMethod = useAppSelector(
@@ -191,7 +198,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
-    const { collectorCoinDiscountPercentage } = useConfiguration();
+    const { collectorCoinDiscountPercentage, featureOrderPaymentAffirmMinAmount } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
@@ -270,7 +277,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 appliedCredit
             ).toFixed(2),
         );
-
+        dispatch(setDisplayAffirmMethod(previewTotal > featureOrderPaymentAffirmMinAmount));
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }
@@ -364,6 +371,65 @@ export function PaymentSummary(props: PaymentSummaryProps) {
         }
     };
 
+    const handleAffirmPayment = async () => {
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
+        if (!stripe) {
+            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
+            return;
+        }
+        try {
+            setIsStripePaymentLoading(true);
+
+            // Try to charge the customer
+            const res = await endpoint.post('', {
+                paymentByWallet: appliedCredit,
+                paymentMethod: {
+                    id: paymentMethodID,
+                },
+                ...(couponCode && {
+                    coupon: {
+                        code: isCouponApplied ? couponCode : -1,
+                    },
+                    paymentPlan: {
+                        id: originalPaymentPlanId,
+                    },
+                }),
+            });
+
+            setIsStripePaymentLoading(false);
+            dispatch(clearSubmissionState());
+            dispatch(invalidateOrders());
+            const { data } = res;
+            confirmStripeAffirm(data.intent);
+        } catch (err: any) {
+            if (err.response.data.success) {
+                confirmStripeAffirm(err.response.data.paymentIntent);
+            }
+
+            if ('message' in err?.response?.data) {
+                setIsStripePaymentLoading(false);
+                notifications.exception(err, 'Payment Failed');
+            }
+        }
+    };
+
+    const confirmStripeAffirm = useCallback(
+        (intent: string) => {
+            // @ts-ignore
+            stripe.confirmAffirmPayment(intent, {
+                // eslint-disable-next-line camelcase
+                payment_method: {
+                    // eslint-disable-next-line camelcase
+                    billing_details: {},
+                },
+
+                // eslint-disable-next-line camelcase
+                return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
+            });
+        },
+        [orderID, stripe],
+    );
+
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.bodyContainer}>
@@ -382,6 +448,17 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}
                         {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
+                        {paymentMethodCode === PaymentMethodsEnum.STRIPE_AFFIRM && displayAffirm ? (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isStripePaymentLoading || !isCouponValid}
+                                onClick={handleAffirmPayment}
+                                sx={{ height: 48 }}
+                            >
+                                {isStripePaymentLoading ? 'Loading...' : 'PAY WITH AFFIRM'}
+                            </Button>
+                        ) : null}
                     </>
                 </div>
 

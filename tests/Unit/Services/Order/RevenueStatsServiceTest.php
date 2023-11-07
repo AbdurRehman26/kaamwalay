@@ -74,7 +74,11 @@ it('adds daily revenue stats', function () {
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
-    $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth(), now()->addMonth(-1)->endOfMonth()])
+    $startDateTime = Carbon::now()->subDays(1);
+    $monthStart = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->startOfMonth()->setTimezone('UTC');
+    $monthEnd = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
+
+    $orders = Order::whereBetween('created_at', [$monthStart, $monthEnd])
         ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
         ->get();
 
@@ -91,7 +95,7 @@ it('adds monthly revenue stats for the current month', function () {
         )
     );
 
-    $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth());
+    $revenueStats = $this->revenueStatsService->addMonthlyStats($monthStart);
 
     expect($revenue)->toBe($revenueStats['revenue']);
     expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
@@ -112,12 +116,16 @@ it('counts daily paid orders cards', function () {
 })->group('revenue-stats');
 
 it('counts monthly paid orders cards', function () {
+    $startDateTime = Carbon::now()->subDays(1);
+    $monthStart = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->startOfMonth()->setTimezone('UTC');
+    $monthEnd = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
+
     $expectedCardTotal = Order::paid()->join('users', 'users.id', '=', 'orders.user_id')->whereNotIn(
         'users.email',
         Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
     )
         ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+        ->whereBetween('orders.created_at', [$monthStart, $monthEnd])
         ->sum('order_items.quantity');
 
     $cardTotal = $this->revenueStatsService->calculateMonthlyCardsTotal(Carbon::now());

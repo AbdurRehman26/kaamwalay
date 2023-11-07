@@ -64,8 +64,8 @@ it('calculates daily unpaid orders stats', function () {
 
 it('calculates monthly unpaid orders stats for the current month', function () {
     $startDateTime = Carbon::now()->subDay();
-    $monthStart = Carbon::parse($startDateTime)->firstOfMonth();
-    $monthEnd = Carbon::parse($startDateTime)->endOfMonth();
+    $monthStart = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->firstOfMonth()->setTimezone('UTC');
+    $monthEnd = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
 
     $expectedUnpaidTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)->where(function (Builder $query) use ($monthStart, $monthEnd) {
         $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED)->whereBetween('created_at', [$monthStart, $monthEnd]);
@@ -91,14 +91,18 @@ it('counts daily unpaid orders cards', function () {
 })->group('unpaid-orders-stats');
 
 it('counts monthly unpaid orders cards', function () {
+    $startDateTime = Carbon::now()->subDays(1);
+    $monthStart = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->startOfMonth()->setTimezone('UTC');
+    $monthEnd = Carbon::parse($startDateTime->format('Y-m-d'), 'America/New_York')->endOfMonth()->setTimezone('UTC');
+
     $expectedCardTotal = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-        ->whereBetween('orders.created_at', [Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth()])
+        ->whereBetween('orders.created_at', [$monthStart, $monthEnd])
         ->where(function (Builder $query) {
             $query->whereHas('orderCustomerShipment')->orWhere('order_status_id', OrderStatus::CONFIRMED);
         })->sum('order_items.quantity');
 
-    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now()->subDays(1)->startOfMonth(), Carbon::now()->subDays(1)->endOfMonth());
+    $cardTotal = $this->unpaidOrdersStatsService->calculateMonthlyCardsTotal(Carbon::now());
 
     expect((int) $expectedCardTotal)->toBe($cardTotal);
 })->group('unpaid-orders-stats');

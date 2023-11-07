@@ -2,8 +2,10 @@ import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import { ReactComponent as AffirmLogo } from '@shared/assets/affirmLogo.svg';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
+import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch } from '../redux/hooks';
 import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
@@ -99,15 +101,22 @@ type PaymentMethodItemProps = {
     isSelected: boolean;
     methodName: string;
     methodId: number;
+    methodCode: string;
 };
 
 function PaymentMethodItem(props: PaymentMethodItemProps) {
     const classes = useStyles(props);
     const dispatch = useAppDispatch();
-    const { methodName, methodId } = props;
+    const { methodName, methodId, methodCode } = props;
     const { collectorCoinDiscountPercentage } = useConfiguration();
+
     function handleOnChange() {
-        dispatch(updatePaymentMethodId(methodId));
+        dispatch(
+            updatePaymentMethodId({
+                id: methodId,
+                code: methodCode,
+            }),
+        );
     }
 
     return (
@@ -120,8 +129,9 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                 ) : (
                     <div />
                 )}
+                {methodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? <AffirmLogo /> : <div />}
 
-                {methodId === 1 ? (
+                {methodId === 1 || methodCode === PaymentMethodsEnum.STRIPE_AFFIRM ? (
                     <div className={classes.rightSide}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}

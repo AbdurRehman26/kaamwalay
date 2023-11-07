@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.21.0 - 2023-10-05
+
+### What's Changed
+
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1106
+- Fix: Failing Test Cases by @numair97 in https://github.com/woozard/robograding/pull/1101
+- Fix: Admin | Card Management | Image edit issue by @luis-molina in https://github.com/woozard/robograding/pull/1109
+- Fix: Admin & Salesrep | Promo code issue by @numair97 in https://github.com/woozard/robograding/pull/1110
+- Fix: Admin Cards List | Improved speed by @luis-molina in https://github.com/woozard/robograding/pull/1111
+- Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1112
+- Release v3.21.0 by @thenabeel in https://github.com/woozard/robograding/pull/1113
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.20.1...v3.21.0
+
 ## v3.20.1 - 2023-09-12
 
 ### What's Changed

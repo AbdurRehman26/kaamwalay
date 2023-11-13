@@ -136,3 +136,73 @@ body {
         display: flex !important;
     }
 }
+
+.clash-card {
+    background: white;
+    width: 290px;
+    display: inline-block;
+    margin: auto;
+    border-radius: 19px;
+    text-align: center;
+    box-shadow: -1px 15px 30px -12px black;
+}
+
+.clash-card__image {
+    display: inline-block;
+    height: 175px !important;
+
+    .category-logo {
+        margin-top: 35px;
+        max-width: 230px;
+        height: auto;
+        max-height: 70%;
+    }
+}
+
+.clash-card__unit-stats--barbarian {
+    background: rgba(245, 245, 245, 1);
+}
+
+.clash-card__unit-stats {
+    color: black;
+    font-weight: 700;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+
+    .one-third {
+        width: 33%;
+        float: left;
+        padding: 10px 15px;
+    }
+
+    .stat {
+        position: relative;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 24px;
+        letter-spacing: 0.10000000149011612px;
+        text-align: center;
+    }
+
+    .stat-value {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        letter-spacing: 0.10000000149011612px;
+        text-align: center;
+    }
+
+    .no-border {
+        border-right: none;
+    }
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: ' ';
+    clear: both;
+    height: 0;
+}

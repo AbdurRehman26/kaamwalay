@@ -16,27 +16,27 @@
         <div class="container">
             <div class="row">
                 @foreach($categories as $category)
-                    <div class="clash-card barbarian">
+                    <a class="clash-card barbarian">
                         <div class="clash-card__image clash-card__image--barbarian">
                             <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
                         </div>
                         <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
                             <div class="one-third">
-                                <div class="stat">{{ $category->card_sets_count > 1000 ?  round(($category->card_sets_count/1000), 1) . 'K' : $category->card_sets_count }}</div>
+                                <div class="stat">{{ formatNumbers($category->card_sets_count) }}</div>
                                 <div class="stat-value">Sets</div>
                             </div>
 
                             <div class="one-third">
-                                <div class="stat">{{$category->card_products_count}}</div>
+                                <div class="stat">{{ formatNumbers($category->card_products_count) }}</div>
                                 <div class="stat-value">Cards</div>
                             </div>
 
                             <div class="one-third no-border">
-                                <div class="stat">{{$category->graded_cards_count}}</div>
+                                <div class="stat">{{ formatNumbers($category->card_products_sum_population) }}</div>
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>
-                    </div> <!-- end clash-card barbarian-->
+                    </a> <!-- end clash-card barbarian-->
                 @endforeach
                 @if(count($categories) % 4)
                     <div class="category-box category-box-fade display-lg">

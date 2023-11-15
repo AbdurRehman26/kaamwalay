@@ -140,7 +140,8 @@ body {
 .category-card {
     background: white;
     width: 290px;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     margin: auto;
     border-radius: 15px;
     text-align: center;
@@ -153,11 +154,12 @@ body {
 }
 
 .category-card__image {
-    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
     height: 175px !important;
-
+    align-items: center;
     .category-logo {
-        margin-top: 35px;
         max-width: 230px;
         height: auto;
         max-height: 70%;

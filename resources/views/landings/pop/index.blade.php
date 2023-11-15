@@ -27,12 +27,12 @@
                             </div>
 
                             <div class="one-third">
-{{--                                <div class="stat">{{ formatNumbers($category->cardProducts()->count()) }}</div>--}}
+                                <div class="stat">{{ formatNumbers($category->cardProducts()->count()) }}</div>
                                 <div class="stat-value">Cards</div>
                             </div>
 
                             <div class="one-third no-border">
-{{--                                <div class="stat">{{ formatNumbers($category->cardProducts()->sum('population')) }}</div>--}}
+                                <div class="stat">{{ formatNumbers($category->cardProducts()->sum('population')) }}</div>
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>

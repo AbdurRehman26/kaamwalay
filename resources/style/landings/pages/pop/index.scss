@@ -137,7 +137,7 @@ body {
     }
 }
 
-.clash-card {
+.category-card {
     background: white;
     width: 290px;
     display: inline-block;
@@ -147,7 +147,7 @@ body {
     box-shadow: -1px 15px 30px -12px black;
 }
 
-.clash-card__image {
+.category-card__image {
     display: inline-block;
     height: 175px !important;
 
@@ -159,11 +159,8 @@ body {
     }
 }
 
-.clash-card__unit-stats--barbarian {
+.category-card--unit-stats {
     background: rgba(245, 245, 245, 1);
-}
-
-.clash-card__unit-stats {
     color: black;
     font-weight: 700;
     border-bottom-left-radius: 14px;

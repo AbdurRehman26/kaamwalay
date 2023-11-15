@@ -65,6 +65,34 @@
         &-series-subheading {
             font-size: 14px;
         }
+
+        &-stats {
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 550px;
+            border-radius: 8px;
+            display: flex;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.10000000149011612px;
+            text-align: center;
+            @include breakpoints.down(sm) {
+                width: 100%;
+            }
+        }
+
+        &-stat-column {
+            text-align: center;
+            width: 33%;
+            padding: 10px;
+            display: inline-grid;
+        }
+
+        &-stat-column.with-right-border {
+            height: 72px;
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+        }
     }
 
     &__splash {

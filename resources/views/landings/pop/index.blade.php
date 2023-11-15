@@ -16,11 +16,11 @@
         <div class="container">
             <div class="row">
                 @foreach($categories as $category)
-                    <a class="clash-card barbarian">
-                        <div class="clash-card__image clash-card__image--barbarian">
+                    <a href="{{route('pop.categories', ['cardCategory' => $category])}}" class="category-card barbarian">
+                        <div class="category-card__image">
                             <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
                         </div>
-                        <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
+                        <div class="category-card--unit-stats category-card--unit-stats clearfix">
                             <div class="one-third">
                                 <div class="stat">{{ formatNumbers($category->card_sets_count) }}</div>
                                 <div class="stat-value">Sets</div>
@@ -36,7 +36,7 @@
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>
-                    </a> <!-- end clash-card barbarian-->
+                    </a>
                 @endforeach
                 @if(count($categories) % 4)
                     <div class="category-box category-box-fade display-lg">

@@ -6,6 +6,34 @@
                      alt="{{$cardCategory->name}}">
                 <h1 class="pop-hero__text-heading">{{ $cardCategory->name }} POP Report</h1>
                 <h2 class="pop-hero__text-subheading">A record of all {{ $cardCategory->name }} cards Robograded by AGS.</h2>
+
+                <h2 class="pop-hero__text-subheading pop-hero__text-stats">
+                    <span class="pop-hero__text-stat-column with-right-border">
+                        <span>
+                            {{ formatNumbers($cardCategory->cardSets()->count()) }}
+                        </span>
+                        <span>
+                            Sets
+                        </span>
+                    </span>
+                    <span class="pop-hero__text-stat-column with-right-border">
+                        <span>
+                            {{ formatNumbers($cardCategory->cardProducts()->count()) }}
+                        </span>
+                        <span>
+                            Cards
+                        </span>
+                    </span>
+                    <span class="pop-hero__text-stat-column">
+                        <span>
+                            {{ formatNumbers($cardCategory->cardProducts()->sum('population')) }}
+                        </span>
+                        <span>
+                            Graded
+                        </span>
+                    </span>
+                </h2>
+
             </aside>
         </div>
     </section>

@@ -142,9 +142,14 @@ body {
     width: 290px;
     display: inline-block;
     margin: auto;
-    border-radius: 19px;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: -1px 15px 30px -12px black;
+    border: 0 solid #e5e7eb;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
+    @include breakpoints.down(md) {
+        width: 85%;
+        margin-top: 30px;
+    }
 }
 
 .category-card__image {

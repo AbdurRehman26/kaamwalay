@@ -1,7 +1,11 @@
+import CheckBoxOutlineBlankSharpIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { PropsWithChildren } from 'react';
-import { Link } from 'react-router-dom';
+import React, { MouseEventHandler, PropsWithChildren, useCallback, useState } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';
@@ -32,6 +36,25 @@ const useStyles = makeStyles(
             borderRadius: 5,
             boxShadow: theme.shadows[2],
         },
+        kebabMenuIcon: {
+            background: 'white !important',
+            top: 8,
+            right: 8,
+            padding: '4px 5px 5px 6px',
+            position: 'absolute',
+            borderRadius: 4,
+            backgroundColor: 'white',
+            zIndex: 99999,
+        },
+        checkBoxIcon: {
+            color: 'rgba(0, 0, 0, 0.54)',
+            top: 8,
+            left: 8,
+            padding: '4px 5px 5px 6px',
+            position: 'absolute',
+            borderRadius: 4,
+            background: 'white !important',
+        },
         gradeScore: {
             position: 'absolute',
             right: 0,
@@ -45,6 +68,7 @@ const useStyles = makeStyles(
             color: theme.palette.primary.contrastText,
         },
         imageHolder: {
+            cursor: 'pointer',
             position: 'relative',
         },
         image: {
@@ -61,6 +85,7 @@ const useStyles = makeStyles(
             padding: '8px 12px',
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            textDecoration: 'none',
         },
         headline: {
             marginBottom: 3,
@@ -89,18 +114,48 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
     const { id, image, grade, certification, name, description, shortName } = props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
+    const [displayIcon, setDisplayIcon] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
 
-    const linkProps: Record<string, any> = { className: classes.root };
-    const LinkComponent: any = onlyImage ? 'div' : Link;
-    if (!onlyImage) {
-        linkProps.to = `/cards/${id}/view`;
-    }
+    const handleClickOptions = useCallback<MouseEventHandler>(
+        (e) => {
+            e.stopPropagation();
+            setAnchorEl(e.target as Element);
+        },
+        [setAnchorEl],
+    );
 
     return (
-        <LinkComponent {...linkProps}>
-            <div className={classes.imageHolder}>
+        <div
+            onMouseLeave={() => {
+                setDisplayIcon(false);
+            }}
+            onMouseEnter={() => {
+                setDisplayIcon(true);
+            }}
+            className={classes.root}
+        >
+            <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.imageHolder}>
                 <img src={image} alt={name} className={classes.image} />
-            </div>
+            </a>
+            {!onlyImage && grade && displayIcon ? (
+                <IconButton className={classes.checkBoxIcon} size="large">
+                    <CheckBoxOutlineBlankSharpIcon />
+                </IconButton>
+            ) : null}
+            {!onlyImage && grade && displayIcon ? (
+                <IconButton onClick={handleClickOptions} className={classes.kebabMenuIcon} size="large">
+                    <MoreIcon />
+                </IconButton>
+            ) : null}
+
+            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                <>
+                    <MenuItem>{'Transfer Ownership'}</MenuItem>
+                </>
+            </Menu>
+
             {!onlyImage && grade ? (
                 <div className={classes.gradeScore}>
                     <Typography color={'textPrimary'} variant={'body1'} className={classes.gradeScoreText}>
@@ -109,7 +164,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                 </div>
             ) : null}
             {!onlyImage ? (
-                <div className={classes.content}>
+                <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.content}>
                     <Typography
                         color={'textPrimary'}
                         variant={'body2'}
@@ -141,10 +196,10 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                         <span className={font.fontWeightMedium}>{isGraded ? 'Certificate #:' : 'Grade Pending'}</span>
                         {isGraded ? <span>{certification}</span> : null}
                     </Typography>
-                </div>
+                </a>
             ) : null}
             {children}
-        </LinkComponent>
+        </div>
     );
 }
 

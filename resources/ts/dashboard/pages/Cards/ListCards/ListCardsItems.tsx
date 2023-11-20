@@ -1,3 +1,4 @@
+import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
 import SortIcon from '@mui/icons-material/Sort';
 import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 import Box from '@mui/material/Box';
@@ -228,6 +229,16 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                         <MenuItem value={'date'}>Date (Newest)</MenuItem>
                         <MenuItem value={'-date'}>Date (Oldest)</MenuItem>
                     </StyledSelect>
+                    <Button
+                        sx={{ borderRadius: 5 }}
+                        component={Link}
+                        to={'/submissions/new'}
+                        color={'primary'}
+                        variant={'outlined'}
+                        startIcon={<LibraryAddCheckOutlinedIcon />}
+                    >
+                        Submit
+                    </Button>
                 </Grid>
             </Box>
             <Grid container spacing={1} className={classes.tableMargin}>

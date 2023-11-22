@@ -1,41 +1,26 @@
+import CheckBoxOutlineBlankSharpIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
 import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
-import SortIcon from '@mui/icons-material/Sort';
 import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { default as TextLink } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactGA from 'react-ga4';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
-import { bracketParams } from '@shared/lib/api/bracketParams';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
-import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
-import { font } from '@shared/styles/utils';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
-
-const StyledSelect = styled(Select)(
-    {
-        marginLeft: 8,
-        fontWeight: 500,
-        fontSize: '14px',
-        '&:before': {
-            display: 'none',
-        },
-    },
-    { name: 'StyledSelect' },
-);
 
 const StyledBox = styled(Box)(
     {
@@ -79,54 +64,14 @@ const useStyles = makeStyles(
 );
 interface ListCardsItemsProps {
     search?: string;
+    userCards$: any;
 }
 
-export function ListCardItems({ search }: ListCardsItemsProps) {
-    const [sortFilter, setSortFilter] = useState('date');
+export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
-
-    const userCards$ = useListUserCardsQuery({
-        params: {
-            sort: sortFilter,
-            filter: {
-                search,
-            },
-            perPage: 48,
-        },
-        ...bracketParams(),
-    });
-    const handleSortChange = useCallback((event) => setSortFilter(event.target.value), [setSortFilter]);
-
-    // Fetch sorted cards based on the selected sort option
-    useEffect(
-        () => {
-            if (!userCards$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
-                userCards$.sort({ sort: sortFilter });
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortFilter],
-    );
-
-    // Search cards based on the user input & return them sorted based on the selected sort option
-    useEffect(
-        () => {
-            if (!userCards$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
-                userCards$.searchSorted({ sort: sortFilter }, { search });
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search],
-    );
-
-    useEffect(() => {
-        setIsSearchEnabled(true);
-    }, []);
+    const [displaySelectButtons, setDisplaySelectButtons] = useState(true);
 
     function handleOnClick() {
         ReactGA.event({
@@ -149,7 +94,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
         );
     }
 
-    const items$ = userCards$?.data?.map((userCard: any, index) => (
+    const items$ = userCards$?.data?.map((userCard: any, index: any) => (
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
                 id={userCard?.id}
@@ -219,26 +164,40 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     return (
         <>
             <Box display={'flex'} alignItems={'center'} width={'100%'} paddingBottom={4}>
-                {!isSm ? <Typography variant={'subtitle2'}>Graded Cards</Typography> : null}
+                {displaySelectButtons ? (
+                    !isSm ? (
+                        <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
+                    ) : null
+                ) : (
+                    <>
+                        <IconButton size="large">
+                            <CheckBoxOutlineBlankSharpIcon />
+                        </IconButton>
+                        <Typography variant={'subtitle2'}>Select all cards on this page - </Typography>
+                        <TextLink
+                            sx={{ marginLeft: 1, color: 'black' }}
+                            component={'button'}
+                            variant="body2"
+                            onClick={() => {
+                                console.info("I'm a button.");
+                            }}
+                        >
+                            Select All
+                        </TextLink>
+                    </>
+                )}
                 <Grid container item xs alignItems={'center'} justifyContent={isSm ? 'flex-start' : 'flex-end'}>
-                    <SortIcon color={'disabled'} />
-                    <Typography variant={'body2'} color={'textSecondary'} className={font.fontWeightMedium}>
-                        Sort By:
-                    </Typography>
-                    <StyledSelect value={sortFilter} variant="standard" onChange={handleSortChange}>
-                        <MenuItem value={'date'}>Date (Newest)</MenuItem>
-                        <MenuItem value={'-date'}>Date (Oldest)</MenuItem>
-                    </StyledSelect>
-                    <Button
-                        sx={{ borderRadius: 5 }}
-                        component={Link}
-                        to={'/submissions/new'}
-                        color={'primary'}
-                        variant={'outlined'}
-                        startIcon={<LibraryAddCheckOutlinedIcon />}
-                    >
-                        Submit
-                    </Button>
+                    {items$.length && (
+                        <Button
+                            onClick={() => setDisplaySelectButtons(!displaySelectButtons)}
+                            sx={{ borderRadius: 24, padding: '10px 15px 10px 15px' }}
+                            color={'primary'}
+                            variant={'outlined'}
+                            startIcon={displaySelectButtons ? <LibraryAddCheckOutlinedIcon /> : null}
+                        >
+                            {displaySelectButtons ? 'Select Cards' : 'Cancel'}
+                        </Button>
+                    )}
                 </Grid>
             </Box>
             <Grid container spacing={1} className={classes.tableMargin}>

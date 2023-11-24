@@ -1,8 +1,8 @@
-import CheckBoxOutlineBlankSharpIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
 import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
 import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
@@ -13,14 +13,16 @@ import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { UserCardEntity } from '@shared/entities/UserCardEntity';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
+import { TransferCardsDialog } from '../ListCards/TransferCards';
 
 const StyledBox = styled(Box)(
     {
@@ -57,6 +59,19 @@ const useStyles = makeStyles(
             borderRadius: 24,
             padding: '12px 24px',
         },
+        checkBoxIcon: {
+            color: 'rgba(0, 0, 0, 0.54)',
+            top: 8,
+            left: 8,
+            padding: '0px',
+            position: 'absolute',
+        },
+        checkBox: {
+            borderRadius: 4,
+            background: 'white !important',
+            padding: 5,
+            boxShadow: theme.shadows[3],
+        },
     }),
     {
         name: 'ListCardsItemsStyles',
@@ -71,7 +86,38 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const [displaySelectButtons, setDisplaySelectButtons] = useState(true);
+    const [displaySelectButtons, setDisplaySelectButtons] = useState(false);
+    const [showTransferDialog, setShowTransferDialog] = useState(true);
+    const [userCardIds, setUserCardIds] = useState<[number?]>([]);
+    const [allSelected, setAllSelected] = useState(false);
+    const [, updateState] = React.useState();
+    // @ts-ignore
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+
+    const handleSelectClick = (id: number) => {
+        const selectedIndex = userCardIds.indexOf(id);
+        if (selectedIndex === -1) {
+            setDisplaySelectButtons(true);
+            userCardIds.push(id);
+        } else {
+            userCardIds.splice(selectedIndex, 1);
+        }
+        forceUpdate();
+    };
+
+    const isSelected = (selectedRowId: number) => {
+        return userCardIds.indexOf(selectedRowId) !== -1;
+    };
+
+    const handleSelectAll = () => {
+        if (!allSelected && !userCardIds.length) {
+            setUserCardIds(userCards$.data.map((userCard: UserCardEntity) => userCard.id));
+            setAllSelected(true);
+            return;
+        }
+        setUserCardIds([]);
+        setAllSelected(false);
+    };
 
     function handleOnClick() {
         ReactGA.event({
@@ -81,6 +127,10 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
         googleTagManager({ event: 'google-ads-started-submission-process' });
         navigate('/submissions/new');
     }
+
+    const handleClose = useCallback(() => {
+        setShowTransferDialog(false);
+    }, []);
 
     if (userCards$.isLoading || userCards$.isError) {
         return (
@@ -97,6 +147,16 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const items$ = userCards$?.data?.map((userCard: any, index: any) => (
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
+                selectedIds={userCardIds}
+                CheckBox={
+                    <IconButton className={classes.checkBoxIcon} size="large">
+                        <Checkbox
+                            className={classes.checkBox}
+                            onClick={() => handleSelectClick(userCard.id)}
+                            checked={isSelected(userCard.id)}
+                        />
+                    </IconButton>
+                }
                 id={userCard?.id}
                 image={userCard?.cardProduct?.imagePath}
                 name={userCard?.cardProduct?.name}
@@ -163,26 +223,40 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
 
     return (
         <>
+            <TransferCardsDialog
+                selectedUserCardIds={userCardIds}
+                userCards={userCards$}
+                open={showTransferDialog}
+                onClose={handleClose}
+            />
+
             <Box display={'flex'} alignItems={'center'} width={'100%'} paddingBottom={4}>
-                {displaySelectButtons ? (
+                {!displaySelectButtons ? (
                     !isSm ? (
                         <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
                     ) : null
                 ) : (
                     <>
                         <IconButton size="large">
-                            <CheckBoxOutlineBlankSharpIcon />
+                            <Checkbox
+                                sx={{ margin: 0, padding: 0 }}
+                                onClick={handleSelectAll}
+                                checked={allSelected}
+                                indeterminate={userCardIds.length > 0}
+                            />
                         </IconButton>
-                        <Typography variant={'subtitle2'}>Select all cards on this page - </Typography>
+                        <Typography variant={'subtitle2'}>
+                            {!userCardIds.length
+                                ? 'Select all cards on this page - '
+                                : `${userCardIds.length} Cards Selected - `}
+                        </Typography>
                         <TextLink
-                            sx={{ marginLeft: 1, color: 'black' }}
+                            sx={{ color: 'black', marginLeft: 1 }}
                             component={'button'}
                             variant="body2"
-                            onClick={() => {
-                                console.info("I'm a button.");
-                            }}
+                            onClick={handleSelectAll}
                         >
-                            Select All
+                            {userCardIds.length ? ' Unselect All' : ' Select All'}
                         </TextLink>
                     </>
                 )}
@@ -193,11 +267,21 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                             sx={{ borderRadius: 24, padding: '10px 15px 10px 15px' }}
                             color={'primary'}
                             variant={'outlined'}
-                            startIcon={displaySelectButtons ? <LibraryAddCheckOutlinedIcon /> : null}
+                            startIcon={!displaySelectButtons ? <LibraryAddCheckOutlinedIcon /> : null}
                         >
-                            {displaySelectButtons ? 'Select Cards' : 'Cancel'}
+                            {!displaySelectButtons ? 'Select Cards' : 'Cancel'}
                         </Button>
                     )}
+                    {userCardIds.length ? (
+                        <Button
+                            onClick={() => setDisplaySelectButtons(!displaySelectButtons)}
+                            sx={{ marginLeft: '10px', borderRadius: 24, padding: '10px 15px 10px 15px' }}
+                            color={'primary'}
+                            variant={'contained'}
+                        >
+                            TRANSFER OWNERSHIP
+                        </Button>
+                    ) : null}
                 </Grid>
             </Box>
             <Grid container spacing={1} className={classes.tableMargin}>

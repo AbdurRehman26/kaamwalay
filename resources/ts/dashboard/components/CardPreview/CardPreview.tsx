@@ -1,4 +1,3 @@
-import CheckBoxOutlineBlankSharpIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -23,6 +22,8 @@ type CardPreviewProps = {
     description: string;
     certification: string;
     grade?: string;
+    CheckBox: React.ReactNode;
+    selectedIds: [number?];
 };
 
 const useStyles = makeStyles(
@@ -45,15 +46,6 @@ const useStyles = makeStyles(
             borderRadius: 4,
             backgroundColor: 'white',
             zIndex: 99999,
-        },
-        checkBoxIcon: {
-            color: 'rgba(0, 0, 0, 0.54)',
-            top: 8,
-            left: 8,
-            padding: '4px 5px 5px 6px',
-            position: 'absolute',
-            borderRadius: 4,
-            background: 'white !important',
         },
         gradeScore: {
             position: 'absolute',
@@ -111,7 +103,8 @@ const useStyles = makeStyles(
  */
 export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps | CardPreviewProps>) {
     const { children, onlyImage } = props as PropsWithChildren<CardPreviewOnlyImageProps>;
-    const { id, image, grade, certification, name, description, shortName } = props as CardPreviewProps;
+    const { id, image, grade, certification, name, description, shortName, CheckBox, selectedIds } =
+        props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
     const [displayIcon, setDisplayIcon] = useState(false);
@@ -139,11 +132,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
             <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.imageHolder}>
                 <img src={image} alt={name} className={classes.image} />
             </a>
-            {!onlyImage && grade && displayIcon ? (
-                <IconButton className={classes.checkBoxIcon} size="large">
-                    <CheckBoxOutlineBlankSharpIcon />
-                </IconButton>
-            ) : null}
+            {!onlyImage && grade && (displayIcon || selectedIds.length) ? CheckBox : null}
             {!onlyImage && grade && displayIcon ? (
                 <IconButton onClick={handleClickOptions} className={classes.kebabMenuIcon} size="large">
                     <MoreIcon />

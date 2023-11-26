@@ -46,14 +46,13 @@ const useStyles = makeStyles(
             position: 'absolute',
             borderRadius: 4,
             backgroundColor: 'white',
-            zIndex: 99999,
         },
         gradeScore: {
             position: 'absolute',
             right: 0,
             top: 0,
-            padding: '4px 8px',
-            borderRadius: '0 0 0 5px',
+            padding: '3px 15px',
+            borderRadius: '0 0 0 8px',
             backgroundColor: theme.palette.primary.main,
         },
         gradeScoreText: {
@@ -164,7 +163,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                 </>
             </Menu>
 
-            {!onlyImage && grade ? (
+            {!onlyImage && grade && !displayIcon ? (
                 <div className={classes.gradeScore}>
                     <Typography color={'textPrimary'} variant={'body1'} className={classes.gradeScoreText}>
                         {grade}

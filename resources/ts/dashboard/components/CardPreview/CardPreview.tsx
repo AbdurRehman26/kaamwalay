@@ -30,6 +30,7 @@ type CardPreviewProps = {
 const useStyles = makeStyles(
     (theme) => ({
         root: {
+            background: 'rgba(244, 244, 244, 1)',
             color: theme.palette.text.primary,
             display: 'flex',
             flexDirection: 'column',
@@ -37,9 +38,12 @@ const useStyles = makeStyles(
             overflow: 'hidden',
             borderRadius: 5,
             boxShadow: theme.shadows[2],
+            alignItems: 'center',
+            height: '290px',
         },
         kebabMenuIcon: {
-            background: 'white !important',
+            background: 'rgba(244, 244, 244, 1)',
+            boxShadow: theme.shadows[2],
             top: 8,
             right: 8,
             padding: '4px 5px 5px 6px',
@@ -64,17 +68,18 @@ const useStyles = makeStyles(
             position: 'relative',
         },
         image: {
-            width: '100%',
-            height: 'auto',
+            height: '158px',
+            width: '120px',
             display: 'block',
+            margin: '20px 0px 10px 0px',
+            zIndex: -99999,
         },
         content: {
             display: 'flex',
             flexDirection: 'column',
-            position: 'absolute',
             left: 0,
             bottom: 0,
-            padding: '8px 12px',
+            padding: '10px 12px',
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             textDecoration: 'none',

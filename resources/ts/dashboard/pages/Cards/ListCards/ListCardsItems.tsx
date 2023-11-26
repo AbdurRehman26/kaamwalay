@@ -180,20 +180,19 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                 },
             });
             if (confirmation) {
-                dispatch(
+                await dispatch(
                     changeUserCardOwnerShip({
                         userCardIds: userCardIds,
                         userId: user.id,
                     }),
                 );
-                console.log('confirm');
+                userCards$.search();
                 return;
             }
-            console.log('cancel');
             setAllSelected(false);
             setUserCardIds([]);
         },
-        [confirm, dispatch, userCardIds],
+        [confirm, dispatch, userCardIds, userCards$],
     );
 
     if (userCards$.isLoading || userCards$.isError) {

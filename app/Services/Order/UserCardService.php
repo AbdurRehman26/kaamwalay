@@ -422,4 +422,13 @@ class UserCardService
             $userCard->save();
         });
     }
+
+    public function changeOwnership(array $data): void
+    {
+        $userCardsQuery = UserCard::whereIn('id', $data['user_card_ids']);
+
+        $userCardsQuery->update(['user_id' => $data['user_id']]);
+
+        $userCardsQuery->searchable();
+    }
 }

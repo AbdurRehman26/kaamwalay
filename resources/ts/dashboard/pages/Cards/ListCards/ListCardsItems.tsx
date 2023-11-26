@@ -10,8 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import { default as TextLink } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { Theme, styled } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
@@ -89,7 +88,6 @@ interface ListCardsItemsProps {
 export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
-    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const [displaySelectButtons, setDisplaySelectButtons] = useState(false);
     const [showTransferDialog, setShowTransferDialog] = useState(false);
     const [userCardIds, setUserCardIds] = useState<[number?]>([]);
@@ -297,11 +295,9 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
 
             <Box display={'flex'} alignItems={'center'} width={'100%'} paddingBottom={4}>
                 {!displaySelectButtons ? (
-                    !isSm ? (
-                        <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
-                    ) : null
+                    <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
                 ) : (
-                    <>
+                    <Box>
                         <IconButton size="large">
                             <Checkbox
                                 sx={{ margin: 0, padding: 0 }}
@@ -323,9 +319,9 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                         >
                             {userCardIds.length ? ' Unselect All' : ' Select All'}
                         </TextLink>
-                    </>
+                    </Box>
                 )}
-                <Grid container item xs alignItems={'center'} justifyContent={isSm ? 'flex-start' : 'flex-end'}>
+                <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
                     {items$.length && (
                         <Button
                             onClick={handleAllAndCancel}

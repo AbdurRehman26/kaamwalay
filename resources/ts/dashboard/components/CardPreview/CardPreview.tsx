@@ -24,6 +24,7 @@ type CardPreviewProps = {
     grade?: string;
     CheckBox: React.ReactNode;
     selectedIds: [number?];
+    handleTransferOwnerShip: any;
 };
 
 const useStyles = makeStyles(
@@ -103,8 +104,18 @@ const useStyles = makeStyles(
  */
 export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps | CardPreviewProps>) {
     const { children, onlyImage } = props as PropsWithChildren<CardPreviewOnlyImageProps>;
-    const { id, image, grade, certification, name, description, shortName, CheckBox, selectedIds } =
-        props as CardPreviewProps;
+    const {
+        id,
+        image,
+        grade,
+        certification,
+        name,
+        description,
+        shortName,
+        CheckBox,
+        selectedIds,
+        handleTransferOwnerShip,
+    } = props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
     const [displayIcon, setDisplayIcon] = useState(false);
@@ -117,6 +128,14 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
             setAnchorEl(e.target as Element);
         },
         [setAnchorEl],
+    );
+
+    const handleTransferOwner = useCallback(
+        (id) => {
+            setAnchorEl(null);
+            handleTransferOwnerShip(id);
+        },
+        [handleTransferOwnerShip],
     );
 
     return (
@@ -141,7 +160,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
 
             <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                 <>
-                    <MenuItem>{'Transfer Ownership'}</MenuItem>
+                    <MenuItem onClick={() => handleTransferOwner(id)}>{'Transfer Ownership'}</MenuItem>
                 </>
             </Menu>
 

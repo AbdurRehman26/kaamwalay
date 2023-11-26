@@ -15,12 +15,16 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { UserCardEntity } from '@shared/entities/UserCardEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import { changeUserCardOwnerShip } from '@shared/redux/slices/userCardsSlice';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
 import { TransferCardsDialog } from '../ListCards/TransferCards';
 
@@ -87,14 +91,16 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const [displaySelectButtons, setDisplaySelectButtons] = useState(false);
-    const [showTransferDialog, setShowTransferDialog] = useState(true);
+    const [showTransferDialog, setShowTransferDialog] = useState(false);
     const [userCardIds, setUserCardIds] = useState<[number?]>([]);
     const [allSelected, setAllSelected] = useState(false);
     const [, updateState] = React.useState();
     // @ts-ignore
     const forceUpdate = React.useCallback(() => updateState({}), []);
+    const confirm = useConfirmation();
+    const dispatch = useDispatch();
 
-    const handleSelectClick = (id: number) => {
+    const handleSelectClick = async (id: number) => {
         const selectedIndex = userCardIds.indexOf(id);
         if (selectedIndex === -1) {
             setDisplaySelectButtons(true);
@@ -119,6 +125,14 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
         setAllSelected(false);
     };
 
+    const handleAllAndCancel = () => {
+        if (userCardIds.length) {
+            setUserCardIds([]);
+            setAllSelected(false);
+        }
+        setDisplaySelectButtons(!displaySelectButtons);
+    };
+
     function handleOnClick() {
         ReactGA.event({
             category: EventCategories.Submissions,
@@ -129,8 +143,58 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     }
 
     const handleClose = useCallback(() => {
+        setUserCardIds([]);
+        setAllSelected(false);
         setShowTransferDialog(false);
+        setDisplaySelectButtons(false);
     }, []);
+
+    const handleTransferOneOwnerShip = useCallback((id) => {
+        setUserCardIds([id]);
+        setShowTransferDialog(true);
+    }, []);
+
+    const handleSubmit = useCallback(
+        async (user: UserEntity) => {
+            setShowTransferDialog(false);
+            let confirmation = false;
+            confirmation = await confirm({
+                title: 'Are you sure you want to transfer ownership?',
+                message:
+                    'Once you transfer ownership of these cards, they will instantly be transferred to the user you selected. They will no longer be visible on your account. The only way for them to be restored to your account is for the recipient to transfer ownership back to you.',
+                confirmText: 'CONFIRM TRANSFER',
+                confirmButtonProps: {
+                    variant: 'contained',
+                    sx: {
+                        margin: '20px',
+                        padding: '10px',
+                    },
+                },
+                cancelButtonProps: {
+                    sx: {
+                        color: 'black',
+                    },
+                },
+                dialogProps: {
+                    maxWidth: 'sm',
+                },
+            });
+            if (confirmation) {
+                dispatch(
+                    changeUserCardOwnerShip({
+                        userCardIds: userCardIds,
+                        userId: user.id,
+                    }),
+                );
+                console.log('confirm');
+                return;
+            }
+            console.log('cancel');
+            setAllSelected(false);
+            setUserCardIds([]);
+        },
+        [confirm, dispatch, userCardIds],
+    );
 
     if (userCards$.isLoading || userCards$.isError) {
         return (
@@ -148,6 +212,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
                 selectedIds={userCardIds}
+                handleTransferOwnerShip={handleTransferOneOwnerShip}
                 CheckBox={
                     <IconButton className={classes.checkBoxIcon} size="large">
                         <Checkbox
@@ -224,8 +289,9 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     return (
         <>
             <TransferCardsDialog
+                handleSubmit={handleSubmit}
                 selectedUserCardIds={userCardIds}
-                userCards={userCards$}
+                userCards={userCards$.data}
                 open={showTransferDialog}
                 onClose={handleClose}
             />
@@ -263,7 +329,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                 <Grid container item xs alignItems={'center'} justifyContent={isSm ? 'flex-start' : 'flex-end'}>
                     {items$.length && (
                         <Button
-                            onClick={() => setDisplaySelectButtons(!displaySelectButtons)}
+                            onClick={handleAllAndCancel}
                             sx={{ borderRadius: 24, padding: '10px 15px 10px 15px' }}
                             color={'primary'}
                             variant={'outlined'}
@@ -274,7 +340,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                     )}
                     {userCardIds.length ? (
                         <Button
-                            onClick={() => setDisplaySelectButtons(!displaySelectButtons)}
+                            onClick={() => setShowTransferDialog(true)}
                             sx={{ marginLeft: '10px', borderRadius: 24, padding: '10px 15px 10px 15px' }}
                             color={'primary'}
                             variant={'contained'}

@@ -21,7 +21,12 @@ export function ConfirmationDialog() {
     const { onClick: onConfirm, ...confirmProps } = state.confirmButtonProps ?? {};
 
     return (
-        <Dialog open={state.isOpen} onClose={state.reject} fullWidth maxWidth={'xs'}>
+        <Dialog
+            open={state.isOpen}
+            onClose={state.reject}
+            fullWidth
+            maxWidth={state.dialogProps.maxWidth ? state.dialogProps.maxWidth : 'xs'}
+        >
             <DialogTitle>{state.title}</DialogTitle>
             {state.message && (
                 <DialogContent>

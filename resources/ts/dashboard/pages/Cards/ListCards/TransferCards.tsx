@@ -1,6 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
@@ -36,20 +37,27 @@ const useStyles = makeStyles({
         objectPosition: 'center center',
     },
 });
-interface TransferCardsDialogProps extends Omit<DialogProps, 'onSubmit'> {
+interface TransferCardsDialogProps extends DialogProps {
     changeCustomer?: boolean;
     userCards: any;
     selectedUserCardIds: [number?];
+    handleSubmit: any;
 }
+
 const debouncedFunc = debounce((func: () => void) => func(), 300);
 
-export function TransferCardsDialog(props: TransferCardsDialogProps) {
-    const { onClose, ...rest } = props;
+export function TransferCardsDialog({
+    onClose,
+    handleSubmit,
+    userCards,
+    selectedUserCardIds,
+    ...rest
+}: TransferCardsDialogProps) {
     const [search, setSearch] = useState('');
-    const [showCards, setShowCards] = useState(true);
+    const [showCards, setShowCards] = useState(false);
     const classes = useStyles();
-    const { userCards, selectedUserCardIds } = props;
     const firstCard = find(userCards, { id: selectedUserCardIds[0] });
+    const [user, setUser] = useState<UserEntity | null>(null);
 
     const customers = useAdminCustomersQuery({
         ...bracketParams(),
@@ -70,10 +78,18 @@ export function TransferCardsDialog(props: TransferCardsDialogProps) {
             if (onClose) {
                 onClose(event, 'escapeKeyDown');
             }
+            setShowCards(false);
             setSearch('');
+            setUser(null);
         },
         [onClose],
     );
+
+    const onSubmit = useCallback(() => {
+        handleSubmit(user);
+        setUser(null);
+        setSearch('');
+    }, [handleSubmit, user]);
 
     return (
         <Dialog {...rest} fullWidth onClose={handleClose}>
@@ -88,7 +104,7 @@ export function TransferCardsDialog(props: TransferCardsDialogProps) {
                         <ArrowBackIcon />
                     </IconButton>
                 )}
-                {showCards ? 'Cards in Transfer' : `Transfer Ownership of ${props.selectedUserCardIds?.length} Cards`}
+                {showCards ? 'Cards in Transfer' : `Transfer Ownership of ${selectedUserCardIds?.length} Cards`}
                 <IconButton
                     sx={{
                         position: 'absolute',
@@ -109,111 +125,172 @@ export function TransferCardsDialog(props: TransferCardsDialogProps) {
                             <Box display={'flex'} alignItems={'center'}>
                                 <img
                                     className={classes.productImage}
-                                    src={firstCard.cardProduct?.imagePath}
-                                    alt={firstCard.cardProduct?.imagePath}
+                                    src={firstCard.cardProduct.imagePath}
+                                    alt={firstCard.cardProduct.imagePath}
                                 />
-                                {firstCard.cardProduct.shortName}
-                                {selectedUserCardIds.length > 1 ? `+ ${selectedUserCardIds.length - 1} More` : ''}
+                                {firstCard.cardProduct.name}
+                                {selectedUserCardIds.length > 1 ? (
+                                    <Link
+                                        sx={{ color: 'black', marginLeft: 1, textDecoration: 'underline !important' }}
+                                        component={'button'}
+                                        variant="body2"
+                                        underline={'always'}
+                                        onClick={() => setShowCards(true)}
+                                    >
+                                        +{selectedUserCardIds.length - 1} More{' '}
+                                    </Link>
+                                ) : (
+                                    ''
+                                )}
                             </Box>
                         ) : null}
-                        <Grid mt={2} mb={2}>
-                            <Typography variant={'body1'} className={font.fontWeightMedium}>
-                                Select user to transfer
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                variant={'outlined'}
-                                size={'small'}
-                                placeholder={'Search users...'}
-                                value={search}
-                                onChange={(e) => handleSearch(e)}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position={'start'}>
-                                            <SearchIcon color={'disabled'} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                        {customers.data.length > 0 && search !== '' ? (
-                            <Typography sx={{ fontSize: '12px', fontWeight: 500, color: '#000000DE' }}>
-                                {' '}
-                                {customers.data.length} results{' '}
-                            </Typography>
-                        ) : null}
+                        {!user ? (
+                            <>
+                                <Grid mt={2} mb={2}>
+                                    <Typography variant={'body1'} className={font.fontWeightMedium}>
+                                        Select user to transfer to
+                                    </Typography>
+                                    <TextField
+                                        fullWidth
+                                        variant={'outlined'}
+                                        size={'small'}
+                                        placeholder={'Search users...'}
+                                        value={search}
+                                        onChange={(e) => handleSearch(e)}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position={'start'}>
+                                                    <SearchIcon color={'disabled'} />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                </Grid>
+                                {customers.data.length > 0 && search !== '' ? (
+                                    <Typography sx={{ fontSize: '12px', fontWeight: 500, color: '#000000DE' }}>
+                                        {' '}
+                                        {customers.data.length} results{' '}
+                                    </Typography>
+                                ) : null}
 
-                        <Grid
-                            mt={1}
-                            mb={1.5}
-                            maxHeight={'400px'}
-                            sx={{ overflowY: 'auto', scrollbarGutter: 'auto', scrollbarWidth: 'none' }}
-                        >
-                            {search !== '' &&
-                                customers.data.map((customer: UserEntity) => {
-                                    return (
-                                        <Grid
-                                            key={customer.id}
-                                            container
-                                            flexDirection={'row'}
-                                            justifyContent={'space-between'}
-                                            sx={{
-                                                borderTopLeftRadius: customers.data[0].id === customer.id ? '4px' : '',
-                                                borderTopRightRadius: customers.data[0].id === customer.id ? '4px' : '',
-                                                borderBottomLeftRadius:
-                                                    customers.data[customers.data.length - 1].id === customer.id
-                                                        ? '4px'
-                                                        : '',
-                                                borderBottomRightRadius:
-                                                    customers.data[customers.data.length - 1].id === customer.id
-                                                        ? '4px'
-                                                        : '',
-                                                borderLeft: '1px solid #E0E0E0',
-                                                borderRight: '1px solid #E0E0E0',
-                                                borderBottom:
-                                                    customers.data[customers.data.length - 1].id === customer.id
-                                                        ? '1px solid #E0E0E0'
-                                                        : '',
-                                                borderTop: '1px solid #E0E0E0',
-                                            }}
-                                            p={2}
-                                        >
-                                            <Grid display={'flex'}>
-                                                <Grid display={'flex'}>
-                                                    <Avatar
-                                                        sx={{ height: '56px', width: '56px' }}
-                                                        src={customer.profileImage}
-                                                    >
-                                                        {customer.getInitials()}
-                                                    </Avatar>
+                                <Grid
+                                    mt={1}
+                                    mb={1.5}
+                                    maxHeight={'400px'}
+                                    sx={{ overflowY: 'auto', scrollbarGutter: 'auto', scrollbarWidth: 'none' }}
+                                >
+                                    {search !== '' &&
+                                        customers.data.map((customer: UserEntity) => {
+                                            return (
+                                                <Grid
+                                                    key={customer.id}
+                                                    container
+                                                    flexDirection={'row'}
+                                                    justifyContent={'space-between'}
+                                                    sx={{
+                                                        borderTopLeftRadius:
+                                                            customers.data[0].id === customer.id ? '4px' : '',
+                                                        borderTopRightRadius:
+                                                            customers.data[0].id === customer.id ? '4px' : '',
+                                                        borderBottomLeftRadius:
+                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                                ? '4px'
+                                                                : '',
+                                                        borderBottomRightRadius:
+                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                                ? '4px'
+                                                                : '',
+                                                        borderLeft: '1px solid #E0E0E0',
+                                                        borderRight: '1px solid #E0E0E0',
+                                                        borderBottom:
+                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                                ? '1px solid #E0E0E0'
+                                                                : '',
+                                                        borderTop: '1px solid #E0E0E0',
+                                                    }}
+                                                    p={2}
+                                                >
+                                                    <Grid display={'flex'}>
+                                                        <Grid display={'flex'}>
+                                                            <Avatar
+                                                                sx={{ height: '56px', width: '56px' }}
+                                                                src={customer.profileImage}
+                                                            >
+                                                                {customer.getInitials()}
+                                                            </Avatar>
+                                                        </Grid>
+                                                        <Grid ml={1}>
+                                                            <Typography sx={{ fontSize: '12px' }}>
+                                                                {customer.getFullName()}
+                                                            </Typography>
+                                                            <Typography sx={{ fontSize: '12px' }}>
+                                                                ID:{' '}
+                                                                <span className={classes.textColorSecondary}>
+                                                                    {customer.customerNumber}
+                                                                </span>{' '}
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid alignItems={'center'}>
+                                                        <Button
+                                                            onClick={() => setUser(customer)}
+                                                            sx={{ minWidth: '92px', padding: '10px' }}
+                                                            variant={'outlined'}
+                                                            color={'primary'}
+                                                        >
+                                                            Select
+                                                        </Button>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid ml={1}>
-                                                    <Typography sx={{ fontSize: '12px' }}>
-                                                        {customer.getFullName()}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: '12px' }}>
-                                                        Customer Id:{' '}
-                                                        <span className={classes.textColorSecondary}>
-                                                            {customer.customerNumber}
-                                                        </span>{' '}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: '12px' }}>
-                                                        Email:{' '}
-                                                        <span className={classes.textColorSecondary}>
-                                                            {customer.email}
-                                                        </span>{' '}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                            <Grid alignItems={'center'}>
-                                                <IconButton sx={{ color: '#0000008A' }} size="large">
-                                                    <KeyboardArrowRightIcon fontSize="large" />
-                                                </IconButton>
-                                            </Grid>
+                                            );
+                                        })}
+                                </Grid>
+                            </>
+                        ) : (
+                            <>
+                                <Typography fontWeight={500} fontSize={14}>
+                                    Transfer To
+                                </Typography>
+                                <Grid
+                                    key={user.id}
+                                    container
+                                    flexDirection={'row'}
+                                    justifyContent={'space-between'}
+                                    sx={{
+                                        padding: '12px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #E0E0E0',
+                                    }}
+                                >
+                                    <Grid display={'flex'}>
+                                        <Grid display={'flex'}>
+                                            <Avatar sx={{ height: '56px', width: '56px' }} src={user.profileImage}>
+                                                {user.getInitials()}
+                                            </Avatar>
                                         </Grid>
-                                    );
-                                })}
-                        </Grid>
+                                        <Grid
+                                            ml={1}
+                                            display={'flex'}
+                                            alignItems={'baseline'}
+                                            flexDirection={'column'}
+                                            justifyContent={'center'}
+                                        >
+                                            <Typography sx={{ fontSize: '12px' }}>{user.getFullName()}</Typography>
+                                            <Typography sx={{ fontSize: '12px' }}>
+                                                <span className={classes.textColorSecondary}>
+                                                    {user.customerNumber}
+                                                </span>{' '}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid display={'flex'} alignItems={'center'}>
+                                        <IconButton>
+                                            <DeleteOutlineIcon onClick={() => setUser(null)} />
+                                        </IconButton>
+                                    </Grid>
+                                </Grid>
+                            </>
+                        )}
                     </>
                 ) : (
                     <>
@@ -222,10 +299,10 @@ export function TransferCardsDialog(props: TransferCardsDialogProps) {
                                 {index + 1}
                                 <img
                                     className={classes.productImage}
-                                    src={find(userCards, { id: userCardId }).cardProduct?.imagePath}
-                                    alt={find(userCards, { id: userCardId }).cardProduct?.imagePath}
+                                    src={find(userCards, { id: userCardId }).cardProduct.imagePath}
+                                    alt={find(userCards, { id: userCardId }).cardProduct.imagePath}
                                 />
-                                {find(userCards, { id: userCardId }).cardProduct?.shortName}
+                                {find(userCards, { id: userCardId }).cardProduct.name}
                             </Box>
                         ))}
                     </>
@@ -240,10 +317,10 @@ export function TransferCardsDialog(props: TransferCardsDialogProps) {
                         </Button>
                         <Button
                             sx={{ padding: '10px' }}
-                            onClick={handleClose}
+                            onClick={onSubmit}
                             variant={'contained'}
-                            disabled={true}
-                            color={'inherit'}
+                            disabled={!user}
+                            color={'primary'}
                         >
                             TRANSFER OWNERSHIP
                         </Button>

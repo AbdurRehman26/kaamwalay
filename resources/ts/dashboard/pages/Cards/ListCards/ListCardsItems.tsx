@@ -10,7 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import { default as TextLink } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
@@ -88,6 +89,7 @@ interface ListCardsItemsProps {
 export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const [displaySelectButtons, setDisplaySelectButtons] = useState(false);
     const [showTransferDialog, setShowTransferDialog] = useState(false);
     const [userCardIds, setUserCardIds] = useState<[number?]>([]);
@@ -293,11 +295,16 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                 onClose={handleClose}
             />
 
-            <Box display={'flex'} alignItems={'center'} width={'100%'} paddingBottom={4}>
+            <Box
+                display={isSm && displaySelectButtons ? 'block' : 'flex'}
+                alignItems={'center'}
+                width={'100%'}
+                paddingBottom={4}
+            >
                 {!displaySelectButtons ? (
                     <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
                 ) : (
-                    <Box>
+                    <Box display={isSm ? 'flex' : 'contents'} alignItems={isSm ? 'center' : ''}>
                         <IconButton size="large">
                             <Checkbox
                                 sx={{ margin: 0, padding: 0 }}
@@ -325,7 +332,11 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                     {items$.length && (
                         <Button
                             onClick={handleAllAndCancel}
-                            sx={{ borderRadius: 24, padding: '10px 15px 10px 15px' }}
+                            sx={{
+                                borderRadius: 24,
+                                padding: '10px 15px 10px 15px',
+                                width: isSm && displaySelectButtons ? (userCardIds.length ? '48%' : '100%') : 'initial',
+                            }}
                             color={'primary'}
                             variant={'outlined'}
                             startIcon={!displaySelectButtons ? <LibraryAddCheckOutlinedIcon /> : null}

@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -19,7 +17,7 @@ return new class extends Migration
                 'turnaround' => '30 Business Days',
                 'estimated_delivery_days_min' => 30,
                 'estimated_delivery_days_max' => 30,
-                'display_position' => 1
+                'display_position' => 1,
             ],
             [
                 'id' => 2,
@@ -28,7 +26,7 @@ return new class extends Migration
                 'turnaround' => '20 Business Days',
                 'estimated_delivery_days_min' => 20,
                 'estimated_delivery_days_max' => 20,
-                'display_position' => 2
+                'display_position' => 2,
             ],
             [
                 'id' => 3,
@@ -37,7 +35,7 @@ return new class extends Migration
                 'turnaround' => '10 Business Days',
                 'estimated_delivery_days_min' => 10,
                 'estimated_delivery_days_max' => 10,
-                'display_position' => 3
+                'display_position' => 3,
             ],
             [
                 'id' => 4,
@@ -46,7 +44,7 @@ return new class extends Migration
                 'turnaround' => '4-6 Business Days',
                 'estimated_delivery_days_min' => 4,
                 'estimated_delivery_days_max' => 6,
-                'display_position' => 4
+                'display_position' => 4,
             ],
             [
                 'id' => 5,
@@ -55,7 +53,7 @@ return new class extends Migration
                 'turnaround' => '2 Business Days',
                 'estimated_delivery_days_min' => 2,
                 'estimated_delivery_days_max' => 2,
-                'display_position' => 5
+                'display_position' => 5,
             ],
             [
                 'id' => 6,
@@ -64,7 +62,7 @@ return new class extends Migration
                 'turnaround' => 'Same Day',
                 'estimated_delivery_days_min' => 1,
                 'estimated_delivery_days_max' => 1,
-                'display_position' => 6
+                'display_position' => 6,
             ],
             [
                 'id' => 7,
@@ -73,7 +71,7 @@ return new class extends Migration
                 'turnaround' => 'Same Day',
                 'estimated_delivery_days_min' => 1,
                 'estimated_delivery_days_max' => 1,
-                'display_position' => 7
+                'display_position' => 7,
             ],
         ];
 
@@ -93,7 +91,7 @@ return new class extends Migration
                 'turnaround' => '20 Business Days',
                 'estimated_delivery_days_min' => 20,
                 'estimated_delivery_days_max' => 20,
-                'display_position' => 1
+                'display_position' => 1,
             ],
             [
                 'id' => 2,
@@ -102,7 +100,7 @@ return new class extends Migration
                 'turnaround' => '5 Business Days',
                 'estimated_delivery_days_min' => 5,
                 'estimated_delivery_days_max' => 5,
-                'display_position' => 2
+                'display_position' => 2,
             ],
             [
                 'id' => 3,
@@ -111,7 +109,7 @@ return new class extends Migration
                 'turnaround' => '5 Business Days',
                 'estimated_delivery_days_min' => 5,
                 'estimated_delivery_days_max' => 5,
-                'display_position' => 3
+                'display_position' => 3,
             ],
             [
                 'id' => 4,
@@ -120,7 +118,7 @@ return new class extends Migration
                 'turnaround' => '2-3 Business Days',
                 'estimated_delivery_days_min' => 2,
                 'estimated_delivery_days_max' => 3,
-                'display_position' => 4
+                'display_position' => 4,
             ],
             [
                 'id' => 5,
@@ -129,7 +127,7 @@ return new class extends Migration
                 'turnaround' => '1 Business Day',
                 'estimated_delivery_days_min' => 1,
                 'estimated_delivery_days_max' => 1,
-                'display_position' => 5
+                'display_position' => 5,
             ],
             [
                 'id' => 6,
@@ -138,7 +136,7 @@ return new class extends Migration
                 'turnaround' => 'Same Day',
                 'estimated_delivery_days_min' => 1,
                 'estimated_delivery_days_max' => 1,
-                'display_position' => 6
+                'display_position' => 6,
             ],
             [
                 'id' => 7,
@@ -147,7 +145,7 @@ return new class extends Migration
                 'turnaround' => 'Same Day',
                 'estimated_delivery_days_min' => 1,
                 'estimated_delivery_days_max' => 1,
-                'display_position' => 7
+                'display_position' => 7,
             ],
         ];
 

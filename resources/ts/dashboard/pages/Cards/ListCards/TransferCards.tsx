@@ -16,6 +16,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import { find } from 'lodash';
@@ -58,6 +60,7 @@ export function TransferCardsDialog({
     const classes = useStyles();
     const firstCard = find(userCards, { id: selectedUserCardIds[0] });
     const [user, setUser] = useState<UserEntity | null>(null);
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const customers = useAdminCustomersQuery({
         ...bracketParams(),
@@ -92,7 +95,7 @@ export function TransferCardsDialog({
     }, [handleSubmit, user]);
 
     return (
-        <Dialog {...rest} fullWidth onClose={handleClose}>
+        <Dialog {...rest} fullScreen={isSm} fullWidth onClose={handleClose}>
             <DialogTitle>
                 {showCards && (
                     <IconButton

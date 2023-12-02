@@ -335,7 +335,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                             sx={{
                                 borderRadius: 24,
                                 padding: '10px 15px 10px 15px',
-                                width: isSm && displaySelectButtons ? (userCardIds.length ? '48%' : '100%') : 'initial',
+                                width: isSm && displaySelectButtons ? (userCardIds.length ? '47%' : '100%') : 'initial',
                             }}
                             color={'primary'}
                             variant={'outlined'}
@@ -347,7 +347,12 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                     {userCardIds.length ? (
                         <Button
                             onClick={() => setShowTransferDialog(true)}
-                            sx={{ marginLeft: '10px', borderRadius: 24, padding: '10px 15px 10px 15px' }}
+                            sx={{
+                                marginLeft: '10px',
+                                borderRadius: 24,
+                                padding: '10px 15px 10px 15px',
+                                width: isSm && displaySelectButtons ? (userCardIds.length ? '50%' : '100%') : 'initial',
+                            }}
                             color={'primary'}
                             variant={'contained'}
                         >

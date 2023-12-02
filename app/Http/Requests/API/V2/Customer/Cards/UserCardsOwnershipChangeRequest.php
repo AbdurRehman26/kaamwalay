@@ -21,7 +21,7 @@ class UserCardsOwnershipChangeRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'exists:users,id'],
-            'user_card_ids.*' => ['required', 'exists:user_cards,id,user_id,'. auth()->user()->id],
+            'user_card_ids.*' => ['required', 'exists:user_cards,id,user_id,'.auth()->user()->id],
         ];
     }
 }

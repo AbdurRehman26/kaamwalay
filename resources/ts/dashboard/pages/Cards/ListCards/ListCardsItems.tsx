@@ -156,7 +156,6 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
 
     const handleSubmit = useCallback(
         async (user: UserEntity) => {
-            setShowTransferDialog(false);
             let confirmation = false;
             confirmation = await confirm({
                 title: 'Are you sure you want to transfer ownership?',
@@ -179,6 +178,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                     maxWidth: 'sm',
                 },
             });
+
             if (confirmation) {
                 await dispatch(
                     changeUserCardOwnerShip({
@@ -187,8 +187,12 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                     }),
                 );
                 userCards$.search();
+                setShowTransferDialog(false);
+                setAllSelected(false);
+                setUserCardIds([]);
                 return;
             }
+            setShowTransferDialog(false);
             setAllSelected(false);
             setUserCardIds([]);
         },

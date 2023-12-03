@@ -16,7 +16,7 @@ class OrderStatusChangedNotification extends PushNotification
         OrderStatus::GRADED => 'graded',
         OrderStatus::ASSEMBLED => 'assembled',
         OrderStatus::SHIPPED => 'shipped',
-        OrderStatus::CANCELLED => 'assembled',
+        OrderStatus::CANCELLED => 'cancelled',
     ];
 
     /**

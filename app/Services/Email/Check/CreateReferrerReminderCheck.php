@@ -34,6 +34,10 @@ class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldS
             return false;
         }
 
+        if (! $user->wantsToReceiveMarketingContent()) {
+            return false;
+        }
+
         $referees = $user->referees;
 
         // Send Remainder if user has no referees

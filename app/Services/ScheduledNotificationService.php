@@ -15,7 +15,7 @@ class ScheduledNotificationService
         DateTime $sendAt,
         string $notificationClass,
         string $notifiableType,
-        string $notifiableId,
+        int $notifiableId,
         array $payload,
         string $checkClass = null
     ): void {

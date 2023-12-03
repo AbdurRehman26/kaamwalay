@@ -153,24 +153,24 @@ it('filters cards by name', function () {
         ]);
 });
 
- test('a customer can transfer his cards to another user', function () {
+test('a customer can transfer his cards to another user', function () {
     $otherUser = User::factory()->withRole('customer')->create();
 
     $cardOwnershipChangeResponse = postJson('/api/v2/customer/cards/change-ownership', [
         'user_id' => $otherUser->id,
-        'user_card_ids' => [$this->userCards[0]->id]
+        'user_card_ids' => [$this->userCards[0]->id],
     ]);
 
-     $cardOwnershipChangeResponse->assertOk();
+    $cardOwnershipChangeResponse->assertOk();
 
-     // Card details for the first user (Should fail now)
-     $cardDetailsResponse = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+    // Card details for the first user (Should fail now)
+    $cardDetailsResponse = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
-     $cardDetailsResponse->assertForbidden();
+    $cardDetailsResponse->assertForbidden();
 
-     // Card details for the user whom it is transferred (Should pass)
-     actingAs($otherUser);
-     $cardDetailsResponseForSecondUser = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+    // Card details for the user whom it is transferred (Should pass)
+    actingAs($otherUser);
+    $cardDetailsResponseForSecondUser = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
-     $cardDetailsResponseForSecondUser->assertOk();
- });
+    $cardDetailsResponseForSecondUser->assertOk();
+});

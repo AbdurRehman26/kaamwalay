@@ -165,6 +165,7 @@ class UserCard extends Model
     {
         $userCardService = app(UserCardService::class);
         $front_slabbed_image = $userCardService->frontSlabbedImage($this->certificate_number);
+
         return $front_slabbed_image;
     }
 }

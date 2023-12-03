@@ -2,7 +2,6 @@
 
 namespace App\Services\Webhooks;
 
-use App\Models\OrderItem;
 use App\Models\UserCard;
 use Exception;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;

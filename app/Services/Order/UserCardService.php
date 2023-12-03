@@ -157,7 +157,7 @@ class UserCardService
         ];
     }
 
-    public function frontSlabbedImage (string $certificateId)
+    public function frontSlabbedImage(string $certificateId)
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();
 
@@ -173,7 +173,7 @@ class UserCardService
             return $data['results'][0]['front_slab_image'];
         }
 
-        return '' ;
+        return '';
     }
 
     public function pepareScannedImagesForPublicCardPage(array $data): array

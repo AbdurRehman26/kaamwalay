@@ -180,7 +180,11 @@ const CustomHits = connectHits(({ hits }) => {
                                     className={'TableInfo'}
                                 >
                                     <div>
-                                        <img className={'TableInfoImage'} src={hit.card_image} alt={hit.card_name} />
+                                        <img
+                                            className={'TableInfoImage'}
+                                            src={!hit.front_slab_image ? hit.card_image : hit.front_slab_image}
+                                            alt={hit.card_name}
+                                        />
                                     </div>
                                     <div className={'TableInfoText'}>
                                         <Typography className={'TableInfoHeading'}>{hit.card_name}</Typography>

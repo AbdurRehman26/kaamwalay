@@ -157,6 +157,25 @@ class UserCardService
         ];
     }
 
+    public function frontSlabbedImage (string $certificateId)
+    {
+        $userCard = UserCard::where('certificate_number', $certificateId)->first();
+
+        if (empty($userCard) || $userCard->orderItem->order->order_status_id !== OrderStatus::SHIPPED) {
+            return [
+                'grades_available' => false,
+            ];
+        }
+
+        $data = $this->agsService->getGradesByCertificateId($certificateId);
+
+        if (! empty($data['results'][0]['front_slab_image'])) {
+            return $data['results'][0]['front_slab_image'];
+        }
+
+        return '' ;
+    }
+
     public function pepareScannedImagesForPublicCardPage(array $data): array
     {
         if (

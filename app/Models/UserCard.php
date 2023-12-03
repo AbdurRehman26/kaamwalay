@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Enums\UserCard\UserCardShippingStatus;
+use App\Services\Order\UserCardService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -66,6 +67,7 @@ class UserCard extends Model
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname.' '.$this->overall_grade,
             'shipped_at' => $this->orderItem->order->shipped_at,
+            'front_slab_image' => $this->frontSlabbedImage(),
             'shipped_at_timestamp' => $this->orderItem->order->shipped_at->unix(),
         ];
     }
@@ -157,5 +159,12 @@ class UserCard extends Model
         $this->shipping_status = UserCardShippingStatus::IN_VAULT;
 
         return $this->save();
+    }
+
+    public function frontSlabbedImage(): string
+    {
+        $userCardService = app(UserCardService::class);
+        $front_slabbed_image = $userCardService->frontSlabbedImage($this->certificate_number);
+        return $front_slabbed_image;
     }
 }

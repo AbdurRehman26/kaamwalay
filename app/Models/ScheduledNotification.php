@@ -11,9 +11,7 @@ class ScheduledNotification extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = ['notification_class', 'notifiable_type', 'notifiable_id', 'send_at', 'payload', 'is_sent', 'check_class'];
 
@@ -26,12 +24,16 @@ class ScheduledNotification extends Model
         return $this->morphTo();
     }
 
+    /**
+     * @param  Builder<ScheduledNotification>  $query
+     * @return Builder<ScheduledNotification>
+     */
     public function scopeUnsent(Builder $query): Builder
     {
         return $query->where('is_sent', 0);
     }
 
-    public function markAsSent()
+    public function markAsSent(): void
     {
         if (! $this->is_sent) {
             $this->forceFill(['is_sent' => true])->save();

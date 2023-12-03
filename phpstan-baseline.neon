@@ -31,14 +31,14 @@ parameters:
 			path: app/Exceptions/API/Admin/Order/OrderFoldersOnDropboxNotCreated.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemDoesNotBelongToOrder\\:\\:\\$message has no type specified\\.$#"
-			count: 1
-			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemDoesNotBelongToOrder.php
-
-		-
 			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\IncorrectOrderItemsStatus\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderItem/IncorrectOrderItemsStatus.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemDoesNotBelongToOrder\\:\\:\\$message has no type specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemDoesNotBelongToOrder.php
 
 		-
 			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemIsNotGraded\\:\\:\\$message has no type specified\\.$#"
@@ -176,9 +176,19 @@ parameters:
 			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
 
 		-
+			message: "#^Class App\\\\Exports\\\\Order\\\\OrdersExport implements generic interface Maatwebsite\\\\Excel\\\\Concerns\\\\WithMapping but does not specify its types\\: RowType$#"
+			count: 1
+			path: app/Exports/Order/OrdersExport.php
+
+		-
 			message: "#^Method App\\\\Exports\\\\Order\\\\OrdersExport\\:\\:collection\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Exports/Order/OrdersExport.php
+
+		-
+			message: "#^Class App\\\\Exports\\\\UsersExport implements generic interface Maatwebsite\\\\Excel\\\\Concerns\\\\WithMapping but does not specify its types\\: RowType$#"
+			count: 1
+			path: app/Exports/UsersExport.php
 
 		-
 			message: "#^Method App\\\\Exports\\\\UsersExport\\:\\:collection\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
@@ -2316,6 +2326,11 @@ parameters:
 			path: app/Models/ScheduledEmail.php
 
 		-
+			message: "#^Method App\\\\Models\\\\ScheduledNotification\\:\\:notifiable\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/ScheduledNotification.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\ShippingMethod\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/ShippingMethod.php
@@ -2626,14 +2641,14 @@ parameters:
 			path: app/Services/Admin/Coupon/CouponService.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between mixed and 'fixed'\\|'flat'\\|'free_cards'\\|'percentage'\\|false will always evaluate to false\\.$#"
-			count: 2
-			path: app/Services/Admin/Coupon/CouponService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponStatusService\\:\\:changeStatus\\(\\) has parameter \\$newCouponStatus with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Services/Admin/Coupon/CouponStatusService.php
+
+		-
+			message: "#^Class App\\\\Services\\\\Admin\\\\DataExportService implements generic interface Maatwebsite\\\\Excel\\\\Concerns\\\\WithMapping but does not specify its types\\: RowType$#"
+			count: 1
+			path: app/Services/Admin/DataExportService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\Order\\\\OrderItemService\\:\\:markItemsAsPending\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
@@ -2804,11 +2819,6 @@ parameters:
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateMultipleSetsReports\\(\\) has parameter \\$cardSets with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between mixed and 'fixed'\\|'flat'\\|'free_cards'\\|'percentage'\\|false will always evaluate to false\\.$#"
-			count: 2
-			path: app/Services/Salesman/Coupon/CouponService.php
 
 		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"

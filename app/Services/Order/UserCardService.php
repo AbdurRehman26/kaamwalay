@@ -157,7 +157,7 @@ class UserCardService
         ];
     }
 
-    public function frontSlabbedImage(string $certificateId)
+    public function frontSlabbedImage(string $certificateId): string
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();
 

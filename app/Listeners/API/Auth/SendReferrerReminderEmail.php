@@ -28,7 +28,7 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
     {
         $user = $event->user;
         $this->emailService->scheduleEmail(
-            now()->addDays(3),
+            now()->addDay(),
             [[$user->email => $user->first_name ?? '']],
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
             EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
@@ -37,7 +37,52 @@ class SendReferrerReminderEmail implements ShouldBeEncrypted, ShouldQueue
                 'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
                 'CARDS_APPLICABLE_FOR_DISCOUNT' => config('robograding.feature_referral_max_discount_items'),
             ],
-            true,
+            false,
+            'CreateReferrerReminderCheck',
+            ['user_id' => $user->id]
+        );
+
+        $this->emailService->scheduleEmail(
+            now()->addDays(5),
+            [[$user->email => $user->first_name ?? '']],
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
+            EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
+            [
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/main',
+                'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
+                'CARDS_APPLICABLE_FOR_DISCOUNT' => config('robograding.feature_referral_max_discount_items'),
+            ],
+            false,
+            'CreateReferrerReminderCheck',
+            ['user_id' => $user->id]
+        );
+
+        $this->emailService->scheduleEmail(
+            now()->addDays(10),
+            [[$user->email => $user->first_name ?? '']],
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
+            EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
+            [
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/main',
+                'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
+                'CARDS_APPLICABLE_FOR_DISCOUNT' => config('robograding.feature_referral_max_discount_items'),
+            ],
+            false,
+            'CreateReferrerReminderCheck',
+            ['user_id' => $user->id]
+        );
+
+        $this->emailService->scheduleEmail(
+            now()->addDays(30),
+            [[$user->email => $user->first_name ?? '']],
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW],
+            EmailService::TEMPLATE_SLUG_REFEREE_REFER_NOW,
+            [
+                'REDIRECT_URL' => config('app.url').'/dashboard/referral-program/main',
+                'PERCENTAGE_VALUE' => config('robograding.feature_referral_discount_percentage'),
+                'CARDS_APPLICABLE_FOR_DISCOUNT' => config('robograding.feature_referral_max_discount_items'),
+            ],
+            false,
             'CreateReferrerReminderCheck',
             ['user_id' => $user->id]
         );

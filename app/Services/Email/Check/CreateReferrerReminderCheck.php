@@ -4,22 +4,10 @@ namespace App\Services\Email\Check;
 
 use App\Models\ScheduledEmail;
 use App\Models\User;
-use App\Services\Email\ReschedulingCheckInterface;
 use App\Services\Email\ShouldStillSendCheckInterface;
-use Carbon\Carbon;
 
-class CreateReferrerReminderCheck implements ReschedulingCheckInterface, ShouldStillSendCheckInterface
+class CreateReferrerReminderCheck implements ShouldStillSendCheckInterface
 {
-    public function needsRescheduling(ScheduledEmail $scheduledEmail): bool
-    {
-        return $this->check($scheduledEmail);
-    }
-
-    public function getNextSendAt(ScheduledEmail $scheduledEmail): Carbon
-    {
-        return now()->addDays(3);
-    }
-
     public function shouldStillSend(ScheduledEmail $scheduledEmail): bool
     {
         return $this->check($scheduledEmail);

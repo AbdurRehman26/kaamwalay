@@ -139,7 +139,7 @@ class UserCardService
                 'type' => $userCard->orderItem->cardProduct->cardCategory->name,
                 'series' => $userCard->orderItem->cardProduct->cardSet->cardSeries->name,
                 'set' => $userCard->orderItem->cardProduct->cardSet->name,
-                'release_date' => !empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
+                'release_date' => ! empty($userCard->orderItem->cardProduct->cardSet->release_date) ?
                     Carbon::parse($userCard->orderItem->cardProduct->cardSet->release_date)->format('F d, Y') :
                     null,
                 'number' => $userCard->orderItem->cardProduct->card_number_order ?? null,
@@ -167,7 +167,7 @@ class UserCardService
 
         $data = $this->agsService->getGradesByCertificateId($certificateId);
 
-        if (!empty($data['results'][0]['front_slab_image'])) {
+        if (! empty($data['results'][0]['front_slab_image'])) {
             return $data['results'][0]['front_slab_image'];
         }
 
@@ -252,8 +252,8 @@ class UserCardService
     protected function prepareSlabbedImagesForPublicCardPage(array $data, UserCard $userCard): array
     {
         if (
-            !empty($data['results'][0]['front_slab_image']) &&
-            !empty($data['results'][0]['back_slab_image'])
+            ! empty($data['results'][0]['front_slab_image']) &&
+            ! empty($data['results'][0]['back_slab_image'])
         ) {
             return [
                 'front_slab_image' => $data['results'][0]['front_slab_image'],

@@ -17,6 +17,7 @@
         "http-interop/http-factory-guzzle": "^1.2",
         "hubspot/hubspot-php": "^4.0",
         "laravel-notification-channels/pusher-push-notifications": "^4.1",
+        "laravel-notification-channels/twilio": "^3.3",
         "laravel/cashier": "^14.7",
         "laravel/framework": "^10.2",
         "laravel/horizon": "^5.12",

@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.23.0 - 2023-12-05
+
+### What's Changed
+
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1121
+* Feature: Update payment plans by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1125
+* Feature: Marketing Promotional SMS by @thenabeel in https://github.com/woozard/robograding/pull/1128
+* Feature: Referrer Reminder Email Schedule by @thenabeel in https://github.com/woozard/robograding/pull/1129
+* Release v3.23.0 by @thenabeel in https://github.com/woozard/robograding/pull/1130
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.22.0...v3.23.0
+
 ## v3.22.0 - 2023-11-07
 
 ### What's Changed

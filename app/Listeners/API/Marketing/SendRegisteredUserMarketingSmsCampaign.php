@@ -20,7 +20,7 @@ class SendRegisteredUserMarketingSmsCampaign implements ShouldBeEncrypted, Shoul
     {
         $user = $event->user;
 
-        if (! $user->wantsToReceiveMarketingContent()) {
+        if (! $user->wantsToReceiveMarketingContent() || ! $user->phone) {
             return;
         }
 

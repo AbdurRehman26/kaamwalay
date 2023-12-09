@@ -167,6 +167,11 @@ function SubmissionSummary() {
         (state) => state.newSubmission.step03Data.requiresShippingInsurance,
     );
     const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
+    const requiresSignature = useAppSelector((state) => state.newSubmission.step03Data.requiresSignature);
+
+    const signatureFee = useAppSelector((state) => state.newSubmission.step03Data.signatureFee);
+    console.log('signatureFee', signatureFee);
+    console.log('requiresSignature', requiresSignature);
 
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
@@ -235,6 +240,7 @@ function SubmissionSummary() {
                 numberOfSelectedCards * finalPrice +
                 Number(cleaningFee) +
                 Number(shippingInsuranceFee) +
+                Number(signatureFee) +
                 shippingFee -
                 Number(isCouponApplied ? discountedValue : 0) -
                 appliedCredit
@@ -358,6 +364,20 @@ function SubmissionSummary() {
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat
                                         value={previewCleaningFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
+
+                            {requiresSignature ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Signature Required: </Typography>
+                                    <NumberFormat
+                                        value={signatureFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator
@@ -553,6 +573,20 @@ function SubmissionSummary() {
                                     <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                                     <NumberFormat
                                         value={previewCleaningFee}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </div>
+                            ) : null}
+
+                            {requiresSignature ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Signature Required: </Typography>
+                                    <NumberFormat
+                                        value={signatureFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

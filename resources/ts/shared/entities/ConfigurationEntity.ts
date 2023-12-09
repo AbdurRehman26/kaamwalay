@@ -20,4 +20,5 @@ export class ConfigurationEntity {
     public featureOrderShippingInsuranceFeePercentage!: number;
     public featureReferralMaxDiscountItems!: number;
     public featureOrderPaymentAffirmMinAmount!: number;
+    public featureOrderSignatureAtDeliveryFeeValue!: number;
 }

@@ -120,6 +120,7 @@ export function ViewSubmission() {
                 shippingFee={data?.shippingFee}
                 cleaningFee={data?.cleaningFee}
                 shippingInsuranceFee={data?.shippingInsuranceFee}
+                signatureFee={data?.signatureFee}
                 refundsTotal={data?.refundTotal}
                 extraChargesTotal={data?.extraChargeTotal}
                 total={data?.grandTotal}

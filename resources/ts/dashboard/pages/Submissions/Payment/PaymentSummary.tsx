@@ -192,6 +192,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
+    const signatureFee = useAppSelector((state) => state.newSubmission.step03Data.signatureFee);
     const extraChargesTotal = useAppSelector((state) => state.newSubmission.extraChargesTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
@@ -273,6 +274,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 refundTotal +
                 Number(shippingInsuranceFee) +
                 Number(cleaningFee) +
+                Number(signatureFee) +
                 extraChargesTotal -
                 appliedCredit
             ).toFixed(2),
@@ -588,6 +590,20 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                             <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
                             <NumberFormat
                                 value={cleaningFee}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </div>
+                    ) : null}
+
+                    {(signatureFee ?? 0) > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Signature Required: </Typography>
+                            <NumberFormat
+                                value={signatureFee}
                                 className={classes.rowRightBoldText}
                                 displayType={'text'}
                                 thousandSeparator

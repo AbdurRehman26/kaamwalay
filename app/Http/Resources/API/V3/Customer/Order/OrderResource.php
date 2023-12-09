@@ -24,6 +24,7 @@ class OrderResource extends BaseResource
             'shipping_fee' => $this->shipping_fee,
             'cleaning_fee' => $this->cleaning_fee,
             'shipping_insurance_fee' => $this->shipping_insurance_fee,
+            'signature_fee' => $this->signature_fee,
             'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => $this->whenLoaded('user', UserResource::class),
@@ -52,6 +53,7 @@ class OrderResource extends BaseResource
             'order_step' => $this->order_step,
             'requires_cleaning' => $this->requires_cleaning,
             'requires_shipping_insurance' => $this->requires_shipping_insurance,
+            'requires_signature' => $this->requires_signature,
             'estimated_delivery_start_at' => $this->estimated_delivery_start_at,
             'estimated_delivery_end_at' => $this->estimated_delivery_end_at,
         ];

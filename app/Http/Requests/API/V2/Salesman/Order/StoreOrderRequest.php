@@ -65,6 +65,7 @@ class StoreOrderRequest extends FormRequest
             'pay_now' => ['required', 'boolean'],
             'payment_method' => ['required_if:pay_now,true', 'array'],
             'payment_method.id' => ['required_if:pay_now,true', 'integer', 'exists:payment_methods,id'],
+            'requires_signature' => ['sometimes', 'boolean'],
         ];
 
         if ($this->addressIsNotRequired()) {

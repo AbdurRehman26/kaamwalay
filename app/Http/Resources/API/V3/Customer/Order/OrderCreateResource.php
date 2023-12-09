@@ -18,6 +18,8 @@ class OrderCreateResource extends V2OrderCreateResource
         return array_merge($data, [
             'shipping_insurance_fee' => $this->shipping_insurance_fee,
             'requires_shipping_insurance' => $this->requires_shipping_insurance,
+            'signature_fee' => $this->signature_fee,
+            'requires_signature' => $this->requires_signature,
         ]);
     }
 }

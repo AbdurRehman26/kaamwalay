@@ -220,7 +220,7 @@ class OrderService extends V1OrderService
 
     protected function recalculateGrandTotal(Order &$order): self
     {
-        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee + $order->shipping_insurance_fee;
+        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee + $order->cleaning_fee + $order->shipping_insurance_fee + $order->signature_fee;
         $order->grand_total = $order->grand_total_before_discount - $order->discounted_amount - $order->payment_method_discounted_amount;
 
         return $this;

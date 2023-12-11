@@ -97,6 +97,8 @@ export function SubmissionsView() {
                 salesmanCommission={data?.salesmanCommission}
                 requiresShippingInsurance={data?.requiresShippingInsurance}
                 shippingInsuranceFee={data?.shippingInsuranceFee}
+                requiresSignature={data?.requiresSignature}
+                signatureFee={data?.signatureFee}
                 shippingMethod={data?.shippingMethod?.name}
             />
             <Divider />

@@ -245,6 +245,9 @@ export function AddedSubmissionCards() {
     const shippingInsuranceFee = useAppSelector(
         (state) => state.salesRepCreateOrderSlice.step03Data.shippingInsuranceFee,
     );
+    const requiresSignature = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.requiresSignature);
+    const signatureFee = useAppSelector((state) => state.salesRepCreateOrderSlice.step03Data.signatureFee);
+
     const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
     const finalShippingAddress =
@@ -367,6 +370,7 @@ export function AddedSubmissionCards() {
                 numberOfSelectedCards * finalPrice +
                 Number(cleaningFee) +
                 Number(shippingInsuranceFee) +
+                Number(signatureFee) +
                 shippingFee -
                 Number(isCouponApplied ? discountedValue : 0) -
                 appliedCredit
@@ -579,6 +583,19 @@ export function AddedSubmissionCards() {
                         <Typography className={classes.rowLeftText}>Cleaning Fee:</Typography>
                         <NumberFormat
                             value={previewCleaningFee}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
+                    </div>
+                ) : null}
+                {requiresSignature ? (
+                    <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
+                        <Typography className={classes.rowLeftText}>Signature Required:</Typography>
+                        <NumberFormat
+                            value={signatureFee}
                             className={classes.rowRightBoldText}
                             displayType={'text'}
                             thousandSeparator

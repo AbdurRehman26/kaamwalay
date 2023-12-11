@@ -29,7 +29,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn([
-                'requires_signature_at_delivery',
+                'requires_signature',
                 'signature_fee',
             ]);
         });

@@ -95,6 +95,8 @@ export interface ShippingSubmissionState {
     fetchingStatus: string | null;
     requiresShippingInsurance: boolean;
     shippingInsuranceFee?: number;
+    requiresSignature: boolean;
+    signatureFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -261,6 +263,8 @@ const initialState: AdminNewOrderSliceState = {
         saveForLater: true,
         requiresShippingInsurance: true,
         shippingInsuranceFee: 0,
+        requiresSignature: false,
+        signatureFee: 0,
         disableAllShippingInputs: false,
         useCustomShippingAddress: false,
     },
@@ -393,6 +397,7 @@ export const createOrder = createAsyncThunk('adminCreateOrderSlice/createOrder',
             ? currentSubmission.step02Data.requiresCleaning
             : false,
         requiresShippingInsurance: currentSubmission.step03Data.requiresShippingInsurance ?? false,
+        requiresSignature: currentSubmission.step03Data.requiresSignature ?? false,
         paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : {},
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
@@ -601,6 +606,12 @@ export const adminCreateOrderSlice = createSlice({
         setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
             state.step03Data.shippingInsuranceFee = action.payload;
         },
+        setRequiresSignature: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.requiresSignature = action.payload;
+        },
+        setSignatureFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.signatureFee = action.payload;
+        },
         setServiceLevel: (state, action: PayloadAction<SubmissionService>) => {
             state.step01Data.selectedServiceLevel = action.payload;
         },
@@ -730,6 +741,8 @@ export const {
     setCleaningFee,
     setRequiresShippingInsurance,
     setShippingInsuranceFee,
+    setRequiresSignature,
+    setSignatureFee,
     markCardAsUnselected,
     setCouponCode,
     updatePaymentMethodId,

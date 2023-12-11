@@ -25,7 +25,7 @@
  *       "service_fee":36,
  *       "shipping_fee":0,
  *       "cleaning_fee":0,
- *       "grand_total":0,
+ *       "grand_total":4.99,
  *       "customer_id":98,
  *       "created_at":"2023-03-17T17:23:25.000000Z",
  *       "reviewed_at":null,
@@ -253,7 +253,9 @@
  *       "salesman_commission":null,
  *       "referral_commission":2,
  *       "shipping_insurance_fee": 10.0,
- *       "requires_shipping_insurance": true
+ *       "requires_shipping_insurance": true,
+ *       "signature_fee": 4.99,
+ *       "requires_signature": true
  *    }
  * }
  */

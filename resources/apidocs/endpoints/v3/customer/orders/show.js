@@ -25,10 +25,12 @@
  *             "status": "Placed",
  *             "service_fee": 18,
  *             "shipping_insurance_fee": 10.0,
- *             "requires_shipping_insurance": true
+ *             "requires_shipping_insurance": true,
+ *             "signature_fee": 4.99,
+ *             "requires_signature": true
  *             "shipping_fee": 14,
  *             "cleaning_fee": 0,
- *             "grand_total": 20,
+ *             "grand_total": 24.99,
  *             "created_at": "2023-04-24T20:37:24.000000Z",
  *             "customer": {
  *                 "id": 18,

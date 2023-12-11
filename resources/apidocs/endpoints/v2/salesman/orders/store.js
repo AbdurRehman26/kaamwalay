@@ -10,6 +10,7 @@
  *
  * @apiParam {Boolean} [requires_cleaning] If customer opts in for cleaning, value can be 1, 0, true, false
  * @apiParam {Boolean} [requires_shipping_insurance] If customer opts in for insurance, value can be 1, 0, true, false
+ * @apiParam {Boolean} [requires_signature] If customer opts in for signature at delivery service, value can be 1, 0, true, false
  * @apiParam {Boolean} [pay_now] If admin wants to pay the order right away, value should be true and a payment method should exist in request
  * @apiParam {Object} [payment_method] Payment method to pay order right away. Initially, id must be the one for Manual Payment.
  *
@@ -71,6 +72,7 @@
  *          "requires_cleaning": 1,
  *          "pay_now": true,
  *          "requires_shipping_insurance": true,
+ *          "requires_signature": true,
  *          "payment_method": {
  *              "id": 4
  *          }
@@ -193,7 +195,9 @@
  *            "shipping_fee": 43,
  *            "shipping_insurance_fee": 10.0,
  *            "requires_shipping_insurance": true,
- *            "grand_total": 263,
+ *            "signature_fee": 4.99,
+ *            "requires_signature": true,
+ *            "grand_total": 267.99,
  *            "amount_paid_from_wallet": 10.00,
  *            "created_by": {
  *                 "id": 1,

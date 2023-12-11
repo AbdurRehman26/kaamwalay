@@ -784,6 +784,8 @@ test('an admin can place order for a user with signature at delivery required', 
         'pay_now' => false,
         'requires_signature' => true,
     ]);
+
+    $response->dump();
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

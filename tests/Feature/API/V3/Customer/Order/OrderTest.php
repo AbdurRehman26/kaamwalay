@@ -187,7 +187,7 @@ test('a customer can place order with signature at delivery required', function 
     $this->actingAs($this->user);
     Event::fake();
     $signatureFee = 4.99;
-    config('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
+    Config::set('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
 
     $response = $this->postJson('/api/v3/customer/orders', [
         'payment_plan' => [

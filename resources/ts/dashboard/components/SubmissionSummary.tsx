@@ -170,8 +170,6 @@ function SubmissionSummary() {
     const requiresSignature = useAppSelector((state) => state.newSubmission.step03Data.requiresSignature);
 
     const signatureFee = useAppSelector((state) => state.newSubmission.step03Data.signatureFee);
-    console.log('signatureFee', signatureFee);
-    console.log('requiresSignature', requiresSignature);
 
     const shippingMethod = useAppSelector(
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,

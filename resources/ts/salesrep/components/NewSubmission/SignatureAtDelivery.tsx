@@ -61,7 +61,7 @@ export function SignatureAtDelivery() {
                     <Typography className={classes.signatureTitle}>Require Signature at Delivery?</Typography>
                 </Box>
                 <FormControlLabel
-                    sx={{ marginTop: '10px', alignItems: isMobile ? 'start' : 'center' }}
+                    sx={{ marginTop: '3px', alignItems: isMobile ? 'start' : 'center' }}
                     control={
                         <Checkbox color={'primary'} onChange={setRequiresSignatureFee} checked={requiresSignature} />
                     }

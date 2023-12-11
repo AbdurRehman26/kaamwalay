@@ -728,7 +728,7 @@ test('an admin can place order for a user with shipping insurance', function () 
 test('an admin can place order for a user with signature at delivery required', function () {
     Event::fake();
     $signatureFee = 4.99;
-    config('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
+    Config::set('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
 
     $customer = User::factory()->create();
 
@@ -785,7 +785,6 @@ test('an admin can place order for a user with signature at delivery required', 
         'requires_signature' => true,
     ]);
 
-    $response->dump();
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

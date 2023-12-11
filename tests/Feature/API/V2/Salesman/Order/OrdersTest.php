@@ -508,7 +508,7 @@ test('a salesman can place order for a user with shipping insurance', function (
 test('a salesman can place order for a user with signature at delivery required', function () {
     Event::fake();
     $signatureFee = 4.99;
-    config('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
+    Config::set('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
 
     $customer = User::factory()->create();
     $customer->salesman()->associate($this->user)->save();

@@ -22,17 +22,17 @@
                         </div>
                         <div class="category-card--unit-stats category-card--unit-stats clearfix">
                             <div class="one-third">
-                                <div class="stat">{{ formatNumbers($category->cardSets()->count()) }}</div>
+                                <div class="stat">{{ formatNumbers($category->card_sets_count) }}</div>
                                 <div class="stat-value">Sets</div>
                             </div>
 
                             <div class="one-third">
-                                <div class="stat">{{ formatNumbers($category->cardProducts()->count()) }}</div>
+                                <div class="stat">{{ formatNumbers($category->card_products_count) }}</div>
                                 <div class="stat-value">Cards</div>
                             </div>
 
                             <div class="one-third no-border">
-                                <div class="stat">{{ formatNumbers($category->cardProducts()->sum('population')) }}</div>
+                                <div class="stat">{{ formatNumbers($category->card_products_sum_population) }}</div>
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>

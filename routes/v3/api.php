@@ -18,13 +18,13 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('customer')->group(function () {
 
-    Route::apiResource('', CustomerController::class)->only(['index']);
-
     Route::prefix('orders')->group(function () {
         Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
     });
 
     Route::middleware('auth')->group(function () {
+        Route::apiResource('', CustomerController::class)->only(['index']);
+
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Auth\LoginController;
 use App\Http\Controllers\API\V3\Auth\RegisterController;
+use App\Http\Controllers\API\V3\Customer\CustomerController;
 use App\Http\Controllers\API\V3\Customer\Order\OrderController;
 use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\Order\UpdateOrderShippingMethodController;
@@ -16,6 +17,9 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('customer')->group(function () {
+
+    Route::apiResource('', CustomerController::class)->only(['index']);
+
     Route::prefix('orders')->group(function () {
         Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
     });

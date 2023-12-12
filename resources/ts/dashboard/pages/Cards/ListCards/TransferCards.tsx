@@ -24,7 +24,7 @@ import { find } from 'lodash';
 import React, { useCallback, useState } from 'react';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { useCustomerCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { font } from '@shared/styles/utils';
 
 const useStyles = makeStyles({
@@ -62,15 +62,21 @@ export function TransferCardsDialog({
     const [user, setUser] = useState<UserEntity | null>(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    const customers = useAdminCustomersQuery({
+    const customers = useCustomerCustomersQuery({
         ...bracketParams(),
     });
 
     const handleSearch = useCallback(
         (e) => {
+            if (!e.target.value) {
+                setSearch('');
+                customers.data = [];
+                return;
+            }
+
             setSearch(e.target.value);
             debouncedFunc(() => {
-                customers.search({ search: e.target.value });
+                customers.search({ emailOrCustomerNumber: e.target.value });
             });
         },
         [setSearch, customers],
@@ -227,10 +233,14 @@ export function TransferCardsDialog({
                                                                 {customer.getFullName()}
                                                             </Typography>
                                                             <Typography sx={{ fontSize: '12px' }}>
-                                                                ID:{' '}
                                                                 <span className={classes.textColorSecondary}>
                                                                     {customer.customerNumber}
-                                                                </span>{' '}
+                                                                </span>
+                                                            </Typography>
+                                                            <Typography sx={{ fontSize: '12px' }}>
+                                                                <span className={classes.textColorSecondary}>
+                                                                    {customer.email}
+                                                                </span>
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
@@ -282,7 +292,10 @@ export function TransferCardsDialog({
                                             <Typography sx={{ fontSize: '12px' }}>
                                                 <span className={classes.textColorSecondary}>
                                                     {user.customerNumber}
-                                                </span>{' '}
+                                                </span>
+                                            </Typography>
+                                            <Typography sx={{ fontSize: '12px' }}>
+                                                <span className={classes.textColorSecondary}>{user.email}</span>
                                             </Typography>
                                         </Grid>
                                     </Grid>

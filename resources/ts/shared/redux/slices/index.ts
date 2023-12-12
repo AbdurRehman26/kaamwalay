@@ -35,6 +35,7 @@ export { adminReferralPayoutSlice as adminReferralPayout } from './adminReferral
 export { addressEditSlice } from './addressEditSlice';
 export { editCustomerSlice } from './editCustomerSlice';
 export { submissionSelection } from './submissionSelection';
+export { customersSlice as customers } from './customerCustomersSlice';
 
 /*
  *

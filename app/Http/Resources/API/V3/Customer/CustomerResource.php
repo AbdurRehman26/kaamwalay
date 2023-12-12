@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin User
- *
  */
 class CustomerResource extends BaseResource
 {
@@ -28,21 +27,21 @@ class CustomerResource extends BaseResource
 
     public function maskEmail(): string
     {
-        $email  = $this->email;
+        $email = $this->email;
 
         // Separate the local part and domain
-        list($localPart, $domain) = explode('@', $email, 2);
+        [$localPart, $domain] = explode('@', $email, 2);
 
         // Mask all characters in the local part except the first letter
-        $maskedLocalPart = $localPart[0] . str_repeat('*', max(0, strlen($localPart) - 1));
+        $maskedLocalPart = $localPart[0].str_repeat('*', max(0, strlen($localPart) - 1));
 
         // Separate the domain into subdomain and top-level domain
-        list($subdomain, $tld) = explode('.', $domain, 2);
+        [$subdomain, $tld] = explode('.', $domain, 2);
 
         // Mask all characters in the subdomain
         $maskedSubdomain = str_repeat('*', strlen($subdomain));
 
         // Combine the masked local part, masked subdomain, and top-level domain
-        return $maskedLocalPart . '@' . $maskedSubdomain . '.' . $tld;
+        return $maskedLocalPart.'@'.$maskedSubdomain.'.'.$tld;
     }
 }

@@ -567,7 +567,6 @@ class User extends Authenticatable implements Exportable, ExportableWithSort, Fi
 
     /**
      * @param  Builder<User>  $query
-     * @param  string  $value
      * @return Builder<User>
      */
     public function scopeEmailOrCustomerNumber(Builder $query, string $value): Builder

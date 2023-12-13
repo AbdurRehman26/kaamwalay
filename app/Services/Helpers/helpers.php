@@ -16,8 +16,12 @@ function getModelId(Model|int $model): int
     return $model;
 }
 
-function formatNumbers(int $num): int|string
+function formatNumbers(?int $num): int|string
 {
+    if(!$num){
+        return 0;
+    }
+
     if ($num > 1000) {
         $x = round($num);
         $x_number_format = number_format($x);

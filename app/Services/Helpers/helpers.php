@@ -18,7 +18,7 @@ function getModelId(Model|int $model): int
 
 function formatNumbers(?int $num): int|string
 {
-    if(!$num){
+    if (! $num) {
         return 0;
     }
 

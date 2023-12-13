@@ -301,6 +301,26 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                         </TableCell>
                                     </TableRow>
                                 ) : null}
+                                {data.signatureFee > 0 ? (
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant={'body2'}>
+                                                <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
+                                                    Signature Required:
+                                                </Box>
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align={'right'}>
+                                            <Typography
+                                                variant={'body2'}
+                                                align={'right'}
+                                                className={font.fontWeightMedium}
+                                            >
+                                                {formatCurrency(data.signatureFee)}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : null}
                             </TableBody>
                         </Table>
                     </TableContainer>

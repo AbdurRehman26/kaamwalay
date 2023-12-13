@@ -95,6 +95,8 @@ export interface ShippingSubmissionState {
     fetchingStatus: string | null;
     requiresShippingInsurance: boolean;
     shippingInsuranceFee?: number;
+    requiresSignature: boolean;
+    signatureFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -261,6 +263,8 @@ const initialState: SalesRepNewOrderSliceState = {
         saveForLater: true,
         requiresShippingInsurance: true,
         shippingInsuranceFee: 0,
+        requiresSignature: false,
+        signatureFee: 0,
         disableAllShippingInputs: false,
         useCustomShippingAddress: false,
     },
@@ -393,6 +397,7 @@ export const createOrder = createAsyncThunk('salesRepCreateOrderSlice/createOrde
             ? currentSubmission.step02Data.requiresCleaning
             : false,
         requiresShippingInsurance: currentSubmission.step03Data.requiresShippingInsurance ?? false,
+        requiresSignature: currentSubmission.step03Data.requiresSignature ?? false,
         paymentMethodId: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethodId : {},
         paymentMethod: currentSubmission.payNow ? currentSubmission.step04Data.paymentMethod : {},
     };
@@ -604,6 +609,12 @@ export const salesRepCreateOrderSlice = createSlice({
         setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
             state.step03Data.shippingInsuranceFee = action.payload;
         },
+        setRequiresSignature: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.requiresSignature = action.payload;
+        },
+        setSignatureFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.signatureFee = action.payload;
+        },
         setPayNow: (state, action: PayloadAction<boolean>) => {
             state.payNow = action.payload;
         },
@@ -729,6 +740,8 @@ export const {
     setCleaningFee,
     setRequiresShippingInsurance,
     setShippingInsuranceFee,
+    setRequiresSignature,
+    setSignatureFee,
     setRequiresCleaning,
     markCardAsUnselected,
     setCouponCode,

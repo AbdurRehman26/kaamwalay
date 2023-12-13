@@ -84,6 +84,8 @@ export interface ShippingSubmissionState {
     fetchingStatus: string | null;
     requiresShippingInsurance: boolean;
     shippingInsuranceFee?: number;
+    requiresSignature: boolean;
+    signatureFee?: number;
     disableAllShippingInputs: boolean;
     useCustomShippingAddress: boolean;
     selectedExistingAddress: Address;
@@ -392,6 +394,8 @@ const initialState: NewSubmissionSliceState = {
         useCustomShippingAddress: false,
         requiresShippingInsurance: true,
         shippingInsuranceFee: 0,
+        requiresSignature: false,
+        signatureFee: 0,
     },
     step04Data: {
         paymentMethodId: 0,
@@ -712,6 +716,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             ? currentSubmission.step02Data.requiresCleaning
             : false,
         requiresShippingInsurance: currentSubmission.step03Data.requiresShippingInsurance ?? false,
+        requiresSignature: currentSubmission.step03Data.requiresSignature ?? false,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders', { version: 'v3' });
@@ -825,6 +830,12 @@ export const newSubmissionSlice = createSlice({
         },
         setShippingInsuranceFee: (state, action: PayloadAction<number>) => {
             state.step03Data.shippingInsuranceFee = action.payload;
+        },
+        setRequiresSignature: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.requiresSignature = action.payload;
+        },
+        setSignatureFee: (state, action: PayloadAction<number>) => {
+            state.step03Data.signatureFee = action.payload;
         },
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
@@ -1046,6 +1057,9 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.requiresShippingInsurance = action.payload.requiresShippingInsurance;
             state.step03Data.shippingInsuranceFee = action.payload.shippingInsuranceFee;
 
+            state.step03Data.requiresSignature = action.payload.requiresSignature;
+            state.step03Data.signatureFee = action.payload.signatureFee;
+
             const billingAddress = action.payload.billingAddress
                 ? action.payload.billingAddress
                 : action.payload.shippingAddress;
@@ -1205,6 +1219,8 @@ export const {
     setCleaningFee,
     setRequiresShippingInsurance,
     setShippingInsuranceFee,
+    setRequiresSignature,
+    setSignatureFee,
     updateShippingAddressField,
     markCardAsSelected,
     markCardAsUnselected,

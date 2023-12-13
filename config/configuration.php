@@ -100,6 +100,9 @@ return [
         'feature_order_shipping_insurance_fee_percentage' => [
             'value' => env('FEATURE_ORDER_SHIPPING_INSURANCE_FEE_PERCENTAGE'),
         ],
+        'feature_order_signature_at_delivery_fee_value' => [
+            'value' => env('FEATURE_ORDER_SIGNATURE_AT_DELIVERY_FEE_VALUE'),
+        ],
         'feature_referral_discount_percentage' => [
             'auth' => true,
             'value' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE'),

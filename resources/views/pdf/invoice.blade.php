@@ -461,6 +461,16 @@
                                     </td>
                                 </tr>
                             @endif
+                            @if($order->signature_fee > 0)
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Signature Required:
+                                    </td>
+                                    <td class="info-content">
+                                        ${{number_format($order->signature_fee, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
                             <tr class="info-line total-line">
                                 <td class="info-title">
                                     Total:

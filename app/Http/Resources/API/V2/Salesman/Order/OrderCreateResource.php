@@ -39,6 +39,8 @@ class OrderCreateResource extends JsonResource
             'cleaning_fee' => $this->cleaning_fee,
             'shipping_insurance_fee' => $this->shipping_insurance_fee,
             'requires_shipping_insurance' => $this->requires_shipping_insurance,
+            'signature_fee' => $this->signature_fee,
+            'requires_signature' => $this->requires_signature,
             'created_by' => new UserResource($this->createdBy),
             'salesman' => new UserResource($this->salesman),
         ];

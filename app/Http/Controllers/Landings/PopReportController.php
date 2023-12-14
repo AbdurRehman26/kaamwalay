@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Landings;
 
 use App\Http\Controllers\Controller;
 use App\Models\CardCategory;
-use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
-use App\Models\PopReportsCard;
 use App\Services\PopReport\PopReportService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PopReportController extends Controller

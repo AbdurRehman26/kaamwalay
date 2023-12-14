@@ -289,12 +289,12 @@ class PopReportService
             'card_categories.*',
             DB::raw('COUNT(DISTINCT pop_reports_cards.card_set_id) as card_sets_count'),
             DB::raw('COUNT(pop_reports_cards.id) as card_products_count'),
-            DB::raw('SUM(pop_reports_cards.population) as card_products_sum_population')
+            DB::raw('SUM(pop_reports_cards.population) as card_products_sum_population'),
         ])
             ->join('card_products', 'card_products.id', '=', 'pop_reports_cards.card_product_id')
-            ->leftJoin('card_categories', 'card_categories.id', '=','card_products.card_category_id')->groupBy('card_products.card_category_id')
+            ->leftJoin('card_categories', 'card_categories.id', '=', 'card_products.card_category_id')->groupBy('card_products.card_category_id')
             ->where('card_categories.is_enabled', '=', 1)
-        ->get();
+            ->get();
     }
 
     // @phpstan-ignore-next-line

@@ -10,7 +10,7 @@
                 <h2 class="pop-hero__text-subheading pop-hero__text-stats">
                     <span class="pop-hero__text-stat-column with-right-border">
                         <span>
-                            {{ formatNumbers($category->card_sets_count) }}
+                            {{ formatNumbers($cardCategory->cardSets()->count()) }}
                         </span>
                         <span>
                             Sets
@@ -18,7 +18,7 @@
                     </span>
                     <span class="pop-hero__text-stat-column with-right-border">
                         <span>
-                            {{ formatNumbers($category->card_products_count) }}
+                            {{ formatNumbers($cardCategory->cardProducts()->count()) }}
                         </span>
                         <span>
                             Cards
@@ -26,7 +26,7 @@
                     </span>
                     <span class="pop-hero__text-stat-column">
                         <span>
-                            {{ formatNumbers($category->card_products_sum_population) }}
+                            {{ formatNumbers($cardCategory->cardProducts()->sum('population')) }}
                         </span>
                         <span>
                             Graded

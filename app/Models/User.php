@@ -188,13 +188,6 @@ class User extends Authenticatable implements Exportable, ExportableWithSort, Fi
         ];
     }
 
-    public static function getAllowedCustomerFilters(): array
-    {
-        return [
-            AllowedFilter::scope('email_or_customer_number'),
-        ];
-    }
-
     /**
      * @param  Builder <User>  $query
      * @return Builder <User>
@@ -563,14 +556,5 @@ class User extends Authenticatable implements Exportable, ExportableWithSort, Fi
         }
 
         return $query->sum('order_items.quantity');
-    }
-
-    /**
-     * @param  Builder<User>  $query
-     * @return Builder<User>
-     */
-    public function scopeEmailOrCustomerNumber(Builder $query, string $value): Builder
-    {
-        return $query->where('email', '=', $value)->orWhere('customer_number', '=', $value);
     }
 }

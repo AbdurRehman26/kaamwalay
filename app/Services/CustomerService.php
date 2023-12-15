@@ -13,9 +13,16 @@ class CustomerService
     // @phpstan-ignore-next-line
     public function getCustomers(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::customer())
-            ->allowedFilters(User::getAllowedCustomerFilters())
-            ->defaultSort('-created_at')
+        $query = User::customer();
+
+        if (! empty(request('filter')['email_or_customer_number'])) {
+            $emailOrCustomerNumber = request('filter')['email_or_customer_number'];
+
+            $query->where('email', '=', $emailOrCustomerNumber)
+                ->orWhere('customer_number', '=', $emailOrCustomerNumber);
+        }
+
+        return QueryBuilder::for($query)
             ->paginate(request('per_page', self::PER_PAGE));
     }
 }

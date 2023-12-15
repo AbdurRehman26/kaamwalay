@@ -311,7 +311,7 @@ class PopReportService
             DB::raw('SUM(pop_reports_cards.population) as card_products_sum_population'),
         ])
             ->join('card_products', 'card_products.id', '=', 'pop_reports_cards.card_product_id')
-            ->leftJoin('card_categories', 'card_categories.id', '=','card_products.card_category_id')->groupBy('card_products.card_category_id');
+            ->leftJoin('card_categories', 'card_categories.id', '=', 'card_products.card_category_id')->groupBy('card_products.card_category_id');
     }
 
     // @phpstan-ignore-next-line

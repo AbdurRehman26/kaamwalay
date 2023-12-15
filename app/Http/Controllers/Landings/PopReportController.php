@@ -28,6 +28,8 @@ class PopReportController extends Controller
 
         $totalPopulation = $this->popReportService->getSeriesTotalPopulation($cardCategory);
 
+        $cardCategory = $this->popReportService->getCategoryReport($cardCategory);
+
         return view('landings.pop.report', compact('data', 'totalPopulation', 'cardCategory'));
     }
 

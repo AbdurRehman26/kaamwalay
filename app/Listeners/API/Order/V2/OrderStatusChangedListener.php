@@ -172,7 +172,7 @@ class OrderStatusChangedListener implements ShouldQueue
         string $template,
         array $vars,
         bool $reschedulingRequired = false,
-        string $checkClass = null,
+        ?string $checkClass = null,
         array $extraData = [],
     ): void {
         $this->emailService->scheduleEmail(

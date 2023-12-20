@@ -17,7 +17,7 @@ class ScheduledNotificationService
         string $notifiableType,
         int $notifiableId,
         array $payload,
-        string $checkClass = null
+        ?string $checkClass = null
     ): void {
         ScheduledNotification::create([
             'send_at' => $sendAt,

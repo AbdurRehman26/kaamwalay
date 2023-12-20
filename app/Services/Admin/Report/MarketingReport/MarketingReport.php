@@ -75,7 +75,7 @@ abstract class MarketingReport implements Reportable
             ->count();
     }
 
-    protected function getCustomersWithCardsBetween(DateTime $fromDate, DateTime $toDate, int $totalCardsGreaterThan, int $totalCardsLessThan = null): int
+    protected function getCustomersWithCardsBetween(DateTime $fromDate, DateTime $toDate, int $totalCardsGreaterThan, ?int $totalCardsLessThan = null): int
     {
         $query = Order::selectRaw('MAX(orders.user_id)')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')

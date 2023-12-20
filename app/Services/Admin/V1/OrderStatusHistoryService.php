@@ -44,8 +44,8 @@ class OrderStatusHistoryService
     public function addStatusToOrder(
         OrderStatus|int $orderStatus,
         Order|int $order,
-        User|int $user = null,
-        string $notes = null
+        User|int|null $user = null,
+        ?string $notes = null
     ): OrderStatusHistory|Model {
         if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */

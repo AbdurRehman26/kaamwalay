@@ -154,7 +154,7 @@ class EmailService
         string $templateName,
         array $templateContent = [],
         bool $reschedulingRequired = false,
-        string $checkClass = null,
+        ?string $checkClass = null,
         array $extraData = [],
     ): bool {
         if (app()->environment('local')) {

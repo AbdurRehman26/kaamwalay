@@ -1,5 +1,31 @@
 # Changelog
 
+## v3.23.0 - 2023-12-05
+
+### What's Changed
+
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1121
+* Feature: Update payment plans by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1125
+* Feature: Marketing Promotional SMS by @thenabeel in https://github.com/woozard/robograding/pull/1128
+* Feature: Referrer Reminder Email Schedule by @thenabeel in https://github.com/woozard/robograding/pull/1129
+* Release v3.23.0 by @thenabeel in https://github.com/woozard/robograding/pull/1130
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.22.0...v3.23.0
+
+## v3.22.0 - 2023-11-07
+
+### What's Changed
+
+- Fix: Admin | Refund Issue by @numair97 in https://github.com/woozard/robograding/pull/1116
+- Fix: Admin | Refund Issue by @thenabeel in https://github.com/woozard/robograding/pull/1117
+- Fix: Shipping Insurance | Showing insurance percentage dynamically by @luis-molina in https://github.com/woozard/robograding/pull/1118
+- Fix: Calculation Issues In Closes  by @numair97 in https://github.com/woozard/robograding/pull/1114
+- Feature: Affirm Payment by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1115
+- Bugfix: Affirm name not displaying on invoice by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1120
+- Fix: Collector Coin verification page processing by @luis-molina in https://github.com/woozard/robograding/pull/1119
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.21.0...v3.22.0
+
 ## v3.21.0 - 2023-10-05
 
 ### What's Changed

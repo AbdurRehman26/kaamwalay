@@ -325,7 +325,7 @@ class PopReportService
                 'card_products_count'
             )
             ->join('card_products', 'card_categories.id', '=', 'card_products.card_category_id')
-            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id',  '=', 'card_products.id')
+            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
             ->groupBy('card_categories.id');
     }
 

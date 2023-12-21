@@ -1,3 +1,5 @@
+@use('Illuminate\Support\Number')
+
 <x-layout>
     <section
         class="pop-index-hero p-5 text-center bg-image rounded-3"
@@ -22,17 +24,17 @@
                         </div>
                         <div class="category-card--unit-stats category-card--unit-stats clearfix">
                             <div class="one-third">
-                                <div class="stat">{{ formatNumbers($category->card_sets_count) }}</div>
+                                <div class="stat">{{ Number::abbreviate($category->card_sets_count, 1, 1) }}</div>
                                 <div class="stat-value">Sets</div>
                             </div>
 
                             <div class="one-third">
-                                <div class="stat">{{ formatNumbers($category->card_products_count) }}</div>
+                                <div class="stat">{{ Number::abbreviate($category->card_products_count, 1, 1) }}</div>
                                 <div class="stat-value">Cards</div>
                             </div>
 
                             <div class="one-third no-border">
-                                <div class="stat">{{ formatNumbers($category->card_products_sum_population) }}</div>
+                                <div class="stat">{{ Number::abbreviate($category->card_products_sum_population, 1, 1) }}</div>
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>

@@ -1,3 +1,5 @@
+@use('Illuminate\Support\Number')
+
 <x-layout pageClass="page--pop-list">
     <section class="pop-hero">
         <div class="container pop-hero__container">
@@ -10,7 +12,7 @@
                 <h2 class="pop-hero__text-subheading pop-hero__text-stats">
                     <span class="pop-hero__text-stat-column with-right-border">
                         <span>
-                            {{ formatNumbers($cardCategory->card_sets_count) }}
+                            {{ Number::format($cardCategory->card_sets_count) }}
                         </span>
                         <span>
                             Sets
@@ -18,7 +20,7 @@
                     </span>
                     <span class="pop-hero__text-stat-column with-right-border">
                         <span>
-                            {{ formatNumbers($cardCategory->card_products_count) }}
+                            {{ Number::format($cardCategory->card_products_count) }}
                         </span>
                         <span>
                             Cards
@@ -26,7 +28,7 @@
                     </span>
                     <span class="pop-hero__text-stat-column">
                         <span>
-                            {{ formatNumbers($cardCategory->card_products_sum_population) }}
+                            {{ Number::format($cardCategory->card_products_sum_population) }}
                         </span>
                         <span>
                             Graded

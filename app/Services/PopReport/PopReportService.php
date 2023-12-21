@@ -286,7 +286,7 @@ class PopReportService
     public function getCategoriesReport(): Collection
     {
         return $this->getCategoryReportQuery()
-            ->where('card_categories.is_enabled', '=', 1)
+            ->enabled()
             ->get();
     }
 
@@ -304,14 +304,29 @@ class PopReportService
      */
     protected function getCategoryReportQuery()
     {
-        return PopReportsCard::select([
+        return CardCategory::select([
             'card_categories.*',
-            DB::raw('COUNT(DISTINCT pop_reports_cards.card_set_id) as card_sets_count'),
-            DB::raw('COUNT(pop_reports_cards.id) as card_products_count'),
             DB::raw('SUM(pop_reports_cards.population) as card_products_sum_population'),
         ])
-            ->join('card_products', 'card_products.id', '=', 'pop_reports_cards.card_product_id')
-            ->leftJoin('card_categories', 'card_categories.id', '=', 'card_products.card_category_id')->groupBy('card_products.card_category_id');
+            ->selectSub(
+                function ($query) {
+                    $query->selectRaw('count(*)')
+                        ->from('card_sets')
+                        ->whereColumn('card_categories.id', 'card_sets.card_category_id');
+                },
+                'card_sets_count'
+            )
+            ->selectSub(
+                function ($query) {
+                    $query->selectRaw('count(*)')
+                        ->from('card_products')
+                        ->whereColumn('card_categories.id', 'card_products.card_category_id');
+                },
+                'card_products_count'
+            )
+            ->join('card_products', 'card_categories.id', '=', 'card_products.card_category_id')
+            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id',  '=', 'card_products.id')
+            ->groupBy('card_categories.id');
     }
 
     // @phpstan-ignore-next-line

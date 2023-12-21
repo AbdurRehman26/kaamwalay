@@ -291,7 +291,7 @@ class PopReportService
     }
 
     /**
-     * @return PopReportsCard|null
+     * @return CardCategory|null
      */
     public function getCategoryReport(CardCategory $cardCategory)
     {
@@ -300,7 +300,7 @@ class PopReportService
     }
 
     /**
-     * @return Builder<PopReportsCard>
+     * @return Builder<CardCategory>
      */
     protected function getCategoryReportQuery()
     {

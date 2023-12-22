@@ -306,7 +306,7 @@ class PopReportService
     {
         return CardCategory::select([
             'card_categories.*',
-            DB::raw('SUM(pop_reports_cards.population) as card_products_sum_population'),
+            DB::raw('SUM(pop_reports_cards.population) as pop_reports_cards_sum_population'),
         ])
             ->selectSub(
                 function ($query) {

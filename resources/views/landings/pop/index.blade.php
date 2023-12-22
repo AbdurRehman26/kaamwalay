@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="one-third no-border">
-                                <div class="stat">{{ Number::abbreviate($category->card_products_sum_population, 1, 1) }}</div>
+                                <div class="stat">{{ Number::abbreviate($category->pop_reports_cards_sum_population, 1, 1) }}</div>
                                 <div class="stat-value">Graded</div>
                             </div>
                         </div>

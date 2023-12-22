@@ -28,7 +28,7 @@
                     </span>
                     <span class="pop-hero__text-stat-column">
                         <span class="pop-hero__text-stat-column-value">
-                            {{ Number::format($cardCategory->card_products_sum_population) }}
+                            {{ Number::format($cardCategory->pop_reports_cards_sum_population) }}
                         </span>
                         <span class="pop-hero__text-stat-column-title">
                             Graded

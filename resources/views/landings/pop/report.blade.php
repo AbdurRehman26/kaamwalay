@@ -11,26 +11,26 @@
 
                 <h2 class="pop-hero__text-subheading pop-hero__text-stats">
                     <span class="pop-hero__text-stat-column with-right-border">
-                        <span>
+                        <span class="pop-hero__text-stat-column-value">
                             {{ Number::format($cardCategory->card_sets_count) }}
                         </span>
-                        <span>
+                        <span class="pop-hero__text-stat-column-title">
                             Sets
                         </span>
                     </span>
                     <span class="pop-hero__text-stat-column with-right-border">
-                        <span>
+                        <span class="pop-hero__text-stat-column-value">
                             {{ Number::format($cardCategory->card_products_count) }}
                         </span>
-                        <span>
+                        <span class="pop-hero__text-stat-column-title">
                             Cards
                         </span>
                     </span>
                     <span class="pop-hero__text-stat-column">
-                        <span>
+                        <span class="pop-hero__text-stat-column-value">
                             {{ Number::format($cardCategory->card_products_sum_population) }}
                         </span>
-                        <span>
+                        <span class="pop-hero__text-stat-column-title">
                             Graded
                         </span>
                     </span>

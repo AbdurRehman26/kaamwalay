@@ -251,7 +251,7 @@ export function TransferCardsDialog({
                                                             variant={'outlined'}
                                                             color={'primary'}
                                                         >
-                                                            Select
+                                                            Select User
                                                         </Button>
                                                     </Grid>
                                                 </Grid>

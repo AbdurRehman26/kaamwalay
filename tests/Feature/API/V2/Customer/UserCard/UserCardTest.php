@@ -174,3 +174,18 @@ test('a customer can transfer his cards to another user', function () {
 
     $cardDetailsResponseForSecondUser->assertOk();
 });
+
+test('a customer cannot transfer cards of another user', function () {
+
+    $otherUser = User::factory()->withRole('customer')->create();
+
+    $otherUserCards = UserCard::factory()->create(
+        ['user_id' => $otherUser->id],
+    );
+
+    postJson('/api/v2/customer/cards/change-ownership', [
+        'user_id' => $otherUser->id,
+        'user_card_ids' => [$otherUserCards->id],
+    ])->assertUnprocessable();
+
+});

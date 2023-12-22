@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Enums\UserCard\UserCardShippingStatus;
-use App\Services\Order\UserCardService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,7 +32,7 @@ class UserCard extends Model
         'shipping_status',
         'is_fake',
         'social_images',
-        'front_slab_image'
+        'front_slab_image',
     ];
 
     protected $casts = [

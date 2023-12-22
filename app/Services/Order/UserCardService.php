@@ -157,23 +157,6 @@ class UserCardService
         ];
     }
 
-    public function frontSlabbedImage(string $certificateId): string
-    {
-        $userCard = UserCard::where('certificate_number', $certificateId)->first();
-
-        if (empty($userCard)) {
-            return '';
-        }
-
-        $data = $this->agsService->getGradesByCertificateId($certificateId);
-
-        if (!empty($data['results'][0]['front_slab_image'])) {
-            return $data['results'][0]['front_slab_image'];
-        }
-
-        return '';
-    }
-
     public function pepareScannedImagesForPublicCardPage(array $data): array
     {
         if (

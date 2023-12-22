@@ -33,6 +33,7 @@ class UserCard extends Model
         'shipping_status',
         'is_fake',
         'social_images',
+        'front_slab_image'
     ];
 
     protected $casts = [
@@ -67,7 +68,7 @@ class UserCard extends Model
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname.' '.$this->overall_grade,
             'shipped_at' => $this->orderItem->order->shipped_at,
-            'front_slab_image' => $this->frontSlabbedImage(),
+            'front_slab_image' => $this->front_slab_image,
             'shipped_at_timestamp' => $this->orderItem->order->shipped_at->unix(),
         ];
     }
@@ -159,13 +160,5 @@ class UserCard extends Model
         $this->shipping_status = UserCardShippingStatus::IN_VAULT;
 
         return $this->save();
-    }
-
-    public function frontSlabbedImage(): string
-    {
-        $userCardService = app(UserCardService::class);
-        $front_slabbed_image = $userCardService->frontSlabbedImage($this->certificate_number);
-
-        return $front_slabbed_image;
     }
 }

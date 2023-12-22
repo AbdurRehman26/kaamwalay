@@ -5,7 +5,7 @@
     background-color: #160056;
 
     &__container {
-        display: flex;
+        display: block;
         justify-content: space-between;
         align-items: stretch;
         @apply pb-1;
@@ -17,6 +17,7 @@
 
     &__text {
         @apply flex justify-center items-start flex-col;
+        max-width: 95%;
         padding: 30px 0;
         z-index: 1;
 
@@ -91,6 +92,9 @@
             &-value {
                 font-weight: 500;
                 font-size: 20px;
+                @include breakpoints.down(sm) {
+                    font-size: 16px !important;
+                }
             }
 
             &-title {

@@ -18,7 +18,7 @@ class BaseResource extends JsonResource
         return parent::toArray($request);
     }
 
-    public function formatDate(string $date = null): ?string
+    public function formatDate(?string $date = null): ?string
     {
         if ($date) {
             return Carbon::parse($date)->toISOString();

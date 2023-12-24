@@ -6,17 +6,12 @@
 
     &__container {
         display: flex;
-        justify-content: space-between;
-        align-items: stretch;
         @apply pb-1;
-
-        @include breakpoints.down(xs) {
-            @apply pr-0;
-        }
     }
 
     &__text {
-        @apply w-11/12 flex justify-center items-start flex-col;
+        @apply grow;
+        @apply flex justify-center items-start flex-col;
         padding: 30px 0;
         z-index: 1;
 
@@ -64,6 +59,48 @@
 
         &-series-subheading {
             font-size: 14px;
+        }
+
+        &-stats {
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 550px;
+            border-radius: 8px;
+            display: flex;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.10000000149011612px;
+            text-align: center;
+            @include breakpoints.down(sm) {
+                width: 100%;
+            }
+        }
+
+        &-stat-column {
+            text-align: center;
+            width: 33%;
+            padding: 10px;
+            display: inline-grid;
+
+            &-value {
+                font-weight: 500;
+                font-size: 20px;
+                @include breakpoints.down(sm) {
+                    font-size: 16px !important;
+                }
+            }
+
+            &-title {
+                font-weight: 400;
+                font-size: 14px;
+                color: #ffffffb2;
+            }
+        }
+
+        &-stat-column.with-right-border {
+            height: 72px;
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
         }
     }
 

@@ -1,3 +1,5 @@
+@use('Illuminate\Support\Number')
+
 <x-layout>
     <section
         class="pop-index-hero p-5 text-center bg-image rounded-3"
@@ -16,8 +18,26 @@
         <div class="container">
             <div class="row">
                 @foreach($categories as $category)
-                    <a href="{{route('pop.categories', ['cardCategory' => $category])}}" class="category-box">
-                        <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
+                    <a href="{{route('pop.categories', ['cardCategory' => $category])}}" class="category-card barbarian">
+                        <div class="category-card__image">
+                            <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
+                        </div>
+                        <div class="category-card--unit-stats category-card--unit-stats clearfix">
+                            <div class="one-third">
+                                <div class="stat">{{ Number::abbreviate($category->card_sets_count, 1, 1) }}</div>
+                                <div class="stat-value">Sets</div>
+                            </div>
+
+                            <div class="one-third">
+                                <div class="stat">{{ Number::abbreviate($category->card_products_count, 1, 1) }}</div>
+                                <div class="stat-value">Cards</div>
+                            </div>
+
+                            <div class="one-third no-border">
+                                <div class="stat">{{ Number::abbreviate($category->pop_reports_cards_sum_population, 1, 1) }}</div>
+                                <div class="stat-value">Graded</div>
+                            </div>
+                        </div>
                     </a>
                 @endforeach
                 @if(count($categories) % 4)

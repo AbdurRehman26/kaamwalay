@@ -44,6 +44,8 @@ interface SubmissionsViewDetailsProps {
     paymentMethodCode: string;
     requiresShippingInsurance: boolean;
     shippingInsuranceFee: number;
+    requiresSignature: boolean;
+    signatureFee: number;
     coupon: OrderCouponEntity;
     paymentStatus: PaymentStatusEnum;
     walletPayment: string;
@@ -101,6 +103,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         orderCustomerShipment,
         requiresShippingInsurance,
         shippingInsuranceFee,
+        requiresSignature,
+        signatureFee,
         shippingMethod,
     } = props;
 
@@ -113,6 +117,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
             'Declared Value:': formatCurrency(declaredValue),
             'Insurance:': requiresShippingInsurance ? 'Yes' : 'No',
+            'Signature Required:': requiresSignature ? 'Yes' : 'No',
             ...(owner?.fullName && {
                 'Owner:': [
                     <>
@@ -144,6 +149,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             referralCommission,
             referrer,
             requiresShippingInsurance,
+            requiresSignature,
             shippingMethod,
         ],
     );
@@ -178,6 +184,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             ...(Number(cleaningFee) > 0 && { 'Cleaning Fee:': formatCurrency(cleaningFee) }),
             ...(Number(shippingInsuranceFee) > 0 && { 'Insurance:': formatCurrency(shippingInsuranceFee) }),
+            ...(Number(signatureFee) > 0 && { 'Signature Required:': formatCurrency(signatureFee) }),
             'Total:': formatCurrency(grandTotal),
         }),
         [
@@ -192,6 +199,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             amountPaidFromWallet,
             grandTotal,
             shippingInsuranceFee,
+            signatureFee,
         ],
     );
 

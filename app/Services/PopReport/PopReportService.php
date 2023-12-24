@@ -283,6 +283,53 @@ class PopReportService
     }
 
     // @phpstan-ignore-next-line
+    public function getCategoriesReport(): Collection
+    {
+        return $this->getCategoryReportQuery()
+            ->enabled()
+            ->get();
+    }
+
+    /**
+     * @return CardCategory|null
+     */
+    public function getCategoryReport(CardCategory $cardCategory)
+    {
+        return $this->getCategoryReportQuery()->where('card_categories.id', $cardCategory->id)->first();
+
+    }
+
+    /**
+     * @return Builder<CardCategory>
+     */
+    protected function getCategoryReportQuery()
+    {
+        return CardCategory::select([
+            'card_categories.*',
+            DB::raw('SUM(pop_reports_cards.population) as pop_reports_cards_sum_population'),
+        ])
+            ->selectSub(
+                function ($query) {
+                    $query->selectRaw('count(*)')
+                        ->from('card_sets')
+                        ->whereColumn('card_categories.id', 'card_sets.card_category_id');
+                },
+                'card_sets_count'
+            )
+            ->selectSub(
+                function ($query) {
+                    $query->selectRaw('count(*)')
+                        ->from('card_products')
+                        ->whereColumn('card_categories.id', 'card_products.card_category_id');
+                },
+                'card_products_count'
+            )
+            ->join('card_products', 'card_categories.id', '=', 'card_products.card_category_id')
+            ->join('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
+            ->groupBy('card_categories.id');
+    }
+
+    // @phpstan-ignore-next-line
     public function getSeriesReport(CardCategory $cardCategory): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;

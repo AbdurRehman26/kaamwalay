@@ -6,7 +6,7 @@ use Exception;
 
 class MixService
 {
-    public function hasFile(string $file, string $app = null): bool
+    public function hasFile(string $file, ?string $app = null): bool
     {
         try {
             return (bool) $this->getFile($file, $app);
@@ -18,7 +18,7 @@ class MixService
     /**
      * @throws Exception
      */
-    public function getFile(string $file, string $app = null): string
+    public function getFile(string $file, ?string $app = null): string
     {
         $app ??= 'landings';
 

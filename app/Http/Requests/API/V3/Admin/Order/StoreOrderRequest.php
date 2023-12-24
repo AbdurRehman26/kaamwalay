@@ -15,6 +15,7 @@ class StoreOrderRequest extends V2StoreOrderRequest
 
         return array_merge($rules, [
             'requires_shipping_insurance' => ['sometimes', 'boolean'],
+            'requires_signature' => ['sometimes', 'boolean'],
         ]);
     }
 }

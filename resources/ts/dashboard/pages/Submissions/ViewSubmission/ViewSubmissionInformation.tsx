@@ -24,6 +24,7 @@ interface ViewSubmissionInformationProps {
     shippingFee: number;
     cleaningFee: number;
     shippingInsuranceFee: number;
+    signatureFee: number;
     total: number;
     discountedAmount: string;
     paymentMethodDiscountedAmount: string;
@@ -49,6 +50,7 @@ export function ViewSubmissionInformation({
     shippingFee,
     cleaningFee,
     shippingInsuranceFee,
+    signatureFee,
     extraChargesTotal,
     refundsTotal,
     total,
@@ -192,6 +194,14 @@ export function ViewSubmissionInformation({
                                 Cleaning Fee
                             </TableCell>
                             <TableCell>{formatCurrency(cleaningFee)}</TableCell>
+                        </TableRow>
+                    ) : null}
+                    {signatureFee > 0 ? (
+                        <TableRow>
+                            <TableCell variant={'head'} component={'th'}>
+                                Signature Required
+                            </TableCell>
+                            <TableCell>{formatCurrency(signatureFee)}</TableCell>
                         </TableRow>
                     ) : null}
                     <TableRow>

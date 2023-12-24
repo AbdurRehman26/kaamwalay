@@ -183,6 +183,85 @@ test('a customer can place order with shipping insurance', function () {
 
 });
 
+test('a customer can place order with signature at delivery required', function () {
+    $this->actingAs($this->user);
+    Event::fake();
+    $signatureFee = 4.99;
+    Config::set('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
+
+    $response = $this->postJson('/api/v3/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'requires_signature' => true,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'requires_signature',
+            'signature_fee',
+            'grand_total',
+        ],
+    ]);
+
+    $response->assertJsonPath('data.signature_fee', $signatureFee);
+    $response->assertJsonPath('data.requires_signature', true);
+});
+
 test('an order needs data', function () {
     $this->actingAs($this->user);
 

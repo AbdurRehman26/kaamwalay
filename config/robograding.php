@@ -29,6 +29,7 @@ return [
     'feature_order_cleaning_fee_per_card' => env('FEATURE_ORDER_CLEANING_FEE_PER_CARD'),
     'feature_order_cleaning_fee_max_cap' => env('FEATURE_ORDER_CLEANING_FEE_MAX_CAP'),
     'feature_order_shipping_insurance_fee_percentage' => env('FEATURE_ORDER_SHIPPING_INSURANCE_FEE_PERCENTAGE'),
+    'feature_order_signature_at_delivery_fee_value' => env('FEATURE_ORDER_SIGNATURE_AT_DELIVERY_FEE_VALUE'),
     'feature_referral_discount_percentage' => env('FEATURE_REFERRAL_DISCOUNT_PERCENTAGE', 35),
     'feature_referral_max_discount_items' => env('FEATURE_REFERRAL_MAX_DISCOUNT_ITEMS', 20),
     'feature_order_payment_affirm_min_amount' => env('FEATURE_ORDER_PAYMENT_AFFIRM_MIN_AMOUNT', 50),

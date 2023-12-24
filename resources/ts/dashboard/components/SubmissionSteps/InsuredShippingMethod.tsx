@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
 import { useAuth } from '@shared/hooks/useAuth';
 import { ShippingInsurance } from '@dashboard/components/SubmissionSteps/ShippingInsurance';
+import { SignatureAtDelivery } from '@dashboard/components/SubmissionSteps/SignatureAtDelivery';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getCountriesList,
@@ -372,6 +373,7 @@ export function InsuredShippingMethod() {
                 </Grid>
             ) : null}
             <ShippingInsurance />
+            <SignatureAtDelivery />
 
             {existingAddresses.length > 0 ? (
                 <>

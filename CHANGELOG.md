@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.24.0 - 2023-12-24
+
+### What's Changed
+
+* Hotfix: SMS Campaign User Phone Issue by @thenabeel in https://github.com/woozard/robograding/pull/1131
+* Feature: Require Signature at Delivery by @luis-molina in https://github.com/woozard/robograding/pull/1132
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1133
+* Feature: Landing Page Category Stats by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1124
+* Release v3.24.0 by @thenabeel in https://github.com/woozard/robograding/pull/1134
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.23.0...v3.24.0
+
 ## v3.23.0 - 2023-12-05
 
 ### What's Changed

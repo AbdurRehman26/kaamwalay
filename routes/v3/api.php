@@ -23,7 +23,7 @@ Route::prefix('customer')->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
-        Route::apiResource('', CustomerController::class)->only(['index']);
+        Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
 
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
@@ -39,7 +39,7 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [PushNotificationController::class, 'index'])->name('customer.push-notifications.index');
             Route::get('stats', [PushNotificationController::class, 'stats'])->name('customer.push-notifications.stats');
             Route::post('{notification}/mark-as-read', [PushNotificationController::class, 'markAsRead'])->name('customer.push-notifications.mark-as-read');
-            Route::post('mark-all-as-read', [PushNotificationController::class, 'markAllAsRead'])->name('customer.push-notifications.mark-all-as-read');
+            Route::post('m ark-all-as-read', [PushNotificationController::class, 'markAllAsRead'])->name('customer.push-notifications.mark-all-as-read');
         });
 
         Route::prefix('referral')->group(function () {

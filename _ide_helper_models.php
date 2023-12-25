@@ -156,6 +156,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $description
+ * @property int $population
  * @property int $added_manually
  * @property int|null $added_by
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -195,6 +196,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereImagePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct wherePopulation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereRarity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereSurface($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereUpdatedAt($value)
@@ -2077,6 +2079,40 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\ScheduledNotification
+ *
+ * @property int $id
+ * @property string|null $notification_class
+ * @property string $notifiable_type
+ * @property int $notifiable_id
+ * @property \Illuminate\Support\Carbon $send_at
+ * @property string $payload
+ * @property int $is_sent
+ * @property string|null $check_class
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notifiable
+ * @method static \Database\Factories\ScheduledNotificationFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification unsent()
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereCheckClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereIsSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereNotifiableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereNotifiableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereNotificationClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereSendAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledNotification whereUpdatedAt($value)
+ */
+	class ScheduledNotification extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\ShippingMatrix
  *
  * @property int $id
@@ -2254,7 +2290,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
  */
-	class User extends \Eloquent implements \Tymon\JWTAuth\Contracts\JWTSubject, \App\Contracts\Exportable, \App\Contracts\ExportableWithSort, \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
+	class User extends \Eloquent implements \App\Contracts\Exportable, \App\Contracts\ExportableWithSort, \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar, \Tymon\JWTAuth\Contracts\JWTSubject {}
 }
 
 namespace App\Models{

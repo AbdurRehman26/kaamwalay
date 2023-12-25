@@ -26,7 +26,7 @@ class SerialNumberService
      * For a string bigger than 3, only uppercase letters will be picked after subject is transformed to PascalCase
      * with max. amount of 3 letter.
      */
-    public static function for(CanBeSerialNumbered|string $subject, int $value = null, int $len = 8, string $pad = '0'): SerialNumber
+    public static function for(CanBeSerialNumbered|string $subject, ?int $value = null, int $len = 8, string $pad = '0'): SerialNumber
     {
         if (class_exists($subject) && method_exists($subject, 'getPrefixSerialNumber')) {
             // If subject it's a class and implements CanBeSerialNumbered interface.

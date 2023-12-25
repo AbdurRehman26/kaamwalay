@@ -81,6 +81,8 @@ class Order extends Model implements Exportable, Taggable
         'referral_total_commission',
         'requires_shipping_insurance',
         'shipping_insurance_fee',
+        'requires_signature',
+        'signature_fee',
     ];
 
     /**
@@ -127,6 +129,8 @@ class Order extends Model implements Exportable, Taggable
         'referral_total_commission' => 'float',
         'requires_shipping_insurance' => 'boolean',
         'shipping_insurance_fee' => 'float',
+        'requires_signature' => 'bool',
+        'signature_fee' => 'float',
     ];
 
     protected $appends = [
@@ -137,6 +141,8 @@ class Order extends Model implements Exportable, Taggable
     protected $attributes = [
         'requires_cleaning' => false,
         'cleaning_fee' => 0,
+        'requires_signature' => false,
+        'signature_fee' => 0,
     ];
 
     private static function allowedIncludes(): array

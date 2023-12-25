@@ -725,6 +725,89 @@ test('an admin can place order for a user with shipping insurance', function () 
     $response->assertJsonPath('data.requires_shipping_insurance', true);
 });
 
+test('an admin can place order for a user with signature at delivery required', function () {
+    Event::fake();
+    $signatureFee = 4.99;
+    Config::set('robograding.feature_order_signature_at_delivery_fee_value', $signatureFee);
+
+    $customer = User::factory()->create();
+
+    $response = $this->postJson('/api/v3/admin/orders', [
+        'user_id' => $customer->id,
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'pay_now' => false,
+        'requires_signature' => true,
+    ]);
+
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'requires_signature',
+            'signature_fee',
+            'grand_total',
+        ],
+    ]);
+
+    $response->assertJsonPath('data.signature_fee', $signatureFee);
+    $response->assertJsonPath('data.requires_signature', true);
+});
+
 test('correct service level price is assigned according to price ranges', function (int $numberOfCards, $priceRangeIndex) {
     Event::fake();
 

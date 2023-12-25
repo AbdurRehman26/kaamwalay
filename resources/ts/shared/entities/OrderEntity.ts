@@ -36,6 +36,8 @@ export class OrderEntity extends Entity {
     public requiresCleaning!: boolean;
     public requiresShippingInsurance!: boolean;
     public shippingInsuranceFee!: number;
+    public requiresSignature!: boolean;
+    public signatureFee!: number;
     public serviceFee!: number;
     public customerId!: number;
     public orderStep!: string;

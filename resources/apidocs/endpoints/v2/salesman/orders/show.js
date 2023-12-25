@@ -25,7 +25,9 @@
  *                "shipping_fee": 43,
  *                "shipping_insurance_fee": 10.0,
  *                "requires_shipping_insurance": true,
- *                "grand_total": 263,
+ *                "signature_fee": 4.99,
+ *                "requires_signature": true
+ *                "grand_total": 267.99,
  *                "extra_charge_total": 0,
  *                "refund_total": 0,
  *                "created_at": {

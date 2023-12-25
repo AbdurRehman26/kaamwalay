@@ -31,7 +31,7 @@ class FileService
         ]);
     }
 
-    protected function getSignedUrl(string $key, string $contentType, string $bucket = null): string
+    protected function getSignedUrl(string $key, string $contentType, ?string $bucket = null): string
     {
         $client = $this->getStorageClient();
         $expiry = '+10 minutes';

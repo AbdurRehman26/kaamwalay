@@ -57,6 +57,8 @@ use Illuminate\Http\Request;
  * @property mixed $requires_shipping_insurance
  * @property mixed $shipping_insurance_fee
  * @property mixed $salesman_commission
+ * @property mixed $requires_signature
+ * @property mixed $signature_fee
  * @property OrderPaymentStatusEnum $payment_status
  *
  * @method orderItems()
@@ -119,6 +121,8 @@ class OrderResource extends BaseResource
             'salesman_commission' => $this->salesman_commission,
             'shipping_insurance_fee' => $this->shipping_insurance_fee,
             'requires_shipping_insurance' => $this->requires_shipping_insurance,
+            'signature_fee' => $this->signature_fee,
+            'requires_signature' => $this->requires_signature,
         ];
     }
 

@@ -455,6 +455,11 @@ class User extends Authenticatable implements Exportable, ExportableWithSort, Fi
         return $this->email;
     }
 
+    public function routeNotificationForTwilio(): string
+    {
+        return $this->phone;
+    }
+
     protected function getPasswordResetRoute(string $token): string
     {
         return route('password.reset', [

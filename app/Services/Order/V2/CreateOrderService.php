@@ -99,6 +99,7 @@ class CreateOrderService
         $this->storeServiceFee();
         $this->storeCleaningFee();
         $this->storeShippingInsuranceFee();
+        $this->storeSignatureFee();
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
@@ -222,7 +223,7 @@ class CreateOrderService
 
     protected function storeGrandTotal(): void
     {
-        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee + $this->order->shipping_insurance_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee + $this->order->cleaning_fee + $this->order->shipping_insurance_fee + $this->order->signature_fee;
         $this->order->grand_total = $this->order->grand_total_before_discount - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
@@ -334,6 +335,15 @@ class CreateOrderService
         if (! empty($this->data['requires_shipping_insurance'])) {
             $this->order->shipping_insurance_fee = (new ShippingInsuranceFeeService($this->order))->calculate();
             $this->order->requires_shipping_insurance = (bool) $this->data['requires_shipping_insurance'];
+            $this->order->save();
+        }
+    }
+
+    protected function storeSignatureFee(): void
+    {
+        if (! empty($this->data['requires_signature'])) {
+            $this->order->signature_fee = config('robograding.feature_order_signature_at_delivery_fee_value');
+            $this->order->requires_signature = (bool) $this->data['requires_signature'];
             $this->order->save();
         }
     }

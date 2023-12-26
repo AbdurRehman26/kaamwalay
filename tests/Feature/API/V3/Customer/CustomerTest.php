@@ -94,6 +94,6 @@ test('a customer cannot search for other customer based on partial or wrong emai
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
-        'filter' => ['email_or_customer_number' => Str::substr($customer->email_address, 0, 5)],
+        'filter' => ['email_or_customer_number' => Str::substr($customer->email, 0, 5)],
     ]))->assertJsonCount(0, 'data');
 });

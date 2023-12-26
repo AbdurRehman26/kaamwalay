@@ -38,7 +38,7 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [PushNotificationController::class, 'index'])->name('customer.push-notifications.index');
             Route::get('stats', [PushNotificationController::class, 'stats'])->name('customer.push-notifications.stats');
             Route::post('{notification}/mark-as-read', [PushNotificationController::class, 'markAsRead'])->name('customer.push-notifications.mark-as-read');
-            Route::post('m ark-all-as-read', [PushNotificationController::class, 'markAllAsRead'])->name('customer.push-notifications.mark-all-as-read');
+            Route::post('mark-all-as-read', [PushNotificationController::class, 'markAllAsRead'])->name('customer.push-notifications.mark-all-as-read');
         });
 
         Route::prefix('referral')->group(function () {

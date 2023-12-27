@@ -1,4 +1,5 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,9 +23,9 @@ type CardPreviewProps = {
     description: string;
     certification: string;
     grade?: string;
-    CheckBox: React.ReactNode;
     selectedIds: [number?];
     handleTransferOwnerShip: any;
+    handleSelectClick?: any;
 };
 
 const useStyles = makeStyles(
@@ -93,6 +94,19 @@ const useStyles = makeStyles(
         smallFont: {
             fontSize: 10,
         },
+        checkBoxIcon: {
+            color: 'rgba(0, 0, 0, 0.54)',
+            top: 8,
+            left: 8,
+            padding: '0px',
+            position: 'absolute',
+        },
+        checkBox: {
+            borderRadius: 4,
+            background: 'white !important',
+            padding: 5,
+            boxShadow: theme.shadows[3],
+        },
     }),
     {
         name: 'CardPreview',
@@ -116,7 +130,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
         name,
         description,
         shortName,
-        CheckBox,
+        handleSelectClick,
         selectedIds,
         handleTransferOwnerShip,
     } = props as CardPreviewProps;
@@ -125,6 +139,10 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
     const [displayIcon, setDisplayIcon] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+
+    const isSelected = (selectedRowId: number) => {
+        return selectedIds.indexOf(selectedRowId) !== -1;
+    };
 
     const handleClickOptions = useCallback<MouseEventHandler>(
         (e) => {
@@ -151,11 +169,20 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                 setDisplayIcon(true);
             }}
             className={classes.root}
+            style={{ border: isSelected(id) ? '2px solid #20BFB8' : '' }}
         >
             <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.imageHolder}>
                 <img src={image} alt={name} className={classes.image} />
             </a>
-            {!onlyImage && grade && (displayIcon || selectedIds.length) ? CheckBox : null}
+            {!onlyImage && grade && (displayIcon || selectedIds.length) ? (
+                <IconButton className={classes.checkBoxIcon} size="large">
+                    <Checkbox
+                        className={classes.checkBox}
+                        onClick={() => handleSelectClick(id)}
+                        checked={isSelected(id)}
+                    />
+                </IconButton>
+            ) : null}
             {!onlyImage && grade && displayIcon ? (
                 <IconButton onClick={handleClickOptions} className={classes.kebabMenuIcon} size="large">
                     <MoreIcon />

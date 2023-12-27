@@ -35,7 +35,6 @@ export function ListCards() {
             filter: {
                 search,
             },
-            perPage: 48,
         },
         ...bracketParams(),
     });

@@ -16,11 +16,10 @@ beforeEach(function () {
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->customers = User::factory()->withRole(config('permission.roles.customer'))->count(3)->create();
 
+    actingAs($this->customer);
 });
 
 test('a customer can search for other customer based on exact email address', function () {
-    actingAs($this->customer);
-
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
@@ -54,8 +53,6 @@ test('a customer can search for other customer based on exact email address', fu
 });
 
 test('a customer can search for other customer based on exact customer number', function () {
-    actingAs($this->customer);
-
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
@@ -89,8 +86,6 @@ test('a customer can search for other customer based on exact customer number', 
 });
 
 test('a customer cannot search for other customer based on partial or wrong email address', function () {
-    actingAs($this->customer);
-
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [

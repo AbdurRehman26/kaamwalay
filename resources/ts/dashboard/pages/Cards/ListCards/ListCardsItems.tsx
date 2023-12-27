@@ -63,19 +63,6 @@ const useStyles = makeStyles(
             borderRadius: 24,
             padding: '12px 24px',
         },
-        checkBoxIcon: {
-            color: 'rgba(0, 0, 0, 0.54)',
-            top: 8,
-            left: 8,
-            padding: '0px',
-            position: 'absolute',
-        },
-        checkBox: {
-            borderRadius: 4,
-            background: 'white !important',
-            padding: 5,
-            boxShadow: theme.shadows[3],
-        },
     }),
     {
         name: 'ListCardsItemsStyles',
@@ -109,10 +96,6 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
             userCardIds.splice(selectedIndex, 1);
         }
         forceUpdate();
-    };
-
-    const isSelected = (selectedRowId: number) => {
-        return userCardIds.indexOf(selectedRowId) !== -1;
     };
 
     const handleSelectAll = () => {
@@ -216,15 +199,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
             <CardPreview
                 selectedIds={userCardIds}
                 handleTransferOwnerShip={handleTransferOneOwnerShip}
-                CheckBox={
-                    <IconButton className={classes.checkBoxIcon} size="large">
-                        <Checkbox
-                            className={classes.checkBox}
-                            onClick={() => handleSelectClick(userCard.id)}
-                            checked={isSelected(userCard.id)}
-                        />
-                    </IconButton>
-                }
+                handleSelectClick={handleSelectClick}
                 id={userCard?.id}
                 image={userCard?.cardProduct?.imagePath}
                 name={userCard?.cardProduct?.name}
@@ -317,7 +292,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
                                 indeterminate={userCardIds.length > 0}
                             />
                         </IconButton>
-                        <Typography variant={'subtitle2'}>
+                        <Typography variant={'subtitle2'} fontWeight={400}>
                             {!userCardIds.length
                                 ? 'Select all cards on this page - '
                                 : `${userCardIds.length} Cards Selected - `}

@@ -23,15 +23,14 @@ type CardPreviewProps = {
     description: string;
     certification: string;
     grade?: string;
-    selectedIds: [number?];
-    handleTransferOwnerShip: any;
+    selectedIds?: [number?];
+    handleTransferOwnerShip?: any;
     handleSelectClick?: any;
 };
 
 const useStyles = makeStyles(
     (theme) => ({
         root: {
-            background: 'rgba(244, 244, 244, 1)',
             color: theme.palette.text.primary,
             display: 'flex',
             flexDirection: 'column',
@@ -39,8 +38,7 @@ const useStyles = makeStyles(
             overflow: 'hidden',
             borderRadius: 5,
             boxShadow: theme.shadows[2],
-            alignItems: 'center',
-            height: '290px',
+            height: '100%',
         },
         kebabMenuIcon: {
             background: 'rgba(244, 244, 244, 1)',
@@ -69,18 +67,18 @@ const useStyles = makeStyles(
             position: 'relative',
         },
         image: {
-            height: '158px',
-            width: '120px',
+            height: 'auto',
+            width: '100%',
             display: 'block',
-            margin: '20px 0px 10px 0px',
             zIndex: -99999,
         },
         content: {
             display: 'flex',
             flexDirection: 'column',
+            position: 'absolute',
             left: 0,
             bottom: 0,
-            padding: '10px 12px',
+            padding: '8px 12px',
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             textDecoration: 'none',
@@ -141,7 +139,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
 
     const isSelected = (selectedRowId: number) => {
-        return selectedIds.indexOf(selectedRowId) !== -1;
+        return selectedIds?.indexOf(selectedRowId) !== -1;
     };
 
     const handleClickOptions = useCallback<MouseEventHandler>(
@@ -174,7 +172,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
             <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.imageHolder}>
                 <img src={image} alt={name} className={classes.image} />
             </a>
-            {!onlyImage && grade && (displayIcon || selectedIds.length) ? (
+            {!onlyImage && grade && (displayIcon || selectedIds?.length) ? (
                 <IconButton className={classes.checkBoxIcon} size="large">
                     <Checkbox
                         className={classes.checkBox}

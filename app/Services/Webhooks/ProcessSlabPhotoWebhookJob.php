@@ -23,7 +23,6 @@ class ProcessSlabPhotoWebhookJob extends ProcessWebhookJob
         $userCard->slab_images = ['front' => $payload['front_slab_image'], 'back' => $payload['back_slab_image']];
         $userCard->save();
 
-        // @phpstan-ignore-next-line
         $userCard->searchable();
     }
 }

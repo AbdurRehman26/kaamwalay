@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, PropsWithChildren, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { cx } from '@shared/lib/utils/cx';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';
@@ -31,6 +32,7 @@ type CardPreviewProps = {
 const useStyles = makeStyles(
     (theme) => ({
         root: {
+            background: 'rgba(244, 244, 244, 1)',
             color: theme.palette.text.primary,
             display: 'flex',
             flexDirection: 'column',
@@ -39,6 +41,7 @@ const useStyles = makeStyles(
             borderRadius: 5,
             boxShadow: theme.shadows[2],
             height: '100%',
+            alignItems: 'center',
         },
         kebabMenuIcon: {
             background: 'rgba(244, 244, 244, 1)',
@@ -62,7 +65,7 @@ const useStyles = makeStyles(
             fontWeight: 700,
             color: theme.palette.primary.contrastText,
         },
-        imageHolder: {
+        listCardsImageHolder: {
             cursor: 'pointer',
             position: 'relative',
         },
@@ -70,18 +73,24 @@ const useStyles = makeStyles(
             height: 'auto',
             width: '100%',
             display: 'block',
+        },
+        listCardsImage: {
+            height: '158px',
+            width: '120px',
+            margin: '20px 0px 10px 0px',
             zIndex: -99999,
         },
         content: {
             display: 'flex',
             flexDirection: 'column',
-            position: 'absolute',
             left: 0,
             bottom: 0,
             padding: '8px 12px',
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             textDecoration: 'none',
+            height: 'inherit',
+            justifyContent: 'space-between',
         },
         headline: {
             marginBottom: 3,
@@ -138,6 +147,12 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
 
+    const linkProps: Record<string, any> = { className: classes.root };
+    const LinkComponent: any = onlyImage ? 'div' : Link;
+    if (!onlyImage) {
+        linkProps.to = `/cards/${id}/view`;
+    }
+
     const isSelected = (selectedRowId: number) => {
         return selectedIds?.indexOf(selectedRowId) !== -1;
     };
@@ -158,7 +173,12 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
         [handleTransferOwnerShip],
     );
 
-    return (
+    return onlyImage ? (
+        <LinkComponent {...linkProps}>
+            <img src={image} alt={name} className={classes.image} />
+            {children}
+        </LinkComponent>
+    ) : (
         <div
             onMouseLeave={() => {
                 setDisplayIcon(false);
@@ -169,10 +189,10 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
             className={classes.root}
             style={{ border: isSelected(id) ? '2px solid #20BFB8' : '' }}
         >
-            <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.imageHolder}>
-                <img src={image} alt={name} className={classes.image} />
+            <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.listCardsImageHolder}>
+                <img src={image} alt={name} className={cx(classes.image, classes.listCardsImage)} />
             </a>
-            {!onlyImage && grade && (displayIcon || selectedIds?.length) ? (
+            {grade && (displayIcon || selectedIds?.length) ? (
                 <IconButton className={classes.checkBoxIcon} size="large">
                     <Checkbox
                         className={classes.checkBox}
@@ -181,7 +201,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                     />
                 </IconButton>
             ) : null}
-            {!onlyImage && grade && displayIcon ? (
+            {grade && displayIcon ? (
                 <IconButton onClick={handleClickOptions} className={classes.kebabMenuIcon} size="large">
                     <MoreIcon />
                 </IconButton>
@@ -193,48 +213,46 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                 </>
             </Menu>
 
-            {!onlyImage && grade && !displayIcon ? (
+            {grade && !displayIcon ? (
                 <div className={classes.gradeScore}>
                     <Typography color={'textPrimary'} variant={'body1'} className={classes.gradeScoreText}>
                         {grade}
                     </Typography>
                 </div>
             ) : null}
-            {!onlyImage ? (
-                <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.content}>
-                    <Typography
-                        color={'textPrimary'}
-                        variant={'body2'}
-                        className={cx(classes.headline, font.fontWeightMedium)}
-                    >
-                        {name}
-                    </Typography>
-                    <div title={shortName}>
-                        <Typography
-                            color={'textPrimary'}
-                            variant={'caption'}
-                            className={cx(classes.description, classes.smallFont)}
-                        >
-                            {getStringTruncated(shortName, 40)}
-                        </Typography>
-                    </div>
+            <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.content}>
+                <Typography
+                    color={'textPrimary'}
+                    variant={'body2'}
+                    className={cx(classes.headline, font.fontWeightMedium)}
+                >
+                    {name}
+                </Typography>
+                <div title={shortName}>
                     <Typography
                         color={'textPrimary'}
                         variant={'caption'}
                         className={cx(classes.description, classes.smallFont)}
                     >
-                        {description}
+                        {getStringTruncated(shortName, 40)}
                     </Typography>
-                    <Typography
-                        variant={'caption'}
-                        color={isGraded ? 'textPrimary' : 'textSecondary'}
-                        className={classes.smallFont}
-                    >
-                        <span className={font.fontWeightMedium}>{isGraded ? 'Certificate #:' : 'Grade Pending'}</span>
-                        {isGraded ? <span>{certification}</span> : null}
-                    </Typography>
-                </a>
-            ) : null}
+                </div>
+                <Typography
+                    color={'textPrimary'}
+                    variant={'caption'}
+                    className={cx(classes.description, classes.smallFont)}
+                >
+                    {description}
+                </Typography>
+                <Typography
+                    variant={'caption'}
+                    color={isGraded ? 'textPrimary' : 'textSecondary'}
+                    className={classes.smallFont}
+                >
+                    <span className={font.fontWeightMedium}>{isGraded ? 'Certificate #:' : 'Grade Pending'}</span>
+                    {isGraded ? <span>{certification}</span> : null}
+                </Typography>
+            </a>
             {children}
         </div>
     );

@@ -150,7 +150,11 @@ const CustomHits = connectHits(({ hits }) => {
                             </div>
                         </div>
                         <div className={'GridImageSection'}>
-                            <img className={'CardImage'} src={hit.card_image} alt={hit.card_name} />
+                            <img
+                                className={'CardImage'}
+                                src={!hit.front_slab_image ? hit.card_image : hit.front_slab_image}
+                                alt={hit.card_name}
+                            />
                         </div>
                         <div className={'GridBottomSection'}>
                             <div className={'GridSection'}>

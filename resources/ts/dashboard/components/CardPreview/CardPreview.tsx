@@ -27,6 +27,7 @@ type CardPreviewProps = {
     selectedIds?: [number?];
     handleTransferOwnerShip?: any;
     handleSelectClick?: any;
+    displayAllCheckIcons?: boolean;
 };
 
 const useStyles = makeStyles(
@@ -140,6 +141,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
         handleSelectClick,
         selectedIds,
         handleTransferOwnerShip,
+        displayAllCheckIcons,
     } = props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
@@ -192,7 +194,7 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
             <a role={'button'} href={`/dashboard/cards/${id}/view`} className={classes.listCardsImageHolder}>
                 <img src={image} alt={name} className={cx(classes.image, classes.listCardsImage)} />
             </a>
-            {grade && (displayIcon || selectedIds?.length) ? (
+            {grade && (displayIcon || selectedIds?.length || displayAllCheckIcons) ? (
                 <IconButton className={classes.checkBoxIcon} size="large">
                     <Checkbox
                         className={classes.checkBox}

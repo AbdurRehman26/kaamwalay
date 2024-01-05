@@ -109,9 +109,8 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     };
 
     const handleAllAndCancel = () => {
-        if (userCardIds.length) {
+        if (userCardIds?.length) {
             setUserCardIds([]);
-            setAllSelected(false);
         }
         setDisplaySelectButtons(!displaySelectButtons);
     };
@@ -197,6 +196,7 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const items$ = userCards$?.data?.map((userCard: any, index: any) => (
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
+                displayAllCheckIcons={displaySelectButtons}
                 selectedIds={userCardIds}
                 handleTransferOwnerShip={handleTransferOneOwnerShip}
                 handleSelectClick={handleSelectClick}

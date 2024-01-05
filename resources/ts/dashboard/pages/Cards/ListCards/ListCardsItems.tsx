@@ -109,8 +109,9 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     };
 
     const handleAllAndCancel = () => {
-        if (userCardIds?.length) {
+        if (userCardIds.length) {
             setUserCardIds([]);
+            setAllSelected(false);
         }
         setDisplaySelectButtons(!displaySelectButtons);
     };

@@ -2,7 +2,6 @@ import { AxiosRequestConfig } from 'axios';
 import { CustomerEntity } from '../../entities/CustomerEntity';
 import { useListQuery } from '../../hooks/useListQuery';
 import { listAdminCustomersAction } from '../slices/adminCustomersSlice';
-import { listCustomerCustomersAction } from '../slices/customerCustomersSlice';
 import { listSalesRepCustomersAction } from '../slices/salesRepCustomersSlice';
 
 export function useAdminCustomersQuery(config?: AxiosRequestConfig) {
@@ -11,8 +10,4 @@ export function useAdminCustomersQuery(config?: AxiosRequestConfig) {
 
 export function useSalesRepCustomersQuery(config?: AxiosRequestConfig) {
     return useListQuery(listSalesRepCustomersAction, CustomerEntity, (state) => state.salesRepCustomers, config);
-}
-
-export function useCustomerCustomersQuery(config?: AxiosRequestConfig) {
-    return useListQuery(listCustomerCustomersAction, CustomerEntity, (state) => state.customers, config);
 }

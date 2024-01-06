@@ -20,8 +20,10 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
+import { plainToInstance } from 'class-transformer';
 import { find } from 'lodash';
 import React, { useCallback, useState } from 'react';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -72,6 +74,7 @@ export function TransferCardsDialog({
 
     const handleSearch = useCallback(
         async (e) => {
+            setCustomers([]);
             if (!e.target.value || e.key !== 'Enter') {
                 return;
             }
@@ -86,8 +89,8 @@ export function TransferCardsDialog({
                 const {
                     data: { data },
                 } = await endpoint.get('');
-                setCustomers(data);
-                setNoUserFound(data.data.length === 0);
+                setCustomers(data.map((customer: any) => plainToInstance(CustomerEntity, customer)));
+                setNoUserFound(data.length === 0);
             } catch (e: any) {
                 notifications.exception(e);
             }

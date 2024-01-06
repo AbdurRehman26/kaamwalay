@@ -14,17 +14,18 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import { debounce } from 'lodash';
 import { find } from 'lodash';
 import React, { useCallback, useState } from 'react';
 import { UserEntity } from '@shared/entities/UserEntity';
-import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useCustomerCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { APIService } from '@shared/services/APIService';
 import { font } from '@shared/styles/utils';
 
 const useStyles = makeStyles({
@@ -38,6 +39,11 @@ const useStyles = makeStyles({
         objectFit: 'contain',
         objectPosition: 'center center',
     },
+    userNotFound: {
+        border: '1px solid #E0E0E0',
+        borderRadius: '4px',
+        backgroundColor: '#F5F5F5',
+    },
 });
 interface TransferCardsDialogProps extends DialogProps {
     changeCustomer?: boolean;
@@ -45,8 +51,6 @@ interface TransferCardsDialogProps extends DialogProps {
     selectedUserCardIds: [number?];
     handleSubmit: any;
 }
-
-const debouncedFunc = debounce((func: () => void) => func(), 300);
 
 export function TransferCardsDialog({
     onClose,
@@ -61,25 +65,60 @@ export function TransferCardsDialog({
     const firstCard = find(userCards, { id: selectedUserCardIds[0] });
     const [user, setUser] = useState<UserEntity | null>(null);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
-    const customers = useCustomerCustomersQuery({
-        ...bracketParams(),
-    });
+    const apiService = useInjectable(APIService);
+    const notifications = useNotifications();
+    const [customers, setCustomers] = useState<UserEntity[]>([]);
+    const [noUserFound, setNoUserFound] = useState(false);
 
     const handleSearch = useCallback(
-        (e) => {
-            if (!e.target.value) {
-                setSearch('');
-                customers.data = [];
+        async (e) => {
+            if (!e.target.value || e.key !== 'Enter') {
                 return;
             }
 
-            setSearch(e.target.value);
-            debouncedFunc(() => {
-                customers.search({ emailOrCustomerNumber: e.target.value });
-            });
+            try {
+                const endpoint = apiService.createEndpoint(
+                    `customer?filter[email_or_customer_number]=${e.target.value}`,
+                    {
+                        version: 'v3',
+                    },
+                );
+                const {
+                    data: { data },
+                } = await endpoint.get('');
+                setCustomers(data);
+                setNoUserFound(data.data.length === 0);
+            } catch (e: any) {
+                notifications.exception(e);
+            }
         },
-        [setSearch, customers],
+        [apiService, notifications],
+    );
+
+    const notFoundElement = (
+        <Stack p={3} className={classes.userNotFound} alignItems={'center'} justifyContent={'center'}>
+            <Typography
+                mt={1}
+                letterSpacing={'0.2px'}
+                lineHeight={'20px'}
+                variant={'subtitle1'}
+                fontSize={14}
+                fontWeight={500}
+            >
+                User not found
+            </Typography>
+            <Typography
+                variant={'caption'}
+                width={'70%'}
+                color={'textSecondary'}
+                letterSpacing={'0.2px'}
+                lineHeight={'20px'}
+                fontSize={14}
+                align={'center'}
+            >
+                Please make sure you have the correct email or customer ID, and try again.
+            </Typography>
+        </Stack>
     );
 
     const handleClose = useCallback(
@@ -165,7 +204,10 @@ export function TransferCardsDialog({
                                         size={'small'}
                                         placeholder={'Search users...'}
                                         value={search}
-                                        onChange={(e) => handleSearch(e)}
+                                        onChange={(e) => {
+                                            setSearch(e.target.value);
+                                        }}
+                                        onKeyUp={handleSearch}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position={'start'}>
@@ -175,10 +217,10 @@ export function TransferCardsDialog({
                                         }}
                                     />
                                 </Grid>
-                                {customers.data.length > 0 && search !== '' ? (
+                                {customers.length > 0 && search !== '' ? (
                                     <Typography sx={{ fontSize: '12px', fontWeight: 500, color: '#000000DE' }}>
                                         {' '}
-                                        {customers.data.length} results{' '}
+                                        {customers.length} results{' '}
                                     </Typography>
                                 ) : null}
 
@@ -189,7 +231,7 @@ export function TransferCardsDialog({
                                     sx={{ overflowY: 'auto', scrollbarGutter: 'auto', scrollbarWidth: 'none' }}
                                 >
                                     {search !== '' &&
-                                        customers.data.map((customer: UserEntity) => {
+                                        customers.map((customer: UserEntity) => {
                                             return (
                                                 <Grid
                                                     key={customer.id}
@@ -198,21 +240,21 @@ export function TransferCardsDialog({
                                                     justifyContent={'space-between'}
                                                     sx={{
                                                         borderTopLeftRadius:
-                                                            customers.data[0].id === customer.id ? '4px' : '',
+                                                            customers[0].id === customer.id ? '4px' : '',
                                                         borderTopRightRadius:
-                                                            customers.data[0].id === customer.id ? '4px' : '',
+                                                            customers[0].id === customer.id ? '4px' : '',
                                                         borderBottomLeftRadius:
-                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                            customers[customers.length - 1].id === customer.id
                                                                 ? '4px'
                                                                 : '',
                                                         borderBottomRightRadius:
-                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                            customers[customers.length - 1].id === customer.id
                                                                 ? '4px'
                                                                 : '',
                                                         borderLeft: '1px solid #E0E0E0',
                                                         borderRight: '1px solid #E0E0E0',
                                                         borderBottom:
-                                                            customers.data[customers.data.length - 1].id === customer.id
+                                                            customers[customers.length - 1].id === customer.id
                                                                 ? '1px solid #E0E0E0'
                                                                 : '',
                                                         borderTop: '1px solid #E0E0E0',
@@ -257,6 +299,8 @@ export function TransferCardsDialog({
                                                 </Grid>
                                             );
                                         })}
+
+                                    {noUserFound && notFoundElement}
                                 </Grid>
                             </>
                         ) : (

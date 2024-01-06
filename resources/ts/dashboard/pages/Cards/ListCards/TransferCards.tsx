@@ -132,6 +132,7 @@ export function TransferCardsDialog({
             setShowCards(false);
             setSearch('');
             setUser(null);
+            setCustomers([]);
         },
         [onClose],
     );

@@ -80,12 +80,9 @@ export function TransferCardsDialog({
             }
 
             try {
-                const endpoint = apiService.createEndpoint(
-                    `customer?filter[email_or_customer_number]=${e.target.value}`,
-                    {
-                        version: 'v3',
-                    },
-                );
+                const endpoint = apiService.createEndpoint(`customer?filter[search]=${e.target.value}`, {
+                    version: 'v3',
+                });
                 const {
                     data: { data },
                 } = await endpoint.get('');

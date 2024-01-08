@@ -23,7 +23,7 @@ test('a customer can search for other customer based on exact email address', fu
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
-        'filter' => ['email_or_customer_number' => $customer->email],
+        'filter' => ['search' => $customer->email],
     ]))
         ->assertSuccessful()
         ->assertJsonStructure([
@@ -56,7 +56,7 @@ test('a customer can search for other customer based on exact customer number', 
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
-        'filter' => ['email_or_customer_number' => $customer->customer_number],
+        'filter' => ['search' => $customer->customer_number],
     ]))
         ->assertSuccessful()
         ->assertJsonStructure([
@@ -89,10 +89,10 @@ test('a customer cannot search for other customer based on partial or wrong emai
     $customer = $this->customers->random();
 
     getJson(route('v3.customer.index', [
-        'filter' => ['email_or_customer_number' => Str::substr($customer->email, 0, 5)],
+        'filter' => ['search' => Str::substr($customer->email, 0, 5)],
     ]))->assertJsonCount(0, 'data');
 });
 
-test('customer list can not be called without filter[email_or_customer_number] param', function () {
+test('customer list can not be called without filter[search] param', function () {
     getJson(route('v3.customer.index'))->assertUnprocessable();
 });

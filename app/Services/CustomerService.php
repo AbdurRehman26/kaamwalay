@@ -15,8 +15,8 @@ class CustomerService
     {
         $query = User::customer();
 
-        if (! empty(request('filter')['email_or_customer_number'])) {
-            $emailOrCustomerNumber = request('filter')['email_or_customer_number'];
+        if (! empty(request('filter')['search'])) {
+            $emailOrCustomerNumber = request('filter')['search'];
 
             $query->where('email', '=', $emailOrCustomerNumber)
                 ->orWhere('customer_number', '=', $emailOrCustomerNumber);

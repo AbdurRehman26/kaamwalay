@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Array} [filter[email_or_customer_number]] for searching customers list between a date range: created_at E.g. filter[signed_up_between]=2018-01-01,2022-12-31
+ * @apiParam {Array} [filter[search]] for searching customers list between a date range: created_at E.g. filter[signed_up_between]=2018-01-01,2022-12-31
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

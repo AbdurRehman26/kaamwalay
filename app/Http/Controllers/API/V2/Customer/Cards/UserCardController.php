@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserCardController extends V1UserCardController
 {
-    public function __construct(private UserCardService $userCardService)
-    {
-        parent::__construct($userCardService);
-    }
-
     public function changeOwnership(UserCardsOwnershipChangeRequest $ownershipChangeRequest): JsonResponse
     {
         try {

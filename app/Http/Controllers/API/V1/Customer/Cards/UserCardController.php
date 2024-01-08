@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 class UserCardController extends Controller
 {
     public function __construct(
-        private UserCardService $userCardService,
+        protected UserCardService $userCardService,
     ) {
     }
 

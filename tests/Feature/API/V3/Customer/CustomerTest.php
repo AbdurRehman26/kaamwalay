@@ -92,3 +92,7 @@ test('a customer cannot search for other customer based on partial or wrong emai
         'filter' => ['email_or_customer_number' => Str::substr($customer->email, 0, 5)],
     ]))->assertJsonCount(0, 'data');
 });
+
+test('customer list can not be called without filter[email_or_customer_number] param', function () {
+    getJson(route('v3.customer.index'))->assertUnprocessable();
+});

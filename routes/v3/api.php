@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V3\Auth\LoginController;
 use App\Http\Controllers\API\V3\Auth\RegisterController;
+use App\Http\Controllers\API\V3\Customer\CustomerController;
 use App\Http\Controllers\API\V3\Customer\Order\OrderController;
 use App\Http\Controllers\API\V3\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V3\Customer\Order\UpdateOrderShippingMethodController;
@@ -21,6 +22,8 @@ Route::prefix('customer')->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
+
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('customer.orders.index');
             Route::post('/', [OrderController::class, 'store'])->name('customer.orders.store');

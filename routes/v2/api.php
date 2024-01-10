@@ -108,6 +108,7 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('cards')->group(function () {
             Route::get('/', [UserCardController::class, 'index']);
+            Route::post('/change-ownership', [UserCardController::class, 'changeOwnership']);
             Route::get('/{userCard}', [UserCardController::class, 'show']);
 
             Route::post('/', [CardProductController::class, 'store']);

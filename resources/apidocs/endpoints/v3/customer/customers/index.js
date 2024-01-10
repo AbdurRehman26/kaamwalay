@@ -1,5 +1,5 @@
 /**
- * @api {get} /v2/customer List customers
+ * @api {get} /v3/customer List customers
  * @apiName List Customers
  * @apiGroup Customer Customers
  *

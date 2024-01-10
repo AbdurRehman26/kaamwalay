@@ -81,9 +81,9 @@ export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const [showTransferDialog, setShowTransferDialog] = useState(false);
     const [userCardIds, setUserCardIds] = useState<[number?]>([]);
     const [allSelected, setAllSelected] = useState(false);
-    const [, updateState] = React.useState();
+    const [, updateState] = useState();
     // @ts-ignore
-    const forceUpdate = React.useCallback(() => updateState({}), []);
+    const forceUpdate = useCallback(() => updateState({}), []);
     const confirm = useConfirmation();
     const dispatch = useDispatch();
 

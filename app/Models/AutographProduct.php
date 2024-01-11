@@ -11,6 +11,16 @@ class AutographProduct extends Model
 {
     use HasFactory, Searchable;
 
+    protected $fillable = [
+        'autograph_category_id',
+        'autograph_type_id',
+        'certificate_number',
+        'name',
+        'image_url',
+        'signed_by',
+        'signed_at',
+    ];
+
     protected $casts = [
         'signed_at' => 'timestamp',
     ];

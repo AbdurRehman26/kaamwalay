@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Imports\AutographProductsImport;
+use App\Services\AutographProductService;
 use Illuminate\Console\Command;
 
 class ImportAutographProductsCommand extends Command
@@ -11,10 +11,11 @@ class ImportAutographProductsCommand extends Command
 
     protected $description = 'Import autograph products and images from files.';
 
-    public function handle(): void
+    public function handle(AutographProductService $autographProductService): void
     {
-//        $fileName = $this->ask('Filename (storage/app/)');
-        $fileName = 'autograph_products.csv';
-        (new AutographProductsImport())->import($fileName, 'local', \Maatwebsite\Excel\Excel::CSV);
+        $productsFilename = $this->ask('Products Filename (storage/app/)');
+        $imagesDirectory = $this->ask('Images Directory (storage/app/)');
+
+        $autographProductService->import($productsFilename, $imagesDirectory);
     }
 }

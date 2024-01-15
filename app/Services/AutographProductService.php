@@ -10,16 +10,13 @@ use Illuminate\Support\Facades\Storage;
 
 class AutographProductService
 {
+    protected const CLOUD_DIRECTORY = 'autographs';
+
     public function import(string $productsFilename, string $imagesDirectory): void
     {
         $this->trackLastAutographProductId();
         $this->processProducts($productsFilename);
         $this->processImages($imagesDirectory);
-    }
-
-    protected function processProducts(string $productsFilename): void
-    {
-        (new AutographProductsImport)->import($productsFilename, 'local', \Maatwebsite\Excel\Excel::CSV);
     }
 
     protected function trackLastAutographProductId(): void
@@ -31,16 +28,23 @@ class AutographProductService
         );
     }
 
+    protected function processProducts(string $productsFilename): void
+    {
+        (new AutographProductsImport)->import($productsFilename, 'local', \Maatwebsite\Excel\Excel::CSV);
+    }
+
     protected function processImages(string $imagesDirectory): void
     {
         $autographProducts = AutographProduct::where('id', '>', Cache::get('autograph-products-import:last-id'))->get();
+
         $autographProducts->each(function (AutographProduct $autographProduct) use ($imagesDirectory) {
             $fileName = "$imagesDirectory/IMG-$autographProduct->certificate_number.jpeg";
 
             if (Storage::exists($fileName)) {
-                $file = Storage::get($fileName);
-                Storage::disk('s3')->put('autographs/'.$autographProduct->certificate_number.'.jpg', $file);
-                $imageUrl = Storage::disk('s3')->url('autographs/'.$autographProduct->certificate_number.'.jpg');
+                $cloudFilename = static::CLOUD_DIRECTORY.'/'.$autographProduct->certificate_number.'.jpg';
+
+                Storage::disk('s3')->put($cloudFilename, Storage::get($fileName));
+                $imageUrl = Storage::disk('s3')->url($cloudFilename);
 
                 $autographProduct->image_url = $imageUrl;
                 $autographProduct->save();

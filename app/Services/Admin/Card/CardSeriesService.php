@@ -7,7 +7,9 @@ use App\Models\CardCategory;
 use App\Models\CardSeries;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
+use Exception;
 
 class CardSeriesService
 {
@@ -28,7 +30,9 @@ class CardSeriesService
 
     public function create(array $data): CardSeries
     {
-        $this->createSeriesOnAgs($data['card_category_id'], $data['name'], $data['image_path']);
+        Log::info('SERIES_CREATION_REQUEST', $data);
+        $agsResponse = $this->createSeriesOnAgs($data['card_category_id'], $data['name'], $data['image_path']);
+        Log::info('SERIES_CREATION_AGS_RESPONSE', $agsResponse);
 
         $series = CardSeries::create([
             'name' => $data['name'],
@@ -42,23 +46,35 @@ class CardSeriesService
         return $series;
     }
 
-    protected function createSeriesOnAgs(int $cardCategoryId, string $seriesName, string $seriesImage): void
+    protected function createSeriesOnAgs(int $cardCategoryId, string $seriesName, string $seriesImage): array
     {
-        $categoryName = CardCategory::find($cardCategoryId)->name;
+        try {
+            $categoryName = CardCategory::find($cardCategoryId)->name;
 
-        //Check if series already exists in AGS DB
-        $seriesResponse = $this->agsService->getCardSeries([
-            'exact_name' => $seriesName,
-            'exact_category_name' => $categoryName,
-        ]);
-
-        //If it doesn't exist, and we have required parameters, create it in AGS side
-        if ($seriesResponse['count'] < 1 && $seriesName && $seriesImage) {
-            $this->agsService->createCardSeries([
-                'name' => $seriesName,
-                'image_path' => $seriesImage,
-                'category_name' => $categoryName,
+            //Check if series already exists in AGS DB
+            $seriesResponse = $this->agsService->getCardSeries([
+                'exact_name' => $seriesName,
+                'exact_category_name' => $categoryName,
             ]);
+
+            //If it doesn't exist, and we have required parameters, create it in AGS side
+            if ($seriesResponse['count'] < 1 && $seriesName && $seriesImage) {
+                $createData = [
+                    'name' => $seriesName,
+                    'image_path' => $seriesImage,
+                    'category_name' => $categoryName,
+                ];
+
+                Log::info('SERIES_CREATION_AGS_REQUEST', $createData);
+
+                return $this->agsService->createCardSeries($createData);
+            }
+
+            return [];
+        } catch (Exception $e) {
+            report($e);
+
+            return [];
         }
     }
 }

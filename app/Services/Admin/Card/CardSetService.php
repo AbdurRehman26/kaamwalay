@@ -7,10 +7,10 @@ use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
-use Exception;
 
 class CardSetService
 {
@@ -85,7 +85,7 @@ class CardSetService
                 return $this->agsService->createCardSet($createData);
             }
 
-           return [];
+            return [];
         } catch (Exception $e) {
             report($e);
 

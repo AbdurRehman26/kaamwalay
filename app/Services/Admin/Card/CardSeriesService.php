@@ -6,10 +6,10 @@ use App\Events\API\Admin\Card\CardSeriesCreatedEvent;
 use App\Models\CardCategory;
 use App\Models\CardSeries;
 use App\Services\AGS\AgsService;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
-use Exception;
 
 class CardSeriesService
 {

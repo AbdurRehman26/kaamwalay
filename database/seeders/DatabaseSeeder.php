@@ -31,8 +31,6 @@ class DatabaseSeeder extends Seeder
             OrderItemCustomerShipmentSeeder::class,
             StateSeeder::class,
             CouponableSeeder::class,
-            AutographCategorySeeder::class,
-            AutographTypeSeeder::class,
             AutographProductSeeder::class,
         ]);
 

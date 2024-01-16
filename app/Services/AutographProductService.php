@@ -72,4 +72,31 @@ class AutographProductService
             }
         });
     }
+
+    public function getDataForPublicPage(AutographProduct $autographProduct): array
+    {
+        $relatedItems = $autographProduct->autographType->autographProducts()
+            ->inRandomOrder()
+            ->take(4)
+            ->get(['name', 'certificate_number', 'image_url', 'signed_by'])
+            ->transform(fn (AutographProduct $autographProduct) => [
+                'long_name' => $autographProduct->getLongName(),
+                'certificate_number' => $autographProduct->certificate_number,
+                'image_url' => $autographProduct->image_url,
+            ])
+            ->toArray();
+
+        return [
+            'certificate_number' => $autographProduct->certificate_number,
+            'long_name' => $autographProduct->getLongName(),
+            'name' => $autographProduct->name,
+            'image_url' => $autographProduct->image_url,
+            'category' => $autographProduct->autographCategory->name,
+            'type' => $autographProduct->autographType->name,
+            'signed_by' => $autographProduct->signed_by,
+            'signed_at' => $autographProduct->signed_at->format('M d, Y'),
+            'created_at' => $autographProduct->created_at->format('M d, Y'),
+            'related_items' => $relatedItems,
+        ];
+    }
 }

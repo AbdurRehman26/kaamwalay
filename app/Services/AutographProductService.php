@@ -75,6 +75,7 @@ class AutographProductService
 
     public function getDataForPublicPage(AutographProduct $autographProduct): array
     {
+        // Random 4 autograph products of the same type as this product
         $relatedItems = $autographProduct->autographType->autographProducts()
             ->inRandomOrder()
             ->take(4)

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Imports\AutographProductsImport;
 use App\Jobs\ProcessImage;
 use App\Models\AutographProduct;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,19 +13,37 @@ class AutographProductService
 {
     protected const CLOUD_DIRECTORY = 'autographs';
 
+    /**
+     * @throws Exception
+     */
     public function import(string $productsFilename, string $imagesDirectory): void
     {
+        $this->validateFilesExistence($productsFilename, $imagesDirectory);
         $this->trackLastAutographProductId();
         $this->processProducts($productsFilename);
         $this->processImages($imagesDirectory);
     }
 
+    /**
+     * @throws Exception
+     */
+    protected function validateFilesExistence(string $productsFilename, string $imagesDirectory): void
+    {
+        if (! Storage::exists($productsFilename)) {
+            throw new Exception('Product file does not exist.');
+        }
+
+        if (! Storage::exists($imagesDirectory)) {
+            throw new Exception('Images directory does not exist.');
+        }
+    }
+
     protected function trackLastAutographProductId(): void
     {
-        Cache::remember(
+        Cache::put(
             'autograph-products-import:last-id',
-            now()->addHour(),
-            fn () => AutographProduct::latest()->first()->id ?? 0
+            AutographProduct::latest()->first()->id ?? 0,
+            now()->addHour()
         );
     }
 

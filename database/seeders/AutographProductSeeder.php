@@ -10,7 +10,7 @@ class AutographProductSeeder extends Seeder
     public function run(): void
     {
         AutographProduct::factory()
-            ->count(20)
+            ->count(100)
             ->create();
     }
 }

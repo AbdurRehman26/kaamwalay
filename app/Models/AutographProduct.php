@@ -22,7 +22,7 @@ class AutographProduct extends Model
     ];
 
     protected $casts = [
-        'signed_at' => 'timestamp',
+        'signed_at' => 'datetime',
     ];
 
     public function toSearchableArray(): array

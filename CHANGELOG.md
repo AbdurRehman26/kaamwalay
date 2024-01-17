@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.25.0 - 2024-01-17
+
+### What's Changed
+
+* Feature: Landings | Live feeds slab photos by @numair97 in https://github.com/woozard/robograding/pull/1127
+* Fix: Home page typing error  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1135
+* Feature: Change UserCard Ownership by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1126
+* Fix: User Card Owner Update by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1136
+* Feature | Debug: Added Logging for creation of series and set by @luis-molina in https://github.com/woozard/robograding/pull/1137
+* Release v3.25.0 by @thenabeel in https://github.com/woozard/robograding/pull/1138
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.24.0...v3.25.0
+
 ## v3.24.0 - 2023-12-24
 
 ### What's Changed

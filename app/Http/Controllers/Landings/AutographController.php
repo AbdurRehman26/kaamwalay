@@ -12,11 +12,15 @@ class AutographController extends Controller
     {
     }
 
+    // Add return type after returning view, and remove static analysis ignore
+    // @phpstan-ignore-next-line
     public function index()
     {
         // return view('landings.authentication.index');
     }
 
+    // Add return type after returning view, and remove static analysis ignore
+    // @phpstan-ignore-next-line
     public function getView(AutographProduct $autographProduct)
     {
         $data = $this->autographProductService->getDataForPublicPage($autographProduct);

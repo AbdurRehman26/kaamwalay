@@ -38,11 +38,17 @@ class AutographProduct extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<AutographCategory, AutographProduct>
+     */
     public function autographCategory(): BelongsTo
     {
         return $this->belongsTo(AutographCategory::class);
     }
 
+    /**
+     * @return BelongsTo<AutographType, AutographProduct>
+     */
     public function autographType(): BelongsTo
     {
         return $this->belongsTo(AutographType::class);

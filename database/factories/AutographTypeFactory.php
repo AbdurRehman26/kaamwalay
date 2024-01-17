@@ -8,8 +8,6 @@ use Illuminate\Support\Carbon;
 
 class AutographTypeFactory extends Factory
 {
-    protected $model = AutographType::class;
-
     public function definition(): array
     {
         return [

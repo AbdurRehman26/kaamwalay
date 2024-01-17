@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 
 class AutographProductFactory extends Factory
 {
-    protected $model = AutographProduct::class;
-
     public function definition(): array
     {
         return [

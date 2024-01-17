@@ -15,6 +15,10 @@ use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
+
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
@@ -24,7 +28,7 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
-    $this->user = User::factory()->create();
+    $this->user = User::factory()->withRole('customer')->create();
 
     $this->orders = Order::factory()->count(1)->state(new Sequence(
         [
@@ -70,13 +74,13 @@ beforeEach(function () {
 });
 
 test('customers can see their cards', function () {
-    $response = $this->getJson('/api/v2/customer/cards');
+    $response = getJson('/api/v2/customer/cards');
 
     $response->assertStatus(200);
 });
 
 test('customers can see their card details', function () {
-    $response = $this->getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+    $response = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
     $response->assertStatus(200);
 });
@@ -85,13 +89,13 @@ test('a customer can not see details of a card owned by others', function () {
     $otherUser = User::factory()->create();
     $this->actingAs($otherUser);
 
-    $response = $this->getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+    $response = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
 
     $response->assertForbidden();
 });
 
 it('sorts cards by date asc', function () {
-    $response = $this->getJson('/api/v2/customer/cards?sort=date')
+    $response = getJson('/api/v2/customer/cards?sort=date')
         ->assertOk();
 
     $this->assertEquals(
@@ -106,7 +110,7 @@ it('sorts cards by date asc', function () {
 });
 
 it('sorts cards by date desc', function () {
-    $response = $this->getJson('/api/v2/customer/cards?sort=-date')
+    $response = getJson('/api/v2/customer/cards?sort=-date')
         ->assertOk();
 
     $this->assertEquals(
@@ -121,7 +125,7 @@ it('sorts cards by date desc', function () {
 });
 
 it('sorts cards alphabetically', function () {
-    $response = $this->getJson('/api/v2/customer/cards?sort=name')
+    $response = getJson('/api/v2/customer/cards?sort=name')
         ->assertOk();
 
     $this->assertEquals(
@@ -140,10 +144,48 @@ it('filters cards by name', function () {
     $this->userCards[0]->orderItem->cardProduct->update([
         'name' => $searchName,
     ]);
-    $this->getJson('/api/v2/customer/cards?filter[search]='.$searchName)
+
+    getJson('/api/v2/customer/cards?filter[search]='.$searchName)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'name' => $searchName,
         ]);
+});
+
+test('a customer can transfer his cards to another user', function () {
+    $otherUser = User::factory()->withRole('customer')->create();
+
+    $cardOwnershipChangeResponse = postJson('/api/v2/customer/cards/change-ownership', [
+        'user_id' => $otherUser->id,
+        'user_card_ids' => [$this->userCards[0]->id],
+    ]);
+
+    $cardOwnershipChangeResponse->assertOk();
+
+    // Card details for the first user (Should fail now)
+    $cardDetailsResponse = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+
+    $cardDetailsResponse->assertForbidden();
+
+    // Card details for the user whom it is transferred (Should pass)
+    actingAs($otherUser);
+    $cardDetailsResponseForSecondUser = getJson('/api/v2/customer/cards/'.$this->userCards[0]->id);
+
+    $cardDetailsResponseForSecondUser->assertOk();
+});
+
+test('a customer cannot transfer cards of another user', function () {
+
+    $otherUser = User::factory()->withRole('customer')->create();
+
+    $otherUserCards = UserCard::factory()->create(
+        ['user_id' => $otherUser->id],
+    );
+
+    postJson('/api/v2/customer/cards/change-ownership', [
+        'user_id' => $otherUser->id,
+        'user_card_ids' => [$otherUserCards->id],
+    ])->assertUnprocessable();
+
 });

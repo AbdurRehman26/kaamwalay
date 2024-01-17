@@ -32,6 +32,7 @@ class UserCard extends Model
         'shipping_status',
         'is_fake',
         'social_images',
+        'slab_images',
     ];
 
     protected $casts = [
@@ -47,6 +48,7 @@ class UserCard extends Model
         'shipping_status' => UserCardShippingStatus::class,
         'is_fake' => 'boolean',
         'social_images' => 'array',
+        'slab_images' => 'array',
     ];
 
     /**
@@ -66,7 +68,8 @@ class UserCard extends Model
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname.' '.$this->overall_grade,
             'shipped_at' => $this->orderItem->order->shipped_at,
-            'shipped_at_timestamp' => $this->orderItem->order->shipped_at->unix(),
+            'front_slab_image' => $this->slab_images['front'] ?? null,
+            'shipped_at_timestamp' => $this->orderItem->order->shipped_at?->unix(),
         ];
     }
 

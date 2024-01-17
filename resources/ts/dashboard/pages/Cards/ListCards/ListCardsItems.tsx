@@ -1,40 +1,32 @@
-import SortIcon from '@mui/icons-material/Sort';
+import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
 import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { default as TextLink } from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
-import { bracketParams } from '@shared/lib/api/bracketParams';
+import { UserCardEntity } from '@shared/entities/UserCardEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
-import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
-import { font } from '@shared/styles/utils';
+import { changeUserCardOwnerShip } from '@shared/redux/slices/userCardsSlice';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
-
-const StyledSelect = styled(Select)(
-    {
-        marginLeft: 8,
-        fontWeight: 500,
-        fontSize: '14px',
-        '&:before': {
-            display: 'none',
-        },
-    },
-    { name: 'StyledSelect' },
-);
+import { TransferCardsDialog } from '../ListCards/TransferCards';
 
 const StyledBox = styled(Box)(
     {
@@ -78,54 +70,51 @@ const useStyles = makeStyles(
 );
 interface ListCardsItemsProps {
     search?: string;
+    userCards$: any;
 }
 
-export function ListCardItems({ search }: ListCardsItemsProps) {
-    const [sortFilter, setSortFilter] = useState('date');
+export function ListCardItems({ search, userCards$ }: ListCardsItemsProps) {
     const classes = useStyles();
     const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+    const [displaySelectButtons, setDisplaySelectButtons] = useState(false);
+    const [showTransferDialog, setShowTransferDialog] = useState(false);
+    const [userCardIds, setUserCardIds] = useState<[number?]>([]);
+    const [allSelected, setAllSelected] = useState(false);
+    const [, updateState] = useState();
+    // @ts-ignore
+    const forceUpdate = useCallback(() => updateState({}), []);
+    const confirm = useConfirmation();
+    const dispatch = useDispatch();
 
-    const userCards$ = useListUserCardsQuery({
-        params: {
-            sort: sortFilter,
-            filter: {
-                search,
-            },
-            perPage: 48,
-        },
-        ...bracketParams(),
-    });
-    const handleSortChange = useCallback((event) => setSortFilter(event.target.value), [setSortFilter]);
+    const handleSelectClick = async (id: number) => {
+        const selectedIndex = userCardIds.indexOf(id);
+        if (selectedIndex === -1) {
+            setDisplaySelectButtons(true);
+            userCardIds.push(id);
+        } else {
+            userCardIds.splice(selectedIndex, 1);
+        }
+        forceUpdate();
+    };
 
-    // Fetch sorted cards based on the selected sort option
-    useEffect(
-        () => {
-            if (!userCards$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
-                userCards$.sort({ sort: sortFilter });
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [sortFilter],
-    );
+    const handleSelectAll = () => {
+        if (!allSelected && !userCardIds.length) {
+            setUserCardIds(userCards$.data.map((userCard: UserCardEntity) => userCard.id));
+            setAllSelected(true);
+            return;
+        }
+        setUserCardIds([]);
+        setAllSelected(false);
+    };
 
-    // Search cards based on the user input & return them sorted based on the selected sort option
-    useEffect(
-        () => {
-            if (!userCards$.isLoading && isSearchEnabled) {
-                // noinspection JSIgnoredPromiseFromCall
-                userCards$.searchSorted({ sort: sortFilter }, { search });
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search],
-    );
-
-    useEffect(() => {
-        setIsSearchEnabled(true);
-    }, []);
+    const handleAllAndCancel = () => {
+        if (userCardIds.length) {
+            setUserCardIds([]);
+            setAllSelected(false);
+        }
+        setDisplaySelectButtons(!displaySelectButtons);
+    };
 
     function handleOnClick() {
         ReactGA.event({
@@ -135,6 +124,63 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
         googleTagManager({ event: 'google-ads-started-submission-process' });
         navigate('/submissions/new');
     }
+
+    const handleClose = useCallback(() => {
+        setUserCardIds([]);
+        setAllSelected(false);
+        setShowTransferDialog(false);
+        setDisplaySelectButtons(false);
+    }, []);
+
+    const handleTransferOneOwnerShip = useCallback((id) => {
+        setUserCardIds([id]);
+        setShowTransferDialog(true);
+    }, []);
+
+    const handleSubmit = useCallback(
+        async (user: UserEntity) => {
+            let confirmation = false;
+            confirmation = await confirm({
+                title: 'Are you sure you want to transfer ownership?',
+                message:
+                    'Once you transfer ownership of these cards, they will instantly be transferred to the user you selected. They will no longer be visible on your account. The only way for them to be restored to your account is for the recipient to transfer ownership back to you.',
+                confirmText: 'CONFIRM TRANSFER',
+                confirmButtonProps: {
+                    variant: 'contained',
+                    sx: {
+                        margin: '20px',
+                        padding: '10px',
+                    },
+                },
+                cancelButtonProps: {
+                    sx: {
+                        color: 'black',
+                    },
+                },
+                dialogProps: {
+                    maxWidth: 'sm',
+                },
+            });
+
+            if (confirmation) {
+                await dispatch(
+                    changeUserCardOwnerShip({
+                        userCardIds: userCardIds,
+                        userId: user.id,
+                    }),
+                );
+                userCards$.search();
+                setShowTransferDialog(false);
+                setAllSelected(false);
+                setUserCardIds([]);
+                return;
+            }
+            setShowTransferDialog(false);
+            setAllSelected(false);
+            setUserCardIds([]);
+        },
+        [confirm, dispatch, userCardIds, userCards$],
+    );
 
     if (userCards$.isLoading || userCards$.isError) {
         return (
@@ -148,9 +194,13 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
         );
     }
 
-    const items$ = userCards$?.data?.map((userCard: any, index) => (
+    const items$ = userCards$?.data?.map((userCard: any, index: any) => (
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
+                displayAllCheckIcons={displaySelectButtons}
+                selectedIds={userCardIds}
+                handleTransferOwnerShip={handleTransferOneOwnerShip}
+                handleSelectClick={handleSelectClick}
                 id={userCard?.id}
                 image={userCard?.cardProduct?.imagePath}
                 name={userCard?.cardProduct?.name}
@@ -217,17 +267,78 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
 
     return (
         <>
-            <Box display={'flex'} alignItems={'center'} width={'100%'} paddingBottom={4}>
-                {!isSm ? <Typography variant={'subtitle2'}>Graded Cards</Typography> : null}
-                <Grid container item xs alignItems={'center'} justifyContent={isSm ? 'flex-start' : 'flex-end'}>
-                    <SortIcon color={'disabled'} />
-                    <Typography variant={'body2'} color={'textSecondary'} className={font.fontWeightMedium}>
-                        Sort By:
-                    </Typography>
-                    <StyledSelect value={sortFilter} variant="standard" onChange={handleSortChange}>
-                        <MenuItem value={'date'}>Date (Newest)</MenuItem>
-                        <MenuItem value={'-date'}>Date (Oldest)</MenuItem>
-                    </StyledSelect>
+            <TransferCardsDialog
+                handleSubmit={handleSubmit}
+                selectedUserCardIds={userCardIds}
+                userCards={userCards$.data}
+                open={showTransferDialog}
+                onClose={handleClose}
+            />
+
+            <Box
+                display={isSm && displaySelectButtons ? 'block' : 'flex'}
+                alignItems={'center'}
+                width={'100%'}
+                paddingBottom={4}
+            >
+                {!displaySelectButtons ? (
+                    <Typography variant={'subtitle2'}>{items$.length} Graded Cards</Typography>
+                ) : (
+                    <Box display={isSm ? 'flex' : 'contents'} alignItems={isSm ? 'center' : ''}>
+                        <IconButton size="large">
+                            <Checkbox
+                                sx={{ margin: 0, padding: 0 }}
+                                onClick={handleSelectAll}
+                                checked={allSelected}
+                                indeterminate={userCardIds.length > 0}
+                            />
+                        </IconButton>
+                        <Typography variant={'subtitle2'} fontWeight={400}>
+                            {!userCardIds.length
+                                ? 'Select all cards on this page - '
+                                : `${userCardIds.length} Cards Selected - `}
+                        </Typography>
+                        <TextLink
+                            sx={{ color: 'black', marginLeft: 1 }}
+                            component={'button'}
+                            variant="body2"
+                            onClick={handleSelectAll}
+                        >
+                            {userCardIds.length ? ' Unselect All' : ' Select All'}
+                        </TextLink>
+                    </Box>
+                )}
+                <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
+                    {items$.length && (
+                        <Button
+                            onClick={handleAllAndCancel}
+                            sx={{
+                                borderRadius: 24,
+                                padding: '10px 15px 10px 15px',
+                                width: isSm && displaySelectButtons ? (userCardIds.length ? '47%' : '100%') : 'initial',
+                            }}
+                            color={'primary'}
+                            variant={'outlined'}
+                            startIcon={!displaySelectButtons ? <LibraryAddCheckOutlinedIcon /> : null}
+                        >
+                            {!displaySelectButtons ? 'Select Cards' : 'Cancel'}
+                        </Button>
+                    )}
+                    {userCardIds.length ? (
+                        <Button
+                            onClick={() => setShowTransferDialog(true)}
+                            sx={{
+                                marginLeft: '10px',
+                                borderRadius: 24,
+                                padding: '10px 15px 10px 15px',
+                                width: isSm && displaySelectButtons ? (userCardIds.length ? '50%' : '100%') : 'initial',
+                            }}
+                            color={'primary'}
+                            variant={'contained'}
+                        >
+                            TRANSFER OWNERSHIP
+                        </Button>
+                    ) : null}
                 </Grid>
             </Box>
             <Grid container spacing={1} className={classes.tableMargin}>

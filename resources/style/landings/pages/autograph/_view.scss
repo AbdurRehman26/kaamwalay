@@ -1,0 +1,8 @@
+.feed-view {
+    &__description {
+        display: block !important;
+        &__button {
+            justify-content: start !important;
+        }
+    }
+}

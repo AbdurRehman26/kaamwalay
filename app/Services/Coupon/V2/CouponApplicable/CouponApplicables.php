@@ -29,7 +29,7 @@ trait CouponApplicables
     {
         if (! empty($order['payment_plan']['id'])) {
             $paymentPlan = PaymentPlan::find($order['payment_plan']['id']);
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } else {
             $paymentPlan = PaymentPlan::find($order->payment_plan_id);
         }

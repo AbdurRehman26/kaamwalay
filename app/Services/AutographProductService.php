@@ -80,11 +80,11 @@ class AutographProductService
             ->inRandomOrder()
             ->take(4)
             ->get(['name', 'certificate_number', 'image_url', 'signed_by'])
-            ->transform(fn (AutographProduct $autographProduct) => [
-                'long_name' => $autographProduct->getLongName(),
-                'certificate_number' => $autographProduct->certificate_number,
-                'image_url' => $autographProduct->image_url,
-            ])
+            ->transform(function (AutographProduct $autographProduct): AutographProduct {
+                $autographProduct['long_name'] = $autographProduct->getLongName();
+
+                return $autographProduct;
+            })
             ->toArray();
 
         return [

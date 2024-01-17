@@ -12,6 +12,9 @@ class AutographCategory extends Model
 
     protected $fillable = ['name'];
 
+    /**
+     * @return HasMany<AutographProduct>
+     */
     public function autographProducts(): HasMany
     {
         return $this->hasMany(AutographProduct::class, 'autograph_category_id');

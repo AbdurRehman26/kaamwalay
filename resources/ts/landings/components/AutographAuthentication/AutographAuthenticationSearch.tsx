@@ -1,5 +1,6 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -7,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
+import AutographTiles from './AutographTiles';
 
 const BoxDiv = styled(Box)({
     '.AutographHero': {
@@ -66,6 +68,7 @@ const BoxDiv = styled(Box)({
         padding: '35px 50px',
         borderRadius: '20px',
         position: 'absolute',
+        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
     },
     '.AutographSearchText': {
         fontSize: '20px',
@@ -105,13 +108,8 @@ const styles = {
         justifyContent: 'center',
     },
 
-    ListView: {
-        background: '#FFFFFF',
-        paddingTop: '10px',
-    },
-
     GridView: {
-        background: 'none',
+        background: '#FFFFFF',
         paddingTop: '10px',
     },
 };
@@ -125,7 +123,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                         <Grid className={'AutographContainer'}>
                             <Grid className={'AutographHeroText'}>
                                 <Grid sx={styles.ImageStyle}>
-                                    <img src="/assets/images/hero-logo.png" alt={'hero-logo'} />
+                                    <img width={100} src="/assets/images/hero-logo.png" alt={'hero-logo'} />
                                 </Grid>
                                 <Typography className={'AutographHeroHeading'}>Autograph Authentication</Typography>
                                 <Typography className={'AutographHeroSubHeading'}>
@@ -159,6 +157,11 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                     </Grid>
                 </Grid>
             </BoxDiv>
+            <Box sx={styles.GridView}>
+                <Container sx={{ marginTop: '100px' }}>
+                    <AutographTiles />
+                </Container>
+            </Box>
         </>
     );
 });

@@ -15,13 +15,13 @@ class AutographController extends Controller
 
     public function index(): View
     {
-         return view('landings.authentication.index');
+        return view('landings.authentication.index');
     }
 
     public function getView(AutographProduct $autographProduct): View
     {
         $data = $this->autographProductService->getDataForPublicPage($autographProduct);
 
-         return view('landings.authentication.view', $data);
+        return view('landings.authentication.view', $data);
     }
 }

@@ -58,6 +58,14 @@ const GridDiv = styled(Grid)({
         letterSpacing: '0.2px',
         textAlign: 'left',
     },
+    '.VerifiedImage': {
+        position: 'relative',
+        left: '130px',
+        top: '10px',
+    },
+    '.VerifiedImageDiv': {
+        position: 'absolute',
+    },
 });
 const BoxDiv = styled(Box)({
     [theme.breakpoints.down('sm')]: {
@@ -71,20 +79,8 @@ const CustomHits = connectHits(({ hits }) => {
             {hits.map((hit: any) => (
                 <a href={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
                     <div className={'GridView'}>
-                        <Grid
-                            sx={{
-                                position: 'absolute',
-                            }}
-                        >
-                            <img
-                                style={{
-                                    position: 'relative',
-                                    left: '130px',
-                                    top: '10px',
-                                }}
-                                src="/assets/images/verified.svg"
-                                alt={'verified'}
-                            />
+                        <Grid className={'VerifiedImageDiv'}>
+                            <img className={'VerifiedImage'} src="/assets/images/verified.svg" alt={'verified'} />
                         </Grid>
                         <div className={'GridImageSection'}>
                             <img

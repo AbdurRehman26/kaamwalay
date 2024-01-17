@@ -425,6 +425,8 @@ class UserCardService
 
     public function changeOwnership(array $data): void
     {
-        UserCard::whereIn('id', $data['user_card_ids'])->update(['user_id' => $data['user_id']]);
+        $query = UserCard::whereIn('id', $data['user_card_ids']);
+        $query->update(['user_id' => $data['user_id']]);
+        $query->searchable();
     }
 }

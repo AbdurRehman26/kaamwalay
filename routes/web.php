@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Landings\AutographAuthenticationController;
 use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\ReferralController;
@@ -52,6 +53,8 @@ Route::prefix('referral')->group(function () {
     Route::get('/', [ReferralController::class, 'index'])->name('referral.view');
     Route::get('/{code}', [ReferralController::class, 'getReferralPage'])->name('referral.home');
 });
+
+Route::get('/authentication', [AutographAuthenticationController::class, 'index'])->name('authentication.view');
 
 Route::get('/partners', [ReferralController::class, 'index'])->name('partners.view');
 

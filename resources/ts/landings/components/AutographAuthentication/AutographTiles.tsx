@@ -7,7 +7,7 @@ import theme from '@shared/styles/theme';
 
 const GridDiv = styled(Grid)({
     '.GridView': {
-        width: '305px',
+        width: '300px',
         height: '228px',
         background: 'rgba(239, 239, 246, 1)',
         borderRadius: '12px',
@@ -75,32 +75,28 @@ const BoxDiv = styled(Box)({
 
 const CustomHits = connectHits(({ hits }) => {
     return (
-        <GridDiv container>
+        <GridDiv container spacing={2}>
             {hits.map((hit: any) => (
-                <a href={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
-                    <div className={'GridView'}>
-                        <Grid className={'VerifiedImageDiv'}>
-                            <img className={'VerifiedImage'} src="/assets/images/verified.svg" alt={'verified'} />
-                        </Grid>
-                        <div className={'GridImageSection'}>
-                            <img
-                                className={'CardImage'}
-                                src={!hit.front_slab_image ? hit.card_image : hit.front_slab_image}
-                                alt={hit.card_name}
-                            />
+                <Grid item key={hit.id} xs={12} sm={6} md={3}>
+                    <a href={`/`} key={hit.id}>
+                        <div className={'GridView'}>
+                            <Grid className={'VerifiedImageDiv'}>
+                                <img className={'VerifiedImage'} src="/assets/images/verified.svg" alt={'verified'} />
+                            </Grid>
+                            <div className={'GridImageSection'}>
+                                <img className={'CardImage'} src={hit.image_url} alt={hit.name} />
+                            </div>
                         </div>
-                    </div>
-                    <div className={'GridBottomSection'}>
-                        <div className={'GridSection'}>
-                            <Typography className={'BottomSectionContent'}>
-                                Daisy Ridley Signed Rey Funko Pop #73 Star Wars{' '}
-                            </Typography>
+                        <div className={'GridBottomSection'}>
+                            <div className={'GridSection'}>
+                                <Typography className={'BottomSectionContent'}>{hit.name}</Typography>
+                            </div>
+                            <div className={'GridSection'}>
+                                <Typography className={'BottomSectionText'}>{hit.certificate_number}</Typography>
+                            </div>
                         </div>
-                        <div className={'GridSection'}>
-                            <Typography className={'BottomSectionText'}>C002820301</Typography>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </Grid>
             ))}
         </GridDiv>
     );

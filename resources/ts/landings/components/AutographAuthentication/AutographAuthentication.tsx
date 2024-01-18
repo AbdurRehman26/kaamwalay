@@ -11,7 +11,7 @@ export function Feed() {
         [meilisearchPublicHost, meilisearchPublicKey],
     );
     return (
-        <InstantSearch indexName={`${appEnv}_user_cards`} searchClient={searchClient}>
+        <InstantSearch indexName={`${appEnv}_autograph_products`} searchClient={searchClient}>
             <AutographAuthenticationSearch />
         </InstantSearch>
     );

@@ -3,18 +3,25 @@
 namespace App\Http\Controllers\Landings;
 
 use App\Http\Controllers\Controller;
-use App\Services\Order\UserCardService;
+use App\Models\AutographProduct;
+use App\Services\AutographProductService;
 use Illuminate\View\View;
 
 class AutographController extends Controller
 {
-    public function __construct(protected UserCardService $userCardService)
+    public function __construct(protected AutographProductService $autographProductService)
     {
     }
-    public function getView(string $certificateId): View
-    {
-        $data = $this->userCardService->getDataForPublicCardPage($certificateId);
 
-        return view('landings.autograph.view', $data);
+    public function index(): View
+    {
+        return view('landings.authentication.index');
+    }
+
+    public function getView(AutographProduct $autographProduct): View
+    {
+        $data = $this->autographProductService->getDataForPublicPage($autographProduct);
+
+        return view('landings.authentication.view', $data);
     }
 }

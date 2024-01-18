@@ -1,5 +1,30 @@
 # Changelog
 
+## v3.25.0 - 2024-01-17
+
+### What's Changed
+
+* Feature: Landings | Live feeds slab photos by @numair97 in https://github.com/woozard/robograding/pull/1127
+* Fix: Home page typing error  by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1135
+* Feature: Change UserCard Ownership by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1126
+* Fix: User Card Owner Update by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1136
+* Feature | Debug: Added Logging for creation of series and set by @luis-molina in https://github.com/woozard/robograding/pull/1137
+* Release v3.25.0 by @thenabeel in https://github.com/woozard/robograding/pull/1138
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.24.0...v3.25.0
+
+## v3.24.0 - 2023-12-24
+
+### What's Changed
+
+* Hotfix: SMS Campaign User Phone Issue by @thenabeel in https://github.com/woozard/robograding/pull/1131
+* Feature: Require Signature at Delivery by @luis-molina in https://github.com/woozard/robograding/pull/1132
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1133
+* Feature: Landing Page Category Stats by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1124
+* Release v3.24.0 by @thenabeel in https://github.com/woozard/robograding/pull/1134
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.23.0...v3.24.0
+
 ## v3.23.0 - 2023-12-05
 
 ### What's Changed

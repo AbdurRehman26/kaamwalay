@@ -58,4 +58,11 @@ Route::get('/partners', [ReferralController::class, 'index'])->name('partners.vi
 
 Route::redirect('/referral', '/partners', 301);
 
-Route::get('/autograph/{certificateId}/view', [AutographController::class, 'getView'])->name('autograph.view');
+Route::prefix('authentication')->group(function () {
+    Route::get('/', [AutographController::class, 'index'])->name('authentication.index');
+    Route::get('/{autographProduct:certificate_number}/view', [AutographController::class, 'getView'])
+        ->name('authentication.view')
+        ->missing(function () {
+            return redirect()->route('authentication.index');
+        });
+});

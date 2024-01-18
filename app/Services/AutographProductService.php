@@ -6,8 +6,8 @@ use App\Imports\AutographProductsImport;
 use App\Jobs\ProcessImage;
 use App\Models\AutographProduct;
 use Exception;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AutographProductService
 {
@@ -16,53 +16,32 @@ class AutographProductService
     /**
      * @throws Exception
      */
-    public function import(string $productsFilename, string $imagesDirectory): void
-    {
-        $this->validateFilesExistence($productsFilename, $imagesDirectory);
-        $this->trackLastAutographProductId();
-        $this->processProducts($productsFilename);
-        $this->processImages($imagesDirectory);
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function validateFilesExistence(string $productsFilename, string $imagesDirectory): void
+    public function importProducts(string $productsFilename): void
     {
         if (! Storage::exists($productsFilename)) {
             throw new Exception('Product file does not exist.');
         }
 
-        if (! Storage::exists($imagesDirectory)) {
-            throw new Exception('Images directory does not exist.');
-        }
-    }
-
-    protected function trackLastAutographProductId(): void
-    {
-        Cache::put(
-            'autograph-products-import:last-id',
-            AutographProduct::latest()->first()->id ?? 0,
-            now()->addHour()
-        );
-    }
-
-    protected function processProducts(string $productsFilename): void
-    {
         (new AutographProductsImport)->import($productsFilename, 'local', \Maatwebsite\Excel\Excel::CSV);
     }
 
-    protected function processImages(string $imagesDirectory): void
+    /**
+     * @throws Exception
+     */
+    public function importImages(string $imagesDirectory, string $filesPrefix = null): void
     {
-        $autographProducts = AutographProduct::where('id', '>', Cache::get('autograph-products-import:last-id'))->get();
+        if (! Storage::exists($imagesDirectory)) {
+            throw new Exception('Images directory does not exist.');
+        }
 
-        $autographProducts->each(function (AutographProduct $autographProduct) use ($imagesDirectory) {
-            $fileName = "$imagesDirectory/IMG-$autographProduct->certificate_number.jpeg";
+        foreach (Storage::files($imagesDirectory) as $image) {
+            $certificateNumber = Str::between($image, $filesPrefix, '.');
+            $autographProduct = AutographProduct::where('certificate_number', $certificateNumber)->first();
 
-            if (Storage::exists($fileName)) {
-                $cloudFilename = static::CLOUD_DIRECTORY.'/'.$autographProduct->certificate_number.'.jpg';
+            if ($autographProduct) {
+                $cloudFilename = static::CLOUD_DIRECTORY.'/'.$certificateNumber.'.jpg';
 
-                Storage::disk('s3')->put($cloudFilename, Storage::get($fileName));
+                Storage::disk('s3')->put($cloudFilename, Storage::get($image));
                 $imageUrl = Storage::disk('s3')->url($cloudFilename);
 
                 $autographProduct->image_url = $imageUrl;
@@ -70,7 +49,7 @@ class AutographProductService
 
                 ProcessImage::dispatch($autographProduct, 'image_url', 'autographs', 'jpg', 700, 700, 70)->delay(now()->addSeconds(5));
             }
-        });
+        }
     }
 
     public function getDataForPublicPage(AutographProduct $autographProduct): array

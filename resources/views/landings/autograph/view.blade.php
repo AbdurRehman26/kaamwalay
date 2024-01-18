@@ -137,15 +137,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="feed-view__breakdown__scores-holder feed-view__description">
+                <div class="feed-view__breakdown__scores-holder autograph-view__description">
                     <div class="feed-view__breakdown__scores">
                         This item was signed in the presence of a SpeedyComics representative and is guaranteed to be authentic by SpeedyComics/AGS Grading Authentication Services.
                     </div>
-                    <div class="feed-view__conclusion__button feed-view__description__button" data-atom="autograph-list-button" data-button-content="Verify Another Certificate">
+                    <div class="feed-view__conclusion__button autograph-view__description__button" data-atom="autograph-list-button" data-button-content="Verify Another Certificate">
                         {{-- JS runtime actions --}}
                     </div>
             </div>
         </div>
         </div>
     </section>
+    @include('landings.autograph.related-items')
+    @include('landings.autograph.certificate-authenticity')
 </x-layout>

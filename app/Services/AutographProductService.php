@@ -28,7 +28,7 @@ class AutographProductService
     /**
      * @throws Exception
      */
-    public function importImages(string $imagesDirectory, string $filesPrefix = null): void
+    public function importImages(string $imagesDirectory, ?string $filesPrefix = null): void
     {
         if (! Storage::exists($imagesDirectory)) {
             throw new Exception('Images directory does not exist.');

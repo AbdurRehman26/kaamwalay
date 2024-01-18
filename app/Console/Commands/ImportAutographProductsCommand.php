@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Services\AutographProductService;
 use Exception;
 use Illuminate\Console\Command;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -21,7 +22,7 @@ class ImportAutographProductsCommand extends Command
     {
         $importType = select('What do you want to import?', [
             1 => 'Products',
-            2 => 'Images'
+            2 => 'Images',
         ]);
 
         if ($importType === 1) {

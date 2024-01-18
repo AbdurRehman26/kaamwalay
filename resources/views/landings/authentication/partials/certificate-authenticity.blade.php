@@ -1,4 +1,4 @@
-<section class="autograph-view__certificate">
+<section class="autograph-view__certificate-image">
     <div class="container">
         <div>
             <div class="autograph-view__certificate__image-div">
@@ -6,7 +6,7 @@
             </div>
         </div>
 
-        <div class="feed-view__conclusion__button" data-atom="autograph-list-button" data-button-content="Verify Another Certificate">
+        <div class="feed-view__conclusion__button autograph-view__conclusion__button" data-atom="authentication-list-button" data-button-content="Verify Another Certificate">
             {{-- JS runtime actions --}}
         </div>
     </div>

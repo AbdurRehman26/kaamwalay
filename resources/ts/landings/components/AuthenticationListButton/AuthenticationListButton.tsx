@@ -11,7 +11,7 @@ interface Props extends Omit<ButtonProps, 'onClick'> {
 
 export function AuthenticationListButton({ children, plan, buttonContent, textColor, aosDelay, ...rest }: Props) {
     return (
-        <Button href={`/dashboard/submissions/new${plan ? `?plan=${plan}` : ''}`} {...rest}>
+        <Button href={`/authentication`} {...rest}>
             {buttonContent || children}
         </Button>
     );

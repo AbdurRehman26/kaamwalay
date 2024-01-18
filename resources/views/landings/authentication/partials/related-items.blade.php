@@ -10,13 +10,16 @@
                 <div class="autograph-view__related-items__image-div">
                     <div class="bonus-earnings__image-div autograph-view__related-items__image">
                         <div><span class="material-icons">verified_user</span></div>
-                        <a href="{{ $related_item['image_url'] }}" class="glightbox">
+                        <a href="{{ route('authentication.view', [$related_item['certificate_number']]) }}" class="glightbox">
                             <img src="{{ $related_item['image_url'] }}" alt="bonus" class="bonus-earnings__image-div__image">
                         </a>
                     </div>
                     <div class="autograph-view__related-items__content">
-                        <h1>{{ $related_item['long_name'] }}</h1>
-                        <p>Certificate #{{ $related_item['certificate_number'] }}</p>
+                        <a href="{{ route('authentication.view', [$related_item['certificate_number']]) }}">
+                            <h1>{{ $related_item['long_name'] }}</h1>
+                            <p>Certificate #{{ $related_item['certificate_number'] }}</p>
+                        </a>
+
                     </div>
                 </div>
 

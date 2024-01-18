@@ -1,15 +1,66 @@
 @use '../../../shared/theme';
 
 .autograph-view {
-    &__description {
+    &__certificate {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        letter-spacing: 0.5px;
+        text-align: left;
+        color: #ffffffb2;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    &__table-cell--heading {
+        line-height: 28px !important;
+    }
+
+    &__certified-badge {
+        margin-top: 15px;
+        height: 72px !important;
+        width: 72px !important;
+    }
+
+    &__subheading {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32px;
+        letter-spacing: 0.20000000298023224px;
+        text-align: left;
+    }
+
+    &__verified-user-icon {
+        font-size: 30px;
+    }
+
+    &__certified-label {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 16px;
+        letter-spacing: 0.4000000059604645px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    &__description-block {
         display: block !important;
+        &__description {
+            color: #0000008a;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 0.10000000149011612px;
+            text-align: left;
+        }
+
         &__button {
             justify-content: start !important;
         }
     }
 
     &__related-items {
-        padding-bottom: 90px;
+        padding-bottom: 140px;
         background-color: white;
 
         &__images-div {
@@ -75,14 +126,17 @@
         }
     }
 
-    &__certificate {
+    &__certificate-image {
         background-color: white;
-        padding-bottom: 80px;
         &__image-div {
             margin-top: 70px;
             margin-bottom: 80px;
             max-width: 1300px;
             max-height: 671px;
         }
+    }
+
+    &__conclusion__button {
+        margin: 60px;
     }
 }

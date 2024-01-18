@@ -22,6 +22,9 @@ const BoxDiv = styled(Box)({
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'relative',
+        [theme.breakpoints.down('sm')]: {
+            height: '460px',
+        },
     },
     '.AutographOverlay': {
         display: 'flex',
@@ -30,6 +33,10 @@ const BoxDiv = styled(Box)({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            height: '460px',
+            alignItems: 'baseline',
+        },
     },
     '.AutographContainer': {
         width: '100%',
@@ -56,6 +63,9 @@ const BoxDiv = styled(Box)({
         padding: '10px',
         marginRight: 'auto',
         marginLeft: 'auto',
+        [theme.breakpoints.down('sm')]: {
+            width: '90%',
+        },
     },
     '.AutographHeroSearchBox': {
         display: 'flex',
@@ -73,6 +83,10 @@ const BoxDiv = styled(Box)({
         position: 'absolute',
         top: '420px',
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+        [theme.breakpoints.down('sm')]: {
+            padding: '35px 20px',
+            top: '340px',
+        },
     },
     '.AutographSearchText': {
         fontSize: '20px',
@@ -116,6 +130,15 @@ const styles = {
         background: '#FFFFFF',
         paddingTop: '10px',
     },
+    SortBy: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginBottom: '20px',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '70px',
+        },
+    },
 };
 
 const PaginationBox = styled(Container)({
@@ -136,7 +159,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                         <Grid className={'AutographContainer'}>
                             <Grid className={'AutographHeroText'}>
                                 <Grid sx={styles.ImageStyle}>
-                                    <img width={100} src="/assets/images/hero-logo.png" alt={'hero-logo'} />
+                                    <img width={120} src="/assets/images/hero-logo.png" alt={'hero-logo'} />
                                 </Grid>
                                 <Typography className={'AutographHeroHeading'}>Autograph Authentication</Typography>
                                 <Typography className={'AutographHeroSubHeading'}>
@@ -172,14 +195,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
             </BoxDiv>
             <Box sx={styles.GridView}>
                 <Container sx={{ marginTop: '10%' }}>
-                    <Grid
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            marginBottom: '20px',
-                        }}
-                    >
+                    <Grid sx={styles.SortBy}>
                         <AutographSortBy />
                     </Grid>
                     <Divider sx={{ marginBottom: '20px' }} orientation="horizontal" flexItem />

@@ -11,7 +11,7 @@ it('imports autograph products', function () {
     Storage::put('test.csv', '');
 
     (new AutographProductService())->importProducts('test.csv');
-    Excel::assertImported('test.csv', 'local', fn(AutographProductsImport $import) => true);
+    Excel::assertImported('test.csv', 'local', fn (AutographProductsImport $import) => true);
 });
 
 it('imports autograph images', function () {
@@ -42,7 +42,7 @@ it('throws exception if images directory does not exist', function () {
 
 it('returns data for public page', function () {
     AutographProduct::factory()->count(5)->create([
-        'autograph_type_id' => 1
+        'autograph_type_id' => 1,
     ]);
 
     $autographProduct = AutographProduct::first();

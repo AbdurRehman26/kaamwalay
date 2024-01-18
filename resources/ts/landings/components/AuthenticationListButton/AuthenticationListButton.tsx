@@ -9,7 +9,7 @@ interface Props extends Omit<ButtonProps, 'onClick'> {
     aosDelay?: any;
 }
 
-export function AutographListButton({ children, plan, buttonContent, textColor, aosDelay, ...rest }: Props) {
+export function AuthenticationListButton({ children, plan, buttonContent, textColor, aosDelay, ...rest }: Props) {
     return (
         <Button href={`/dashboard/submissions/new${plan ? `?plan=${plan}` : ''}`} {...rest}>
             {buttonContent || children}
@@ -17,4 +17,4 @@ export function AutographListButton({ children, plan, buttonContent, textColor, 
     );
 }
 
-export default AutographListButton;
+export default AuthenticationListButton;

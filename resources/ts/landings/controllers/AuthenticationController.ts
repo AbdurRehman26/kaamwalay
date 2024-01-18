@@ -1,4 +1,4 @@
-import { AutographListButtonAtom } from '../atoms/AutographListButtonAtom';
+import { AuthenticationListButtonAtom } from '../atoms/AuthenticationListButtonAtom';
 import { CardImageModal } from '../atoms/CardImageModalAtom';
 import { CardImageModalMobile } from '../atoms/CardImageModalMobileAtom';
 import { CardImageSlider } from '../atoms/CardImageSliderAtom';
@@ -9,14 +9,14 @@ import { Controller } from '../classes/Controller';
 import { CanSetup } from '../interfaces/CanSetup';
 import { mountAtom } from '../utils/mountAtom';
 
-class AutographController extends Controller implements CanSetup<AutographController> {
+class AuthenticationController extends Controller implements CanSetup<AuthenticationController> {
     public async setup() {
         await mountAtom(LayoutAtom);
     }
 
-    public autographView() {
+    public authenticationView() {
         mountAtom(
-            AutographListButtonAtom.clone(),
+            AuthenticationListButtonAtom.clone(),
             CardPageShareBoxAtom,
             CardPageShareModal,
             CardImageModal,
@@ -26,4 +26,4 @@ class AutographController extends Controller implements CanSetup<AutographContro
     }
 }
 
-export default AutographController;
+export default AuthenticationController;

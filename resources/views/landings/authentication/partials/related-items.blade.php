@@ -1,0 +1,27 @@
+<section class="autograph-view__related-items">
+    <div class="container">
+        <div class="bonus-earnings__heading-div">
+            <p class="bonus-earnings__heading-div__small-text autograph-view__related-items__heading" data-aos="fade">Related Items</p>
+        </div>
+        <div class="bonus-earnings__images-div autograph-view__related-items__images-div" data-aos="fade">
+
+            @foreach($related_items as $related_item)
+
+                <div class="autograph-view__related-items__image-div">
+                    <div class="bonus-earnings__image-div autograph-view__related-items__image">
+                        <div><span class="material-icons">verified_user</span></div>
+                        <a href="{{ $related_item['image_url'] }}" class="glightbox">
+                            <img src="{{ $related_item['image_url'] }}" alt="bonus" class="bonus-earnings__image-div__image">
+                        </a>
+                    </div>
+                    <div class="autograph-view__related-items__content">
+                        <h1>{{ $related_item['long_name'] }}</h1>
+                        <p>Certificate #{{ $related_item['certificate_number'] }}</p>
+                    </div>
+                </div>
+
+            @endforeach
+
+        </div>
+    </div>
+</section>

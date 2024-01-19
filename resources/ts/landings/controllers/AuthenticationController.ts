@@ -1,4 +1,3 @@
-import { AuthenticationListButtonAtom } from '../atoms/AuthenticationListButtonAtom';
 import { CardImageModal } from '../atoms/CardImageModalAtom';
 import { CardImageModalMobile } from '../atoms/CardImageModalMobileAtom';
 import { CardImageSlider } from '../atoms/CardImageSliderAtom';
@@ -15,14 +14,7 @@ class AuthenticationController extends Controller implements CanSetup<Authentica
     }
 
     public authenticationView() {
-        mountAtom(
-            AuthenticationListButtonAtom.clone(),
-            CardPageShareBoxAtom,
-            CardPageShareModal,
-            CardImageModal,
-            CardImageSlider,
-            CardImageModalMobile,
-        );
+        mountAtom(CardPageShareBoxAtom, CardPageShareModal, CardImageModal, CardImageSlider, CardImageModalMobile);
     }
 }
 

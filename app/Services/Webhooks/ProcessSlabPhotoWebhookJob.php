@@ -19,10 +19,12 @@ class ProcessSlabPhotoWebhookJob extends ProcessWebhookJob
             throw new Exception('Invalid payload: '.json_encode($payload));
         }
 
+        // We are using save() method so it would automatically re-index it on search
         $userCard = UserCard::where('certificate_number', $payload['certificate_number'])->firstOrFail();
-        $userCard->slab_images = ['front' => $payload['front_slab_image'] ?? null, 'back' => $payload['back_slab_image'] ?? null];
+        $userCard->slab_images = [
+            'front' => $payload['front_slab_image'] ?? $userCard->slab_images['front'] ?? null,
+            'back' => $payload['back_slab_image'] ?? $userCard->slab_images['back'] ?? null,
+        ];
         $userCard->save();
-
-        $userCard->searchable();
     }
 }

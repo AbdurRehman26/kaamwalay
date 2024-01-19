@@ -139,9 +139,9 @@
                     <div class="feed-view__breakdown__scores authentication-view__description-block__description">
                         This item was signed in the presence of a SpeedyComics representative and is guaranteed to be authentic by SpeedyComics/AGS Grading Authentication Services.
                     </div>
-                    <div class="feed-view__conclusion__button authentication-view__description-block__button" data-atom="authentication-list-button" data-button-content="Verify Another Certificate">
-                        {{-- JS runtime actions --}}
-                    </div>
+                    <a type="button" href="{{ route('authentication.index') }}" class="authentication-view__button">
+                        Verify Another Certificate
+                    </a>
             </div>
         </div>
         </div>

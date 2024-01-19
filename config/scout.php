@@ -136,7 +136,7 @@ return [
         'index-settings' => [
             'card_products' => [
                 'searchableAttributes' => ['name', 'short_name', 'long_name'],
-                'filterableAttributes' => ['card_category_name'],
+                'filterableAttributes' => ['card_category_name', 'card_series_name', 'card_set_name'],
                 'rankingRules' => [
                     'words',
                     'typo',

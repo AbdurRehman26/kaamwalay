@@ -36,7 +36,7 @@
                 </div>
                 <div>
                     <div class="feed-view__header__share">
-                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal">
+                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ url()->current() }}">
                             {{-- JS runtime actions --}}
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="feed-view__left-side">
                         <div class="feed-view__share">
                             <p class="feed-view__share__title">SHARE</p>
-                            <div class="feed-view__share__icon" data-atom="card-page-share-box">
+                            <div class="feed-view__share__icon" data-atom="card-page-share-box" data-content="{{ url()->current() }}">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

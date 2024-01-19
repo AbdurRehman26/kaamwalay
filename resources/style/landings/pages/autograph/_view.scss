@@ -1,7 +1,7 @@
 @use '../../../shared/theme';
 @use '../../../shared/breakpoints';
 
-.autograph-view {
+.authentication-view {
     &__certificate {
         font-size: 14px;
         font-weight: 500;
@@ -219,7 +219,6 @@
             position: relative;
             display: inline-block;
             margin-top: 70px;
-            margin-bottom: 80px;
             max-width: 1300px;
             max-height: 671px;
 

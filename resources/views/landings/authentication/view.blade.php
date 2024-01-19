@@ -27,12 +27,12 @@
             <div class="feed-view__header__overlay-color"></div>
         </div>
 
-        <div class="container feed-view__header__container autograph-view">
+        <div class="container feed-view__header__container authentication-view">
             <div class="feed-view__card-holder"></div>
             <div class="feed-view__header__content">
                 <div class="feed-view__header__details">
-                    <p class="autograph-view__certificate">Certificate # {{ $certificate_number }}</p>
-                    <h1 class="autograph-view__subheading">{{ $long_name }}</h1>
+                    <p class="authentication-view__certificate">Certificate # {{ $certificate_number }}</p>
+                    <h1 class="authentication-view__subheading">{{ $long_name }}</h1>
                 </div>
                 <div>
                     <div class="feed-view__header__share">
@@ -41,10 +41,10 @@
                         </div>
                     </div>
                     <div class="feed-view__header__score">
-                        <div class="autograph-view__certified-badge">
-                            <p class="autograph-view__certified-label">Certified</p>
+                        <div class="authentication-view__certified-badge">
+                            <p class="authentication-view__certified-label">Certified</p>
                             <p class="feed-view__header__grade-score">
-                            <div><span class="material-icons autograph-view__verified-user-icon">verified_user</span></div>
+                            <div><span class="material-icons authentication-view__verified-user-icon">verified_user</span></div>
                             </p>
                         </div>
                     </div>
@@ -78,30 +78,30 @@
                             </div>
                         @endif
                     </div>
-                    <div class="feed-view__right-side autograph-view__right-side">
-                        <div class="feed-view__table-div-left autograph-view__table-div-left">
+                    <div class="feed-view__right-side authentication-view__right-side">
+                        <div class="feed-view__table-div-left authentication-view__table-div-left">
                             <table class="feed-view__table">
                                 <tbody>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Certificate #:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Certificate #:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $certificate_number }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Category:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Category:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $category }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Item Type:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Item Type:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $type }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Item:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Item:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $name }}
                                     </td>
@@ -110,22 +110,22 @@
                             </table>
                         </div>
                         <div class="feed-view__table-div-right">
-                            <table class="feed-view__table autograph-view__table-div-right">
+                            <table class="feed-view__table authentication-view__table-div-right">
                                 <tbody>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Signed By:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Signed By:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $signed_by }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Date Signed:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Date Signed:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $signed_at }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Date Listed:</td>
+                                    <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Date Listed:</td>
                                     <td class="feed-view__table-cell">
                                         {{ $created_at }}
                                     </td>
@@ -135,11 +135,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="feed-view__breakdown__scores-holder autograph-view__description-block">
-                    <div class="feed-view__breakdown__scores autograph-view__description-block__description">
+                <div class="feed-view__breakdown__scores-holder authentication-view__description-block">
+                    <div class="feed-view__breakdown__scores authentication-view__description-block__description">
                         This item was signed in the presence of a SpeedyComics representative and is guaranteed to be authentic by SpeedyComics/AGS Grading Authentication Services.
                     </div>
-                    <div class="feed-view__conclusion__button autograph-view__description-block__button" data-atom="authentication-list-button" data-button-content="Verify Another Certificate">
+                    <div class="feed-view__conclusion__button authentication-view__description-block__button" data-atom="authentication-list-button" data-button-content="Verify Another Certificate">
                         {{-- JS runtime actions --}}
                     </div>
             </div>

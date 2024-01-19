@@ -4,7 +4,7 @@
             <h1 class="authentication-view__certificate-image__number">
                 {{ $certificate_number }}
             </h1>
-            <img src="{{ asset('assets/images/landings/autograph/speedy-coa.jpeg') }}" alt="bonus" class="bonus-earnings__image-div__image">
+            <img src="{{ asset('assets/images/landings/authentication/speedy-coa.jpeg') }}" alt="bonus" class="bonus-earnings__image-div__image">
         </div>
 
         <div class="authentication-view__certificate__button">

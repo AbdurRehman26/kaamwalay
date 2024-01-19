@@ -1,10 +1,7 @@
-import SortIcon from '@mui/icons-material/Sort';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
-import { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectSortBy } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -60,40 +57,33 @@ const styles = {
 const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
     const [classN, changeClass] = useState('Select');
     const { appEnv } = useConfiguration();
-    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     return (
-        <>
-            {!isSm ? (
-                <AutographSortDropdown>
-                    <Select
-                        value={currentRefinement || `${appEnv}_autograph_products`}
-                        onChange={(event) => refine(event.target.value)}
-                        variant={'standard'}
-                        onFocus={() => {
-                            changeClass('SelectFocus');
-                        }}
-                        className={classN}
-                        disableUnderline
+        <AutographSortDropdown>
+            <Select
+                value={currentRefinement || `${appEnv}_autograph_products`}
+                onChange={(event) => refine(event.target.value)}
+                variant={'standard'}
+                onFocus={() => {
+                    changeClass('SelectFocus');
+                }}
+                className={classN}
+                disableUnderline
+            >
+                <MenuItem sx={{ display: 'none' }} value={`${appEnv}_autograph_products`}>
+                    Most Recent
+                </MenuItem>
+                {items.map((item: any) => (
+                    <MenuItem
+                        key={item.label}
+                        sx={item.isRefined ? styles.MenuItemSelected : styles.MenuItem}
+                        value={item.isRefined ? currentRefinement : item.value}
                     >
-                        <MenuItem sx={{ display: 'none' }} value={`${appEnv}_autograph_products`}>
-                            Most Recent
-                        </MenuItem>
-                        {items.map((item: any) => (
-                            <MenuItem
-                                key={item.label}
-                                sx={item.isRefined ? styles.MenuItemSelected : styles.MenuItem}
-                                value={item.isRefined ? currentRefinement : item.value}
-                            >
-                                Sort: {item.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </AutographSortDropdown>
-            ) : (
-                <SortIcon />
-            )}
-        </>
+                        Sort: {item.label}
+                    </MenuItem>
+                ))}
+            </Select>
+        </AutographSortDropdown>
     );
 });
 

@@ -16,9 +16,7 @@ class FeedController extends Controller
 
     public function getList(): View
     {
-        $data = $this->userCardService->getFeedCards();
-
-        return view('landings.feed.list', compact('data'));
+        return view('landings.feed.list');
     }
 
     public function getView(string $certificateId): View

@@ -8,7 +8,7 @@
             @foreach($related_items as $related_item)
 
                 <div class="autograph-view__related-items__image-div">
-                    <div class="bonus-earnings__image-div autograph-view__related-items__image">
+                    <div class="autograph-view__related-items__image">
                         <div><span class="material-icons">verified_user</span></div>
                         <a href="{{ route('authentication.view', [$related_item['certificate_number']]) }}" class="glightbox">
                             <img src="{{ $related_item['image_url'] }}" alt="bonus" class="bonus-earnings__image-div__image">

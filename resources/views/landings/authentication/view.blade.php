@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div class="feed-view__header__score">
-                        <div class="feed-view__header__grade autograph-view__certified-badge">
+                        <div class="autograph-view__certified-badge">
                             <p class="autograph-view__certified-label">Certified</p>
                             <p class="feed-view__header__grade-score">
                             <div><span class="material-icons autograph-view__verified-user-icon">verified_user</span></div>

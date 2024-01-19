@@ -191,11 +191,11 @@
         position: relative;
         &__number {
             position: absolute;
-            transform: translate(-67%, -31%);
-            left: 67%;
+            transform: translate(-70%, -31%);
+            left: 70%;
             top: 31%;
             z-index: 99999;
-            font-size: 20px;
+            font-size: 24px;
 
             @include breakpoints.down(1366) {
                 font-size: 22px;

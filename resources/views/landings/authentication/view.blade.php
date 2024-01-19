@@ -78,8 +78,8 @@
                             </div>
                         @endif
                     </div>
-                    <div class="feed-view__right-side">
-                        <div class="feed-view__table-div-left">
+                    <div class="feed-view__right-side autograph-view__right-side">
+                        <div class="feed-view__table-div-left autograph-view__table-div-left">
                             <table class="feed-view__table">
                                 <tbody>
                                 <tr>
@@ -110,7 +110,7 @@
                             </table>
                         </div>
                         <div class="feed-view__table-div-right">
-                            <table class="feed-view__table">
+                            <table class="feed-view__table autograph-view__table-div-right">
                                 <tbody>
                                 <tr>
                                     <td class="feed-view__table-cell feed-view__table-cell--heading autograph-view__table-cell--heading">Signed By:</td>

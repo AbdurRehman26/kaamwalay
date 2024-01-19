@@ -1,4 +1,5 @@
 @use '../../../shared/theme';
+@use '../../../shared/breakpoints';
 
 .autograph-view {
     &__certificate {
@@ -10,6 +11,10 @@
         color: #ffffffb2;
         text-transform: uppercase;
         margin-bottom: 10px;
+
+        @include breakpoints.down(768) {
+            margin-bottom: 35px;
+        }
     }
 
     &__table-cell--heading {
@@ -18,8 +23,16 @@
 
     &__certified-badge {
         margin-top: 15px;
+        min-height: 72px !important;
         height: 72px !important;
+        min-width: 72px !important;
         width: 72px !important;
+        @include breakpoints.down(768) {
+            min-height: 48px !important;
+            min-width: 48px !important;
+            height: 48px !important;
+            width: 48px !important;
+        }
     }
 
     &__subheading {
@@ -31,10 +44,17 @@
     }
 
     &__verified-user-icon {
+        @include breakpoints.down(768) {
+            font-size: 35px;
+        }
+
         font-size: 30px;
     }
 
     &__certified-label {
+        @include breakpoints.down(768) {
+            display: none;
+        }
         font-size: 14px;
         font-weight: 500;
         line-height: 16px;
@@ -57,11 +77,20 @@
         &__button {
             justify-content: start !important;
         }
+        a {
+            @include breakpoints.down(768) {
+                width: 100% !important;
+            }
+        }
     }
 
     &__related-items {
         padding-bottom: 140px;
         background-color: white;
+
+        @include breakpoints.down(768) {
+            padding-bottom: 0 !important;
+        }
 
         &__images-div {
             justify-content: space-between !important;
@@ -127,16 +156,72 @@
     }
 
     &__certificate-image {
+        display: block;
         background-color: white;
+        position: relative;
+        &__number {
+            transform: translate(-67%, -31%);
+            position: absolute;
+            left: 67%;
+            top: 31%;
+            z-index: 99999;
+            font-size: 20px;
+        }
         &__image-div {
+            position: relative;
+            display: inline-block;
             margin-top: 70px;
             margin-bottom: 80px;
             max-width: 1300px;
             max-height: 671px;
+
+            @include breakpoints.down(768) {
+                margin-top: 30px !important;
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+
+    &__table-div-left {
+        @include breakpoints.down(768) {
+            display: block !important;
+        }
+
+        .feed-view__table-cell--heading {
+            @include breakpoints.down(768) {
+                width: 80px !important;
+            }
+        }
+    }
+
+    &__table-div-right {
+        @include breakpoints.down(768) {
+            margin-top: 0 !important;
+        }
+        .feed-view__table-cell--heading {
+            @include breakpoints.down(768) {
+                width: 80px !important;
+            }
+        }
+    }
+
+    &__right-side {
+        @include breakpoints.down(768) {
+            display: block !important;
         }
     }
 
     &__conclusion__button {
         margin: 60px;
+
+        @include breakpoints.down(768) {
+            margin: 30px 0 30px 0 !important;
+        }
+
+        a {
+            @include breakpoints.down(768) {
+                width: 100% !important;
+            }
+        }
     }
 }

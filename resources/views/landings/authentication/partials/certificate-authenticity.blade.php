@@ -1,7 +1,10 @@
 <section class="autograph-view__certificate-image">
     <div class="container">
         <div>
-            <div class="autograph-view__certificate__image-div">
+            <div class="autograph-view__certificate-image__image-div">
+                <h1 class="autograph-view__certificate-image__number">
+                    {{ $certificate_number }}
+                </h1>
                 <img src="{{ asset('assets/images/landings/autograph/speedy-coa.jpeg') }}" alt="bonus" class="bonus-earnings__image-div__image">
             </div>
         </div>

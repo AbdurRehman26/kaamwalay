@@ -123,6 +123,9 @@ export function LayoutHeader() {
                         <MuiLink className={classes.navLink} href={'/partners'}>
                             Partners
                         </MuiLink>
+                        <MuiLink className={classes.navLink} href={'/authentication'}>
+                            Authentication
+                        </MuiLink>
                     </Grid>
                 </Grid>
                 <Button

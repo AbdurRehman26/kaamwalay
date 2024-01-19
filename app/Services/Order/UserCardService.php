@@ -101,7 +101,7 @@ class UserCardService
             ];
         }
 
-        $data = []; //$this->agsService->getGradesByCertificateId($certificateId);
+        $data = $this->agsService->getGradesByCertificateId($certificateId);
 
         $generatedImages = $this->pepareScannedImagesForPublicCardPage($data);
 

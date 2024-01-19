@@ -10,6 +10,8 @@ import { styled } from '@mui/material/styles';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
 import AutographItemsPerPage from './AutographItemsPerPage';
+import AutographList from './AutographList';
+import AutographPagination from './AutographPagination';
 import AutographSortBy from './AutographSortBy';
 import AutographTiles from './AutographTiles';
 
@@ -53,7 +55,7 @@ const BoxDiv = styled(Box)({
         lineHeight: '64px',
         letterSpacing: '0.2px',
         [theme.breakpoints.down('sm')]: {
-            fontSize: '32px',
+            fontSize: '30px',
         },
     },
     '.AutographHeroSubHeading': {
@@ -84,7 +86,7 @@ const BoxDiv = styled(Box)({
         top: '420px',
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
         [theme.breakpoints.down('sm')]: {
-            padding: '35px 20px',
+            padding: '25px 10px',
             top: '340px',
         },
     },
@@ -95,6 +97,9 @@ const BoxDiv = styled(Box)({
         letterSpacing: '0.5px',
         textAlign: 'center',
         paddingBottom: '20px',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '16px',
+        },
     },
     '.searchBox': {
         width: '630px',
@@ -144,7 +149,7 @@ const styles = {
 const PaginationBox = styled(Container)({
     display: 'flex',
     padding: '15px 15px',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
         float: 'none',
     },
@@ -200,8 +205,11 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                     </Grid>
                     <Divider sx={{ marginBottom: '20px' }} orientation="horizontal" flexItem />
                     <AutographTiles />
+                    <AutographList />
+                    <Divider sx={{ marginBottom: '20px' }} orientation="horizontal" flexItem />
                 </Container>
                 <PaginationBox sx={styles.GridView}>
+                    <AutographPagination />
                     <AutographItemsPerPage />
                 </PaginationBox>
             </Box>

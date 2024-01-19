@@ -78,7 +78,7 @@ const CustomHits = connectHits(({ hits }) => {
         <GridDiv container spacing={2}>
             {hits.map((hit: any) => (
                 <Grid item key={hit.id} xs={12} sm={6} md={3}>
-                    <a href={`/`} key={hit.id}>
+                    <a href={`authentication/${hit.certificate_number}/view`} key={hit.id}>
                         <div className={'GridView'}>
                             <Grid className={'VerifiedImageDiv'}>
                                 <img className={'VerifiedImage'} src="/assets/images/verified.svg" alt={'verified'} />
@@ -89,7 +89,7 @@ const CustomHits = connectHits(({ hits }) => {
                         </div>
                         <div className={'GridBottomSection'}>
                             <div className={'GridSection'}>
-                                <Typography className={'BottomSectionContent'}>{hit.name}</Typography>
+                                <Typography className={'BottomSectionContent'}>{hit.name.slice(0, 60)}</Typography>
                             </div>
                             <div className={'GridSection'}>
                                 <Typography className={'BottomSectionText'}>{hit.certificate_number}</Typography>

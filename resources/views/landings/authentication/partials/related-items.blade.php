@@ -17,7 +17,7 @@
                     <div class="authentication-view__related-items__content">
                         <a href="{{ route('authentication.view', [$related_item['certificate_number']]) }}">
                             <h1>{{ $related_item['long_name'] }}</h1>
-                            <p>{{ $related_item['certificate_number'] }}</p>
+                            <p class="authentication-view__related-items__certificate-number">{{ $related_item['certificate_number'] }}</p>
                         </a>
 
                     </div>

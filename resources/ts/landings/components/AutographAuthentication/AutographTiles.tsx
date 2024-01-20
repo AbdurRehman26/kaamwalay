@@ -8,7 +8,6 @@ import theme from '@shared/styles/theme';
 const GridDiv = styled(Grid)({
     '.GridView': {
         width: '300px',
-        height: '228px',
         background: 'rgba(239, 239, 246, 1)',
         borderRadius: '12px',
         flex: '1 1 auto',

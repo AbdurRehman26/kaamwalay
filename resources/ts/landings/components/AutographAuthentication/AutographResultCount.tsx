@@ -17,7 +17,7 @@ const styles = {
         },
     },
     searchValues: {
-        fontWeight: '500',
+        fontWeight: 500,
         fontSize: '20px',
         lineHeight: '24px',
         letterSpacing: '0.5px',
@@ -25,6 +25,9 @@ const styles = {
         margin: '10px 10px',
         [theme.breakpoints.down('sm')]: {
             margin: '0px 0px',
+            fontSize: '14px',
+            letterSpacing: '0.4000000059604645px',
+            lineHeight: '20px',
         },
     },
 };

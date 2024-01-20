@@ -29,24 +29,23 @@
 
         <div class="container feed-view__header__container authentication-view">
             <div class="feed-view__card-holder"></div>
-            <div class="feed-view__header__content">
+            <div class="feed-view__header__content authentication-view__header__content">
+                <div class="authentication-view__header__share">
+                    <div class="authentication-view-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ url()->current() }}">
+                        {{-- JS runtime actions --}}
+                    </div>
+                </div>
                 <div class="feed-view__header__details">
                     <p class="authentication-view__certificate">Certificate # {{ $certificate_number }}</p>
-                    <h1 class="authentication-view__subheading">{{ $long_name }}</h1>
                 </div>
-                <div>
-                    <div class="feed-view__header__share">
-                        <div class="feed-view__share__icon-mobile" data-atom="card-page-share-modal" data-content="{{ url()->current() }}">
-                            {{-- JS runtime actions --}}
-                        </div>
-                    </div>
-                    <div class="feed-view__header__score">
-                        <div class="authentication-view__certified-badge">
-                            <p class="authentication-view__certified-label">Certified</p>
-                            <p class="feed-view__header__grade-score">
-                            <div><span class="material-icons authentication-view__verified-user-icon">verified_user</span></div>
-                            </p>
-                        </div>
+
+                <div class="feed-view__header__score">
+                    <h1 class="authentication-view__subheading">{{ $long_name }}</h1>
+                    <div class="authentication-view__certified-badge">
+                        <p class="authentication-view__certified-label">Certified</p>
+                        <p class="feed-view__header__grade-score">
+                        <div><span class="material-icons authentication-view__verified-user-icon">verified_user</span></div>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -115,7 +114,14 @@
                                 <tr>
                                     <td class="feed-view__table-cell feed-view__table-cell--heading authentication-view__table-cell--heading">Signed By:</td>
                                     <td class="feed-view__table-cell">
-                                        {{ $signed_by }}
+                                        {{ Str::of($signed_by)->explode(',')->first() }}
+                                        <Tooltip title="12312">
+                                            <Button>top-start</Button>
+                                        </Tooltip>
+
+                                        <Tooltip title="Add" arrow>
+                                            <Button>Arrow</Button>
+                                        </Tooltip>
                                     </td>
                                 </tr>
                                 <tr>

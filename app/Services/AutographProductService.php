@@ -73,7 +73,7 @@ class AutographProductService
             'image_url' => $autographProduct->image_url,
             'category' => $autographProduct->autographCategory->name,
             'type' => $autographProduct->autographType->name,
-            'signed_by' => $autographProduct->signed_by,
+            'signed_by' => $autographProduct->signed_by . ',' . $autographProduct->signed_by . ',' . $autographProduct->signed_by,
             'signed_at' => $autographProduct->signed_at->format('M d, Y'),
             'created_at' => $autographProduct->created_at->format('M d, Y'),
             'related_items' => $relatedItems,

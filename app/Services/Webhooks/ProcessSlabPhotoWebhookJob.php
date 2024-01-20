@@ -23,7 +23,7 @@ class ProcessSlabPhotoWebhookJob extends ProcessWebhookJob
         $userCard = UserCard::where('certificate_number', $payload['certificate_number'])->firstOrFail();
         $userCard->slab_images = [
             'front' => $payload['front_slab_image'] ?? $userCard->slab_images['front'] ?? null,
-            'back' => $payload['back_slab_image'] ?? $userCard->slab_images['back'] ?? null
+            'back' => $payload['back_slab_image'] ?? $userCard->slab_images['back'] ?? null,
         ];
         $userCard->save();
     }

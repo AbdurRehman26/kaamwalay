@@ -28,6 +28,7 @@ const GridDiv = styled(Grid)({
         padding: '10px 10px',
     },
     '.CardImage': {
+        padding: '15px 0px',
         maxWidth: '200px',
         maxHeight: '200px',
     },

@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import React from 'react';
 
 interface Props {
     content: string;
@@ -26,16 +27,24 @@ export function TooltipIcon({ content }: Props) {
     const classes = useStyles();
 
     const plusMore = (
-        <Typography className={classes.root} marginLeft={'5px'} sx={{ textDecoration: 'underline' }}>
+        <Typography display={'block'} className={classes.root} marginLeft={'5px'} sx={{ textDecoration: 'underline' }}>
             {` +${names.length} More`}
         </Typography>
     );
-    const displayNam = <Typography className={classes.root}>{name}</Typography>;
+    const displayNam = (
+        <Typography display={'block'} className={classes.root}>
+            {name}
+        </Typography>
+    );
 
     const tooltipText = names.join('\n');
 
     return names.length ? (
-        <Tooltip title={<span style={{ whiteSpace: 'pre-line' }}>{tooltipText}</span>}>
+        <Tooltip
+            enterTouchDelay={0}
+            leaveTouchDelay={5000}
+            title={<span style={{ whiteSpace: 'pre-line' }}>{tooltipText}</span>}
+        >
             <Box className={classes.root} display={'flex'}>
                 {displayNam}
                 {names.length ? plusMore : ''}

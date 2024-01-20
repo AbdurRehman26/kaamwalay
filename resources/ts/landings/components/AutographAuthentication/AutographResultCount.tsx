@@ -1,6 +1,8 @@
 import Typography from '@mui/material/Typography';
 import { connectStats } from 'react-instantsearch-dom';
+import { useDispatch } from 'react-redux';
 import theme from '@shared/styles/theme';
+import { setFilterResults } from '../../redux/slices/feedSlice';
 
 const styles = {
     CountStyle: {
@@ -28,6 +30,9 @@ const styles = {
 };
 
 const CustomStats = connectStats(({ nbHits, query }: { nbHits: any; query: any }) => {
+    const dispatch = useDispatch();
+    dispatch(setFilterResults(nbHits));
+
     return (
         <div>
             <Typography sx={styles.searchValues}>

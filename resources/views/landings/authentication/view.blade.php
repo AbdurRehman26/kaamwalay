@@ -5,8 +5,8 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.1/dist/imagebox.min.css">
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{{--        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">--}}
+{{--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />--}}
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -22,25 +22,25 @@
             });
 
         </script>
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-        <script>
-            (function() {
-                var lightbox = GLightbox({
-                    plyr: {
-                        config: {
-                            ratio: '9:16'
-                        }
-                    },
-                    zoomable: false
-                });
+{{--        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>--}}
+{{--        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>--}}
+{{--        <script>--}}
+{{--            (function() {--}}
+{{--                var lightbox = GLightbox({--}}
+{{--                    plyr: {--}}
+{{--                        config: {--}}
+{{--                            ratio: '9:16'--}}
+{{--                        }--}}
+{{--                    },--}}
+{{--                    zoomable: false--}}
+{{--                });--}}
 
-                AOS.init({
-                    once: true,
-                    easing: 'ease-in-out'
-                });
-            })();
-        </script>
+{{--                AOS.init({--}}
+{{--                    once: true,--}}
+{{--                    easing: 'ease-in-out'--}}
+{{--                });--}}
+{{--            })();--}}
+{{--        </script>--}}
     </x-slot>
     <header class="authentication-view__header">
         <div class="authentication-view__header__overlay">

@@ -1114,7 +1114,7 @@
             position: absolute;
             transform: translate(-70%, -31%);
             left: 70%;
-            top: 31%;
+            margin-top: 16.75%;
             z-index: 99999;
             font-size: 24px;
 
@@ -1122,18 +1122,21 @@
                 font-size: 22px;
                 left: 70.5%;
                 top: 29%;
+                margin-top: 0 !important;
             }
 
             @include breakpoints.down(1024) {
                 font-size: 22px;
                 left: 70.5%;
                 top: 29%;
+                margin-top: 0 !important;
             }
 
             @include breakpoints.down(768) {
                 font-size: 12px;
                 left: 70.5%;
                 top: 29%;
+                margin-top: 0 !important;
             }
         }
         &__image-div {
@@ -1203,4 +1206,15 @@
             width: 100% !important;
         }
     }
+}
+
+.glightbox-clean .gdesc-inner {
+    padding: 0 !important;
+}
+
+#gSlideDesc_0 {
+    font-size: 22px;
+    left: 70.5%;
+    top: 29%;
+    margin-top: 0 !important;
 }

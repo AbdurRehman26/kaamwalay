@@ -31,7 +31,8 @@
                         config: {
                             ratio: '9:16'
                         }
-                    }
+                    },
+                    zoomable: false
                 });
 
                 AOS.init({

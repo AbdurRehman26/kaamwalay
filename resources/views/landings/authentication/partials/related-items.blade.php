@@ -19,7 +19,6 @@
                             <h1>{{ $related_item['long_name'] }}</h1>
                             <p class="authentication-view__related-items__certificate-number">{{ $related_item['certificate_number'] }}</p>
                         </a>
-
                     </div>
                 </div>
 

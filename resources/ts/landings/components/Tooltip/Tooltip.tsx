@@ -28,7 +28,7 @@ export function TooltipIcon({ content }: Props) {
 
     const plusMore = (
         <Typography className={classes.root} sx={{ textDecoration: 'underline' }}>
-            {` +${names.length} More`}
+            {`${names.length} More`}
         </Typography>
     );
     const displayNam = <Typography className={classes.root}>{name}</Typography>;

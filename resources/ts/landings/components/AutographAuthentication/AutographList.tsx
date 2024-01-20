@@ -83,10 +83,7 @@ const TableDiv = styled(TableContainer)({
     },
 });
 const BoxDiv = styled(Box)({
-    [theme.breakpoints.up('lg')]: {
-        display: 'none',
-    },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
         display: 'none',
     },
     '.autographList': {

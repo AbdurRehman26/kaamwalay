@@ -16,10 +16,6 @@ const GridDiv = styled(Grid)({
         flexDirection: 'column',
         margin: '10px 10px',
         alignItems: 'center',
-        '&:hover': {
-            boxShadow:
-                '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
-        },
     },
     '.GridTopSection': {
         display: 'flex',
@@ -66,6 +62,17 @@ const GridDiv = styled(Grid)({
     '.VerifiedImageDiv': {
         position: 'absolute',
     },
+    '.Anchor': {
+        '&:hover': {
+            '.GridView': {
+                boxShadow:
+                    '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+            },
+            '.BottomSectionContent': {
+                textDecoration: 'underline',
+            },
+        },
+    },
 });
 const BoxDiv = styled(Box)({
     [theme.breakpoints.down('sm')]: {
@@ -78,7 +85,7 @@ const CustomHits = connectHits(({ hits }) => {
         <GridDiv container spacing={2}>
             {hits.map((hit: any) => (
                 <Grid item key={hit.id} xs={12} sm={6} md={3}>
-                    <a href={`authentication/${hit.certificate_number}/view`} key={hit.id}>
+                    <a className={'Anchor'} href={`authentication/${hit.certificate_number}/view`} key={hit.id}>
                         <div className={'GridView'}>
                             <Grid className={'VerifiedImageDiv'}>
                                 <img className={'VerifiedImage'} src="/assets/images/verified.svg" alt={'verified'} />

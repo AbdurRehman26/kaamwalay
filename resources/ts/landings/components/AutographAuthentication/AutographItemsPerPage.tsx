@@ -4,8 +4,6 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import styled from '@mui/styles/styled';
 import { connectHitsPerPage } from 'react-instantsearch-dom';
-import { useDispatch } from 'react-redux';
-import { setItemsPerPage } from '../../redux/slices/feedSlice';
 
 const GridDiv = styled(Grid)({
     display: 'flex',
@@ -18,9 +16,6 @@ const GridDiv = styled(Grid)({
 });
 
 const CustomHitsPerPage = connectHitsPerPage(({ items, refine, currentRefinement }) => {
-    const dispatch = useDispatch();
-    dispatch(setItemsPerPage(currentRefinement));
-
     return (
         <GridDiv>
             <Typography sx={{ marginTop: '2px' }}>Items per page:</Typography>

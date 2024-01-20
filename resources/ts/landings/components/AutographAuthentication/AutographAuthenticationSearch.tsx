@@ -55,7 +55,7 @@ const BoxDiv = styled(Box)({
         lineHeight: '64px',
         letterSpacing: '0.2px',
         [theme.breakpoints.down('sm')]: {
-            fontSize: '30px',
+            fontSize: '28px',
         },
     },
     '.AutographHeroSubHeading': {
@@ -68,6 +68,9 @@ const BoxDiv = styled(Box)({
         [theme.breakpoints.down('sm')]: {
             width: '90%',
         },
+        [theme.breakpoints.down('md')]: {
+            width: '90%',
+        },
     },
     '.AutographHeroSearchBox': {
         display: 'flex',
@@ -78,6 +81,7 @@ const BoxDiv = styled(Box)({
         },
     },
     '.AutographInnerSearchBox': {
+        width: '34%',
         background: '#fff',
         color: '#000',
         padding: '35px 50px',
@@ -88,6 +92,7 @@ const BoxDiv = styled(Box)({
         [theme.breakpoints.down('sm')]: {
             padding: '25px 10px',
             top: '340px',
+            width: '90%',
         },
     },
     '.AutographSearchText': {
@@ -101,29 +106,16 @@ const BoxDiv = styled(Box)({
             fontSize: '16px',
         },
     },
-    '.searchBox': {
-        width: '630px',
-        padding: '8px 20px',
-        borderRadius: '20px',
-        color: '#000000',
-        [theme.breakpoints.down('sm')]: {
-            width: '360px',
-        },
-    },
 });
 
 const styles = {
     InputStyle: {
-        width: '550px',
+        width: '100%',
         padding: '10px 20px',
         borderRadius: '24px',
         color: '#000000',
         background: '#FFFFFF',
         border: '1px solid rgba(204, 204, 204, 1)',
-
-        [theme.breakpoints.down('sm')]: {
-            width: '360px',
-        },
     },
     ImageStyle: {
         display: 'flex',
@@ -149,10 +141,7 @@ const styles = {
 const PaginationBox = styled(Container)({
     display: 'flex',
     padding: '15px 15px',
-    justifyContent: 'center',
-    [theme.breakpoints.down('sm')]: {
-        float: 'none',
-    },
+    justifyContent: 'flex-end',
 });
 
 const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
@@ -173,7 +162,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                                 </Typography>
                             </Grid>
                             <Grid className={'AutographHeroSearchBox'}>
-                                <Grid className={'AutographInnerSearchBox'}>
+                                <Container className={'AutographInnerSearchBox'}>
                                     <Typography className={'AutographSearchText'}>
                                         SEARCH TO VERIFY AUTHENTICITY
                                     </Typography>
@@ -192,7 +181,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                                         }
                                         disableUnderline
                                     />
-                                </Grid>
+                                </Container>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -208,7 +197,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                     <AutographList />
                     <Divider sx={{ marginBottom: '20px' }} orientation="horizontal" flexItem />
                 </Container>
-                <PaginationBox sx={styles.GridView}>
+                <PaginationBox>
                     <AutographPagination />
                     <AutographItemsPerPage />
                 </PaginationBox>

@@ -15,7 +15,6 @@ const useStyles = makeStyles(
             lineHeight: '24px',
             letterSpacing: '0.1px',
             textAlign: 'left',
-            marginLeft: '5px',
         },
     }),
     { name: 'Tooltip' },
@@ -27,8 +26,8 @@ export function TooltipIcon({ content }: Props) {
     const classes = useStyles();
 
     const plusMore = (
-        <Typography className={classes.root} sx={{ textDecoration: 'underline' }}>
-            {`${names.length} More`}
+        <Typography className={classes.root} marginLeft={'5px'} sx={{ textDecoration: 'underline' }}>
+            {` +${names.length} More`}
         </Typography>
     );
     const displayNam = <Typography className={classes.root}>{name}</Typography>;

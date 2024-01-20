@@ -134,14 +134,9 @@
                                 <tr>
                                     <td class="authentication-view__table-cell authentication-view__table-cell--heading authentication-view__table-cell--heading">Signed By:</td>
                                     <td class="authentication-view__table-cell">
-                                        {{ Str::of($signed_by)->explode(',')->first() }}
-                                        <Tooltip title="12312">
-                                            <Button>top-start</Button>
-                                        </Tooltip>
-
-                                        <Tooltip title="Add" arrow>
-                                            <Button>Arrow</Button>
-                                        </Tooltip>
+                                        <span class="authentication-view-view__share__icon-mobile" data-atom="tooltip" data-content="{{ $signed_by }}">
+                                            {{-- JS runtime actions --}}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>

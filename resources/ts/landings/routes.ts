@@ -2,6 +2,7 @@ import { route } from './utils/route';
 
 const HomeController = () => import('./controllers/HomeController');
 const FeedController = () => import('./controllers/FeedController');
+const AuthenticationController = () => import('./controllers/AuthenticationController');
 const PopController = () => import('./controllers/PopController');
 const ReferralController = () => import('./controllers/ReferralController');
 
@@ -18,6 +19,12 @@ export default () => {
         .group((route) => {
             route('/', [FeedController, 'feedList']).name('list');
             route('/:id/view', [FeedController, 'feedView']).name('view');
+        });
+
+    route('/authentication')
+        .name('authentication')
+        .group((route) => {
+            route('/:id/view', [AuthenticationController, 'authenticationView']).name('authenticationView');
         });
 
     route('/pop')

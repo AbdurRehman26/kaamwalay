@@ -54,7 +54,7 @@
     <section class="feed-view__content">
         <div class="container feed-view__content__container">
             <div class="feed-view__content__card-holder">
-                <div class="feed-view__card">
+                <div class="authentication-view__card feed-view__card">
                     <div class="container" data-atom="card-image-slider" data-images="{{json_encode([$image_url])}}">
                     </div>
                 </div>

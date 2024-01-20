@@ -20,6 +20,18 @@
         width: 100%;
     }
 
+    &__card {
+        img {
+            max-height: 500px !important;
+            @include breakpoints.down(768) {
+                max-height: 400px !important;
+            }
+            @include breakpoints.down(1024) {
+                max-height: 400px !important;
+            }
+        }
+    }
+
     &__certificate {
         font-size: 14px;
         font-weight: 500;

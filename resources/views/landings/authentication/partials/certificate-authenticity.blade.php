@@ -4,7 +4,10 @@
             <h1 class="authentication-view__certificate-image__number">
                 {{ $certificate_number }}
             </h1>
-            <img src="{{ asset('assets/images/landings/authentication/speedy-coa.jpeg') }}" alt="bonus" class="bonus-earnings__image-div__image">
+            <a href="{{ asset('assets/images/landings/authentication/speedy-coa.jpeg') }}" class="glightbox">
+                <img src="{{ asset('assets/images/landings/authentication/speedy-coa.jpeg') }}" alt="bonus" class="bonus-earnings__image-div__image">
+            </a>
+
         </div>
 
         <div class="authentication-view__certificate__button">

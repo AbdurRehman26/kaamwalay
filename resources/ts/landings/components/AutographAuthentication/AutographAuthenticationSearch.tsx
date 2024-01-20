@@ -7,11 +7,13 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
 import AutographItemsPerPage from './AutographItemsPerPage';
 import AutographList from './AutographList';
 import AutographPagination from './AutographPagination';
+import AutographResultCount from './AutographResultCount';
 import AutographSortBy from './AutographSortBy';
 import AutographTiles from './AutographTiles';
 
@@ -130,7 +132,7 @@ const styles = {
     SortBy: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         marginBottom: '20px',
         [theme.breakpoints.down('sm')]: {
             marginTop: '70px',
@@ -145,6 +147,8 @@ const PaginationBox = styled(Container)({
 });
 
 const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
+    const [query, setQuery] = useState('');
+
     return (
         <>
             <BoxDiv>
@@ -173,6 +177,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                                         value={currentRefinement}
                                         onChange={(event) => {
                                             refine(event.currentTarget.value);
+                                            setQuery(event.target.value);
                                         }}
                                         startAdornment={
                                             <InputAdornment position="start">
@@ -190,6 +195,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
             <Box sx={styles.GridView}>
                 <Container sx={{ marginTop: '10%' }}>
                     <Grid sx={styles.SortBy}>
+                        <AutographResultCount query={query} />
                         <AutographSortBy />
                     </Grid>
                     <Divider sx={{ marginBottom: '20px' }} orientation="horizontal" flexItem />

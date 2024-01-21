@@ -6,6 +6,7 @@
     &__table-div-left {
         width: 320px;
         display: table-row;
+
         @include breakpoints.down(768) {
             display: none;
         }
@@ -18,6 +19,7 @@
 
     &__table-div-right {
         width: 320px;
+
         @include breakpoints.down(1024) {
             width: 100%;
             height: 100%;
@@ -263,6 +265,7 @@
             align-items: center;
             width: 100%;
             padding-top: 20px;
+
             @include breakpoints.down(768) {
                 padding-top: 0;
                 max-width: 100%;
@@ -897,9 +900,11 @@
     &__card {
         img {
             max-height: 500px !important;
+
             @include breakpoints.down(768) {
                 max-height: 400px !important;
             }
+
             @include breakpoints.down(1024) {
                 max-height: 400px !important;
             }
@@ -924,9 +929,11 @@
 
         &__button {
             text-align: center;
+
             a {
                 margin-top: 100px;
                 margin-bottom: 100px;
+
                 @include breakpoints.down(768) {
                     margin-top: 100px;
                     margin-bottom: 110px;
@@ -951,6 +958,7 @@
         height: 72px !important;
         min-width: 72px !important;
         width: 72px !important;
+
         @include breakpoints.down(768) {
             min-height: 48px !important;
             min-width: 48px !important;
@@ -989,6 +997,7 @@
         @include breakpoints.down(768) {
             display: none;
         }
+
         font-size: 14px;
         font-weight: 500;
         line-height: 16px;
@@ -999,6 +1008,7 @@
 
     &__description-block {
         display: block !important;
+
         &__description {
             color: #0000008a;
             font-size: 14px;
@@ -1020,6 +1030,7 @@
 
         &__images-div {
             justify-content: space-between !important;
+
             @include breakpoints.down(768) {
                 display: flex;
                 flex-wrap: nowrap !important;
@@ -1031,6 +1042,17 @@
         &__image-div {
             flex-basis: 23%;
             height: 228px;
+
+            &:hover {
+                .image {
+                    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12),
+                        0px 1px 3px rgba(0, 0, 0, 0.2);
+                }
+
+                .long-name {
+                    text-decoration: underline;
+                }
+            }
 
             @include breakpoints.down(768) {
                 flex: 0 0 auto;
@@ -1062,20 +1084,24 @@
             overflow: hidden;
             position: relative;
             background: rgba(239, 239, 246, 1);
-            box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 5px 0px rgba(0, 0, 0, 0.12);
             align-items: center;
             border-radius: 12px;
             flex-direction: column;
         }
 
         &__heading {
-            display: flex;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.10000000149011612px;
+            text-align: left;
+            margin-bottom: 20px;
         }
 
         &__content {
             margin-top: 10px;
             color: black;
+
             h1 {
                 display: -webkit-box;
                 text-overflow: ellipsis;
@@ -1088,6 +1114,7 @@
                 letter-spacing: 0.20000000298023224px;
                 text-align: left;
             }
+
             p {
                 font-size: 14px;
                 font-weight: 400;
@@ -1111,6 +1138,7 @@
         display: block;
         background-color: white;
         position: relative;
+
         &__number {
             position: absolute;
             transform: translate(-70%, -31%);
@@ -1140,6 +1168,7 @@
                 margin-top: 0 !important;
             }
         }
+
         &__image-div {
             position: relative;
             display: inline-block;
@@ -1170,6 +1199,7 @@
         @include breakpoints.down(768) {
             margin-top: 0 !important;
         }
+
         .authentication-view__table-cell--heading {
             @include breakpoints.down(768) {
                 width: 80px !important;

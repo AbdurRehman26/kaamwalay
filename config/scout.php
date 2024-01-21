@@ -156,6 +156,13 @@ return [
                     'disableOnAttributes' => ['certificate_number'],
                 ],
             ],
+            'autograph_products' => [
+                'searchableAttributes' => ['name', 'certificate_number'],
+                'sortableAttributes' => ['created_at_timestamp'],
+                'typoTolerance' => [
+                    'disableOnAttributes' => ['certificate_number'],
+                ],
+            ],
         ],
     ],
 

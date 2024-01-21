@@ -23,6 +23,84 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\AutographCategory
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AutographProduct> $autographProducts
+ * @property-read int|null $autograph_products_count
+ * @method static \Database\Factories\AutographCategoryFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographCategory whereUpdatedAt($value)
+ */
+	class AutographCategory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AutographProduct
+ *
+ * @property int $id
+ * @property int $autograph_category_id
+ * @property int $autograph_type_id
+ * @property string $certificate_number
+ * @property string $name
+ * @property string $image_url
+ * @property string $signed_by
+ * @property \Illuminate\Support\Carbon $signed_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AutographCategory|null $autographCategory
+ * @property-read \App\Models\AutographType|null $autographType
+ * @method static \Database\Factories\AutographProductFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereAutographCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereAutographTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereCertificateNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereImageUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereSignedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereSignedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographProduct whereUpdatedAt($value)
+ */
+	class AutographProduct extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AutographType
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AutographProduct> $autographProducts
+ * @property-read int|null $autograph_products_count
+ * @method static \Database\Factories\AutographTypeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AutographType whereUpdatedAt($value)
+ */
+	class AutographType extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\CardCategory
  *
  * @property int $id
@@ -856,6 +934,7 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float $cleaning_fee
+ * @property float $signature_fee
  * @property float $shipping_insurance_fee
  * @property float|null $grand_total
  * @property float|null $amount_paid_from_wallet
@@ -880,6 +959,7 @@ namespace App\Models{
  * @property int|null $salesman_id
  * @property float $referral_total_commission
  * @property bool $requires_cleaning Refers to card cleaning service
+ * @property bool $requires_signature Refers to signature at delivery service
  * @property bool $requires_shipping_insurance Shows if Full Shipping Insurance has been selected
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
@@ -987,6 +1067,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresCleaning($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresShippingInsurance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequiresSignature($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanCommission($value)
@@ -997,6 +1078,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingInsuranceFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingOrderAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereSignatureFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order withAllTags(\ArrayAccess|\Spatie\Tags\Tag|array|string $tags, ?string $type = null)
@@ -2312,6 +2394,7 @@ namespace App\Models{
  * @property \App\Enums\UserCard\UserCardShippingStatus|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
  * @property bool|null $is_fake
  * @property array|null $social_images
+ * @property array|null $slab_images
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta
@@ -2340,6 +2423,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereRoboGradeValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereShippingStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereSlabImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereSocialImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUserId($value)

@@ -13,7 +13,7 @@ const GridDiv = styled(Grid)({
         position: 'relative',
         background: 'rgba(239, 239, 246, 1)',
         alignItems: 'center',
-        borderRadius: '5px',
+        borderRadius: '12px',
         flexDirection: 'column',
     },
     '.GridTopSection': {

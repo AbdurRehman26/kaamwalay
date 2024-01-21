@@ -1,3 +1,4 @@
+import { AutographAtom } from '../atoms/AutographAtom';
 import { CardImageModal } from '../atoms/CardImageModalAtom';
 import { CardImageModalMobile } from '../atoms/CardImageModalMobileAtom';
 import { CardImageSlider } from '../atoms/CardImageSliderAtom';
@@ -23,6 +24,10 @@ class AuthenticationController extends Controller implements CanSetup<Authentica
             CardImageModalMobile,
             TooltipAtom,
         );
+    }
+
+    public async autograph() {
+        mountAtom(AutographAtom);
     }
 }
 

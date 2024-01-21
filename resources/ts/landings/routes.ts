@@ -5,15 +5,12 @@ const FeedController = () => import('./controllers/FeedController');
 const AuthenticationController = () => import('./controllers/AuthenticationController');
 const PopController = () => import('./controllers/PopController');
 const ReferralController = () => import('./controllers/ReferralController');
-const AutographController = () => import('./controllers/AutographController');
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
     route('/', [HomeController, 'getHome']).name('home');
 
     route('/partners', [ReferralController, 'referralView']).name('view');
-
-    route('/authentication', [AutographController, 'autograph']).name('view');
 
     route('referral/:code', [ReferralController, 'getReferralHome']).name('referralhome');
 
@@ -27,6 +24,7 @@ export default () => {
     route('/authentication')
         .name('authentication')
         .group((route) => {
+            route('/', [AuthenticationController, 'autograph']).name('view');
             route('/:id/view', [AuthenticationController, 'authenticationView']).name('authenticationView');
         });
 

@@ -24,6 +24,7 @@ export default () => {
     route('/authentication')
         .name('authentication')
         .group((route) => {
+            route('/', [AuthenticationController, 'autograph']).name('view');
             route('/:id/view', [AuthenticationController, 'authenticationView']).name('authenticationView');
         });
 

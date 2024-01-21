@@ -4,7 +4,7 @@ import { InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import AutographAuthenticationSearch from './AutographAuthenticationSearch';
 
-export function Feed() {
+export function AutographAuthentication() {
     const { appEnv, meilisearchPublicHost, meilisearchPublicKey } = useConfiguration();
     const searchClient = useMemo(
         () => instantMeiliSearch(meilisearchPublicHost!, meilisearchPublicKey!),
@@ -17,4 +17,4 @@ export function Feed() {
     );
 }
 
-export default Feed;
+export default AutographAuthentication;

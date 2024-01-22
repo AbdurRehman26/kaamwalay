@@ -96,16 +96,16 @@ it('calculates discount for service fee order', function () {
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
-        $couponDiscount = (float) $this->coupon->discount_value;
+        $couponDiscount = round((float) $this->coupon->discount_value, 2);
     } elseif ($this->coupon->type === 'flat') {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
 
         $insuredShipping = $this->order->shipping_fee;
 
-        $couponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
+        $couponDiscount = round($serviceFee + $insuredShipping - $this->order->coupon->discount_value, 2);
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
-        $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
+        $couponDiscount = round((float) (($this->coupon->discount_value * $serviceFee) / 100), 2);
     }
 
     expect($discount)->toBe($couponDiscount);

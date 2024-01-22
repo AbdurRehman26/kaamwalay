@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/PersonOutline';
 import StyleIcon from '@mui/icons-material/StyleOutlined';
-import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
+// import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -177,15 +177,15 @@ export function DrawerNavigation() {
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>
-                    <ListItem onClick={handleItemPress('/authentication')}>
-                        <StyledListItemIcon>
-                            <VerifiedUserOutlinedIcon />
-                        </StyledListItemIcon>
-                        <ListItemText
-                            primary={'Authentication'}
-                            primaryTypographyProps={{ className: classes.listItemText }}
-                        />
-                    </ListItem>
+                    {/* <ListItem onClick={handleItemPress('/authentication')}>*/}
+                    {/*    <StyledListItemIcon>*/}
+                    {/*        <VerifiedUserOutlinedIcon />*/}
+                    {/*    </StyledListItemIcon>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'Authentication'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
 
                     <Divider className={classes.divider} />
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Landings\AutographController;
 use App\Http\Controllers\Landings\FeedController;
 use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\ReferralController;
@@ -56,3 +57,12 @@ Route::prefix('referral')->group(function () {
 Route::get('/partners', [ReferralController::class, 'index'])->name('partners.view');
 
 Route::redirect('/referral', '/partners', 301);
+
+Route::prefix('authentication')->group(function () {
+    Route::get('/', [AutographController::class, 'index'])->name('authentication.index');
+    Route::get('/{autographProduct:certificate_number}/view', [AutographController::class, 'getView'])
+        ->name('authentication.view')
+        ->missing(function () {
+            return redirect()->route('authentication.index');
+        });
+});

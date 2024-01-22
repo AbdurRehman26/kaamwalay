@@ -136,7 +136,7 @@ return [
         'index-settings' => [
             'card_products' => [
                 'searchableAttributes' => ['name', 'short_name', 'long_name'],
-                'filterableAttributes' => ['card_category_name'],
+                'filterableAttributes' => ['card_category_name', 'card_series_name', 'card_set_name'],
                 'rankingRules' => [
                     'words',
                     'typo',
@@ -152,6 +152,13 @@ return [
                 'searchableAttributes' => ['card_name', 'searchable_name', 'owner_name', 'certificate_number'],
                 'filterableAttributes' => ['card_category', 'grade', 'grade_overall'],
                 'sortableAttributes' => ['shipped_at_timestamp'],
+                'typoTolerance' => [
+                    'disableOnAttributes' => ['certificate_number'],
+                ],
+            ],
+            'autograph_products' => [
+                'searchableAttributes' => ['name', 'certificate_number'],
+                'sortableAttributes' => ['created_at_timestamp'],
                 'typoTolerance' => [
                     'disableOnAttributes' => ['certificate_number'],
                 ],

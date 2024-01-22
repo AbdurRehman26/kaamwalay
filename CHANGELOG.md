@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.26.0 - 2024-01-21
+
+### What's Changed
+
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1139
+* Feature: Autograph Authentication (Backend) by @thenabeel in https://github.com/woozard/robograding/pull/1140
+* Hotfix: Payment | Rounding Coupon Discount by @luis-molina in https://github.com/woozard/robograding/pull/1145
+* Feature: FE | Authentication Detail Page by @AbdurRehman26 in https://github.com/woozard/robograding/pull/1143
+* Feature: FE | Authentication Landing Page by @numair97 in https://github.com/woozard/robograding/pull/1144
+* Fix: Authentication Detail Page by @numair97 in https://github.com/woozard/robograding/pull/1146
+* Release v3.26.0 by @thenabeel in https://github.com/woozard/robograding/pull/1147
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.25.0...v3.26.0
+
 ## v3.25.0 - 2024-01-17
 
 ### What's Changed

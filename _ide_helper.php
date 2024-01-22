@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.34.2.
+ * Generated for Laravel 10.41.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -5053,6 +5053,20 @@
                         return $instance->connection($name);
         }
                     /**
+         * Get a database connection instance from the given configuration.
+         *
+         * @param string $name
+         * @param array $config
+         * @param bool $force
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
+        public static function connectUsing($name, $config, $force = false)
+        {
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
+                        return $instance->connectUsing($name, $config, $force);
+        }
+                    /**
          * Register a custom Doctrine type.
          *
          * @param string $class
@@ -6842,13 +6856,14 @@
          *
          * @param string $path
          * @param string $data
+         * @param bool $lock
          * @return int 
          * @static 
          */ 
-        public static function append($path, $data)
+        public static function append($path, $data, $lock = false)
         {
                         /** @var \Illuminate\Filesystem\Filesystem $instance */
-                        return $instance->append($path, $data);
+                        return $instance->append($path, $data, $lock);
         }
                     /**
          * Get or set UNIX mode of a file or directory.
@@ -7452,9 +7467,9 @@
                         return $instance->after($callback);
         }
                     /**
-         * Determine if the given ability should be granted for the current user.
+         * Determine if all of the given abilities should be granted for the current user.
          *
-         * @param string $ability
+         * @param \Illuminate\Auth\Access\iterable|string $ability
          * @param array|mixed $arguments
          * @return bool 
          * @static 
@@ -7465,9 +7480,9 @@
                         return $instance->allows($ability, $arguments);
         }
                     /**
-         * Determine if the given ability should be denied for the current user.
+         * Determine if any of the given abilities should be denied for the current user.
          *
-         * @param string $ability
+         * @param \Illuminate\Auth\Access\iterable|string $ability
          * @param array|mixed $arguments
          * @return bool 
          * @static 
@@ -7873,7 +7888,7 @@
      * 
      *
      * @method static \Illuminate\Http\Client\PendingRequest baseUrl(string $url)
-     * @method static \Illuminate\Http\Client\PendingRequest withBody(string $content, string $contentType = 'application/json')
+     * @method static \Illuminate\Http\Client\PendingRequest withBody(\Psr\Http\Message\StreamInterface|string $content, string $contentType = 'application/json')
      * @method static \Illuminate\Http\Client\PendingRequest asJson()
      * @method static \Illuminate\Http\Client\PendingRequest asForm()
      * @method static \Illuminate\Http\Client\PendingRequest attach(string|array $name, string|resource $contents = '', string|null $filename = null, array $headers = [])
@@ -8289,7 +8304,7 @@
          * Get a translation according to an integer value.
          *
          * @param string $key
-         * @param \Countable|int|array $number
+         * @param \Countable|int|float|array $number
          * @param array $replace
          * @param string|null $locale
          * @return string 
@@ -8583,7 +8598,6 @@
      *
      * @method static void write(string $level, \Illuminate\Contracts\Support\Arrayable|\Illuminate\Contracts\Support\Jsonable|\Illuminate\Support\Stringable|array|string $message, array $context = [])
      * @method static \Illuminate\Log\Logger withContext(array $context = [])
-     * @method static \Illuminate\Log\Logger withoutContext()
      * @method static void listen(\Closure $callback)
      * @method static \Psr\Log\LoggerInterface getLogger()
      * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
@@ -8664,6 +8678,17 @@
         {
                         /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->sharedContext();
+        }
+                    /**
+         * Flush the log context on all currently resolved channels.
+         *
+         * @return \Illuminate\Log\LogManager 
+         * @static 
+         */ 
+        public static function withoutContext()
+        {
+                        /** @var \Illuminate\Log\LogManager $instance */
+                        return $instance->withoutContext();
         }
                     /**
          * Flush the shared context.
@@ -10299,6 +10324,18 @@
                         $instance->assertNotPushed($job, $callback);
         }
                     /**
+         * Assert the total count of jobs that were pushed.
+         *
+         * @param int $expectedCount
+         * @return void 
+         * @static 
+         */ 
+        public static function assertCount($expectedCount)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
+                        $instance->assertCount($expectedCount);
+        }
+                    /**
          * Assert that no jobs were pushed.
          *
          * @return void 
@@ -10501,6 +10538,18 @@
         {
                         /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->setConnectionName($name);
+        }
+                    /**
+         * Get the maximum number of attempts for an object-based queue handler.
+         *
+         * @param mixed $job
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getJobTries($job)
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        return $instance->getJobTries($job);
         }
                     /**
          * Get the backoff for an object-based queue handler.
@@ -13979,6 +14028,18 @@
                         $instance->substituteImplicitBindings($route);
         }
                     /**
+         * Register a callback to to run after implicit bindings are substituted.
+         *
+         * @param callable $callback
+         * @return \Illuminate\Routing\Router 
+         * @static 
+         */ 
+        public static function substituteImplicitBindingsUsing($callback)
+        {
+                        /** @var \Illuminate\Routing\Router $instance */
+                        return $instance->substituteImplicitBindingsUsing($callback);
+        }
+                    /**
          * Register a route matched event listener.
          *
          * @param string|callable $callback
@@ -14587,6 +14648,30 @@
                         return $instance->getColumns($table);
         }
                     /**
+         * Get the indexes for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getIndexes($table)
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getIndexes($table);
+        }
+                    /**
+         * Get the foreign keys for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getForeignKeys($table)
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getForeignKeys($table);
+        }
+                    /**
          * Drop all tables from the database.
          *
          * @return void 
@@ -14673,6 +14758,29 @@
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasTable($table);
+        }
+                    /**
+         * Determine if the given view exists.
+         *
+         * @param string $view
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasView($view)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->hasView($view);
+        }
+                    /**
+         * Get the user-defined types that belong to the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getTypes()
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getTypes();
         }
                     /**
          * Determine if the given table has a given column.
@@ -14911,6 +15019,52 @@
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->blueprintResolver($resolver);
         }
+                    /**
+         * Register a custom macro.
+         *
+         * @param string $name
+         * @param object|callable $macro
+         * @return void 
+         * @static 
+         */ 
+        public static function macro($name, $macro)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::macro($name, $macro);
+        }
+                    /**
+         * Mix another object into the class.
+         *
+         * @param object $mixin
+         * @param bool $replace
+         * @return void 
+         * @throws \ReflectionException
+         * @static 
+         */ 
+        public static function mixin($mixin, $replace = true)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::mixin($mixin, $replace);
+        }
+                    /**
+         * Checks if macro is registered.
+         *
+         * @param string $name
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasMacro($name)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        return \Illuminate\Database\Schema\MySqlBuilder::hasMacro($name);
+        }
+                    /**
+         * Flush the existing macros.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function flushMacros()
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::flushMacros();
+        }
          
     }
             /**
@@ -15123,6 +15277,18 @@
         {
                         /** @var \Illuminate\Session\Store $instance */
                         return $instance->only($keys);
+        }
+                    /**
+         * Get all the session data except for a specified array of items.
+         *
+         * @param array $keys
+         * @return array 
+         * @static 
+         */ 
+        public static function except($keys)
+        {
+                        /** @var \Illuminate\Session\Store $instance */
+                        return $instance->except($keys);
         }
                     /**
          * Checks if a key exists.
@@ -18257,6 +18423,18 @@
                         return $instance->useManifestFilename($filename);
         }
                     /**
+         * Resolve asset paths using the provided resolver.
+         *
+         * @param callable|null $urlResolver
+         * @return \Illuminate\Foundation\Vite 
+         * @static 
+         */ 
+        public static function createAssetPathsUsing($resolver)
+        {
+                        /** @var \Illuminate\Foundation\Vite $instance */
+                        return $instance->createAssetPathsUsing($resolver);
+        }
+                    /**
          * Get the Vite "hot" file path.
          *
          * @return string 
@@ -18489,6 +18667,18 @@
         {
                         return \Illuminate\Support\Str::sanitizeHtml($html);
         }
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function ucwords($value)
+        {
+                        return \Illuminate\Support\Str::ucwords($value);
+        }
          
     }
             /**
@@ -18556,12 +18746,59 @@
         {
                         return \Illuminate\Support\Stringable::sanitizeHtml();
         }
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @return \Illuminate\Support\Stringable 
+         * @static 
+         */ 
+        public static function ucwords()
+        {
+                        return \Illuminate\Support\Stringable::ucwords();
+        }
          
     }
      
 }
 
-        namespace Barryvdh\Debugbar\Facades { 
+        namespace AnourValar\EloquentSerialize\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class EloquentSerializeFacade {
+                    /**
+         * Pack
+         *
+         * @param \Illuminate\Database\Eloquent\Builder $builder
+         * @return string 
+         * @static 
+         */ 
+        public static function serialize($builder)
+        {
+                        /** @var \AnourValar\EloquentSerialize\Service $instance */
+                        return $instance->serialize($builder);
+        }
+                    /**
+         * Unpack
+         *
+         * @param mixed $package
+         * @throws \LogicException
+         * @return \Illuminate\Database\Eloquent\Builder 
+         * @static 
+         */ 
+        public static function unserialize($package)
+        {
+                        /** @var \AnourValar\EloquentSerialize\Service $instance */
+                        return $instance->unserialize($package);
+        }
+         
+    }
+     
+}
+
+    namespace Barryvdh\Debugbar\Facades { 
             /**
      * 
      *
@@ -19813,6 +20050,16 @@
          *
          * @static 
          */ 
+        public static function withHeaders($headers)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withHeaders($headers);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
         public static function test($name, $params = [])
         {
                         /** @var \Livewire\LivewireManager $instance */
@@ -19949,9 +20196,10 @@
                     /**
          * 
          *
+         * @param string|null $disk Fallback for usage with named properties
          * @param object $export
          * @param string $filePath
-         * @param string|null $disk
+         * @param string|null $diskName
          * @param string $writerType
          * @param mixed $diskOptions
          * @return bool 
@@ -19959,10 +20207,10 @@
          * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
          * @static 
          */ 
-        public static function store($export, $filePath, $diskName = null, $writerType = null, $diskOptions = [])
+        public static function store($export, $filePath, $diskName = null, $writerType = null, $diskOptions = [], $disk = null)
         {
                         /** @var \Maatwebsite\Excel\Excel $instance */
-                        return $instance->store($export, $filePath, $diskName, $writerType, $diskOptions);
+                        return $instance->store($export, $filePath, $diskName, $writerType, $diskOptions, $disk);
         }
                     /**
          * 
@@ -22744,6 +22992,814 @@
         public static function assertFormFieldIsVisible($fieldName, $formName = 'form')
         {
                         return \Livewire\Features\SupportTesting\Testable::assertFormFieldIsVisible($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::mountFormComponentAction()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function mountFormComponentAction($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::mountFormComponentAction($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::unmountFormComponentAction()
+         * @return static 
+         * @static 
+         */ 
+        public static function unmountFormComponentAction()
+        {
+                        return \Livewire\Features\SupportTesting\Testable::unmountFormComponentAction();
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::setFormComponentActionData()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function setFormComponentActionData($data)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::setFormComponentActionData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDataSet()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDataSet($data)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDataSet($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::callFormComponentAction()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $data
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function callFormComponentAction($component, $name, $data = [], $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::callFormComponentAction($component, $name, $data, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::callMountedFormComponentAction()
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callMountedFormComponentAction($arguments = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::callMountedFormComponentAction($arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionExists()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionExists($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionExists($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDoesNotExist()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDoesNotExist($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDoesNotExist($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionVisible()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionVisible($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionVisible($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionHidden()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHidden($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHidden($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionEnabled()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionEnabled($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionEnabled($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDisabled()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDisabled($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDisabled($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionHasIcon()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $icon
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHasIcon($component, $name, $icon, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHasIcon($component, $name, $icon, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDoesNotHaveIcon()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $icon
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDoesNotHaveIcon($component, $name, $icon, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDoesNotHaveIcon($component, $name, $icon, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionHasLabel()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $label
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHasLabel($component, $name, $label, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHasLabel($component, $name, $label, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDoesNotHaveLabel()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $label
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDoesNotHaveLabel($component, $name, $label, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDoesNotHaveLabel($component, $name, $label, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionHasColor()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array|string $color
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHasColor($component, $name, $color, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHasColor($component, $name, $color, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDoesNotHaveColor()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array|string $color
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDoesNotHaveColor($component, $name, $color, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDoesNotHaveColor($component, $name, $color, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionHasUrl()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $url
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHasUrl($component, $name, $url, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHasUrl($component, $name, $url, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionDoesNotHaveUrl()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $url
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionDoesNotHaveUrl($component, $name, $url, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionDoesNotHaveUrl($component, $name, $url, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionShouldOpenUrlInNewTab()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionShouldOpenUrlInNewTab($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionShouldOpenUrlInNewTab($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionShouldNotOpenUrlInNewTab()
+         * @param array|string $component
+         * @param array|string $name
+         * @param array $arguments
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionShouldNotOpenUrlInNewTab($component, $name, $arguments = [], $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionShouldNotOpenUrlInNewTab($component, $name, $arguments, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionMounted()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionMounted($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionMounted($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionNotMounted()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionNotMounted($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionNotMounted($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertFormComponentActionMounted()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormComponentActionHalted($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertFormComponentActionHalted($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertHasFormComponentActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasFormComponentActionErrors($keys = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertHasFormComponentActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::assertHasNoFormComponentActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoFormComponentActionErrors($keys = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertHasNoFormComponentActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::getNestedFormComponentActionComponentAndName()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @param array $arguments
+         * @return array 
+         * @static 
+         */ 
+        public static function getNestedFormComponentActionComponentAndName($component, $name, $formName = 'form', $arguments = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::getNestedFormComponentActionComponentAndName($component, $name, $formName, $arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsComponentActions::parseNestedFormComponentActionComponentAndName()
+         * @param array|string $component
+         * @param array|string $name
+         * @param string $formName
+         * @return array 
+         * @static 
+         */ 
+        public static function parseNestedFormComponentActionComponentAndName($component, $name, $formName = 'form')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::parseNestedFormComponentActionComponentAndName($component, $name, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::mountInfolistAction()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function mountInfolistAction($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::mountInfolistAction($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::unmountInfolistAction()
+         * @return static 
+         * @static 
+         */ 
+        public static function unmountInfolistAction()
+        {
+                        return \Livewire\Features\SupportTesting\Testable::unmountInfolistAction();
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::setInfolistActionData()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function setInfolistActionData($data)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::setInfolistActionData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDataSet()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDataSet($data)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDataSet($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::callInfolistAction()
+         * @param string $component
+         * @param array|string $name
+         * @param array $data
+         * @param array $arguments
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function callInfolistAction($component, $name, $data = [], $arguments = [], $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::callInfolistAction($component, $name, $data, $arguments, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::callMountedInfolistAction()
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callMountedInfolistAction($arguments = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::callMountedInfolistAction($arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionExists()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionExists($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionExists($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDoesNotExist()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDoesNotExist($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDoesNotExist($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionVisible()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionVisible($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionVisible($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionHidden()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHidden($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHidden($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionEnabled()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionEnabled($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionEnabled($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDisabled()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDisabled($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDisabled($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionHasIcon()
+         * @param string $component
+         * @param array|string $name
+         * @param string $icon
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHasIcon($component, $name, $icon, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHasIcon($component, $name, $icon, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDoesNotHaveIcon()
+         * @param string $component
+         * @param array|string $name
+         * @param string $icon
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDoesNotHaveIcon($component, $name, $icon, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDoesNotHaveIcon($component, $name, $icon, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionHasLabel()
+         * @param string $component
+         * @param array|string $name
+         * @param string $label
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHasLabel($component, $name, $label, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHasLabel($component, $name, $label, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDoesNotHaveLabel()
+         * @param string $component
+         * @param array|string $name
+         * @param string $label
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDoesNotHaveLabel($component, $name, $label, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDoesNotHaveLabel($component, $name, $label, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionHasColor()
+         * @param string $component
+         * @param array|string $name
+         * @param array|string $color
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHasColor($component, $name, $color, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHasColor($component, $name, $color, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDoesNotHaveColor()
+         * @param string $component
+         * @param array|string $name
+         * @param array|string $color
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDoesNotHaveColor($component, $name, $color, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDoesNotHaveColor($component, $name, $color, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionHasUrl()
+         * @param string $component
+         * @param array|string $name
+         * @param string $url
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHasUrl($component, $name, $url, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHasUrl($component, $name, $url, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionDoesNotHaveUrl()
+         * @param string $component
+         * @param array|string $name
+         * @param string $url
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionDoesNotHaveUrl($component, $name, $url, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionDoesNotHaveUrl($component, $name, $url, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionShouldOpenUrlInNewTab()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionShouldOpenUrlInNewTab($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionShouldOpenUrlInNewTab($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionShouldNotOpenUrlInNewTab()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionShouldNotOpenUrlInNewTab($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionShouldNotOpenUrlInNewTab($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionMounted()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionMounted($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionMounted($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionNotMounted()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionNotMounted($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionNotMounted($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertInfolistActionMounted()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertInfolistActionHalted($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertInfolistActionHalted($component, $name, $infolistName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertHasInfolistActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasInfolistActionErrors($keys = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertHasInfolistActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::assertHasNoInfolistActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoInfolistActionErrors($keys = [])
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertHasNoInfolistActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Infolists\Testing\TestsActions::getNestedInfolistActionComponentAndName()
+         * @param string $component
+         * @param array|string $name
+         * @param string $infolistName
+         * @return array 
+         * @static 
+         */ 
+        public static function getNestedInfolistActionComponentAndName($component, $name, $infolistName = 'infolist')
+        {
+                        return \Livewire\Features\SupportTesting\Testable::getNestedInfolistActionComponentAndName($component, $name, $infolistName);
         }
                     /**
          * 
@@ -26887,7 +27943,7 @@ namespace  {
              * Add a "where date" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|null $operator
              * @param \DateTimeInterface|string|null $value
              * @param string $boolean
              * @return \Illuminate\Database\Query\Builder 
@@ -26903,7 +27959,7 @@ namespace  {
              * Add an "or where date" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|null $operator
              * @param \DateTimeInterface|string|null $value
              * @return \Illuminate\Database\Query\Builder 
              * @static 
@@ -26918,7 +27974,7 @@ namespace  {
              * Add a "where time" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|null $operator
              * @param \DateTimeInterface|string|null $value
              * @param string $boolean
              * @return \Illuminate\Database\Query\Builder 
@@ -26934,7 +27990,7 @@ namespace  {
              * Add an "or where time" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|null $operator
              * @param \DateTimeInterface|string|null $value
              * @return \Illuminate\Database\Query\Builder 
              * @static 
@@ -26949,7 +28005,7 @@ namespace  {
              * Add a "where day" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @param string $boolean
              * @return \Illuminate\Database\Query\Builder 
@@ -26965,7 +28021,7 @@ namespace  {
              * Add an "or where day" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @return \Illuminate\Database\Query\Builder 
              * @static 
@@ -26980,7 +28036,7 @@ namespace  {
              * Add a "where month" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @param string $boolean
              * @return \Illuminate\Database\Query\Builder 
@@ -26996,7 +28052,7 @@ namespace  {
              * Add an "or where month" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @return \Illuminate\Database\Query\Builder 
              * @static 
@@ -27011,7 +28067,7 @@ namespace  {
              * Add a "where year" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @param string $boolean
              * @return \Illuminate\Database\Query\Builder 
@@ -27027,7 +28083,7 @@ namespace  {
              * Add an "or where year" statement to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $column
-             * @param string $operator
+             * @param \DateTimeInterface|string|int|null $operator
              * @param \DateTimeInterface|string|int|null $value
              * @return \Illuminate\Database\Query\Builder 
              * @static 
@@ -28473,6 +29529,7 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
+            class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
             class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class Pdf extends \Barryvdh\DomPDF\Facade\Pdf {}
             class PDF extends \Barryvdh\DomPDF\Facade\Pdf {}

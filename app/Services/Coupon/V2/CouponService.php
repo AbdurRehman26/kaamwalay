@@ -37,7 +37,7 @@ class CouponService
     {
         $couponApplication = resolve($this->couponApplicables[$coupon->couponApplicable->code]);
 
-        return $couponApplication->calculateDiscount($coupon, $order);
+        return round($couponApplication->calculateDiscount($coupon, $order), 2);
     }
 
     public function updateCouponLogs(Order $order): void

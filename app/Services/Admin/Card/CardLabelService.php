@@ -10,7 +10,8 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderLabelService;
 use App\Services\Admin\V2\OrderService;
 use App\Services\AGS\AgsService;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class CardLabelService
 {
@@ -50,10 +51,12 @@ class CardLabelService
     {
         $exportLabels = [];
 
+        $certificateNumbers = Arr::pluck($data, 'certificate_number');
+        $userCards = UserCard::whereIn('certificate_number', $certificateNumbers)->with('orderItem.cardProduct.cardLabel')->get();
+
         foreach ($data as $certificateData) {
-            $userCard = UserCard::whereCertificateNumber($certificateData['certificate_number'])->first();
-            $orderItem = $userCard->orderItem;
-            $cardLabel = $orderItem->cardProduct->cardLabel;
+            $userCard = $userCards->where('certificate_number', $certificateData['certificate_number'])->first();
+            $cardLabel = $userCard->orderItem->cardProduct->cardLabel;
 
             if ($certificateData['persist_changes']) {
                 $cardLabel->line_one = $certificateData['line_one'];
@@ -69,9 +72,9 @@ class CardLabelService
                 'label_line_three' => $certificateData['line_three'] ?? '',
                 'label_line_four' => $certificateData['line_four'] ?? '',
                 'card_number' => $certificateData['line_four'] ?? '',
-                'certificate_id' => $orderItem->userCard->certificate_number,
-                'final_grade' => $orderItem->userCard->overall_grade,
-                'grade_nickname' => $orderItem->userCard->overall_grade_nickname,
+                'certificate_id' => $userCard->certificate_number,
+                'final_grade' => $userCard->overall_grade,
+                'grade_nickname' => $userCard->overall_grade_nickname,
             ];
         }
 
@@ -83,16 +86,24 @@ class CardLabelService
      */
     public function getOrderLabels(Order $order): Collection
     {
-        $orderCards = $this->orderService->getCardsByStatus($order, OrderItemStatus::GRADED);
+        $orderCards = $this->orderService->getCardsByStatus($order, OrderItemStatus::GRADED, [
+            'orderItem.cardProduct.cardLabel',
+            'orderItem.cardProduct.cardCategory.cardCategoryType',
+            'orderItem.cardProduct.cardSet.cardSeries'
+        ]);
 
-        $cardsWithoutLabel = $orderCards->filter(function ($card, $key) {
-            return $card->orderItem->cardProduct->cardLabel()->doesntExist();
-        })->unique(function ($item) {
-            return $item->orderItem->card_product_id;
+        $cardsWithoutLabel = $orderCards->filter(function (UserCard $card, $key) {
+            return empty($card->orderItem->cardProduct->cardLabel);
+        })->unique(function (UserCard $card) {
+            return $card->orderItem->card_product_id;
         });
 
         foreach ($cardsWithoutLabel as $card) {
             $this->createCardLabelService->createLabel($card->orderItem->cardProduct);
+
+            // Since label was lazy loaded above and new label has been created now,
+            // We need to reload card product to use label in API resource response
+            $card->orderItem->cardProduct->refresh();
         }
 
         return $orderCards;

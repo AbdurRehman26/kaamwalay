@@ -215,11 +215,12 @@ class OrderService extends V1OrderService
     /**
      * @return Collection<int, UserCard>
      */
-    public function getCardsByStatus(Order $order, int $status): Collection
+    public function getCardsByStatus(Order $order, int $status, array $with = []): Collection
     {
         return UserCard::join('order_items', 'order_items.id', 'user_cards.order_item_id')
             ->where('order_id', $order->id)
             ->where('order_items.order_item_status_id', $status)
+            ->with($with)
             ->select('user_cards.*')->get();
     }
 

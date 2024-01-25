@@ -89,7 +89,7 @@ class CardLabelService
         $orderCards = $this->orderService->getCardsByStatus($order, OrderItemStatus::GRADED, [
             'orderItem.cardProduct.cardLabel',
             'orderItem.cardProduct.cardCategory.cardCategoryType',
-            'orderItem.cardProduct.cardSet.cardSeries'
+            'orderItem.cardProduct.cardSet.cardSeries',
         ]);
 
         $cardsWithoutLabel = $orderCards->filter(function (UserCard $card, $key) {

@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.27.0 - 2024-01-26
+
+### What's Changed
+
+* Master into Dev by @thenabeel in https://github.com/woozard/robograding/pull/1148
+* Fix: Replace Footer Card Image by @aliwooter in https://github.com/woozard/robograding/pull/1142
+* Hotfix: Disable authentication nav link by @thenabeel in https://github.com/woozard/robograding/pull/1149
+* Feature: Export Labels Performance Enhancement by @thenabeel in https://github.com/woozard/robograding/pull/1150
+* Feature: Revert Turnaround Times by @thenabeel in https://github.com/woozard/robograding/pull/1151
+* Release v3.27.0 by @thenabeel in https://github.com/woozard/robograding/pull/1152
+
+**Full Changelog**: https://github.com/woozard/robograding/compare/v3.26.0...v3.27.0
+
 ## v3.26.0 - 2024-01-21
 
 ### What's Changed

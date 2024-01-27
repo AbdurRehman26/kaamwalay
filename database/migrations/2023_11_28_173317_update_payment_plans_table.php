@@ -79,7 +79,7 @@ return new class extends Migration
                 'id' => 2,
                 'price' => 20,
                 'max_protection_amount' => 200,
-                'turnaround' => '10 Business Days',
+                'turnaround' => '5 Business Days',
                 'estimated_delivery_days_min' => 5,
                 'estimated_delivery_days_max' => 5,
                 'display_position' => 2,

@@ -6,8 +6,6 @@ import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import { useCallback, useMemo } from 'react';
-import ReactGA from 'react-ga4';
-import { AuthenticationEvents, EventCategories } from '../../constants/GAEventsTypes';
 import { LoginRequestDto } from '../../dto/LoginRequestDto';
 import { useInjectable } from '../../hooks/useInjectable';
 import { isAxiosError } from '../../lib/api/isAxiosError';
@@ -38,11 +36,8 @@ export function SignInContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                     email: values.email,
                     password: values.password,
                 });
-                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
                 onAuthSuccess(authenticatedUser);
             } catch (e: any) {
-                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
-
                 if (isAxiosError(e) || isException(e)) {
                     NotificationsService.exception(e);
                 } else {

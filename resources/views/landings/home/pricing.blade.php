@@ -8,7 +8,7 @@
             <h3 class="Home-sectionContentHeadline text-center">Unbeatable Prices and Turnaround Times</h3>
         </div>
 
-        <div class="Home-priceRange" data-atom="quantity-dependent-pricing-chips" data-content="{{json_encode($paymentPlans)}}" data-aos="fade-up">
+        <div class="Home-priceRange" data-atom="quantity-dependent-pricing-chips" data-content="{{json_encode([])}}" data-aos="fade-up">
             {{-- JS runtime actions --}}
         </div>
         

@@ -17,10 +17,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import ReactGA from 'react-ga4';
-import NumberFormat from 'react-number-format';
 import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
-import { CardsSelectionEvents, EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -36,7 +33,6 @@ import {
     setBillingAddress,
     setCleaningFee,
     setIsCouponApplied,
-    setPreviewTotal,
 } from '@shared/redux/slices/adminCreateOrderSlice';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -212,12 +208,6 @@ export function AddedSubmissionCards() {
     );
     const existingAddresses = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.existingAddresses);
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
-    const serviceLevelPrice = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.price,
-    );
-    const priceRanges = useAppSelector(
-        (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.priceRanges,
-    );
     const protectionLimit = useAppSelector(
         (state) => state.adminCreateOrderSlice.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
@@ -228,24 +218,17 @@ export function AddedSubmissionCards() {
     const isNextDisabled = useAppSelector((state) => state.adminCreateOrderSlice.isNextDisabled);
     const isCouponApplied = useAppSelector((state) => state.adminCreateOrderSlice.couponState.isCouponApplied);
     const userId = useAppSelector((state) => state.adminCreateOrderSlice.user.id);
-    const appliedCredit = useAppSelector((state) => state.adminCreateOrderSlice.appliedCredit);
     const shippingMethod = useAppSelector(
         (state) => state.adminCreateOrderSlice.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
     );
-    const discountedValue = useAppSelector(
-        (state) => state.adminCreateOrderSlice.couponState.appliedCouponData.discountedAmount,
-    );
-    const shippingFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.shippingFee);
     const cleaningFee = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.cleaningFee);
     const requiresCleaning = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.requiresCleaning);
     const requiresShippingInsurance = useAppSelector(
         (state) => state.adminCreateOrderSlice.step03Data.requiresShippingInsurance,
     );
-    const shippingInsuranceFee = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.shippingInsuranceFee);
 
     const requiresSignature = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.requiresSignature);
-    const signatureFee = useAppSelector((state) => state.adminCreateOrderSlice.step03Data.signatureFee);
 
     const { featureOrderCleaningFeePerCard, featureOrderCleaningFeeMaxCap } = useConfiguration();
 
@@ -300,21 +283,8 @@ export function AddedSubmissionCards() {
               }, 0)
             : 0;
 
-    let finalPrice =
-        priceRanges?.filter((item: any) => {
-            if (
-                (numberOfSelectedCards >= item.minCards && numberOfSelectedCards <= item.maxCards) ||
-                (numberOfSelectedCards >= item.minCards && item.maxCards === null)
-            ) {
-                return item;
-            }
-        }) ?? null;
-
-    finalPrice = finalPrice ? finalPrice[0]?.price : serviceLevelPrice;
-
     const handleDeselectCard = useCallback(
         (row: { id: number }) => {
-            ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
             dispatch(markCardAsUnselected(row));
             if (isCouponApplied) {
                 dispatch(setIsCouponApplied(false));
@@ -343,10 +313,6 @@ export function AddedSubmissionCards() {
     const createSubmission = async () => {
         try {
             dispatch(setBillingAddress(finalShippingAddress));
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action: PaymentMethodEvents.payLater,
-            });
             setIsLoading(true);
             const order = await dispatch(createOrder()).unwrap();
             NotificationsService.success('Order Placed Successfully!');
@@ -362,23 +328,6 @@ export function AddedSubmissionCards() {
     const clearAllCards = () => {
         dispatch(resetSelectedCards([]));
     };
-
-    function getPreviewTotal() {
-        const previewTotal = Number(
-            (
-                numberOfSelectedCards * finalPrice +
-                Number(cleaningFee) +
-                Number(shippingInsuranceFee) +
-                Number(signatureFee) +
-                shippingFee -
-                Number(isCouponApplied ? discountedValue : 0) -
-                appliedCredit
-            ).toFixed(2),
-        );
-
-        dispatch(setPreviewTotal(previewTotal));
-        return previewTotal;
-    }
 
     useEffect(() => {
         if (requiresCleaning) {
@@ -516,36 +465,13 @@ export function AddedSubmissionCards() {
                     <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
                     <Typography className={classes.rowRightBoldText}>
                         <span style={{ fontWeight: 400, color: '#757575' }}>
-                            (
-                            <NumberFormat
-                                value={finalPrice}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
-                            &nbsp; x {numberOfSelectedCards}) =&nbsp;
+                            ( &nbsp; x {numberOfSelectedCards}) =&nbsp;
                         </span>
-                        <NumberFormat
-                            value={numberOfSelectedCards * finalPrice}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
                     </Typography>
                 </div>
                 {isCouponApplied ? (
                     <div className={classes.row} style={{ marginTop: '16px' }}>
                         <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
-                        <NumberFormat
-                            value={discountedValue}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'-$'}
-                        />
                     </div>
                 ) : null}
                 <div
@@ -555,68 +481,26 @@ export function AddedSubmissionCards() {
                     <Typography className={classes.rowLeftText}>
                         {shippingMethod?.code === ShippingMethodType.InsuredShipping ? 'Shipping: ' : 'Storage Fee:'}
                     </Typography>
-                    <NumberFormat
-                        value={shippingMethod?.code === ShippingMethodType.InsuredShipping ? shippingFee : 0}
-                        className={classes.rowRightBoldText}
-                        displayType={'text'}
-                        thousandSeparator
-                        decimalSeparator={'.'}
-                        prefix={'$'}
-                    />
                 </div>
                 {requiresShippingInsurance ? (
                     <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                         <Typography className={classes.rowLeftText}>Insurance:</Typography>
-                        <NumberFormat
-                            value={shippingInsuranceFee}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
                     </div>
                 ) : null}
                 {requiresCleaning ? (
                     <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                         <Typography className={classes.rowLeftText}>Cleaning Fee:</Typography>
-                        <NumberFormat
-                            value={previewCleaningFee}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
                     </div>
                 ) : null}
                 {requiresSignature ? (
                     <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                         <Typography className={classes.rowLeftText}>Signature Required:</Typography>
-                        <NumberFormat
-                            value={signatureFee}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
                     </div>
                 ) : null}
                 <Divider />
                 <div className={classes.row} style={{ marginTop: '16px', marginBottom: '16px' }}>
                     <Typography className={classes.rowLeftText}>Total:</Typography>
-                    <Typography className={classes.rowRightBoldText}>
-                        &nbsp;
-                        <NumberFormat
-                            value={getPreviewTotal()}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
-                    </Typography>
+                    <Typography className={classes.rowRightBoldText}>&nbsp;</Typography>
                 </div>
                 <LoadingButton
                     disabled={!isCreateSubmission}

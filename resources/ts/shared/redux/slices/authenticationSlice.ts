@@ -1,8 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
-import ReactGA from 'react-ga4';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
-import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
@@ -14,10 +12,8 @@ import { AuthenticationRepository } from '@shared/repositories/AuthenticationRep
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
-import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 import { googleTagManager } from '../../lib/utils/googleTagManager';
-import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 
 interface StateType {
     checking: boolean;
@@ -38,7 +34,6 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
     try {
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
-        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
         googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
@@ -47,8 +42,6 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         // serialize class objects to plain objects according redux toolkit error
         return instanceToPlain(authenticatedUser);
     } catch (e: any) {
-        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
-
         if (isAxiosError(e) || isException(e)) {
             NotificationsService.exception(e);
         } else {
@@ -66,10 +59,8 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
     try {
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
-        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
         googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
-        trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -107,7 +98,6 @@ export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', asy
     const authenticationRepository = app(AuthenticationRepository);
     try {
         const forgotPasswordResponse = await authenticationRepository.forgotPassword(email);
-        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
         return forgotPasswordResponse;
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -121,7 +111,6 @@ export const resetPasswordAction = createAsyncThunk(
         const authenticationRepository = app(AuthenticationRepository);
         try {
             const resetPasswordResponse = await authenticationRepository.resetPassword(input);
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
             return resetPasswordResponse;
         } catch (e: any) {
             NotificationsService.exception(e);

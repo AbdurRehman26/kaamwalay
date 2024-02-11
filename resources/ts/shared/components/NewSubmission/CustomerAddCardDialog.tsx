@@ -15,9 +15,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import ReactGA from 'react-ga4';
 import ImageUploader from '@shared/components/ImageUploader';
-import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { useEndpoint } from '@shared/hooks/useEndpoint';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -53,10 +51,6 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
 
     const selectCard = useCallback(
         (item: SearchResultItemCardProps) => {
-            ReactGA.event({
-                category: EventCategories.Cards,
-                action: CardsSelectionEvents.added,
-            });
             dispatch(markCardAsSelected(item));
         },
         [dispatch],

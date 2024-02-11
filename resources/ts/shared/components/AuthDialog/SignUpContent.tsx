@@ -7,16 +7,12 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
-import ReactGA from 'react-ga4';
 import { FormInput } from '@shared/components/AuthDialog/FormInput';
 import { SubmitButton } from '@shared/components/AuthDialog/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/AuthDialog/styles';
 import { PopupSignUpValidationRules } from '@shared/components/AuthDialog/validation';
 import InternationalPhoneNumberField from '@shared/components/InternationalPhoneNumberField';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { useInjectable } from '../../hooks/useInjectable';
@@ -121,8 +117,6 @@ export function SignUpContent({
 
             try {
                 const authenticatedUser = await authenticationRepository.postRegister(values);
-                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-                trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
                 NotificationsService.success('Register successfully!');
                 onAuthSuccess(authenticatedUser);
             } catch (e: any) {

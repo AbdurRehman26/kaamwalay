@@ -4,23 +4,14 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useStripe } from '@stripe/react-stripe-js';
 import { round } from 'lodash';
 import React, { useCallback, useState } from 'react';
-import ReactGA from 'react-ga4';
-import NumberFormat from 'react-number-format';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { PaymentMethodsEnum } from '@shared/constants/PaymentMethodsEnum';
 import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
-import { useAuth } from '@shared/hooks/useAuth';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { googleTagManager } from '@shared/lib/utils/googleTagManager';
-import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
@@ -172,7 +163,6 @@ interface PaymentSummaryProps {
 export function PaymentSummary(props: PaymentSummaryProps) {
     const classes = useStyles();
     const notifications = useNotifications();
-    const stripe = useStripe();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const displayAffirm = useAppSelector((state) => state.newSubmission.displayAffirm);
@@ -188,7 +178,6 @@ export function PaymentSummary(props: PaymentSummaryProps) {
         (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
         (a, b) => a?.id === b?.id && a?.code === b?.code,
     );
-    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
     const cleaningFee = useAppSelector((state) => state.newSubmission.step02Data.cleaningFee);
     const shippingInsuranceFee = useAppSelector((state) => state.newSubmission.step03Data.shippingInsuranceFee);
@@ -202,9 +191,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
     const { collectorCoinDiscountPercentage, featureOrderPaymentAffirmMinAmount } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
-    const orderSubmission = useAppSelector((state) => state.newSubmission);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
-    const user$ = useAuth().user;
     const originalPaymentPlanId = useAppSelector((state) => state.newSubmission?.step01Data?.originalServiceLevel.id);
     const isCouponValid = useAppSelector((state) => state.newSubmission?.couponState.isCouponValid);
     const numberOfSelectedCards =
@@ -216,49 +203,6 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             : 0;
 
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
-
-    const currentSelectedTurnaround = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
-    );
-    const currentSelectedMaxProtection = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
-    );
-    const currentSelectedLevelPrice = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
-    );
-
-    const sendECommerceDataToGA = () => {
-        ReactGA.event({
-            category: EventCategories.Submissions,
-            action: SubmissionEvents.placed,
-        });
-
-        ReactGA.gtag('event', 'add_to_cart', {
-            items: [
-                {
-                    // eslint-disable-next-line
-                    item_id: String(orderID),
-                    // eslint-disable-next-line
-                    item_name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
-                    // eslint-disable-next-line
-                    item_category: 'Cards',
-                    price: currentSelectedLevelPrice,
-                    quantity: numberOfSelectedCards,
-                },
-            ],
-        });
-
-        ReactGA.gtag('event', 'purchase', {
-            // eslint-disable-next-line
-            transaction_id: String(orderID),
-            value: grandTotal,
-            currency: 'USD',
-            shipping: shippingFee,
-        });
-
-        ReactGA.gtag('event', 'send', null);
-        ReactGA.gtag('event', 'clear', null);
-    };
 
     function getPreviewTotal() {
         const previewTotal = Number(
@@ -286,10 +230,6 @@ export function PaymentSummary(props: PaymentSummaryProps) {
 
     const handleConfirmStripePayment = async () => {
         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
-        if (!stripe) {
-            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
-            return;
-        }
         try {
             setIsStripePaymentLoading(true);
 
@@ -315,70 +255,17 @@ export function PaymentSummary(props: PaymentSummaryProps) {
             setIsStripePaymentLoading(false);
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action: SubmissionEvents.paid,
-            });
-            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                value: grandTotal,
-                currency: 'USD',
-            });
-            sendECommerceDataToGA();
-            googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
-            pushDataToRefersion(orderSubmission, user$);
             window.location.href = `/dashboard/submissions/${orderID}/view`;
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');
             }
-            // Charge was failed by back-end so we try to charge him on the front-end
-            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            const intent = err.response.data.paymentIntent;
-            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
-            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
-                // eslint-disable-next-line camelcase
-                payment_method: intent.paymentMethod,
-            });
-
-            // Checking if something else failed.
-            // Eg: Insufficient funds, 3d auth failed by user, etc
-            if (chargeResult.error) {
-                notifications.error(chargeResult?.error?.message!, 'Error');
-                setIsStripePaymentLoading(false);
-            } else {
-                // We're all good!
-                if (chargeResult.paymentIntent.status === 'succeeded') {
-                    const verifyOrderEndpoint = apiService.createEndpoint(
-                        `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
-                    );
-                    verifyOrderEndpoint.post('').then(() => {
-                        setIsStripePaymentLoading(false);
-                        dispatch(clearSubmissionState());
-                        dispatch(invalidateOrders());
-                        ReactGA.event({
-                            category: EventCategories.Submissions,
-                            action: SubmissionEvents.paid,
-                        });
-                        trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                            value: grandTotal,
-                            currency: 'USD',
-                        });
-                        sendECommerceDataToGA();
-                        pushDataToRefersion(orderSubmission, user$);
-                        window.location.href = `/dashboard/submissions/${orderID}/view`;
-                    });
-                }
-            }
         }
     };
 
     const handleAffirmPayment = async () => {
         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
-        if (!stripe) {
-            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
-            return;
-        }
         try {
             setIsStripePaymentLoading(true);
 
@@ -429,7 +316,7 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                 return_url: window.location.origin + `/dashboard/submissions/${orderID}/affirm/confirmation`,
             });
         },
-        [orderID, stripe],
+        [orderID],
     );
 
     return (
@@ -474,67 +361,25 @@ export function PaymentSummary(props: PaymentSummaryProps) {
 
                         <Typography className={classes.rowRightBoldText}>
                             <span style={{ fontWeight: 400, color: '#757575' }}>
-                                (
-                                <NumberFormat
-                                    value={serviceLevelPrice}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
-                                />
-                                &nbsp; x {numberOfSelectedCards}) =&nbsp;
+                                ( &nbsp; x {numberOfSelectedCards}) =&nbsp;
                             </span>
-                            <NumberFormat
-                                value={numberOfSelectedCards * serviceLevelPrice}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </Typography>
                     </div>
                     {paymentMethodID === 3 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
-                            <NumberFormat
-                                value={(
-                                    (Number(collectorCoinDiscountPercentage) / 100) *
-                                    (numberOfSelectedCards * serviceLevelPrice)
-                                ).toFixed(2)}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'-$'}
-                            />
                         </div>
                     ) : null}
 
                     {appliedCredit > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Credit: </Typography>
-                            <NumberFormat
-                                value={appliedCredit}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'-$'}
-                            />
                         </div>
                     ) : null}
 
                     {isCouponApplied ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
-                            <NumberFormat
-                                value={discountedValue}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'-$'}
-                            />
                         </div>
                     ) : null}
 
@@ -546,84 +391,35 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
                             <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
                         ) : null}
-
-                        <NumberFormat
-                            value={shippingFee}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
                     </div>
 
                     {extraChargesTotal > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Extra Charges: </Typography>
-                            <NumberFormat
-                                value={extraChargesTotal}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </div>
                     ) : null}
 
                     {(shippingInsuranceFee ?? 0) > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Insurance: </Typography>
-                            <NumberFormat
-                                value={shippingInsuranceFee}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </div>
                     ) : null}
 
                     {cleaningFee > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Cleaning Fee: </Typography>
-                            <NumberFormat
-                                value={cleaningFee}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </div>
                     ) : null}
 
                     {(signatureFee ?? 0) > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Signature Required: </Typography>
-                            <NumberFormat
-                                value={signatureFee}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </div>
                     ) : null}
 
                     {refundTotal > 0 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Refunds: </Typography>
-                            <NumberFormat
-                                value={refundTotal}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'-$'}
-                            />
                         </div>
                     ) : null}
                 </div>
@@ -635,14 +431,6 @@ export function PaymentSummary(props: PaymentSummaryProps) {
                         <Typography className={classes.rowRightBoldText}>
                             &nbsp;
                             {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
-                            <NumberFormat
-                                value={getPreviewTotal()}
-                                className={classes.rowRightBoldText}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
                         </Typography>
                     </div>
                 </div>

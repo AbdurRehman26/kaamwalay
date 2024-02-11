@@ -5,7 +5,6 @@ import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { setRequiresShippingInsurance, setShippingInsuranceFee } from '@shared/redux/slices/adminCreateOrderSlice';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
@@ -65,18 +64,7 @@ export function ShippingInsurance() {
                             <Grid item xs={10}>
                                 <Typography className={'optionTitle'}>Full Shipping Insurance</Typography>
                             </Grid>
-                            <Grid item xs={2} display={'flex'} justifyContent={'flex-end'} pr={1}>
-                                <NumberFormat
-                                    value={fullShippingInsuranceDisplay}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
-                                    className={'value'}
-                                    decimalScale={2}
-                                    fixedDecimalScale={true}
-                                />
-                            </Grid>
+                            <Grid item xs={2} display={'flex'} justifyContent={'flex-end'} pr={1}></Grid>
                         </Grid>
                     </OptionButton>
                 </Grid>

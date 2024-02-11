@@ -21,7 +21,6 @@
         "tsBuildInfoFile": ".tsbuildinfo",
         "paths": {
             "@admin/*": ["resources/ts/admin/*"],
-            "@salesrep/*": ["resources/ts/salesrep/*"],
             "@auth/*": ["resources/ts/auth/*"],
             "@dashboard/*": ["resources/ts/dashboard/*"],
             "@publicPath": ["resources/ts/shared/publicPath.ts"],

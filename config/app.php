@@ -195,12 +195,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
-        App\Providers\Filament\AppPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         \App\Providers\BladeServiceProvider::class,
-        \App\Providers\PaymentServiceProvider::class,
-        \App\Providers\QueryBuilderWhereLikeMacroServiceProvider::class,
     ],
 
     /*

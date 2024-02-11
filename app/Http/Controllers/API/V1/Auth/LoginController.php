@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
-use App\Concerns\AGS\AuthenticatableWithAGS;
-use App\Events\API\Auth\UserLoggedIn;
-use App\Exceptions\API\Auth\AuthenticationException;
-use App\Exceptions\API\Customer\UserIsDeactivated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
-use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -18,8 +13,6 @@ use Throwable;
 
 class LoginController extends Controller
 {
-    use AuthenticatableWithAGS;
-
     /**
      * @throws Throwable
      */
@@ -32,10 +25,6 @@ class LoginController extends Controller
         }
 
         $isActive = auth()->user()->is_active;
-        throw_if(! is_null($isActive) && ! $isActive, UserIsDeactivated::class);
-
-        CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
-        UserLoggedIn::dispatch(auth()->user());
 
         return new JsonResponse(
             [
@@ -53,8 +42,6 @@ class LoginController extends Controller
     ): JsonResponse {
         try {
             $response = $this->agsService->login(data: $request->validated());
-
-            throw_if(empty($response), AuthenticationException::class);
 
             $customerProfileService->update(
                 auth()->guard()->user(),

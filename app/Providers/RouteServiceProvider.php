@@ -28,38 +28,15 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api/v2')
+            Route::prefix('api/v1')
                 ->middleware('api')
-                ->as('v2.')
-                ->group(base_path('routes/v2/api.php'));
+                ->as('v1.')
+                ->group(base_path('routes/v1/api.php'));
 
-            Route::prefix('api/v3')
+            Route::prefix('api/v1/admin')
                 ->middleware('api')
-                ->as('v3.')
-                ->group(base_path('routes/v3/api.php'));
-
-            Route::prefix('api/v2/admin')
-                ->middleware('api')
-                ->as('v2.')
-                ->group(base_path('routes/v2/admin.php'));
-
-            Route::prefix('api/v2/salesman')
-                ->middleware('api')
-                ->as('v2.')
-                ->group(base_path('routes/v2/salesman.php'));
-
-            Route::prefix('api/v3/admin')
-                ->middleware('api')
-                ->as('v3.admin.')
-                ->group(base_path('routes/v3/admin.php'));
-
-            Route::prefix('api/v3/salesman')
-                ->middleware('api')
-                ->as('v3.salesman.')
-                ->group(base_path('routes/v3/salesman.php'));
-
-            Route::prefix('webhooks')
-                ->group(base_path('routes/webhooks.php'));
+                ->as('v1.')
+                ->group(base_path('routes/v1/admin.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

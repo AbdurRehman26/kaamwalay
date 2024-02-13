@@ -10,11 +10,9 @@ import Typography from '@mui/material/Typography';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga4';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { APIService } from '@shared/services/APIService';
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
@@ -126,7 +124,6 @@ export function PaymentForm() {
                     category: EventCategories.PaymentMethods,
                     action: PaymentMethodEvents.addedNewStripeCard,
                 });
-                trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
             }
         } catch (e) {
             console.error(e);

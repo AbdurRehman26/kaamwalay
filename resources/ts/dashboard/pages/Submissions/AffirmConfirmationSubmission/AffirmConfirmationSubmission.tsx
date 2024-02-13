@@ -2,7 +2,6 @@ import Grid from '@mui/material/Grid';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
@@ -10,7 +9,6 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { AffirmConfirmationPanel } from '@dashboard/pages/Submissions/AffirmConfirmationSubmission/AffirmConfirmationPanel';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -79,10 +77,6 @@ export function AffirmConfirmationSubmission() {
             ReactGA.event({
                 category: EventCategories.Submissions,
                 action: SubmissionEvents.paid,
-            });
-            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                value: data?.grandTotal,
-                currency: 'USD',
             });
             sendECommerceDataToGA();
             googleTagManager({ event: 'google-ads-purchased', value: data?.grandTotal });

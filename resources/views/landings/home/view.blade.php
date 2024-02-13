@@ -7,15 +7,8 @@
               href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     </x-slot>
-    <x-slot name="header">
-        @include('landings.home.hero')
-    </x-slot>
     @include('landings.home.about')
-    @include('landings.home.availableCards')
-    @include('landings.home.pricing')
-    @include('landings.home.details')
     @include('landings.home.features')
-    @include('landings.home.testimonial')
     @include('landings.home.conclusion')
     <x-slot name="body">
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

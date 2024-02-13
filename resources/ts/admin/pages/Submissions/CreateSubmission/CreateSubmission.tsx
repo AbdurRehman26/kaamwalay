@@ -22,7 +22,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CleaningFee from '@shared/components/CleaningFee';
 import { AddedSubmissionCards } from '@shared/components/NewSubmission/AddedSubmissionCards';
 import { ApplyPromoCode } from '@shared/components/NewSubmission/ApplyPromoCode';
-import { CardsSearchResults } from '@shared/components/NewSubmission/CardsSearchResults';
 import { ShippingMethods } from '@shared/components/NewSubmission/ShippingMethods';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
@@ -91,7 +90,6 @@ export function CreateSubmission() {
     const [openDropDown, setOpenDropDown] = useState(false);
     const selectedCards = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.selectedCards);
     const requiresCleaning = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.requiresCleaning);
-    const searchValue = useAppSelector((state) => state.adminCreateOrderSlice.step02Data.searchValue);
     const serviceLevels = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.availableServiceLevels);
     const selectedServiceLevel = useAppSelector((state) => state.adminCreateOrderSlice.step01Data.selectedServiceLevel);
     const payNow = useAppSelector((state) => state.adminCreateOrderSlice.payNow);
@@ -232,7 +230,6 @@ export function CreateSubmission() {
                                 >
                                     <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                                         <CardSubmissionSearchField />
-                                        {searchValue !== '' ? <CardsSearchResults /> : null}
                                         {searchCardCategoriesCustomer ? (
                                             <Configure
                                                 hitsPerPage={20}

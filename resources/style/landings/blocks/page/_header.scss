@@ -7,18 +7,21 @@
     top: 0;
     width: 100%;
     z-index: 100;
+    font-weight: 900;
     height: 72px;
     padding: 0 24px;
-    color: #fff;
+    color: #494949;
     display: flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
-
+    padding-left: 10%;
+    padding-right: 10%;
+    border-bottom: solid 1px #e0e0e0;
     &:before {
         content: '';
-        background: linear-gradient(106.54deg, #140078 -4.67%, #6c31bc 112.32%);
+        background: white;
         transition: opacity 250ms ease-in-out;
         position: absolute;
         display: block;
@@ -30,20 +33,6 @@
         height: 100%;
         z-index: -1;
         opacity: 1;
-    }
-
-    &--transparent:not(&--scrolled) {
-        &:before {
-            opacity: 0;
-        }
-    }
-
-    &--no-shadow {
-        box-shadow: none;
-    }
-
-    &--scrolled {
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
     }
 
     @include breakpoints.down(xs) {
@@ -88,7 +77,8 @@
             position: relative;
             overflow: hidden;
             padding: 0 $paddingSize;
-            font-weight: 500;
+            font-weight: 900;
+            font-size: large;
             letter-spacing: 0.35px;
             display: inline-flex;
             align-items: center;

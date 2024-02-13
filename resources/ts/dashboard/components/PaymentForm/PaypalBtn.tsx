@@ -2,14 +2,12 @@
 import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga4';
 import { useDispatch } from 'react-redux';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import { useAppSelector } from '@dashboard/redux/hooks';
@@ -120,10 +118,6 @@ function PaypalBtn() {
                             notifications.success('Order paid!', 'Success!');
                             dispatch(clearSubmissionState());
                             dispatch(invalidateOrders());
-                            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
-                                value: grandTotal,
-                                currency: 'USD',
-                            });
                             sendECommerceDataToGA();
                             googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);

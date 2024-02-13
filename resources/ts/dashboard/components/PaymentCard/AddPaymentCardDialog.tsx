@@ -9,11 +9,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { APIService } from '@shared/services/APIService';
 
 interface AddPaymentCardDialogProps extends Omit<DialogProps, 'onSubmit'> {
@@ -136,7 +134,6 @@ function AddPaymentCardDialog(props: AddPaymentCardDialogProps) {
                     category: EventCategories.PaymentMethods,
                     action: PaymentMethodEvents.addedNewStripeCard,
                 });
-                trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
                 onSubmit();
             }
         } catch (e) {

@@ -2,18 +2,18 @@
     <x-slot name="head">
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css"
-              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
         <link rel="stylesheet" type="text/css"
-              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
     </x-slot>
     @include('landings.home.about')
-    @include('landings.home.features')
+    @include('landings.home.services')
     @include('landings.home.conclusion')
     <x-slot name="body">
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
-            (function() {
+            (function () {
                 AOS.init({
                     once: true,
                     easing: 'ease-in-out'
@@ -26,7 +26,7 @@
         <script type="text/javascript"
                 src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <script>
-            $(function() {
+            $(function () {
                 var lightbox = GLightbox();
 
                 $('.Home-prices--js').slick({

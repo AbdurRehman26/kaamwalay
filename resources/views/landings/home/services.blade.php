@@ -1,8 +1,7 @@
 <section class="Home-section Home-features">
     <div class="container Home-sectionContainer Home-sectionContainer--center-center" data-aos="fade-up">
         <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center">
-            <h4 class="Home-sectionContentCaption text-center">What You Get</h4>
-            <h3 class="Home-sectionContentHeadline text-center">Some of the reasons thousands of collectors have switched to Robograding</h3>
+            <h1 class="Home-sectionContentHeadline text-center">Services We Offer</h1>
         </div>
     </div>
 

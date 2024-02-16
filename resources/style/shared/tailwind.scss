@@ -1,4 +1,5 @@
 @use './breakpoints';
+@use './theme';
 @tailwind base;
 @tailwind components;
 
@@ -37,4 +38,13 @@ body {
 }
 body::backdrop {
     background-color: #fafafa;
+}
+
+.primaryButton {
+    border-radius: 10px;
+    padding: 10px 20px;
+    background-color: theme.$primaryColor;
+    &:hover {
+        background-color: theme.$primaryColorDark;
+    }
 }

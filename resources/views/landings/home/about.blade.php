@@ -14,10 +14,6 @@
             <div data-atom="services-multi-select" data-aos="fade-left" data-aos-delay="200">
                 {{-- JS runtime actions --}}
             </div>
-            
-            <div class="mt4" data-atom="submit-button" data-button-content="Search Provider">
-                {{-- JS runtime actions --}}
-            </div>
         </div>
 
         <div class="Home-sectionColumn Home-sectionColumn--half">
